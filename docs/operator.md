@@ -1,4 +1,4 @@
-# [Custom Resource options](operator.html#operator-custom-resource-options)
+# <a name="operator-custom-resource-options"></a>Custom Resource options
 
 Percona Server for MySQL managed by the Operator is configured via the spec section
 of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
@@ -22,7 +22,7 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | secretsName     | string             | `cluster1-secrets` | A name for [users secrets](users.md#users) |
 | sslSecretName   | string             | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
 
-## [Percona Server for MySQL Section](operator.html#operator-mysql-section)
+## <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
 The `mysql` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains general
 configuration options for the Percona Server for MySQL.
@@ -41,7 +41,7 @@ configuration options for the Percona Server for MySQL.
 |                 | |
 | **Key**         | {{ optionlink('mysql.image') }} |
 | **Value**       | string |
-| **Example**     | `percona/percona-server:8.0.28` |
+| **Example**     | `percona/percona-server:{{ ps80recommended }}` |
 | **Description** | The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](images.md#custom-registry-images)) |
 |                 | |
 | **Key**         | {{ optionlink('mysql.imagePullSecrets.name') }} |
@@ -143,7 +143,7 @@ configuration options for the Percona Server for MySQL.
 | **Example**     | |
 | **Description** | [Persistent Volume Claim](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
 
-## [Router Section](operator.html#operator-router-section)
+## <a name="operator-router-section"></a>Router section
 
 The `router` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), which acts as a proxy for Group replication.
 
@@ -156,7 +156,7 @@ The `router` section in the [deploy/cr.yaml](https://github.com/percona/percona-
 |                 | |
 | **Key**         | {{ optionlink('router.image') }} |
 | **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:main-router` |
+| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}-router` |
 | **Description** | Router Docker image to use |
 |                 | |
 | **Key**         | {{ optionlink('router.imagePullPolicy') }} |
@@ -192,7 +192,7 @@ of any complexity to be used |
 | **Example**     | `ClusterIP` |
 | **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for for MySQL Router instances xposure |
 
-## [Orchestrator Section](operator.html#operator-orchestrator-section)
+## <a name="operator-orchestrator-section"></a>Orchestrator section
 
 The `orchestrator` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
 configuration options for the Orchestrator - a replication topology manager, used if asynchronous replication is turned on.
@@ -206,7 +206,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.image') }} |
 | **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:main-orchestrator` |
+| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}-orchestrator` |
 | **Description** | Orchestrator Docker image to use |
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.imagePullPolicy') }} |
@@ -239,7 +239,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Example**     | `1Gi` |
 | **Description** | The [Kubernetes PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Orchestrator |
 
-## [PMM Section](operator.html#operator-pmm-section)
+## <a name="operator-pmm-section"></a>PMM section
 
 The `pmm` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
 options for Percona Monitoring and Management.
@@ -253,7 +253,7 @@ options for Percona Monitoring and Management.
 |                 | |
 | **Key**         | {{ optionlink('pmm.image') }} |
 | **Value**       | string |
-| **Example**     | `percona/pmm-client:2.28.0` |
+| **Example**     | `percona/pmm-client:{{ pmm2recommended }}` |
 | **Description** | PMM client Docker image to use |
 |                 | |
 | **Key**         | {{ optionlink('pmm.imagePullPolicy') }} |
@@ -271,7 +271,7 @@ options for Percona Monitoring and Management.
 | **Example**     | `admin` |
 | **Description** | The [PMM Serve_User](https://www.percona.com/doc/percona-monitoring-and-management/glossary.option.html). The PMM Server password should be configured using Secrets |
 
-## [Backup Section](operator.html#operator-backup-section)
+## <a name="operator-backup-section"></a>Backup section
 
 The `backup` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
 file contains the following configuration options for the regular Percona XtraDB Cluster backups.
@@ -285,7 +285,7 @@ file contains the following configuration options for the regular Percona XtraDB
 |                 | |
 | **Key**         | {{ optionlink('backup.image') }} |
 | **Value**       | string |
-| **Example**     | `percona/percona-server-mysql-operator:0.2.0-backup` |
+| **Example**     | `percona/percona-server-mysql-operator:{{ release }}-backup` |
 | **Description** | The Percona XtraBackup Docker image to use for the backup |
 |                 | |
 | **Key**         | {{ optionlink('backup.imagePullPolicy') }} |

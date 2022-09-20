@@ -4,7 +4,7 @@
 1. First of all, clone the percona-server-mysql-operator repository:
 
 ```bash
-git clone -b v0.2.0 https://github.com/percona/percona-server-mysql-operator
+git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
 cd percona-server-mysql-operator
 ```
 

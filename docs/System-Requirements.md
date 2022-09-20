@@ -5,7 +5,7 @@ The Operator supports Percona Server for MySQL (PS) 5.7 and 8.0.
 ## Officially supported platforms
 
 The following platforms were tested and are officially supported by the Operator
-0.2.0:
+{{ release }}:
 
 
 * [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.21 - 1.23

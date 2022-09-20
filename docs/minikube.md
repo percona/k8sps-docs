@@ -36,14 +36,14 @@ default web browser.
 2. Deploy the Operator [using](https://kubernetes.io/docs/reference/using-api/server-side-apply/) the following command:
 
 ```bash
-$ kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v0.2.0/deploy/bundle.yaml
+$ kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/bundle.yaml
 ```
 
 
 3. Deploy Percona Server for MySQL:
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/main/deploy/cr.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/cr.yaml
 ```
 
 This deploys three Percona Server for MySQL instances and one Orchestrator
