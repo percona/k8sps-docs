@@ -16,8 +16,6 @@ With [Asynchronous or Semi-synchronous replication](https://dev.mysql.com/doc/re
 the cluster is exposed through a Kubernetes Service called
 `<CLUSTER_NAME>-mysql-primary`: for example, `cluster1-mysql-primary`.
 
-
-
 ![image](assets/images/exposure-async.svg)
 
 This Service is created by default and is always present. You can change the
@@ -56,8 +54,6 @@ Clusters configured to use Group Replication are exposed via the [MySQL Router](
 through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
 `cluster1-router`. Network design in this case looks like this:
 
-
-
 ![image](assets/images/exposure-gr.svg)
 
 MySQL Router can be configured via the [router section](operator.md#operator-router-section).
@@ -87,10 +83,7 @@ my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL Router:
 
-
 * `6446` - read/write, routing traffic to a Primary node,
-
-
 * `6447` - read-only, load balancing the traffic across Replicas.
 
 Additionally, ports `6448` and `6449` are available in the same way to
@@ -113,19 +106,14 @@ Still, sometimes it is required to expose all MySQL instances, where each of
 them gets its own IP address (e.g. in case of load balancing implemented on the
 application level).
 
-
-
 ![image](assets/images/exposure-all.svg)
 
 This is possible by setting the following options in [spec.mysql section](operator.md#operator-mysql-section).
 
-
 * [mysql.expose.enabled](operator.md#mysql-expose-enabled) enables or disables exposure
-of MySQL instances,
-
-
+    of MySQL instances,
 * [mysql.expose.type](operator.md#mysql-expose-type) defines the Kubernetes Service
-object type.
+    object type.
 
 The following example creates a dedicated LoadBalancer Service for each node of
 the MySQL cluster:
@@ -152,5 +140,4 @@ cluster1-mysql-2         LoadBalancer   10.40.42.158   35.193.50.44    3306:3204
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL instances (e.g. `3306` for the classic MySQL
 protocol, or `33060` for [MySQL X Protocol](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
-useful for  operations, such as
-asynchronous calls).
+useful for  operations, such as asynchronous calls).

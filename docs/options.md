@@ -7,12 +7,9 @@ You can pass options from the
 configuration file to be included in the MySQL configuration in one of the
 following ways:
 
-
 * edit the `deploy/cr.yaml` file,
 
-
 * use a ConfigMap,
-
 
 * use a Secret object.
 
@@ -91,11 +88,13 @@ This can be useful if you need additional protection for some sensitive data.
 You should create a Secret object with a specific name, composed of your cluster
 name and the `mysql` suffix.
 
-**NOTE**: To find the cluster name, you can use the following command:
+!!! note
 
-```bash
-$ kubectl get ps
-```
+    To find the cluster name, you can use the following command:
+
+    ```bash
+    $ kubectl get ps
+    ```
 
 Configuration options should be put inside a specific key inside of the `data`
 section. The name of this key is `my.cnf` for Percona Server for MySQL pods.
@@ -116,12 +115,14 @@ follows:
 $ cat my.cnf | base64
 ```
 
-**NOTE**: Similarly, you can read the list of options from a Base64 encoded
-string:
+!!! note
 
-```bash
-$ echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
-```
+    Similarly, you can read the list of options from a Base64 encoded
+    string:
+
+    ```bash
+    $ echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
+    ```
 
 Finally, use a yaml file to create the Secret object. For example, you can
 create a `deploy/mysql-secret.yaml` file with the following contents:
@@ -141,10 +142,12 @@ When ready, apply it with the following command:
 $ kubectl create -f deploy/mysql-secret.yaml
 ```
 
-**NOTE**: Do not forget to restart Percona Server for MySQL pods to ensure the
-cluster has updated the configuration. You can do it with the following
-command:
+!!! note
 
-```bash
-$ kubectl rollout restart statefulset cluster1-mysql
-```
+    Do not forget to restart Percona Server for MySQL pods to ensure the
+    cluster has updated the configuration. You can do it with the following
+    command:
+
+    ```bash
+    $ kubectl rollout restart statefulset cluster1-mysql
+    ```

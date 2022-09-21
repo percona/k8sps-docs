@@ -3,10 +3,7 @@
 The Percona Operator for MySQL uses Transport Layer
 Security (TLS) cryptographic protocol for the following types of communication:
 
-
 * Internal - communication between Percona Server for MySQL instances,
-
-
 * External - communication between the client application and ProxySQL.
 
 The internal certificate is also used as an authorization method.
@@ -19,24 +16,18 @@ secrets available. But certificates can be generated manually as well.
 
 To generate certificates manually, follow these steps:
 
-
 1. Provision a Certificate Authority (CA) to generate TLS certificates
-
 
 2. Generate a CA key and certificate file with the server details
 
-
 3. Create the server TLS certificates using the CA keys, certs, and server
-details
+    details
 
 The set of commands generate certificates with the following attributes:
 
-
 * `Server-pem` - Certificate
 
-
 * `Server-key.pem` - the private key
-
 
 * `ca.pem` - Certificate Authority
 

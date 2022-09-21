@@ -5,23 +5,17 @@ and managing open source MySQL clusters on Kubernetes.
 
 Containers deployed with the Operator include the following components:
 
-
 * [Percona Server for MySQL](https://www.percona.com/doc/percona-server/LATEST/index.html) (a free, fully compatible, enhanced, and open source drop-in replacement for any MySQL database),
-
 
 * [Percona XtraBackup](https://www.percona.com/doc/percona-xtrabackup/8.0/index.html) (a hot backup utility for MySQL based servers that doesn’t lock your database during the backup),
 
-
 * [Orchestrator](https://github.com/openark/orchestrator) (a replication topology manager for MySQL, used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype)),
-
 
 * [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), a proxy solution used when [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype)).
 
 The design of the Operator is highly bound
 to Percona Server for MySQL and the high availability implementation based on Orchestrator,
 which in its turn can be briefly described with the following diagram.
-
-
 
 ![image](assets/images/replication.svg)
 
@@ -34,8 +28,6 @@ function if you take any of the nodes down.
 To provide high availability operator uses [node affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
 to run Percona Server for MySQL instances on separate worker nodes if possible. If
 some node fails, the pod with it is automatically re-created on another node.
-
-
 
 ![image](assets/images/operator.svg)
 

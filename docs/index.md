@@ -21,68 +21,46 @@ instrumentation.
 
 # Requirements
 
-
 * [System Requirements](System-Requirements.md)
-
 
 * [Design and architecture](architecture.md)
 
-
 # Quickstart guides
-
 
 * [Install with Helm](helm.md)
 
-
 * [Install on Minikube](minikube.md)
-
 
 * [Install on Amazon Elastic Kubernetes Service (AWS EKS)](eks.md)
 
-
 # Installation guides
-
 
 * [Generic Kubernetes installation](kubernetes.md)
 
-
 # Configuration and Management
-
 
 * [Backup and restore](backups.md)
 
-
 * [Application and system users](users.md)
-
 
 * [Anti-affinity and tolerations](constraints.md)
 
-
 * [Changing MySQL Options](options.md)
-
 
 * [Exposing the cluster](expose.md)
 
-
 * [Transport Encryption (TLS/SSL)](TLS.md)
-
 
 * [Horizontal and vertical scaling](scaling.md)
 
-
 * [Monitor with Percona Monitoring and Management (PMM)](monitoring.md)
-
 
 * [Add sidecar containers](sidecar.md)
 
-
 # Reference
-
 
 * [Custom Resource options](operator.md)
 
-
 * [Percona certified images](images.md)
-
 
 * [Release Notes](RN/index.md)

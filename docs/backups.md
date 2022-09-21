@@ -4,8 +4,6 @@ The Operator stores MySQL backups outside the
 Kubernetes cluster: on [Amazon S3 or S3-compatible storage](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services),
 or on [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 
-
-
 ![image](assets/images/backup-s3.svg)
 
 The Operator currently allows doing cluster backup *on-demand* (i.e. manually at
@@ -36,8 +34,10 @@ data:
   AWS_SECRET_ACCESS_KEY: UkVQTEFDRS1XSVRILUFXUy1TRUNSRVQtS0VZ
 ```
 
-**NOTE**: The following command can be used to get a base64-encoded string from
-a plain text one: `$ echo -n 'plain-text-string' | base64`
+!!! note
+
+    The following command can be used to get a base64-encoded string from
+    a plain text one: `$ echo -n 'plain-text-string' | base64`
 
 The `name` value is the [Kubernetes
 secret](https://kubernetes.io/docs/concepts/configuration/secret/)
@@ -104,8 +104,10 @@ data:
   AZURE_STORAGE_ACCOUNT_KEY: UkVQTEFDRS1XSVRILUFXUy1TRUNSRVQtS0VZ
 ```
 
-**NOTE**: The following command can be used to get a base64-encoded string from
-a plain text one: `$ echo -n 'plain-text-string' | base64`
+!!! note
+
+    The following command can be used to get a base64-encoded string from
+    a plain text one: `$ echo -n 'plain-text-string' | base64`
 
 The `name` value is the [Kubernetes
 secret](https://kubernetes.io/docs/concepts/configuration/secret/)
@@ -154,12 +156,9 @@ When the `deploy/cr.yaml` file
 contains correctly configured keys and is applied with `kubectl` command, use
 *a special backup configuration YAML file* with the following contents:
 
-
 * **backup name** in the `metadata.name` key,
 
-
 * **Percona Distribution for MySQL Cluster name** in the `clusterName` key,
-
 
 * **storage name** from `deploy/cr.yaml` in the `spec.storageName` key.
 
@@ -171,77 +170,75 @@ When the backup destination is configured and applied with kubectl apply -f depl
 $ kubectl apply -f deploy/backup.yaml
 ```
 
-**NOTE**: Storing backup settings in a separate file can be replaced by
-passing its content to the `kubectl apply` command as follows:
+!!! note
 
-```bash
-$ cat <<EOF | kubectl apply -f-
-apiVersion: ps.percona.com/v1alpha1
-kind: PerconaServerMySQLBackup
-metadata:
-  name: backup1
-spec:
-  clusterName: cluster1
-  storageName: s3-us-west
-EOF
-```
+    Storing backup settings in a separate file can be replaced by
+    passing its content to the `kubectl apply` command as follows:
+
+    ```bash
+    $ cat <<EOF | kubectl apply -f-
+    apiVersion: ps.percona.com/v1alpha1
+    kind: PerconaServerMySQLBackup
+    metadata:
+      name: backup1
+    spec:
+      clusterName: cluster1
+      storageName: s3-us-west
+    EOF
+    ```
 
 ## Restore the cluster from a previously saved backup
 
 Following things are needed to restore a previously saved backup:
 
-
 * Make sure that the cluster is running.
-
 
 * Find out correct names for the **backup** and the **cluster**. Available
 backups can be listed with the following command:
 
-```bash
-$ kubectl get ps-backup
-```
+    ```bash
+    $ kubectl get ps-backup
+    ```
 
-And the following command will list existing Percona Distribution for MySQL
-Cluster names in the current Kubernetes-based environment:
+    And the following command will list existing Percona Distribution for MySQL
+    Cluster names in the current Kubernetes-based environment:
 
-```bash
-$ kubectl get ps
-```
+    ```bash
+    $ kubectl get ps
+    ```
 
 When the correct names for the backup and the cluster are known, backup
 restoration can be done in the following way.
 
-
 1. Set appropriate keys in the `deploy/restore.yaml` file.
 
-
     * set `spec.clusterName` key to the name of the target cluster to restore
-the backup on,
-
+        the backup on,
 
     * set `spec.backupName` key to the name of your backup.
 
-
 2. After that, the actual restoration process can be started as follows:
 
-```bash
-$ kubectl apply -f deploy/restore.yaml
-```
+    ```bash
+    $ kubectl apply -f deploy/restore.yaml
+    ```
 
-**NOTE**: Storing backup settings in a separate file can be replaced by passing
-its content to the `kubectl apply` command as follows:
+!!! note
 
-```bash
-$ cat <<EOF | kubectl apply -f-
-apiVersion: "pxc.percona.com/v1alpha1"
-kind: "PerconaServerMySQLRestore"
-metadata:
-  name: "restore1"
-spec:
-  clusterName: "cluster1"
-  backupName: "backup1"
-EOF
-```
+    Storing backup settings in a separate file can be replaced by passing
+    its content to the `kubectl apply` command as follows:
+
+    ```bash
+    $ cat <<EOF | kubectl apply -f-
+    apiVersion: "pxc.percona.com/v1alpha1"
+    kind: "PerconaServerMySQLRestore"
+    metadata:
+      name: "restore1"
+    spec:
+      clusterName: "cluster1"
+      backupName: "backup1"
+    EOF
+    ```
 
 ## Delete the unneeded backup
 

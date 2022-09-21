@@ -22,9 +22,7 @@ for the high availability and balancing purposes.
 
 Percona Operator for MySQL provides two approaches for doing this:
 
-
 * simple way to set anti-affinity for Pods, built-in into the Operator,
-
 
 * more advanced approach based on using standard Kubernetes
 constraints.
@@ -34,18 +32,14 @@ constraints.
 Percona Operator for MySQL provides the `antiAffinityTopologyKey`
 option, which may have one of the following values:
 
-
 * `kubernetes.io/hostname` - Pods will avoid residing within the same
 host,
-
 
 * `topology.kubernetes.io/zone` - Pods will avoid residing
 within the same zone,
 
-
 * `topology.kubernetes.io/region` - Pods will avoid
 residing within the same region,
-
 
 * `none` - no constraints are applied.
 
@@ -108,5 +102,4 @@ affinity:
              - another-node-label-value
 ```
 
-See explanation of the advanced affinity options [in Kubernetes
-documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature).
+See explanation of the advanced affinity options [in Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature).
