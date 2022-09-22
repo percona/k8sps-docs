@@ -31,9 +31,9 @@ instrumentation.
 
 * [Install on Minikube](minikube.md)
 
-* [Install on Amazon Elastic Kubernetes Service (AWS EKS)](eks.md)
-
 # Installation guides
+
+* [Install on Amazon Elastic Kubernetes Service (AWS EKS)](eks.md)
 
 * [Generic Kubernetes installation](kubernetes.md)
 
