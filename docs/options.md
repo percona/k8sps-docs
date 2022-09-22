@@ -29,7 +29,7 @@ spec:
         max_connections=250
 ```
 
-See the [Custom Resource options, MySQL section](operator.html#operator-mysql-section)
+See the [Custom Resource options, MySQL section](operator.md#operator-mysql-section)
 for more details.
 
 ## Use a ConfigMap
