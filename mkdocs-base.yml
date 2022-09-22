@@ -1,6 +1,6 @@
 # MkDocs configuration
 # Used as base - look for .yml files with INHERIT
-site_name: Percona Product Documentation
+site_name: Percona Operator for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
@@ -13,7 +13,7 @@ edit_uri: edit/main/docs/
 theme:
   name: material
   logo: assets/images/percona-logo.svg
-  favicon: assets/images/percona-favicon.ico
+  favicon: assets/images/favicon.ico
   palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"

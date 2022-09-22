@@ -1,4 +1,4 @@
-# Percona Operator for MySQL
+# Percona Operator for MySQL based on Percona Server for MySQL
 
 Kubernetes have added a way to
 manage containerized systems, including database clusters. This management is
