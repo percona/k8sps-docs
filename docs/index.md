@@ -63,4 +63,4 @@ instrumentation.
 
 * [Percona certified images](images.md)
 
-* [Release Notes](RN/index.md)
+* [Release Notes](ReleaseNotes/index.md)

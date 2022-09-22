@@ -1,6 +1,6 @@
 # MkDocs configuration
 # Used as base - look for .yml files with INHERIT
-site_name: Percona Operator for MySQL
+site_name: Percona Operator for MySQL based on Percona Server for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
@@ -128,5 +128,5 @@ nav:
           - "Percona certified images": images.md
           
     - Release Notes:
-          - "Percona Operator for MySQL 0.2.0 (2022-06-30)": RN/Kubernetes-Operator-for-PS-RN0.2.0.md
-          - "Percona Distribution for MySQL Operator based on Percona Server for MySQL 0.1.0 (2022-01-25)": RN/Kubernetes-Operator-for-PS-RN0.1.0.md
+          - "Percona Operator for MySQL 0.2.0 (2022-06-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.md
+          - "Percona Distribution for MySQL Operator based on Percona Server for MySQL 0.1.0 (2022-01-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.1.0.md
