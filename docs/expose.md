@@ -83,6 +83,8 @@ my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL Router:
 
+* `3306` - read/write, default MySQL clients connection,
+* `33062` - read/write, port for MySQL administrative connections,
 * `6446` - read/write, routing traffic to a Primary node,
 * `6447` - read-only, load balancing the traffic across Replicas.
 
