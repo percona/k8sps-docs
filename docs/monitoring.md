@@ -34,12 +34,15 @@ Kubernetes-based environment:
 
     * set `pmm.enabled=true`
     * set the `pmm.serverHost` key to your PMM Server hostname,
-    * check that  the `serverUser` key contains your PMM Server user name
-        (`admin` by default),
-    * make sure the `pmmserver` key in the
-        [deploy/secrets.yaml](https://github.com/percona/percona-server-mongodb-operator/blob/main/deploy/secrets.yaml)
-        secrets file contains the password specified for the PMM Server during its
-        installation.
+    * authorize PMM Client within PMM Server in one of two ways:
+        === "with token-based authorization (recommended)"
+            <a name="operator-monitoring-client-token"></a>
+            [Acquire the API Key from your PMM Server](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication) and set ``pmmserverkey`` in the [deploy/secrets.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/secrets.yaml) secrets file to this obtained API Key value.
+
+        === "with password-based authorization"
+            check that the `serverUser` key in the [deploy/secrets.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/secrets.yaml) secrets file contains your PMM Server user name (`admin` by default), and make sure the `pmmserver` key in the [deploy/secrets.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/secrets.yaml) secrets file contains the password specified for the PMM Server during its installation.
+
+            *Password-based authorization method is deprecated since the Operator 0.3.0.*
 
     !!! note
 

@@ -60,7 +60,7 @@ The following table shows system users’ names and purposes.
 | Backup         | xtrabackup   | xtrabackup          | [User to run backups](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)     |
 | Cluster Check  | clustercheck | clustercheck        | [User for liveness checks and readiness checks](http://galeracluster.com/library/documentation/monitoring-cluster.html) |
 | Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
-| PMM Server Password | should be set through the [operator options](operator.md) | pmmserver | [Password used to access PMM Server](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
+| PMM Server Password | should be set through the [operator options](operator.md) | pmmserver | [Password used to access PMM Server](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling). **Password-based authorization method is deprecated since the Operator 0.3.0**. [Use token-based authorization instead](monitoring.md#operator-monitoring-client-token) |
 | Operator Admin | operator     | operator            | Database administrative user, should be used only by the Operator      |
 | Replication    | replication  | replication         | Administrative user needed for replication                             |
 
@@ -81,12 +81,11 @@ stringData:
   root: root_password
   xtrabackup: backup_password
   monitor: monitor_password
-  clustercheck: clustercheck_password
-  proxyadmin: admin_password
-  pmmserver: admin
+  pmmserverkey: my_pmm_server_key
   operator: operator_password
   replication: replication_password
   orchestrator: orchestrator_password
+  heartbeat: heartbeat_password
 ```
 
 As you can see, because we use the `stringData` type when creating the Secrets
@@ -95,12 +94,12 @@ convenient from the user’s point of view. But the resulting Secrets
 object contains passwords stored as `data` - i.e., base64-encoded strings.
 If you want to update any field, you’ll need to encode the value into base64
 format. To do this, you can run `echo -n "password" | base64` in your local
-shell to get valid values. For example, setting the PMM Server user’s password
+shell to get valid values. For example, setting the Admin user’s password
 to `new_password` in the `cluster1-secrets` object can be done
 with the following command:
 
 ```bash
-$ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserver": '$(echo -n new_password | base64)'}}'
+$ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n new_password | base64)'}}'
 ```
 
 ### Password Rotation Policies and Timing
