@@ -12,6 +12,8 @@ MySQL cluster; it should include only [URL-compatible characters](https://datatr
 not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
 
+* `finalizers.delete-mysql-pods-in-order` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
+
 The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains the following sections:
 
 | Key             | Value type         | Default            | Description                                |
