@@ -375,6 +375,11 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Example**     | `us-west-2` |
 | **Description** | The [AWS region](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages |
 |                 | |
+| **Key**         | {{ optionlink('backup.storages.s3.&lt;storage-name&gt;.prefix') }} |
+| **Value**       | string |
+| **Example**     | `""` |
+| **Description** | The path (sub-folder) to the backups inside the [bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) |
+|                 | |
 | **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.s3.credentialsSecret') }} |
 | **Value**       | string |
 | **Example**     | `my-cluster-name-backup-s3` |
