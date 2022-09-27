@@ -1,0 +1,76 @@
+1. You will need the login and password for the admin user to access the
+    cluster. Use `kubectl get secrets` command to see the list of Secrets
+    objects (by default the Secrets object you are interested in has
+    `cluster1-secrets` name). Then
+    `kubectl get secret cluster1-secrets -o yaml` command will return
+    the YAML file with generated Secrets, including the `MONGODB_DATABASE_ADMIN_USER`
+    and `MONGODB_DATABASE_ADMIN_PASSWORD` strings, which should look as follows:
+
+    ```yaml
+    ...
+    data:
+      ...
+      root: MWV1VDdZSGxYWHNhcHpYTjF3Ug==
+    ```
+
+    Here the actual login name and password are base64-encoded. Use 
+    `echo 'MWV1VDdZSGxYWHNhcHpYTjF3Ug==' | base64 --decode` command to bring it
+    back to a human-readable form.
+
+2. Run a container with a MongoDB client and connect its console output to your
+    terminal. The following command will do this, naming the new Pod
+    `percona-client`:
+
+    ```bash
+    $ kubectl run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
+    ```
+
+    Executing it may require some time to deploy the correspondent Pod.
+
+3. Now run `mysql` tool in the percona-client command shell using the password
+    obtained from the Secret instead of the `<root password>` placeholder:
+
+    ```bash
+    $ mysql -h cluster1-haproxy -uroot -p<root password>
+    ```
+    
+    ??? example "Expected output"
+
+        ```text
+        mysql: [Warning] Using a password on the command line interface can be insecure.
+        Welcome to the MySQL monitor.  Commands end with ; or \g.
+        Your MySQL connection id is 4065
+        Server version: 8.0.29-21 Percona Server (GPL), Release 21, Revision c59f87d2854
+
+        Copyright (c) 2009-2022 Percona LLC and/or its affiliates
+        Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+        Oracle is a registered trademark of Oracle Corporation and/or its
+        affiliates. Other names may be trademarks of their respective
+        owners.
+
+        Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+        mysql>
+        ```
+
+    The following example will use the MySQL prompt to check the
+    `max_connections` variable:
+
+    ```bash
+    mysql> SHOW VARIABLES LIKE "max_connections";
+    ```
+
+    ??? example "Expected output"
+
+        ```text
+        +-----------------+-------+
+        | Variable_name   | Value |
+        +-----------------+-------+
+        | max_connections | 158   |
+        +-----------------+-------+
+        1 row in set (0.02 sec)
+
+        mysql> 
+        ```
+

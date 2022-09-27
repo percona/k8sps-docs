@@ -1,16 +1,17 @@
-.. code:: text
+```text
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4065
+Server version: 8.0.29-21 Percona Server (GPL), Release 21, Revision c59f87d2854
 
-	mysql: [Warning] Using a password on the command line interface can be insecure.
-	Welcome to the MySQL monitor.  Commands end with ; or \g.
-	Your MySQL connection id is 2268
-	Server version: 8.0.25-15 Percona Server (GPL), Release 15, Revision a558ec2
+Copyright (c) 2009-2022 Percona LLC and/or its affiliates
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
 
-	Copyright (c) 2009-2021 Percona LLC and/or its affiliates
-	Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
 
-	Oracle is a registered trademark of Oracle Corporation and/or its
-	affiliates. Other names may be trademarks of their respective
-	owners.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-	Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-
+mysql>
+```
