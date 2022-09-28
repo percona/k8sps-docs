@@ -34,7 +34,7 @@ mysql:
    image: perconalab/percona-xtradb-cluster-operator:{{ release }}-haproxy
 ```
 
-The resulting HAPproxy setup will contain the `cluster1-haproxy` service
+The resulting HAProxy setup will contain the `cluster1-haproxy` service
 listening on ports 3306 (MySQL) and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
 useful for operations such as asynchronous calls).
 This service is pointing to the MySQL cluster member number zero
