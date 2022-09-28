@@ -35,7 +35,7 @@ mysql:
 ```
 
 The resulting HAProxy setup will contain the `cluster1-haproxy` service
-listening on ports 3306 (MySQL) and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
+listening on ports 3306 (MySQL primary), 3307 (MySQL replicas) and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
 useful for operations such as asynchronous calls).
 This service is pointing to the MySQL cluster member number zero
 (`cluster1-mysql-0`) by default when this member is available. If a zero
