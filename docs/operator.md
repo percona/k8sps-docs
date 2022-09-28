@@ -93,7 +93,7 @@ configuration options for the Percona Server for MySQL.
 | **Key**         | {{ optionlink('mysql.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for xposure |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure |
 |                 | |
 | **Key**         | {{ optionlink('mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage') }} |
 | **Value**       | string |
@@ -192,7 +192,7 @@ of any complexity to be used |
 | **Key**         | {{ optionlink('router.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for for MySQL Router instances xposure |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for MySQL Router instances exposure |
 
 ## <a name="operator-orchestrator-section"></a>Orchestrator section
 
@@ -225,6 +225,11 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Value**       | subdoc |
 | **Example**     | |
 | **Description** | In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.expose.type') }} |
+| **Value**       | string |
+| **Example**     | `ClusterIP` |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for Orchestrator instances exposure |
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.resources.requests.memory') }} |
 | **Value**       | string |
@@ -369,6 +374,11 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Value**       | string |
 | **Example**     | `us-west-2` |
 | **Description** | The [AWS region](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages |
+|                 | |
+| **Key**         | {{ optionlink('backup.storages.s3.&lt;storage-name&gt;.prefix') }} |
+| **Value**       | string |
+| **Example**     | `""` |
+| **Description** | The path (sub-folder) to the backups inside the [bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) |
 |                 | |
 | **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.s3.credentialsSecret') }} |
 | **Value**       | string |
