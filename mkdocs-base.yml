@@ -128,6 +128,7 @@ nav:
           - "Application and system users": users.md
           - "Anti-affinity and tolerations": constraints.md
           - "Changing MySQL Options": options.md
+          - "Load Balancing with HAProxy": haproxy-conf.md
           - "Exposing the cluster": expose.md
           - "Transport Encryption (TLS/SSL)": TLS.md
           - "Horizontal and vertical scaling": scaling.md
