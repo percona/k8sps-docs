@@ -183,76 +183,6 @@ configuration options for the HAProxy service.
 | **Example**     | `private-registry-credentials` |
 | **Description** | The [Kubernetes imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the HAProxy image |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.readinessDelaySec') }} |
-| **Value**       | int |
-| **Example**     | `15` |
-| **Description** | Adds a delay before a run check to verify the application is ready to process traffic |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.livenessDelaySec') }} |
-| **Value**       | int |
-| **Example**     | `300` |
-| **Description** | Adds a delay before the run check ensures the application is healthy and capable of processing requests |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.configuration') }} |
-| **Value**       | string |
-| **Example**     | |
-| **Description** | The [custom HAProxy configuration file](haproxy-conf.md#haproxy-conf-custom) contents |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.annotations') }} |
-| **Value**       | label |
-| **Example**     | `iam.amazonaws.com/role: role-arn` |
-| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) metadata |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.labels') }} |
-| **Value**       | label |
-| **Example**     | `rack: rack-22` |
-| **Description** | [Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.readinessProbes.initialDelaySeconds') }} |
-| **Value**       | int |
-| **Example**     | `15` |
-| **Description** | Number of seconds to wait before performing the first [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.readinessProbes.timeoutSeconds') }} |
-| **Value**       | int |
-| **Example**     | `1` |
-| **Description** | Number of seconds after the container has started before [readiness probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) are initiated |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.readinessProbes.periodSeconds') }} |
-| **Value**       | int |
-| **Example**     | `5` |
-| **Description** | How often (in seconds) to perform the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.readinessProbes.successThreshold') }} |
-| **Value**       | int |
-| **Example**     | `1` |
-| **Description** | Minimum consecutive successes for the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.readinessProbes.failureThreshold') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | When the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.serviceType') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIP` |
-| **Description** | Specifies the type of [Kubernetes Service](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for HAProxy |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.externalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for HAProxy should [route external traffic to cluster-wide or to node-local endpoints](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) (it can influence the load balancing effectiveness) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.replicasServiceType') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIP` |
-| **Description** | Specifies the type of [Kubernetes Service](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for HAProxy replicas |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.replicasExternalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for HAProxy replicas should [route external traffic to cluster-wide or to node-local endpoints](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) (it can influence the load balancing effectiveness) |
-|                 | |
 | **Key**         | {{ optionlink('haproxy.resources.requests.memory') }} |
 | **Value**       | string |
 | **Example**     | `1G` |
@@ -273,26 +203,6 @@ configuration options for the HAProxy service.
 | **Example**     | `700m` |
 | **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.envVarsSecret') }} |
-| **Value**       | string |
-| **Example**     | `my-env-var-secrets` |
-| **Description** | A secret with environment variables, see [Define environment variables](containers-conf.md#faq-env) for details |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.priorityClassName') }} |
-| **Value**       | string |
-| **Example**     | `high-priority` |
-| **Description** | The [Kubernetes Pod Priority class](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass) for HAProxy |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.schedulerName') }} |
-| **Value**       | string |
-| **Example**     | `mycustom-scheduler` |
-| **Description** | The [Kubernetes Scheduler](https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.nodeSelector') }} |
-| **Value**       | label |
-| **Example**     | `disktype: ssd` |
-| **Description** | [Kubernetes nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) |
-|                 | |
 | **Key**         | {{ optionlink('haproxy.affinity.topologyKey') }} |
 | **Value**       | string |
 | **Example**     | `kubernetes.io/hostname` |
@@ -303,100 +213,10 @@ configuration options for the HAProxy service.
 | **Example**     | |
 | **Description** | If available it makes a [topologyKey](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature) node affinity constraint to be ignored |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.tolerations') }} |
-| **Value**       | subdoc |
-| **Example**     | `node.alpha.kubernetes.io/unreachable` |
-| **Description** | [Kubernetes Pod tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.podDisruptionBudget.maxUnavailable') }} |
-| **Value**       | int |
-| **Example**     | `1` |
-| **Description** | The [Kubernetes podDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget) specifies the number of Pods from the set unavailable after the eviction |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.podDisruptionBudget.minAvailable') }} |
-| **Value**       | int |
-| **Example**     | `0` |
-| **Description** | The [Kubernetes podDisruptionBudget](https://kubernetes.io/docs/tasks/run-application/configure-pdb/#specifying-a-poddisruptionbudget) Pods that must be available after an eviction |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.gracePeriod') }} |
-| **Value**       | int |
-| **Example**     | `30` |
-| **Description** | The [Kubernetes grace period when terminating a Pod](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.loadBalancerSourceRanges') }} |
+| **Key**         | {{ optionlink('haproxy.expose.type') }} |
 | **Value**       | string |
-| **Example**     | `10.0.0.0/8` |
-| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.serviceLabels') }} |
-| **Value**       | label |
-| **Example**     | `rack: rack-23` |
-| **Description** | The [Kubernetes labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for the load balancer Service |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.serviceAnnotations') }} |
-| **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
-| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) metadata for the load balancer Service |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.containerSecurityContext') }} |
-| **Value**       | subdoc |
-| **Example**     | `privileged: true` |
-| **Description** | A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.podSecurityContext') }} |
-| **Value**       | subdoc |
-| **Example**     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
-| **Description** | A custom [Kubernetes Security Context for a Pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.serviceAccountName') }} |
-| **Value**       | string |
-| **Example**     | `percona-xtradb-cluster-operator-workload` |
-| **Description** | The [Kubernetes Service Account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the HAProxy Pod |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.runtimeClassName') }} |
-| **Value**       | string |
-| **Example**     | `image-rc` |
-| **Description** | Name of the [Kubernetes Runtime Class](https://kubernetes.io/docs/concepts/containers/runtime-class/) for the HAProxy Pod |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.image') }} |
-| **Value**       | string |
-| **Example**     | `busybox` |
-| **Description** | Image for the [custom sidecar container](faq.md#faq-sidecar) for the HAProxy Pod |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.command') }} |
-| **Value**       | array |
-| **Example**     | `["/bin/sh"]` |
-| **Description** | Command for the [custom sidecar container](faq.md#faq-sidecar) for the HAProxy Pod |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.args') }} |
-| **Value**       | array |
-| **Example**     | `["-c", "while true; do trap 'exit 0' SIGINT SIGTERM SIGQUIT SIGKILL; done;"]` |
-| **Description** | Command arguments for the [custom sidecar container](faq.md#faq-sidecar) for the HAProxy Pod |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.name') }} |
-| **Value**       | string |
-| **Example**     | `my-sidecar-1` |
-| **Description** | Name of the [custom sidecar container](faq.md#faq-sidecar) for the HAProxy Pod |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `1G` |
-| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the sidecar HAProxy containers |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.resources.requests.cpu') }} |
-| **Value**       | string |
-| **Example**     | `500m` |
-| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the sidecar HAProxy containers |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `2G` |
-| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the sidecar HAProxy containers |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.sidecars.resources.limits.cpu') }} |
-| **Value**       | string |
-| **Example**     | `600m` |
-| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the sidecar HAProxy containers |
+| **Example**     | `ClusterIP` |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for HAProxy exposure |
 
 ## <a name="operator-router-section"></a>Router section
 
