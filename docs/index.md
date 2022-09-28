@@ -49,8 +49,6 @@ instrumentation.
 
 * [Exposing the cluster](expose.md)
 
-* [Load Balancing with HAProxy](haproxy-conf.md)
-
 * [Transport Encryption (TLS/SSL)](TLS.md)
 
 * [Horizontal and vertical scaling](scaling.md)
