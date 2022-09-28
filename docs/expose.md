@@ -35,20 +35,14 @@ mysql:
 ```
 
 The resulting HAProxy setup will contain the `cluster1-haproxy` service
-listening on ports 3306 (MySQL primary), 3307 (MySQL replicas) and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
+listening on ports 3306 (MySQL primary), 3307 (MySQL replicas), and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
 useful for operations such as asynchronous calls).
-This service is pointing to the MySQL cluster member number zero
-(`cluster1-mysql-0`) by default when this member is available. If a zero
-member is not available, members are selected in descending order of their
-numbers (e.g. `cluster1-mysql-2`, then `cluster1-mysql-1`, etc.). This
-service can be used for both read and write load, or it can also be used
-just for write load (single writer mode) in setups with split write and read
-loads.
 
 !!! note
 
-    For obvious reasons the Operator will not allow the simultaneous
-    enabling of both HAProxy and Group Replication.
+    The Operator currently supports using HAProxy with the asyncrhonous cluster
+    only, and therefore simultaneous enabling of both HAProxy and Group
+    Replication is not possible.
 
 When the cluster is configured in this way, you can find the endpoint (the
 public IP address of the load balancer in our example) by getting the Service
