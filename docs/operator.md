@@ -19,6 +19,7 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | Key             | Value type         | Default            | Description                                |
 | --------------- | ------------------ | ------------------ | ------------------------------------------ |
 | mysql           | subdoc             |                    | Percona Server for MySQL general section   |
+| haproxy         | subdoc             |                    | HAProxy section                            |
 | orchestrator    | subdoc             |                    | Orchestrator section                       |
 | pmm             | subdoc             |                    | Percona Monitoring and Management section  |
 | secretsName     | string             | `cluster1-secrets` | A name for [users secrets](users.md#users) |
@@ -144,6 +145,78 @@ configuration options for the Percona Server for MySQL.
 | **Value**       | subdoc |
 | **Example**     | |
 | **Description** | [Persistent Volume Claim](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
+
+## <a name="operator-haproxy-section"></a>HAProxy section
+
+The `haproxy` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
+configuration options for the HAProxy service.
+
+|                 | |
+|-----------------|-|
+| **Key**         | {{ optionlink('haproxy.enabled') }} |
+| **Value**       | boolean |
+| **Example**     | `true` |
+| **Description** | Enables or disables [load balancing with HAProxy](https://haproxy.org) [Services](https://kubernetes.io/docs/concepts/services-networking/service/) |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.size') }} |
+| **Value**       | int |
+| **Example**     | `3` |
+| **Description** | The number of the HAProxy Pods [to provide load balancing](haproxy-conf.md). Safe configuration should have 2 or more |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.image') }} |
+| **Value**       | string |
+| **Example**     | `percona/perconalab-xtradb-cluster-operator:{{ release }}-haproxy` |
+| **Description** | HAProxy Docker image to use |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.replicasServiceEnabled') }} |
+| **Value**       | boolean |
+| **Example**     | `true` |
+| **Description** | Enables or disables `haproxy-replicas` Service. This Service (on by default) forwards requests to all MySQL instances, and it **should not be used for write requests**! |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.imagePullPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Always` |
+| **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.imagePullSecrets.name') }} |
+| **Value**       | string |
+| **Example**     | `private-registry-credentials` |
+| **Description** | The [Kubernetes imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the HAProxy image |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `1G` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `600m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `1G` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `700m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.affinity.topologyKey') }} |
+| **Value**       | string |
+| **Example**     | `kubernetes.io/hostname` |
+| **Description** | The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.affinity.advanced') }} |
+| **Value**       | subdoc |
+| **Example**     | |
+| **Description** | If available it makes a [topologyKey](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature) node affinity constraint to be ignored |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.expose.type') }} |
+| **Value**       | string |
+| **Example**     | `ClusterIP` |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for HAProxy exposure |
 
 ## <a name="operator-router-section"></a>Router section
 
