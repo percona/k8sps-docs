@@ -4,13 +4,66 @@ The Percona Operator for MySQL uses Transport Layer
 Security (TLS) cryptographic protocol for the following types of communication:
 
 * Internal - communication between Percona Server for MySQL instances,
-* External - communication between the client application and ProxySQL.
+* External - communication between the client application and the cluster.
 
 The internal certificate is also used as an authorization method.
 
-TLS security can be configured in several ways. By default, the Operator
-generates long-term certificates automatically if there are no certificate
-secrets available. But certificates can be generated manually as well.
+TLS security can be configured in several ways.
+
+* By default, the Operator *generates long-term certificates* automatically if
+    there are no certificate secrets available.
+   
+    ??? note "The Operator's self-signed issuer is local to the Operator Namespace"
+        This self-signed issuer is created because Percona Distribution for MySQL
+        requires all certificates issued by the same source.
+
+* The Operator can use a specifically installed *cert-manager*, which will
+    automatically *generate and renew short-term TLS certificate*
+    
+    ??? note "The *cert-manager* acts as a self-signed issuer and generates certificates" 
+        It is still a self-signed issuer which allows you to deploy and use the
+        Percona Operator without a separate certificate issuer.
+
+* Certificates can be generated manually: obtained from some other issuer and
+    provided to the Operator.
+
+## Install and use the *cert-manager*
+
+### About the *cert-manager*
+
+A [cert-manager](https://cert-manager.io/docs/) is a Kubernetes certificate
+management controller which is widely used to automate the management and
+issuance of TLS certificates. It is community-driven, and open source.
+
+When you have already installed *cert-manager*, nothing else is needed: just
+deploy the Operator, and the Operator will request a certificate from the
+*cert-manager*.
+
+### Installation of the *cert-manager*
+
+The steps to install the *cert-manager* are the following:
+
+* Create a namespace,
+
+* Disable resource validations on the cert-manager namespace,
+
+* Install the cert-manager.
+
+The following commands perform all the needed actions:
+
+```bash
+$ kubectl create namespace cert-manager
+$ kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
+$ kubectl_bin apply -f https://github.com/jetstack/cert-manager/releases/download/v{{ certmanagerrecommended }}/cert-manager.yaml
+```
+
+After the installation, you can verify the *cert-manager* by running the following command:
+
+```bash
+$ kubectl get pods -n cert-manager
+```
+
+The result should display the *cert-manager* and webhook active and running.
 
 ## Generate certificates manually
 
