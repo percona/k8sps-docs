@@ -82,7 +82,7 @@ default web browser.
     command:
 
     ```bash
-    $ kubectl get psmdb
+    $ kubectl get ps
     ```
 
     ??? example "Expected output"
