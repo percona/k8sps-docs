@@ -31,7 +31,7 @@ default web browser.
 1. Clone the percona-server-mysql-operator repository:
 
     ```bash
-    $ git clone -b v{{{release}}} https://github.com/percona/percona-server-mysql-operator
+    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
     $ cd percona-server-mysql-operator
     ```
 
