@@ -166,9 +166,9 @@ contains correctly configured keys and is applied with `kubectl` command, use
 
 * **storage name** from `deploy/cr.yaml` in the `spec.storageName` key.
 
-The example of such file is [deploy/backup/backup.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup.yaml).
-
 * <a name="finalizers"></a>**S3 backup finalizer** set by the `metadata.finalizers.delete-backup` key (it triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object).
+
+The example of such file is [deploy/backup/backup.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup.yaml).
 
 When the backup destination is configured and applied with kubectl apply -f deploy/cr.yaml command, make backup as follows:
 

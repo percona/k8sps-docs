@@ -29,12 +29,12 @@
 * {{ k8spsjira(23) }} Add [cert-manager support](../TLS.md#install-and-use-the-cert-manager) to generate and update TLS certificates automatically
 * {{ k8spsjira(31) }} Show `ready` state in the custom resource output produced by the `kubectl get ps` command only after all LoadBalancers are ready
 * {{ k8spsjira(59) }} Add [mysql.primaryServiceType](../operator.md#mysql-primaryservicetype) Custom Resource option to configure the primary exposure type in one place instead of exposing all Pods with specific Service type
-* {{ k8spsjira(88) }} Allow configuring `prefix` field for backup storages via the [backup.s3.prefix](../operator.md#backup-s3-prefix) Custom Resource option
+* {{ k8spsjira(88) }} Allow configuring `prefix` field for backup storages via the [backup.s3.prefix](../operator.md#backup-storages-s3-prefix) Custom Resource option
 * {{ k8spsjira(93) }} Avoid running multiple backups on the same Pod by either scheduling new backup to another Node or blocking it until the running one finishes
 * {{ k8spsjira(97) }} [S3 backup finalizer](../backups.md#finalizers) now triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object
 * {{ k8spsjira(103) }} Show MySQL Router and Orchestrator statuses in the Custom Resource through the `kubectl` command
 * {{ k8spsjira(104) }} Avoid using the root user in backup containers to run XtraBackup with the lowest possible privileges for higher security and isolation of the cluster components
-* {{ k8spsjira(115) }} Make it possible [to use API Key](../monitoring.md#operator-monitoring-client-token) to authorize within Percona Monitoring and Management Server as a more convenient and modern alternative password-based authentication
+* {{ k8spsjira(115) }} Make it possible [to use API Key](../monitoring.md#installing-the-pmm-client) to authorize within Percona Monitoring and Management Server as a more convenient and modern alternative password-based authentication
 * {{ k8spsjira(119) }} and {{ k8spsjira(150) }}	Allow to specify custom init images for the cluster components (MySQL, Orchestrator, Router, HAProxy, etc.) to simplify customizing images by the end users
 * {{ k8spsjira(138) }} Expose MySQL default and administrative connection ports via MySQL Router
 * {{ k8spsjira(145) }} Add `delete-mysql-pods-in-order` finalizer to control the proper Pods deletion order in case of the cluster deletion event

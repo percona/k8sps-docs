@@ -11,11 +11,11 @@ Containers deployed with the Operator include the following components:
 
 * [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype),
 
-[HAProxy](https://haproxy.org) - a load balancing and proxy service used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype)),
+* [HAProxy](https://haproxy.org) - a load balancing and proxy service used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype)),
 
 * [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) - a proxy solution used when [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype),
 
-*[Percona Toolkit](https://docs.percona.com/percona-toolkit/) - a set of tools useful in debugging MySQL Pods.
+* [Percona Toolkit](https://docs.percona.com/percona-toolkit/) - a set of tools useful in debugging MySQL Pods.
 
 The design of the Operator is highly bound
 to Percona Server for MySQL and the high availability implementation based on Orchestrator,
