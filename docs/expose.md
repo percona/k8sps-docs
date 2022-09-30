@@ -12,8 +12,52 @@ and [Group Replication](https://dev.mysql.com/doc/refman/8.0/en/group-replicatio
 
 ## Asynchronous Replication
 
+### Exposing cluster with HAProxy
+
+Percona Operator for MySQL provides load balancing and proxy service with
+[HAProxy](https://haproxy.org) (enabled by default).
+
+![image](assets/images/exposure-haproxy.svg)
+
+You can control whether to use it or not by enabling or disabling it via the
+`haproxy.enabled` option in the `deploy/cr.yaml` configuration file.
+
+The following example turns on the asynchronous replication and enables HAProxy:
+
+```yaml
+mysql:
+  clusterType: async
+  ...
+  haproxy: 
+   enabled: true
+   size: 3
+   image: perconalab/percona-xtradb-cluster-operator:{{ release }}-haproxy
+```
+
+The resulting HAProxy setup will contain the `cluster1-haproxy` service
+listening on ports 3306 (MySQL primary), 3307 (MySQL replicas), and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
+useful for operations such as asynchronous calls).
+
+!!! note
+
+    The Operator currently supports using HAProxy with the asyncrhonous cluster
+    only, and therefore simultaneous enabling of both HAProxy and Group
+    Replication is not possible.
+
+When the cluster is configured in this way, you can find the endpoint (the
+public IP address of the load balancer in our example) by getting the Service
+object with the `kubectl get service` command:
+
+```bash
+$ kubectl get service cluster1-haproxy
+NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
+cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
+```
+
+### Exposing cluster without HAProxy
+
 With [Asynchronous or Semi-synchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html)
-the cluster is exposed through a Kubernetes Service called
+the cluster can be also exposed through a Kubernetes Service called
 `<CLUSTER_NAME>-mysql-primary`: for example, `cluster1-mysql-primary`.
 
 ![image](assets/images/exposure-async.svg)
@@ -45,8 +89,7 @@ cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:3214
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL primary instance (e.g. `3306` for the classic
 MySQL protocol, or `33060` for [MySQL X Protocol](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
-useful for  operations, such as
-asynchronous calls).
+useful for operations such as asynchronous calls).
 
 ## Group Replication
 
@@ -83,13 +126,14 @@ my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL Router:
 
+* `3306` - read/write, default MySQL clients connection,
+* `33062` - read/write, port for MySQL administrative connections,
 * `6446` - read/write, routing traffic to a Primary node,
 * `6447` - read-only, load balancing the traffic across Replicas.
 
 Additionally, ports `6448` and `6449` are available in the same way to
 connect via [MySQL X Protocol](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
-useful for  operations, such as
-asynchronous calls.
+useful for operations such as asynchronous calls.
 
 Alternatively, you can find the endpoint to connect to by `kubectl get ps`
 command:
@@ -140,4 +184,4 @@ cluster1-mysql-2         LoadBalancer   10.40.42.158   35.193.50.44    3306:3204
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL instances (e.g. `3306` for the classic MySQL
 protocol, or `33060` for [MySQL X Protocol](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
-useful for  operations, such as asynchronous calls).
+useful for operations such as asynchronous calls).

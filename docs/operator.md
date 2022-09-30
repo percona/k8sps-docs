@@ -12,15 +12,44 @@ MySQL cluster; it should include only [URL-compatible characters](https://datatr
 not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
 
+* `finalizers.delete-mysql-pods-in-order` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
+
 The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains the following sections:
 
 | Key             | Value type         | Default            | Description                                |
 | --------------- | ------------------ | ------------------ | ------------------------------------------ |
 | mysql           | subdoc             |                    | Percona Server for MySQL general section   |
+| haproxy         | subdoc             |                    | HAProxy section                            |
 | orchestrator    | subdoc             |                    | Orchestrator section                       |
 | pmm             | subdoc             |                    | Percona Monitoring and Management section  |
 | secretsName     | string             | `cluster1-secrets` | A name for [users secrets](users.md#users) |
 | sslSecretName   | string             | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
+
+## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
+
+The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
+
+|                 | |
+|-----------------|-|
+| **Key**         | {{ optionlink('tls.SANs') }} |
+| **Value**       | subdoc |
+| **Example**     | |
+| **Description** | Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.name') }} |
+| **Value**       | string |
+| **Example**     | `special-selfsigned-issuer` |
+| **Description** | A [cert-manager issuer name](https://cert-manager.io/docs/concepts/issuer/) |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.kind') }} |
+| **Value**       | string |
+| **Example**     | `ClusterIssuer` |
+| **Description** | A [cert-manager issuer type](https://cert-manager.io/docs/configuration/) |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.group') }} |
+| **Value**       | string |
+| **Example**     | `cert-manager.io` |
+| **Description** | A [cert-manager issuer group](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
 
 ## <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
@@ -91,7 +120,7 @@ configuration options for the Percona Server for MySQL.
 | **Key**         | {{ optionlink('mysql.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for xposure |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure |
 |                 | |
 | **Key**         | {{ optionlink('mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage') }} |
 | **Value**       | string |
@@ -143,6 +172,78 @@ configuration options for the Percona Server for MySQL.
 | **Example**     | |
 | **Description** | [Persistent Volume Claim](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
 
+## <a name="operator-haproxy-section"></a>HAProxy section
+
+The `haproxy` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
+configuration options for the HAProxy service.
+
+|                 | |
+|-----------------|-|
+| **Key**         | {{ optionlink('haproxy.enabled') }} |
+| **Value**       | boolean |
+| **Example**     | `true` |
+| **Description** | Enables or disables [load balancing with HAProxy](https://haproxy.org) [Services](https://kubernetes.io/docs/concepts/services-networking/service/) |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.size') }} |
+| **Value**       | int |
+| **Example**     | `3` |
+| **Description** | The number of the HAProxy Pods [to provide load balancing](haproxy-conf.md). Safe configuration should have 2 or more |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.image') }} |
+| **Value**       | string |
+| **Example**     | `percona/perconalab-xtradb-cluster-operator:{{ release }}-haproxy` |
+| **Description** | HAProxy Docker image to use |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.replicasServiceEnabled') }} |
+| **Value**       | boolean |
+| **Example**     | `true` |
+| **Description** | Enables or disables `haproxy-replicas` Service. This Service (on by default) forwards requests to all MySQL instances, and it **should not be used for write requests**! |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.imagePullPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Always` |
+| **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.imagePullSecrets.name') }} |
+| **Value**       | string |
+| **Example**     | `private-registry-credentials` |
+| **Description** | The [Kubernetes imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the HAProxy image |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `1G` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `600m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `1G` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `700m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.affinity.topologyKey') }} |
+| **Value**       | string |
+| **Example**     | `kubernetes.io/hostname` |
+| **Description** | The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.affinity.advanced') }} |
+| **Value**       | subdoc |
+| **Example**     | |
+| **Description** | If available it makes a [topologyKey](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature) node affinity constraint to be ignored |
+|                 | |
+| **Key**         | {{ optionlink('haproxy.expose.type') }} |
+| **Value**       | string |
+| **Example**     | `ClusterIP` |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for HAProxy exposure |
+
 ## <a name="operator-router-section"></a>Router section
 
 The `router` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), which acts as a proxy for Group replication.
@@ -190,7 +291,7 @@ of any complexity to be used |
 | **Key**         | {{ optionlink('router.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for for MySQL Router instances xposure |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for MySQL Router instances exposure |
 
 ## <a name="operator-orchestrator-section"></a>Orchestrator section
 
@@ -223,6 +324,11 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Value**       | subdoc |
 | **Example**     | |
 | **Description** | In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.expose.type') }} |
+| **Value**       | string |
+| **Example**     | `ClusterIP` |
+| **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for Orchestrator instances exposure |
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.resources.requests.memory') }} |
 | **Value**       | string |
@@ -260,6 +366,26 @@ options for Percona Monitoring and Management.
 | **Value**       | string |
 | **Example**     | `Always` |
 | **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `150M` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `300m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `400m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
 |                 | |
 | **Key**         | {{ optionlink('pmm.serverHost') }} |
 | **Value**       | string |
@@ -368,6 +494,11 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Example**     | `us-west-2` |
 | **Description** | The [AWS region](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages |
 |                 | |
+| **Key**         | {{ optionlink('backup.storages.s3.&lt;storage-name&gt;.prefix') }} |
+| **Value**       | string |
+| **Example**     | `""` |
+| **Description** | The path (sub-folder) to the backups inside the [bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) |
+|                 | |
 | **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.s3.credentialsSecret') }} |
 | **Value**       | string |
 | **Example**     | `my-cluster-name-backup-s3` |
@@ -377,3 +508,41 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Value**       | string |
 | **Example**     | |
 | **Description** | The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+
+## <a name="operator-pt-section"></a>Percona Toolkit section
+
+The `toolkit` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
+options for [Percona Toolkit](https://docs.percona.com/percona-toolkit/).
+
+|                 | |
+| **Key**         | {{ optionlink('toolkit.image') }} |
+| **Value**       | string |
+| **Example**     | `percona/pmm-client:{{ pmm2recommended }}` |
+| **Description** | Percona Toolkit client Docker image to use |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.imagePullPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Always` |
+| **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `150M` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `100m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `400m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+
+
