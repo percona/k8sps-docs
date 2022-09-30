@@ -25,6 +25,32 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | secretsName     | string             | `cluster1-secrets` | A name for [users secrets](users.md#users) |
 | sslSecretName   | string             | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
 
+## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
+
+The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
+
+|                 | |
+|-----------------|-|
+| **Key**         | {{ optionlink('tls.SANs') }} |
+| **Value**       | subdoc |
+| **Example**     | |
+| **Description** | Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.name') }} |
+| **Value**       | string |
+| **Example**     | `special-selfsigned-issuer` |
+| **Description** | A [cert-manager issuer name](https://cert-manager.io/docs/concepts/issuer/) |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.kind') }} |
+| **Value**       | string |
+| **Example**     | `ClusterIssuer` |
+| **Description** | A [cert-manager issuer type](https://cert-manager.io/docs/configuration/) |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.group') }} |
+| **Value**       | string |
+| **Example**     | `cert-manager.io` |
+| **Description** | A [cert-manager issuer group](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
+
 ## <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
 The `mysql` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains general
