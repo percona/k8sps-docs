@@ -25,6 +25,32 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | secretsName     | string             | `cluster1-secrets` | A name for [users secrets](users.md#users) |
 | sslSecretName   | string             | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
 
+## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
+
+The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
+
+|                 | |
+|-----------------|-|
+| **Key**         | {{ optionlink('tls.SANs') }} |
+| **Value**       | subdoc |
+| **Example**     | |
+| **Description** | Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.name') }} |
+| **Value**       | string |
+| **Example**     | `special-selfsigned-issuer` |
+| **Description** | A [cert-manager issuer name](https://cert-manager.io/docs/concepts/issuer/) |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.kind') }} |
+| **Value**       | string |
+| **Example**     | `ClusterIssuer` |
+| **Description** | A [cert-manager issuer type](https://cert-manager.io/docs/configuration/) |
+|                 | |
+| **Key**         | {{ optionlink('tls.issuerConf.group') }} |
+| **Value**       | string |
+| **Example**     | `cert-manager.io` |
+| **Description** | A [cert-manager issuer group](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
+
 ## <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
 The `mysql` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains general
@@ -341,6 +367,26 @@ options for Percona Monitoring and Management.
 | **Example**     | `Always` |
 | **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 |                 | |
+| **Key**         | {{ optionlink('pmm.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `150M` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `300m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `400m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
 | **Key**         | {{ optionlink('pmm.serverHost') }} |
 | **Value**       | string |
 | **Example**     | `monitoring-service` |
@@ -462,3 +508,41 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Value**       | string |
 | **Example**     | |
 | **Description** | The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+
+## <a name="operator-pt-section"></a>Percona Toolkit section
+
+The `toolkit` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
+options for [Percona Toolkit](https://docs.percona.com/percona-toolkit/).
+
+|                 | |
+| **Key**         | {{ optionlink('toolkit.image') }} |
+| **Value**       | string |
+| **Example**     | `percona/pmm-client:{{ pmm2recommended }}` |
+| **Description** | Percona Toolkit client Docker image to use |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.imagePullPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Always` |
+| **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `150M` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `100m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `400m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+
+
