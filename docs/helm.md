@@ -23,7 +23,7 @@ Install Helm following its [official installation instructions](https://docs.hel
 2. Install the Percona Operator for MySQL:
 
    ```bash
-   $ helm install my-op percona/ps-operator --version {{ release }}
+   $ helm install my-op percona/ps-operator
    ```
 
    The `my-op` parameter in the above example is the name of [a new release object](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
@@ -40,7 +40,7 @@ Install Helm following its [official installation instructions](https://docs.hel
 3. Install Percona Server for MySQL:
 
    ```bash
-   $ helm install my-db percona/ps-db --version {{ release }} --namespace my-namespace
+   $ helm install my-db percona/ps-db
    ```
 
    The `my-db` parameter in the above example is the name of [a new release object](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
@@ -58,7 +58,7 @@ The following example will deploy a Percona Server for MySQL in the
 `my-namespace` namespace, with disabled backups and 20 Gi storage:
 
 ```bash
-$ helm install my-db percona/ps-db --version {{ release }} --namespace my-namespace \
+$ helm install my-db percona/ps-db \
   --set mysql.volumeSpec.pvc.resources.requests.storage=20Gi \
   --set backup.enabled=false
 ```
