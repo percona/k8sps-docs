@@ -341,6 +341,26 @@ options for Percona Monitoring and Management.
 | **Example**     | `Always` |
 | **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 |                 | |
+| **Key**         | {{ optionlink('pmm.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `150M` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `300m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
+| **Key**         | {{ optionlink('pmm.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `400m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
+|                 | |
 | **Key**         | {{ optionlink('pmm.serverHost') }} |
 | **Value**       | string |
 | **Example**     | `monitoring-service` |
@@ -462,3 +482,41 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Value**       | string |
 | **Example**     | |
 | **Description** | The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+
+## <a name="operator-pt-section"></a>Percona Toolkit section
+
+The `toolkit` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
+options for [Percona Toolkit](https://docs.percona.com/percona-toolkit/).
+
+|                 | |
+| **Key**         | {{ optionlink('toolkit.image') }} |
+| **Value**       | string |
+| **Example**     | `percona/pmm-client:{{ pmm2recommended }}` |
+| **Description** | Percona Toolkit client Docker image to use |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.imagePullPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Always` |
+| **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `150M` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.requests.cpu') }} |
+| **Value**       | string |
+| **Example**     | `100m` |
+| **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+|                 | |
+| **Key**         | {{ optionlink('toolkit.resources.limits.cpu') }} |
+| **Value**       | string |
+| **Example**     | `400m` |
+| **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+
+
