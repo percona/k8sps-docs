@@ -33,7 +33,7 @@ instrumentation.
 
 * [Install on Minikube](minikube.md)
 
-# Installation guides
+# Advanced installation guides
 
 * [Install on Google Kubernetes Engine (GKE)](gke.md)
 
