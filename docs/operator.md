@@ -189,7 +189,7 @@ configuration options for the HAProxy service.
 | **Key**         | {{ optionlink('haproxy.size') }} |
 | **Value**       | int |
 | **Example**     | `3` |
-| **Description** | The number of the HAProxy Pods [to provide load balancing](haproxy-conf.md). Safe configuration should have 2 or more |
+| **Description** | The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more |
 |                 | |
 | **Key**         | {{ optionlink('haproxy.image') }} |
 | **Value**       | string |
@@ -357,7 +357,7 @@ options for Percona Monitoring and Management.
 | **Key**         | {{ optionlink('pmm.enabled') }} |
 | **Value**       | boolean |
 | **Example**     | `false` |
-| **Description** | Enables or disables [monitoring Percona Server for MySQL with PMM](https://www.percona.com/doc/percona-xtradb-cluster/5.7/manual/monitoring.html) |
+| **Description** | Enables or disables [monitoring Percona Server for MySQL with PMM](monitoring.md) |
 |                 | |
 | **Key**         | {{ optionlink('pmm.image') }} |
 | **Value**       | string |
@@ -397,7 +397,7 @@ options for Percona Monitoring and Management.
 | **Key**         | {{ optionlink('pmm.serverUser') }} |
 | **Value**       | string |
 | **Example**     | `admin` |
-| **Description** | The [PMM Serve_User](https://www.percona.com/doc/percona-monitoring-and-management/glossary.option.html). The PMM Server password should be configured using Secrets |
+| **Description** | The PMM Serve_User. The PMM Server password should be configured using Secrets |
 
 ## <a name="operator-backup-section"></a>Backup section
 
