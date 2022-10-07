@@ -34,34 +34,13 @@ Kubernetes-based environment:
 
     * set `pmm.enabled=true`
     * set the `pmm.serverHost` key to your PMM Server hostname,
-    * authorize PMM Client within PMM Server in one of two ways:
-
-        === "with token-based authorization (recommended)"
-            <a name="operator-monitoring-client-token"></a>
-            [Acquire the API Key from your PMM Server](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication) and set ``pmmserverkey`` in the [deploy/secrets.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/secrets.yaml) secrets file to this obtained API Key value.
-
-        === "with password-based authorization"
-            check that the `serverUser` key in the [deploy/secrets.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/secrets.yaml) secrets file contains your PMM Server user name (`admin` by default), and make sure the `pmmserver` key in the [deploy/secrets.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/secrets.yaml) secrets file contains the password specified for the PMM Server during its installation.
-
-            *Password-based authorization method is deprecated since the Operator 0.3.0.*
-
-    !!! note
-
-        You use `deploy/secrets.yaml` file to *create* Secrets Object.
-        The file contains all values for each key/value pair in a convenient
-        plain text format. But the resulting Secrets contain passwords stored
-        as base64-encoded strings. If you want to *update* password field,
-        you’ll need to encode the value into base64 format. To do this, you can
-        run `echo -n "password" | base64` in your local shell to get valid
-        values. For example, setting the PMM Server user’s password to
-        new_password\` in the `cluster1-secrets` object can be done
-        with the following command:
+    * authorize PMM Client within PMM Server:
+        <a name="operator-monitoring-client-token"></a>
+        [Acquire the API Key from your PMM Server](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication) and set `pmmserverkey` in the [users Secrets](users.md/#system-users) object to this obtained API Key value. For example, setting the PMM Server API Key to `new_key` in the `cluster1-secrets` object can be done with the following command:
 
         ```bash
-        kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserver": '$(echo -n new_password | base64)'}}'
-        ```
-
-    Apply changes with the `kubectl apply -f deploy/secrets.yaml` command.
+        $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64)'}}'
+        ```       
 
     When done, apply the edited `deploy/cr.yaml` file:
 
