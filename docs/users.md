@@ -60,9 +60,9 @@ The following table shows system users’ names and purposes.
 | Backup         | xtrabackup   | xtrabackup          | [User to run backups](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)     |
 | Cluster Check  | clustercheck | clustercheck        | [User for liveness checks and readiness checks](http://galeracluster.com/library/documentation/monitoring-cluster.html) |
 | Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
-| PMM Server Password | should be set through the [operator options](operator.md) | pmmserver | [Password used to access PMM Server](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling). **Password-based authorization method is deprecated since the Operator 0.3.0**. [Use token-based authorization instead](monitoring.md#operator-monitoring-client-token) |
 | Operator Admin | operator     | operator            | Database administrative user, should be used only by the Operator      |
 | Replication    | replication  | replication         | Administrative user needed for replication                             |
+| PMM Server API Key | | pmmserverkey | [API Key used to access PMM Server](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
 
 ### YAML Object Format
 
