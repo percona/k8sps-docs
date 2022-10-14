@@ -103,7 +103,9 @@
     percona-server-for-mysql-operator-54c5c87988-xfmlf   1/1     Running   0               7m42s
     ```
 
-8. Check connectivity to your newly created cluster
+8. Check connectivity to your newly created cluster. Run a MySQL client container
+    and connect its console output to your terminal. The following command
+    will do this, naming the new Pod `percona-client`:
 
     ```bash
     $ kubectl run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
