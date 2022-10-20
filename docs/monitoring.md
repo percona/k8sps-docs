@@ -38,9 +38,17 @@ Kubernetes-based environment:
         <a name="operator-monitoring-client-token"></a>
         [Acquire the API Key from your PMM Server](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication) and set `pmmserverkey` in the [users Secrets](users.md/#system-users) object to this obtained API Key value. For example, setting the PMM Server API Key to `new_key` in the `cluster1-secrets` object can be done with the following command:
 
-        ```bash
-        $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64)'}}'
-        ```       
+        === "in GNU/Linux"
+
+            ```bash
+            $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64 --wrap=0)'}}'
+            ```
+
+        === "in Apple macOS"
+
+            ```bash
+            $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64)'}}'
+            ```
 
     When done, apply the edited `deploy/cr.yaml` file:
 
