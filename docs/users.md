@@ -99,13 +99,13 @@ your local shell to get valid values. For example, setting the Admin user’s pa
 to `new_password` in the `cluster1-secrets` object can be done
 with the following command:
 
-=== "in GNU/Linux"
+=== "in Linux"
 
     ```bash
     $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n new_password | base64 --wrap=0)'}}'
     ```
 
-=== "in Apple macOS"
+=== "in macOS"
 
     ```bash
     $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n new_password | base64)'}}'
