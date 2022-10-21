@@ -125,13 +125,13 @@ data:
     The following command can be used to get a base64-encoded string from
     a plain text one:
 
-    === "in GNU/Linux"
+    === "in Linux"
 
         ```bash
         $ echo -n 'plain-text-string' | base64 --wrap=0
         ```
 
-    === "in Apple macOS"
+    === "in macOS"
 
         ```bash
         $ echo -n 'plain-text-string' | base64
