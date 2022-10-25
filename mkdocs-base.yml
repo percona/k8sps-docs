@@ -44,6 +44,7 @@ extra_css:
   - css/version-select.css
 
 extra_javascript:
+   - js/promptremover.js
 #  - js/version-select.js
 #  - js/toctree.js
 #  - js/lightgallery.min.js
