@@ -36,7 +36,7 @@
     
     ??? example "Expected output"
 
-        ```{: .text .no-copy}
+        ```{.text .no-copy}
         mysql: [Warning] Using a password on the command line interface can be insecure.
         Welcome to the MySQL monitor.  Commands end with ; or \g.
         Your MySQL connection id is 4065
@@ -63,7 +63,7 @@
 
     ??? example "Expected output"
 
-        ```{: .text .no-copy}
+        ```{.text .no-copy}
         +-----------------+-------+
         | Variable_name   | Value |
         +-----------------+-------+
