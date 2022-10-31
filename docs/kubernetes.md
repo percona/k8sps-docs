@@ -107,14 +107,14 @@
     and connect its console output to your terminal. The following command
     will do this, naming the new Pod `percona-client`:
 
-    ```bash
+    ``` {.bash data-prompt="$" data-prompt-second="percona-client:/$"}
     $ kubectl run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
     percona-client:/$ mysql -h cluster1-mysql-primary -uroot -proot_password
     ```
 
     This command will connect you to the MySQL monitor.
 
-    ```text
+    ```{.text .no-copy}
     mysql: [Warning] Using a password on the command line interface can be insecure.
     Welcome to the MySQL monitor.  Commands end with ; or \g.
     Your MySQL connection id is 2268
