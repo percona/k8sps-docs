@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function(){
         //const commandTextElement = collection[i].getElementsByTagName("code");
         const commandElement=collection.item(i);
         //const commandText=commandTextElement.innerHTML;
-        console.log(commandElement);
+        //console.log(commandElement);
         let commandCodeElement = commandElement.getElementsByTagName("code");
         //console.log(commandCodeElement);
         let commandCodeElementString = commandCodeElement.item(0).textContent;

@@ -59,7 +59,7 @@ Kubernetes-based environment:
 2. Check that corresponding Pods are not in a cycle of stopping and restarting.
     This cycle occurs if there are errors on the previous steps:
 
-    ``` {: .python .test-class data-prompt="sdf" }
+    ``` {.bash data-prompt="" }
     $ kubectl get pods
     $ kubectl logs cluster1-mysql-0 -c pmm-client
     ```
