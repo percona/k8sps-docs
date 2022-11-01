@@ -74,7 +74,7 @@ nodeGroups:
 When the cluster configuration file is ready, you can actually create your cluster
 by the following command:
 
-```bash
+```{.bash data-prompt="$"}
 $ eksctl create cluster -f ~/cluster.yaml
 ```
 
@@ -84,7 +84,7 @@ $ eksctl create cluster -f ~/cluster.yaml
 
     So, create the namespace and save it in the namespace context for subsequent commands as follows (replace the `<namespace name>` placeholder with some descriptive name):
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl create namespace <namespace name>
     $ kubectl config set-context $(kubectl config current-context) --namespace=<namespace name>
     ```
@@ -93,25 +93,25 @@ $ eksctl create cluster -f ~/cluster.yaml
 
 2. Use the following `git clone` command to download the correct branch of the percona-server-mysql-operator repository:
 
-    ```bash
-    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    ```{.bash data-prompt="$"}
+    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
     ```
 
     After the repository is downloaded, change the directory to run the rest of the commands in this document:
 
-    ```bash
-    cd percona-server-mysql-operator
+    ```{.bash data-prompt="$"}
+    $ cd percona-server-mysql-operator
     ```
 
 3. Deploy the Operator [using](https://kubernetes.io/docs/reference/using-api/server-side-apply/) the following command:
 
-    ```bash
-    kubectl apply --server-side -f deploy/bundle.yaml
+    ```{.bash data-prompt="$"}
+    $ kubectl apply --server-side -f deploy/bundle.yaml
     ```
 
     The following confirmation is returned:
 
-    ```text
+    ```{.text .no-copy}
     customresourcedefinition.apiextensions.k8s.io/perconaserverformysqlbackups.ps.percona.com created
     customresourcedefinition.apiextensions.k8s.io/perconaserverformysqlrestores.ps.percona.com created
     customresourcedefinition.apiextensions.k8s.io/perconaserverformysqls.ps.percona.com created
@@ -127,14 +127,14 @@ $ eksctl create cluster -f ~/cluster.yaml
 4. The operator has been started, and you can create the Percona Distribution
     for MySQL cluster:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/cr.yaml
     ```
 
     The process could take some time.
     The return statement confirms the creation:
 
-    ```text
+    ```{.text .no-copy}
     perconaserverformysql.ps.percona.com/cluster1 created
     ```
 
@@ -154,7 +154,7 @@ $ eksctl create cluster -f ~/cluster.yaml
 6. Now you can check wether you are able to connect to MySQL from the outside
     with the help of the `kubectl port-forward` command as follows:
 
-    ```bash
-    kubectl port-forward svc/cluster1-mysql-primary 3306:3306 &
-    mysql -h 127.0.0.1 -P 3306 -uroot -proot_password
+    ```{.bash data-prompt="$"}
+    $ kubectl port-forward svc/cluster1-mysql-primary 3306:3306 &
+    $ mysql -h 127.0.0.1 -P 3306 -uroot -proot_password
     ```

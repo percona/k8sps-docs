@@ -51,7 +51,7 @@ The steps to install the *cert-manager* are the following:
 
 The following commands perform all the needed actions:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl create namespace cert-manager
 $ kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
 $ kubectl_bin apply -f https://github.com/jetstack/cert-manager/releases/download/v{{ certmanagerrecommended }}/cert-manager.yaml
@@ -59,7 +59,7 @@ $ kubectl_bin apply -f https://github.com/jetstack/cert-manager/releases/downloa
 
 After the installation, you can verify the *cert-manager* by running the following command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl get pods -n cert-manager
 ```
 
@@ -89,7 +89,7 @@ and another set is for internal ones. A secret created for the external use must
 be added to `cr.yaml/spec/secretsName`. A certificate generated for internal
 communications must be added to the `cr.yaml/spec/sslInternalSecretName`.
 
-```bash
+```{.bash data-prompt="$"}
 $ cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
 {
   "CN": "Root CA",

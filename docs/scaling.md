@@ -10,7 +10,7 @@ nothing more but changing this option and applying the updated
 configuration file. This may be done in a specifically saved config, or
 on the fly, using the following command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl patch ps cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
 ```
 
@@ -32,7 +32,7 @@ The following are the steps to increase the size:
 
 1. Extract and backup the yaml file for the cluster
 
-    ```bash
+    ```{.bash data-prompt="$"}
     kubectl get ps cluster1 -o yaml --export > CR_backup.yaml
     ```
 
@@ -44,19 +44,19 @@ The following are the steps to increase the size:
     all cluster data will be lost!** -->
     You can use the following command to delete the cluster:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl delete -f CR_backup.yaml
     ```
 
 3. For each node, edit the yaml to resize the PVC object.
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl edit pvc datadir-cluster1-mysql-0
     ```
 
     In the yaml, edit the spec.resources.requests.storage value.
 
-    ```bash
+    ```yaml
     spec:
       accessModes:
       - ReadWriteOnce
@@ -67,7 +67,7 @@ The following are the steps to increase the size:
 
     Perform the same operation on the other nodes.
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl edit pvc datadir-cluster1-mysql-1
     $ kubectl edit pvc datadir-cluster1-mysql-2
     ```
@@ -75,12 +75,12 @@ The following are the steps to increase the size:
 4. In the CR configuration file, use vim or another text editor to edit
     the PVC size.
 
-    ```bash
-    vim CR_backup.yaml
+    ```{.bash data-prompt="$"}
+    $ vim CR_backup.yaml
     ```
 
 5. Apply the updated configuration to the cluster.
 
-    ```bash
-    kubectl apply -f CR_backup.yaml
+    ```{.bash data-prompt="$"}
+    $ kubectl apply -f CR_backup.yaml
     ```

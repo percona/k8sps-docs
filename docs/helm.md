@@ -15,14 +15,14 @@ Install Helm following its [official installation instructions](https://docs.hel
 1. Add the Percona’s Helm charts repository and make your Helm client up to
     date with it:
 
-   ```bash
+   ```{.bash data-prompt="$"}
    $ helm repo add percona https://percona.github.io/percona-helm-charts/
    $ helm repo update
    ```
 
 2. Install the Percona Operator for MySQL:
 
-   ```bash
+   ```{.bash data-prompt="$"}
    $ helm install my-op percona/ps-operator
    ```
 
@@ -39,7 +39,7 @@ Install Helm following its [official installation instructions](https://docs.hel
 
 3. Install Percona Server for MySQL:
 
-   ```bash
+   ```{.bash data-prompt="$"}
    $ helm install my-db percona/ps-db
    ```
 
@@ -57,7 +57,7 @@ any of the [Custom Resource options](https://github.com/percona/percona-helm-cha
 The following example will deploy a Percona Server for MySQL in the
 `my-namespace` namespace, with disabled backups and 20 Gi storage:
 
-```bash
+```{.bash data-prompt="$"}
 $ helm install my-db percona/ps-db \
   --set mysql.volumeSpec.pvc.resources.requests.storage=20Gi \
   --set backup.enabled=false

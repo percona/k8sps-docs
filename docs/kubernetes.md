@@ -3,7 +3,7 @@
 
 1. First of all, clone the percona-server-mysql-operator repository:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
     cd percona-server-mysql-operator
     ```
@@ -19,7 +19,7 @@
     standard set of resources which Kubernetes “knows” about with the new
     items (in our case ones which are the core of the operator). [Apply it](https://kubernetes.io/docs/reference/using-api/server-side-apply/) as follows:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply --server-side -f deploy/crd.yaml
     ```
 
@@ -29,7 +29,7 @@
 3. The next thing to do is to add the `mysql` namespace to Kubernetes,
     not forgetting to set the correspondent context for further steps:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl create namespace mysql
     $ kubectl config set-context $(kubectl config current-context) --namespace=mysql
     ```
@@ -45,7 +45,7 @@
     about users and roles can be found in [Kubernetes
     documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings)).
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/rbac.yaml
     ```
 
@@ -58,7 +58,7 @@
 
     Finally it’s time to start the operator within Kubernetes:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/operator.yaml
     ```
 
@@ -71,7 +71,7 @@
     After editing is finished, users secrets should be created using the
     following command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl create -f deploy/secrets.yaml
     ```
 
@@ -86,7 +86,7 @@
 7. After the operator is started and user secrets are added, Percona Server for
     MySQL can be created at any time with the following command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/cr.yaml
     ```
 
@@ -94,7 +94,7 @@
     operator and replica set pod have reached their Running status.
     `kubectl get pods` output should look like this:
 
-    ```text
+    ```{.text .no-copy}
     NAME                                                 READY   STATUS    RESTARTS        AGE
     cluster1-mysql-0                                     1/1     Running   0               7m6s
     cluster1-mysql-1                                     1/1     Running   1 (5m39s ago)   6m4s
@@ -107,7 +107,7 @@
     and connect its console output to your terminal. The following command
     will do this, naming the new Pod `percona-client`:
 
-    ``` {.bash data-prompt="$" data-prompt-second="percona-client:/$"}
+    ```{.bash data-prompt="$" data-prompt-second="percona-client:/$"}
     $ kubectl run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
     percona-client:/$ mysql -h cluster1-mysql-primary -uroot -proot_password
     ```

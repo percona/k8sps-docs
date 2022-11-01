@@ -172,7 +172,7 @@ The example of such file is [deploy/backup/backup.yaml](https://github.com/perco
 
 When the backup destination is configured and applied with kubectl apply -f deploy/cr.yaml command, make backup as follows:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl apply -f deploy/backup.yaml
 ```
 
@@ -181,7 +181,7 @@ $ kubectl apply -f deploy/backup.yaml
     Storing backup settings in a separate file can be replaced by
     passing its content to the `kubectl apply` command as follows:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ cat <<EOF | kubectl apply -f-
     apiVersion: ps.percona.com/v1alpha1
     kind: PerconaServerMySQLBackup
@@ -204,14 +204,14 @@ Following things are needed to restore a previously saved backup:
 * Find out correct names for the **backup** and the **cluster**. Available
 backups can be listed with the following command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl get ps-backup
     ```
 
     And the following command will list existing Percona Distribution for MySQL
     Cluster names in the current Kubernetes-based environment:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl get ps
     ```
 
@@ -227,7 +227,7 @@ restoration can be done in the following way.
 
 2. After that, the actual restoration process can be started as follows:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/restore.yaml
     ```
 
@@ -236,7 +236,7 @@ restoration can be done in the following way.
     Storing backup settings in a separate file can be replaced by passing
     its content to the `kubectl apply` command as follows:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ cat <<EOF | kubectl apply -f-
     apiVersion: "pxc.percona.com/v1alpha1"
     kind: "PerconaServerMySQLRestore"
@@ -254,12 +254,12 @@ Manual deleting of a previously saved backup requires not more than the backup
 name. This name can be taken from the list of available backups returned
 by the following command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl get ps-backup
 ```
 
 When the name is known, backup can be deleted as follows:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl delete ps-backup/<backup-name>
 ```
