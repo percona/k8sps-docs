@@ -57,27 +57,27 @@ You should use the combination of the cluster name with the `-mysql`
 suffix as the naming convention for the configmap. To find the cluster
 name, you can use the following command:
 
-```bash
-kubectl get ps
+```{.bash data-prompt="$"}
+$ kubectl get ps
 ```
 
 The syntax for `kubectl create configmap` command is:
 
-```default
-kubectl create configmap <cluster-name>-mysql <resource-type=resource-name>
+```{.bash data-prompt="$"}
+$ kubectl create configmap <cluster-name>-mysql <resource-type=resource-name>
 ```
 
 The following example defines `cluster1-mysql` as the configmap name and the
 `my.cnf` file as the data source:
 
-```bash
-kubectl create configmap cluster1-mysql --from-file=my.cnf
+```{.bash data-prompt="$"}
+$ kubectl create configmap cluster1-mysql --from-file=my.cnf
 ```
 
 To view the created configmap, use the following command:
 
-```bash
-kubectl describe configmaps cluster1-mysql
+```{.bash data-prompt="$"}
+$ kubectl describe configmaps cluster1-mysql
 ```
 
 ## Use a Secret Object
@@ -92,7 +92,7 @@ name and the `mysql` suffix.
 
     To find the cluster name, you can use the following command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl get ps
     ```
 
@@ -113,13 +113,13 @@ follows:
 
 === "in Linux"
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ cat my.cnf | base64 --wrap=0
     ```
 
 === "in macOS"
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ cat my.cnf | base64
     ```
 
@@ -128,7 +128,7 @@ follows:
     Similarly, you can read the list of options from a Base64 encoded
     string:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
     ```
 
@@ -146,7 +146,7 @@ data:
 
 When ready, apply it with the following command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl create -f deploy/mysql-secret.yaml
 ```
 
@@ -156,6 +156,6 @@ $ kubectl create -f deploy/mysql-secret.yaml
     cluster has updated the configuration. You can do it with the following
     command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl rollout restart statefulset cluster1-mysql
     ```

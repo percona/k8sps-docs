@@ -48,7 +48,7 @@ When the cluster is configured in this way, you can find the endpoint (the
 public IP address of the load balancer in our example) by getting the Service
 object with the `kubectl get service` command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl get service cluster1-haproxy
 NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
 cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
@@ -80,7 +80,7 @@ When the cluster is configured in this way, you can find the endpoint (the
 public IP address of the load balancer in our example) by getting the Service
 object with the `kubectl get service` command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl get service cluster1-mysql-primary
 NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
 cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
@@ -117,7 +117,7 @@ When the cluster is configured in this way, you can find the endpoint (the
 public IP address of the load balancer in our example) by getting the Service
 object with the `kubectl get service` command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl get service cluster1-router
 NAME                TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)                                                       AGE
 my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,6447:31694/TCP,6448:31515/TCP,6449:31686/TCP   18h
@@ -138,7 +138,7 @@ useful for operations such as asynchronous calls.
 Alternatively, you can find the endpoint to connect to by `kubectl get ps`
 command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl get ps
 NAME       REPLICATION         ENDPOINT        STATE   AGE
 cluster1   group-replication   35.239.63.143   ready   10m
@@ -172,7 +172,7 @@ mysql:
 When the cluster instances are exposed in this way, you can find the
 corresponding Services with the `kubectl get services` command:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl get services
 NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
 ...

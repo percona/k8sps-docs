@@ -29,14 +29,14 @@ spec:
 
 Apply your modifications as usual:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl apply -f deploy/cr.yaml
 ```
 
 Running `kubectl describe` command for the appropriate Pod can bring you the
 information about the newly created container:
 
-```text
+```{.bash data-prompt="$"}
 $ kubectl describe pod cluster1-mysql-0
 ....
 Containers:
@@ -64,7 +64,7 @@ my-sidecar-1:
 
 You can login to your sidecar container as follows:
 
-```bash
+```{.bash data-prompt="$"}
 $ kubectl exec -it cluster1-mysql-0 -c my-sidecar-1 -- sh
 / #
 ```

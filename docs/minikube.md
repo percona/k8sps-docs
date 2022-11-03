@@ -30,20 +30,20 @@ default web browser.
 
 1. Clone the percona-server-mysql-operator repository:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
     $ cd percona-server-mysql-operator
     ```
 
 2. Deploy the operator with the following command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/bundle.yaml
     ```
 
     ??? example "Expected output"
 
-        ```text
+        ```{.text .no-copy}
         customresourcedefinition.apiextensions.k8s.io/perconaservermysqlbackups.ps.percona.com created
         customresourcedefinition.apiextensions.k8s.io/perconaservermysqlrestores.ps.percona.com created
         customresourcedefinition.apiextensions.k8s.io/perconaservermysqls.ps.percona.com created
@@ -63,13 +63,13 @@ default web browser.
     When done, apply the updated ``deploy/cr.yaml`` file with the following
     command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/cr.yaml
     ```
 
     ??? example "Expected output"
 
-        ```text
+        ```{.text .no-copy}
         perconaservermysql.ps.percona.com/cluster1 created
         ```
 
@@ -81,13 +81,13 @@ default web browser.
     cluster will obtain the `ready` status. You can check it with the following
     command:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl get ps
     ```
 
     ??? example "Expected output"
 
-        ```text
+        ```{.text .no-copy}
         NAME       REPLICATION   ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
         cluster1   async         cluster1-haproxy.default   ready   3       3              3                  5m50s
         ```

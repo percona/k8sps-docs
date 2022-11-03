@@ -21,7 +21,7 @@
     terminal. The following command will do this, naming the new Pod
     `percona-client`:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
     ```
 
@@ -30,7 +30,7 @@
 3. Now run `mysql` tool in the percona-client command shell using the password
     obtained from the Secret instead of the `<root password>` placeholder:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ mysql -h cluster1-haproxy -uroot -p<root password>
     ```
     
@@ -57,7 +57,7 @@
     The following example will use the MySQL prompt to check the
     `max_connections` variable:
 
-    ```bash
+    ```{.bash data-prompt="mysql>"}
     mysql> SHOW VARIABLES LIKE "max_connections";
     ```
 
