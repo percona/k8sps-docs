@@ -111,9 +111,17 @@ max_connections=250
 You can get a Base64 encoded string from your options via the command line as
 follows:
 
-```bash
-$ cat my.cnf | base64
-```
+=== "in Linux"
+
+    ```bash
+    $ cat my.cnf | base64 --wrap=0
+    ```
+
+=== "in macOS"
+
+    ```bash
+    $ cat my.cnf | base64
+    ```
 
 !!! note
 

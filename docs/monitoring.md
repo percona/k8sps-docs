@@ -40,7 +40,7 @@ Kubernetes-based environment:
 
         === "in Linux"
 
-            ``` { .python data-prompt="$" }
+            ```{.bash data-prompt="$"}
             $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64 --wrap=0)'}}'
             ```
 
