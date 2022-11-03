@@ -40,7 +40,7 @@ Kubernetes-based environment:
 
         === "in Linux"
 
-            ```bash
+            ```{.bash data-prompt="$"}
             $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64 --wrap=0)'}}'
             ```
 
@@ -59,7 +59,7 @@ Kubernetes-based environment:
 2. Check that corresponding Pods are not in a cycle of stopping and restarting.
     This cycle occurs if there are errors on the previous steps:
 
-    ```bash
+    ``` {.bash data-prompt="$" }
     $ kubectl get pods
     $ kubectl logs cluster1-mysql-0 -c pmm-client
     ```
