@@ -92,6 +92,10 @@ default web browser.
         cluster1   async         cluster1-haproxy.default   ready   3       3              3                  5m50s
         ```
 
+    You can also track the progress via the Kubernetes dashboard:
+
+    ![image](assets/images/minikube-pods.svg)
+
 ## Verify the cluster operation
 
 It may take ten minutes to get the cluster started. When `kubectl get ps`
