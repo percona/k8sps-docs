@@ -262,7 +262,7 @@ restoration can be done in the following way.
 
     ```{.bash data-prompt="$"}
     $ cat <<EOF | kubectl apply -f-
-    apiVersion: "pxc.percona.com/v1alpha1"
+    apiVersion: "ps.percona.com/v1alpha1"
     kind: "PerconaServerMySQLRestore"
     metadata:
       name: "restore1"
