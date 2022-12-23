@@ -1,6 +1,6 @@
 # System Requirements
 
-The Operator supports Percona Server for MySQL (PS) 5.7 and 8.0.
+The Operator supports Percona Server for MySQL (PS) 8.0.
 
 ## Officially supported platforms
 
