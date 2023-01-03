@@ -1,10 +1,10 @@
-1. You will need the login and password for the admin user to access the
+1. You will need password  for the `root` user to access the
     cluster. Use `kubectl get secrets` command to see the list of Secrets
     objects (by default the Secrets object you are interested in has
     `cluster1-secrets` name). Then
     `kubectl get secret cluster1-secrets -o yaml` command will return
-    the YAML file with generated Secrets, including the `MONGODB_DATABASE_ADMIN_USER`
-    and `MONGODB_DATABASE_ADMIN_PASSWORD` strings, which should look as follows:
+    the YAML file with generated Secrets, including the `root` password, which
+    should look as follows:
 
     ```yaml
     ...
@@ -13,11 +13,11 @@
       root: MWV1VDdZSGxYWHNhcHpYTjF3Ug==
     ```
 
-    Here the actual login name and password are base64-encoded. Use 
+    Here the actual password is base64-encoded. Use 
     `echo 'MWV1VDdZSGxYWHNhcHpYTjF3Ug==' | base64 --decode` command to bring it
     back to a human-readable form.
 
-2. Run a container with a MongoDB client and connect its console output to your
+2. Run a container with `mysql` tool and connect its console output to your
     terminal. The following command will do this, naming the new Pod
     `percona-client`:
 
