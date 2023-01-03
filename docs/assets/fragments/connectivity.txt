@@ -1,4 +1,4 @@
-1. You will need password  for the `root` user to access the
+1. You will need password for the `root` user to access the
     cluster. Use `kubectl get secrets` command to see the list of Secrets
     objects (by default the Secrets object you are interested in has
     `cluster1-secrets` name). Then
