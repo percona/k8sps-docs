@@ -163,7 +163,7 @@ $ kubectl create -f deploy/mysql-secret.yaml
 ## Auto-tuning MySQL options
 
 Few configuration options for MySQL can be calculated and set by the Operator
-automatically based on the available Pod resource limits (memory and CPU) **if
+automatically based on the available Pod memory resource limits **if
 constant values for these options are not specified by the user** (either in
 CR.yaml or in ConfigMap).
 
