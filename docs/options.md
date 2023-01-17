@@ -163,9 +163,9 @@ $ kubectl create -f deploy/mysql-secret.yaml
 ## Auto-tuning MySQL options
 
 Few configuration options for MySQL can be calculated and set by the Operator
-automatically based on the available Pod memory resource limits **if
-constant values for these options are not specified by the user** (either in
-CR.yaml or in ConfigMap).
+automatically based on the available Pod memory resource limits
+**if constant values for these options are not specified by the user** (either
+in cr.yaml or in ConfigMap).
 
 Options which can be set automatically are the following ones:
 
@@ -173,9 +173,9 @@ Options which can be set automatically are the following ones:
 
 * `max_connections`
 
-If Percona Server for MySQL Pod limits are defined, then limits values are used to
-calculate these options. If Percona Server for MySQL Pod limits are not defined,
-auto-tuning is not done.
+If Percona Server for MySQL container resource limits are defined, then limits
+values are used to calculate these options. If Percona Server for MySQL
+container resource limits are not defined, auto-tuning is not done.
 
 Also, starting from the Operator 0.4.0, there is another way of auto-tuning.
 You can use `"{{containerMemoryLimit}}"` as a value in `spec.mysql.configuration`
