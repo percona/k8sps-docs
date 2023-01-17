@@ -18,14 +18,17 @@ alphanumeric character;
 
 The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains the following sections:
 
-| Key             | Value type         | Default            | Description                                |
-| --------------- | ------------------ | ------------------ | ------------------------------------------ |
-| mysql           | subdoc             |                    | Percona Server for MySQL general section   |
-| haproxy         | subdoc             |                    | HAProxy section                            |
-| orchestrator    | subdoc             |                    | Orchestrator section                       |
-| pmm             | subdoc             |                    | Percona Monitoring and Management section  |
-| secretsName     | string             | `cluster1-secrets` | A name for [users secrets](users.md#users) |
-| sslSecretName   | string             | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
+| Key             | Value type | Default            | Description                                |
+| --------------- | ---------- | ------------------ | ------------------------------------------ |
+| mysql           | subdoc     |                    | Percona Server for MySQL general section   |
+| proxy.haproxy   | subdoc     |                    | HAProxy subsection                         |
+| proxy.router    | subdoc     |                    | MySQL Router subsection                    |
+| orchestrator    | subdoc     |                    | Orchestrator section                       |
+| pmm             | subdoc     |                    | Percona Monitoring and Management section  |
+| secretsName     | string     | `cluster1-secrets` | A name for [users secrets](users.md#users) |
+| sslSecretName   | string     | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
+|ignoreAnnotations| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator |
+| ignoreLabels    | subdoc     | `rack`             | The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator |
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
@@ -116,13 +119,38 @@ configuration options for the Percona Server for MySQL.
 |                 | |
 | **Key**         | {{ optionlink('mysql.expose.enabled') }} |
 | **Value**       | boolean |
-| **Example**     | `true` |
+| **Example**     | `false` |
 | **Description** | Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses |
 |                 | |
 | **Key**         | {{ optionlink('mysql.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
 | **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure |
+|                 | |
+| **Key**         | {{ optionlink('mysql.expose.annotations') }} |
+| **Value**       | string |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) |
+|                 | |
+| **Key**         | {{ optionlink('mysql.expose.externalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('mysql.expose.internalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('mysql.expose.labels') }} |
+| **Value**       | label |
+| **Example**     | `rack: rack-22` |
+| **Description** | [Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) |
+|                 | |
+| **Key**         | {{ optionlink('mysql.expose.loadBalancerSourceRanges') }} |
+| **Value**       | string |
+| **Example**     | `10.0.0.0/8` |
+| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
 |                 | |
 | **Key**         | {{ optionlink('mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage') }} |
 | **Value**       | string |
@@ -174,105 +202,140 @@ configuration options for the Percona Server for MySQL.
 | **Example**     | |
 | **Description** | [Persistent Volume Claim](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
 
-## <a name="operator-haproxy-section"></a>HAProxy section
+## <a name="operator-haproxy-section"></a>HAProxy subsection
 
-The `haproxy` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
-configuration options for the HAProxy service.
+The `proxy.haproxy` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+file contains configuration options for the HAProxy service.
 
 |                 | |
 |-----------------|-|
-| **Key**         | {{ optionlink('haproxy.enabled') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.enabled') }} |
 | **Value**       | boolean |
 | **Example**     | `true` |
 | **Description** | Enables or disables [load balancing with HAProxy](https://haproxy.org) [Services](https://kubernetes.io/docs/concepts/services-networking/service/) |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.size') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.size') }} |
 | **Value**       | int |
 | **Example**     | `3` |
 | **Description** | The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.image') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.image') }} |
 | **Value**       | string |
 | **Example**     | `percona/perconalab-xtradb-cluster-operator:{{ release }}-haproxy` |
 | **Description** | HAProxy Docker image to use |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.replicasServiceEnabled') }} |
-| **Value**       | boolean |
-| **Example**     | `true` |
-| **Description** | Enables or disables `haproxy-replicas` Service. This Service (on by default) forwards requests to all MySQL instances, and it **should not be used for write requests**! |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.imagePullPolicy') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.imagePullPolicy') }} |
 | **Value**       | string |
 | **Example**     | `Always` |
 | **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.imagePullSecrets.name') }} |
-| **Value**       | string |
-| **Example**     | `private-registry-credentials` |
-| **Description** | The [Kubernetes imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the HAProxy image |
-|                 | |
-| **Key**         | {{ optionlink('haproxy.resources.requests.memory') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.resources.requests.memory') }} |
 | **Value**       | string |
 | **Example**     | `1G` |
 | **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.resources.requests.cpu') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.resources.requests.cpu') }} |
 | **Value**       | string |
 | **Example**     | `600m` |
 | **Description** | [Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.resources.limits.memory') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.resources.limits.memory') }} |
 | **Value**       | string |
 | **Example**     | `1G` |
 | **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.resources.limits.cpu') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.resources.limits.cpu') }} |
 | **Value**       | string |
 | **Example**     | `700m` |
 | **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.affinity.topologyKey') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.antiAffinityTopologyKey') }} |
 | **Value**       | string |
 | **Example**     | `kubernetes.io/hostname` |
 | **Description** | The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.affinity.advanced') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.affinity.advanced') }} |
 | **Value**       | subdoc |
 | **Example**     | |
 | **Description** | If available it makes a [topologyKey](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature) node affinity constraint to be ignored |
 |                 | |
-| **Key**         | {{ optionlink('haproxy.expose.type') }} |
+| **Key**         | {{ optionlink('proxy.haproxy.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
 | **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for HAProxy exposure |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.expose.annotations') }} |
+| **Value**       | string |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.expose.externalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service for HAProxy should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.expose.internalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service for HAProxy should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.expose.labels') }} |
+| **Value**       | label |
+| **Example**     | `rack: rack-22` |
+| **Description** | [Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for HAProxy |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.expose.loadBalancerIP') }} |
+| **Value**       | string |
+| **Example**     | `127.0.0.1` |
+| **Description** | The static IP-address for the load balancer |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.expose.loadBalancerSourceRanges') }} |
+| **Value**       | string |
+| **Example**     | `10.0.0.0/8` |
+| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
 
-## <a name="operator-router-section"></a>Router section
+## <a name="operator-router-section"></a>Router subsection
 
-The `router` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), which acts as a proxy for Group replication.
+The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), which acts as a proxy for Group replication.
 
 |                 | |
 |-----------------|-|
-| **Key**         | {{ optionlink('router.size') }} |
+| **Key**         | {{ optionlink('proxy.router.size') }} |
 | **Value**       | int |
 | **Example**     | `3` |
 | **Description** | The number of the Router Pods to provide routing to MySQL Servers |
 |                 | |
-| **Key**         | {{ optionlink('router.image') }} |
+| **Key**         | {{ optionlink('proxy.router.image') }} |
 | **Value**       | string |
 | **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}-router` |
 | **Description** | Router Docker image to use |
 |                 | |
-| **Key**         | {{ optionlink('router.imagePullPolicy') }} |
+| **Key**         | {{ optionlink('proxy.router.imagePullPolicy') }} |
 | **Value**       | string |
 | **Example**     | `Always` |
 | **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 |                 | |
-| **Key**         | {{ optionlink('router.affinity.antiAffinityTopologyKey') }} |
+| **Key**         | {{ optionlink('proxy.router.initImage') }} |
+| **Value**       | string |
+| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+| **Description** | An alternative image for the initial Operator installation |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.resources.requests.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.resources.limits.memory') }} |
+| **Value**       | string |
+| **Example**     | `256M` |
+| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.affinity.antiAffinityTopologyKey') }} |
 | **Value**       | string |
 | **Example**     | `kubernetes.io/hostname` |
 | **Description** | The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
 |                 | |
-| **Key**         | {{ optionlink('router.affinity.advanced') }} |
+| **Key**         | {{ optionlink('proxy.router.affinity.advanced') }} |
 | **Value**       | subdoc |
 | **Example**     | |
 | **Description** | In cases where the Pods require complex tuning the advanced option turns off the
@@ -280,20 +343,40 @@ The `router` section in the [deploy/cr.yaml](https://github.com/percona/percona-
 [standard Kubernetes affinity constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 of any complexity to be used |
 |                 | |
-| **Key**         | {{ optionlink('router.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `256M` |
-| **Description** | The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container |
-|                 | |
-| **Key**         | {{ optionlink('router.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `256M` |
-| **Description** | [Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container |
-|                 | |
-| **Key**         | {{ optionlink('router.expose.type') }} |
+| **Key**         | {{ optionlink('proxy.router.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
 | **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for MySQL Router instances exposure |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.expose.annotations') }} |
+| **Value**       | string |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.expose.externalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service for MySQL Router should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.expose.internalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service for MySQL Router should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.expose.labels') }} |
+| **Value**       | label |
+| **Example**     | `rack: rack-22` |
+| **Description** | [Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for MySQL Router |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.expose.loadBalancerIP') }} |
+| **Value**       | string |
+| **Example**     | `127.0.0.1` |
+| **Description** | The static IP-address for the load balancer |
+|                 | |
+| **Key**         | {{ optionlink('proxy.router.expose.loadBalancerSourceRanges') }} |
+| **Value**       | string |
+| **Example**     | `10.0.0.0/8` |
+| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
 
 ## <a name="operator-orchestrator-section"></a>Orchestrator section
 
@@ -317,6 +400,16 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Example**     | `Always` |
 | **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 |                 | |
+| **Key**         | {{ optionlink('orchestrator.serviceAccountName') }} |
+| **Value**       | string |
+| **Example**     | `ercona-server-mysql-operator-orchestrator` |
+| **Description** | The [Kubernetes Service Account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the Orchestrator Pods |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.initImage') }} |
+| **Value**       | string |
+| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+| **Description** | An alternative image for the initial Operator installation |
+|                 | |
 | **Key**         | {{ optionlink('orchestrator.affinity.antiAffinityTopologyKey') }} |
 | **Value**       | string |
 | **Example**     | `kubernetes.io/hostname` |
@@ -331,6 +424,31 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
 | **Description** | The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for Orchestrator instances exposure |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.expose.annotations') }} |
+| **Value**       | string |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.expose.externalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service for the Orchestrator should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.expose.internalTrafficPolicy') }} |
+| **Value**       | string |
+| **Example**     | `Cluster` |
+| **Description** | Specifies whether Service for the Orchestrator should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.expose.labels') }} |
+| **Value**       | label |
+| **Example**     | `rack: rack-22` |
+| **Description** | [Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for the Orchestrator |
+|                 | |
+| **Key**         | {{ optionlink('orchestrator.expose.loadBalancerSourceRanges') }} |
+| **Value**       | string |
+| **Example**     | `10.0.0.0/8` |
+| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.resources.requests.memory') }} |
 | **Value**       | string |
