@@ -25,6 +25,7 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | proxy.router    | subdoc     |                    | MySQL Router subsection                    |
 | orchestrator    | subdoc     |                    | Orchestrator section                       |
 | pmm             | subdoc     |                    | Percona Monitoring and Management section  |
+| initImage       | string     | `perconalab/percona-server-mysql-operator:{{ release }}` | An alternative init image for the Operator |
 | secretsName     | string     | `cluster1-secrets` | A name for [users secrets](users.md#users) |
 | sslSecretName   | string     | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
 |ignoreAnnotations| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator |
@@ -82,6 +83,11 @@ configuration options for the Percona Server for MySQL.
 | **Value**       | string |
 | **Example**     | `private-registry-credentials` |
 | **Description** | The [Kubernetes ImagePullSecret](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) |
+|                 | |
+| **Key**         | {{ optionlink('mysql.initImage') }} |
+| **Value**       | string |
+| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+| **Description** | An alternative init image for MySQL Pods |
 |                 | |
 | **Key**         | {{ optionlink('mysql.sizeSemiSync') }} |
 | **Example**     | `0` |
@@ -318,7 +324,7 @@ The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona
 | **Key**         | {{ optionlink('proxy.router.initImage') }} |
 | **Value**       | string |
 | **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
-| **Description** | An alternative image for the initial Operator installation |
+| **Description** | An alternative init image for MySQL Router Pods |
 |                 | |
 | **Key**         | {{ optionlink('proxy.router.resources.requests.memory') }} |
 | **Value**       | string |
@@ -408,7 +414,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Key**         | {{ optionlink('orchestrator.initImage') }} |
 | **Value**       | string |
 | **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
-| **Description** | An alternative image for the initial Operator installation |
+| **Description** | An alternative init image for Orchestrator Pods |
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.affinity.antiAffinityTopologyKey') }} |
 | **Value**       | string |
@@ -538,6 +544,11 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Value**       | string  |
 | **Example**     | `Always` |
 | **Description** | The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
+|                 | |
+| **Key**         | {{ optionlink('backup.initImage') }} |
+| **Value**       | string |
+| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+| **Description** | An alternative init image for Percona XtraBackup Pods |
 |                 | |
 | **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.type') }} |
 | **Value**       | string |
