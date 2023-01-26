@@ -302,6 +302,11 @@ configuration options for the Orchestrator - a replication topology manager, use
 
 |                 | |
 |-----------------|-|
+| **Key**         | {{ optionlink('orchestrator.enabled') }} |
+| **Value**       | boolean |
+| **Example**     | `true` |
+| **Description** | Enables or disables the Orchestrator |
+|                 | |
 | **Key**         | {{ optionlink('orchestrator.size') }} |
 | **Value**       | int |
 | **Example**     | `3` |
