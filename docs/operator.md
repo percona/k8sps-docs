@@ -1,4 +1,11 @@
-# <a name="operator-custom-resource-options"></a>Custom Resource options
+# Custom Resource options reference
+
+Percona Operator for MySQL uses [Custom Resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) to manage options for the various components of the cluster.
+
+* `PerconaServerMySQL` Custom Resource with options for the cluster,
+* `PerconaServerMySQLBackup` and `PerconaServerMySQLRestore` Custom Resources contain options for Percona XtraBackup used to backup Percona XtraDB Cluster and to restore it from backups.
+
+## PerconaServerMySQL Custom Resource options
 
 Percona Server for MySQL managed by the Operator is configured via the spec section
 of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
@@ -31,7 +38,7 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 |ignoreAnnotations| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator |
 | ignoreLabels    | subdoc     | `rack`             | The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator |
 
-## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
+### <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
 The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
 
@@ -57,7 +64,7 @@ The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-ser
 | **Example**     | `cert-manager.io` |
 | **Description** | A [cert-manager issuer group](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
 
-## <a name="operator-mysql-section"></a>Percona Server for MySQL section
+### <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
 The `mysql` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains general
 configuration options for the Percona Server for MySQL.
@@ -208,7 +215,7 @@ configuration options for the Percona Server for MySQL.
 | **Example**     | |
 | **Description** | [Persistent Volume Claim](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
 
-## <a name="operator-haproxy-section"></a>HAProxy subsection
+### <a name="operator-haproxy-section"></a>HAProxy subsection
 
 The `proxy.haproxy` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
 file contains configuration options for the HAProxy service.
@@ -300,7 +307,7 @@ file contains configuration options for the HAProxy service.
 | **Example**     | `10.0.0.0/8` |
 | **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
 
-## <a name="operator-router-section"></a>Router subsection
+### <a name="operator-router-section"></a>Router subsection
 
 The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), which acts as a proxy for Group replication.
 
@@ -384,7 +391,7 @@ of any complexity to be used |
 | **Example**     | `10.0.0.0/8` |
 | **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
 
-## <a name="operator-orchestrator-section"></a>Orchestrator section
+### <a name="operator-orchestrator-section"></a>Orchestrator section
 
 The `orchestrator` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
 configuration options for the Orchestrator - a replication topology manager, used if asynchronous replication is turned on.
@@ -471,7 +478,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Example**     | `1Gi` |
 | **Description** | The [Kubernetes PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Orchestrator |
 
-## <a name="operator-pmm-section"></a>PMM section
+### <a name="operator-pmm-section"></a>PMM section
 
 The `pmm` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
 options for Percona Monitoring and Management.
@@ -523,7 +530,7 @@ options for Percona Monitoring and Management.
 | **Example**     | `admin` |
 | **Description** | The PMM Serve_User. The PMM Server password should be configured using Secrets |
 
-## <a name="operator-backup-section"></a>Backup section
+### <a name="operator-backup-section"></a>Backup section
 
 The `backup` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
 file contains the following configuration options for the regular Percona XtraDB Cluster backups.
@@ -640,7 +647,7 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Example**     | |
 | **Description** | The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
 
-## <a name="operator-pt-section"></a>Percona Toolkit section
+### <a name="operator-pt-section"></a>Percona Toolkit section
 
 The `toolkit` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
 options for [Percona Toolkit](https://docs.percona.com/percona-toolkit/).
@@ -676,4 +683,44 @@ options for [Percona Toolkit](https://docs.percona.com/percona-toolkit/).
 | **Example**     | `400m` |
 | **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
 
+## <a name="operator-backupsource-section"></a> PerconaServerMySQLRestore Custom Resource options
+
+[Percona Server for MySQL Restore](backups.md#restoring-backup) options are managed by the Operator via the 
+`PerconaServerMySQLRestore` [Custom Resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and can be configured via the
+[deploy/backup/restore.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml)
+configuration file. This Custom Resource contains the following options:
+
+| Key              | Value type        | Description                                    | Required |
+| ---------------- | ----------------- | ---------------------------------------------- | -------- |
+| metadata.name    | string            | The name of the restore                        | true     |
+| spec.clusterName | string            | MySQL Cluster name (the name of your running cluster) | true |
+| spec.backupName  | string            | The name of the backup which should be restored| false    |
+| spec.backupSource| [subdoc](operator.md#operator-restore-backupsource-options-section)| Defines configuration for different restore sources | false |
+
+### <a name="operator-restore-backupsource-options-section"></a>backupSource section
+
+| Key              | Value type        | Description                                    | Required |
+| ---------------- | ----------------- | ---------------------------------------------- | -------- |
+| destination      | string            | Path to the backup                             | false    |
+| storageName      | string            | The storage name from CR `spec.backup.storages`| false    |
+| s3               | [subdoc](operator.md#operator-restore-s3-options-section)    | Define configuration for s3 compatible storages | false |
+| azure            | [subdoc](operator.md#operator-restore-azure-options-section) | Define configuration for azure blob storage     | false |
+
+### <a name="operator-restore-s3-options-section"></a>backupSource.s3 subsection
+
+| Key              | Value type        | Description                                    | Required |
+| ---------------- | ----------------- | ---------------------------------------------- | -------- |
+| bucket           | string            | The bucket with a backup                       | true     |
+| credentialsSecret| string            | The Secret name for the backup                 | true     |
+| endpointUrl      | string            | A valid endpoint URL                           | false    |
+| region           | string            | The region corresponding to the S3 bucket      | false    |
+
+### <a name="operator-restore-azure-options-section"></a>backupSource.azure subsection
+
+| Key              | Value type        | Description                                    | Required |
+| ---------------- | ----------------- | ---------------------------------------------- | -------- |
+| credentialsSecret| string            | The Secret name for the azure blob storage     | true     |
+| container        | string            | The container name of the azure blob storage   | true     |
+| endpointUrl      | string            | A valid endpoint URL                           | false    |
+| storageClass     | string            | The storage class name of the azure storage    | false    |
 
