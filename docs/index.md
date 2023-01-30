@@ -49,6 +49,8 @@ instrumentation.
 
 * [Anti-affinity and tolerations](constraints.md)
 
+* [Labels and annotations](annotations.md)
+
 * [Changing MySQL Options](options.md)
 
 * [Exposing the cluster](expose.md)
