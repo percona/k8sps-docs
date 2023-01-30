@@ -41,7 +41,7 @@ extra_css:
   - https://unicons.iconscout.com/release/v3.0.3/css/line.css
   - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css
   - css/percona.css
-  - css/version-select.css
+#  - css/version-select.css
   - css/nocopy.css
 
 extra_javascript:
@@ -92,7 +92,7 @@ plugins:
   # https://pypi.org/project/mkdocs-htmlproofer-plugin/
   #    htmlproofer: {}
   mike:
-    version_selector: true
+    version_selector: false
     css_dir: css
     javascript_dir: js
     canonical_version: null
@@ -100,10 +100,10 @@ plugins:
 extra: # Used in main.html template and can't be externalized
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
-  release: '0.3.0'
-  apiversion: '0-3-0'
-  ps80recommended: '8.0.29'
-  pxbrecommended: '8.0.28'
+  release: '0.4.0'
+  apiversion: '0-4-0'
+  ps80recommended: '8.0.30-22'
+  pxbrecommended: '8.0.30-23'
   pmm2recommended: '2.33.0'
   gkerecommended: '1.25'
   certmanagerrecommended: '1.8.0'
