@@ -18,7 +18,7 @@
 
 * Starting from now it [becomes possible](backups.md#restore-the-cluster-from-a-previously-saved-backup) to restore backups to a new cluster, which means bootstrapping the new cluster without an existing backup object.
 
-* This release also includes fixes to the following CVEs (Common Vulnerabilities and Exposures): CVE-2021-20329 (potential injections in MongoDB Go Driver used HAProxy, which had no effect on Percona Operator for MySQL), and CVE-2022-42898 (images used by the Operator suffering from the unauthenticated denial of service vulnerability). Users of previous Operator versions are advised to upgrade to version 0.4.0
+* This release also includes fixes to the following CVEs (Common Vulnerabilities and Exposures): CVE-2022-40897 (the denial of service vulnerability in Python Packaging Authority setuptools, the operator and mysql-router images are affected), as well as CVE-2022-32149 and CVE-2022-27664 (the denial of service vulnerability in golang binaries, percona-toolkit image used by the Operator is affected). Users of previous Operator versions are advised to upgrade to the version 0.4.0.
 
 ## New Features
 
