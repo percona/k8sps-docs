@@ -658,6 +658,7 @@ The `toolkit` section in the [deploy/cr.yaml](https://github.com/percona/percona
 options for [Percona Toolkit](https://docs.percona.com/percona-toolkit/).
 
 |                 | |
+|-----------------|-|
 | **Key**         | {{ optionlink('toolkit.image') }} |
 | **Value**       | string |
 | **Example**     | `percona/pmm-client:{{ pmm2recommended }}` |

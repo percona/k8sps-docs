@@ -4,7 +4,7 @@ site_name: Percona Operator for MySQL based on Percona Server for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
-copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2022
+copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2023
 use_directory_urls: false
 repo_name: percona/k8sps-docs
 repo_url: https://github.com/percona/k8sps-docs
@@ -41,7 +41,7 @@ extra_css:
   - https://unicons.iconscout.com/release/v3.0.3/css/line.css
   - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css
   - css/percona.css
-  - css/version-select.css
+#  - css/version-select.css
   - css/nocopy.css
 
 extra_javascript:
@@ -83,7 +83,7 @@ plugins:
   with-pdf:
     output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
     cover_title: "Documentation"
-    cover_subtitle: 0.3.0 (September 30, 2022)
+    cover_subtitle: 0.4.0 (January 30, 2023)
     author: "Percona Technical Documentation Team"
     cover_logo: docs/assets/images/operatorlogo.png
     custom_template_path: _resources/templates
@@ -92,7 +92,7 @@ plugins:
   # https://pypi.org/project/mkdocs-htmlproofer-plugin/
   #    htmlproofer: {}
   mike:
-    version_selector: true
+    version_selector: false
     css_dir: css
     javascript_dir: js
     canonical_version: null
@@ -100,11 +100,11 @@ plugins:
 extra: # Used in main.html template and can't be externalized
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
-  release: '0.3.0'
-  apiversion: '0-3-0'
-  ps80recommended: '8.0.29'
-  pxbrecommended: '8.0.28'
-  pmm2recommended: '2.30.0'
+  release: '0.4.0'
+  apiversion: '0-4-0'
+  ps80recommended: '8.0.30-22'
+  pxbrecommended: '8.0.30-23'
+  pmm2recommended: '2.33.0'
   gkerecommended: '1.25'
   certmanagerrecommended: '1.8.0'
   version:
@@ -144,6 +144,7 @@ nav:
           - "Percona certified images": images.md
           
     - Release Notes:
+          - "Percona Operator for MySQL 0.4.0 (2023-01-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md
           - "Percona Operator for MySQL 0.3.0 (2022-09-29)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.md
           - "Percona Operator for MySQL 0.2.0 (2022-06-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.md
           - "Percona Distribution for MySQL Operator based on Percona Server for MySQL 0.1.0 (2022-01-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.1.0.md
