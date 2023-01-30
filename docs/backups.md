@@ -20,7 +20,7 @@ be set to `true` to enable backups), and the number of options in the
 Since backups are stored separately on the Amazon S3, a secret with
 `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` should be present on
 the Kubernetes cluster. The secrets file with these base64-encoded keys should
-be created: for example `deploy/backup-s3.yaml` file with the following
+be created: for example [deploy/backup-s3.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup-s3.yaml) file with the following
 contents.
 
 ```yaml
@@ -230,6 +230,8 @@ also on any Kubernetes-based environment with the installed Operator.
     has a Secrets object with the same user passwords as in the original cluster.
     More details about secrets can be found in [System Users](users.md#users-system-users).
 
+The example of the restore configuration file is [deploy/backup/restore.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml). The options that can be used in it are described in the [restore options reference](operator.md#perconaservermysqlrestore-custom-resource-options).
+
 Following things are needed to restore a previously saved backup:
 
 * Make sure that the cluster is running.
@@ -282,6 +284,7 @@ restoration can be done in the following way.
             backupSource:
               destination: s3://S3-BUCKET-NAME/BACKUP-NAME
               s3:
+                bucket: S3-BUCKET-NAME
                 credentialsSecret: my-cluster-name-backup-s3
                 region: us-west-2
                 endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
@@ -300,6 +303,7 @@ restoration can be done in the following way.
             backupSource:
               destination: AZURE-CONTAINER-NAME/BACKUP-NAME
               azure:
+                container: AZURE-CONTAINER-NAME
                 credentialsSecret: my-cluster-azure-secret
                 ...
             ```
