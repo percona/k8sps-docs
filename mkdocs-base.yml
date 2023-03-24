@@ -114,8 +114,8 @@ extra: # Used in main.html template and can't be externalized
       make our documentation better.
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
-  release: '0.4.0'
-  apiversion: '0-4-0'
+  release: '0.5.0'
+  apiversion: '0-5-0'
   ps80recommended: '8.0.30-22'
   pxbrecommended: '8.0.30-23'
   pmm2recommended: '2.33.0'
@@ -159,6 +159,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - "Percona Operator for MySQL 0.5.0 (2023-03-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md
           - "Percona Operator for MySQL 0.4.0 (2023-01-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md
           - "Percona Operator for MySQL 0.3.0 (2022-09-29)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.md
           - "Percona Operator for MySQL 0.2.0 (2022-06-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.md
