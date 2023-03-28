@@ -57,6 +57,8 @@ instrumentation.
 
 * [Transport Encryption (TLS/SSL)](TLS.md)
 
+* [Telemetry](telemetry.md)
+
 * [Horizontal and vertical scaling](scaling.md)
 
 * [Monitor with Percona Monitoring and Management (PMM)](monitoring.md)
