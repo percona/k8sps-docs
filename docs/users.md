@@ -43,7 +43,17 @@ the Operator requires system-level Percona Server for MySQL users.
 
 Credentials for these users are stored as a [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) object.
 The Operator requires to be deployed before the Percona Server for MySQL is
-started. The name of the required secrets (`cluster1-secrets` by default)
+started. 
+
+!!! note
+
+    The Operator will either use existing Secrets, or create a new
+    Secrets object with randomly generated passwords if it didn’t
+    exist. Also, starting from the Operator version 0.5, it will
+    generate random passwords for system users not found in the
+    existing Secrets object.
+
+The name of the required Secrets (`cluster1-secrets` by default)
 should be set in the `spec.secretsName` option of the `deploy/cr.yaml`
 configuration file.
 
