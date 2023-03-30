@@ -13,13 +13,11 @@ file.
 
 The metadata part of this file contains the following keys:
 
-
 * `name` (`cluster1` by default) sets the name of your Percona Server for
 MySQL cluster; it should include only [URL-compatible characters](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3),
 not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
 * `finalizers.delete-mysql-pods-in-order` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
-
 
 * `finalizers.delete-mysql-pods-in-order` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
 
@@ -63,6 +61,22 @@ The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-ser
 | **Value**       | string |
 | **Example**     | `cert-manager.io` |
 | **Description** | A [cert-manager issuer group](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
+
+### <a name="operator-upgradeoptions-section"></a>Upgrade options section
+
+The `upgradeOptions` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
+
+|                 | |
+|-----------------|-|
+| **Key**         | {{ optionlink('upgradeOptions.versionServiceEndpoint') }} |
+| **Value**       | string |
+| **Example**     | `https://check.percona.com` |
+| **Description** | The Version Service URL used to check versions compatibility for upgrade |
+|                 | |
+| **Key**         | {{ optionlink('upgradeOptions.apply') }} |
+| **Value**       | string |
+| **Example**     | `Disabled` |
+| **Description** | Specifies how images are picked up from the version service on initial start by the Operator. `Never` or `Disabled` will completely disable quering version service for images, otherwise it can be set to `Latest` or `Recommended` or to a specific version string of Percona Server for MySQL (e.g. `8.0.32-24`) that is wished to be version-locked (so that the user can control the version running) |
 
 ### <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
