@@ -370,6 +370,11 @@ The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona
 [standard Kubernetes affinity constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 of any complexity to be used |
 |                 | |
+| **Key**         | {{ optionlink('proxy.router.configuration') }} |
+| **Value**       | string |
+| **Example**     | <pre>&#124;<br>`[default]`<br>`logging_folder=/tmp/router/log`<br>`[logger]`<br>`level=DEBUG`</pre> |
+| **Description** | Custom configuration options to be passed to MySQL Router |
+|                 | |
 | **Key**         | {{ optionlink('proxy.router.expose.type') }} |
 | **Value**       | string |
 | **Example**     | `ClusterIP` |
