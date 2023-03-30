@@ -87,10 +87,10 @@ plugins:
   # https://github.com/orzih/mkdocs-with-pdf
   with-pdf:
     output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
-    cover_title: "Documentation"
-    cover_subtitle: 0.4.0 (January 30, 2023)
+    cover_title: "Percona Operator for MySQL based on Percona Server for MySQL documentation"
+    cover_subtitle: 0.5.0 (March 30, 2023)
     author: "Percona Technical Documentation Team"
-    cover_logo: docs/assets/images/operatorlogo.png
+    cover_logo: docs/assets/images/percona_kubernetes_icon.png
     custom_template_path: _resource/templates
     enabled_if_env: ENABLE_PDF_EXPORT
   # Check links - but extends build time significantly

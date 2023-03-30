@@ -1,6 +1,6 @@
 # Percona Operator for MySQL Release Notes
 
-* [*Percona Operator for MySQL* 0.5.0 (2023-03-30)](Kubernetes-Operator-for-PS-RN0.5.0.md
+* [*Percona Operator for MySQL* 0.5.0 (2023-03-30)](Kubernetes-Operator-for-PS-RN0.5.0.md)
 
 * [*Percona Operator for MySQL* 0.4.0 (2023-01-30)](Kubernetes-Operator-for-PS-RN0.4.0.md)
 
