@@ -4,8 +4,8 @@ The Operator supports Percona Server for MySQL (PS) 8.0.
 
 ## Officially supported platforms
 
-The Operator was developed and tested with Percona Server for MySQL versions
-8.0.30 and 8.0.32. Other options may also work but have not been tested.
+The Operator was developed and tested with Percona Server for MySQL 8.0.32.
+Other options may also work but have not been tested.
 
 The following platforms were tested and are officially supported by the Operator
 {{ release }}:

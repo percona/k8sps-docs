@@ -120,7 +120,7 @@ extra: # Used in main.html template and can't be externalized
   pxbrecommended: '8.0.32-25'
   pmm2recommended: '2.36.0'
   gkerecommended: '1.25'
-  certmanagerrecommended: '1.8.0'
+  certmanagerrecommended: '1.11.0'
   version:
     provider: mike
 
