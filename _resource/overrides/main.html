@@ -18,13 +18,16 @@ by adding marketing-requested elements
 </div>
 {%- endmacro %}
               
-              {% block extrahead %}
-              {{ super() }}
-
-              <html data-lt-installed="true">
-                <head>
-                    <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL">
-                    <meta property="og:description" content="Documentation">
+               {% block extrahead %}
+               {{ super() }}
+                 {% set title = config.site_name %}
+                 {% if page and page.meta and page.meta.title %}
+                 {% set title = title ~ " - " ~ page.meta.title %}
+                 {% elif page and page.title and not page.is_homepage %}
+                 {% set title = title ~ " - " ~ page.title %}
+                 {% endif %}
+                 <meta property="og:type" content="website" />
+                 <meta property="og:title" content="{{ title }}" />
                     <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/ps/assets/images/kubernetes-operators.png">
                     <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/ps/">
                 </head>
@@ -43,7 +46,7 @@ by adding marketing-requested elements
                   j.async = true; 
                   j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
                   f.parentNode.insertBefore(j, f);
-                })(window, document, 'script', 'dataLayer', 'GTM-K48FGP2');
+                })(window, document, 'script', 'dataLayer', 'GTM-WBVF48V');
               </script>
               {% endblock %}
 
@@ -54,7 +57,7 @@ by adding marketing-requested elements
               <img src="https://tracking.g2crowd.com/attribution_tracking/conversions/1007137.gif?e=" width="1" height="1" />
 
               <noscript>
-                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K48FGP2" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WBVF48V" height="0" width="0" style="display:none;visibility:hidden"></iframe>
               </noscript>
               {% endblock %}
 
