@@ -33,7 +33,8 @@ Kubernetes-based environment:
     file.
 
     * set `pmm.enabled=true`
-    * set the `pmm.serverHost` key to your PMM Server hostname,
+    * set the `pmm.serverHost` key to your PMM Server hostname or IP address
+        (it should be resolvable and reachable from within your cluster)
     * authorize PMM Client within PMM Server:
         <a name="operator-monitoring-client-token"></a>
         [Acquire the API Key from your PMM Server](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication) and set `pmmserverkey` in the [users Secrets](users.md/#system-users) object to this obtained API Key value. For example, setting the PMM Server API Key to `new_key` in the `cluster1-secrets` object can be done with the following command:
