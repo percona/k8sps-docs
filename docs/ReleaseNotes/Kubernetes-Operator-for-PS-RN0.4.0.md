@@ -6,7 +6,7 @@
 
 * **Installation**
 
-    [Installing Percona Operator for MySQL](../index.md#advanced-installation-guides)
+    [Installing Percona Operator for MySQL](../System-Requirements.md#installation-guidelines)
 
 !!! note
 

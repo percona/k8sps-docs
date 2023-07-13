@@ -9,7 +9,7 @@
 
 * **Installation**
 
-    [Installing Percona Operator for MySQL](https://www.percona.com/doc/kubernetes-operator-for-mysql/ps/index.html#advanced-installation-guides)
+    [Installing Percona Operator for MySQL](../System-Requirements.md#installation-guidelines)
 
 
 !!! note

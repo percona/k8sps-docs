@@ -134,15 +134,15 @@ extra: # Used in main.html template and can't be externalized
 nav:
 
     - Welcome: index.md
-    - Requirements:
-          - "System Requirements": System-Requirements.md
+    - Features:
           - "Design and architecture": architecture.md
           
     - Quickstart guides:
           - "Install with Helm": helm.md
           - "Install on Minikube": minikube.md
           
-    - Advanced Installation guide:
+    - Installation:
+          - "System Requirements": System-Requirements.md
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
           - "Generic Kubernetes installation": kubernetes.md
