@@ -71,11 +71,11 @@ Before you start, check that you have [enabled the MySQL Router](#enable-mysql-r
         $ kubectl get ps
         ```
 
-    3. Create the ConfigMap. You should use the combination of the cluster name with the `-mysql` suffix as the naming convention for the ConfigMap. For example, to create the ConfigMap for the cluster `cluster1`, the command is the following:
+    3. Create the ConfigMap. You should use the combination of the cluster name with the `-router` suffix as the naming convention for the ConfigMap. For example, to create the ConfigMap for the cluster `cluster1`, the command is the following:
 
 
         ```{.bash data-prompt="$"}
-        $ kubectl create configmap cluster1-mysql --from-file=mysqlrouter.conf
+        $ kubectl create configmap cluster1-router --from-file=mysqlrouter.conf
         ```
         
         Replace the `cluster1` with the corresponding name of your cluster.
