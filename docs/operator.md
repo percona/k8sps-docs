@@ -35,6 +35,7 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | sslSecretName   | string     | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
 |ignoreAnnotations| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator |
 | ignoreLabels    | subdoc     | `rack`             | The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator |
+| pause           | boolean    | `false`            | Pause/resume: setting it to `true` gracefully stops the cluster, and setting it to `false` after shut down starts the cluster back   |
 
 ### <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
