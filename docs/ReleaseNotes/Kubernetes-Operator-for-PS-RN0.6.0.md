@@ -59,7 +59,7 @@ The Operator was developed and tested with Percona Server for MySQL 8.0.32.
 Other options may also work but have not been tested.
 
 The following platforms were tested and are officially supported by the Operator
-0.5.0:
+0.6.0:
 
 * [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.22 - 1.25
 * [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.22 - 1.25
