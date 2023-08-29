@@ -31,7 +31,7 @@ function if you take any of the nodes down.
 
 To provide high availability operator uses [node affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
 to run Percona Server for MySQL instances on separate worker nodes if possible. If
-some node fails, the pod with it is automatically re-created on another node.
+some node fails, the pod in it is automatically re-created on another node.
 
 ![image](assets/images/operator.svg)
 
@@ -44,10 +44,10 @@ a different node. The PVC StorageClass must support this feature
 respectively).
 
 The Operator functionality extends the Kubernetes API with
-*PerconaServerForMySQL* object, and it is implemented as a golang
-application. Each *PerconaServerForMySQL* object maps to one separate MySQL setup.
+*PerconaServerMySQL* object, and it is implemented as a golang
+application. Each *PerconaServerMySQL* object maps to one separate MySQL setup.
 The Operator listens to all events on the created objects.
-When a new PerconaServerForMySQL object is created, or an existing one undergoes
+When a new PerconaServerMySQL object is created, or an existing one undergoes
 some changes or deletion, the Operator automatically
 creates/changes/deletes all needed Kubernetes objects with the
 appropriate settings to provide a proper Percona Server for MySQL operation.
