@@ -56,7 +56,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 ## Supported Platforms
 
 The Operator was developed and tested with Percona Server for MySQL  8.0.33-25.
-Other options may also work but have not been tested.Other software components include:
+Other options may also work but have not been tested. Other software components include:
 
 * Orchestrator 3.2.6-9
 * MySQL Router 8.0.33-25
