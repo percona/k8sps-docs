@@ -85,3 +85,22 @@ haproxy:
 ```
 
 the actual default configuration file can be found [here](https://github.com/percona/percona-server-mysql-operator/blob/main/build/haproxy-global.cfg).
+
+## Enabling the Proxy protocol
+
+The Proxy protocol [allows](https://www.percona.com/doc/percona-server/LATEST/flexibility/proxy_protocol_support.html)
+HAProxy to provide a real client address to the Percona Distribution for MySQL
+Cluster.
+
+Normally Proxy protocol is disabled, and MySQL sees the IP address of the
+proxying server (HAProxy) instead of the real client address.
+But there are scenarios when making real client IP-address visible for MySQL
+is important: e.g. it allows to have privilege grants based on
+client/application address, and significantly enhance auditing.
+
+You can enable Proxy protocol on your cluster by adding
+[proxy_protocol_networks](https://www.percona.com/doc/percona-server/LATEST/flexibility/proxy_protocol_support.html#proxy_protocol_networks)
+option to [mysql.configuration](operator.md#mysql-configuration) key in the
+`deploy/cr.yaml` configuration file.
+
+More information about Proxy protocol can be found in the [official HAProxy documentation](https://www.haproxy.com/blog/using-haproxy-with-the-proxy-protocol-to-better-secure-your-database/).
