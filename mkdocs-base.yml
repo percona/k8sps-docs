@@ -153,6 +153,7 @@ nav:
           - "Anti-affinity and tolerations": constraints.md
           - "Labels and annotations": annotations.md
           - "Changing MySQL Options": options.md
+          - "Load Balancing with HAProxy": haproxy-conf.md
           - "Exposing the cluster": expose.md
           - "Transport Encryption (TLS/SSL)": TLS.md
           - "Telemetry": telemetry.md

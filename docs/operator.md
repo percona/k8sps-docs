@@ -327,6 +327,12 @@ The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona
 
 |                 | |
 |-----------------|-|
+| **Key**         | {{ optionlink('proxy.router.enabled') }} |
+| **Value**       | boolean |
+| **Example**     | `false` |
+| **Description** | Enables or disables MySQL Router |
+|                 | |
+|                 | |
 | **Key**         | {{ optionlink('proxy.router.size') }} |
 | **Value**       | int |
 | **Example**     | `3` |
