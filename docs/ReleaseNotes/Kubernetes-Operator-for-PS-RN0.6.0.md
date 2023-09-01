@@ -2,13 +2,13 @@
 
 * **Date**
 
-    August 29, 2023
+    September 5, 2023
 
 * **Installation**
 
     [Installing Percona Operator for MySQL](../System-Requirements.md#installation-guidelines)
 
-Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.5.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
+Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.6.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
 ## Highlights
 
@@ -22,10 +22,10 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Improvements
 
-* {{ k8spsjira(162) }}: [Support of the proxy-protocol](../haproxy-conf.html#haproxy-conf-protocol) in HAProxy
+* {{ k8spsjira(162) }}: [Support of the proxy-protocol](../haproxy-conf.html#haproxy-conf-protocol) in HAProxy to preserve users’ IP-address. It allows users to fine-tune the access to the database and have proper audit
 * {{ k8spsjira(163) }}: Make Percona Monitoring and Management (PMM) able to gather HaProxy metrics
 * * {{ k8spsjira(205) }}: Update user passwords individually
-* {{ k8spsjira(270) }}: Use more clear [Controller](https://kubernetes.io/docs/concepts/architecture/controller/) names in log messages
+* {{ k8spsjira(270) }}: Use more clear [Controller](https://kubernetes.io/docs/concepts/architecture/controller/) names in log messages to ease troubleshooting
 * {{ k8spsjira(280) }}: Full cluster crash recovery with group replication is now using MySQL shell built-in checks to detect the member with latest transactions and reboots from it, making the cluster prone to data loss
 * {{ k8spsjira(281) }}: The Operator [can now be run locally](../ToDo.md) against a remote Kubernetes cluster, which simplifies the development process, substantially shortening the way to make and try minor code improvements
 * {{ k8spsjira(285) }}: Add startup probe for MySQL Router
@@ -55,14 +55,21 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Supported Platforms
 
-The Operator was developed and tested with Percona Server for MySQL 8.0.32.
-Other options may also work but have not been tested.
+The Operator was developed and tested with Percona Server for MySQL  8.0.33-25.
+Other options may also work but have not been tested.Other software components include:
+
+* Orchestrator 3.2.6-9
+* MySQL Router 8.0.33-25
+* XtraBackup 8.0.33-27
+* Percona Toolkit 3.5.3
+* HAProxy 2.8.1
+* PMM Client 2.39
 
 The following platforms were tested and are officially supported by the Operator
 0.6.0:
 
-* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.22 - 1.25
-* [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.22 - 1.25
-* [Minikube](https://minikube.sigs.k8s.io/docs/) 1.29 (based on Kubernetes 1.26)
+* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.24 - 1.27
+* [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.23 - 1.27
+* [Minikube](https://minikube.sigs.k8s.io/docs/) 1.31.2 (based on Kubernetes 1.27)
 
 This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.
