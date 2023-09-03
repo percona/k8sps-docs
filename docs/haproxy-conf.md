@@ -14,7 +14,7 @@ $ kubectl patch ps cluster1 --type=merge --patch '{
      "haproxy": {
         "enabled": true,
         "size": 3,
-        "image": "perconalab/percona-xtradb-cluster-operator:{{ release }}-haproxy" }
+        "image": "percona/haproxy:{{ haproxyrecommended }}" }
   }}'
 ```
 
@@ -29,9 +29,8 @@ The resulting HAPproxy setup will contain two services:
     just for write load (single writer mode) in setups with split write and read
     loads.
 
-* `cluster1-haproxy-replicas` listening on port 3307 (MySQL).
-    This service selects MySQL cluster members to serve queries following
-    the Round Robin load balancing algorithm.
+* `cluster1-mysql-proxy` service selects MySQL cluster members to serve queries
+    following the Round Robin load balancing algorithm.
 
 When the cluster with HAProxy is upgraded, the following steps
 take place. First, reader members are upgraded one by one: the Operator waits
