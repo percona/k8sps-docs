@@ -156,8 +156,13 @@ Manual update of Percona Server for MySQL can be done as follows:
     $ kubectl patch ps cluster1 --type=merge --patch '{
        "spec": {
            "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server-mysql-operator:{{ release }}" },
-           "pmm":      { "image": "percona/pmm-client:{{ pmm2recommended }}" }
+           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+           "proxy.haproxy":{ "image": "percona/haproxy:{{ psrecommended }}" },
+           "proxy.router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" },
+           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorecommended }}" },
+           "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
+           "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" },
+           "pmm": { "image": "percona/pmm-client:{{ pmm2recommended }}" }
        }}'
     ```
 
