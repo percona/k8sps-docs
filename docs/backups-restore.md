@@ -1,6 +1,6 @@
 # Restore the cluster from a previously saved backup
 
-Backups can be restored not only on the Kubernetes cluster where it was made, but
+Backup can be restored not only on the Kubernetes cluster where it was made, but
 also on any Kubernetes-based environment with the installed Operator.
 
 !!! note

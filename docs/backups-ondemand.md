@@ -2,7 +2,8 @@
 
 To make an on-demand backup, the user should first make changes in the
 `deploy/cr.yaml` configuration file: set the `backup.enabled` key to
-`true` and configure backup storage in the `backup.storages` subsection.
+`true` and [configure backup storage](backups-storage.md) in the
+`backup.storages` subsection.
 
 When the `deploy/cr.yaml` file
 contains correctly configured keys and is applied with `kubectl` command, use

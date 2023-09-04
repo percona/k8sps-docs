@@ -13,7 +13,7 @@ object with credentials needed to access the storage.
     `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` should be present on
     the Kubernetes cluster. The secrets file with these base64-encoded keys should
     be created: for example [deploy/backup-s3.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup-s3.yaml) file with the following
-    contents.    
+    contents.
 
     ```yaml
     apiVersion: v1
@@ -24,9 +24,9 @@ object with credentials needed to access the storage.
     data:
       AWS_ACCESS_KEY_ID: UkVQTEFDRS1XSVRILUFXUy1BQ0NFU1MtS0VZ
       AWS_SECRET_ACCESS_KEY: UkVQTEFDRS1XSVRILUFXUy1TRUNSRVQtS0VZ
-    ```    
+    ```
 
-    !!! note    
+    !!! note
 
         The following command can be used to get a base64-encoded string from
         a plain text one:    
@@ -50,12 +50,12 @@ object with credentials needed to access the storage.
     obviously they should contain proper values to make this access
     possible). To have effect secrets file should be applied with the
     appropriate command to create the secret object,
-    e.g. `kubectl apply -f deploy/backup-s3.yaml` (for Kubernetes).    
+    e.g. `kubectl apply -f deploy/backup-s3.yaml` (for Kubernetes).
 
     All the data needed to access the S3-compatible cloud to store backups should be
     put into the `backup.storages` subsection. Here is an example
     of [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
-    which uses Amazon S3 storage for backups:    
+    which uses Amazon S3 storage for backups:
 
     ```yaml
     ...
@@ -69,7 +69,7 @@ object with credentials needed to access the storage.
             bucket: S3-BACKUP-BUCKET-NAME-HERE
             region: us-west-2
             credentialsSecret: cluster1-s3-credentials
-    ```    
+    ```
 
     If you use some S3-compatible storage instead of the original
     Amazon S3, the [endpointURL](https://docs.min.io/docs/aws-cli-with-minio.html) is needed in the `s3` subsection which points to the actual cloud used for backups and
@@ -77,14 +77,14 @@ object with credentials needed to access the storage.
 
     ```yaml
     endpointUrl: https://storage.googleapis.com
-    ```    
+    ```
 
     Also you can use [prefix](operator.md#backup-storages-s3-prefix) option to
     specify the path (sub-folder) to the backups inside the S3 bucket. If prefix is
-    not set, backups are stored in the root directory.    
+    not set, backups are stored in the root directory.
 
     The options within this subsection are further explained in the
-    [Operator Custom Resource options](operator.md#operator-backup-section).    
+    [Operator Custom Resource options](operator.md#operator-backup-section).
 
     One option which should be mentioned separately is
     `credentialsSecret` which is a [Kubernetes
@@ -99,7 +99,7 @@ object with credentials needed to access the storage.
     a secret with `AZURE_STORAGE_ACCOUNT_NAME` and `AZURE_STORAGE_ACCOUNT_KEY` should be present on
     the Kubernetes cluster. The secrets file with these base64-encoded keys should
     be created: for example `deploy/backup-azure.yaml` file with the following
-    contents.    
+    contents.
 
     ```yaml
     apiVersion: v1
@@ -110,9 +110,9 @@ object with credentials needed to access the storage.
     data:
       AZURE_STORAGE_ACCOUNT_NAME: UkVQTEFDRS1XSVRILUFXUy1BQ0NFU1MtS0VZ
       AZURE_STORAGE_ACCOUNT_KEY: UkVQTEFDRS1XSVRILUFXUy1TRUNSRVQtS0VZ
-    ```    
+    ```
 
-    !!! note    
+    !!! note
 
         The following command can be used to get a base64-encoded string from
         a plain text one:    
@@ -136,12 +136,12 @@ object with credentials needed to access the storage.
     (and obviously they should contain proper values to make this access
     possible). To have effect secrets file should be applied with the appropriate
     command to create the secret object, e.g.
-    `kubectl apply -f deploy/backup-azure.yaml` (for Kubernetes).    
+    `kubectl apply -f deploy/backup-azure.yaml` (for Kubernetes).
 
     All the data needed to access the Azure Blob storage to store backups should be
     put into the `backup.storages` subsection. Here is an example
     of [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
-    which uses Azure Blob storage for backups:    
+    which uses Azure Blob storage for backups:
 
     ```yaml
     ...
@@ -154,10 +154,10 @@ object with credentials needed to access the storage.
           azure:
             container: <your-container-name>
             credentialsSecret: cluster1-azure-credentials
-    ```    
+    ```
 
     The options within this subsection are further explained in the
-    [Operator Custom Resource options](operator.md#operator-backup-section).    
+    [Operator Custom Resource options](operator.md#operator-backup-section).
 
     One option which should be mentioned separately is
     `credentialsSecret` which is a [Kubernetes
