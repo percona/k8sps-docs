@@ -23,17 +23,15 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 ## Improvements
 
 * {{ k8spsjira(162) }}: [Support of the proxy-protocol](../haproxy-conf.html#haproxy-conf-protocol) in HAProxy to preserve users’ IP-address. It allows users to fine-tune the access to the database and have proper audit
-* {{ k8spsjira(163) }}: Make Percona Monitoring and Management (PMM) able to gather HaProxy metrics
+* {{ k8spsjira(163) }}: Make Percona Monitoring and Management (PMM) able to gather HAProxy metrics
 * * {{ k8spsjira(205) }}: Update user passwords individually
 * {{ k8spsjira(270) }}: Use more clear [Controller](https://kubernetes.io/docs/concepts/architecture/controller/) names in log messages to ease troubleshooting
 * {{ k8spsjira(280) }}: Full cluster crash recovery with group replication is now using MySQL shell built-in checks to detect the member with latest transactions and reboots from it, making the cluster prone to data loss
 * {{ k8spsjira(281) }}: The Operator [can now be run locally](../ToDo.md) against a remote Kubernetes cluster, which simplifies the development process, substantially shortening the way to make and try minor code improvements
-* {{ k8spsjira(285) }}: Add startup probe for MySQL Router
 
 ## Bugs Fixed
 
-* {{ k8spsjira(230) }}: Cluster doesn't start correctly unless 3 mysql pods	Dmitriy Kostiuk	
-* {{ k8spsjira(260) }}: Fix a bug due to which group replication cluster could stuck in initializing state after restore
+* {{ k8spsjira(260) }}: Fix a bug due to which group replication cluster can stuck in initializing state after restore
 * {{ k8spsjira(190) }}: Stuck on delete *CAUSED BY K8SPS-260, fixed by K8SPS-239*
 * {{ k8spsjira(211) }}: cluster status is flapping on passwords change
 * {{ k8spsjira(223) }}: Fix a bug due to which deleting a Pod with its PVC was breaking the InnoDB Cluster because of the UUID change of the recreated Pod
