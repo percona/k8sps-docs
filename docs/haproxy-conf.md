@@ -18,26 +18,23 @@ $ kubectl patch ps cluster1 --type=merge --patch '{
   }}'
 ```
 
-The resulting HAPproxy setup will contain two services:
+The resulting HAPproxy setup will contain the `cluster1-haproxy` service
+listening on ports 3306 (MySQL cluster zero member) and 3307 (other members).
 
-* `cluster1-haproxy` service listening on ports 3306 (MySQL) and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)).
-    This service is pointing to the MySQL cluster member number zero 
-    (`cluster1-mysql-0`) by default when this member is available. If a zero
-    member is not available, members are selected in descending order of their
-    numbers (e.g. `cluster1-mysql-2`, then `cluster1-mysql-1`, etc.). This
-    service can be used for both read and write load, or it can also be used
-    just for write load (single writer mode) in setups with split write and read
-    loads.
-
-* `cluster1-mysql-proxy` service selects MySQL cluster members to serve queries
-    following the Round Robin load balancing algorithm.
+This service is pointing to the MySQL cluster member number zero
+(`cluster1-mysql-0`) on the default 3306 port when this member is available. If
+a zero member is not available, members are selected in descending order of
+their numbers (e.g. `cluster1-mysql-2`, then `cluster1-mysql-1`, etc.). It can
+be used for both read and write load, or it can also be used just for write load
+(single writer mode) in setups with split write and read loads. On 3307 port
+this service selects MySQL cluster members to serve queries following the Round
+Robin load balancing algorithm. 
 
 When the cluster with HAProxy is upgraded, the following steps
 take place. First, reader members are upgraded one by one: the Operator waits
 until the upgraded Percona Distribution for MySQL luster member becomes synced,
 and then proceeds to upgrade the next member. When the upgrade is finished for
-all the readers, then the writer Percona XtraDB Cluster member is finally
-upgraded.
+all the readers, then the writer MySQL cluster member is finally upgraded.
 
 ## Passing custom configuration options to HAProxy
 
@@ -85,21 +82,3 @@ haproxy:
 
 the actual default configuration file can be found [here](https://github.com/percona/percona-server-mysql-operator/blob/main/build/haproxy-global.cfg).
 
-## Enabling the Proxy protocol
-
-The Proxy protocol [allows](https://www.percona.com/doc/percona-server/LATEST/flexibility/proxy_protocol_support.html)
-HAProxy to provide a real client address to the Percona Distribution for MySQL
-Cluster.
-
-Normally Proxy protocol is disabled, and MySQL sees the IP address of the
-proxying server (HAProxy) instead of the real client address.
-But there are scenarios when making real client IP-address visible for MySQL
-is important: e.g. it allows to have privilege grants based on
-client/application address, and significantly enhance auditing.
-
-You can enable Proxy protocol on your cluster by adding
-[proxy_protocol_networks](https://www.percona.com/doc/percona-server/LATEST/flexibility/proxy_protocol_support.html#proxy_protocol_networks)
-option to [mysql.configuration](operator.md#mysql-configuration) key in the
-`deploy/cr.yaml` configuration file.
-
-More information about Proxy protocol can be found in the [official HAProxy documentation](https://www.haproxy.com/blog/using-haproxy-with-the-proxy-protocol-to-better-secure-your-database/).
