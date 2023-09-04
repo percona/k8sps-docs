@@ -148,7 +148,12 @@ nav:
           - "Generic Kubernetes installation": kubernetes.md
           
     - Configuration and Management:
-          - "Backup and restore": backups.md
+          - Backup and restore: 
+            - "About backups": backups.md
+            - "Configure storage for backups": backups-storage.md
+            - "Make on-demand backup": backups-ondemand.md
+            - "Restore from a previously saved backup": backups-restore.md
+            - "Delete the unneeded backup": backups-delete.md
           - "Application and system users": users.md
           - "Anti-affinity and tolerations": constraints.md
           - "Labels and annotations": annotations.md
