@@ -6,7 +6,7 @@ or on [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/bl
 
 ![image](assets/images/backup-s3.svg)
 
-The Operator currently allows [doing logical cluster backups on-demand](backups-ondeband.md)
+The Operator currently allows [doing logical cluster backups on-demand](backups-ondemand.md)
 (i.e. manually at any moment). 
 
 It uses the [Percona XtraBackup](https://docs.percona.com/percona-xtrabackup/latest/) tool.
