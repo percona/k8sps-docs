@@ -43,7 +43,7 @@ Robin load balancing algorithm.
 
 When the cluster with HAProxy is upgraded, the following steps
 take place. First, reader members are upgraded one by one: the Operator waits
-until the upgraded Percona Distribution for MySQL luster member becomes synced,
+until the upgraded Percona Distribution for MySQL cluster member becomes synced,
 and then proceeds to upgrade the next member. When the upgrade is finished for
 all the readers, then the writer MySQL cluster member is finally upgraded.
 
