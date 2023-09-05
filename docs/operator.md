@@ -35,7 +35,7 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | sslSecretName   | string     | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
 |ignoreAnnotations| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator |
 | ignoreLabels    | subdoc     | `rack`             | The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator |
-| allowUnsafeConfigurations    | boolean | `false`  | Prevents users from configuring a cluster with unsafe parameters such as starting the cluster with the number of Percona Server for MySQL instances which is less than 3, more than 9, or is an even number (if `false`, unsafe parameters will be automatically changed to safe defaults)                           |
+| allowUnsafeConfigurations    | boolean | `false`  | Prevents users from configuring a cluster with unsafe parameters such as starting a cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults)                           |
 
 ### <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
