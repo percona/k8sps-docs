@@ -18,7 +18,7 @@ cluster:
 ```bash
 $ kubectl patch ps cluster1 --type=merge --patch '{
   "spec": {
-     "router": {
+     "proxy": {
        "haproxy": {
           "enabled": true,
           "size": 3,
