@@ -9,9 +9,9 @@ Containers deployed with the Operator include the following components:
 
 * [Percona XtraBackup](https://www.percona.com/doc/percona-xtrabackup/8.0/index.html) - a hot backup utility for MySQL based servers that doesn’t lock your database during the backup,
 
-* [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype),
+* [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype),
 
-* [HAProxy](https://haproxy.org) - a load balancing and proxy service used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype)),
+* [HAProxy](https://haproxy.org) - a load balancing and proxy service used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype)),
 
 * [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) - a proxy solution used when [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype),
 
