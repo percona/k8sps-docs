@@ -159,7 +159,7 @@ configuration options for the Percona Server for MySQL.
 |                 | |
 | **Key**         | {{ optionlink('mysql.expose.annotations') }} |
 | **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
 | **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) |
 |                 | |
 | **Key**         | {{ optionlink('mysql.expose.externalTrafficPolicy') }} |
@@ -296,7 +296,7 @@ file contains configuration options for the HAProxy service.
 |                 | |
 | **Key**         | {{ optionlink('proxy.haproxy.expose.annotations') }} |
 | **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
 | **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy |
 |                 | |
 | **Key**         | {{ optionlink('proxy.haproxy.expose.externalTrafficPolicy') }} |
@@ -385,7 +385,7 @@ of any complexity to be used |
 |                 | |
 | **Key**         | {{ optionlink('proxy.router.expose.annotations') }} |
 | **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
 | **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for MySQL Router |
 |                 | |
 | **Key**         | {{ optionlink('proxy.router.expose.externalTrafficPolicy') }} |
@@ -467,7 +467,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.expose.annotations') }} |
 | **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
+| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
 | **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the Orchestrator |
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.expose.externalTrafficPolicy') }} |
