@@ -279,6 +279,66 @@ file contains configuration options for the HAProxy service.
 | **Example**     | `700m` |
 | **Description** | [Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
 |                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.env.name') }} |
+| **Value**       | string |
+| **Example**     | `HA_CONNECTION_TIMEOUT` |
+| **Description** | Name of an environment variable for HAProxy |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.env.value') }} |
+| **Value**       | string |
+| **Example**     | `"1000"` |
+| **Description** | Value of an environment variable for HAProxy |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.envFrom.secretRef.name') }} |
+| **Value**       | string |
+| **Example**     | `haproxy-env-secret` |
+| **Description** | Name of a Secret with environment variables for HAProxy |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.timeoutSeconds') }} |
+| **Value**       | int |
+| **Example**     | `3` |
+| **Description** | Number of seconds after which the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.periodSeconds') }} |
+| **Value**       | int |
+| **Example**     | `5` |
+| **Description** | How often (in seconds) to perform the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.successThreshold') }} |
+| **Value**       | int |
+| **Example**     | `3` |
+| **Description** | Minimum consecutive successes for the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.failureThreshold') }} |
+| **Value**       | int |
+| **Example**     | `1` |
+| **Description** | When the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.livenessProbes.timeoutSeconds') }} |
+| **Value**       | int |
+| **Example**     | `3` |
+| **Description** | Number of seconds after which the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.livenessProbes.periodSeconds') }} |
+| **Value**       | int |
+| **Example**     | `5` |
+| **Description** | How often (in seconds) to perform the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.livenessProbes.successThreshold') }} |
+| **Value**       | int |
+| **Example**     | `3` |
+| **Description** | Minimum consecutive successes for the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.failureThreshold') }} |
+| **Value**       | int |
+| **Example**     | `1` |
+| **Description** | When the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready |
+|                 | |
+| **Key**         | {{ optionlink('proxy.haproxy.configuration') }} |
+| **Value**       | string |
+| **Example**     | |
+| **Description** | The [custom HAProxy configuration file](haproxy-conf.md#passing-custom-configuration-options-to-haproxy) contents |
+|                 | |
 | **Key**         | {{ optionlink('proxy.haproxy.antiAffinityTopologyKey') }} |
 | **Value**       | string |
 | **Example**     | `kubernetes.io/hostname` |
@@ -330,6 +390,12 @@ The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona
 
 |                 | |
 |-----------------|-|
+| **Key**         | {{ optionlink('proxy.router.enabled') }} |
+| **Value**       | boolean |
+| **Example**     | `false` |
+| **Description** | Enables or disables MySQL Router |
+|                 | |
+|                 | |
 | **Key**         | {{ optionlink('proxy.router.size') }} |
 | **Value**       | int |
 | **Example**     | `3` |
