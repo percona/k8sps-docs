@@ -1,14 +1,25 @@
 # MySQL Router Configuration
 
-[MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) is lightweight middleware that provides transparent routing between your application and back-end MySQL servers. [MySQL Router is part of the Operator](architecture.md#design-overview) and is deployed during the installation. However, to use the Router, enable it first.
+[MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) is lightweight middleware that provides transparent routing between your application and back-end MySQL servers. [MySQL Router is part of the Operator](architecture.md#design-overview) and is deployed during the installation. MySQL Router can be used as an alternative to [HAProxy based load balancing](haproxy-conf.md) when group replication between MySQL instances is turned on.
+
+To use the Router, enable it and make sure that HAProxy is disabled. 
 
 ## Enable MySQL Router 
 
 1. Edit the `/deploy/cr.yaml` file
 
     ```yaml
-    router:
-      enabled: true
+    ...
+    mysql:
+      clusterType: group-replication
+      ...
+    proxy:
+      haproxy:
+        enabled: false
+        ...
+      router:
+        enabled: true
+        ...
     ```
 
 2. Update the cluster to apply the new configuration:
