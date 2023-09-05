@@ -35,7 +35,7 @@ The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-
 | sslSecretName   | string     | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
 |ignoreAnnotations| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator |
 | ignoreLabels    | subdoc     | `rack`             | The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator |
-| allowUnsafeConfigurations    | boolean | `false`  | Prevents users from configuring a cluster with unsafe parameters such as starting a cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults)                           |
+| allowUnsafeConfigurations    | boolean | `false`  | Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults)                           |
 
 ### <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
@@ -88,8 +88,13 @@ configuration options for the Percona Server for MySQL.
 |-----------------|-|
 | **Key**         | {{ optionlink('mysql.clusterType') }} |
 | **Value**       | int |
-| **Example**     | `async` |
+| **Example**     | `group-replication` |
 | **Description** | The cluster type: `async` for [Asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/replication.html), `group-replication` for [Group Replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) |
+|                 | |
+| **Key**         | {{ optionlink('mysql.autoRecovery') }} |
+| **Value**       | boolean |
+| **Example**     | `true` |
+| **Description** | Enables or disables the Operator from attempting to fix the issue in the event of a full cluster crash  |
 |                 | |
 | **Key**         | {{ optionlink('mysql.size') }} |
 | **Value**       | int |
@@ -324,7 +329,7 @@ file contains configuration options for the HAProxy service.
 
 ### <a name="operator-router-section"></a>Router subsection
 
-The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), which acts as a proxy for Group replication.
+The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/), which can act as a proxy for Group replication.
 
 |                 | |
 |-----------------|-|
@@ -384,7 +389,7 @@ of any complexity to be used |
 | **Key**         | {{ optionlink('proxy.router.expose.annotations') }} |
 | **Value**       | string |
 | **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
-| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy |
+| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for MySQL Router |
 |                 | |
 | **Key**         | {{ optionlink('proxy.router.expose.externalTrafficPolicy') }} |
 | **Value**       | string |
@@ -466,7 +471,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 | **Key**         | {{ optionlink('orchestrator.expose.annotations') }} |
 | **Value**       | string |
 | **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http` |
-| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy |
+| **Description** | The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the Orchestrator |
 |                 | |
 | **Key**         | {{ optionlink('orchestrator.expose.externalTrafficPolicy') }} |
 | **Value**       | string |
