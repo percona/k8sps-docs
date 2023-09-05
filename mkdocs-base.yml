@@ -120,12 +120,15 @@ extra: # Used in main.html template and can't be externalized
       make our documentation better. Read more about <a class="reference external" href="https://www.percona.com/20180524-cookie-policy" target="_blank">Percona Cookie Policy</a>.
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
-  release: '0.5.0'
-  apiversion: '0-5-0'
-  ps80recommended: '8.0.32-24'
-  pxbrecommended: '8.0.32-25'
-  pmm2recommended: '2.36.0'
-  gkerecommended: '1.25'
+  release: '0.6.0'
+  apiversion: '0-6-0'
+  ps80recommended: '8.0.33-25'
+  pxbrecommended: '8.0.33-27'
+  pmm2recommended: '2.39'
+  haproxyrecommended: '2.8.1'
+  routerrecommended: '8.0.33-25'
+  orchestratorrecommended: '3.2.6-9'
+  gkerecommended: '1.27'
   certmanagerrecommended: '1.11.0'
   version:
     provider: mike
@@ -182,6 +185,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - "Percona Operator for MySQL 0.6.0 (2023-09-05)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.md
           - "Percona Operator for MySQL 0.5.0 (2023-03-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md
           - "Percona Operator for MySQL 0.4.0 (2023-01-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md
           - "Percona Operator for MySQL 0.3.0 (2022-09-29)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.md
