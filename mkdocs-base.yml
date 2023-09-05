@@ -148,18 +148,30 @@ nav:
           - "Generic Kubernetes installation": kubernetes.md
           
     - Configuration and Management:
-          - "Backup and restore": backups.md
+          - Backup and restore: 
+            - "About backups": backups.md
+            - "Configure storage for backups": backups-storage.md
+            - "Make on-demand backup": backups-ondemand.md
+            - "Restore from a previously saved backup": backups-restore.md
+            - "Delete the unneeded backup": backups-delete.md
           - "Application and system users": users.md
           - "Anti-affinity and tolerations": constraints.md
           - "Labels and annotations": annotations.md
           - "Changing MySQL Options": options.md
           - "Load Balancing with HAProxy": haproxy-conf.md
+          - "MySQL Router Configuration": router-conf.md
           - "Exposing the cluster": expose.md
           - "Transport Encryption (TLS/SSL)": TLS.md
           - "Telemetry": telemetry.md
           - "Horizontal and vertical scaling": scaling.md
           - "Monitor with Percona Monitoring and Management (PMM)": monitoring.md
           - "Add sidecar containers": sidecar.md
+          - "Restart or pause the cluster": pause.md
+          
+    - Troubleshooting:
+          - "Initial troubleshooting": debug.md
+          - "Exec into the container": debug-shell.md
+          - "Check the logs": debug-logs.md
           
     - Reference:
           - "Custom Resource options": operator.md
