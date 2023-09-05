@@ -17,12 +17,12 @@ The list of recommended upgrade scenarios includes two variants:
 
 !!! note
 
-    The Operator supports **last 3 versions of the CRD**, so it is technically
-    possible to skip upgrading the CRD and just upgrade the Operator. If the CRD
-    is older than the new Operator version *by no more than three releases*, you
-    will be able to continue using the old CRD and even carry on Percona Server
-    for MySQL minor version upgrades with it. But the recommended way is to
-    update the Operator *and* CRD.
+    The Operator supports **last 3 versions of the CRD** including the newest
+    one, so it is technically possible to skip upgrading the CRD and just
+    upgrade the Operator. If the CRD version is one of these, you will be able
+    to continue using the old CRD and even carry on Percona Server for MySQL
+    minor version upgrades with it. But the recommended way is to update the
+    Operator *and* CRD.
 
 Only the incremental update to a nearest version of the Operator is supported
 (for example, update from 0.5.0 to 0.6.0). To update to a newer version, which
@@ -50,7 +50,7 @@ The upgrade includes the following steps.
     follows.
 
     ``` {.bash data-prompt="$" }
-    $ kubectl patch deployment percona-xtradb-cluster-operator \
+    $ kubectl patch deployment percona-server-mysql-operator \
       -p'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"percona/percona-server-mysql-operator:{{ release }}"}]}}}}'
     ```
 
