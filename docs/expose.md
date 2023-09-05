@@ -56,7 +56,7 @@ cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,330
 
 ### Exposing cluster without HAProxy
 
-With [Asynchronous or Semi-synchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html)
+With [Asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html)
 the cluster can be also exposed through a Kubernetes Service called
 `<CLUSTER_NAME>-mysql-primary`: for example, `cluster1-mysql-primary`.
 

@@ -9,9 +9,9 @@ Containers deployed with the Operator include the following components:
 
 * [Percona XtraBackup](https://www.percona.com/doc/percona-xtrabackup/8.0/index.html) - a hot backup utility for MySQL based servers that doesn’t lock your database during the backup,
 
-* [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype),
+* [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype),
 
-* [HAProxy](https://haproxy.org) - a load balancing and proxy service used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) betweem MySQL instances [is turned on](operator.md#mysql-clustertype)),
+* [HAProxy](https://haproxy.org) - a load balancing and proxy service used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype)),
 
 * [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) - a proxy solution used when [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) between MySQL instances [is turned on](operator.md#mysql-clustertype),
 
@@ -31,7 +31,7 @@ function if you take any of the nodes down.
 
 To provide high availability operator uses [node affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
 to run Percona Server for MySQL instances on separate worker nodes if possible. If
-some node fails, the pod with it is automatically re-created on another node.
+some node fails, the pod in it is automatically re-created on another node.
 
 ![image](assets/images/operator.svg)
 
@@ -44,10 +44,10 @@ a different node. The PVC StorageClass must support this feature
 respectively).
 
 The Operator functionality extends the Kubernetes API with
-*PerconaServerForMySQL* object, and it is implemented as a golang
-application. Each *PerconaServerForMySQL* object maps to one separate MySQL setup.
+*PerconaServerMySQL* object, and it is implemented as a golang
+application. Each *PerconaServerMySQL* object maps to one separate MySQL setup.
 The Operator listens to all events on the created objects.
-When a new PerconaServerForMySQL object is created, or an existing one undergoes
+When a new PerconaServerMySQL object is created, or an existing one undergoes
 some changes or deletion, the Operator automatically
 creates/changes/deletes all needed Kubernetes objects with the
 appropriate settings to provide a proper Percona Server for MySQL operation.
