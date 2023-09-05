@@ -3,7 +3,7 @@
 Installing the Percona Operator for MySQL on [minikube](https://github.com/kubernetes/minikube)
 is the easiest way to try it locally without a cloud provider. Minikube runs
 Kubernetes on GNU/Linux, Windows, or macOS system using a system-wide
-hypervisor, such as VirtualBox, KVM/QEMU, VMware Fusion or Hyper-V. Using it is
+hypervisor, such as VirtualBox, KVM/QEMU, VMware Fusion, Hyper-V or even Docker itself. Using it is
 a popular way to test the Kubernetes application locally prior to deploying it
 on a cloud.
 
