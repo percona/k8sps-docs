@@ -2,7 +2,7 @@
 
 Percona Operator for MySQL provides load balancing and proxy service with
 [HAProxy](https://haproxy.org) (enabled by default). HAProxy is the only
-solution proxy when asynchronous replication betweem MySQL instances is turned,
+solution proxy when asynchronous replication between MySQL instances is enabled,
 while group replication can be used either with HAProxy or [MySQL Router](router-conf.md).
 You can control whether to use HAProxy or not by enabling or disabling it via
 the `haproxy.enabled` option in the `deploy/cr.yaml` configuration file.
