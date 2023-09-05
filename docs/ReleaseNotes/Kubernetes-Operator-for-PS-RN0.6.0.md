@@ -12,7 +12,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Highlights
 
-* The [Smart Upgrade functionality](../upgrade.md/#automated-upgrade) allows users to automatically get the latest version of the software compatible with the Operator and apply it safely
+* The [Smart Upgrade functionality](../update.md/#automated-upgrade) allows users to automatically get the latest version of the software compatible with the Operator and apply it safely
 * The role of the HAProxy load balancer, which was previously used for asynchronous replication between MySQL instances, has been extended. Now HAProxy can also be used with group replication as an alternative to MySQL Router
 * Starting from this release, semi-synchronous replication is not supported by the Operator in favor of using safer options: either group replication, or asynchronous replication (see [this blog post](https://www.percona.com/blog/face-to-face-with-semi-synchronous-replication/) for details on how asynchronous replication may cause data loss in case of a node crash)
 

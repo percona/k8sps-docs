@@ -40,6 +40,21 @@ ul li p {
     margin: 1em 0 .54em;
 }
 
+article table {
+  page-break-before: auto !important;
+  page-break-inside: auto !important;
+}
+
+article ol {
+  page-break-before: auto !important;
+  page-break-inside: auto !important;
+}
+
+section {
+  page-break-before: auto !important;
+  page-break-inside: auto !important;
+}
+
 .imgcenter {
     display: block;
     margin: 0 auto;

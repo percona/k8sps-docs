@@ -46,6 +46,7 @@ extra_css:
   - css/percona.css
 #  - css/version-select.css
   - css/nocopy.css
+  - css/extra.css
 
 extra_javascript:
    - js/promptremover.js
@@ -94,7 +95,7 @@ plugins:
   with-pdf:
     output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
     cover_title: "Percona Operator for MySQL based on Percona Server for MySQL documentation"
-    cover_subtitle: 0.5.0 (March 30, 2023)
+    cover_subtitle: 0.6.0 (September 5, 2023)
     author: "Percona Technical Documentation Team"
     cover_logo: docs/assets/images/percona_kubernetes_icon.png
     custom_template_path: _resource/templates

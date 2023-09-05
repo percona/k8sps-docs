@@ -22,7 +22,7 @@
 
 ## New Features
 
-* {{ k8spsjira(113) }}: Allow [using templates](../options.md/auto-tuning-mysql-options) to define `innodb_buffer_pool_size` when the Operator performs auto-tuning based on container memory limits 
+* {{ k8spsjira(113) }}: Allow [using templates](../options.md) to define `innodb_buffer_pool_size` when the Operator performs auto-tuning based on container memory limits 
 
 ## Improvements
 

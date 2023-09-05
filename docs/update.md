@@ -158,10 +158,10 @@ Manual update of Percona Server for MySQL can be done as follows:
            "crVersion":"{{ release }}",
            "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
            "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ psrecommended }}" },
+              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
               "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
            },
-           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorecommended }}" },
+           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
            "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
            "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" },
            "pmm": { "image": "percona/pmm-client:{{ pmm2recommended }}" }
@@ -172,20 +172,20 @@ Manual update of Percona Server for MySQL can be done as follows:
 
         The above command upgrades various components of the cluster including PMM Client. It is [highly recommended](https://docs.percona.com/percona-monitoring-and-management/how-to/upgrade.html) to upgrade PMM Server **before** upgrading PMM Client. If it wasn't done and you would like to avoid PMM Client upgrade, remove it from the list of images, reducing the last of two patch commands as follows:        
         
-         ```bash
-    $ kubectl patch ps cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ psrecommended }}" },
-              "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
-           },
-           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorecommended }}" },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
-           "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" }
-       }}'
-    ```
+        ```bash
+        $ kubectl patch ps cluster1 --type=merge --patch '{
+           "spec": {
+               "crVersion":"{{ release }}",
+               "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+               "proxy":{
+                  "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
+                  "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
+               },
+               "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+               "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
+               "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" }
+           }}'
+        ```
 
 3. The deployment rollout will be automatically triggered by the applied patch.
     You can track the rollout process in real time with the
