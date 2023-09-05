@@ -117,10 +117,6 @@ configuration options for the Percona Server for MySQL.
 | **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
 | **Description** | An alternative init image for MySQL Pods |
 |                 | |
-| **Key**         | {{ optionlink('mysql.sizeSemiSync') }} |
-| **Example**     | `0` |
-| **Description** | The number of the Percona Server for MySQL [semi-sync](https://dev.mysql.com/doc/refman/8.0/en/replication-semisync.html) replicas |
-|                 | |
 | **Key**         | {{ optionlink('mysql.primaryServiceType') }} |
 | **Value**       | string |
 | **Example**     | `LoadBalancer` |
