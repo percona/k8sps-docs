@@ -29,7 +29,7 @@ have at least 3 nodes. In a basic setup with this amount of nodes,
 Percona Server for MySQL provides high availability, continuing to
 function if you take any of the nodes down.
 
-To provide high availability operator uses [node affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
+<a name="high-availability"></a>To provide high availability operator uses [node affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
 to run Percona Server for MySQL instances on separate worker nodes if possible. If
 some node fails, the pod in it is automatically re-created on another node.
 

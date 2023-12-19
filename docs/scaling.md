@@ -5,19 +5,44 @@ platform is the ease of an application scaling. Scaling an application
 results in adding or removing the Pods and scheduling them to available
 Kubernetes nodes.
 
-Size of the cluster is controlled by a [size key](operator.md#mysql-size) in the [Custom Resource options](operator.md#operator-custom-resource-options) configuration. That’s why scaling the cluster needs
-nothing more but changing this option and applying the updated
-configuration file. This may be done in a specifically saved config, or
-on the fly, using the following command:
+Scaling can be vertical and horizontal. Vertical scaling adds more compute or
+storage resources to Percona Server for MySQL nodes; horizontal scaling is about adding more
+nodes to the cluster. [High availability](architecture.md#high-availability)
+looks technically similar, because it also involves additional nodes, but the
+reason is maintaining liveness of the system in case of server or network
+failures.
 
-```{.bash data-prompt="$"}
-$ kubectl patch ps cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
+## Vertical scaling
+
+### Scale compute
+
+There are multiple components that Operator deploys and manages: Percona 
+Server for MySQL, Orchestrator, HAProxy or MySQL Router, etc. To add or reduce CPU or Memory 
+you need to edit corresponding sections in the Custom Resource. We follow 
+the structure for `requests` and `limits` that Kubernetes [provides](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+For example, you can add more resources to your HAProxy nodes by editing the
+following section in the Custom Resource:
+
+```yaml
+spec:
+  ...
+  proxy:
+    haproxy:
+      ...
+      resources:
+        requests:
+          memory: 4G
+          cpu: 2
+        limits:
+          memory: 4G
+          cpu: 2
 ```
 
-In this example we have changed the size of the Percona Server for MySQL
-Cluster to `5` instances.
+Use our reference documentation for the [Custom Resource options](operator.md#operator-custom-resource-options) 
+for more details about other components.
 
-## Increase the Persistent Volume Claim size
+### Scale storage
 
 Kubernetes manages storage with a PersistentVolume (PV), a segment of
 storage supplied by the administrator, and a PersistentVolumeClaim
@@ -84,3 +109,19 @@ The following are the steps to increase the size:
     ```{.bash data-prompt="$"}
     $ kubectl apply -f CR_backup.yaml
     ```
+
+## Horizontal scaling
+
+Size of the cluster is controlled by a [size key](operator.md#mysql-size) in the
+[Custom Resource options](operator.md#operator-custom-resource-options)
+configuration. That’s why scaling the cluster needs nothing more but changing
+this option and applying the updated configuration file. This may be done in a
+specifically saved config, or on the fly, using the following command:
+
+```{.bash data-prompt="$"}
+$ kubectl patch ps cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
+```
+
+In this example we have changed the size of the Percona Server for MySQL
+Cluster to `5` instances.
+
