@@ -16,8 +16,8 @@ theme:
   favicon: assets/images/percona-favicon.ico
   custom_dir: _resource/overrides/
   font:
-    text: Chivo, Colfax, Franziska
-    text: Poppins
+    text: Roboto
+    code: Roboto Mono
   palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"
@@ -47,6 +47,7 @@ extra_css:
 #  - css/version-select.css
   - css/nocopy.css
   - css/extra.css
+  - css/design.css
   - css/osano.css
 
 extra_javascript:
@@ -59,7 +60,8 @@ extra_javascript:
 markdown_extensions:
   attr_list: {}
   toc:
-    permalink: True
+    permalink: true
+  md_in_html: {}
   admonition: {}
   def_list: {}
   meta: {}
@@ -69,11 +71,25 @@ markdown_extensions:
   pymdownx.smartsymbols: {}
   pymdownx.tilde: {}
   pymdownx.superfences: {}
-  pymdownx.snippets: {}
   pymdownx.tabbed:
     alternate_style: true
+  pymdownx.tasklist:
+    custom_checkbox: true
+  pymdownx.snippets:
+      base_path:
+        - snippets
+        - docs/assets/code
+        - docs/assets/fragments
+      auto_append:
+        - services-banner.md
   pymdownx.highlight:
-    linenums: false
+    use_pygments: true
+  pymdownx.emoji:
+    emoji_index: !!python/name:material.extensions.emoji.twemoji
+    emoji_generator: !!python/name:material.extensions.emoji.to_svg
+    options:
+      custom_icons:
+        - _resource/overrides/.icons
 
 plugins:
   section-index: {}
