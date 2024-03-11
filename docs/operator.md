@@ -652,6 +652,11 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
 | **Description** | An alternative init image for Percona XtraBackup Pods |
 |                 | |
+| **Key**         | {{ optionlink('backup.backoffLimit') }} |
+| **Value**       | int |
+| **Example**     | `6` |
+| **Description** | The number of retries to make a backup |
+|                 | |
 | **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.type') }} |
 | **Value**       | string |
 | **Example**     | `s3` |
