@@ -76,15 +76,15 @@ markdown_extensions:
   pymdownx.tasklist:
     custom_checkbox: true
   pymdownx.snippets:
-    base_path:
-      - snippets
-      - docs/assets/code
-      - docs/assets/fragments
-    auto_append:
-      - services-banner.md
+      base_path:
+        - snippets
+        - docs/assets/code
+        - docs/assets/fragments
+      auto_append:
+        - services-banner.md
   pymdownx.highlight:
     use_pygments: true
-    pymdownx.emoji:
+  pymdownx.emoji:
     emoji_index: !!python/name:material.extensions.emoji.twemoji
     emoji_generator: !!python/name:material.extensions.emoji.to_svg
     options:
