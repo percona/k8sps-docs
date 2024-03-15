@@ -47,18 +47,6 @@ Install Helm following its [official installation instructions](https://docs.hel
    which is created for the Percona Server for MySQL when you install its Helm
    chart (use any name you like).
 
-## Installing Percona Server for MySQL with customized parameters
+The command above installs Percona Server for MySQL with default parameters.
 
-The command above installs Percona Server for MySQL with [default parameters](operator.md#operator-custom-resource-options).
-Custom options can be passed to a `helm install` command as a
-`--set key=value[,key=value]` argument. The options passed with a chart can be
-any of the [Custom Resource options](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-db#installing-the-chart).
-
-The following example will deploy a Percona Server for MySQL in the
-`my-namespace` namespace, with disabled backups and 20 Gi storage:
-
-```{.bash data-prompt="$"}
-$ helm install my-db percona/ps-db \
-  --set mysql.volumeSpec.pvc.resources.requests.storage=20Gi \
-  --set backup.enabled=false
-```
+You can find in the documentation for the charts which [Operator](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator#installing-the-chart) and [database](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-db#installing-the-chart) parameters can be customized during installation.
