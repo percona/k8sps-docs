@@ -33,7 +33,7 @@ updates sequentially.
 
 The upgrade includes the following steps.
 
-1. Update the [Custom Resource Definition](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
+1. Update the [Custom Resource Definition :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
     for the Operator, taking it from the official repository on Github, and do
     the same for the Role-based access control:
 
@@ -42,10 +42,10 @@ The upgrade includes the following steps.
     $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
     ```
 
-2. Now you should [apply a patch](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to your
+2. Now you should [apply a patch :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to your
     deployment, supplying necessary image name with a newer version tag. You can find the proper
     image name for the current Operator release [in the list of certified images](images.md)
-    (for older releases, please refer to the [old releases documentation archive](https://docs.percona.com/legacy-documentation)).
+    (for older releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation)).
     For example, updating to the `{{ release }}` version should look as
     follows.
 
@@ -71,16 +71,16 @@ The upgrade includes the following steps.
 If you have [installed the Operator using Helm](helm.md), you can upgrade the
 Operator with the `helm upgrade` command.
 
-1. In case if you installed the Operator with no [customized parameters](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator#installing-the-chart), the upgrade can be done as follows: 
+1. In case if you installed the Operator with no [customized parameters :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator#installing-the-chart), the upgrade can be done as follows: 
 
     ``` {.bash data-prompt="$" }
     $ helm upgrade my-op percona/ps-operator --version {{ release }}
     ```
 
-    The `my-op` parameter in the above example is the name of a [release object](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
+    The `my-op` parameter in the above example is the name of a [release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
     which which you have chosen for the Operator when installing its Helm chart.
 
-    If the Operator was installed with some [customized parameters](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator#installing-the-chart), you should list these options in the upgrade command.
+    If the Operator was installed with some [customized parameters :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator#installing-the-chart), you should list these options in the upgrade command.
     
     
     !!! note
@@ -91,7 +91,7 @@ Operator with the `helm upgrade` command.
         $ helm upgrade my-op percona/ps-operator --version {{ release }} -f my-values.yaml
         ```
 
-2. Update the [Custom Resource Definition](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
+2. Update the [Custom Resource Definition :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
     for the Operator, taking it from the official repository on Github, and do
     the same for the Role-based access control:
 
@@ -136,7 +136,7 @@ Manual update of Percona Server for MySQL can be done as follows:
         ...
     ```
 
-2. Now [apply a patch](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/)
+2. Now [apply a patch :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/)
     to your Custom Resource, setting necessary Custom Resource version and image
     names with a newer version tag.
 
@@ -148,7 +148,7 @@ Manual update of Percona Server for MySQL can be done as follows:
 
     Patching Custom Resource is done with the `kubectl patch ps` command.
     Actual image names can be found [in the list of certified images](images.md)
-    (for older releases, please refer to the [old releases documentation archive](https://docs.percona.com/legacy-documentation)).
+    (for older releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation)).
     For example, updating `cluster1` cluster to the `{{ release }}` version
     should look as follows:
 
@@ -170,7 +170,7 @@ Manual update of Percona Server for MySQL can be done as follows:
 
     !!! warning
 
-        The above command upgrades various components of the cluster including PMM Client. It is [highly recommended](https://docs.percona.com/percona-monitoring-and-management/how-to/upgrade.html) to upgrade PMM Server **before** upgrading PMM Client. If it wasn't done and you would like to avoid PMM Client upgrade, remove it from the list of images, reducing the last of two patch commands as follows:        
+        The above command upgrades various components of the cluster including PMM Client. It is [highly recommended :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/how-to/upgrade.html) to upgrade PMM Server **before** upgrading PMM Client. If it wasn't done and you would like to avoid PMM Client upgrade, remove it from the list of images, reducing the last of two patch commands as follows:        
         
         ```bash
         $ kubectl patch ps cluster1 --type=merge --patch '{
@@ -241,7 +241,7 @@ configuration file as follows:
     * *version number* - specify the desired version explicitly
         (version numbers are specified as `{{ ps80recommended }}`, etc.).
         Actual versions can be found [in the list of certified images](images.md)
-        (for older releases, please refer to the [old releases documentation archive](https://docs.percona.com/legacy-documentation)).
+        (for older releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation)).
 
 4. Make sure the `upgradeOptions.versionServiceEndpoint` key is set to a valid
     Version Server URL (otherwise upgrades will not occur).

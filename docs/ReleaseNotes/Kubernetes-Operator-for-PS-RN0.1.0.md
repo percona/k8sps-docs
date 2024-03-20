@@ -10,14 +10,14 @@ administrative/operational actions when needed.
 
 The already existing [Percona Distribution for MySQL Operator](https://www.percona.com/doc/kubernetes-operator-for-pxc/index.html) is based on Percona XtraDB Cluster. It is feature rich and provides virtually-synchronous replication by utilizing Galera Write-Sets. Sync replication ensures data consistency and proved itself useful for critical applications, especially on Kubernetes.
 
-The new *Percona Distribution for MySQL Operator* is going to run Percona Server for MySQL and provide both regular asynchronous (with [semi-sync](https://dev.mysql.com/doc/refman/8.0/en/replication-semisync.html) support) and virtually-synchronous replication based on [Group Replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+The new *Percona Distribution for MySQL Operator* is going to run Percona Server for MySQL and provide both regular asynchronous (with [semi-sync :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication-semisync.html) support) and virtually-synchronous replication based on [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
 
 **Version 0.1.0 of the Percona Distribution for MySQL Operator based on Percona Server for MySQL is a tech preview release and it is not recommended for production environments.**
 
 You can install *Percona Distribution for MySQL Operator* on Kubernetes,
-[Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine),
-[Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com/eks/),
-and [Minikube](https://minikube.sigs.k8s.io/docs/).
+[Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine),
+[Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/),
+and [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/).
 
 The features available in this release are the following:
 

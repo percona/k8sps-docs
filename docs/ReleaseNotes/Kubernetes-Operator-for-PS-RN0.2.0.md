@@ -26,7 +26,7 @@ changes its official name to **Percona Operator for MySQL**
 * This release brings initial [implementation of Group Replication](../operator.md#mysql-clustertype) between Percona Server for MySQL instances. Group Replication works in conjunction with MySQL Router, which is used instead of Orchestrator and also provides load balancing
 
 
-* Now the Operator [is capable of making backups](../backups.md#backups). Backups are stored on the cloud outside the Kubernetes cluster: [Amazon S3, or S3-compatible storage](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services) is supported, as well as [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs). Currently, backups work with asynchronous replication; support for backups with Group Replication is coming
+* Now the Operator [is capable of making backups](../backups.md#backups). Backups are stored on the cloud outside the Kubernetes cluster: [Amazon S3, or S3-compatible storage :octicons-link-external-16:](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services) is supported, as well as [Azure Blob Storage :octicons-link-external-16:](https://azure.microsoft.com/en-us/services/storage/blobs). Currently, backups work with asynchronous replication; support for backups with Group Replication is coming
 
 ## New Features
 
@@ -67,12 +67,12 @@ The following platforms were tested and are officially supported by the Operator
 0.2.0:
 
 
-* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.21 - 1.23
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.21 - 1.23
 
 
-* [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.19 - 1.22
+* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.19 - 1.22
 
 
-* [Minikube](https://minikube.sigs.k8s.io/docs/) 1.26 (based on Kubernetes 1.24)
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.26 (based on Kubernetes 1.24)
 
 This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.

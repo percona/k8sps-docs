@@ -7,8 +7,8 @@ on specific nodes: for example, to get speed advantages of the SSD
 equipped machine, or to reduce costs choosing nodes in a same
 availability zone.
 
-That’s why `mysql` section of the [deploy/cr.yaml](https://raw.githubusercontent.com/percona/percona-server-mysql-operator/main/deploy/cr.yaml)
-file contain keys which can be used to configure [node affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+That’s why `mysql` section of the [deploy/cr.yaml :octicons-link-external-16:](https://raw.githubusercontent.com/percona/percona-server-mysql-operator/main/deploy/cr.yaml)
+file contain keys which can be used to configure [node affinity :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 ## Affinity and anti-affinity
 
@@ -56,7 +56,7 @@ affinity:
 Previous way can be used with no special knowledge of the Kubernetes way
 of assigning Pods to specific nodes. Still in some cases more complex
 tuning may be needed. In this case `advanced` option placed in the
-[deploy/cr.yaml](https://github.com/percona/percona-xtradb-cluster-operator/blob/master/deploy/cr.yaml)
+[deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-xtradb-cluster-operator/blob/master/deploy/cr.yaml)
 file turns off the effect of the `topologyKey` and allows to use
 standard Kubernetes affinity constraints of any complexity:
 
@@ -102,4 +102,4 @@ affinity:
              - another-node-label-value
 ```
 
-See explanation of the advanced affinity options [in Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature).
+See explanation of the advanced affinity options [in Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature).

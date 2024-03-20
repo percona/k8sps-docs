@@ -1,7 +1,7 @@
 # Labels and annotations
 
-[Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
-and [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+[Labels :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+and [annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 are used to attach additional metadata information to Kubernetes resources.
 
 Labels and annotations are rather similar. The difference between them is that

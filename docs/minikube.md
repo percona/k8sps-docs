@@ -1,6 +1,6 @@
 # Install Percona Server for MySQL on Minikube
 
-Installing the Percona Operator for MySQL on [minikube](https://github.com/kubernetes/minikube)
+Installing the Percona Operator for MySQL on [minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube)
 is the easiest way to try it locally without a cloud provider. Minikube runs
 Kubernetes on GNU/Linux, Windows, or macOS system using a system-wide
 hypervisor, such as VirtualBox, KVM/QEMU, VMware Fusion, Hyper-V or even Docker itself. Using it is
@@ -9,7 +9,7 @@ on a cloud.
 
 ## Prerequisites
 
-To run Percona Operator for MySQL on Minikube you should first of all [install Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/),
+To run Percona Operator for MySQL on Minikube you should first of all [install Minikube :octicons-link-external-16:](https://kubernetes.io/docs/tasks/tools/install-minikube/),
 using a way recommended for your system. This includes the installation of
 the following three components:
 

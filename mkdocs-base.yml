@@ -82,7 +82,7 @@ markdown_extensions:
         - docs/assets/fragments
       auto_append:
         - services-banner.md
-  pymdownx.highlight:
+  pymdownx.highlight: 
     use_pygments: true
   pymdownx.emoji:
     emoji_index: !!python/name:material.extensions.emoji.twemoji

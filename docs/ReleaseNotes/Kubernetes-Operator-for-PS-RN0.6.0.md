@@ -14,7 +14,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 * The [Smart Upgrade functionality](../update.md/#automated-upgrade) allows users to automatically get the latest version of the software compatible with the Operator and apply it safely
 * The role of the HAProxy load balancer, which was previously used for asynchronous replication between MySQL instances, has been extended. Now HAProxy can also be used with group replication as an alternative to MySQL Router
-* Starting from this release, semi-synchronous replication is not supported by the Operator in favor of using safer options: either group replication, or asynchronous replication (see [this blog post](https://www.percona.com/blog/face-to-face-with-semi-synchronous-replication/) for details on how asynchronous replication may cause data loss in case of a node crash)
+* Starting from this release, semi-synchronous replication is not supported by the Operator in favor of using safer options: either group replication, or asynchronous replication (see [this blog post :octicons-link-external-16:](https://www.percona.com/blog/face-to-face-with-semi-synchronous-replication/) for details on how asynchronous replication may cause data loss in case of a node crash)
 
 
 ## New features
@@ -24,12 +24,12 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Improvements
 
-* {{ k8spsjira(162) }}: Now [MySQL X protocol](https://www.percona.com/blog/understanding-mysql-x-all-flavors) can be used with HAProxy load balancing
+* {{ k8spsjira(162) }}: Now [MySQL X protocol :octicons-link-external-16:](https://www.percona.com/blog/understanding-mysql-x-all-flavors) can be used with HAProxy load balancing
 * {{ k8spsjira(163) }}: Percona Monitoring and Management (PMM) is now able to gather HAProxy metrics
 * {{ k8spsjira(205) }}: Update user passwords on a per-user basis instead of a cumulative update so that if an error occurs while changing a user's password, other system users are not affected
-* {{ k8spsjira(270) }}: Use more clear [Controller](https://kubernetes.io/docs/concepts/architecture/controller/) names in log messages to ease troubleshooting
+* {{ k8spsjira(270) }}: Use more clear [Controller :octicons-link-external-16:](https://kubernetes.io/docs/concepts/architecture/controller/) names in log messages to ease troubleshooting
 * {{ k8spsjira(280) }}: Full cluster crash recovery with group replication is now using MySQL shell built-in checks to detect the member with latest transactions and reboots from it, making the cluster prone to data loss
-* {{ k8spsjira(281) }}: The Operator [can now be run locally](https://github.com/percona/percona-server-mysql-operator/blob/main/CONTRIBUTING.md#1-contributing-to-the-source-tree) against a remote Kubernetes cluster, which simplifies the development process, substantially shortening the way to make and try minor code improvements
+* {{ k8spsjira(281) }}: The Operator [can now be run locally :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/CONTRIBUTING.md#1-contributing-to-the-source-tree) against a remote Kubernetes cluster, which simplifies the development process, substantially shortening the way to make and try minor code improvements
 
 ## Bugs Fixed
 
@@ -66,8 +66,8 @@ Other options may also work but have not been tested. Other software components 
 The following platforms were tested and are officially supported by the Operator
 0.6.0:
 
-* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.24 - 1.27
-* [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.23 - 1.27
-* [Minikube](https://minikube.sigs.k8s.io/docs/) 1.31.2 (based on Kubernetes 1.27)
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.24 - 1.27
+* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.23 - 1.27
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.31.2 (based on Kubernetes 1.27)
 
 This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.

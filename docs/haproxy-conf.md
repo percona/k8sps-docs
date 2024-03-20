@@ -1,7 +1,7 @@
 # Configuring Load Balancing with HAProxy
 
 Percona Operator for MySQL provides load balancing and proxy service with
-[HAProxy](https://haproxy.org) (enabled by default). HAProxy is the only
+[HAProxy :octicons-link-external-16:](https://haproxy.org) (enabled by default). HAProxy is the only
 solution proxy when asynchronous replication between MySQL instances is enabled,
 while group replication can be used either with HAProxy or [MySQL Router](router-conf.md).
 You can control whether to use HAProxy or not by enabling or disabling it via
@@ -50,7 +50,7 @@ all the readers, then the writer MySQL cluster member is finally upgraded.
 ## Passing custom configuration options to HAProxy
 
 You can pass custom configuration to HAProxy, adding options from the
-[haproxy.cfg](https://www.haproxy.com/blog/the-four-essential-sections-of-an-haproxy-configuration/)
+[haproxy.cfg :octicons-link-external-16:](https://www.haproxy.com/blog/the-four-essential-sections-of-an-haproxy-configuration/)
 configuration file to the  `haproxy.configuration` Custom Resource option in
 the `deploy/cr.yaml` file. Here is an example:
 
@@ -91,5 +91,5 @@ haproxy:
       http-request use-service prometheus-exporter if { path /metrics }
 ```
 
-the actual default configuration file can be found [here](https://github.com/percona/percona-server-mysql-operator/blob/main/build/haproxy-global.cfg).
+the actual default configuration file can be found [here :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/build/haproxy-global.cfg).
 

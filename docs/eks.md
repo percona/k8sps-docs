@@ -1,21 +1,21 @@
 # Install Percona Distribution for MySQL on Amazon Elastic Kubernetes Service (EKS)
 
-This guide shows you how to deploy Percona Operator for MySQL on Amazon Elastic Kubernetes Service (EKS). The document assumes some experience with Amazon EKS. For more information on the EKS, see the [Amazon EKS official documentation](https://aws.amazon.com/eks/).
+This guide shows you how to deploy Percona Operator for MySQL on Amazon Elastic Kubernetes Service (EKS). The document assumes some experience with Amazon EKS. For more information on the EKS, see the [Amazon EKS official documentation :octicons-link-external-16:](https://aws.amazon.com/eks/).
 
 ## Prerequisites
 
 The following tools are used in this guide and therefore should be preinstalled:
 
 1. **AWS Command Line Interface (AWS CLI)** for interacting with the different
-    parts of AWS. You can install it following the [official installation instructions for your system](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
+    parts of AWS. You can install it following the [official installation instructions for your system :octicons-link-external-16:](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
 
 2. **eksctl** to simplify cluster creation on EKS. It can be installed
-    along its [installation notes on GitHub](https://github.com/weaveworks/eksctl#installation).
+    along its [installation notes on GitHub :octicons-link-external-16:](https://github.com/weaveworks/eksctl#installation).
 
 3. **kubectl**  to manage and deploy applications on Kubernetes. Install
-    it [following the official installation instructions](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+    it [following the official installation instructions :octicons-link-external-16:](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
-Also, you need to configure AWS CLI with your credentials according to the [official guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+Also, you need to configure AWS CLI with your credentials according to the [official guide :octicons-link-external-16:](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 
 ## Create the EKS cluster
 
@@ -24,19 +24,19 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
     * name of your EKS cluster,
     * AWS region in which you wish to deploy your cluster,
     * the amount of nodes you would like tho have,
-    * the desired ratio between [on-demand](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-on-demand-instances.html)
-        and [spot](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html)
+    * the desired ratio between [on-demand :octicons-link-external-16:](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-on-demand-instances.html)
+        and [spot :octicons-link-external-16:](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html)
         instances in the total number of nodes.
 
     !!! note
 
-        [spot](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html)
+        [spot :octicons-link-external-16:](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html)
         instances are not recommended for production environment, but may be useful
         e.g. for testing purposes.
 
-    After you have settled all the needed details, create your EKS cluster [following the official cluster creation instructions](https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html).
+    After you have settled all the needed details, create your EKS cluster [following the official cluster creation instructions :octicons-link-external-16:](https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html).
 
-2. After you have created the EKS cluster, you also need to [install the Amazon EBS CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) on your cluster. See the [official documentation](https://docs.aws.amazon.com/eks/latest/userguide/managing-ebs-csi.html) on adding it as an Amazon EKS add-on.
+2. After you have created the EKS cluster, you also need to [install the Amazon EBS CSI driver :octicons-link-external-16:](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) on your cluster. See the [official documentation :octicons-link-external-16:](https://docs.aws.amazon.com/eks/latest/userguide/managing-ebs-csi.html) on adding it as an Amazon EKS add-on.
 
 ## Install the Operator and deploy your MySQL cluster
 
@@ -63,7 +63,7 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
     $ cd percona-server-mysql-operator
     ```
 
-3. Deploy the Operator [using](https://kubernetes.io/docs/reference/using-api/server-side-apply/) the following command:
+3. Deploy the Operator [using :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/server-side-apply/) the following command:
 
     ```{.bash data-prompt="$"}
     $ kubectl apply --server-side -f deploy/bundle.yaml
@@ -98,7 +98,7 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
     perconaserverformysql.ps.percona.com/cluster1 created
     ```
 
-5. During previous steps, the Operator has generated several [secrets](https://kubernetes.io/docs/concepts/configuration/secret/), including the password for the `root` user, which you will need to access the cluster.
+5. During previous steps, the Operator has generated several [secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/), including the password for the `root` user, which you will need to access the cluster.
 
     Use `kubectl get secrets` command to see the list of Secrets objects (by default Secrets object you are      interested in has `my-cluster-secrets` name). Then `kubectl get secret cluster1-secrets -o yaml` will return the YAML file with generated secrets, including the root password which should look as follows:
 
