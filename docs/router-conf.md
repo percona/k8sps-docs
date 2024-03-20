@@ -6,7 +6,7 @@ To use the Router, enable it and make sure that HAProxy is disabled.
 
 ## Enable MySQL Router 
 
-1. Edit the `/deploy/cr.yaml` file
+1. Edit the `deploy/cr.yaml` file
 
     ```yaml
     ...
@@ -25,7 +25,7 @@ To use the Router, enable it and make sure that HAProxy is disabled.
 2. Update the cluster to apply the new configuration:
 
     ```{.bash data-prompt="$"}
-    $ kubectl apply -f /deploy/cr.yaml
+    $ kubectl apply -f deploy/cr.yaml
     ```
 
 ## Configure MySQL Router 
@@ -43,7 +43,7 @@ Before you start, check that you have [enabled the MySQL Router](#enable-mysql-r
 
 === "deploy/cr.yaml"
     
-    The `router.configuration` subsection of the `/deploy.cr.yaml` file contains the MySQL Router configuration. 
+    The `router.configuration` subsection of the `deploy.cr.yaml` file contains the MySQL Router configuration. 
 
     1. To change the verbosity level, edit the configuration file as follows:
 
@@ -58,7 +58,7 @@ Before you start, check that you have [enabled the MySQL Router](#enable-mysql-r
     2. Update the cluster to apply the new configuration
 
         ```{.bash data-prompt="$"}
-        $ kubectl apply -f /deploy.cr.yaml
+        $ kubectl apply -f deploy.cr.yaml
         ```
 
 === "ConfigMap"
