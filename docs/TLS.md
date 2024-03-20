@@ -31,7 +31,7 @@ TLS security can be configured in several ways.
 
 ### About the *cert-manager*
 
-A [cert-manager](https://cert-manager.io/docs/) is a Kubernetes certificate
+A [cert-manager :octicons-link-external-16:](https://cert-manager.io/docs/) is a Kubernetes certificate
 management controller which is widely used to automate the management and
 issuance of TLS certificates. It is community-driven, and open source.
 

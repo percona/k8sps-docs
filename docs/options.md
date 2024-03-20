@@ -3,7 +3,7 @@
 You may require a configuration change for your application. MySQL
 allows the option to configure the database with a configuration file.
 You can pass options from the
-[my.cnf](https://dev.mysql.com/doc/refman/8.0/en/option-files.html)
+[my.cnf :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/option-files.html)
 configuration file to be included in the MySQL configuration in one of the
 following ways:
 
@@ -16,7 +16,7 @@ following ways:
 ## Edit the `deploy/cr.yaml` file
 
 You can add options from the
-[my.cnf](https://dev.mysql.com/doc/refman/8.0/en/option-files.html)
+[my.cnf :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/option-files.html)
 configuration file by editing the configuration section of the
 `deploy/cr.yaml`. Here is an example:
 
@@ -40,7 +40,7 @@ data inside a containerized application.
 
 Use the `kubectl` command to create the configmap from external
 resources, for more information see [Configure a Pod to use a
-ConfigMap](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-a-configmap).
+ConfigMap :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-a-configmap).
 
 For example, let’s suppose that your application requires more
 connections. To increase your `max_connections` setting in MySQL, you
@@ -82,7 +82,7 @@ $ kubectl describe configmaps cluster1-mysql
 
 ## Use a Secret Object
 
-The Operator can also store configuration options in [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+The Operator can also store configuration options in [Kubernetes Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/).
 This can be useful if you need additional protection for some sensitive data.
 
 You should create a Secret object with a specific name, composed of your cluster
@@ -99,7 +99,7 @@ name and the `mysql` suffix.
 Configuration options should be put inside a specific key inside of the `data`
 section. The name of this key is `my.cnf` for Percona Server for MySQL pods.
 
-Actual options should be encoded with [Base64](https://en.wikipedia.org/wiki/Base64).
+Actual options should be encoded with [Base64 :octicons-link-external-16:](https://en.wikipedia.org/wiki/Base64).
 
 For example, let’s define a `my.cnf` configuration file and put there a pair
 of MySQL options we used in the previous example:

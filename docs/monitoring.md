@@ -1,7 +1,7 @@
 # Monitoring
 
 Percona Monitoring and Management (PMM) [provides an excellent
-solution](https://www.percona.com/doc/percona-xtradb-cluster/LATEST/manual/monitoring.html#using-pmm)
+solution :octicons-link-external-16:](https://www.percona.com/doc/percona-xtradb-cluster/LATEST/manual/monitoring.html#using-pmm)
 to monitor Percona Distribution for MySQL.
 
 !!! note
@@ -18,7 +18,7 @@ That’s why PMM Server and PMM Client need to be installed separately.
 ## Installing the PMM Server
 
 PMM Server runs as a *Docker image*, a *virtual appliance*, or on an *AWS instance*.
-Please refer to the [official PMM documentation](https://www.percona.com/doc/percona-monitoring-and-management/2.x/setting-up/server/index.html)
+Please refer to the [official PMM documentation :octicons-link-external-16:](https://www.percona.com/doc/percona-monitoring-and-management/2.x/setting-up/server/index.html)
 for the installation instructions.
 
 ## Installing the PMM Client
@@ -29,7 +29,7 @@ Kubernetes-based environment:
 
 1. The PMM client installation is initiated by updating the `pmm`
     section in the
-    [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+    [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
     file.
 
     * set `pmm.enabled=true`
@@ -37,7 +37,7 @@ Kubernetes-based environment:
         (it should be resolvable and reachable from within your cluster)
     * authorize PMM Client within PMM Server:
         <a name="operator-monitoring-client-token"></a>
-        [Acquire the API Key from your PMM Server](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication) and set `pmmserverkey` in the [users Secrets](users.md/#system-users) object to this obtained API Key value. For example, setting the PMM Server API Key to `new_key` in the `cluster1-secrets` object can be done with the following command:
+        [Acquire the API Key from your PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication) and set `pmmserverkey` in the [users Secrets](users.md/#system-users) object to this obtained API Key value. For example, setting the PMM Server API Key to `new_key` in the `cluster1-secrets` object can be done with the following command:
 
         === "in Linux"
 

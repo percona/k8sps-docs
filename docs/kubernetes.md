@@ -17,7 +17,7 @@
 2. Now Custom Resource Definition for Percona Server for MySQL should be created
     from the `deploy/crd.yaml` file. Custom Resource Definition extends the
     standard set of resources which Kubernetes “knows” about with the new
-    items (in our case ones which are the core of the operator). [Apply it](https://kubernetes.io/docs/reference/using-api/server-side-apply/) as follows:
+    items (in our case ones which are the core of the operator). [Apply it :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/server-side-apply/) as follows:
 
     ```{.bash data-prompt="$"}
     $ kubectl apply --server-side -f deploy/crd.yaml
@@ -43,7 +43,7 @@
     based on specifically defined roles and actions corresponding to
     them, allowed to be done on specific Kubernetes resources (details
     about users and roles can be found in [Kubernetes
-    documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings)).
+    documentation :octicons-link-external-16:](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings)).
 
     ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/rbac.yaml
@@ -65,7 +65,7 @@
 5. Now that’s time to add the Percona Server for MySQL Users secrets to
     Kubernetes. They should be placed in the data section of the
     `deploy/secrets.yaml` file as logins and plaintext passwords for the user
-    accounts (see [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/secret/)
+    accounts (see [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/)
     for details).
 
     After editing is finished, users secrets should be created using the
