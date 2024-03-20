@@ -8,7 +8,7 @@ You can compare the Kubernetes Operator to a System Administrator who deploys
 the application and watches the Kubernetes events related to it, taking
 administrative/operational actions when needed.
 
-The already existing [Percona Distribution for MySQL Operator :octicons-link-external-16:](https://www.percona.com/doc/kubernetes-operator-for-pxc/index.html) is based on Percona XtraDB Cluster. It is feature rich and provides virtually-synchronous replication by utilizing Galera Write-Sets. Sync replication ensures data consistency and proved itself useful for critical applications, especially on Kubernetes.
+The already existing [Percona Distribution for MySQL Operator](https://www.percona.com/doc/kubernetes-operator-for-pxc/index.html) is based on Percona XtraDB Cluster. It is feature rich and provides virtually-synchronous replication by utilizing Galera Write-Sets. Sync replication ensures data consistency and proved itself useful for critical applications, especially on Kubernetes.
 
 The new *Percona Distribution for MySQL Operator* is going to run Percona Server for MySQL and provide both regular asynchronous (with [semi-sync :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication-semisync.html) support) and virtually-synchronous replication based on [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
 
