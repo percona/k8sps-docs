@@ -31,35 +31,35 @@ changes its official name to **Percona Operator for MySQL**
 ## New Features
 
 
-* [K8SPS-32 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-32): Orchestrator is now highly available, allowing you to deploy a cluster without a single point of failure
+* [K8SPS-32](https://jira.percona.com/browse/K8SPS-32): Orchestrator is now highly available, allowing you to deploy a cluster without a single point of failure
 
 
-* [K8SPS-53 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-53) and [K8SPS-54 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-54): You can now backup and restore your MySQL database with the Operator
+* [K8SPS-53](https://jira.percona.com/browse/K8SPS-53) and [K8SPS-54](https://jira.percona.com/browse/K8SPS-54): You can now backup and restore your MySQL database with the Operator
 
 
-* [K8SPS-55 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-55) and [K8SPS-82 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-82): Add Group Replication support and deploy MySQL Router proxy for load-balancing the traffic
+* [K8SPS-55](https://jira.percona.com/browse/K8SPS-55) and [K8SPS-82](https://jira.percona.com/browse/K8SPS-82): Add Group Replication support and deploy MySQL Router proxy for load-balancing the traffic
 
 
-* [K8SPS-56 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-56): Automatically tune `buffer_pool_size` and `max_connections` options based on the resources provisioned for MySQL container if custom MySQL config is not provided
+* [K8SPS-56](https://jira.percona.com/browse/K8SPS-56): Automatically tune `buffer_pool_size` and `max_connections` options based on the resources provisioned for MySQL container if custom MySQL config is not provided
 
 ## Improvements
 
 
-* [K8SPS-39 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-39): Show endpoint in the Custom Resource status to quickly identify endpoint URI, or public IP address in case of the LoadBalancer
+* [K8SPS-39](https://jira.percona.com/browse/K8SPS-39): Show endpoint in the Custom Resource status to quickly identify endpoint URI, or public IP address in case of the LoadBalancer
 
 
-* [K8SPS-47 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-47): Expose MySQL Administrative Connection Port and MySQL Server X Protocol in Services
+* [K8SPS-47](https://jira.percona.com/browse/K8SPS-47): Expose MySQL Administrative Connection Port and MySQL Server X Protocol in Services
 
 ## Bugs Fixed
 
 
-* [K8SPS-58 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-58): Fix a bug that caused cluster failure if MySQL initialization took longer than the startup probe delay
+* [K8SPS-58](https://jira.percona.com/browse/K8SPS-58): Fix a bug that caused cluster failure if MySQL initialization took longer than the startup probe delay
 
 
-* [K8SPS-70 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-70): Fix a bug that caused cluster crash if secretsName option was changed to another Secrets object with different passwords
+* [K8SPS-70](https://jira.percona.com/browse/K8SPS-70): Fix a bug that caused cluster crash if secretsName option was changed to another Secrets object with different passwords
 
 
-* [K8SPS-78 :octicons-link-external-16:](https://jira.percona.com/browse/K8SPS-78): Make the Operator throw an error at cluster creation time if the storage is not specified
+* [K8SPS-78](https://jira.percona.com/browse/K8SPS-78): Make the Operator throw an error at cluster creation time if the storage is not specified
 
 ## Supported Platforms
 
