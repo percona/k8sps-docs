@@ -655,7 +655,7 @@ file contains the following configuration options for the regular Percona XtraDB
 | **Key**         | {{ optionlink('backup.backoffLimit') }} |
 | **Value**       | int |
 | **Example**     | `6` |
-| **Description** | The number of retries to make a backup |
+| **Description** | The number of retries to make a backup (by default, 6 retries are made) |
 |                 | |
 | **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.type') }} |
 | **Value**       | string |
