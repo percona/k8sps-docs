@@ -134,14 +134,14 @@ extra: # Used in main.html template and can't be externalized
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
   release: '0.7.0'
   apiversion: '0-7-0'
-  ps80recommended: '8.0.33-25'
-  pxbrecommended: '8.0.33-27'
-  pmm2recommended: '2.39'
-  haproxyrecommended: '2.8.1'
-  routerrecommended: '8.0.33-25'
-  orchestratorrecommended: '3.2.6-9'
-  gkerecommended: '1.27'
-  certmanagerrecommended: '1.11.0'
+  ps80recommended: '8.0.36-28'
+  pxbrecommended: '8.0.35-30'
+  pmm2recommended: '2.41.1'
+  haproxyrecommended: '2.8.5'
+  routerrecommended: '8.0.36'
+  orchestratorrecommended: '3.2.6-12'
+  gkerecommended: '1.29'
+  certmanagerrecommended: '1.12.3'
   version:
     provider: mike
 
