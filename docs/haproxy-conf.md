@@ -115,7 +115,8 @@ option to [mysql.configuration](operator.md#mysql-configuration) key in the
     need setting [haproxy.externaltrafficpolicy](operator.md#haproxy-externaltrafficpolicy) option in `deploy/cr.yaml`.
 
 Here are two ways to set proper addresses with `proxy_protocol_networks` with
-their pros and cons:{.power-number}
+their pros and cons:
+{.power-number}
 
 1. List HAProxy Pod IP addresses explicitly
 
@@ -131,7 +132,7 @@ their pros and cons:{.power-number}
     
 === "Listing HAProxy Pod IPs explicitly"
 
-    You can do it like follows:{.power-number}
+    You can do it like follows: {.power-number}
 
     1. Find out HAProxy Pods addresses:
     
@@ -177,7 +178,7 @@ their pros and cons:{.power-number}
     
         A safe setup would require at least 6 Kubernetes Nodes.
     
-    You can do it like follows:{.power-number}
+    You can do it like follows: {.power-number}
     
     1. Check Pod CIDRs (pools of IP addresses which can be assigned to Pods)
         for your Nodes. It should look something like this:
