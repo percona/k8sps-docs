@@ -141,16 +141,16 @@ their pros and cons:{.power-number}
        
        ??? example "Expected output"
 
-            ```{.text .no-copy}
-            NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
-            cluster1-haproxy-0     2/2     Running   0          69m   10.24.1.6    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
-            cluster1-haproxy-1     2/2     Running   0          69m   10.24.2.7    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
-            cluster1-haproxy-2     2/2     Running   0          69m   10.24.0.16   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
-            cluster1-mysql-0       2/2     Running   0          58m   10.24.1.9    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
-            cluster1-mysql-1       2/2     Running   0          57m   10.24.2.9    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
-            cluster1-mysql-2       2/2     Running   0          59m   10.24.0.18   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
-            ...
-            ```
+           ```{.text .no-copy}
+           NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
+           cluster1-haproxy-0     2/2     Running   0          69m   10.24.1.6    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
+           cluster1-haproxy-1     2/2     Running   0          69m   10.24.2.7    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
+           cluster1-haproxy-2     2/2     Running   0          69m   10.24.0.16   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
+           cluster1-mysql-0       2/2     Running   0          58m   10.24.1.9    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
+           cluster1-mysql-1       2/2     Running   0          57m   10.24.2.9    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
+           cluster1-mysql-2       2/2     Running   0          59m   10.24.0.18   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
+           ...
+           ```
 
     2. Set proper addresses to `mysql.configuration` key in the `deploy/cr.yaml`
        Custom Resource manifest:
@@ -190,12 +190,12 @@ their pros and cons:{.power-number}
        
        ??? example "Expected output"
 
-            ```{.text .no-copy}
-            10.24.1.0/24
-            10.24.2.0/24
-            10.24.0.0/24
-            ...
-            ```
+           ```{.text .no-copy}
+           10.24.1.0/24
+           10.24.2.0/24
+           10.24.0.0/24
+           ...
+           ```
 
     2. Set proper [affinity constraints](affinity.md) and `mysql.configuration`
        value in the `deploy/cr.yaml` Custom Resource manifest:
