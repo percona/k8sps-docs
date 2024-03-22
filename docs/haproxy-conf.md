@@ -133,37 +133,37 @@ their pros and cons:{.power-number}
 
     You can do it like follows:{.power-number}
 
-    1. find out HAProxy Pods addresses:
+    1. Find out HAProxy Pods addresses:
     
-       ```{.bash data-prompt="$"}
-       $ kubectl get pod -o wide
-       ```
+        ```{.bash data-prompt="$"}
+        $ kubectl get pod -o wide
+        ```
        
-       ??? example "Expected output"
+        ??? example "Expected output"
 
-           ```{.text .no-copy}
-           NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
-           cluster1-haproxy-0     2/2     Running   0          69m   10.24.1.6    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
-           cluster1-haproxy-1     2/2     Running   0          69m   10.24.2.7    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
-           cluster1-haproxy-2     2/2     Running   0          69m   10.24.0.16   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
-           cluster1-mysql-0       2/2     Running   0          58m   10.24.1.9    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
-           cluster1-mysql-1       2/2     Running   0          57m   10.24.2.9    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
-           cluster1-mysql-2       2/2     Running   0          59m   10.24.0.18   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
-           ...
-           ```
+            ```{.text .no-copy}
+            NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
+            cluster1-haproxy-0     2/2     Running   0          69m   10.24.1.6    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
+            cluster1-haproxy-1     2/2     Running   0          69m   10.24.2.7    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
+            cluster1-haproxy-2     2/2     Running   0          69m   10.24.0.16   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
+            cluster1-mysql-0       2/2     Running   0          58m   10.24.1.9    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
+            cluster1-mysql-1       2/2     Running   0          57m   10.24.2.9    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
+            cluster1-mysql-2       2/2     Running   0          59m   10.24.0.18   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
+            ...
+            ```
 
     2. Set proper addresses to `mysql.configuration` key in the `deploy/cr.yaml`
-       Custom Resource manifest:
+        Custom Resource manifest:
        
-       ```yaml
-       ...
-       mysql:
-         configuration: |
-           proxy_protocol_networks=10.24.1.6/32,10.24.2.7/32,10.24.0.16/32
-         ...
-       ```
+        ```yaml
+        ...
+        mysql:
+          configuration: |
+            proxy_protocol_networks=10.24.1.6/32,10.24.2.7/32,10.24.0.16/32
+          ...
+        ```
 
-       Don't forget to apply changes as usual, with the
+        Don't forget to apply changes as usual, with the
        `kubectl apply -f deploy/cr.yaml` command.
     
 === "Running HAProxy Pods on a different node"
@@ -180,63 +180,63 @@ their pros and cons:{.power-number}
     You can do it like follows:{.power-number}
     
     1. Check Pod CIDRs (pools of IP addresses which can be assigned to Pods)
-       for your Nodes. It should look something like this:
+        for your Nodes. It should look something like this:
 
-       ```{.bash data-prompt="$"}
-       $ kubectl get node -l topology.kubernetes.io/zone=europe-west3-a -o jsonpath={.items[].spec.podCIDR} && \
-       kubectl get node -l topology.kubernetes.io/zone=europe-west3-b -o jsonpath={.items[].spec.podCIDR} && \
-       kubectl get node -l topology.kubernetes.io/zone=europe-west3-c -o jsonpath={.items[].spec.podCIDR}
-       ```
+        ```{.bash data-prompt="$"}
+        $ kubectl get node -l topology.kubernetes.io/zone=europe-west3-a -o jsonpath={.items[].spec.podCIDR} && \
+        kubectl get node -l topology.kubernetes.io/zone=europe-west3-b -o jsonpath={.items[].spec.podCIDR} && \
+        kubectl get node -l topology.kubernetes.io/zone=europe-west3-c -o jsonpath={.items[].spec.podCIDR}
+        ```
        
-       ??? example "Expected output"
+        ??? example "Expected output"
 
-           ```{.text .no-copy}
-           10.24.1.0/24
-           10.24.2.0/24
-           10.24.0.0/24
-           ...
-           ```
+            ```{.text .no-copy}
+            10.24.1.0/24
+            10.24.2.0/24
+            10.24.0.0/24
+            ...
+            ```
 
     2. Set proper [affinity constraints](affinity.md) and `mysql.configuration`
-       value in the `deploy/cr.yaml` Custom Resource manifest:
+        value in the `deploy/cr.yaml` Custom Resource manifest:
 
-       ```yaml
-       mysql:
-         ...
-         affinity:
-           advanced:
-             nodeAffinity:
-               requiredDuringSchedulingIgnoredDuringExecution:
-                 nodeSelectorTerms:
-                 - matchExpressions:
-                   - key: topology.kubernetes.io/zone
-                     operator: In
-                     values:
-                     - europe-west3-a
-                     - europe-west3-b
-         ...
-         configuration: |
-           proxy_protocol_networks=10.24.0.0/24
-         ...
-         proxy:
-           ...
-           haproxy:
-             ...
-             affinity:
-               advanced:
-                 nodeAffinity:
-                   requiredDuringSchedulingIgnoredDuringExecution:
-                     nodeSelectorTerms:
-                     - matchExpressions:
-                       - key: topology.kubernetes.io/zone
-                  operator: In
-                  values:
-                  - europe-west3-c
-             ...
-       ```
+        ```yaml
+        mysql:
+          ...
+          affinity:
+            advanced:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                  - matchExpressions:
+                    - key: topology.kubernetes.io/zone
+                      operator: In
+                      values:
+                      - europe-west3-a
+                      - europe-west3-b
+          ...
+          configuration: |
+            proxy_protocol_networks=10.24.0.0/24
+          ...
+          proxy:
+            ...
+            haproxy:
+              ...
+              affinity:
+                advanced:
+                  nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      nodeSelectorTerms:
+                      - matchExpressions:
+                        - key: topology.kubernetes.io/zone
+                   operator: In
+                   values:
+                   - europe-west3-c
+              ...
+        ```
 
-       Don't forget to apply changes as usual, with the
-       `kubectl apply -f deploy/cr.yaml` command.
+        Don't forget to apply changes as usual, with the
+        `kubectl apply -f deploy/cr.yaml` command.
 
 !!! warning
 
