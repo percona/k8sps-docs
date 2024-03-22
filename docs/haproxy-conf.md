@@ -114,8 +114,8 @@ option to [mysql.configuration](operator.md#mysql-configuration) key in the
     Depending on the load balancer of your cloud provider, you may also
     need setting [haproxy.externaltrafficpolicy](operator.md#haproxy-externaltrafficpolicy) option in `deploy/cr.yaml`.
 
-There are two ways to set proper addresses with `proxy_protocol_networks` with
-their pros and cons:
+Here are two ways to set proper addresses with `proxy_protocol_networks` with
+their pros and cons:{.power-number}
 
 1. List HAProxy Pod IP addresses explicitly
 
@@ -131,6 +131,8 @@ their pros and cons:
     
 === "Listing HAProxy Pod IPs explicitly"
 
+    You can do it like follows:{.power-number}
+
     1. find out HAProxy Pods addresses:
     
        ```{.bash data-prompt="$"}
@@ -139,15 +141,16 @@ their pros and cons:
        
        ??? example "Expected output"
 
-        ```{.text .no-copy}
-        NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
-        cluster1-haproxy-0     2/2     Running   0          69m   10.24.1.6    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
-        cluster1-haproxy-1     2/2     Running   0          69m   10.24.2.7    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
-        cluster1-haproxy-2     2/2     Running   0          69m   10.24.0.16   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
-        cluster1-mysql-0       2/2     Running   0          58m   10.24.1.9    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
-        cluster1-mysql-1       2/2     Running   0          57m   10.24.2.9    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
-        cluster1-mysql-2       2/2     Running   0          59m   10.24.0.18   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
-        ...
+            ```{.text .no-copy}
+            NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                                       NOMINATED NODE   READINESS GATES
+            cluster1-haproxy-0     2/2     Running   0          69m   10.24.1.6    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
+            cluster1-haproxy-1     2/2     Running   0          69m   10.24.2.7    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
+            cluster1-haproxy-2     2/2     Running   0          69m   10.24.0.16   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
+            cluster1-mysql-0       2/2     Running   0          58m   10.24.1.9    gke-sdf-31268-default-pool-fa50783b-czhs   <none>           <none>
+            cluster1-mysql-1       2/2     Running   0          57m   10.24.2.9    gke-sdf-31268-default-pool-b267c069-59gj   <none>           <none>
+            cluster1-mysql-2       2/2     Running   0          59m   10.24.0.18   gke-sdf-31268-default-pool-e4c7fa4b-d247   <none>           <none>
+            ...
+            ```
 
     2. Set proper addresses to `mysql.configuration` key in the `deploy/cr.yaml`
        Custom Resource manifest:
@@ -174,6 +177,8 @@ their pros and cons:
     
         A safe setup would require at least 6 Kubernetes Nodes.
     
+    You can do it like follows:{.power-number}
+    
     1. Check Pod CIDRs (pools of IP addresses which can be assigned to Pods)
        for your Nodes. It should look something like this:
 
@@ -185,11 +190,12 @@ their pros and cons:
        
        ??? example "Expected output"
 
-        ```{.text .no-copy}
-        10.24.1.0/24
-        10.24.2.0/24
-        10.24.0.0/24
-        ...
+            ```{.text .no-copy}
+            10.24.1.0/24
+            10.24.2.0/24
+            10.24.0.0/24
+            ...
+            ```
 
     2. Set proper [affinity constraints](affinity.md) and `mysql.configuration`
        value in the `deploy/cr.yaml` Custom Resource manifest:
@@ -227,6 +233,7 @@ their pros and cons:
                   values:
                   - europe-west3-c
              ...
+       ```
 
        Don't forget to apply changes as usual, with the
        `kubectl apply -f deploy/cr.yaml` command.
