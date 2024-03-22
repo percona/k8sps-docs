@@ -151,13 +151,20 @@ nav:
     - Welcome: index.md
     - Features:
           - "Design and architecture": architecture.md
-          
     - Quickstart guides:
-          - "Install with Helm": helm.md
-          - "Install on Minikube": minikube.md
+          - Overview: quickstart.md
+          - Quick install:
+            - "Install with Helm": helm.md
+            - "Install with kubectl": kubectl.md
+          - Connect to the database: connect.md
+          - Insert data: data-insert.md
+          - Make a backup: backup-tutorial.md
+          - Monitor the database with PMM: monitoring-tutorial.md
+          - what-next.md
           
     - Installation:
           - "System Requirements": System-Requirements.md
+          - "Install on Minikube": minikube.md
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
           - "Generic Kubernetes installation": kubernetes.md
