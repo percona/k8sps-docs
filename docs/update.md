@@ -152,7 +152,7 @@ Manual update of Percona Server for MySQL can be done as follows:
     For example, updating `cluster1` cluster to the `{{ release }}` version
     should look as follows:
 
-    ```bash
+    ```{.bash data-prompt="$"}
     $ kubectl patch ps cluster1 --type=merge --patch '{
        "spec": {
            "crVersion":"{{ release }}",
@@ -172,7 +172,7 @@ Manual update of Percona Server for MySQL can be done as follows:
 
         The above command upgrades various components of the cluster including PMM Client. It is [highly recommended :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/how-to/upgrade.html) to upgrade PMM Server **before** upgrading PMM Client. If it wasn't done and you would like to avoid PMM Client upgrade, remove it from the list of images, reducing the last of two patch commands as follows:        
         
-        ```bash
+        ```{.bash data-prompt="$"}
         $ kubectl patch ps cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
