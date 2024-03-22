@@ -1,4 +1,4 @@
-       # Configuring Load Balancing with HAProxy
+# Configuring Load Balancing with HAProxy
 
 Percona Operator for MySQL provides load balancing and proxy service with
 [HAProxy :octicons-link-external-16:](https://haproxy.org) (enabled by default). HAProxy is the only
@@ -132,7 +132,8 @@ their pros and cons:
     
 === "Listing HAProxy Pod IPs explicitly"
 
-    You can do it like follows: {.power-number}
+    You can do it like follows:
+    {.power-number}
 
     1. Find out HAProxy Pods addresses:
     
@@ -178,7 +179,8 @@ their pros and cons:
     
         A safe setup would require at least 6 Kubernetes Nodes.
     
-    You can do it like follows: {.power-number}
+    You can do it like follows:
+    {.power-number}
     
     1. Check Pod CIDRs (pools of IP addresses which can be assigned to Pods)
         for your Nodes. It should look something like this:
