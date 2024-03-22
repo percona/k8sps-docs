@@ -1,8 +1,9 @@
-# Connect to Percona XtraDB Cluster
+# Connect to Percona Server for MySQL
 
-In this tutorial, you will connect to the Percona XtraDB Cluster you deployed previously.
+In this tutorial, you will connect to the Percona Server for MySQL you deployed
+previously.
 
-To connect to Percona XtraDB Cluster you will need the password for the `root`
+To connect to Percona Server for MySQL you will need the password for the `root`
 user. Passwords are stored in the Secrets object. 
 
 Here's how to get it:
@@ -16,7 +17,7 @@ Here's how to get it:
 
     The Secrets object we target is named as
     `<cluster_name>-secrets`. The `<cluster_name>` value is
-    the [name of your Percona XtraDB Cluster](operator.md#metadata-name). The default variant for the Secrets object is:
+    the [name of your Percona Server for MySQL](operator.md#metadata-name). The default variant for the Secrets object is:
 
     === "via kubectl" 
 
@@ -24,7 +25,7 @@ Here's how to get it:
 
     === "via Helm"
 
-        `cluster1-pxc-db-secrets`
+        `cluster1-ps-db-secrets`
 
 2. Retrieve the password for the root user. Replace the `secret-name` and `namespace` with your values in the following commands:
 
@@ -39,24 +40,24 @@ Here's how to get it:
     ```
     Executing it may require some time to deploy the correspondent Pod.
 
-4. Connect to Percona XtraDB Cluster. To do this, run `mysql` tool in the
+4. Connect to Percona Server for MySQL. To do this, run `mysql` tool in the
     percona-client command shell using your cluster name and the password
     obtained from the secret instead of the `<root_password>` placeholder.
     The command will look different depending on whether your cluster provides
     load balancing with [HAProxy](haproxy-conf.md) (the default choice) or
-    [ProxySQL](proxysql-conf.md):
+    [MySQL Router](router-conf.md):
 
     === "with HAProxy (default)"
         ```{.bash data-prompt="$"}
         $ mysql -h <cluster_name>-haproxy -uroot -p'<root_password>'
         ```
 
-    === "with ProxySQL"
+    === "with MySQL Router"
         ```{.bash data-prompt="$"}
-        $ mysql -h <cluster_name>-proxysql -uroot -p'<root_password>'
+        $ mysql -h <cluster_name>-router -uroot -p'<root_password>'
         ```
 
-Congratulations! You have connected to Percona XtraDB Cluster. 
+Congratulations! You have connected to Percona Server for MySQL. 
 
 ## Next steps
 

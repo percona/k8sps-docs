@@ -4,21 +4,21 @@ In this tutorial, you will learn how to make a logical backup of your data manua
 
 ## Considerations and prerequisites
 
-In this tutorial, we use the [AWS S3](https://aws.amazon.com/s3/) as the backup storage. You need the following S3-related information:
+In this tutorial, we use the [AWS S3 :octicons-link-external-16:](https://aws.amazon.com/s3/) as the backup storage. You need the following S3-related information:
    
 * the name of the S3 storage
 * the name of the S3 bucket
 * the region - the location of the bucket
 * the S3 credentials to be used to access the storage. 
 
-If you don’t have access to AWS, you can use any S3-compatible storage like [MinIO](https://min.io/docs/minio/linux/index.html). Also [check the list of supported storages](backups.md#backup-storage).
+If you don’t have access to AWS, you can use any S3-compatible storage like [MinIO :octicons-link-external-16:](https://min.io/docs/minio/linux/index.html). Also [check the list of supported storages](backups.md#backup-storage).
 
 Also, we will use some files from the Operator repository for setting up
-backups. So, clone the percona-xtradb-cluster-operator repository:
+backups. So, clone the percona-server-mysql-operator repository:
 
 ``` {.bash data-prompt="$" }
-$ git clone -b v{{ release }} https://github.com/percona/percona-xtradb-cluster-operator
-$ cd percona-xtradb-cluster-operator
+$ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+$ cd percona-server-mysql-operator
 ```
 
 !!! note
@@ -44,16 +44,16 @@ $ cd percona-xtradb-cluster-operator
         $ echo -n 'AWS_SECRET_ACCESS_KEY' | base64 
         ```
 
-2. Edit the [`deploy/backup-secret-s3.yaml`](https://github.com/percona/percona-xtradb-cluster-operator/blob/main/deploy/backup/backup-secret-s3.yaml) example Secrets configuration file and specify the following:
+2. Edit the [deploy/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup-s3.yaml) example Secrets configuration file and specify the following:
 
     * the `metadata.name` key is the name which you use to refer your Kubernetes Secret
     * the base64-encoded S3 credentials
 
-    ```yaml title="deploy/backup-secret-s3.yaml"
+    ```yaml title="deploy/backup-s3.yaml"
     apiVersion: v1
     kind: Secret
     metadata:
-      name: my-cluster-name-backup-s3
+      name: cluster1-s3-credentials
     type: Opaque
     data:
       AWS_ACCESS_KEY_ID: <YOUR_AWS_ACCESS_KEY_ID>
@@ -63,7 +63,7 @@ $ cd percona-xtradb-cluster-operator
 3. Create the Secrets object from this yaml file. Specify your namespace instead of the `<namespace>` placeholder:
 
 	```{.bash data-prompt="$"}
-	$ kubectl apply -f deploy/backup-secret-s3.yaml -n <namespace>
+	$ kubectl apply -f deploy/backup-s3.yaml -n <namespace>
 	```
 
 4. Update your `deploy/cr.yaml` configuration. Specify the following parameters in the `backup` section:
@@ -73,18 +73,19 @@ $ cd percona-xtradb-cluster-operator
     * specify the S3 bucket name for the `storages.<NAME>.s3.bucket` option
     * specify the  region in the `storages.<NAME>.s3.region` option. Also you can use the `storages.<NAME>.s3.prefix` option to specify the path (a sub-folder) to the backups inside the S3 bucket. If prefix is not set, backups are stored in the root directory.
 
-   	```yaml
-   	...
-   	backup:
-   	  ...
-   	  storages:
-   	    s3-us-west:
-   	      type: s3
-   	      s3:
-   	        bucket: "S3-BACKUP-BUCKET-NAME-HERE"
-   	        region: "<AWS_S3_REGION>"
-   	        credentialsSecret: my-cluster-name-backup-s3
-   	  ...
+    ```yaml
+    ...
+    backup:
+      enabled: true
+      ...
+      storages:
+        s3-us-west:
+          type: s3
+          s3:
+            bucket: S3-BACKUP-BUCKET-NAME-HERE
+            region: us-west-2
+            credentialsSecret: cluster1-s3-credentials
+          ...
     ```
 
     !!! note ""
@@ -107,22 +108,21 @@ Now when your have the [configured storage](#configure-backup-storage) in your
 Custom Resource, you can make your first backup.
 {.power-number}
 
-1. To make a backup, you need the configuration file. Edit the sample [`deploy/backup/backup.yaml`](https://github.com/percona/percona-xtradb-cluster-operator/blob/main/deploy/backup/backup.yaml) configuration file and specify the following:
+1. To make a backup, you need the configuration file. Edit the sample [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup.yaml) configuration file and specify the following:
 
     * `metadata.name` - specify the backup name. You will use this name to restore from this backup
-    * `spec.pxcCluster` - specify the name of your cluster. This is the name you specified when deploying Percona XtraDB Cluster.
+    * `spec.clusterName` - specify the name of your cluster. This is the name you specified when deploying Percona Server for MySQL cluster.
     * `spec.storageName` - specify the name of your already configured storage.
 
     ```yaml title="deploy/backup/backup.yaml"
-    apiVersion: pxc.percona.com/v1
-    kind: PerconaXtraDBClusterBackup
+    apiVersion: ps.percona.com/v1alpha1
+    kind: PerconaServerMySQLBackup
     metadata:
-      finalizers:
-        - delete-s3-backup
       name: backup1
+      finalizers:
+        - delete-backup
     spec:
-      pxcCluster: cluster1
-      clusterName: my-cluster-name
+      clusterName: cluster1
       storageName: s3-us-west
     ```
 
@@ -135,14 +135,14 @@ Custom Resource, you can make your first backup.
 3. Track the backup progress. 
 
     ```{.bash data-prompt="$"}
-	$ kubectl get pxc-backup -n <namespace>
+	$ kubectl get ps-backup -n <namespace>
 	```
 
 	??? example "Output"
 
 	    ```{.text .no-copy}
 	    NAME      CLUSTER       STORAGE      DESTINATION                                      STATUS    COMPLETED   AGE
-	    backup1   cluster1      s3-us-west   s3://pxc-operator-testing/2023-10-10T16:36:46Z   Running               43s
+	    backup1   cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s
 	    ```
 
 	When the status changes to `Succeeded`, backup is made.
@@ -154,7 +154,7 @@ You may face issues with the backup. To identify the issue, you can do the follo
 * View the information about the backup with the following command:
 
    ```{.bash data-prompt="$"}
-   $ kubectl get pxc-backup <backup-name> -n <namespace> -o yaml
+   $ kubectl get ps-backup <backup-name> -n <namespace> -o yaml
    ```
 
 * [View the backup-agent logs](debug-logs.md). Use the previous command to find the name of the pod where the backup was made:
