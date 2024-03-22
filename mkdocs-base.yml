@@ -132,6 +132,7 @@ extra: # Used in main.html template and can't be externalized
     https://docs.percona.com
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
+  commandName: 'kubectl'
   release: '0.6.0'
   apiversion: '0-6-0'
   ps80recommended: '8.0.33-25'
