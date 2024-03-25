@@ -76,7 +76,7 @@ Here’s how to get it:
         mysql>
         ```
 
-    The following example will use the MySQL prompt to check the
+    The following example uses the MySQL prompt to check the
     `max_connections` variable:
 
     ```{.bash data-prompt="mysql>"}
