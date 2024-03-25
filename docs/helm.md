@@ -61,3 +61,8 @@ $ helm install my-db percona/ps-db \
   --set mysql.volumeSpec.pvc.resources.requests.storage=20Gi \
   --set backup.enabled=false
 ```
+
+## Next steps
+
+[Connect to Percona Server for MySQL :material-arrow-right:](connect.md){.md-button}
+

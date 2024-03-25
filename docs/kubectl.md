@@ -97,9 +97,7 @@ MySQL instances.
 
 You can check the rest of the Operator's parameters in the [Custom Resource options reference](operator.md#operator-custom-resource-options).
 
-
 ## Next steps
 
 [Connect to Percona Server for MySQL :material-arrow-right:](connect.md){.md-button}
-
 
