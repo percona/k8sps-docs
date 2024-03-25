@@ -7,13 +7,12 @@ Here’s how to get it:
     ```{.bash data-prompt="$"}
     $ {{ commandName }} get secrets
     ```
-    The Secrets object you are interested in has the
-    `my-cluster-name-secrets` name.
+    It will show you the list of Secrets objects (by default the Secrets object you are interested in has `cluster1-secrets` name).
 
-2. Use the following command to get the password of the `root` user.  Substitute the `<my-cluster-name>` and `<namespace>` placeholders with your values:
+2. Use the following command to get the password of the `root` user.  Substitute `cluster1` with your value, if needed:
     
     ```{.bash data-prompt="$"}
-    $ {{ commandName }} get secret my-cluster-name-secrets -o yaml
+    $ {{ commandName }} get secret cluster1-secrets -o yaml
     ```
     
     The command returns the YAML file with generated Secrets, including the `root` password, which
