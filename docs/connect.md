@@ -43,9 +43,10 @@ Here's how to get it:
 4. Connect to Percona Server for MySQL. To do this, run `mysql` tool in the
     percona-client command shell using your cluster name and the password
     obtained from the secret instead of the `<root_password>` placeholder.
-    The command will look different depending on whether your cluster provides
-    load balancing with [HAProxy](haproxy-conf.md) (the default choice) or
-    [MySQL Router](router-conf.md):
+    The command will look different depending on whether your cluster  uses load
+    balancing with [HAProxy](haproxy-conf.md) (the default behavior) or uses
+    [MySQL Router](router-conf.md) (can be used with Group Replication clusters
+    only):
 
     === "with HAProxy (default)"
         ```{.bash data-prompt="$"}
