@@ -28,11 +28,21 @@
     Executing it may require some time to deploy the correspondent Pod.
 
 3. Now run `mysql` tool in the percona-client command shell using the password
-    obtained from the Secret instead of the `<root password>` placeholder:
+    obtained from the Secret instead of the `<root password>` placeholder.
+    The command will look different depending on whether the cluster uses load
+    balancing with [HAProxy](haproxy-conf.md) (the default behavior) or uses
+    [MySQL Router](router-conf.md) (can be used with Group Replication clusters
+    only):
 
-    ```{.bash data-prompt="$"}
-    $ mysql -h cluster1-haproxy -uroot -p<root password>
-    ```
+    === "if using HAProxy (default)"
+        ``` {.bash data-prompt="$" }
+        $ mysql -h cluster1-haproxy -uroot -p<root password>
+        ```
+
+    === "if using Router"
+        ``` {.bash data-prompt="$" }
+        $ mysql -h cluster1-router -uroot -p<root password>
+        ```
     
     ??? example "Expected output"
 
