@@ -82,7 +82,7 @@ if the primary fails. Finally, asynchronous replication doesn't allow you
 scaling write requests horizontally, leaving  vertical scaling (primary
 instance RAM and CPU increase) as the only available option.
 
-*Group replication* is good at horizontal scaling of writes, but is not so fast,
+*Group replication* allows horizontal scaling of writes, but is not so fast,
 because writes require consensus (so-called "certification").
 Also, concurrent writes of the same row on different instances are
 [treated as data conflicts :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication-summary.html):
