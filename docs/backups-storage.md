@@ -31,13 +31,13 @@ object with credentials needed to access the storage.
         The following command can be used to get a base64-encoded string from
         a plain text one:    
 
-        === "in Linux"    
+        **in Linux:**
 
             ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
-        === "in macOS"    
+        **in macOS:**
 
             ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64
@@ -117,13 +117,13 @@ object with credentials needed to access the storage.
         The following command can be used to get a base64-encoded string from
         a plain text one:    
 
-        === "in Linux"    
+        **in Linux:**
 
             ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
-        === "in macOS"    
+        **in macOS:**
 
             ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64

@@ -163,7 +163,7 @@ You may face issues with the backup. To identify the issue, you can do the follo
   $ kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
   ```
 
-Congratulations! You have made the first backup manually. Want to learn more about backups? See the [Backup and restore](backups.md) section for how to [configure point-in-time recovery](backups-pitr.md), and how to [automatically make backups according to the schedule](backups-scheduled.md).
+Congratulations! You have made the first backup manually. Want to learn more about backups? See the [Backup and restore](backups.md) section for how to [restore from a previously saved backup](backups-restore.md).
 
 ## Next steps
 

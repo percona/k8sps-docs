@@ -93,7 +93,7 @@ useful for operations such as asynchronous calls).
 
 ## Group Replication
 
-Clusters configured to use Group Replication are exposed via the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/)
+Clusters configured to use Group Replication can be also exposed via the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/)
 through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
 `cluster1-router`. Network design in this case looks like this:
 
