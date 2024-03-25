@@ -33,13 +33,13 @@ object with credentials needed to access the storage.
 
         === "in Linux"    
 
-            ```bash
+            ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
         === "in macOS"    
 
-            ```bash
+            ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64
             ```    
 
@@ -119,13 +119,13 @@ object with credentials needed to access the storage.
 
         === "in Linux"    
 
-            ```bash
+            ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
         === "in macOS"    
 
-            ```bash
+            ```{.bash data-prompt="$"}
             $ echo -n 'plain-text-string' | base64
             ```    
 

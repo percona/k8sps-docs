@@ -28,6 +28,20 @@ To use the Router, enable it and make sure that HAProxy is disabled.
     $ kubectl apply -f deploy/cr.yaml
     ```
 
+    When the process is over your cluster will obtain the `ready` status. You
+    can check it with the following command:
+
+    ```{.bash data-prompt="$"}
+    $ kubectl get ps
+    ```
+
+    ??? example "Expected output"
+
+        ```{.text .no-copy}
+        NAME       REPLICATION         ENDPOINT                  STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+        cluster1   group-replication   cluster1-router.default   ready   3                                3        53m
+        ```
+
 ## Configure MySQL Router 
 
 When enabled, the MySQL Router operates with the reasonable default settings and can be used in a variety of use cases such as high-availability and scalability.

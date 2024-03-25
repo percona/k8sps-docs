@@ -16,8 +16,8 @@ $ kubectl get ps
 ??? example "Expected output"
 
     ``` {.text .no-copy}
-    NAME       REPLICATION         ENDPOINT                  STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-    cluster1   group-replication   cluster1-router.default   ready   3                                3        20m
+    NAME       REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+    cluster1   group-replication   cluster1-haproxy.default   ready   3                                3        20m
     ```
 
 The Custom Resource should have `ready` state.
