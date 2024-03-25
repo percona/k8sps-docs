@@ -42,19 +42,12 @@ The upgrade includes the following steps.
     $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
     ```
 
-2. Now you should [apply a patch :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to your
-    deployment, supplying necessary image name with a newer version tag. You can find the proper
-    image name for the current Operator release [in the list of certified images](images.md)
-    (for older releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation)).
-    For example, updating to the `{{ release }}` version should look as
-    follows.
-
+2. Now you should update the Operator:
     ``` {.bash data-prompt="$" }
-    $ kubectl patch deployment percona-server-mysql-operator \
-      -p'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"percona/percona-server-mysql-operator:{{ release }}"}]}}}}'
+    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/operator.yaml
     ```
 
-3. The deployment rollout will be automatically triggered by the applied patch.
+3. The deployment rollout will be automatically triggered.
     You can track the rollout process in real time with the
     `kubectl rollout status` command with the name of your cluster:
 
