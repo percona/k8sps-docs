@@ -11,6 +11,7 @@ We recommend installing the Operator with the [kubectl :octicons-link-external-1
 ## Prerequisites
 
 To install Percona Server for MySQL cluster, you need the following:
+{.power-number}
 
 1. The **kubectl** tool to manage and deploy applications on Kubernetes, included in most Kubernetes distributions. Install not already installed, [follow its official installation instructions :octicons-link-external-16:](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 

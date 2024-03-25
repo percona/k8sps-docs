@@ -10,7 +10,7 @@ Install Helm following its [official installation instructions :octicons-link-ex
 
     Helm v3 is needed to run the following steps.
 
-## Installation
+## Installation {.power-number}
 
 1. Add the Percona’s Helm charts repository and make your Helm client up to
     date with it:
