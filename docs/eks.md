@@ -108,5 +108,5 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
 
     ```{.bash data-prompt="$"}
     $ kubectl port-forward svc/cluster1-mysql-primary 3306:3306 &
-    $ mysql -h 127.0.0.1 -P 3306 -u root -p<root password>
+    $ mysql -h 127.0.0.1 -P 3306 -uroot -p<root password>
     ```
