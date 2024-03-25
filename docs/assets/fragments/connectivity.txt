@@ -1,5 +1,4 @@
-To connect to Percona Distribution
-    for MySQL Cluster you will need the password for the root user. Passwords are stored in the [Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) object, which was generated during the previous steps.
+To connect to Percona Server for MySQL you will need the password for the root user. Passwords are stored in the [Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) object, which was generated during the previous steps.
 
 Here’s how to get it:
 
@@ -43,11 +42,20 @@ Here’s how to get it:
     It may require some time to execute the command and deploy the correspondent Pod.
 
 5. Now run `mysql` tool in the `percona-client` command shell using the password
-    obtained from the Secret instead of the `<root password>` placeholder:
+    obtained from the Secret instead of the `<root password>` placeholder.
+    The command will look different depending on whether the cluster uses load
+    balancing with [HAProxy](haproxy-conf.md) (the default behavior) or uses
+    [MySQL Router](router-conf.md) (can be used with Group Replication clusters):
 
-    ```{.bash data-prompt="$"}
-    $ mysql -h cluster1-haproxy -u root -p <root password>
-    ```
+    === "If using HAProxy (default)"
+        ``` {.bash data-prompt="$" }
+        $ mysql -h cluster1-haproxy -uroot -p<root password>
+        ```
+
+    === "If using MySQL Router"
+        ``` {.bash data-prompt="$" }
+        $ mysql -h cluster1-router -uroot -p<root password>
+        ```
     
     ??? example "Expected output"
 
