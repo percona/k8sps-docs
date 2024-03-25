@@ -1,45 +1,57 @@
-1. You will need password for the `root` user to access the
-    cluster. Use `kubectl get secrets` command to see the list of Secrets
-    objects (by default the Secrets object you are interested in has
-    `cluster1-secrets` name). Then
-    `kubectl get secret cluster1-secrets -o yaml` command will return
-    the YAML file with generated Secrets, including the `root` password, which
+To connect to Percona Server for MySQL you will need the password for the root user. Passwords are stored in the [Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) object, which was generated during the previous steps.
+
+Here’s how to get it:
+
+1. List the Secrets objects.
+
+    ```{.bash data-prompt="$"}
+    $ {{ commandName }} get secrets
+    ```
+    It will show you the list of Secrets objects (by default the Secrets object you are interested in has `cluster1-secrets` name).
+
+2. Use the following command to get the password of the `root` user.  Substitute `cluster1` with your value, if needed:
+    
+    ```{.bash data-prompt="$"}
+    $ {{ commandName }} get secret cluster1-secrets -o yaml
+    ```
+    
+    The command returns the YAML file with generated Secrets, including the `root` password, which
     should look as follows:
 
-    ```yaml
+    ```{.yaml .no-copy}
     ...
     data:
       ...
-      root: MWV1VDdZSGxYWHNhcHpYTjF3Ug==
+      root: <base64-encoded-password>
     ```
 
-    Here the actual password is base64-encoded. Use 
-    `echo 'MWV1VDdZSGxYWHNhcHpYTjF3Ug==' | base64 --decode` command to bring it
-    back to a human-readable form.
-
-2. Run a container with `mysql` tool and connect its console output to your
-    terminal. The following command will do this, naming the new Pod
-    `percona-client`:
+3. The actual password is base64-encoded. Use the following command to bring it
+    back to a human-readable form:
 
     ```{.bash data-prompt="$"}
-    $ kubectl run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
+    $ echo '<base64-encoded-password>' | base64 --decode
     ```
 
-    Executing it may require some time to deploy the correspondent Pod.
+4. Run a container with `mysql` tool and connect its console output to your terminal. The following command will do this, naming the new Pod `percona-client`:
 
-3. Now run `mysql` tool in the percona-client command shell using the password
+    ```{.bash data-prompt="$"}
+    $ {{ commandName }} run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
+    ```
+
+    It may require some time to execute the command and deploy the correspondent Pod.
+
+5. Now run `mysql` tool in the `percona-client` command shell using the password
     obtained from the Secret instead of the `<root password>` placeholder.
     The command will look different depending on whether the cluster uses load
     balancing with [HAProxy](haproxy-conf.md) (the default behavior) or uses
-    [MySQL Router](router-conf.md) (can be used with Group Replication clusters
-    only):
+    [MySQL Router](router-conf.md) (can be used with Group Replication clusters):
 
-    === "if using HAProxy (default)"
+    === "If using HAProxy (default)"
         ``` {.bash data-prompt="$" }
         $ mysql -h cluster1-haproxy -uroot -p<root password>
         ```
 
-    === "if using Router"
+    === "If using MySQL Router"
         ``` {.bash data-prompt="$" }
         $ mysql -h cluster1-router -uroot -p<root password>
         ```
@@ -64,7 +76,7 @@
         mysql>
         ```
 
-    The following example will use the MySQL prompt to check the
+    The following example uses the MySQL prompt to check the
     `max_connections` variable:
 
     ```{.bash data-prompt="mysql>"}
