@@ -15,37 +15,36 @@ Install Helm following its [official installation instructions :octicons-link-ex
 1. Add the Percona’s Helm charts repository and make your Helm client up to
     date with it:
 
-   ```{.bash data-prompt="$"}
-   $ helm repo add percona https://percona.github.io/percona-helm-charts/
-   $ helm repo update
-   ```
+    ```{.bash data-prompt="$"}
+    $ helm repo add percona https://percona.github.io/percona-helm-charts/
+    $ helm repo update
+    ```
 
 2. Install the Percona Operator for MySQL:
 
-   ```{.bash data-prompt="$"}
-   $ helm install my-op percona/ps-operator
-   ```
+    ```{.bash data-prompt="$"}
+    $ helm install my-op percona/ps-operator
+    ```
 
-   The `my-op` parameter in the above example is the name of [a new release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
-   which is created for the Operator when you install its Helm chart (use any
-   name you like).
+    The `my-op` parameter in the above example is the name of [a new release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
+    which is created for the Operator when you install its Helm chart (use any
+    name you like).
 
-   !!! note
+    !!! note
 
-       If nothing explicitly specified, `helm install` command will work
-       with `default` namespace. To use different namespace, provide it with
-       the following additional parameter: `--namespace my-namespace`.
-
+        If nothing explicitly specified, `helm install` command will work
+        with `default` namespace. To use different namespace, provide it with
+        the following additional parameter: `--namespace my-namespace`.
 
 3. Install Percona Server for MySQL:
 
-   ```{.bash data-prompt="$"}
-   $ helm install my-db percona/ps-db
-   ```
+    ```{.bash data-prompt="$"}
+    $ helm install my-db percona/ps-db
+    ```
 
-   The `my-db` parameter in the above example is the name of [a new release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
-   which is created for the Percona Server for MySQL when you install its Helm
-   chart (use any name you like).
+    The `my-db` parameter in the above example is the name of [a new release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
+    which is created for the Percona Server for MySQL when you install its Helm
+    chart (use any name you like).
 
 ## Installing Percona Server for MySQL with customized parameters
 
