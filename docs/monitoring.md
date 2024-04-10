@@ -34,8 +34,7 @@ To install PMM Client as a side-car container in your Kubernetes-based environme
 
     === ":material-console: From command line"
 
-        You can query your PMM Server installation to generate and get
-        the API Key using `curl` and `jq` utilities. 
+        You can query your PMM Server to generate and get the API Key using `curl` and `jq` utilities. 
 
         To do it, you will need your PMM Server IP address or hostname, and the admin user credentials.
 
