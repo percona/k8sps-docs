@@ -47,7 +47,7 @@ To install PMM Client as a side-car container in your Kubernetes-based environme
             $ kubectl get secret pmm-secret -o jsonpath='{.data.PMM_ADMIN_PASSWORD}' | base64 --decode
             ```
 
-            Also, such installation allows you to find out the proper PMM Server external IP using the appropriate
+            Also, such installation allows you to get the proper PMM Server external IP using the appropriate
             Kubernetes Service:
    
             ```{.bash data-prompt="$"}
