@@ -4,7 +4,7 @@ site_name: Percona Operator for MySQL based on Percona Server for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
-copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2023
+copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2024
 use_directory_urls: false
 repo_name: percona/k8sps-docs
 repo_url: https://github.com/percona/k8sps-docs
@@ -113,7 +113,7 @@ plugins:
   with-pdf:
     output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
     cover_title: "Percona Operator for MySQL based on Percona Server for MySQL documentation"
-    cover_subtitle: 0.6.0 (September 5, 2023)
+    cover_subtitle: 0.7.0 (March 25, 2024)
     author: "Percona Technical Documentation Team"
     cover_logo: docs/assets/images/percona_kubernetes_icon.png
     custom_template_path: _resource/templates
@@ -132,16 +132,17 @@ extra: # Used in main.html template and can't be externalized
     https://docs.percona.com
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
-  release: '0.6.0'
-  apiversion: '0-6-0'
-  ps80recommended: '8.0.33-25'
-  pxbrecommended: '8.0.33-27'
-  pmm2recommended: '2.39'
-  haproxyrecommended: '2.8.1'
-  routerrecommended: '8.0.33-25'
-  orchestratorrecommended: '3.2.6-9'
-  gkerecommended: '1.27'
-  certmanagerrecommended: '1.11.0'
+  commandName: 'kubectl'
+  release: '0.7.0'
+  apiversion: '0-7-0'
+  ps80recommended: '8.0.36-28'
+  pxbrecommended: '8.0.35-30'
+  pmm2recommended: '2.41.1'
+  haproxyrecommended: '2.8.5'
+  routerrecommended: '8.0.36'
+  orchestratorrecommended: '3.2.6-12'
+  gkerecommended: '1.29'
+  certmanagerrecommended: '1.14.4'
   version:
     provider: mike
 
@@ -151,13 +152,20 @@ nav:
     - Welcome: index.md
     - Features:
           - "Design and architecture": architecture.md
-          
     - Quickstart guides:
-          - "Install with Helm": helm.md
-          - "Install on Minikube": minikube.md
+          - Overview: quickstart.md
+          - Quick install:
+            - "Install with Helm": helm.md
+            - "Install with kubectl": kubectl.md
+          - Connect to the database: connect.md
+          - Insert data: data-insert.md
+          - Make a backup: backup-tutorial.md
+          - Monitor the database with PMM: monitoring-tutorial.md
+          - what-next.md
           
     - Installation:
           - "System Requirements": System-Requirements.md
+          - "Install on Minikube": minikube.md
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
           - "Generic Kubernetes installation": kubernetes.md
@@ -197,6 +205,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - "Percona Operator for MySQL 0.7.0 (2024-03-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.md
           - "Percona Operator for MySQL 0.6.0 (2023-09-05)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.md
           - "Percona Operator for MySQL 0.5.0 (2023-03-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md
           - "Percona Operator for MySQL 0.4.0 (2023-01-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md
