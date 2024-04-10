@@ -40,7 +40,7 @@ To install PMM Client as a side-car container in your Kubernetes-based environme
 
         !!! note
 
-            If your PMM Server is installed [on your Kubernetes cluster](https://docs.percona.com/percona-monitoring-and-management/setting-up/server/helm.html),
+            If your PMM Server [is installed on your Kubernetes cluster](https://docs.percona.com/percona-monitoring-and-management/setting-up/server/helm.html),
             you can find the admin password as follows:
 
             ```{.bash data-prompt="$"}
