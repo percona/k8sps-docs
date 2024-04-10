@@ -34,34 +34,42 @@ To install PMM Client as a side-car container in your Kubernetes-based environme
 
     === ":material-console: From command line"
 
-        You can query your PMM Server installation for the API
-        Key using `curl` and `jq` utilities. 
+        You can query your PMM Server installation to generate and get
+        the API Key using `curl` and `jq` utilities. 
 
-        Retrieve the user credentials from the PMM Server:
+        To do it, you will need your PMM Server IP address or hostname, and the admin user credentials.
 
-        ```.bash
-        PMM_AUTH=$(echo -n admin:$(kubectl get secret pmm-secret -o jsonpath='{.data.PMM_ADMIN_PASSWORD}' | base64 --decode) | base64)
+        !!! note
+
+            If your PMM Server is installed [on your Kubernetes cluster](https://docs.percona.com/percona-monitoring-and-management/setting-up/server/helm.html),
+            you can find the admin password as follows:
+
+            ```{.bash data-prompt="$"}
+            $ kubectl get secret pmm-secret -o jsonpath='{.data.PMM_ADMIN_PASSWORD}' | base64 --decode
+            ```
+
+            Also, such installation allows you to find out the proper PMM Server external IP using the appropriate
+            Kubernetes Service:
+   
+            ```{.bash data-prompt="$"}
+            $ kubectl get services monitoring-service -oyaml -o jsonpath='{.status.loadBalancer.ingress[0].ip}
+            ```
+
+        To generate API_KEY and get the value, run the following command, substituting the `<ADMIN_PASSWORD>`
+        and `<PMM_SERVER_IP>` placeholders with appropriate values:
+
+        ```{.bash data-prompt="$"}
+        $ curl --insecure -X POST -H "Authorization: Basic  admin:<ADMIN_PASSWORD>" -H 'Content-Type: application/json'  -d '{"name":"operator", "role": "Admin"}' "https://<PMM_SERVER_IP>/graph/api/auth/keys" | jq .key | base64 --decode
         ```
 
-        Replace the `$PMM_SERVER_IP` placeholder with your real PMM Server hostname in the following command:
-        
-        ```.bash 
-        export API_KEY=$(curl --insecure -X POST -H "Authorization: Basic $PMM_AUTH" -H 'Content-Type: application/json'  -d '{"name":"operator", "role": "Admin"}' "https://$PMM_SERVER_IP/graph/api/auth/keys" | jq .key)
-        ```
-
-        To get the API_KEY value, run:
-
-        ```.bash
-        echo $API_KEY
-        ```
-
-        The output shows the base64 encoded API key. 
+        The above command generates new API Key named `operator`. API Key names are unique within the PMM Severer; to generate another API Key, you should use some different
+        key name.
 
     !!! note
 
         The API key is not rotated. 
 
-2. Specify the API key as the `pmmserverkey` value in the [users Secrets](users.md/#system-users) object.
+3. Specify the API key as the `pmmserverkey` value in the [users Secrets](users.md/#system-users) object.
 
     === "in Linux"
 
@@ -75,7 +83,7 @@ To install PMM Client as a side-car container in your Kubernetes-based environme
         $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64)'}}'
         ```
 
-3. Update the `pmm`
+4. Update the `pmm`
     section in the
     [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
     file.
@@ -84,13 +92,13 @@ To install PMM Client as a side-car container in your Kubernetes-based environme
     * set the `pmm.serverHost` key to your PMM Server hostname or IP address
         (it should be resolvable and reachable from within your cluster)
     
-4. When done, apply the edited `deploy/cr.yaml` file:
+5. When done, apply the edited `deploy/cr.yaml` file:
 
     ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/cr.yaml
     ```
 
-5. Check that corresponding Pods are not in a cycle of stopping and restarting.
+6. Check that corresponding Pods are not in a cycle of stopping and restarting.
     This cycle occurs if there are errors on the previous steps:
 
     ```{.bash data-prompt="$"}
@@ -98,6 +106,6 @@ To install PMM Client as a side-car container in your Kubernetes-based environme
     $ kubectl logs cluster1-mysql-0 -c pmm-client
     ```
 
-6. Now you can access PMM via *https* in a web browser, with the
+7. Now you can access PMM via *https* in a web browser, with the
     login/password authentication, and the browser is configured to show
     Percona Server for MySQL metrics.
