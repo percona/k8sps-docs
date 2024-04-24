@@ -1,6 +1,6 @@
 # MkDocs configuration
 # Used as base - look for .yml files with INHERIT
-site_name: Percona Operator for MySQL based on Percona Server for MySQL
+site_name: Percona Operator for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
@@ -59,7 +59,8 @@ extra_css:
 extra_javascript:
    - js/promptremover.js
    - js/consent.js
-#  - js/version-select.js
+   - js/percona-select.js
+#   - js/version-select.js
 #  - js/toctree.js
 #  - js/lightgallery.min.js
 
