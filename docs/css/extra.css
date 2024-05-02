@@ -6,12 +6,12 @@
     }
   }
 
-  /* Type override due to large titles used in the version switcher */
-  
-  #versionSelect {
-      font-size: 0.5625rem;
-      vertical-align: 0.0625em;
-  }
-  .version-select::after {
-      font-size: 0.8em;
-  }
+/* Type override due to large titles used in the version switcher */
+
+#versionSelect {
+    font-size: 0.5625rem;
+    vertical-align: 0.0625em;
+}
+.version-select::after {
+    font-size: 0.8em;
+}
