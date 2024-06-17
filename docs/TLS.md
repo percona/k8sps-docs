@@ -100,7 +100,7 @@ $ cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
 }
 EOF
 
-cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
+$ cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
 {
   "hosts": [
     "*.${CLUSTER_NAME}-mysql",
