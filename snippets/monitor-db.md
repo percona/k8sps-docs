@@ -28,9 +28,44 @@ container in your Kubernetes-based environment:
 
 1. Authorize PMM Client within PMM Server.
     <a name="operator-monitoring-client-token"></a>
-    1. [Acquire the API Key from your PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication). Specify the Admin role when getting the API Key. 
+    1. Acquire the API Key from your PMM Server (specify the Admin role when getting the API Key).
 
         <i warning>:material-alert: Warning:</i> The API key is not rotated automatically.
+
+        === ":material-view-dashboard-variant: From PMM UI" 
+
+            [Generate the PMM API key :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication){.md-button} 
+
+        === ":material-console: From command line"
+
+            You can query your PMM Server to generate and get the API Key using `curl` and `jq` utilities. 
+
+            To do it, you will need your PMM Server IP address or hostname, and the admin user credentials.
+
+            !!! note
+
+                If your PMM Server [is installed on your Kubernetes cluster](https://docs.percona.com/percona-monitoring-and-management/setting-up/server/helm.html),
+                you can find the admin password as follows:
+
+                ```{.bash data-prompt="$"}
+                $ kubectl get secret pmm-secret -o jsonpath='{.data.PMM_ADMIN_PASSWORD}' | base64 --decode
+                ```
+
+                Also, such installation allows you to get the proper PMM Server external IP using the appropriate
+                Kubernetes Service:
+   
+                ```{.bash data-prompt="$"}
+                $ kubectl get services monitoring-service -oyaml -o jsonpath='{.status.loadBalancer.ingress[0].ip}
+                ```
+
+            To generate API_KEY and get the value, run the following command, substituting the `<ADMIN_PASSWORD>`
+            and `<PMM_SERVER_IP>` placeholders with appropriate values:
+
+            ```{.bash data-prompt="$"}
+            $ curl --insecure -X POST -H "Authorization: Basic  admin:<ADMIN_PASSWORD>" -H 'Content-Type: application/json'  -d '{"name":"operator", "role": "Admin"}' "https://<PMM_SERVER_IP>/graph/api/auth/keys" | jq .key | base64 --decode
+            ```
+
+            The above command generates new API Key named `operator`. API Key names are unique within the PMM Severer; to generate another API Key, you should use some different key name.
 
     2. Set `pmmserverkey` in the [users Secrets](users.md/#system-users) object to this obtained API Key value. For example, setting the PMM Server API Key to `new_key` in the `cluster1-secrets` object can be done with the following command:
 
@@ -49,14 +84,15 @@ container in your Kubernetes-based environment:
 2. Update the `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{ release }}/deploy/cr.yaml) file:
 
     * Set `pmm.enabled`=`true`.
-    * Specify your PMM Server hostname or an IP address for the `pmm.serverHost` option. The PMM Server IP address should be resolvable and reachable from within your cluster.
+    * Specify your PMM Server hostname or an IP address for the `pmm.serverHost` option (it should be resolvable and reachable from within your cluster).
 
      ```yaml
      pmm:
        enabled: true
        image: percona/pmm-client:{{pmm2recommended}}
        serverHost: monitoring-service
-     ``` 
+     ```
+
 3. Apply the changes:
 
     ``` {.bash data-prompt="$"}
