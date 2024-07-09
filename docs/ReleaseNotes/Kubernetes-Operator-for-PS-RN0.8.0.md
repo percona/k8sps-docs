@@ -12,6 +12,20 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Highlights
 
+### Fixing the overloaded allowUnsafeConfigurations flag
+
+In the previous Operator versions `allowUnsafeConfigurations` Custom Resource option was used to allow configuring a cluster with unsafe parameters, such as starting it with unsafe number of MySQL or proxy instances. In fact, setting this option to `true` resulted in a wide range of reduced safety features without the user's explicit intent.
+
+With this release, a separate `unsafeFlags` Custom Resource section is introduced for the fine-grained control of the safety loosening features:
+
+```yaml
+unsafeFlags:
+  mysqlSize: true
+  proxy: true
+  proxySize: true
+  orchestrator: true
+  orchestratorSize: true
+```
 
 ### Other improvements
 
@@ -20,7 +34,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 * {{ k8spsjira(149) }}: HAProxy - customizable health checks and timeouts
 * {{ k8spsjira(43) }}: Improve CR status
-* {{ k8spsjira(186) }}: Unsafe flag behavior change
+* {{ k8spsjira(186) }}: Removing `allowUnsafeConfigurations` Custom Resource option in favor of fine-grained safety control in the `unsafeFlags` subsection
 * {{ k8spsjira(241) }}: Support cluster wide
 * {{ k8spsjira(347) }}: [investigation] Check new PS Binlog Server
 
@@ -30,7 +44,6 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 * {{ k8spsjira(338) }}: [investigation] Cluster creation (from existing PVCs) FullClusterCrachDetected error status
 * {{ k8spsjira(334) }}: Add domain-qualified finalizer names
 * {{ k8spsjira(333) }}: improve delete-mysql-pods-in-order finalizer in group replication
-* {{ k8spsjira(328) }}: Improve version-service test
 
 ## Bugs Fixed
 
@@ -43,6 +56,10 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 * {{ k8spsjira(301) }}: multiple errors on mysql pod delete
 * {{ k8spsjira(304) }}: [investigation] operator logs flooded with router error messages after full cluster crash
 * {{ k8spsjira(307) }}: missing log messages on smart update
+
+## Deprecation and removal
+
+* Starting from now, `allowUnsafeConfigurations` Custom Resource option is deprecated in favor of a number of options under the `unsafeFlags` subsection. Setting `allowUnsafeConfigurations` won't have any effect; upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under [unsafeFlags](../operator.md#operator-unsafeflags-section) set to true and [TLS funuctionality disabled](../TLS.md#run-percona-server-for-mongodb-without-tls)
 
 ## Supported Platforms
 
