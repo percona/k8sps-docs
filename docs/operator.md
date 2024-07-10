@@ -79,7 +79,15 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `false`    |
 
-### <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
+### `allowUnsafeConfigurations`
+
+Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false`  |
+
+## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
 The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
 
