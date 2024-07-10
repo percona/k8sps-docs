@@ -11,7 +11,7 @@ Percona Server for MySQL managed by the Operator is configured via the spec sect
 of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
 file.
 
-The metadata part of this file contains the following keys:
+The metadata part of PerconaServerMySQL Custom Resource contains the following keys:
 
 * <a name="metadata-name"></a> `name` (`cluster1` by default) sets the name of your Percona Server for
 MySQL cluster; it should include only [URL-compatible characters :octicons-link-external-16:](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3),
@@ -21,24 +21,63 @@ alphanumeric character;
 
 * `finalizers.delete-mysql-pods-in-order` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
 
-The spec part of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains the following sections:
+The toplevel spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
 
-| Key             | Value type | Default            | Description                                |
-| --------------- | ---------- | ------------------ | ------------------------------------------ |
-| mysql           | subdoc     |                    | Percona Server for MySQL general section   |
-| proxy.haproxy   | subdoc     |                    | HAProxy subsection                         |
-| proxy.router    | subdoc     |                    | MySQL Router subsection                    |
-| orchestrator    | subdoc     |                    | Orchestrator section                       |
-| pmm             | subdoc     |                    | Percona Monitoring and Management section  |
-| initImage       | string     | `perconalab/percona-server-mysql-operator:{{ release }}` | An alternative init image for the Operator |
-| secretsName     | string     | `cluster1-secrets` | A name for [users secrets](users.md#users) |
-| sslSecretName   | string     | `cluster1-ssl`     | A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details |
-|ignoreAnnotations| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator |
-| ignoreLabels    | subdoc     | `rack`             | The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator |
-| updateStrategy  | string     | `SmartUpdate`      | A strategy the Operator uses for [upgrades](update.md) |
-| upgradeOptions  | subdoc     |                    | Options to control Percona Server for MySQL version choice at the deployment time and during upgrades |
-| pause           | boolean    | `false`            | Pause/resume: setting it to `true` gracefully stops the cluster, and setting it to `false` after shut down starts the cluster back   |
-| allowUnsafeConfigurations    | boolean | `false`  | Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults)                           |
+### `initImage`
+
+An alternative init image for the Operator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `secretsName`
+
+A name for [users secrets](users.md#users).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cluster1-secrets` |
+
+### `sslSecretName`
+
+A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cluster1-ssl`     |
+
+### `ignoreAnnotations`
+
+The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc      | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` |
+
+### `ignoreLabels`
+
+The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc      | `rack`             |
+
+### `updateStrategy`
+
+A strategy the Operator uses for [upgrades](update.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `SmartUpdate` |
+
+### `pause`
+
+Pause/resume: setting it to `true` gracefully stops the cluster, and setting it to `false` after shut down starts the cluster back.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false`    |
 
 ### <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
