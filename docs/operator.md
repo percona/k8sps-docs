@@ -44,845 +44,1293 @@ The spec part of the [deploy/cr.yaml :octicons-link-external-16:](https://github
 
 The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('tls.SANs') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration |
-|                 | |
-| **Key**         | {{ optionlink('tls.issuerConf.name') }} |
-| **Value**       | string |
-| **Example**     | `special-selfsigned-issuer` |
-| **Description** | A [cert-manager issuer name :octicons-link-external-16:](https://cert-manager.io/docs/concepts/issuer/) |
-|                 | |
-| **Key**         | {{ optionlink('tls.issuerConf.kind') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIssuer` |
-| **Description** | A [cert-manager issuer type :octicons-link-external-16:](https://cert-manager.io/docs/configuration/) |
-|                 | |
-| **Key**         | {{ optionlink('tls.issuerConf.group') }} |
-| **Value**       | string |
-| **Example**     | `cert-manager.io` |
-| **Description** | A [cert-manager issuer group :octicons-link-external-16:](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
+### `tls.SANs`
 
-### <a name="operator-upgradeoptions-section"></a>Upgrade options section
+Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `tls.issuerConf.name`
+
+A [cert-manager issuer name :octicons-link-external-16:](https://cert-manager.io/docs/concepts/issuer/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `special-selfsigned-issuer` |
+
+### `tls.issuerConf.kind`
+
+A [cert-manager issuer type :octicons-link-external-16:](https://cert-manager.io/docs/configuration/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIssuer` |
+
+### `tls.issuerConf.group`
+
+A [cert-manager issuer group :octicons-link-external-16:](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cert-manager.io` |
+
+## <a name="operator-upgradeoptions-section"></a>Upgrade options section
 
 The `upgradeOptions` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('upgradeOptions.versionServiceEndpoint') }} |
-| **Value**       | string |
-| **Example**     | `https://check.percona.com` |
-| **Description** | The Version Service URL used to check versions compatibility for upgrade |
-|                 | |
-| **Key**         | {{ optionlink('upgradeOptions.apply') }} |
-| **Value**       | string |
-| **Example**     | `Disabled` |
-| **Description** | Specifies how images are picked up from the version service on initial start by the Operator. `Never` or `Disabled` will completely disable quering version service for images, otherwise it can be set to `Latest` or `Recommended` or to a specific version string of Percona Server for MySQL (e.g. `8.0.32-24`) that is wished to be version-locked (so that the user can control the version running) |
+### `upgradeOptions.versionServiceEndpoint`
 
-### <a name="operator-mysql-section"></a>Percona Server for MySQL section
+The Version Service URL used to check versions compatibility for upgrade.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `https://check.percona.com` |
+
+### `upgradeOptions.apply`
+
+Specifies how images are picked up from the version service on initial start by the Operator. `Never` or `Disabled` will completely disable quering version service for images, otherwise it can be set to `Latest` or `Recommended` or to a specific version string of Percona Server for MySQL (e.g. `8.0.32-24`) that is wished to be version-locked (so that the user can control the version running) |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Disabled` |
+
+## <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
 The `mysql` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains general
 configuration options for the Percona Server for MySQL.
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('mysql.clusterType') }} |
-| **Value**       | int |
-| **Example**     | `group-replication` |
-| **Description** | The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.autoRecovery') }} |
-| **Value**       | boolean |
-| **Example**     | `true` |
-| **Description** | Enables or disables the Operator from attempting to fix the issue in the event of a full cluster crash  |
-|                 | |
-| **Key**         | {{ optionlink('mysql.size') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | The number of the Percona Server for MySQL instances |
-|                 | |
-| **Key**         | {{ optionlink('mysql.image') }} |
-| **Value**       | string |
-| **Example**     | `percona/percona-server:{{ ps80recommended }}` |
-| **Description** | The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](images.md#custom-registry-images)) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.imagePullSecrets.name') }} |
-| **Value**       | string |
-| **Example**     | `private-registry-credentials` |
-| **Description** | The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.initImage') }} |
-| **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
-| **Description** | An alternative init image for MySQL Pods |
-|                 | |
-| **Key**         | {{ optionlink('mysql.primaryServiceType') }} |
-| **Value**       | string |
-| **Example**     | `LoadBalancer` |
-| **Description** | Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Primary instance if the asyncronous replication is turned on |
-|                 | |
-| **Key**         | {{ optionlink('mysql.replicasServiceType') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIP` |
-| **Description** | Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Replica instances if the asyncronous replication is turned on |
-|                 | |
-| **Key**         | {{ optionlink('mysql.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `512M` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container |
-|                 | |
-| **Key**         | {{ optionlink('mysql.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `1G` |
-| **Description** | [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container |
-|                 | |
-| **Key**         | {{ optionlink('mysql.affinity.antiAffinityTopologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
-|                 | |
-| **Key**         | {{ optionlink('mysql.affinity.advanced') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used |
-|                 | |
-| **Key**         | {{ optionlink('mysql.topologySpreadConstraints.labelSelector.matchLabels') }} |
-| **Value**       | label |
-| **Example**     | `app.kubernetes.io/name: percona-server` |
-| **Description** | The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.topologySpreadConstraints.maxSkew') }} |
-| **Value**       | int |
-| **Example**     | 1 |
-| **Description** | The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.topologySpreadConstraints.topologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.topologySpreadConstraints.whenUnsatisfiable') }} |
-| **Value**       | string |
-| **Example**     | `DoNotSchedule` |
-| **Description** | What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.expose.enabled') }} |
-| **Value**       | boolean |
-| **Example**     | `false` |
-| **Description** | Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses |
-|                 | |
-| **Key**         | {{ optionlink('mysql.expose.type') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure |
-|                 | |
-| **Key**         | {{ optionlink('mysql.expose.annotations') }} |
-| **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
-| **Description** | The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.expose.externalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('mysql.expose.internalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('mysql.expose.labels') }} |
-| **Value**       | label |
-| **Example**     | `rack: rack-22` |
-| **Description** | [Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.expose.loadBalancerSourceRanges') }} |
-| **Value**       | string |
-| **Example**     | `10.0.0.0/8` |
-| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
-|                 | |
-| **Key**         | {{ optionlink('mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage') }} |
-| **Value**       | string |
-| **Example**     | `2Gi` |
-| **Description** | The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Percona Server for MySQL |
-|                 | |
-| **Key**         | {{ optionlink('mysql.configuration') }} |
-| **Value**       | string |
-| **Example**     | <pre>&#124;<br>`[mysqld]`<br>`max_connections=250`</pre> |
-| **Description** | The `my.cnf` file options to be passed to Percona Server for MySQL instances |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecars.image') }} |
-| **Value**       | string |
-| **Example**     | `busybox` |
-| **Description** | Image for the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecars.command') }} |
-| **Value**       | array |
-| **Example**     | `["sleep", "30d"]` |
-| **Description** | Command for the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecars.name') }} |
-| **Value**       | string |
-| **Example**     | `my-sidecar-1` |
-| **Description** | Name of the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecars.volumeMounts.mountPath') }} |
-| **Value**       | string |
-| **Example**     | `/volume1` |
-| **Description** | Mount path of the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecars.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `16M` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL sidecar container |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecars.volumeMounts.name') }} |
-| **Value**       | string |
-| **Example**     | `sidecar-volume-claim` |
-| **Description** | Name of the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecarVolumes') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | [Volume specification :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Percona Server for MySQL Pods |
-|                 | |
-| **Key**         | {{ optionlink('mysql.sidecarPVCs') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | [Persistent Volume Claim :octicons-link-external-16:](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
+### `mysql.clusterType`
 
-### <a name="operator-haproxy-section"></a>HAProxy subsection
+The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `group-replication` |
+
+### `mysql.autoRecovery`
+
+Enables or disables the Operator from attempting to fix the issue in the event of a full cluster crash .
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `mysql.size`
+
+The number of the Percona Server for MySQL instances.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `mysql.image`
+
+The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](images.md#custom-registry-images)).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `percona/percona-server:{{ ps80recommended }}` |
+
+### `mysql.imagePullSecrets.name`
+
+The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `private-registry-credentials` |
+
+### `mysql.initImage`
+
+An alternative init image for MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `mysql.primaryServiceType`
+
+Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Primary instance if the asyncronous replication is turned on.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `LoadBalancer` |
+
+### `mysql.replicasServiceType`
+
+Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Replica instances if the asyncronous replication is turned on.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+### `mysql.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `512M` |
+
+### `mysql.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `1G` |
+
+### `mysql.affinity.antiAffinityTopologyKey`
+
+The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `mysql.affinity.advanced`
+
+In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `mysql.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `app.kubernetes.io/name: percona-server` |
+
+### `mysql.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `mysql.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `mysql.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `DoNotSchedule` |
+
+### `mysql.expose.enabled`
+
+Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
+
+### `mysql.expose.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+### `mysql.expose.annotations`
+
+The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `mysql.expose.externalTrafficPolicy`
+
+Specifies whether Service should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `mysql.expose.internalTrafficPolicy`
+
+Specifies whether Service should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `mysql.expose.labels`
+
+[Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `rack: rack-22` |
+
+### `mysql.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `10.0.0.0/8` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage`
+
+The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Percona Server for MySQL.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `2Gi` |
+
+### `mysql.configuration`
+
+The `my.cnf` file options to be passed to Percona Server for MySQL instances.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | <pre>&#124;<br>`[mysqld]`<br>`max_connections=250`</pre> |
+
+### `mysql.sidecars.image`
+
+Image for the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `busybox` |
+
+### `mysql.sidecars.command`
+
+Command for the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+|:material-application-array-outline: array     | `["sleep", "30d"]` |
+
+### `mysql.sidecars.name`
+
+Name of the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-sidecar-1` |
+
+### `mysql.sidecars.volumeMounts.mountPath`
+
+Mount path of the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `/volume1` |
+
+### `mysql.sidecars.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL sidecar container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `16M` |
+
+### `mysql.sidecars.volumeMounts.name`
+
+Name of the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `sidecar-volume-claim` |
+
+### `mysql.sidecarVolumes`
+
+[Volume specification :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Percona Server for MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `mysql.sidecarPVCs`
+
+[Persistent Volume Claim :octicons-link-external-16:](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+## <a name="operator-haproxy-section"></a>HAProxy subsection
 
 The `proxy.haproxy` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
 file contains configuration options for the HAProxy service.
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('proxy.haproxy.enabled') }} |
-| **Value**       | boolean |
-| **Example**     | `true` |
-| **Description** | Enables or disables [load balancing with HAProxy :octicons-link-external-16:](https://haproxy.org) [Services :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.size') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.image') }} |
-| **Value**       | string |
-| **Example**     | `percona/perconalab-xtradb-cluster-operator:{{ release }}-haproxy` |
-| **Description** | HAProxy Docker image to use |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.imagePullPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Always` |
-| **Description** | The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `1G` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.resources.requests.cpu') }} |
-| **Value**       | string |
-| **Example**     | `600m` |
-| **Description** | [Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `1G` |
-| **Description** | [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.resources.limits.cpu') }} |
-| **Value**       | string |
-| **Example**     | `700m` |
-| **Description** | [Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.env.name') }} |
-| **Value**       | string |
-| **Example**     | `HA_CONNECTION_TIMEOUT` |
-| **Description** | Name of an environment variable for HAProxy |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.env.value') }} |
-| **Value**       | string |
-| **Example**     | `"1000"` |
-| **Description** | Value of an environment variable for HAProxy |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.envFrom.secretRef.name') }} |
-| **Value**       | string |
-| **Example**     | `haproxy-env-secret` |
-| **Description** | Name of a Secret with environment variables for HAProxy |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.timeoutSeconds') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | Number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.periodSeconds') }} |
-| **Value**       | int |
-| **Example**     | `5` |
-| **Description** | How often (in seconds) to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.successThreshold') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | Minimum consecutive successes for the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.failureThreshold') }} |
-| **Value**       | int |
-| **Example**     | `1` |
-| **Description** | When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.livenessProbes.timeoutSeconds') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | Number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.livenessProbes.periodSeconds') }} |
-| **Value**       | int |
-| **Example**     | `5` |
-| **Description** | How often (in seconds) to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.livenessProbes.successThreshold') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | Minimum consecutive successes for the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.readinessProbes.failureThreshold') }} |
-| **Value**       | int |
-| **Example**     | `1` |
-| **Description** | When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.configuration') }} |
-| **Value**       | string |
-| **Example**     | |
-| **Description** | The [custom HAProxy configuration file](haproxy-conf.md#passing-custom-configuration-options-to-haproxy) contents |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.antiAffinityTopologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.affinity.advanced') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | If available it makes a [topologyKey :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature) node affinity constraint to be ignored |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.topologySpreadConstraints.labelSelector.matchLabels') }} |
-| **Value**       | label |
-| **Example**     | `app.kubernetes.io/name: percona-server` |
-| **Description** | The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.topologySpreadConstraints.maxSkew') }} |
-| **Value**       | int |
-| **Example**     | 1 |
-| **Description** | The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.topologySpreadConstraints.topologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.topologySpreadConstraints.whenUnsatisfiable') }} |
-| **Value**       | string |
-| **Example**     | `DoNotSchedule` |
-| **Description** | What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.expose.type') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for HAProxy exposure |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.expose.annotations') }} |
-| **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
-| **Description** | The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.expose.externalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for HAProxy should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.expose.internalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for HAProxy should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.expose.labels') }} |
-| **Value**       | label |
-| **Example**     | `rack: rack-22` |
-| **Description** | [Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for HAProxy |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.expose.loadBalancerIP') }} |
-| **Value**       | string |
-| **Example**     | `127.0.0.1` |
-| **Description** | The static IP-address for the load balancer |
-|                 | |
-| **Key**         | {{ optionlink('proxy.haproxy.expose.loadBalancerSourceRanges') }} |
-| **Value**       | string |
-| **Example**     | `10.0.0.0/8` |
-| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
+### `proxy.haproxy.enabled`
 
-### <a name="operator-router-section"></a>Router subsection
+Enables or disables [load balancing with HAProxy :octicons-link-external-16:](https://haproxy.org) [Services :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `proxy.haproxy.size`
+
+The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `proxy.haproxy.image`
+
+HAProxy Docker image to use.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `percona/perconalab-xtradb-cluster-operator:{{ release }}-haproxy` |
+
+### `proxy.haproxy.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `proxy.haproxy.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `1G` |
+
+### `proxy.haproxy.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `600m` |
+
+### `proxy.haproxy.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `1G` |
+
+### `proxy.haproxy.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `700m` |
+
+### `proxy.haproxy.env.name`
+
+Name of an environment variable for HAProxy.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `HA_CONNECTION_TIMEOUT` |
+
+### `proxy.haproxy.env.value`
+
+Value of an environment variable for HAProxy.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"1000"` |
+
+### `proxy.haproxy.envFrom.secretRef.name`
+
+Name of a Secret with environment variables for HAProxy.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `haproxy-env-secret` |
+
+### `proxy.haproxy.readinessProbes.timeoutSeconds`
+
+Number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `proxy.haproxy.readinessProbes.periodSeconds`
+
+How often (in seconds) to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `proxy.haproxy.readinessProbes.successThreshold`
+
+Minimum consecutive successes for the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `proxy.haproxy.readinessProbes.failureThreshold`
+
+When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `proxy.haproxy.livenessProbes.timeoutSeconds`
+
+Number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `proxy.haproxy.livenessProbes.periodSeconds`
+
+How often (in seconds) to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `proxy.haproxy.livenessProbes.successThreshold`
+
+Minimum consecutive successes for the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `proxy.haproxy.readinessProbes.failureThreshold`
+
+When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `proxy.haproxy.configuration`
+
+The [custom HAProxy configuration file](haproxy-conf.md#passing-custom-configuration-options-to-haproxy) contents.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | |
+
+### `proxy.haproxy.antiAffinityTopologyKey`
+
+The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `proxy.haproxy.affinity.advanced`
+
+If available it makes a [topologyKey :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature) node affinity constraint to be ignored.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `proxy.haproxy.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `app.kubernetes.io/name: percona-server` |
+
+### `proxy.haproxy.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `proxy.haproxy.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `proxy.haproxy.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `DoNotSchedule` |
+
+### `proxy.haproxy.expose.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for HAProxy exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+### `proxy.haproxy.expose.annotations`
+
+The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `proxy.haproxy.expose.externalTrafficPolicy`
+
+Specifies whether Service for HAProxy should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `proxy.haproxy.expose.internalTrafficPolicy`
+
+Specifies whether Service for HAProxy should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `proxy.haproxy.expose.labels`
+
+[Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for HAProxy.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `rack: rack-22` |
+
+### `proxy.haproxy.expose.loadBalancerIP`
+
+The static IP-address for the load balancer.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `127.0.0.1` |
+
+### `proxy.haproxy.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `10.0.0.0/8` |
+
+## <a name="operator-router-section"></a>Router subsection
 
 The `proxy.router` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/), which can act as a proxy for Group replication.
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('proxy.router.enabled') }} |
-| **Value**       | boolean |
-| **Example**     | `false` |
-| **Description** | Enables or disables MySQL Router |
-|                 | |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.size') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | The number of the Router Pods to provide routing to MySQL Servers |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.image') }} |
-| **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}-router` |
-| **Description** | Router Docker image to use |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.imagePullPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Always` |
-| **Description** | The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.initImage') }} |
-| **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
-| **Description** | An alternative init image for MySQL Router Pods |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `256M` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `256M` |
-| **Description** | [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.affinity.antiAffinityTopologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.affinity.advanced') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | In cases where the Pods require complex tuning the advanced option turns off the
+### `proxy.router.enabled`
+
+Enables or disables MySQL Router.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
+
+### `proxy.router.size`
+
+The number of the Router Pods to provide routing to MySQL Servers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `proxy.router.image`
+
+Router Docker image to use.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}-router` |
+
+### `proxy.router.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `proxy.router.initImage`
+
+An alternative init image for MySQL Router Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `proxy.router.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `256M` |
+
+### `proxy.router.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `256M` |
+
+### `proxy.router.affinity.antiAffinityTopologyKey`
+
+The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `proxy.router.affinity.advanced`
+
+In cases where the Pods require complex tuning the advanced option turns off the
 `topologyKey` effect. This setting allows the
 [standard Kubernetes affinity constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
-of any complexity to be used |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.topologySpreadConstraints.labelSelector.matchLabels') }} |
-| **Value**       | label |
-| **Example**     | `app.kubernetes.io/name: percona-server` |
-| **Description** | The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.topologySpreadConstraints.maxSkew') }} |
-| **Value**       | int |
-| **Example**     | 1 |
-| **Description** | The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.topologySpreadConstraints.topologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.topologySpreadConstraints.whenUnsatisfiable') }} |
-| **Value**       | string |
-| **Example**     | `DoNotSchedule` |
-| **Description** | What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.configuration') }} |
-| **Value**       | string |
-| **Example**     | <pre>&#124;<br>`[default]`<br>`logging_folder=/tmp/router/log`<br>`[logger]`<br>`level=DEBUG`</pre> |
-| **Description** | Custom configuration options to be passed to MySQL Router |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.expose.type') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for MySQL Router instances exposure |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.expose.annotations') }} |
-| **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
-| **Description** | The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for MySQL Router |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.expose.externalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for MySQL Router should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.expose.internalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for MySQL Router should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.expose.labels') }} |
-| **Value**       | label |
-| **Example**     | `rack: rack-22` |
-| **Description** | [Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for MySQL Router |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.expose.loadBalancerIP') }} |
-| **Value**       | string |
-| **Example**     | `127.0.0.1` |
-| **Description** | The static IP-address for the load balancer |
-|                 | |
-| **Key**         | {{ optionlink('proxy.router.expose.loadBalancerSourceRanges') }} |
-| **Value**       | string |
-| **Example**     | `10.0.0.0/8` |
-| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
+of any complexity to be used.
 
-### <a name="operator-orchestrator-section"></a>Orchestrator section
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+
+### `proxy.router.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `app.kubernetes.io/name: percona-server` |
+
+### `proxy.router.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `proxy.router.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `proxy.router.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `DoNotSchedule` |
+
+### `proxy.router.configuration`
+
+Custom configuration options to be passed to MySQL Router.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | <pre>&#124;<br>`[default]`<br>`logging_folder=/tmp/router/log`<br>`[logger]`<br>`level=DEBUG`</pre> |
+
+### `proxy.router.expose.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for MySQL Router instances exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+### `proxy.router.expose.annotations`
+
+The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for MySQL Router.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `proxy.router.expose.externalTrafficPolicy`
+
+Specifies whether Service for MySQL Router should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `proxy.router.expose.internalTrafficPolicy`
+
+Specifies whether Service for MySQL Router should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `proxy.router.expose.labels`
+
+[Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for MySQL Router.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `rack: rack-22` |
+
+### `proxy.router.expose.loadBalancerIP`
+
+The static IP-address for the load balancer.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `127.0.0.1` |
+
+### `proxy.router.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `10.0.0.0/8` |
+
+## <a name="operator-orchestrator-section"></a>Orchestrator section
 
 The `orchestrator` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
 configuration options for the Orchestrator - a replication topology manager, used if asynchronous replication is turned on.
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('orchestrator.enabled') }} |
-| **Value**       | boolean |
-| **Example**     | `true` |
-| **Description** | Enables or disables the Orchestrator |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.size') }} |
-| **Value**       | int |
-| **Example**     | `3` |
-| **Description** | The number of the Orchestrator Pods to provide load balancing |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.image') }} |
-| **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}-orchestrator` |
-| **Description** | Orchestrator Docker image to use |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.imagePullPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Always` |
-| **Description** | The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.serviceAccountName') }} |
-| **Value**       | string |
-| **Example**     | `ercona-server-mysql-operator-orchestrator` |
-| **Description** | The [Kubernetes Service Account :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the Orchestrator Pods |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.initImage') }} |
-| **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
-| **Description** | An alternative init image for Orchestrator Pods |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.affinity.antiAffinityTopologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.affinity.advanced') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.topologySpreadConstraints.labelSelector.matchLabels') }} |
-| **Value**       | label |
-| **Example**     | `app.kubernetes.io/name: percona-server` |
-| **Description** | The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.topologySpreadConstraints.maxSkew') }} |
-| **Value**       | int |
-| **Example**     | 1 |
-| **Description** | The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.topologySpreadConstraints.topologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.topologySpreadConstraints.whenUnsatisfiable') }} |
-| **Value**       | string |
-| **Example**     | `DoNotSchedule` |
-| **Description** | What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.expose.type') }} |
-| **Value**       | string |
-| **Example**     | `ClusterIP` |
-| **Description** | The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for Orchestrator instances exposure |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.expose.annotations') }} |
-| **Value**       | string |
-| **Example**     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
-| **Description** | The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the Orchestrator |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.expose.externalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for the Orchestrator should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.expose.internalTrafficPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Cluster` |
-| **Description** | Specifies whether Service for the Orchestrator should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.expose.labels') }} |
-| **Value**       | label |
-| **Example**     | `rack: rack-22` |
-| **Description** | [Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for the Orchestrator |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.expose.loadBalancerSourceRanges') }} |
-| **Value**       | string |
-| **Example**     | `10.0.0.0/8` |
-| **Description** | The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `128M` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `256M` |
-| **Description** | [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container |
-|                 | |
-| **Key**         | {{ optionlink('orchestrator.volumeSpec.persistentVolumeClaim.resources.requests.storage') }} |
-| **Value**       | string |
-| **Example**     | `1Gi` |
-| **Description** | The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Orchestrator |
+### `orchestrator.enabled`
 
-### <a name="operator-pmm-section"></a>PMM section
+Enables or disables the Orchestrator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `orchestrator.size`
+
+The number of the Orchestrator Pods to provide load balancing.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `orchestrator.image`
+
+Orchestrator Docker image to use.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}-orchestrator` |
+
+### `orchestrator.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `orchestrator.serviceAccountName`
+
+The [Kubernetes Service Account :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ercona-server-mysql-operator-orchestrator` |
+
+### `orchestrator.initImage`
+
+An alternative init image for Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `orchestrator.affinity.antiAffinityTopologyKey`
+
+The Operator [topology key :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `orchestrator.affinity.advanced`
+
+In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `orchestrator.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `app.kubernetes.io/name: percona-server` |
+
+### `orchestrator.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `orchestrator.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `orchestrator.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `DoNotSchedule` |
+
+### `orchestrator.expose.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for Orchestrator instances exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+### `orchestrator.expose.annotations`
+
+The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the Orchestrator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `orchestrator.expose.externalTrafficPolicy`
+
+Specifies whether Service for the Orchestrator should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `orchestrator.expose.internalTrafficPolicy`
+
+Specifies whether Service for the Orchestrator should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `orchestrator.expose.labels`
+
+[Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for the Orchestrator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `rack: rack-22` |
+
+### `orchestrator.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `10.0.0.0/8` |
+
+### `orchestrator.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `128M` |
+
+### `orchestrator.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `256M` |
+
+### `orchestrator.volumeSpec.persistentVolumeClaim.resources.requests.storage`
+
+The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Orchestrator |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `1Gi` |
+
+## <a name="operator-pmm-section"></a>PMM section
 
 The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
 options for Percona Monitoring and Management.
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('pmm.enabled') }} |
-| **Value**       | boolean |
-| **Example**     | `false` |
-| **Description** | Enables or disables [monitoring Percona Server for MySQL with PMM](monitoring.md) |
-|                 | |
-| **Key**         | {{ optionlink('pmm.image') }} |
-| **Value**       | string |
-| **Example**     | `percona/pmm-client:{{ pmm2recommended }}` |
-| **Description** | PMM client Docker image to use |
-|                 | |
-| **Key**         | {{ optionlink('pmm.imagePullPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Always` |
-| **Description** | The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
-|                 | |
-| **Key**         | {{ optionlink('pmm.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `150M` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
-|                 | |
-| **Key**         | {{ optionlink('pmm.resources.requests.cpu') }} |
-| **Value**       | string |
-| **Example**     | `300m` |
-| **Description** | [Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
-|                 | |
-| **Key**         | {{ optionlink('pmm.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `256M` |
-| **Description** | [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
-|                 | |
-| **Key**         | {{ optionlink('pmm.resources.limits.cpu') }} |
-| **Value**       | string |
-| **Example**     | `400m` |
-| **Description** | [Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container |
-|                 | |
-| **Key**         | {{ optionlink('pmm.serverHost') }} |
-| **Value**       | string |
-| **Example**     | `monitoring-service` |
-| **Description** | Address of the PMM Server to collect data from the cluster |
-|                 | |
-| **Key**         | {{ optionlink('pmm.serverUser') }} |
-| **Value**       | string |
-| **Example**     | `admin` |
-| **Description** | The PMM Serve_User. The PMM Server password should be configured using Secrets |
+### `pmm.enabled`
 
-### <a name="operator-backup-section"></a>Backup section
+Enables or disables [monitoring Percona Server for MySQL with PMM](monitoring.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
+
+### `pmm.image`
+
+PMM client Docker image to use.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `percona/pmm-client:{{ pmm2recommended }}` |
+
+### `pmm.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `pmm.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `150M` |
+
+### `pmm.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `300m` |
+
+### `pmm.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `256M` |
+
+### `pmm.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `400m` |
+
+### `pmm.serverHost`
+
+Address of the PMM Server to collect data from the cluster.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `monitoring-service` |
+
+### `pmm.serverUser`
+
+The PMM Serve_User. The PMM Server password should be configured using Secrets.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `admin` |
+
+## <a name="operator-backup-section"></a>Backup section
 
 The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
 file contains the following configuration options for the regular Percona XtraDB Cluster backups.
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('backup.enabled') }} |
-| **Value**       | boolean |
-| **Example**     | `true` |
-| **Description** | Enables or disables making backups |
-|                 | |
-| **Key**         | {{ optionlink('backup.image') }} |
-| **Value**       | string |
-| **Example**     | `percona/percona-server-mysql-operator:{{ release }}-backup` |
-| **Description** | The Percona XtraBackup Docker image to use for the backup |
-|                 | |
-| **Key**         | {{ optionlink('backup.imagePullPolicy') }} |
+### `backup.enabled`
+
+Enables or disables making backups.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `backup.image`
+
+The Percona XtraBackup Docker image to use for the backup.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `percona/percona-server-mysql-operator:{{ release }}-backup` |
+
+### `backup.imagePullPolicy') }} |
 | **Value**       | string  |
 | **Example**     | `Always` |
-| **Description** | The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
-|                 | |
-| **Key**         | {{ optionlink('backup.initImage') }} |
-| **Value**       | string |
-| **Example**     | `perconalab/percona-server-mysql-operator:{{ release }}` |
-| **Description** | An alternative init image for Percona XtraBackup Pods |
-|                 | |
-| **Key**         | {{ optionlink('backup.backoffLimit') }} |
-| **Value**       | int |
-| **Example**     | `6` |
-| **Description** | The number of retries to make a backup (by default, 6 retries are made) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.type') }} |
-| **Value**       | string |
-| **Example**     | `s3` |
-| **Description** | The cloud storage type used for backups. Only `s3` and `azure` types are supported |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.verifyTLS') }} |
-| **Value**       | boolean |
-| **Example**     | `true` |
-| **Description** | Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.nodeSelector') }} |
-| **Value**       | label |
-| **Example**     | `disktype: ssd` |
-| **Description** | [Kubernetes nodeSelector :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `1G` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.resources.requests.cpu') }} |
-| **Value**       | string |
-| **Example**     | `600m` |
-| **Description** | [Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.affinity.nodeAffinity') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | The Operator [node affinity :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) constraint |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.labelSelector.matchLabels') }} |
-| **Value**       | label |
-| **Example**     | `app.kubernetes.io/name: percona-server` |
-| **Description** | The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.maxSkew') }} |
-| **Value**       | int |
-| **Example**     | 1 |
-| **Description** | The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.topologyKey') }} |
-| **Value**       | string |
-| **Example**     | `kubernetes.io/hostname` |
-| **Description** | The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.whenUnsatisfiable') }} |
-| **Value**       | string |
-| **Example**     | `DoNotSchedule` |
-| **Description** | What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.tolerations') }} |
-| **Value**       | subdoc |
-| **Example**     | |
-| **Description** | [Kubernetes Pod tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.schedulerName') }} |
-| **Value**       | string |
-| **Example**     | `mycustom-scheduler` |
-| **Description** | The [Kubernetes Scheduler :octicons-link-external-16:](https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.priorityClassName') }} |
-| **Value**       | string |
-| **Example**     | `high-priority` |
-| **Description** | The [Kubernetes Pod priority class :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.containerSecurityContext') }} |
-| **Value**       | subdoc |
-| **Example**     | `privileged: true` |
-| **Description** | A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.podSecurityContext') }} |
-| **Value**       | subdoc |
-| **Example**     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
-| **Description** | A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.annotations') }} |
-| **Value**       | label |
-| **Example**     | `testName: scheduled-backup` |
-| **Description** | The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.labels') }} |
-| **Value**       | label |
-| **Example**     | `backupWorker: 'True'` |
-| **Description** | [Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.s3.bucket') }} |
-| **Value**       | string  |
-| **Example**     | |
-| **Description** | The [Amazon S3 bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) name for backups |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.s3.&lt;storage-name&gt;.region') }} |
-| **Value**       | string |
-| **Example**     | `us-west-2` |
-| **Description** | The [AWS region :octicons-link-external-16:](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.s3.&lt;storage-name&gt;.prefix') }} |
-| **Value**       | string |
-| **Example**     | `""` |
-| **Description** | The path (sub-folder) to the backups inside the [bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.&lt;storage-name&gt;.s3.credentialsSecret') }} |
-| **Value**       | string |
-| **Example**     | `my-cluster-name-backup-s3` |
-| **Description** | The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys |
-|                 | |
-| **Key**         | {{ optionlink('backup.storages.s3.&lt;storage-name&gt;.endpointUrl') }} |
-| **Value**       | string |
-| **Example**     | |
-| **Description** | The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
 
-### <a name="operator-pt-section"></a>Percona Toolkit section
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+### `backup.initImage`
+
+An alternative init image for Percona XtraBackup Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `backup.backoffLimit`
+
+The number of retries to make a backup (by default, 6 retries are made).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `6` |
+
+### `backup.storages.&lt;storage-name&gt;.type`
+
+The cloud storage type used for backups. Only `s3` and `azure` types are supported.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `s3` |
+
+### `backup.storages.&lt;storage-name&gt;.verifyTLS`
+
+Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `backup.storages.&lt;storage-name&gt;.nodeSelector`
+
+[Kubernetes nodeSelector :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `disktype: ssd` |
+
+### `backup.storages.&lt;storage-name&gt;.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `1G` |
+
+### `backup.storages.&lt;storage-name&gt;.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `600m` |
+
+### `backup.storages.&lt;storage-name&gt;.affinity.nodeAffinity`
+
+The Operator [node affinity :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) constraint.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `app.kubernetes.io/name: percona-server` |
+
+### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `DoNotSchedule` |
+
+### `backup.storages.&lt;storage-name&gt;.tolerations`
+
+[Kubernetes Pod tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `backup.storages.&lt;storage-name&gt;.schedulerName`
+
+The [Kubernetes Scheduler :octicons-link-external-16:](https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `mycustom-scheduler` |
+
+### `backup.storages.&lt;storage-name&gt;.priorityClassName`
+
+The [Kubernetes Pod priority class :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `high-priority` |
+
+### `backup.storages.&lt;storage-name&gt;.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `privileged: true` |
+
+### `backup.storages.&lt;storage-name&gt;.podSecurityContext`
+
+A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
+
+### `backup.storages.&lt;storage-name&gt;.annotations`
+
+The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `testName: scheduled-backup` |
+
+### `backup.storages.&lt;storage-name&gt;.labels`
+
+[Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `backupWorker: 'True'` |
+
+### `backup.storages.&lt;storage-name&gt;.s3.bucket') }} |
+
+The [Amazon S3 bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) name for backups.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     |  |
+
+### `backup.storages.s3.&lt;storage-name&gt;.region`
+
+The [AWS region :octicons-link-external-16:](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `us-west-2` |
+
+### `backup.storages.s3.&lt;storage-name&gt;.prefix`
+
+The path (sub-folder) to the backups inside the [bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `""` |
+
+### `backup.storages.&lt;storage-name&gt;.s3.credentialsSecret`
+
+The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-cluster-name-backup-s3` |
+
+### `backup.storages.s3.&lt;storage-name&gt;.endpointUrl`
+
+The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | |
+
+## <a name="operator-pt-section"></a>Percona Toolkit section
 
 The `toolkit` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
 options for [Percona Toolkit :octicons-link-external-16:](https://docs.percona.com/percona-toolkit/).
 
-|                 | |
-|-----------------|-|
-| **Key**         | {{ optionlink('toolkit.image') }} |
-| **Value**       | string |
-| **Example**     | `percona/pmm-client:{{ pmm2recommended }}` |
-| **Description** | Percona Toolkit client Docker image to use |
-|                 | |
-| **Key**         | {{ optionlink('toolkit.imagePullPolicy') }} |
-| **Value**       | string |
-| **Example**     | `Always` |
-| **Description** | The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
-|                 | |
-| **Key**         | {{ optionlink('toolkit.resources.requests.memory') }} |
-| **Value**       | string |
-| **Example**     | `150M` |
-| **Description** | The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
-|                 | |
-| **Key**         | {{ optionlink('toolkit.resources.requests.cpu') }} |
-| **Value**       | string |
-| **Example**     | `100m` |
-| **Description** | [Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
-|                 | |
-| **Key**         | {{ optionlink('toolkit.resources.limits.memory') }} |
-| **Value**       | string |
-| **Example**     | `256M` |
-| **Description** | [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
-|                 | |
-| **Key**         | {{ optionlink('toolkit.resources.limits.cpu') }} |
-| **Value**       | string |
-| **Example**     | `400m` |
-| **Description** | [Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+### `toolkit.image`
+
+Percona Toolkit client Docker image to use.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `percona/pmm-client:{{ pmm2recommended }}` |
+
+### `toolkit.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `toolkit.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `150M` |
+
+### `toolkit.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `toolkit.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `256M` |
+
+### `toolkit.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `400m` |
 
 ## <a name="operator-backupsource-section"></a> PerconaServerMySQLRestore Custom Resource options
 
