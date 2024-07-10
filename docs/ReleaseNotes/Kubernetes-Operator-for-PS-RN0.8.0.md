@@ -34,7 +34,7 @@ unsafeFlags:
 
 * {{ k8spsjira(149) }}: HAProxy - customizable health checks and timeouts
 * {{ k8spsjira(43) }}: Improve CR status
-* {{ k8spsjira(186) }}: Removing `allowUnsafeConfigurations` Custom Resource option in favor of fine-grained safety control in the `unsafeFlags` subsection
+* {{ k8spsjira(186) }} and {{ k8spsjira(370) }}: Removing `allowUnsafeConfigurations` Custom Resource option in favor of fine-grained safety control in the `unsafeFlags` subsection
 * {{ k8spsjira(241) }}: Support cluster wide
 * {{ k8spsjira(347) }}: [investigation] Check new PS Binlog Server
 
@@ -47,7 +47,6 @@ unsafeFlags:
 
 ## Bugs Fixed
 
-* {{ k8spsjira(370) }}: Incorrect unsafeFlags behavior 
 * {{ k8spsjira(366) }}: Operator panics after deleting cluster
 * {{ k8spsjira(346) }}: Allow the cluster started with 1 node to scale up
 * {{ k8spsjira(341) }}: delete-backup finalizer should be ignored for failed backups
