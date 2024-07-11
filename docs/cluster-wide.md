@@ -1,34 +1,93 @@
-# Install Percona XtraDB Cluster in multi-namespace (cluster-wide) mode
+# Percona Operator for MySQL single-namespace and multi-namespace deployment
 
-## Difference between single-namespace and multi-namespace Operator deployment
+There are two design patterns that you can choose from when deploying Percona Operator for MySQL and Percona Server for MySQL clusters in Kubernetes:
 
-By default, Percona Operator for MySQL based on Percona XtraDB Cluster functions in a specific Kubernetes
-namespace. You can create one during installation (like it is shown in the
-[installation instructions](kubernetes.md#install-kubernetes)) or just use the `default`
-namespace. This approach allows several Operators to co-exist in one
-Kubernetes-based environment, being separated in different namespaces:
+* Namespace-scope - one Operator per Kubernetes namespace,
 
-![image](assets/images/cluster-wide-1.png)
+* Cluster-wide - one Operator can manage clusters in multiple namespaces.
 
-Still, sometimes it is more convenient to have one Operator watching for
-Percona XtraDB Cluster custom resources in several namespaces.
+This how-to explains how to configure Percona Operator for MySQL based on Percona Server for MySQL for each scenario.
+
+## Namespace-scope
+
+By default, Percona Operator for MySQL functions in a specific Kubernetes namespace. You can
+create one during the installation (like it is shown in the
+[installation instructions](kubernetes.md)) or just use the `default` namespace. This approach allows several Operators to co-exist in one Kubernetes-based environment, being separated in different namespaces:
+
+![image](assets/images/cluster-wide-1.svg)
+
+Normally this is a recommended approach, as isolation minimizes impact in case of various failure scenarios. This is the default configuration of our Operator.
+
+Let’s say you will use a Kubernetes Namespace called `percona-db-1`.
+
+1. Clone `percona-server-mysql-operator` repository:
+
+    ``` {.bash data-prompt="$" }
+    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    $ cd percona-server-mysql-operator
+    ```
+
+2. Create your `percona-db-1` Namespace (if it doesn't yet exist) as follows:
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl create namespace percona-db-1
+    ```
+
+3. Deploy the Operator [using :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/server-side-apply/)
+    the following command:
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl apply --server-side -f deploy/bundle.yaml -n percona-db-1
+    ```
+
+4. Once Operator is up and running, deploy the database cluster itself:
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl apply -f deploy/cr.yaml -n percona-db-1
+    ```
+
+You can deploy multiple clusters in this namespace.
+
+### Add more namespaces
+
+What if there is a need to deploy clusters in another namespace? The solution for namespace-scope deployment is to have more than one Operator. We will use the `percona-db-2` namespace as an example.
+
+1. Create your `percona-db-2` namespace (if it doesn't yet exist) as follows:
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl create namespace percona-db-2
+    ```
+
+2. Deploy the Operator:
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl apply --server-side -f deploy/bundle.yaml -n percona-db-2
+    ```
+
+3. Once Operator is up and running deploy the database cluster itself:
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl apply -f deploy/cr.yaml -n percona-db-2
+    ```
+
+    !!! note
+
+        Cluster names may be the same in different namespaces.
+
+## Install the Operator cluster-wide
+
+Sometimes it is more convenient to have one Operator watching for
+Percona Server for MySQL custom resources in several namespaces.
 
 We recommend running Percona Operator for MySQL in a traditional way,
-limited to a specific namespace. But it is possible to run it in so-called
-*cluster-wide* mode, one Operator watching several namespaces, if needed:
+limited to a specific namespace, to limit the blast radius. But it is possible
+to run it in so-called *cluster-wide* mode, one Operator watching several
+namespaces, if needed:
 
-![image](assets/images/cluster-wide-2.png)
+![image](assets/images/cluster-wide-2.svg)
 
-!!! note
-
-    Please take into account that if several Operators are configured to
-    watch the same namespace, it is entirely unpredictable which one will get
-    ownership of the Custom Resource in it, so this situation should be avoided.
-
-## Installing the Operator in cluster-wide mode
-
-To use the Operator in such *cluster-wide* mode, you should install it with a
-different set of configuration YAML files, which are available in the `deploy`
+To use the Operator in such cluster-wide mode, you should install it with a
+different set of configuration YAML files, which are available in the deploy
 folder and have filenames with a special `cw-` prefix: e.g.
 `deploy/cw-bundle.yaml`.
 
@@ -37,111 +96,69 @@ the following information there:
 
 * `subjects.namespace` option should contain the namespace which will host
     the Operator,
-
 * `WATCH_NAMESPACE` key-value pair in the `env` section should have
     `value` equal to a  comma-separated list of the namespaces to be watched by
     the Operator (or just a blank string to make the Operator deal with
     *all namespaces* in a Kubernetes cluster).
 
-    !!! note
+The following simple example shows how to install Operator cluster-wide on
+Kubernetes.
 
-        The list of namespaces to watch is fully supported by the Operator
-        starting from the version 1.7 (in the version 1.6 you can only use
-        cluster-wide mode with empty `WATCH_NAMESPACE` key to watch all
-        namespaces). Also, prior to the version 1.12.0 it was necessary to
-        mention the Operator's own namespace in the list of watched namespaces.
-
-    The following simple example shows how to install Operator cluster-wide on
-    Kubernetes.
-
-
-1. First of all, clone the percona-xtradb-cluster-operator repository:
+1. Clone `percona-server-mysql-operator` repository:
 
     ``` {.bash data-prompt="$" }
-    $ git clone -b v{{ release }} https://github.com/percona/percona-xtradb-cluster-operator
-    $ cd percona-xtradb-cluster-operator
+    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    $ cd percona-server-mysql-operator
     ```
 
-2. Let’s suppose that Operator’s namespace should be the `pxc-operator` one.
-    Create it as follows:
+2. Let’s say you will use `ps-operator` namespace for the Operator, and `percona-db-1`
+    namespace for the cluster. Create these namespaces, if needed:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl create namespace pxc-operator
+    $ kubectl create namespace ps-operator
+    $ kubectl create namespace percona-db-1
     ```
 
-    Namespaces to be watched by the Operator should be created in the same way
-    if not exist. Let’s say the Operator should watch the `pxc` namespace:
+3. Edit the ``deploy/cw-bundle.yaml`` configuration file to make sure it
+    contains proper namespace name for the Operator:
+
+    ```yaml
+    ...
+    subjects:
+    - kind: ServiceAccount
+      name: percona-server-mysql-operator
+      namespace: ps-operator
+    ...
+    spec:
+      containers:
+      - command:
+        ...
+        env:
+        - name: WATCH_NAMESPACE
+          value: "percona-db-1"
+        ...
+    ```
+
+4. Apply the `deploy/cw-bundle.yaml` file with the following command:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl create namespace pxc
+    $ kubectl apply --server-side -f deploy/cw-bundle.yaml -n ps-operator
     ```
 
-3. Apply the `deploy/cw-bundle.yaml` file with the following command:
+    Right now the operator deployed in cluster-wide mode will monitor all
+    namespaces in the cluster, either already existing or newly created ones.
+
+5. Deploy the cluster in the namespace of your choice:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl apply -f deploy/cw-bundle.yaml -n pxc-operator
+    $ kubectl apply -f deploy/cr.yaml -n percona-db-1
     ```
 
-4. After the Operator is started, Percona XtraDB Cluster can be created at any
-    time by applying the `deploy/cr.yaml` configuration file, like in the case
-    of normal installation:
+## Verifying the cluster operation
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f deploy/cr.yaml -n pxc
-    ```
+When creation process is over, you can try to connect to the cluster.
 
-    The creation process will take some time. The process is over when both
-    operator and replica set Pods have reached their Running status:
-
-    ``` {.text .no-copy}
-    NAME                                               READY   STATUS    RESTARTS   AGE
-    cluster1-haproxy-0                                 2/2     Running   0          6m17s
-    cluster1-haproxy-1                                 2/2     Running   0          4m59s
-    cluster1-haproxy-2                                 2/2     Running   0          4m36s
-    cluster1-pxc-0                                     3/3     Running   0          6m17s
-    cluster1-pxc-1                                     3/3     Running   0          5m3s
-    cluster1-pxc-2                                     3/3     Running   0          3m56s
-    percona-xtradb-cluster-operator-79966668bd-rswbk   1/1     Running   0          9m54s
-    ```
-
-5. Check the connectivity to the newly created cluster.
-
-    First you will need the login and password for the admin user to access the
-    cluster. Use `kubectl get secrets` command to see the list of Secrets
-    objects (by default the Secrets object you are interested in has
-    `cluster1-secrets` name). 
-    You can use the following command to get the password of the `root`
-    user:
-    
-    ``` {.bash data-prompt="$" }
-    $ kubectl get secrets --namespace=pxc cluster1-secrets --template='{{"{{"}}.data.root | base64decode{{"}}"}}{{"{{"}}"\n"{{"}}"}}'
-    ```
-
-    Now run a container with `mysql` tool and connect its console output to your
-    terminal. The following command will do this, naming the new Pod
-    `percona-client`:
-
-    ```{.bash data-prompt="$"}
-    $ kubectl run -i --rm --tty percona-client --image=percona:5.7 --restart=Never --env="POD_NAMESPACE=pxc" -- bash -il
-    ```
-    
-    Executing it may require some time to deploy the correspondent Pod.
-    
-    Now run `mysql` tool in the percona-client command shell using the password
-    obtained from the secret instead of the `<root_password>` placeholder. The 
-    command will look different depending on whether your cluster provides load
-    balancing with [HAProxy](haproxy-conf.md) (the default choice) or
-    [ProxySQL](proxysql-conf.md):
-
-    === "with HAProxy (default)"
-        ```{.bash data-prompt="$"}
-        $ mysql -h cluster1-haproxy -uroot -p'<root_password>'
-        ```
-
-    === "with ProxySQL"
-        ```{.bash data-prompt="$"}
-        $ mysql -h cluster1-proxysql -uroot -p'<root_password>'
-        ```
+{% include 'assets/fragments/connectivity.txt' %}
 
 !!! note 
 
@@ -149,7 +166,7 @@ the following information there:
     communication across Namespaces is not allowed by default network policies.
     In this case, you should specifically allow the Operator communication
     across the needed Namespaces. Following the above example, you would need
-    to allow ingress traffic for the `pxc-operator` Namespace from the `pxc`
+    to allow ingress traffic for the `ps-operator` Namespace from the `percona-db-1`
     Namespace, and also from the `default` Namespace. You can do it with the
     NetworkPolicy resource, specified in the YAML file as follows:
     
@@ -158,13 +175,13 @@ the following information there:
     kind: NetworkPolicy
     metadata:
       name: percona
-      namespace: pxc-operator
+      namespace: ps-operator
     spec:
       ingress:
       - from:
         - namespaceSelector:
             matchLabels:
-              kubernetes.io/metadata.name: pxc
+              kubernetes.io/metadata.name: percona-db-1
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: default
@@ -184,29 +201,28 @@ Cluster-wide Operator is upgraded similarly to a single-namespace one. Both depl
 
 * the Operator;
 * [Custom Resource Definition (CRD)](operator.md),
-* Database Management System (Percona XtraDB Cluster).
+* Database Management System (Percona Server for MySQL).
  
 To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](update.md#upgrading-the-operator-and-crd) concerning the Operator's namespace and a different YAML configuration file: the one with a special `cw-` prefix, `deploy/cw-rbac.yaml`. The resulting steps will look as follows.
 
 1. Update the [Custom Resource Definition](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
-    for the Operator, taking it from the official repository on Github, and do
-    the same for the Role-based access control:
+    for the Operator, and do the same for the Role-based access control:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-xtradb-cluster-operator/v{{ release }}/deploy/crd.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-xtradb-cluster-operator/v{{ release }}/deploy/cw-rbac.yaml
+    $ kubectl apply -f deploy/crd.yaml
+    $ kubectl apply -f deploy/cw-rbac.yaml
     ```
 
 2. Now you should [apply a patch](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to your
     deployment, supplying the necessary image name with a newer version tag. You can find the proper
-    image name for the current Operator release [in the list of certified images](images.md#custom-registry-images)
+    image name for the current Operator release [in the list of certified images](images.md)
     (for older releases, please refer to the [old releases documentation archive](archive.md)).
-    For example, updating to the `{{ release }}` version in the `pxc-operator` namespace should look as
+    For example, updating to the `{{ release }}` version in the `ps-operator` namespace should look as
     follows.
 
     ``` {.bash data-prompt="$" }
-    $ kubectl patch deployment percona-xtradb-cluster-operator \
-      -p'{"spec":{"template":{"spec":{"containers":[{"name":"percona-xtradb-cluster-operator","image":"percona/percona-xtradb-cluster-operator:{{ release }}"}]}}}}' -n pxc-operator
+    $ kubectl patch deployment percona-server-mysql-operator \
+      -p'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"percona/percona-server-mysql-operator:{{ release }}"}]}}}}' -n ps-operator
     ```
 
 3. The deployment rollout will be automatically triggered by the applied patch.
@@ -214,5 +230,5 @@ To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](
     `kubectl rollout status` command with the name of your cluster:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl rollout status deployments percona-xtradb-cluster-operator -n pxc-operator
+    $ kubectl rollout status deployments percona-server-mysql-operator -n ps-operator
     ```
