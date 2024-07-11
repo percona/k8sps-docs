@@ -101,7 +101,7 @@ Allows users to start the cluster with less than 3 MySQL instances or with more 
 
 ### `unsafeFlags.proxy`
 
-Allows users to configure a cluster with disabled proxy (HAProxy and Router).
+Allows users to configure a cluster with disabled proxy (both HAProxy and Router).
 
 | Value type  | Example    |
 | ----------- | ---------- |
