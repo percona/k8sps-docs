@@ -202,7 +202,7 @@ nav:
           - "Check the logs": debug-logs.md
           
     - HOWTOs:
-          - "How to install Percona XtraDB Cluster in multi-namespace (cluster-wide) mode": cluster-wide.md
+          - "Provide Percona Operator for MySQL single-namespace and multi-namespace deployment": cluster-wide.md
           
     - Reference:
           - "Custom Resource options": operator.md
