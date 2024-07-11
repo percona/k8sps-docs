@@ -1187,6 +1187,14 @@ An alternative init image for Percona XtraBackup Pods.
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
 
+### `backup.containerSecurityContext`
+
+A custom [Kubernetes Security Context :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the `xtrabackup` container to be used instead of the default one.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `privileged: true` |
+
 ### `backup.backoffLimit`
 
 The number of retries to make a backup (by default, 6 retries are made).
