@@ -1128,11 +1128,12 @@ The Percona XtraBackup Docker image to use for the backup.
 | ----------- | ---------- |
 | :material-code-string: string     | `percona/percona-server-mysql-operator:{{ release }}-backup` |
 
-### `backup.imagePullPolicy') }} |
-| **Value**       | string  |
-| **Example**     | `Always` |
+### `backup.imagePullPolicy`
 
 The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| **Value**       | string  |
+| **Example**     | `Always` |
 
 ### `backup.initImage`
 
@@ -1150,7 +1151,7 @@ The number of retries to make a backup (by default, 6 retries are made).
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `6` |
 
-### `backup.storages.&lt;storage-name&gt;.type`
+### `backup.storages.STORAGE-NAME.type`
 
 The cloud storage type used for backups. Only `s3` and `azure` types are supported.
 
@@ -1158,7 +1159,7 @@ The cloud storage type used for backups. Only `s3` and `azure` types are support
 | ----------- | ---------- |
 | :material-code-string: string     | `s3` |
 
-### `backup.storages.&lt;storage-name&gt;.verifyTLS`
+### `backup.storages.STORAGE-NAME.verifyTLS`
 
 Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate.
 
@@ -1166,7 +1167,7 @@ Enable or disable verification of the storage server TLS certificate. Disabling 
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
-### `backup.storages.&lt;storage-name&gt;.nodeSelector`
+### `backup.storages.STORAGE-NAME.nodeSelector`
 
 [Kubernetes nodeSelector :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector).
 
@@ -1174,7 +1175,7 @@ Enable or disable verification of the storage server TLS certificate. Disabling 
 | ----------- | ---------- |
 | :material-label-outline: label     | `disktype: ssd` |
 
-### `backup.storages.&lt;storage-name&gt;.resources.requests.memory`
+### `backup.storages.STORAGE-NAME.resources.requests.memory`
 
 The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container.
 
@@ -1182,7 +1183,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `1G` |
 
-### `backup.storages.&lt;storage-name&gt;.resources.requests.cpu`
+### `backup.storages.STORAGE-NAME.resources.requests.cpu`
 
 [Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container.
 
@@ -1190,7 +1191,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `600m` |
 
-### `backup.storages.&lt;storage-name&gt;.affinity.nodeAffinity`
+### `backup.storages.STORAGE-NAME.affinity.nodeAffinity`
 
 The Operator [node affinity :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) constraint.
 
@@ -1198,7 +1199,7 @@ The Operator [node affinity :octicons-link-external-16:](https://kubernetes.io/d
 | ----------- | ---------- |
 | :material-text-long: subdoc     | |
 
-### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.labelSelector.matchLabels`
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.labelSelector.matchLabels`
 
 The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
@@ -1206,7 +1207,7 @@ The Label selector for the [Kubernetes Pod Topology Spread Constraints :octicons
 | ----------- | ---------- |
 | :material-label-outline: label     | `app.kubernetes.io/name: percona-server` |
 
-### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.maxSkew`
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.maxSkew`
 
 The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
@@ -1214,7 +1215,7 @@ The degree to which Pods may be unevenly distributed under the [Kubernetes Pod T
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | 1 |
 
-### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.topologyKey`
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.topologyKey`
 
 The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
@@ -1222,7 +1223,7 @@ The key of node labels for the [Kubernetes Pod Topology Spread Constraints :octi
 | ----------- | ---------- |
 | :material-code-string: string     | `kubernetes.io/hostname` |
 
-### `backup.storages.&lt;storage-name&gt;.topologySpreadConstraints.whenUnsatisfiable`
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.whenUnsatisfiable`
 
 What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
@@ -1230,7 +1231,7 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | ----------- | ---------- |
 | :material-code-string: string     | `DoNotSchedule` |
 
-### `backup.storages.&lt;storage-name&gt;.tolerations`
+### `backup.storages.STORAGE-NAME.tolerations`
 
 [Kubernetes Pod tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
 
@@ -1238,7 +1239,7 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | ----------- | ---------- |
 | :material-text-long: subdoc     | |
 
-### `backup.storages.&lt;storage-name&gt;.schedulerName`
+### `backup.storages.STORAGE-NAME.schedulerName`
 
 The [Kubernetes Scheduler :octicons-link-external-16:](https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers).
 
@@ -1246,7 +1247,7 @@ The [Kubernetes Scheduler :octicons-link-external-16:](https://kubernetes.io/doc
 | ----------- | ---------- |
 | :material-code-string: string     | `mycustom-scheduler` |
 
-### `backup.storages.&lt;storage-name&gt;.priorityClassName`
+### `backup.storages.STORAGE-NAME.priorityClassName`
 
 The [Kubernetes Pod priority class :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass).
 
@@ -1254,7 +1255,7 @@ The [Kubernetes Pod priority class :octicons-link-external-16:](https://kubernet
 | ----------- | ---------- |
 | :material-code-string: string     | `high-priority` |
 
-### `backup.storages.&lt;storage-name&gt;.containerSecurityContext`
+### `backup.storages.STORAGE-NAME.containerSecurityContext`
 
 A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
 
@@ -1262,7 +1263,7 @@ A custom [Kubernetes Security Context for a Container :octicons-link-external-16
 | ----------- | ---------- |
 | :material-text-long: subdoc     | `privileged: true` |
 
-### `backup.storages.&lt;storage-name&gt;.podSecurityContext`
+### `backup.storages.STORAGE-NAME.podSecurityContext`
 
 A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
 
@@ -1270,7 +1271,7 @@ A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](htt
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
 
-### `backup.storages.&lt;storage-name&gt;.annotations`
+### `backup.storages.STORAGE-NAME.annotations`
 
 The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 
@@ -1278,7 +1279,7 @@ The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/d
 | ----------- | ---------- |
 | :material-label-outline: label     | `testName: scheduled-backup` |
 
-### `backup.storages.&lt;storage-name&gt;.labels`
+### `backup.storages.STORAGE-NAME.labels`
 
 [Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
@@ -1286,7 +1287,7 @@ The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/d
 | ----------- | ---------- |
 | :material-label-outline: label     | `backupWorker: 'True'` |
 
-### `backup.storages.&lt;storage-name&gt;.s3.bucket') }} |
+### `backup.storages.STORAGE-NAME.s3.bucket`
 
 The [Amazon S3 bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) name for backups.
 
@@ -1294,7 +1295,7 @@ The [Amazon S3 bucket :octicons-link-external-16:](https://docs.aws.amazon.com/A
 | ----------- | ---------- |
 | :material-code-string: string     |  |
 
-### `backup.storages.s3.&lt;storage-name&gt;.region`
+### `backup.storages.s3.STORAGE-NAME.region`
 
 The [AWS region :octicons-link-external-16:](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages.
 
@@ -1302,7 +1303,7 @@ The [AWS region :octicons-link-external-16:](https://docs.aws.amazon.com/general
 | ----------- | ---------- |
 | :material-code-string: string     | `us-west-2` |
 
-### `backup.storages.s3.&lt;storage-name&gt;.prefix`
+### `backup.storages.s3.STORAGE-NAME.prefix`
 
 The path (sub-folder) to the backups inside the [bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html).
 
@@ -1310,7 +1311,7 @@ The path (sub-folder) to the backups inside the [bucket :octicons-link-external-
 | ----------- | ---------- |
 | :material-code-string: string     | `""` |
 
-### `backup.storages.&lt;storage-name&gt;.s3.credentialsSecret`
+### `backup.storages.STORAGE-NAME.s3.credentialsSecret`
 
 The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
 
@@ -1318,7 +1319,7 @@ The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/c
 | ----------- | ---------- |
 | :material-code-string: string     | `my-cluster-name-backup-s3` |
 
-### `backup.storages.s3.&lt;storage-name&gt;.endpointUrl`
+### `backup.storages.s3.STORAGE-NAME.endpointUrl`
 
 The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
 
