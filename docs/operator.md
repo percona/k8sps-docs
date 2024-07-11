@@ -81,11 +81,55 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 
 ### `allowUnsafeConfigurations`
 
-Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults).
+Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults). **This option is deprecated and will be removed in future releases**. Use `unsafeFlags` subsection instead 
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `false`  |
+
+## <a name="operator-unsafeflags-section"></a>Unsafe flags section
+
+The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *After switching to unsafe configurations permissive mode you will not be able to switch the cluster back by setting same keys to `false`, the flags will be ignored*.
+
+### `unsafeFlags.mysqlSize`
+
+Allows users to start the cluster with less than 3 MySQL instances or with more than 9 (the maximum safe size).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.proxy`
+
+Allows users to configure a cluster with disabled proxy (HAProxy and Router).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.proxySize`
+
+Allows users to set proxy (HAProxy or Router) size to a value less than 2 Pods (if `false`, the Operator will automatically change unsafe parameters to safe defaults).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.orchestrator`
+
+Allows users to configure a cluster with disabled Orchestrator even if asynchronous replication is turned on.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.orchestratorSize`
+
+Allows users to set [orchestrator.size](#orchestratorsize) option to a value less than the minimum safe size (3).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
