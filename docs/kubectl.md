@@ -15,15 +15,15 @@ To install Percona Server for MySQL cluster, you need the following:
 
 1. The **kubectl** tool to manage and deploy applications on Kubernetes, included in most Kubernetes distributions. Install not already installed, [follow its official installation instructions :octicons-link-external-16:](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
-2. A Kubernetes environment. You can deploy it on [Minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube) for testing purposes or using any cloud provider of your choice. Check the list of our [officially supported platforms](System-Requirements.md#officially-supported-platforms).
+2. A Kubernetes environment. You can deploy it on [Minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube) for testing purposes or using any cloud provider of your choice. Check the list of our [officially supported platforms](System-Requirements.md#supported-platforms).
 
     !!! note "See also"
 
-        * [Set up Minikube](minikube.md#set-up-minikube)
-        * [Create and configure the GKE cluster](gke.md#create-and-configure-the-gke-cluster)
-        * [Set up Amazon Elastic Kubernetes Service](eks.md#software-installation)
-        
-## Procedure 
+        * [Set up Minikube](minikube.md)
+        * [Create and configure the GKE cluster](gke.md)
+        * [Set up Amazon Elastic Kubernetes Service](eks.md)
+
+## Procedure
 
 Here's a sequence of steps to follow:
 {.power-number}
@@ -96,7 +96,7 @@ You have successfully installed and deployed the Operator with default parameter
 The default configuration includes three HAProxy and three Percona Server for
 MySQL instances. 
 
-You can check the rest of the Operator's parameters in the [Custom Resource options reference](operator.md#operator-custom-resource-options).
+You can check the rest of the Operator's parameters in the [Custom Resource options reference](operator.md).
 
 ## Next steps
 

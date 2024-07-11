@@ -39,7 +39,7 @@ spec:
           cpu: 2
 ```
 
-Use our reference documentation for the [Custom Resource options](operator.md#operator-custom-resource-options) 
+Use our reference documentation for the [Custom Resource options](operator.md) 
 for more details about other components.
 
 ### Scale storage
@@ -112,7 +112,7 @@ The following are the steps to increase the size:
 
 ## Horizontal scaling
 
-Size of the cluster is controlled by a [size key](operator.md#mysql-size) in the
+Size of the cluster is controlled by a [size key](operator.md#mysqlsize) in the
 [Custom Resource options](operator.md#operator-custom-resource-options)
 configuration. That’s why scaling the cluster needs nothing more but changing
 this option and applying the updated configuration file. This may be done in a

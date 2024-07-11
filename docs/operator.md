@@ -41,7 +41,7 @@ A name for [users secrets](users.md#users).
 
 ### `sslSecretName`
 
-A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md#tls) for details.
+A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md) for details.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -174,7 +174,7 @@ The number of the Percona Server for MySQL instances.
 
 ### `mysql.image`
 
-The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](images.md#custom-registry-images)).
+The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](images.md)).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -350,7 +350,7 @@ The `my.cnf` file options to be passed to Percona Server for MySQL instances.
 
 ### `mysql.sidecars.image`
 
-Image for the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods.
+Image for the [custom sidecar container](sidecar.md) for Percona Server for MySQL Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -358,7 +358,7 @@ Image for the [custom sidecar container](sidecar.md#operator-sidecar) for Percon
 
 ### `mysql.sidecars.command`
 
-Command for the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods.
+Command for the [custom sidecar container](sidecar.md) for Percona Server for MySQL Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -366,7 +366,7 @@ Command for the [custom sidecar container](sidecar.md#operator-sidecar) for Perc
 
 ### `mysql.sidecars.name`
 
-Name of the [custom sidecar container](sidecar.md#operator-sidecar) for Percona Server for MySQL Pods.
+Name of the [custom sidecar container](sidecar.md) for Percona Server for MySQL Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -374,7 +374,7 @@ Name of the [custom sidecar container](sidecar.md#operator-sidecar) for Percona 
 
 ### `mysql.sidecars.volumeMounts.mountPath`
 
-Mount path of the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods.
+Mount path of the [custom sidecar container](sidecar.md) volume for Replica Set Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -390,7 +390,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 
 ### `mysql.sidecars.volumeMounts.name`
 
-Name of the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods.
+Name of the [custom sidecar container](sidecar.md) volume for Replica Set Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -398,7 +398,7 @@ Name of the [custom sidecar container](sidecar.md#operator-sidecar) volume for R
 
 ### `mysql.sidecarVolumes`
 
-[Volume specification :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Percona Server for MySQL Pods.
+[Volume specification :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) for the [custom sidecar container](sidecar.md) volume for Percona Server for MySQL Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -406,7 +406,7 @@ Name of the [custom sidecar container](sidecar.md#operator-sidecar) volume for R
 
 ### `mysql.sidecarPVCs`
 
-[Persistent Volume Claim :octicons-link-external-16:](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md#operator-sidecar) volume for Replica Set Pods |
+[Persistent Volume Claim :octicons-link-external-16:](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md) volume for Replica Set Pods |
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1295,7 +1295,7 @@ The [Amazon S3 bucket :octicons-link-external-16:](https://docs.aws.amazon.com/A
 | ----------- | ---------- |
 | :material-code-string: string     |  |
 
-### `backup.storages.s3.STORAGE-NAME.region`
+### `backup.storages.STORAGE-NAME.s3.region`
 
 The [AWS region :octicons-link-external-16:](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages.
 
@@ -1303,7 +1303,7 @@ The [AWS region :octicons-link-external-16:](https://docs.aws.amazon.com/general
 | ----------- | ---------- |
 | :material-code-string: string     | `us-west-2` |
 
-### `backup.storages.s3.STORAGE-NAME.prefix`
+### `backup.storages.STORAGE-NAME.s3.prefix`
 
 The path (sub-folder) to the backups inside the [bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html).
 
@@ -1319,7 +1319,7 @@ The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/c
 | ----------- | ---------- |
 | :material-code-string: string     | `my-cluster-name-backup-s3` |
 
-### `backup.storages.s3.STORAGE-NAME.endpointUrl`
+### `backup.storages.STORAGE-NAME.s3.endpointUrl`
 
 The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
 
@@ -1382,7 +1382,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 
 ## <a name="operator-backupsource-section"></a> PerconaServerMySQLRestore Custom Resource options
 
-[Percona Server for MySQL Restore](backups.md#restoring-backup) options are managed by the Operator via the 
+[Percona Server for MySQL Restore](backups-restore.md) options are managed by the Operator via the 
 `PerconaServerMySQLRestore` [Custom Resource :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and can be configured via the
 [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml)
 configuration file. This Custom Resource contains the following options:

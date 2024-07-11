@@ -18,7 +18,7 @@ Within this release, a [Quickstart guide](../quickstart.md) was added to the Ope
 
 ### Fine-tuning backups
 
-This release brings a number of improvements for backups, making them more stable and robust. The new [backup.backoffLimit](../operator.md#backup-backofflimit) Custom Resource option allows customizing the number of attempts the Operator should take to create the backup (the default is making 6 retries after the first backup attempt fails for some reason, such as faulty network connection or the cloud outage). Also, the Operator now makes a number of checks before starting the restore process to make sure that there are needed cloud credentials and the actual backup. This allows to avoid faulty restore that would leave the database cluster in non-functional state.
+This release brings a number of improvements for backups, making them more stable and robust. The new [backup.backoffLimit](../operator.md#backupbackofflimit) Custom Resource option allows customizing the number of attempts the Operator should take to create the backup (the default is making 6 retries after the first backup attempt fails for some reason, such as faulty network connection or the cloud outage). Also, the Operator now makes a number of checks before starting the restore process to make sure that there are needed cloud credentials and the actual backup. This allows to avoid faulty restore that would leave the database cluster in non-functional state.
 
 ### Other improvements
 
@@ -37,7 +37,7 @@ With our latest release, we put an all-hands-on-deck approach towards fine-tunin
 
 ## Bugs Fixed
 
-* {{ k8spsjira(124) }}: Parametrize the number of attempts the Operator should make for backup through a [Custom Resource option](../operator.md#backup-backofflimit)
+* {{ k8spsjira(124) }}: Parametrize the number of attempts the Operator should make for backup through a [Custom Resource option](../operator.md#backupbackofflimit)
 * {{ k8spsjira(146) }}: Log messages were incorrectly mentioning semi-synchronous replication regardless of the actual replication type
 * {{ k8spsjira(173) }}: Fix a bug due to which the Operator was silently resetting a component size to the minimum size allowed when `allowUnsafeConfig` was turned off, without any messages in the log
 * {{ k8spsjira(185) }}: Fix a bug due to which the Orchestrator-MySQL (topology instances) connections were not encrypted

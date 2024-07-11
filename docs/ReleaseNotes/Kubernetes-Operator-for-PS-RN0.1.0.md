@@ -41,4 +41,4 @@ The features available in this release are the following:
 
 ## Installation
 
-Installation is performed by following the documentation installation instructions for [Kubernetes](../kubernetes.md#install-kubernetes), [Amazon Elastic Kubernetes Service](../eks.md#install-eks) and [Minikube](../minikube.md#install-minikube).
+Installation is performed by following the documentation installation instructions for [Kubernetes](../kubernetes.md), [Amazon Elastic Kubernetes Service](../eks.md) and [Minikube](../minikube.md).

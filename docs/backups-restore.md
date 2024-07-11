@@ -7,7 +7,7 @@ also on any Kubernetes-based environment with the installed Operator.
 
     When restoring to a new Kubernetes-based environment, make sure it
     has a Secrets object with the same user passwords as in the original cluster.
-    More details about secrets can be found in [System Users](users.md#users-system-users).
+    More details about secrets can be found in [System Users](users.md#system-users).
 
 The example of the restore configuration file is [deploy/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml). The options that can be used in it are described in the [restore options reference](operator.md#perconaservermysqlrestore-custom-resource-options).
 

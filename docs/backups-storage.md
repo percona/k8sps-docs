@@ -73,13 +73,13 @@ object with credentials needed to access the storage.
 
     If you use some S3-compatible storage instead of the original
     Amazon S3, the [endpointURL :octicons-link-external-16:](https://docs.min.io/docs/aws-cli-with-minio.html) is needed in the `s3` subsection which points to the actual cloud used for backups and
-    is specific to the cloud provider. For example, using [Google Cloud :octicons-link-external-16:](https://cloud.google.com) involves the [following :octicons-link-external-16:](https://storage.googleapis.com) endpointUrl:    
+    is specific to the cloud provider. For example, using [Google Cloud :octicons-link-external-16:](https://cloud.google.com) involves the [following :octicons-link-external-16:](https://storage.googleapis.com) endpointUrl:
 
     ```yaml
     endpointUrl: https://storage.googleapis.com
     ```
 
-    Also you can use [prefix](operator.md#backup-storages-s3-prefix) option to
+    Also you can use [prefix](operator.md#backupstoragesstorage-names3prefix) option to
     specify the path (sub-folder) to the backups inside the S3 bucket. If prefix is
     not set, backups are stored in the root directory.
 
