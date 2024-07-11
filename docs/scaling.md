@@ -113,7 +113,7 @@ The following are the steps to increase the size:
 ## Horizontal scaling
 
 Size of the cluster is controlled by a [size key](operator.md#mysqlsize) in the
-[Custom Resource options](operator.md#operator-custom-resource-options)
+[Custom Resource options](operator.md)
 configuration. That’s why scaling the cluster needs nothing more but changing
 this option and applying the updated configuration file. This may be done in a
 specifically saved config, or on the fly, using the following command:
