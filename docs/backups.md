@@ -13,7 +13,7 @@ It uses the [Percona XtraBackup :octicons-link-external-16:](https://docs.percon
 
 Backups are controlled by the `backup` section of the
 [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
-file. This section contains the [backup.enabled](operator.md#backup-enabled) key
+file. This section contains the [backup.enabled](operator.md#backupenabled) key
 (it should be set to `true` to enable backups), and the number of options in the
 `storages` subsection, [needed to access cloud to store backups](backups-storage.md).
 

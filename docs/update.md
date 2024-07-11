@@ -136,7 +136,7 @@ Manual update of Percona Server for MySQL can be done as follows:
     !!! note
 
         Check the version of the Operator you have in your Kubernetes
-        environment. Please refer to the [Operator upgrade guide](update.md#upgrading-the-operator)
+        environment. Please refer to the [Operator upgrade guide](update.md#upgrading-the-operator-and-crd)
         to upgrade the Operator and CRD, if needed.
 
     Patching Custom Resource is done with the `kubectl patch ps` command.
@@ -225,8 +225,8 @@ configuration file as follows:
 3. Change the `upgradeOptions.apply`  option from `Disabled` to one of the
     following values:
 
-    * `Recommended` - [scheduled](operator.md#upgradeoptions-schedule) upgrades
-        will choose the most recent version of software flagged as "Recommended"
+    * `Recommended` - the Operator will choose the most recent version of
+        software flagged as "Recommended"
 
     * `Latest` - automatic upgrades will choose the most recent version of
         the software available,

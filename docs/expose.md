@@ -5,7 +5,7 @@ applications in several scenarios. In either way the cluster is exposed with
 regular Kubernetes [Service objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/),
 configured by the Operator.
 
-This document describes the usage of [Custom Resource manifest options](operator.md#operator-custom-resource-options)
+This document describes the usage of [Custom Resource manifest options](operator.md)
 to expose the clusters deployed with the Operator. The expose options vary for
 different replication types: [Asynchronous :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html)
 and [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
@@ -63,7 +63,7 @@ the cluster can be also exposed through a Kubernetes Service called
 ![image](assets/images/exposure-async.svg)
 
 This Service is created by default and is always present. You can change the
-type of the Service object by setting [mysql.primaryServiceType](operator.md#mysql-primaryservicetype)
+type of the Service object by setting [mysql.primaryServiceType](operator.md#mysqlprimaryservicetype)
 variable in the Custom Resource.
 
 The following example exposes the Primary node of the asynchronous cluster with
@@ -100,7 +100,7 @@ through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
 ![image](assets/images/exposure-gr.svg)
 
 MySQL Router can be configured via the [router section](operator.md#operator-router-section).
-In particular, the [router.expose.type](operator.md#router-expose-type) option sets the
+In particular, the [router.expose.type](operator.md#proxyrouterexposetype) option sets the
 type of the correspondent Kubernetes Service object. The following example
 exposes MySQL Router through a LoadBalancer object:
 
@@ -154,9 +154,9 @@ application level).
 
 This is possible by setting the following options in [spec.mysql section](operator.md#operator-mysql-section).
 
-* [mysql.expose.enabled](operator.md#mysql-expose-enabled) enables or disables exposure
+* [mysql.expose.enabled](operator.md#mysqlexposeenabled) enables or disables exposure
     of MySQL instances,
-* [mysql.expose.type](operator.md#mysql-expose-type) defines the Kubernetes Service
+* [mysql.expose.type](operator.md#mysqlexposetype) defines the Kubernetes Service
     object type.
 
 The following example creates a dedicated LoadBalancer Service for each node of

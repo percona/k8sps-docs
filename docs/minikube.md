@@ -75,7 +75,7 @@ default web browser.
 
     This deploys three Percona Server for MySQL instances and one Orchestrator
     instance. For more configuration options please see `deploy/cr.yaml` and
-    [Custom Resource Options](operator.md#operator-custom-resource-options).
+    [Custom Resource Options](operator.md).
 
     The creation process may take some time. When the process is over your
     cluster will obtain the `ready` status. You can check it with the following

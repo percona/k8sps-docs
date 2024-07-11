@@ -16,7 +16,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 * {{ k8spsjira(166) }}: The Operator now updates certificates at all changes in the Custom Resource `tls` section: this fixes the previous behavior, along to which it didn't do anything related to TLS certificates in case of existing SSL secrets, even in the case of wrong/incomplete `tls` configuration
 
-* {{ k8spsjira(217) }}: The user is now able to customize the MySQL Router configuration with the new [proxy.router.configuration](../operator.md#proxy-router-configuration) Custom Resource option
+* {{ k8spsjira(217) }}: The user is now able to customize the MySQL Router configuration with the new [proxy.router.configuration](../operator.md#proxyrouterconfiguration) Custom Resource option
 
 * {{ k8spsjira(141) }}: Add capturing [anonymous telemetry and usage data](../telemetry.md) following the way of other Percona Operators
 
