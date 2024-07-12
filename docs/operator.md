@@ -81,7 +81,7 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 
 ### `allowUnsafeConfigurations`
 
-Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults). **This option is deprecated and will be removed in future releases**. Use `unsafeFlags` subsection instead 
+Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults). **This option is deprecated and will be removed in future releases**. Use `unsafeFlags` subsection instead. Setting `allowUnsafeConfigurations` won’t have any effect with the Operator version 0.8.0 and newer, and upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under the [unsafeFlags](#operator-unsafeflags-section) subsection set to `true`. 
 
 | Value type  | Example    |
 | ----------- | ---------- |
