@@ -140,13 +140,13 @@ extra: # Used in main.html template and can't be externalized
   release: '0.8.0'
   apiversion: '0-8-0'
   ps80recommended: '8.0.36-28'
-  pxbrecommended: '8.0.35-30'
-  pmm2recommended: '2.41.1'
+  pxbrecommended: '8.0.35-31'
+  pmm2recommended: '2.42.0'
   haproxyrecommended: '2.8.5'
   routerrecommended: '8.0.36'
   orchestratorrecommended: '3.2.6-12'
   gkerecommended: '1.29'
-  certmanagerrecommended: '1.14.4'
+  certmanagerrecommended: '1.15.1'
   version:
     provider: mike
 

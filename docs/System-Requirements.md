@@ -7,19 +7,19 @@ Other options may also work but have not been tested. Other software components 
 
 * Orchestrator 3.2.6-12
 * MySQL Router 8.0.36
-* XtraBackup 8.0.35-30
+* XtraBackup 8.0.35-31
 * Percona Toolkit 3.5.7
 * HAProxy 2.8.5
-* PMM Client 2.41.1
+* PMM Client 2.42.0
 
 ## Supported platforms
 
 The following platforms were tested and are officially supported by the Operator
 {{ release }}:
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.26 - 1.29
-* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.25 - 1.29
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.32
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.27 - 1.29
+* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.27 - 1.30
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.33.1 (based on Kubernetes 1.30.0)
 
 Other Kubernetes platforms may also work but have not been tested.
 
