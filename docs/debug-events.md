@@ -96,6 +96,36 @@ $ kubectl get events --field-selector involvedObject.kind=Pod,involvedObject.nam
     ...
     ```
 
+Save way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.):
+
+```{.bash data-prompt="$"}
+$ kubectl get events --field-selector involvedObject.kind=PerconaServerMySQL,involvedObject.name=cluster1
+```
+
+???+ example "Expected output"
+
+    ``` {.text .no-copy}
+    LAST SEEN   TYPE      REASON                     OBJECT                        MESSAGE
+    10m         Warning   AsyncReplicationNotReady   perconaservermysql/cluster1   cluster1-mysql-1: [not_replicating]
+    ...
+    ```
+
+Alternatively, you can see events for a specific object in the output of `kubectl describe` command:
+
+```{.bash data-prompt="$"}
+$ kubectl describe ps cluster1
+```
+
+??? example "Expected output"
+
+    ``` {.text .no-copy}
+    Name:         cluster1
+    ...
+    Events:
+      Type     Reason                    Age                From           Message
+      ----     ------                    ----               ----           -------
+      Warning  AsyncReplicationNotReady  10m (x23 over 13m)    ps-controller  cluster1-mysql-1: [not_replicating]
+    ...
 
 Check `kubectl get events --help` to know about more options.
 
