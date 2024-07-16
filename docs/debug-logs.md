@@ -43,4 +43,3 @@ In the following examples we will access containers of the `cluster1-mysql-0` Po
     ``` {.bash data-prompt="$" }
     $ kubectl logs cluster1-mysql-0 -c mysql -f | jq -R 'fromjson?'
     ```
-
