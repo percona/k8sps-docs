@@ -8,7 +8,7 @@ Events can be checked by the following command
 $ kubectl get events
 ```
 
-??? example "Expected output"
+???+ example "Expected output"
 
     ``` {.text .no-copy}
     LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
@@ -24,13 +24,13 @@ Use the following command to sort the output in a reverse chronological fashion.
 $ kubectl get events --sort-by=".lastTimestamp"
 ```
 
-??? example "Expected output"
+???+ example "Expected output"
 
     ``` {.text .no-copy}
     LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
-    11m         Normal    SuccessfulCreate         statefulset/cluster1-mysql                            create Pod cluster1-mysql-0 in StatefulSet cluster1-mysql successful
-    11m         Normal    SuccessfulCreate         statefulset/cluster1-mysql                            create Claim datadir-cluster1-mysql-0 Pod cluster1-mysql-0 in StatefulSet cluster1-mysql success
-    10m         Normal    ProvisioningSucceeded    persistentvolumeclaim/datadir-cluster1-mysql-0        Successfully provisioned volume pvc-54f31a2c-659d-48c2-801e-647bfdb039e5
+    33m         Warning   FailedScheduling           pod/cluster1-mysql-0                                  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+    33m         Normal    Provisioning               persistentvolumeclaim/datadir-cluster1-mysql-0        External provisioner is provisioning volume for claim "default/datadir-cluster1-mysql-0"
+    33m         Normal    ProvisioningSucceeded      persistentvolumeclaim/datadir-cluster1-mysql-0        Successfully provisioned volume pvc-aad3d7cf-2bd4-4823-8e6f-38b9a8528aaa
     ...
     ```
 
@@ -39,7 +39,7 @@ When there are too many events and there is a need of filtering output, tools li
 Example:
 
 ```{.bash data-prompt="$"}
-$ kubectl get events -oyaml | yq .items[0]
+$ kubectl get events -oyaml | yq .items[11]
 ```
 
 ??? example "Expected output"
