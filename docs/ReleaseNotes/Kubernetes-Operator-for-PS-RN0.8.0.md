@@ -70,7 +70,7 @@ Other options may also work but have not been tested. Other software components 
 * Orchestrator 3.2.6-12
 * MySQL Router 8.0.36
 * XtraBackup 8.0.35-31
-* Percona Toolkit 3.5.7
+* Percona Toolkit 3.6.0
 * HAProxy 2.8.5
 * PMM Client 2.42.0
 
