@@ -119,7 +119,7 @@ plugins:
   with-pdf:
     output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
     cover_title: "Percona Operator for MySQL based on Percona Server for MySQL documentation"
-    cover_subtitle: 0.7.0 (March 25, 2024)
+    cover_subtitle: 0.8.0 (July 16, 2024)
     author: "Percona Technical Documentation Team"
     cover_logo: docs/assets/images/percona_kubernetes_icon.png
     custom_template_path: _resource/templates
@@ -137,16 +137,16 @@ extra: # Used in main.html template and can't be externalized
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
   commandName: 'kubectl'
-  release: '0.7.0'
-  apiversion: '0-7-0'
+  release: '0.8.0'
+  apiversion: '0-8-0'
   ps80recommended: '8.0.36-28'
-  pxbrecommended: '8.0.35-30'
-  pmm2recommended: '2.41.1'
+  pxbrecommended: '8.0.35-31'
+  pmm2recommended: '2.42.0'
   haproxyrecommended: '2.8.5'
   routerrecommended: '8.0.36'
   orchestratorrecommended: '3.2.6-12'
   gkerecommended: '1.29'
-  certmanagerrecommended: '1.14.4'
+  certmanagerrecommended: '1.15.1'
   version:
     provider: mike
 
@@ -213,6 +213,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - "Percona Operator for MySQL 0.8.0 (2024-07-16)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md
           - "Percona Operator for MySQL 0.7.0 (2024-03-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.md
           - "Percona Operator for MySQL 0.6.0 (2023-09-05)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.md
           - "Percona Operator for MySQL 0.5.0 (2023-03-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md
