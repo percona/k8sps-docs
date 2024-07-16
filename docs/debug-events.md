@@ -126,6 +126,7 @@ $ kubectl describe ps cluster1
       ----     ------                    ----               ----           -------
       Warning  AsyncReplicationNotReady  10m (x23 over 13m)    ps-controller  cluster1-mysql-1: [not_replicating]
     ...
+    ```
 
 Check `kubectl get events --help` to know about more options.
 
