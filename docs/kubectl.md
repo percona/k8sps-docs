@@ -81,8 +81,7 @@ Here's a sequence of steps to follow:
     $ kubectl get ps -n <namespace>
     ```
 
-    The creation process may take some time. When the process is over your
-    cluster obtains the `ready` status.
+    The creation process may take some time. When the process is over your cluster obtains the `ready` status.
 
     ??? example "Expected output"
 
@@ -93,8 +92,7 @@ Here's a sequence of steps to follow:
 
 You have successfully installed and deployed the Operator with default parameters.
 
-The default configuration includes three HAProxy and three Percona Server for
-MySQL instances. 
+The default configuration includes three HAProxy and three Percona Server for MySQL instances.
 
 You can check the rest of the Operator's parameters in the [Custom Resource options reference](operator.md).
 
