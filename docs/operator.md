@@ -17,9 +17,9 @@ The metadata part of PerconaServerMySQL Custom Resource contains the following k
 MySQL cluster; it should include only [URL-compatible characters :octicons-link-external-16:](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3),
 not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
-* `finalizers.delete-mysql-pods-in-order` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
-
-* `finalizers.delete-mysql-pods-in-order` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
+* `finalizers` subsection:
+    * `percona.com/delete-mysql-pods-in-order` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
+    * `percona.com/delete-ssl` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](TLS.md) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
 
 The toplevel spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
 
@@ -81,11 +81,55 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 
 ### `allowUnsafeConfigurations`
 
-Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3, more than 9, or an even number of Percona Server for MySQL instances (if `false`, unsafe parameters will be automatically changed to safe defaults).
+Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3 or more than 9 Percona Server for MySQL instances. **This option is deprecated and will be removed in future releases**. Use `unsafeFlags` subsection instead. Setting `allowUnsafeConfigurations` won’t have any effect with the Operator version 0.8.0 and newer, and upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under the [unsafeFlags](#operator-unsafeflags-section) subsection set to `true`. 
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `false`  |
+
+## <a name="operator-unsafeflags-section"></a>Unsafe flags section
+
+The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *After switching to unsafe configurations permissive mode you will not be able to switch the cluster back by setting same keys to `false`, the flags will be ignored*.
+
+### `unsafeFlags.mysqlSize`
+
+Allows users to start the cluster with less than 3 MySQL instances or with more than 9 (the maximum safe size).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.proxy`
+
+Allows users to configure a cluster with disabled proxy (both HAProxy and Router).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.proxySize`
+
+Allows users to set proxy (HAProxy or Router) size to a value less than 2 Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.orchestrator`
+
+Allows users to configure a cluster with disabled Orchestrator even if asynchronous replication is turned on.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
+### `unsafeFlags.orchestratorSize`
+
+Allows users to set [orchestrator.size](#orchestratorsize) option to a value less than the minimum safe size (3).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
@@ -1142,6 +1186,14 @@ An alternative init image for Percona XtraBackup Pods.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `backup.containerSecurityContext`
+
+A custom [Kubernetes Security Context :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the `xtrabackup` container to be used instead of the default one.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `privileged: true` |
 
 ### `backup.backoffLimit`
 
