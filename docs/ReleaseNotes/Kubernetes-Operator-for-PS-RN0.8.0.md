@@ -14,7 +14,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ### Supporting cluster-wide Operator installation
 
-Starting from now, the Operator [can be installed](../cluster-wide.html) in multi-namespace (so-called “cluster-wide”) mode, enabling management of Percona Server for MySQL clusters across multiple namespaces from a single Operator. This functionality, already available for other Percona Operators, brings greater flexibility and efficiency to managing MySQL databases on Kubernetes.
+Starting from now, the Operator [can be installed](../cluster-wide.md) in multi-namespace (so-called “cluster-wide”) mode, enabling management of Percona Server for MySQL clusters across multiple namespaces from a single Operator. This functionality, already available for other Percona Operators, brings greater flexibility and efficiency to managing MySQL databases on Kubernetes.
 
 ### Fixing the overloaded allowUnsafeConfigurations flag
 
@@ -35,7 +35,7 @@ unsafeFlags:
 
 * {{ k8spsjira(149) }}: Custom Resource options now include [customizable health checks and timeouts](../operator.md#proxyhaproxyreadinessprobestimeoutseconds) for HAProxy
 * {{ k8spsjira(186) }} and {{ k8spsjira(370) }}: Removing `allowUnsafeConfigurations` Custom Resource option in favor of fine-grained safety control in the `unsafeFlags` subsection
-* {{ k8spsjira(241) }}: Support for the [cluster-wide Operator mode](../cluster-wide.html) allowing one Operator to watch for Percona Server for MySQL Custom Resources in several namespaces
+* {{ k8spsjira(241) }}: Support for the [cluster-wide Operator mode](../cluster-wide.md) allowing one Operator to watch for Percona Server for MySQL Custom Resources in several namespaces
 
 ## Improvements
 

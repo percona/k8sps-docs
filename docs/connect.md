@@ -1,10 +1,8 @@
 # Connect to Percona Server for MySQL
 
-In this tutorial, you will connect to the Percona Server for MySQL you deployed
-previously.
+In this tutorial, you will connect to the Percona Server for MySQL you deployed previously.
 
-To connect to Percona Server for MySQL you will need the password for the `root`
-user. Passwords are stored in the Secrets object. 
+To connect to Percona Server for MySQL you will need the password for the `root` user. Passwords are stored in the Secrets object. 
 
 Here's how to get it:
 {.power-number}
@@ -15,9 +13,7 @@ Here's how to get it:
     $ kubectl get secrets -n <namespace>
     ```
 
-    The Secrets object we target is named as
-    `<cluster_name>-secrets`. The `<cluster_name>` value is
-    the [name of your Percona Server for MySQL](operator.md#metadata-name). The default variant for the Secrets object is:
+    The Secrets object we target is named as `<cluster_name>-secrets`. The `<cluster_name>` value is the [name of your Percona Server for MySQL](operator.md#metadata-name). The default variant for the Secrets object is:
 
     === "via kubectl" 
 
@@ -40,13 +36,8 @@ Here's how to get it:
     ```
     Executing it may require some time to deploy the correspondent Pod.
 
-4. Connect to Percona Server for MySQL. To do this, run `mysql` tool in the
-    percona-client command shell using your cluster name and the password
-    obtained from the secret instead of the `<root_password>` placeholder.
-    The command will look different depending on whether your cluster  uses load
-    balancing with [HAProxy](haproxy-conf.md) (the default behavior) or uses
-    [MySQL Router](router-conf.md) (can be used with Group Replication clusters
-    only):
+4. Connect to Percona Server for MySQL. To do this, run `mysql` tool in the percona-client command shell using your cluster name and the password obtained from the secret instead of the `<root_password>` placeholder. The command will look different depending on whether your cluster  uses load balancing with [HAProxy](haproxy-conf.md) (the default behavior) or uses
+    [MySQL Router](router-conf.md) (can be used with Group Replication clusters only):
 
     === "with HAProxy (default)"
         ```{.bash data-prompt="$"}

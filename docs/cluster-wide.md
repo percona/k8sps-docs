@@ -215,8 +215,7 @@ To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](
 
 2. Now you should [apply a patch](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to your
     deployment, supplying the necessary image name with a newer version tag. You can find the proper
-    image name for the current Operator release [in the list of certified images](images.md)
-    (for older releases, please refer to the [old releases documentation archive](archive.md)).
+    image name for the current Operator release [in the list of certified images](images.md).
     For example, updating to the `{{ release }}` version in the `ps-operator` namespace should look as
     follows.
 
