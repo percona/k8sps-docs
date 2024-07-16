@@ -96,7 +96,7 @@ $ kubectl get events --field-selector involvedObject.kind=Pod,involvedObject.nam
     ...
     ```
 
-Save way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.):
+Save way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.) to investigate any problems to them:
 
 ```{.bash data-prompt="$"}
 $ kubectl get events --field-selector involvedObject.kind=PerconaServerMySQL,involvedObject.name=cluster1
@@ -131,5 +131,5 @@ Check `kubectl get events --help` to know about more options.
 
 !!! note
 
-    It is important to note that events are stored in the etcd for only 60 minutes. Ensure that events are checked within 60 minutes of the issue. Kubernetes cluster administrators might also use event exporters for storing the events.
+    It is important to note that events are stored in the [etcd :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/components/#etcd) for only 60 minutes. Ensure that events are checked within 60 minutes of the issue. Kubernetes cluster administrators might also use event exporters for storing the events.
 
