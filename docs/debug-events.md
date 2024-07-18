@@ -96,7 +96,7 @@ $ kubectl get events --field-selector involvedObject.kind=Pod,involvedObject.nam
     ...
     ```
 
-Save way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.) to investigate any problems to them:
+Same way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.) to investigate any problems to them:
 
 ```{.bash data-prompt="$"}
 $ kubectl get events --field-selector involvedObject.kind=PerconaServerMySQL,involvedObject.name=cluster1
