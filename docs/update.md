@@ -184,7 +184,7 @@ Manual update of Percona Server for MySQL can be done as follows:
     You can track the rollout process in real time with the
     `kubectl rollout status` command with the name of your cluster:
 
-    ```default
+    ``` {.bash data-prompt="$" }
     $ kubectl rollout status sts cluster1-ps
     ```
 
