@@ -12,17 +12,31 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Highlights
 
+## Scheduled backups
 
+Starting from now, the Operator supports scheduled backups, moving towards the upcoming general availability status and feature parity with other Percona Operators.
+
+```yaml
+ schedule:
+#      - name: "sat-night-backup"
+#        schedule: "0 0 * * 6"
+#        keep: 3
+#        storageName: s3-us-west
+#      - name: "daily-backup"
+#        schedule: "0 0 * * *"
+#        keep: 5
+#        storageName: s3
+```
 
 ## New features
 
-* {{ k8spsjira(348) }}: Add schedule backup for MySQL operator
+* {{ k8spsjira(348) }}: [Scheduled backups](../backups-scheduled.md) are now supported in addition to on-demand ones
 
 ## Improvements
 
 * {{ k8spsjira(361) }}: Use port 33061 for GR in group replication bootstrap
 * {{ k8spsjira(364) }}: Do `reconcileFullClusterCrash` only for GR
-* {{ k8spsjira(377) }}: Do not use --skip-ssl for db initialization
+* {{ k8spsjira(377) }}: Clean-up the database initialization code in the Operator to avoid using the `--skip-ssl` option removed in MySQL 8.4 
 
 ## Bugs Fixed
 
