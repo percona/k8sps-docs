@@ -14,7 +14,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Scheduled backups
 
-Starting from now, the Operator supports scheduled backups, moving towards the upcoming general availability status and feature parity with other Percona Operators.
+Starting from now, the Operator supports scheduled backups, moving towards the upcoming general availability status. You can configure scheduled backups in the Custom Resourse, as you do with other Percona Operators, in the `backup.schedule` subsection, setting the `name` of the backup, `schedule` in [crontab format :octicons-link-external-16:](https://en.wikipedia.org/wiki/Cron), as well as the backup `storage`, and, optionally, the retention (the number of backups to `keep`):
 
 ```yaml
  schedule:
@@ -28,31 +28,32 @@ Starting from now, the Operator supports scheduled backups, moving towards the u
 #        storageName: s3
 ```
 
+See more detailed instruction on configuring scheduled backups in [our documentation](../backups-scheduled.md).
+
 ## New features
 
 * {{ k8spsjira(348) }}: [Scheduled backups](../backups-scheduled.md) are now supported in addition to on-demand ones
 
 ## Improvements
 
-* {{ k8spsjira(361) }}: Use port 33061 for GR in group replication bootstrap
-* {{ k8spsjira(364) }}: Do `reconcileFullClusterCrash` only for GR
-* {{ k8spsjira(377) }}: Clean-up the database initialization code in the Operator to avoid using the `--skip-ssl` option removed in MySQL 8.4 
+* {{ k8spsjira(361) }}: Now the recommended 33061 port is used during the Group Replication bootstrap instead of the default MySQL port 3306
+* {{ k8spsjira(364) }}: Reconciling full cluster crush is now done only for the Group Replication cluster type, as not needed for asynchronous replication clusters
+* {{ k8spsjira(377) }}: A clean-up was done in the database initialization code to avoid using the `--skip-ssl` option in the Operator, which was removed in MySQL 8.4 
 
 ## Bugs Fixed
 
-* {{ k8spsjira(350) }}: sslInternalSecretName is present in bundle.yaml and docs but not used in code
-* {{ k8spsjira(354) }}: Custom sslSecret is deleted when percona.com/delete-ssl Finalizer is disabled
-* {{ k8spsjira(359) }}: Fix a bug where the Operator couldn't perform crash recovery if there was a leftover instance in metadata
-* {{ k8spsjira(360) }}: After async cluster downscale, orc services aren't cleaned up
-* {{ k8spsjira(365) }}: Group replication: mysql container constantly restarts during smart update
-* {{ k8spsjira(369) }}: [async] ps cluster has error status during smart update but update finishes successfully
-* {{ k8spsjira(372) }}: [async] mysql pod fails during SmartUpdate when spec.mysql.size=2
-* {{ k8spsjira(373) }}: [async] 'Unable to determine cluster name' and 'unexpected end of JSON input' errors in operator log
-* {{ k8spsjira(388) }}: PS-Operator cannot create ps-db-mysql and ps-db-orc StatefulSet when Resource Quota is enabled
+* {{ k8spsjira(350) }}: Remove the the `sslInternalSecretName` Custom Resource option which was not actualy used by the Operator
+* {{ k8spsjira(354) }}: Fix a bug where custom sslSecret was deleted at cluster deletion even with disabled `percona.com/delete-ssl` finalizer
+* {{ k8spsjira(359) }}: Fix a bug where the Operator couldn't perform crash recovery for the Group Replication cluster, if there was a leftover instance 
+* {{ k8spsjira(360) }}: Fix a bug where the outdated orchestrator Services were not removed after the asynchronous cluster downscale
+* {{ k8spsjira(365) }}: Fix a bug that caused crash loop in case of MySQL version upgrade due to restarting MySQL container after adding the Pod to the cluster
+* {{ k8spsjira(369) }} and {{ k8spsjira(373) }}: Fix a bug where the asynchronous replication cluster was temporarily getting error status during smart update or when starting the single-Pod cluster
+* {{ k8spsjira(372) }}: Fix a bug where MySQL Pod was failing during the SmartUpdate on two-node asynchronous replication cluster
+* {{ k8spsjira(388) }}: Fix a bug where the Operator could not create ps-db-mysql and ps-db-orc StatefulSet with enabled Resource Quota (thanks to xirehat for contribution)
 
 ## Deprecation and removal
 
-* Starting from now, `sslInternalSecretName option` option is now removed from the Custom Resource
+* The `sslInternalSecretName` option option is removed from the Custom Resource, as not used by the Operator
 
 ## Supported Platforms
 
