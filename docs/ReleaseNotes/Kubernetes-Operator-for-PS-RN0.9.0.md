@@ -14,21 +14,19 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ## Scheduled backups
 
-Starting from now, the Operator supports scheduled backups, moving towards the upcoming general availability status. You can configure scheduled backups in the Custom Resourse, as you do with other Percona Operators, in the `backup.schedule` subsection, setting the `name` of the backup, `schedule` in [crontab format :octicons-link-external-16:](https://en.wikipedia.org/wiki/Cron), as well as the backup `storage`, and, optionally, the retention (the number of backups to `keep`):
+Starting from now, the Operator supports scheduled backups, moving towards the upcoming general availability status. You can configure scheduled backups in the Custom Resource, as you do with other Percona Operators, in the `backup.schedule` subsection, setting the `name` of the backup, `schedule` in [crontab format :octicons-link-external-16:](https://en.wikipedia.org/wiki/Cron), as well as the backup `storage`, and, optionally, the retention (the number of backups to `keep`):
 
 ```yaml
- schedule:
-#      - name: "sat-night-backup"
-#        schedule: "0 0 * * 6"
-#        keep: 3
-#        storageName: s3-us-west
-#      - name: "daily-backup"
-#        schedule: "0 0 * * *"
-#        keep: 5
-#        storageName: s3
+backup:
+  ...
+  schedule:
+    - name: "sat-night-backup"
+      schedule: "0 0 * * 6"
+      keep: 3
+      storageName: s3-us-west
 ```
 
-See more detailed instruction on configuring scheduled backups in [our documentation](../backups-scheduled.md).
+See more detailed instructions on configuring scheduled backups in [our documentation](../backups-scheduled.md).
 
 ## New features
 
@@ -42,7 +40,7 @@ See more detailed instruction on configuring scheduled backups in [our documenta
 
 ## Bugs Fixed
 
-* {{ k8spsjira(350) }}: Remove the the `sslInternalSecretName` Custom Resource option which was not actualy used by the Operator
+* {{ k8spsjira(350) }}: Remove the the `sslInternalSecretName` Custom Resource option which was not actually used by the Operator
 * {{ k8spsjira(354) }}: Fix a bug where custom sslSecret was deleted at cluster deletion even with disabled `percona.com/delete-ssl` finalizer
 * {{ k8spsjira(359) }}: Fix a bug where the Operator couldn't perform crash recovery for the Group Replication cluster, if there was a leftover instance 
 * {{ k8spsjira(360) }}: Fix a bug where the outdated orchestrator Services were not removed after the asynchronous cluster downscale
