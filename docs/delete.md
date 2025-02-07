@@ -34,13 +34,14 @@ The steps are the following:
     $ kubectl delete ps <cluster_name> -n <namespace>
     ```
 
-    It may take a while to stop and delete the cluster. 
-
     ??? example "Sample output"
 
     ```{.text .no-copy}
     perconaservermysql.ps.percona.com "cluster1" deleted
     ```
+
+    It may take a while to stop and delete the cluster. 
+
 
 3. Check that the cluster is deleted by listing the Custom Resources again:
 
@@ -69,6 +70,13 @@ Choose the instructions relevant to the way you installed the Operator.
         $ kubectl get deploy -n <namespace>
         ```
 
+        ??? example "Sample output"
+
+            ```{.text .no-copy}
+            NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+            percona-server-mysql-operator   1/1     1            1           42m
+            ```
+
     2. Delete the `percona-*` deployment
 
         ```{.bash data-prompt="$"}
@@ -77,9 +85,9 @@ Choose the instructions relevant to the way you installed the Operator.
 
         ??? example "Sample output"
 
-        ```{.text .no-copy}
-        deployment.apps "percona-server-mysql-operator" deleted
-        ```
+            ```{.text .no-copy}
+            deployment.apps "percona-server-mysql-operator" deleted
+            ```
 
     3. Check that the Operator is deleted by listing the Pods. As a result you should have no Pods related to it.
 
@@ -89,9 +97,9 @@ Choose the instructions relevant to the way you installed the Operator.
         
         ??? example "Sample output"
 
-        ```{.text .no-copy}
-        No resources found in <namespace> namespace.
-        ```
+            ```{.text .no-copy}
+            No resources found in <namespace> namespace.
+            ```
 
     4. If you are not just deleting the Operator and Percona Server for MySQL from a specific namespace, but want to clean up your entire Kubernetes environment, you can also delete the [CustomRecourceDefinitions (CRDs) :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions).
 
@@ -103,18 +111,27 @@ Choose the instructions relevant to the way you installed the Operator.
         $ kubectl get crd
         ```
 
-    5. Delete the `percona*.pxc.percona.com` CRDs
+        ??? example "Sample output"
+
+            ```{.text .no-copy}
+            NAME                                        CREATED AT
+            perconaservermysqlbackups.ps.percona.com    2025-02-07T20:10:42Z
+            perconaservermysqlrestores.ps.percona.com   2025-02-07T20:10:42Z
+            perconaservermysqls.ps.percona.com          2025-02-07T20:10:42Z
+            ```
+
+    5. Delete the `percona*.ps.percona.com` CRDs
 
         ```{.bash data-prompt="$"}
-        $ kubectl delete crd perconaxtradbclusterbackups.ps.percona.com perconaxtradbclusterrestores.ps.percona.com perconaxtradbclusters.ps.percona.com
+        $ kubectl delete crd perconaservermysqlbackups.ps.percona.com perconaservermysqlrestores.ps.percona.com perconaservermysqls.ps.percona.com
         ``` 
 
         ??? example "Sample output"
 
             ```{.text .no-copy}
-            customresourcedefinition.apiextensions.k8s.io "perconaxtradbclusterbackups.ps.percona.com" deleted
-            customresourcedefinition.apiextensions.k8s.io "perconaxtradbclusterrestores.ps.percona.com" deleted
-            customresourcedefinition.apiextensions.k8s.io "perconaxtradbclusters.ps.percona.com" deleted
+            customresourcedefinition.apiextensions.k8s.io "perconaservermysqlbackups.ps.percona.com" deleted
+            customresourcedefinition.apiextensions.k8s.io "perconaservermysqlrestores.ps.percona.com" deleted
+            customresourcedefinition.apiextensions.k8s.io "perconaservermysqls.ps.percona.com" deleted
             ```
 
 === "Helm"
@@ -164,23 +181,23 @@ By default, TLS-related objects and data volumes remain in Kubernetes environmen
 
             ```{.text .no-copy}
             NAME                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-            datadir-cluster1-pxc-0   Bound    pvc-be4e2398-6fc9-456a-836b-9f0bc36d2a16   6Gi        RWO            standard-rwo   3m57s
-            datadir-cluster1-pxc-1   Bound    pvc-8a9ed524-2f79-4ed1-9265-a09947084e08   6Gi        RWO            standard-rwo   2m41s
-            datadir-cluster1-pxc-2   Bound    pvc-830fccfb-ced6-4fab-b85a-866aa435a2c7   6Gi        RWO            standard-rwo   91s
+            datadir-cluster1-mysql-0   Bound    pvc-8683d0ab-7ed4-48cb-93a9-bc6ceb6ec285   2G         RWO            standard       <unset>                 47m
+            datadir-cluster1-mysql-1   Bound    pvc-fbc5a8a4-94ff-4259-9d15-f798c97e0788   2G         RWO            standard       <unset>                 45m
+            datadir-cluster1-mysql-2   Bound    pvc-4c164ff3-a4f5-431c-9aa8-e5c7eb71a31b   2G         RWO            standard       <unset>                 44m
             ```
 
     2. Delete PVCs related to your cluster. The following command deletes PVCs for the `cluster1` cluster:
 
         ```{.bash data-prompt="$"}
-        $ kubectl delete pvc datadir-cluster1-pxc-0 datadir-cluster1-pxc-1 datadir-cluster1-pxc-2 -n <namespace>
+        $ kubectl delete pvc datadir-cluster1-mysql-0 datadir-cluster1-mysql-1 datadir-cluster1-mysql-2 -n <namespace>
         ```    
 
         ??? example "Sample output"       
 
             ```{.text .no-copy}
-            persistentvolumeclaim "datadir-cluster1-pxc-0" deleted
-            persistentvolumeclaim "datadir-cluster1-pxc-1" deleted
-            persistentvolumeclaim "datadir-cluster1-pxc-2" deleted
+            persistentvolumeclaim "datadir-cluster1-mysql-0" deleted
+            persistentvolumeclaim "datadir-cluster1-mysql-1" deleted
+            persistentvolumeclaim "datadir-cluster1-mysql-2" deleted
             ```    
 
 2. Delete the Secrets
