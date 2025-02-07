@@ -53,6 +53,13 @@ See more detailed instructions on configuring scheduled backups in [our document
 
 * The `sslInternalSecretName` option option is removed from the Custom Resource, as not used by the Operator
 
+## Known limitations
+
+* Both upgrade to the Operator version 0.9.0 and the appropriate database cluster upgrade can not be done in a usual way due to a number of internal changes, and require additional manual operations.
+
+    * Upgrading the Operator can be done with [this workaround](../upgrade.md#upgrading-the-operator-and-crd)
+    * Upgrading the database cluster can be done by [deleting and recreating it](../delete.md#delete-the-database-cluster)
+
 ## Supported Platforms
 
 The Operator was developed and tested with Percona Server for MySQL 8.0.40-31.
