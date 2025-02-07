@@ -33,6 +33,76 @@ updates sequentially.
 
 The upgrade includes the following steps.
 
+0. If upgrading from the operator version 0.8.0 to 0.9.0 you need the following preparatory step, due to a number of internal changes in this Operator version:
+
+    1. Find the name of the MySQL primary Pod. For example, you can do it with the following command, substituting your real cluster name instead of `cluster1`, if needed:
+    
+        ``` {.bash data-prompt="$" }
+        $ kubectl exec -it cluster1-mysql-0 -- bash -c 'mysqlsh -u operator -p$(</etc/mysql/mysql-users-secret/operator)'
+        ```
+
+        ??? example "Expected output"
+
+            ```text
+            Defaulted container "mysql" out of: mysql, xtrabackup, mysql-init (init)
+            MySQL Shell 8.0.36
+
+            Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+            Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+            Other names may be trademarks of their respective owners.
+
+            Type '\help' or '\?' for help; '\quit' to exit.
+            WARNING: Using a password on the command line interface can be insecure.
+            Creating a session to 'operator@localhost'
+            Fetching schema names for auto-completion... Press ^C to stop.
+            Your MySQL connection id is 1092 (X protocol)
+            Server version: 8.0.36-28 Percona Server (GPL), Release 28, Revision 47601f19
+            No default schema selected; type \use <schema> to set one.
+             MySQL  localhost:33060+ ssl  JS > dba.getCluster().status().defaultReplicaSet.primary
+            cluster1-mysql-0.cluster1-mysql.ps-3257:3306
+            ```
+
+    2. Exec into the `mysql` on this primary Pod:
+
+        ``` {.bash data-prompt="$" }
+        $ kubectl exec -it cluster1-mysql-0 -- bash -c 'mysql -u operator -p$(</etc/mysql/mysql-users-secret/operator)'
+        ```
+
+    3. Create the `replication` user:
+    
+        ```mysql
+        CREATE USER 'replication'@'%' IDENTIFIED by '<change-this>';
+        ```
+
+    4. Encode the replication user's password with base64:
+
+        ``` {.bash data-prompt="$" }
+        $ echo -n '<change-this>' | base64 --wrap=0
+PGNoYW5nZS10aGlzPg==
+        ```
+        
+    5. Patch the secrets to add this replication password:
+
+        ``` {.bash data-prompt="$" }
+        $ kubectl patch secrets cluster1-secrets -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
+        ```
+
+        ??? example "Expected output"
+
+            ```text
+            secret/cluster1-secrets patched
+            ```
+
+        ``` {.bash data-prompt="$" }
+        $ kubectl patch secrets internal-cluster1 -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'        ```
+
+        ??? example "Expected output"
+
+            ```text
+            secret/internal-cluster1 patched
+            ```
+
+
 1. Update the [Custom Resource Definition :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
     for the Operator, taking it from the official repository on Github, and do
     the same for the Role-based access control:
