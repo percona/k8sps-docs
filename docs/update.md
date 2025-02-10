@@ -87,7 +87,7 @@ If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following pre
     === "in Linux"
 
         ```{.bash data-prompt="$"}
-        $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n '<change-this>' | base64 --wrap=0)'}}'
+        $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n '<change-this>' | base64 --wrap=0)'"}}'
         ```
 
         ??? example "Expected output"
@@ -99,7 +99,7 @@ If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following pre
     === "in macOS"
 
         ```{.bash data-prompt="$"}
-        $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n '<change-this>' | base64)'}}'
+        $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n '<change-this>' | base64)'"}}'
         ```
 
         ??? example "Expected output"

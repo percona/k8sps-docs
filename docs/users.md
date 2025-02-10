@@ -111,13 +111,13 @@ in the `cluster1-secrets` object can be done with the following command:
 === "in Linux"
 
     ```{.bash data-prompt="$"}
-    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n new_password | base64 --wrap=0)'}}'
+    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64 --wrap=0)'"}}'
     ```
 
 === "in macOS"
 
     ```{.bash data-prompt="$"}
-    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n new_password | base64)'}}'
+    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
     ```
 
 ### Password Rotation Policies and Timing
