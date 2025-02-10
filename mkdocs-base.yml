@@ -141,6 +141,7 @@ extra: # Used in main.html template and can't be externalized
   apiversion: '0-9-0'
   ps80recommended: '8.0.40-31'
   pxbrecommended: '8.0.35-31'
+  ptrecommended: '3.7.0'
   pmm2recommended: '2.44.0'
   haproxyrecommended: '2.8.11'
   routerrecommended: '8.0.40'
