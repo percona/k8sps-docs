@@ -1381,6 +1381,7 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 
 ### `backup.schedule.name`
 
+Name of the scheduled backup.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1388,7 +1389,7 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 
 ### `backup.schedule.schedule`
 
-Scheduled time to make a backup specified in the [crontab format :octicons-link-external-16:](https://en.wikipedia.org/wiki/Cron).
+Scheduled time of the backup, specified in the [crontab format :octicons-link-external-16:](https://en.wikipedia.org/wiki/Cron).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1404,12 +1405,11 @@ The amount of most recent backups to store. Older backups are automatically dele
 
 ### `backup.schedule.storageName`
 
-The name of the storage for the backups configured in the `storages` or `fs-pvc` subsection.
+The name of the storage for the backups configured in the `storages` subsection.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `s3-us-west` |
-
 
 ## <a name="operator-pt-section"></a>Percona Toolkit section
 
