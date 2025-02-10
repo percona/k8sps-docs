@@ -86,17 +86,29 @@ If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following pre
 
     === "in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n '<change-this>' | base64 --wrap=0
-            ```    
+        ```{.bash data-prompt="$"}
+        $ echo -n '<change-this>' | base64 --wrap=0
+        ```
+
+        ??? example "Expected output"
+
+            ```text
+            PGNoYW5nZS10aGlzPg==
+            ```
 
     === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n '<change-this>' | base64
-            ```    
-        
-5. Patch the secrets to add this replication password:
+        ```{.bash data-prompt="$"}
+        $ echo -n '<change-this>' | base64
+        ```    
+
+        ??? example "Expected output"
+
+            ```text
+            PGNoYW5nZS10aGlzPg==
+            ```        
+
+6. Patch the secrets to add this replication password:
 
     ``` {.bash data-prompt="$" }
     $ kubectl patch -n <namespace_name> secrets cluster1-secrets -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
