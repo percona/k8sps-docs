@@ -33,7 +33,7 @@ updates sequentially.
 
 If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following preparatory step, due to a number of internal changes in this Operator version:
 
-1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to MySQL Shell with the following command (substite your real cluster name instead of `cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
+1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to MySQL Shell with the following command (substitute your real cluster name instead of `cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
     
     ``` {.bash data-prompt="$" }
     $ kubectl exec -n <namespace_name> -it cluster1-mysql-0 -- bash -c 'mysqlsh -u operator -p$(</etc/mysql/mysql-users-secret/operator)'
