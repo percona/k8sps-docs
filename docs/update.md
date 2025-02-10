@@ -262,7 +262,7 @@ Manual update of Percona Server for MySQL can be done as follows:
            },
            "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
            "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
-           "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" },
+           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
            "pmm": { "image": "percona/pmm-client:{{ pmm2recommended }}" }
        }}'
     ```
@@ -282,7 +282,7 @@ Manual update of Percona Server for MySQL can be done as follows:
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
                "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
-               "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" }
+               "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
            }}'
         ```
 
