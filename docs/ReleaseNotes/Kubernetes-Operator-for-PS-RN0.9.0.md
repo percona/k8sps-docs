@@ -8,7 +8,7 @@
 
     [Installing Percona Operator for MySQL](../System-Requirements.md#installation-guidelines)
 
-Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.8.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
+Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.9.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
 ## Highlights
 
@@ -51,13 +51,13 @@ See more detailed instructions on configuring scheduled backups in [our document
 
 ## Deprecation and removal
 
-* The `sslInternalSecretName` option option is removed from the Custom Resource, as not used by the Operator
+* The `sslInternalSecretName` option option is removed from the Custom Resource
 
 ## Known limitations
 
 * Both upgrade to the Operator version 0.9.0 and the appropriate database cluster upgrade can not be done in a usual way due to a number of internal changes, and require additional manual operations.
 
-    * Upgrading the Operator can be done with [this workaround](../upgrade.md#upgrading-the-operator-and-crd)
+    * Upgrading the Operator can be done with [this workaround](../upgrade.md#prerequisites)
     * Upgrading the database cluster can be done by [deleting and recreating it](../delete.md#delete-the-database-cluster)
 
 ## Supported Platforms
