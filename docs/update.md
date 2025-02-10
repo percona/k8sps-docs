@@ -33,7 +33,7 @@ updates sequentially.
 
 If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following preparatory step, due to a number of internal changes in this Operator version:
 
-1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to the mysql shell with the following command (substite your real cluster name instead of `cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
+1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to MySQL Shell with the following command (substite your real cluster name instead of `cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
     
     ``` {.bash data-prompt="$" }
     $ kubectl exec -n <namespace_name> -it cluster1-mysql-0 -- bash -c 'mysqlsh -u operator -p$(</etc/mysql/mysql-users-secret/operator)'
@@ -58,7 +58,7 @@ If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following pre
         No default schema selected; type \use <schema> to set one.
         ```
 
-    Now, excecute the following request in MySQL Sell:
+    Now, excecute the following request in MySQL Shell:
         
     ``` {.bash data-prompt="MySQL  localhost:33060+ ssl  JS >" }
     MySQL  localhost:33060+ ssl  JS > dba.getCluster().status().defaultReplicaSet.primary
@@ -76,7 +76,7 @@ If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following pre
     $ kubectl exec -n <namespace_name> -it cluster1-mysql-0 -- bash -c 'mysql -u operator -p$(</etc/mysql/mysql-users-secret/operator)'
     ```
 
-3. Create the `replication` user:
+3. Create the `replication` user with some password (we use `<change-this>` password placeholder in this example):
     
     ```mysql
     CREATE USER 'replication'@'%' IDENTIFIED by '<change-this>';
@@ -98,9 +98,9 @@ If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following pre
 
     === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n '<change-this>' | base64)'}}'
-            ```
+        ```{.bash data-prompt="$"}
+        $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n '<change-this>' | base64)'}}'
+        ```
 
         ??? example "Expected output"
 

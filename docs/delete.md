@@ -36,9 +36,9 @@ The steps are the following:
 
     ??? example "Sample output"
 
-    ```{.text .no-copy}
-    perconaservermysql.ps.percona.com "cluster1" deleted
-    ```
+        ```{.text .no-copy}
+        perconaservermysql.ps.percona.com "cluster1" deleted
+        ```
 
     It may take a while to stop and delete the cluster. 
 
@@ -51,9 +51,9 @@ The steps are the following:
 
     ??? example "Sample output"
 
-    ```{.text .no-copy}
-    No resources found in <namespace> namespace.
-    ```
+        ```{.text .no-copy}
+        No resources found in <namespace> namespace.
+        ```
 
 ## Delete the Operator
 
