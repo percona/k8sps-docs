@@ -207,6 +207,7 @@ nav:
           
     - HOWTOs:
           - "Provide Percona Operator for MySQL single-namespace and multi-namespace deployment": cluster-wide.md
+          - "Delete the Operator": delete.md
           
     - Reference:
           - "Custom Resource options": operator.md
