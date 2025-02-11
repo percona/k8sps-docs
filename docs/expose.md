@@ -40,9 +40,8 @@ useful for operations such as asynchronous calls).
 
 !!! note
 
-    The Operator currently supports using HAProxy with the asyncrhonous cluster
-    only, and therefore simultaneous enabling of both HAProxy and Group
-    Replication is not possible.
+    The Operator currently supports using HAProxy not only with asynchronous
+    replication clusters, but also with group replication clusters.
 
 When the cluster is configured in this way, you can find the endpoint (the
 public IP address of the load balancer in our example) by getting the Service
@@ -93,8 +92,11 @@ useful for operations such as asynchronous calls).
 
 ## Group Replication
 
-Clusters configured to use Group Replication can be also exposed via the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/)
-through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
+Group replication clusters can be configured to use either HAProxy or with [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/). Group replication cluster can be exposed with HAProxy
+similarly to the asynchronous cluster. 
+
+If group replication cluster is configured with MySQL Router, it can be 
+exposed through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
 `cluster1-router`. Network design in this case looks like this:
 
 ![image](assets/images/exposure-gr.svg)
