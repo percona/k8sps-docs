@@ -29,6 +29,107 @@ Only the incremental update to a nearest version of the Operator is supported
 differs from the current version by more than one, make several incremental
 updates sequentially.
 
+### Prerequisites
+
+If upgrading from the Operator version 0.8.0 to 0.9.0 you need the following preparatory step, due to a number of internal changes in this Operator version:
+
+1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to MySQL Shell with the following command (substitute your real cluster name instead of `cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
+    
+    ``` {.bash data-prompt="$" }
+    $ kubectl exec -n <namespace_name> -it cluster1-mysql-0 -- bash -c 'mysqlsh -u operator -p$(</etc/mysql/mysql-users-secret/operator)'
+    ```
+
+    ??? example "Expected output"
+
+        ```text
+        Defaulted container "mysql" out of: mysql, xtrabackup, mysql-init (init)
+        MySQL Shell 8.0.36
+
+        Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+        Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+        Other names may be trademarks of their respective owners.
+
+        Type '\help' or '\?' for help; '\quit' to exit.
+        WARNING: Using a password on the command line interface can be insecure.
+        Creating a session to 'operator@localhost'
+        Fetching schema names for auto-completion... Press ^C to stop.
+        Your MySQL connection id is 1092 (X protocol)
+        Server version: 8.0.36-28 Percona Server (GPL), Release 28, Revision 47601f19
+        No default schema selected; type \use <schema> to set one.
+        ```
+
+    Now, excecute the following request in MySQL Shell:
+        
+    ``` {.bash data-prompt="MySQL  localhost:33060+ ssl  JS >" }
+    MySQL  localhost:33060+ ssl  JS > dba.getCluster().status().defaultReplicaSet.primary
+    ```
+
+    ???+ example "Expected output"
+
+        ```text
+        cluster1-mysql-0.cluster1-mysql.default:3306
+        ```
+
+2. Exec into the `mysql` on this primary Pod (`cluster1-mysql-0` in the above example):
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl exec -n <namespace_name> -it cluster1-mysql-0 -- bash -c 'mysql -u operator -p$(</etc/mysql/mysql-users-secret/operator)'
+    ```
+
+3. Create the `replication` user with some password (we use `<change-this>` password placeholder in this example):
+    
+    ```mysql
+    CREATE USER 'replication'@'%' IDENTIFIED by '<change-this>';
+    ```
+
+4. Encode the replication user's password with base64:
+
+    === "in Linux"
+
+        ```{.bash data-prompt="$"}
+        $ echo -n '<change-this>' | base64 --wrap=0
+        ```
+
+        ??? example "Expected output"
+
+            ```text
+            PGNoYW5nZS10aGlzPg==
+            ```
+
+    === "in macOS"
+
+        ```{.bash data-prompt="$"}
+        $ echo -n '<change-this>' | base64
+        ```    
+
+        ??? example "Expected output"
+
+            ```text
+            PGNoYW5nZS10aGlzPg==
+            ```        
+
+6. Patch the secrets to add this replication password:
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl patch -n <namespace_name> secrets cluster1-secrets -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
+    ```
+
+    ??? example "Expected output"
+
+        ```text
+        secret/cluster1-secrets patched
+        ```
+
+    ``` {.bash data-prompt="$" }
+    $ kubectl patch -n <namespace_name> secrets internal-cluster1 -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
+    ```
+
+    ??? example "Expected output"
+
+        ```text
+        secret/internal-cluster1 patched
+        ```
+
 ### Manual upgrade
 
 The upgrade includes the following steps.
@@ -111,6 +212,11 @@ are updated. Smart Update strategy is on when the `updateStrategy` key in the
     and `OnDelete`. You can find out more about it in the
     [appropriate section](update.md#more-on-upgrade-strategies).
 
+
+!!! warning 
+
+    If upgrading from the Operator version 0.8.0, normal Percona Server for MySQL upgrade path is not supported. You should [delete your cluster](delete.md), not [cleaning up](delete.md#clean-up-resources) Persistent Volume Claims, and recreate it back (by applying the `deploy/cr.yaml` file from the new release with all needed edits related to your cluster configuration).
+
 ### Manual upgrade
 
 Manual update of Percona Server for MySQL can be done as follows:
@@ -156,7 +262,7 @@ Manual update of Percona Server for MySQL can be done as follows:
            },
            "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
            "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
-           "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" },
+           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
            "pmm": { "image": "percona/pmm-client:{{ pmm2recommended }}" }
        }}'
     ```
@@ -176,7 +282,7 @@ Manual update of Percona Server for MySQL can be done as follows:
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
                "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
-               "toolkit":{ "image": "percona/percona-server-mysql-operator:{{ release }}-toolkit" }
+               "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
            }}'
         ```
 
