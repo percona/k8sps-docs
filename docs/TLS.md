@@ -84,10 +84,7 @@ The set of commands generate certificates with the following attributes:
 
 * `ca.pem` - Certificate Authority
 
-You should generate certificates twice: one set is for external communications,
-and another set is for internal ones. A secret created for the external use must
-be added to `cr.yaml/spec/sslSecretName`. A certificate generated for internal
-communications must be added to the `cr.yaml/spec/sslInternalSecretName`.
+A secret must be added to `cr.yaml/spec/sslSecretName`.
 
 ```{.bash data-prompt="$"}
 $ cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
