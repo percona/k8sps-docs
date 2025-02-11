@@ -92,8 +92,7 @@ useful for operations such as asynchronous calls).
 
 ## Group Replication
 
-Group replication clusters can be configured to use either HAProxy or with [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/). Group replication cluster can be exposed with HAProxy
-similarly to the asynchronous cluster. 
+Group replication clusters can be configured to use either HAProxy or [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/). Group replication cluster can be exposed with HAProxy similarly to the asynchronous cluster. 
 
 If group replication cluster is configured with MySQL Router, it can be 
 exposed through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
