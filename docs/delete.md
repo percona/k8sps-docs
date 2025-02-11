@@ -13,11 +13,12 @@ To delete the database cluster means to delete the Custom Resource associated wi
 
 !!! note
 
-    There is a [finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) defined in the Custom Resource, which define whether to delete or preserve  TLS-related objects:
+    There are 2 [finalizers :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) defined in the Custom Resource, which define whether to delete or preserve  TLS-related objects and data volumes when the cluster is deleted.
 
+    * `finalizers.percona.com/delete-mysql-pvc`: if present, [Persistent Volume Claims :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for the database cluster Pods are deleted along with the cluster deletion.
     * `finalizers.percona.com/delete-ssl`: if present, objects, created for SSL (Secret, certificate, and issuer) are deleted along with the cluster deletion.
 
-    This finalizer is off by default in the `deploy/cr.yaml` configuration file. Also, the Operator doesn't delete [Persistent Volume Claims :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for the database cluster Pods along with the cluster deletion. This allows you to recreate the cluster without losing data, credentials for the system users, etc. You can always [delete TLS-related objects and PVCs manually](#clean-up-resources), if needed. 
+    These finalizers are off by default in the `deploy/cr.yaml` configuration file, and it allows you to recreate the cluster without losing data, credentials for the system users, etc. You can always [delete TLS-related objects and PVCs manually](#clean-up-resources), if needed. 
 
 The steps are the following:
 {.power-number}
@@ -166,7 +167,10 @@ Choose the instructions relevant to the way you installed the Operator.
 
 ## Clean up resources
  
-By default, TLS-related objects and data volumes remain in Kubernetes environment after you delete the cluster to allow you to recreate it without losing the data. If you wish to delete them, do the following:
+By default, TLS-related objects and data volumes remain in Kubernetes environment after you delete the cluster to allow you to recreate it without losing the data
+(unless you overwrite this behaviour by turning on `percona.com/delete-mysql-pvc` and/or `percona.com/delete-ssl` [finalizers](operator.md#metadata-name)).
+You can always delete TLS-related objects and PVCs manually. 
+If you wish to delete them, do the following:
 {.power-number}
 
 1. Delete Persistent Volume Claims.

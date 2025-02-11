@@ -31,6 +31,7 @@ See more detailed instructions on configuring scheduled backups in [our document
 ## New features
 
 * {{ k8spsjira(348) }}: [Scheduled backups](../backups-scheduled.md) are now supported in addition to on-demand ones
+* {{ k8spsjira(367) }}: A new [percona.com/delete-mysql-pvc](../operator.md#metadata-name) Finalizer can be used to automatically delete Persistent Volume Claims for the database cluster Pods after the cluster deletion event (off by default)
 
 ## Improvements
 
