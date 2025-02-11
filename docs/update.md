@@ -215,7 +215,7 @@ are updated. Smart Update strategy is on when the `updateStrategy` key in the
 
 !!! warning 
 
-    If upgrading from the Operator version 0.8.0, normal Percona Server for MySQL upgrade path is not supported. You should [delete your cluster](delete.md), not [cleaning up](delete.md#clean-up-resources) Persistent Volume Claims, and recreate it back with the same parameters.
+    If upgrading from the Operator version 0.8.0, normal Percona Server for MySQL upgrade path is not supported. You should [delete your cluster](delete.md), not [cleaning up](delete.md#clean-up-resources) Persistent Volume Claims, and recreate it back (by applying the `deploy/cr.yaml` file from the new release with all needed edits related to your cluster configuration).
 
 ### Manual upgrade
 
