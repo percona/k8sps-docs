@@ -41,7 +41,7 @@ See more detailed instructions on configuring scheduled backups in [our document
 
 ## Bugs Fixed
 
-* {{ k8spsjira(350) }}: Remove the the `sslInternalSecretName` Custom Resource option which was not actually used by the Operator
+* {{ k8spsjira(350) }}: Remove the `sslInternalSecretName` Custom Resource option which was not actually used by the Operator
 * {{ k8spsjira(354) }}: Fix a bug where custom sslSecret was deleted at cluster deletion even with disabled `percona.com/delete-ssl` finalizer
 * {{ k8spsjira(359) }}: Fix a bug where the Operator couldn't perform crash recovery for the Group Replication cluster if there was a leftover instance 
 * {{ k8spsjira(360) }}: Fix a bug where the outdated orchestrator Services were not removed after the asynchronous cluster downscale
@@ -52,7 +52,7 @@ See more detailed instructions on configuring scheduled backups in [our document
 
 ## Deprecation and removal
 
-* The `sslInternalSecretName` option option is removed from the Custom Resource
+* The `sslInternalSecretName` option is removed from the Custom Resource
 
 ## Known limitations
 
