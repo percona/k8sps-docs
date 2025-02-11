@@ -8,7 +8,7 @@
 
     [Installing Percona Operator for MySQL](../System-Requirements.md#installation-guidelines)
 
-Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.9.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
+Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.9.0 of the Percona Operator for MySQL is still **a tech preview release**, and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
 ## Highlights
 
@@ -36,19 +36,19 @@ See more detailed instructions on configuring scheduled backups in [our document
 ## Improvements
 
 * {{ k8spsjira(361) }}: Now the recommended 33061 port is used during the Group Replication bootstrap instead of the default MySQL port 3306
-* {{ k8spsjira(364) }}: Reconciling full cluster crush is now done only for the Group Replication cluster type, as not needed for asynchronous replication clusters
+* {{ k8spsjira(364) }}: Reconciling full cluster crush is now done only for the Group Replication cluster type, as it is not required for asynchronous replication clusters
 * {{ k8spsjira(377) }}: A clean-up was done in the database initialization code to avoid using the `--skip-ssl` option in the Operator, which was removed in MySQL 8.4 
 
 ## Bugs Fixed
 
 * {{ k8spsjira(350) }}: Remove the the `sslInternalSecretName` Custom Resource option which was not actually used by the Operator
 * {{ k8spsjira(354) }}: Fix a bug where custom sslSecret was deleted at cluster deletion even with disabled `percona.com/delete-ssl` finalizer
-* {{ k8spsjira(359) }}: Fix a bug where the Operator couldn't perform crash recovery for the Group Replication cluster, if there was a leftover instance 
+* {{ k8spsjira(359) }}: Fix a bug where the Operator couldn't perform crash recovery for the Group Replication cluster if there was a leftover instance 
 * {{ k8spsjira(360) }}: Fix a bug where the outdated orchestrator Services were not removed after the asynchronous cluster downscale
 * {{ k8spsjira(365) }}: Fix a bug that caused crash loop in case of MySQL version upgrade due to restarting MySQL container after adding the Pod to the cluster
 * {{ k8spsjira(369) }} and {{ k8spsjira(373) }}: Fix a bug where the asynchronous replication cluster was temporarily getting error status during smart update or when starting the single-Pod cluster
 * {{ k8spsjira(372) }}: Fix a bug where MySQL Pod was failing during the SmartUpdate on two-node asynchronous replication cluster
-* {{ k8spsjira(388) }}: Fix a bug where the Operator could not create ps-db-mysql and ps-db-orc StatefulSet with enabled Resource Quota (thanks to xirehat for contribution)
+* {{ k8spsjira(388) }}: Fix a bug where the Operator could not create ps-db-mysql and ps-db-orc StatefulSets with Resource Quota enabled (thanks to xirehat for contribution)
 
 ## Deprecation and removal
 
