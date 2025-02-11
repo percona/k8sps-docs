@@ -81,14 +81,14 @@ Here's a sequence of steps to follow:
     $ kubectl get ps -n <namespace>
     ```
 
-    The creation process may take some time. When the process is over your cluster obtains the `ready` status.
-
     ??? example "Expected output"
 
         ```{.text .no-copy}
         NAME       REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
         cluster1   group-replication   cluster1-haproxy.default   ready   3                                3        20m
         ```
+
+    The creation process may take some time. When the process is over your cluster obtains the `ready` status.
 
 You have successfully installed and deployed the Operator with default parameters.
 
