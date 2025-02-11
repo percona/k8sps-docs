@@ -1379,6 +1379,38 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 | ----------- | ---------- |
 | :material-code-string: string     | |
 
+### `backup.schedule.name`
+
+Name of the scheduled backup.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `sat-night-backup` |
+
+### `backup.schedule.schedule`
+
+Scheduled time of the backup, specified in the [crontab format :octicons-link-external-16:](https://en.wikipedia.org/wiki/Cron).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `0 0 \* \* 6` |
+
+### `backup.schedule.keep`
+
+The amount of most recent backups to store. Older backups are automatically deleted. Set `keep` to zero or completely remove it to disable automatic deletion of backups.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `backup.schedule.storageName`
+
+The name of the storage for the backups configured in the `storages` subsection.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `s3-us-west` |
+
 ## <a name="operator-pt-section"></a>Percona Toolkit section
 
 The `toolkit` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
