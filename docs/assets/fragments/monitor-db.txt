@@ -26,7 +26,7 @@ container in your Kubernetes-based environment:
 
 1. Authorize PMM Client within PMM Server.
     <a name="operator-monitoring-client-token"></a>
-    1. [Acquire the API Key from your PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/details/api.html#api-keys-and-authentication). Specify the Admin role when getting the API Key. 
+    1. [Acquire the API Key from your PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/details/api.html#api-keys-and-authentication). Specify the Admin role when getting the API Key. 
 
         <i warning>:material-alert: Warning:</i> The API key is not rotated automatically.
 
