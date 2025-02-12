@@ -69,10 +69,10 @@ The following table shows system users’ names and purposes.
 | Orchestrator   | orchestrator | orchestrator        | Orchestrator administrative user                                       |
 | Backup         | xtrabackup   | xtrabackup          | [User to run backups :octicons-link-external-16:](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)     |
 | Cluster Check  | clustercheck | clustercheck        | [User for liveness checks and readiness checks :octicons-link-external-16:](http://galeracluster.com/library/documentation/monitoring-cluster.html) |
-| Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent :octicons-link-external-16:](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
+| Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
 | Operator Admin | operator     | operator            | Database administrative user, should be used only by the Operator      |
 | Replication    | replication  | replication         | Administrative user needed for replication                             |
-| PMM Server API Key | | pmmserverkey | [API Key used to access PMM Server :octicons-link-external-16:](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
+| PMM Server API Key | | pmmserverkey | [API Key used to access PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
 
 ### YAML Object Format
 
