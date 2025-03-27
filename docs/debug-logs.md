@@ -38,9 +38,8 @@ In the following examples we will access containers of the `cluster1-mysql-0` Po
     $ kubectl logs cluster1-mysql-0 -c mysql --previous
     ```
 
-* Check logs of the `mysql` container, parsing the output with [jq JSON processor](https://stedolan.github.io/jq/):
+* Check logs of the `mysql` container, parsing the output with [jq JSON processor :octicons-link-external-16:](https://stedolan.github.io/jq/):
 
     ``` {.bash data-prompt="$" }
     $ kubectl logs cluster1-mysql-0 -c mysql -f | jq -R 'fromjson?'
     ```
-

@@ -7,9 +7,9 @@ also on any Kubernetes-based environment with the installed Operator.
 
     When restoring to a new Kubernetes-based environment, make sure it
     has a Secrets object with the same user passwords as in the original cluster.
-    More details about secrets can be found in [System Users](users.md#users-system-users).
+    More details about secrets can be found in [System Users](users.md#system-users).
 
-The example of the restore configuration file is [deploy/backup/restore.yaml](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml). The options that can be used in it are described in the [restore options reference](operator.md#perconaservermysqlrestore-custom-resource-options).
+The example of the restore configuration file is [deploy/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml). The options that can be used in it are described in the [restore options reference](operator.md#perconaservermysqlrestore-custom-resource-options).
 
 Following things are needed to restore a previously saved backup:
 
@@ -54,7 +54,7 @@ restoration can be done in the following way.
         === "S3-compatible storage"
 
             The `backupSource` key should contain `destination` key equal to the
-            S3 [bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html)
+            S3 [bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html)
             with a special `s3://` prefix, followed by the necessary S3
             configuration keys, same as in `deploy/cr.yaml` file:
 
@@ -73,7 +73,7 @@ restoration can be done in the following way.
         === "Azure Blob storage"
 
             The `backupSource` key should contain `destination` key equal to the
-            Azure Blob [container](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction#containers)
+            Azure Blob [container :octicons-link-external-16:](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction#containers)
             and backup name, followed by the necessary Azure
             configuration keys, same as in `deploy/cr.yaml` file:
 

@@ -1,10 +1,10 @@
 # MkDocs configuration
 # Used as base - look for .yml files with INHERIT
-site_name: Percona Operator for MySQL based on Percona Server for MySQL
+site_name: Percona Operator for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
-copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2023
+copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2025
 use_directory_urls: false
 repo_name: percona/k8sps-docs
 repo_url: https://github.com/percona/k8sps-docs
@@ -12,26 +12,31 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
-  logo: assets/images/percona-logo.svg
-  favicon: assets/images/percona-favicon.ico
+  logo: assets/operators-mark.svg
+  favicon: assets/operators-fav.svg
   custom_dir: _resource/overrides/
   font:
-    text: Chivo, Colfax, Franziska
-    text: Poppins
+    text: Roboto
+    code: Roboto Mono
   palette:
-    # Light mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Color theme set to Automatic. Click to change
     - media: "(prefers-color-scheme: light)"
       scheme: percona-light
+      primary: custom
+      accent: custom
       toggle:
-        icon: material/toggle-switch-off-outline
-        name: Switch to light mode
-
-    # Dark mode 
+        icon: material/brightness-7
+        name: Color theme set to Light Mode. Click to change
     - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+      scheme: percona-dark
+      primary: custom
+      accent: custom
       toggle:
-        icon: material/toggle-switch
-        name: Switch to dark mode
+        icon: material/brightness-4
+        name: Color theme set to Dark Mode. Click to change
 
 # Theme features
 
@@ -43,21 +48,26 @@ theme:
 extra_css:
   - https://unicons.iconscout.com/release/v3.0.3/css/line.css
   - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css
-  - css/percona.css
 #  - css/version-select.css
   - css/nocopy.css
+  - css/design.css
+  - css/osano.css
+  - css/operators.css
   - css/extra.css
 
 extra_javascript:
    - js/promptremover.js
-#  - js/version-select.js
+   - js/consent.js
+   - js/percona-select.js
+#   - js/version-select.js
 #  - js/toctree.js
 #  - js/lightgallery.min.js
 
 markdown_extensions:
   attr_list: {}
   toc:
-    permalink: True
+    permalink: true
+  md_in_html: {}
   admonition: {}
   def_list: {}
   meta: {}
@@ -67,11 +77,25 @@ markdown_extensions:
   pymdownx.smartsymbols: {}
   pymdownx.tilde: {}
   pymdownx.superfences: {}
-  pymdownx.snippets: {}
   pymdownx.tabbed:
     alternate_style: true
-  pymdownx.highlight:
-    linenums: false
+  pymdownx.tasklist:
+    custom_checkbox: true
+  pymdownx.snippets:
+      base_path:
+        - snippets
+        - docs/assets/code
+        - docs/assets/fragments
+      auto_append:
+        - services-banner.md
+  pymdownx.highlight: 
+    use_pygments: true
+  pymdownx.emoji:
+    emoji_index: !!python/name:material.extensions.emoji.twemoji
+    emoji_generator: !!python/name:material.extensions.emoji.to_svg
+    options:
+      custom_icons:
+        - _resource/overrides/.icons
 
 plugins:
   section-index: {}
@@ -95,7 +119,7 @@ plugins:
   with-pdf:
     output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
     cover_title: "Percona Operator for MySQL based on Percona Server for MySQL documentation"
-    cover_subtitle: 0.6.0 (September 5, 2023)
+    cover_subtitle: 0.9.0 (February 11, 2025)
     author: "Percona Technical Documentation Team"
     cover_logo: docs/assets/images/percona_kubernetes_icon.png
     custom_template_path: _resource/templates
@@ -110,27 +134,20 @@ plugins:
     canonical_version: null
 
 extra: # Used in main.html template and can't be externalized
-  homepage:
-    https://docs.percona.com
-  consent:
-    title: Cookie consent
-    description: >- 
-      We use cookies to recognize your repeated visits and preferences, as well
-      as to measure the effectiveness of our documentation and whether users
-      find what they're searching for. With your consent, you're helping us to
-      make our documentation better. Read more about <a class="reference external" href="https://www.percona.com/20180524-cookie-policy" target="_blank">Percona Cookie Policy</a>.
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
-  release: '0.6.0'
-  apiversion: '0-6-0'
-  ps80recommended: '8.0.33-25'
-  pxbrecommended: '8.0.33-27'
-  pmm2recommended: '2.39'
-  haproxyrecommended: '2.8.1'
-  routerrecommended: '8.0.33-25'
-  orchestratorrecommended: '3.2.6-9'
-  gkerecommended: '1.27'
-  certmanagerrecommended: '1.11.0'
+  commandName: 'kubectl'
+  release: '0.9.0'
+  apiversion: '0-9-0'
+  ps80recommended: '8.0.40-31'
+  pxbrecommended: '8.0.35-31'
+  ptrecommended: '3.7.0'
+  pmm2recommended: '2.44.0'
+  haproxyrecommended: '2.8.11'
+  routerrecommended: '8.0.40'
+  orchestratorrecommended: '3.2.6-15'
+  gkerecommended: '1.29'
+  certmanagerrecommended: '1.16.3'
   version:
     provider: mike
 
@@ -138,15 +155,23 @@ extra: # Used in main.html template and can't be externalized
 nav:
 
     - Welcome: index.md
+    - get-help.md
     - Features:
           - "Design and architecture": architecture.md
-          
     - Quickstart guides:
-          - "Install with Helm": helm.md
-          - "Install on Minikube": minikube.md
+          - Overview: quickstart.md
+          - 1. Quick install:
+            - "Install with Helm": helm.md
+            - "Install with kubectl": kubectl.md
+          - 2. Connect to the database: connect.md
+          - 3. Insert data: data-insert.md
+          - 4. Make a backup: backup-tutorial.md
+          - 5. Monitor the database with PMM: monitoring-tutorial.md
+          - what-next.md
           
     - Installation:
           - "System Requirements": System-Requirements.md
+          - "Install on Minikube": minikube.md
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
           - "Generic Kubernetes installation": kubernetes.md
@@ -155,6 +180,7 @@ nav:
           - Backup and restore: 
             - "About backups": backups.md
             - "Configure storage for backups": backups-storage.md
+            - "Make scheduled backups": backups-scheduled.md
             - "Make on-demand backup": backups-ondemand.md
             - "Restore from a previously saved backup": backups-restore.md
             - "Delete the unneeded backup": backups-delete.md
@@ -176,7 +202,12 @@ nav:
     - Troubleshooting:
           - "Initial troubleshooting": debug.md
           - "Exec into the container": debug-shell.md
+          - "Check the events": debug-events.md
           - "Check the logs": debug-logs.md
+          
+    - HOWTOs:
+          - "Provide Percona Operator for MySQL single-namespace and multi-namespace deployment": cluster-wide.md
+          - "Delete the Operator": delete.md
           
     - Reference:
           - "Custom Resource options": operator.md
@@ -186,6 +217,9 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - "Percona Operator for MySQL 0.9.0 (2025-02-11)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.md
+          - "Percona Operator for MySQL 0.8.0 (2024-07-16)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md
+          - "Percona Operator for MySQL 0.7.0 (2024-03-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.md
           - "Percona Operator for MySQL 0.6.0 (2023-09-05)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.md
           - "Percona Operator for MySQL 0.5.0 (2023-03-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md
           - "Percona Operator for MySQL 0.4.0 (2023-01-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md

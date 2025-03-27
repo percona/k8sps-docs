@@ -16,7 +16,7 @@
 
 * This is maintenance release, where we fixed 15 bugs and focused on improving existing features like backups and support for various replication topologies
 
-* Starting from now it [becomes possible](../backups.md#restore-the-cluster-from-a-previously-saved-backup) to restore backups to a new cluster, which means bootstrapping the new cluster without an existing backup object.
+* Starting from now it [becomes possible](../backups-restore.md) to restore backups to a new cluster, which means bootstrapping the new cluster without an existing backup object.
 
 * This release also includes fixes to the following CVEs (Common Vulnerabilities and Exposures): CVE-2022-40897 (the denial of service vulnerability in Python Packaging Authority setuptools, the operator and mysql-router images are affected), as well as CVE-2022-32149 and CVE-2022-27664 (the denial of service vulnerability in golang binaries, percona-toolkit image used by the Operator is affected). Users of previous Operator versions are advised to upgrade to the version 0.4.0.
 
@@ -28,7 +28,7 @@
 
 * {{ k8spsjira(90) }}: Add sanity checks for backups: make sure that there is no pre-existing backup with the same name in the cloud storage and that the created backup is not empty
 * {{ k8spsjira(130) }}: Standardize cluster and components service [exposure](../expose.md) to have unification of the expose configuration across all Percona Operators
-* {{ k8spsjira(95) }}: With [backupSource support](../backups.md#restore-the-cluster-from-a-previously-saved-backup) for restores users are now able to restore database from object storage directly without the need to have ps-backup Custom Resource
+* {{ k8spsjira(95) }}: With [backupSource support](../backups-restore.md) for restores users are now able to restore database from object storage directly without the need to have ps-backup Custom Resource
 * {{ k8spsjira(207) }}: Allow to disable both Orchestrator and HAProxy, starting only a single-node Percona Server for MySQL without replication. Can be useful for development and testing purposes
 
 ## Bugs Fixed
@@ -53,8 +53,8 @@
 The following platforms were tested and are officially supported by the Operator
 0.3.0:
 
-* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.23 - 1.25
-* [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.21 - 1.24
-* [Minikube](https://minikube.sigs.k8s.io/docs/) 1.28 (based on Kubernetes 1.25)
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.23 - 1.25
+* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.21 - 1.24
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.28 (based on Kubernetes 1.25)
 
 This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.

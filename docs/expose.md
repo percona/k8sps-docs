@@ -2,20 +2,20 @@
 
 The Operator provides entry points for accessing the database by client
 applications in several scenarios. In either way the cluster is exposed with
-regular Kubernetes [Service objects](https://kubernetes.io/docs/concepts/services-networking/service/),
+regular Kubernetes [Service objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/),
 configured by the Operator.
 
-This document describes the usage of [Custom Resource manifest options](operator.md#operator-custom-resource-options)
+This document describes the usage of [Custom Resource manifest options](operator.md)
 to expose the clusters deployed with the Operator. The expose options vary for
-different replication types: [Asynchronous](https://dev.mysql.com/doc/refman/8.0/en/replication.html)
-and [Group Replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+different replication types: [Asynchronous :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html)
+and [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
 
 ## Asynchronous Replication
 
 ### Exposing cluster with HAProxy
 
 Percona Operator for MySQL provides load balancing and proxy service with
-[HAProxy](https://haproxy.org) (enabled by default).
+[HAProxy :octicons-link-external-16:](https://haproxy.org) (enabled by default).
 
 ![image](assets/images/exposure-haproxy.svg)
 
@@ -35,14 +35,13 @@ mysql:
 ```
 
 The resulting HAProxy setup will contain the `cluster1-haproxy` service
-listening on ports 3306 (MySQL primary), 3307 (MySQL replicas), and 3309 (the [proxy protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
+listening on ports 3306 (MySQL primary), 3307 (MySQL replicas), and 3309 (the [proxy protocol :octicons-link-external-16:](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
 useful for operations such as asynchronous calls).
 
 !!! note
 
-    The Operator currently supports using HAProxy with the asyncrhonous cluster
-    only, and therefore simultaneous enabling of both HAProxy and Group
-    Replication is not possible.
+    The Operator currently supports using HAProxy not only with asynchronous
+    replication clusters, but also with group replication clusters.
 
 When the cluster is configured in this way, you can find the endpoint (the
 public IP address of the load balancer in our example) by getting the Service
@@ -56,14 +55,14 @@ cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,330
 
 ### Exposing cluster without HAProxy
 
-With [Asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html)
+With [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html)
 the cluster can be also exposed through a Kubernetes Service called
 `<CLUSTER_NAME>-mysql-primary`: for example, `cluster1-mysql-primary`.
 
 ![image](assets/images/exposure-async.svg)
 
 This Service is created by default and is always present. You can change the
-type of the Service object by setting [mysql.primaryServiceType](operator.md#mysql-primaryservicetype)
+type of the Service object by setting [mysql.primaryServiceType](operator.md#mysqlprimaryservicetype)
 variable in the Custom Resource.
 
 The following example exposes the Primary node of the asynchronous cluster with
@@ -88,19 +87,21 @@ cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:3214
 
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL primary instance (e.g. `3306` for the classic
-MySQL protocol, or `33060` for [MySQL X Protocol](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
+MySQL protocol, or `33060` for [MySQL X Protocol :octicons-link-external-16:](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
 useful for operations such as asynchronous calls).
 
 ## Group Replication
 
-Clusters configured to use Group Replication are exposed via the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/)
-through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
+Group replication clusters can be configured to use either HAProxy or [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/). Group replication cluster can be exposed with HAProxy similarly to the asynchronous cluster. 
+
+If group replication cluster is configured with MySQL Router, it can be 
+exposed through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
 `cluster1-router`. Network design in this case looks like this:
 
 ![image](assets/images/exposure-gr.svg)
 
 MySQL Router can be configured via the [router section](operator.md#operator-router-section).
-In particular, the [router.expose.type](operator.md#router-expose-type) option sets the
+In particular, the [router.expose.type](operator.md#proxyrouterexposetype) option sets the
 type of the correspondent Kubernetes Service object. The following example
 exposes MySQL Router through a LoadBalancer object:
 
@@ -132,7 +133,7 @@ use to communicate with MySQL Router:
 * `6447` - read-only, load balancing the traffic across Replicas.
 
 Additionally, ports `6448` and `6449` are available in the same way to
-connect via [MySQL X Protocol](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
+connect via [MySQL X Protocol :octicons-link-external-16:](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
 useful for operations such as asynchronous calls.
 
 Alternatively, you can find the endpoint to connect to by `kubectl get ps`
@@ -154,9 +155,9 @@ application level).
 
 This is possible by setting the following options in [spec.mysql section](operator.md#operator-mysql-section).
 
-* [mysql.expose.enabled](operator.md#mysql-expose-enabled) enables or disables exposure
+* [mysql.expose.enabled](operator.md#mysqlexposeenabled) enables or disables exposure
     of MySQL instances,
-* [mysql.expose.type](operator.md#mysql-expose-type) defines the Kubernetes Service
+* [mysql.expose.type](operator.md#mysqlexposetype) defines the Kubernetes Service
     object type.
 
 The following example creates a dedicated LoadBalancer Service for each node of
@@ -183,5 +184,5 @@ cluster1-mysql-2         LoadBalancer   10.40.42.158   35.193.50.44    3306:3204
 
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL instances (e.g. `3306` for the classic MySQL
-protocol, or `33060` for [MySQL X Protocol](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
+protocol, or `33060` for [MySQL X Protocol :octicons-link-external-16:](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
 useful for operations such as asynchronous calls).

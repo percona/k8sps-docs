@@ -31,7 +31,7 @@ TLS security can be configured in several ways.
 
 ### About the *cert-manager*
 
-A [cert-manager](https://cert-manager.io/docs/) is a Kubernetes certificate
+A [cert-manager :octicons-link-external-16:](https://cert-manager.io/docs/) is a Kubernetes certificate
 management controller which is widely used to automate the management and
 issuance of TLS certificates. It is community-driven, and open source.
 
@@ -84,10 +84,7 @@ The set of commands generate certificates with the following attributes:
 
 * `ca.pem` - Certificate Authority
 
-You should generate certificates twice: one set is for external communications,
-and another set is for internal ones. A secret created for the external use must
-be added to `cr.yaml/spec/secretsName`. A certificate generated for internal
-communications must be added to the `cr.yaml/spec/sslInternalSecretName`.
+A secret must be added to `cr.yaml/spec/sslSecretName`.
 
 ```{.bash data-prompt="$"}
 $ cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
@@ -103,11 +100,17 @@ EOF
 $ cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
 {
   "hosts": [
-    "${CLUSTER_NAME}-proxysql",
-    "*.${CLUSTER_NAME}-proxysql-unready",
-    "*.${CLUSTER_NAME}-pxc"
+    "*.${CLUSTER_NAME}-mysql",
+    "*.${CLUSTER_NAME}-mysql.${NAMESPACE}",
+    "*.${CLUSTER_NAME}-mysql.${NAMESPACE}.svc",
+    "*.${CLUSTER_NAME}-orchestrator",
+    "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}",
+    "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}.svc",
+    "*.${CLUSTER_NAME}-router",
+    "*.${CLUSTER_NAME}-router.${NAMESPACE}",
+    "*.${CLUSTER_NAME}-router.${NAMESPACE}.svc"
   ],
-  "CN": "${CLUSTER_NAME}-pxc",
+  "CN": "${CLUSTER_NAME}-mysql",
   "key": {
     "algo": "rsa",
     "size": 2048

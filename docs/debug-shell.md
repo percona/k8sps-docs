@@ -22,8 +22,7 @@ In the following examples we will access the container `pxc` of the `cluster1-px
     would show the following result:
     
     ``` {.text .no-copy}
-    OCI runtime exec failed: exec failed: unable to start container process: exec: "time": executable file not found in $PATH: unknown
-command terminated with exit code 126
+    OCI runtime exec failed: exec failed: unable to start container process: exec: "time": executable file not found in $PATH: unknown command terminated with exit code 126
     ```
 
 * Print `/var/log/mysqld.log` file to a terminal:

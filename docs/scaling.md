@@ -19,7 +19,7 @@ failures.
 There are multiple components that Operator deploys and manages: Percona 
 Server for MySQL, Orchestrator, HAProxy or MySQL Router, etc. To add or reduce CPU or Memory 
 you need to edit corresponding sections in the Custom Resource. We follow 
-the structure for `requests` and `limits` that Kubernetes [provides](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+the structure for `requests` and `limits` that Kubernetes [provides :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
 For example, you can add more resources to your HAProxy nodes by editing the
 following section in the Custom Resource:
@@ -39,7 +39,7 @@ spec:
           cpu: 2
 ```
 
-Use our reference documentation for the [Custom Resource options](operator.md#operator-custom-resource-options) 
+Use our reference documentation for the [Custom Resource options](operator.md) 
 for more details about other components.
 
 ### Scale storage
@@ -51,7 +51,7 @@ feature was added to allow a user to increase the size of an existing
 PVC object. The user cannot shrink the size of an existing PVC object.
 Certain volume types support, by default, expanding PVCs (details about
 PVCs and the supported volume types can be found in [Kubernetes
-documentation](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims))
+documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims))
 
 The following are the steps to increase the size:
 
@@ -112,8 +112,8 @@ The following are the steps to increase the size:
 
 ## Horizontal scaling
 
-Size of the cluster is controlled by a [size key](operator.md#mysql-size) in the
-[Custom Resource options](operator.md#operator-custom-resource-options)
+Size of the cluster is controlled by a [size key](operator.md#mysqlsize) in the
+[Custom Resource options](operator.md)
 configuration. That’s why scaling the cluster needs nothing more but changing
 this option and applying the updated configuration file. This may be done in a
 specifically saved config, or on the fly, using the following command:

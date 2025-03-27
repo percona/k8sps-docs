@@ -2,7 +2,7 @@
 
 This guide shows you how to deploy Percona Operator for MySQL on Google
 Kubernetes Engine (GKE). The document assumes some experience with the platform.
-For more information on the GKE, see the [Kubernetes Engine Quickstart](https://cloud.google.com/kubernetes-engine/docs/quickstart).
+For more information on the GKE, see the [Kubernetes Engine Quickstart :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine/docs/quickstart).
 
 ## Prerequisites
 
@@ -12,12 +12,12 @@ To use *Google Cloud shell*, you need nothing but a modern web browser.
 
 If you would like to use *your local shell*, install the following:
 
-1. [gcloud](https://cloud.google.com/sdk/docs/quickstarts). This tool is
+1. [gcloud :octicons-link-external-16:](https://cloud.google.com/sdk/docs/quickstarts). This tool is
     part of the Google Cloud SDK. To install it, select your operating
-    system on the [official Google Cloud SDK documentation page](https://cloud.google.com/sdk/docs)
+    system on the [official Google Cloud SDK documentation page :octicons-link-external-16:](https://cloud.google.com/sdk/docs)
     and then follow the instructions.
 
-2. [kubectl](https://cloud.google.com/kubernetes-engine/docs/quickstart#choosing_a_shell).
+2. [kubectl :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine/docs/quickstart#choosing_a_shell).
     It is the Kubernetes command-line tool you will use to manage and deploy
     applications. To install the tool, run the following command:
 
@@ -29,21 +29,17 @@ If you would like to use *your local shell*, install the following:
 ## Create and configure the GKE cluster
 
 You can configure the settings using the `gcloud` tool. You can run it either in
-the [Cloud Shell](https://cloud.google.com/shell/docs/quickstart) or in your
+the [Cloud Shell :octicons-link-external-16:](https://cloud.google.com/shell/docs/quickstart) or in your
 local shell (if you have installed Google Cloud SDK locally on the previous
-step). The following command will create a cluster named `my-cluster-name`:
+step). The following command will create a cluster named `cluster1`:
 
 ```{.bash data-prompt="$"}
-$ gcloud container clusters create my-cluster-name --project <project name> --zone us-central1-a --cluster-version {{ gkerecommended }} --machine-type n1-standard-4 --num-nodes=3
+$ gcloud container clusters create cluster1 --project <project ID> --zone us-central1-a --cluster-version {{ gkerecommended }} --machine-type n1-standard-4 --num-nodes=3
 ```
 
 !!! note
 
-    You must edit the following command and other command-line statements to
-    replace the `<project name>` placeholder with your project name. You may
-    also be required to edit the *zone location*, which is set to `us-central1`
-    in the above example. Other parameters specify that we are creating a
-    cluster with 3 nodes and with machine type of 4 vCPUs.
+    You must edit the above command and other command-line statements to replace the `<project ID>` placeholder with your project ID (see available projects with `gcloud projects list` command). You may also be required to edit the *zone location*, which is set to `us-central1-a` in the above example. Other parameters specify that we are creating a cluster with 3 nodes and with machine type of 4 vCPUs.
 
 You may wait a few minutes for the cluster to be generated.
 
@@ -65,7 +61,7 @@ command in your local shell:
 $ gcloud container clusters get-credentials cluster1 --zone us-central1-a --project <project name>
 ```
 
-Finally, use your [Cloud Identity and Access Management (Cloud IAM)](https://cloud.google.com/iam)
+Finally, use your [Cloud Identity and Access Management (Cloud IAM) :octicons-link-external-16:](https://cloud.google.com/iam)
 to control access to the cluster. The following command will give you the
 ability to create Roles and RoleBindings:
 
@@ -128,8 +124,8 @@ $ kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-
     !!! note
 
         This deploys default MySQL cluster configuration.
-        Please see [deploy/cr.yaml](https://raw.githubusercontent.com/percona/percona-server-MySQL-operator/v{{ release }}/deploy/cr.yaml)
-        and [Custom Resource Options](operator.md#operator-custom-resource-options)
+        Please see [deploy/cr.yaml :octicons-link-external-16:](https://raw.githubusercontent.com/percona/percona-server-MySQL-operator/v{{ release }}/deploy/cr.yaml)
+        and [Custom Resource Options](operator.md)
         for the configuration options. You can clone the repository with all
         manifests and source code by executing the following command:
 
@@ -184,7 +180,19 @@ $ kubectl get pods
 
 ??? example "Expected output"
 
-    --8<-- "./docs/assets/code/kubectl-get-pods-response.txt"
+    ```text
+    NAME                                            READY   STATUS    RESTARTS      AGE
+    cluster1-haproxy-0                              2/2     Running   0             44m
+    cluster1-haproxy-1                              2/2     Running   0             44m
+    cluster1-haproxy-2                              2/2     Running   0             44m
+    cluster1-mysql-0                                3/3     Running   0             46m
+    cluster1-mysql-1                                3/3     Running   2 (44m ago)   45m
+    cluster1-mysql-2                                3/3     Running   2 (42m ago)   43m
+    cluster1-orc-0                                  2/2     Running   0             46m
+    cluster1-orc-1                                  2/2     Running   0             45m
+    cluster1-orc-2                                  2/2     Running   0             44m
+    percona-server-mysql-operator-7c984f7c9-mgwh4   1/1     Running   0             47m
+    ```
 
 If the command output had shown some errors, you can examine the problematic
 Pod with the `kubectl describe <pod name>` command as follows:
@@ -213,10 +221,11 @@ configuration. An example of a warning is as follows:
 
 There are several ways that you can delete the cluster.
 
-You can clean up the cluster with the `gcloud` command as follows:
+
+You can clean up the cluster with the `gcloud container clusters delete <cluster name> --zone <zone location>` command. The return statement requests your confirmation of the deletion. Type `y` to confirm.
 
 ```{.bash data-prompt="$"}
-$ gcloud container clusters delete <cluster name>
+$ gcloud container clusters delete cluster1 --zone us-central1-a --project <project ID>
 ```
 
 The return statement requests your confirmation of the deletion. Type `y` to confirm.

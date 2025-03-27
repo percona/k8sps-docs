@@ -17,7 +17,7 @@
 2. Now Custom Resource Definition for Percona Server for MySQL should be created
     from the `deploy/crd.yaml` file. Custom Resource Definition extends the
     standard set of resources which Kubernetes “knows” about with the new
-    items (in our case ones which are the core of the operator). [Apply it](https://kubernetes.io/docs/reference/using-api/server-side-apply/) as follows:
+    items (in our case ones which are the core of the operator). [Apply it :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/server-side-apply/) as follows:
 
     ```{.bash data-prompt="$"}
     $ kubectl apply --server-side -f deploy/crd.yaml
@@ -43,7 +43,7 @@
     based on specifically defined roles and actions corresponding to
     them, allowed to be done on specific Kubernetes resources (details
     about users and roles can be found in [Kubernetes
-    documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings)).
+    documentation :octicons-link-external-16:](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings)).
 
     ```{.bash data-prompt="$"}
     $ kubectl apply -f deploy/rbac.yaml
@@ -65,7 +65,7 @@
 5. Now that’s time to add the Percona Server for MySQL Users secrets to
     Kubernetes. They should be placed in the data section of the
     `deploy/secrets.yaml` file as logins and plaintext passwords for the user
-    accounts (see [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/secret/)
+    accounts (see [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/)
     for details).
 
     After editing is finished, users secrets should be created using the
@@ -75,13 +75,13 @@
     $ kubectl create -f deploy/secrets.yaml
     ```
 
-    More details about secrets can be found in [Users](users.md#users).
+    More details about secrets can be found in [Users](users.md).
 
 
 6. Now certificates should be generated. By default, the Operator generates
     certificates automatically, and no actions are required at this step. Still,
     you can generate and apply your own certificates as secrets according
-    to the [TLS instructions](TLS.md#tls).
+    to the [TLS instructions](TLS.md).
 
 7. After the operator is started and user secrets are added, Percona Server for
     MySQL can be created at any time with the following command:
@@ -103,29 +103,6 @@
     percona-server-for-mysql-operator-54c5c87988-xfmlf   1/1     Running   0               7m42s
     ```
 
-8. Check connectivity to your newly created cluster. Run a MySQL client container
-    and connect its console output to your terminal. The following command
-    will do this, naming the new Pod `percona-client`:
+## Verify the cluster operation
 
-    ```{.bash data-prompt="$" data-prompt-second="percona-client:/$"}
-    $ kubectl run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
-    percona-client:/$ mysql -h cluster1-mysql-primary -uroot -proot_password
-    ```
-
-    This command will connect you to the MySQL monitor.
-
-    ```{.text .no-copy}
-    mysql: [Warning] Using a password on the command line interface can be insecure.
-    Welcome to the MySQL monitor.  Commands end with ; or \g.
-    Your MySQL connection id is 2268
-    Server version: 8.0.25-15 Percona Server (GPL), Release 15, Revision a558ec2
-
-    Copyright (c) 2009-2021 Percona LLC and/or its affiliates
-    Copyright (c) 2000, 2021, Oracle and/or its affiliates.
-
-    Oracle is a registered trademark of Oracle Corporation and/or its
-    affiliates. Other names may be trademarks of their respective
-    owners.
-
-    Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-    ```
+{% include 'assets/fragments/connectivity.txt' %}

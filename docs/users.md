@@ -21,7 +21,7 @@ mysql> GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%' IDENTIFIED BY 'passwor
 
 !!! note
 
-    MySQL password here should not exceed 32 characters due to the [replication-specific limit introduced in MySQL 5.7.5](https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html).
+    MySQL password here should not exceed 32 characters due to the [replication-specific limit introduced in MySQL 5.7.5 :octicons-link-external-16:](https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html).
 
 Verify that the user was created successfully. If successful, the
 following command will let you successfully login to MySQL shell via
@@ -41,7 +41,7 @@ permissions have been successfully granted.
 To automate the deployment and management of the cluster components,
 the Operator requires system-level Percona Server for MySQL users.
 
-Credentials for these users are stored as a [Kubernetes Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) object.
+Credentials for these users are stored as a [Kubernetes Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) object.
 The Operator requires to be deployed before the Percona Server for MySQL is
 started. 
 
@@ -67,12 +67,12 @@ The following table shows system users’ names and purposes.
 | -------------- | ------------ | ------------------- | ---------------------------------------------------------------------- |
 | Admin          | root         | root                | Database administrative user, can be used by the application if needed |
 | Orchestrator   | orchestrator | orchestrator        | Orchestrator administrative user                                       |
-| Backup         | xtrabackup   | xtrabackup          | [User to run backups](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)     |
-| Cluster Check  | clustercheck | clustercheck        | [User for liveness checks and readiness checks](http://galeracluster.com/library/documentation/monitoring-cluster.html) |
-| Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
+| Backup         | xtrabackup   | xtrabackup          | [User to run backups :octicons-link-external-16:](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)     |
+| Cluster Check  | clustercheck | clustercheck        | [User for liveness checks and readiness checks :octicons-link-external-16:](http://galeracluster.com/library/documentation/monitoring-cluster.html) |
+| Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
 | Operator Admin | operator     | operator            | Database administrative user, should be used only by the Operator      |
 | Replication    | replication  | replication         | Administrative user needed for replication                             |
-| PMM Server API Key | | pmmserverkey | [API Key used to access PMM Server](https://www.percona.com/doc/percona-monitoring-and-management/security.html#pmm-security-password-protection-enabling) |
+| PMM Server API Key | | pmmserverkey | [API Key used to access PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
 
 ### YAML Object Format
 
@@ -111,13 +111,13 @@ in the `cluster1-secrets` object can be done with the following command:
 === "in Linux"
 
     ```{.bash data-prompt="$"}
-    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n new_password | base64 --wrap=0)'}}'
+    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64 --wrap=0)'"}}'
     ```
 
 === "in macOS"
 
     ```{.bash data-prompt="$"}
-    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": '$(echo -n new_password | base64)'}}'
+    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
     ```
 
 ### Password Rotation Policies and Timing
@@ -136,5 +136,5 @@ take any action beyond changing the password.
 
 Starting with MySQL 8.0.16, a new feature called Account Categories has been
 implemented, which allows us to mark our system users as such.
-See [the official documentation on this feature](https://dev.mysql.com/doc/refman/8.0/en/account-categories.html)
+See [the official documentation on this feature :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/account-categories.html)
 for more details.

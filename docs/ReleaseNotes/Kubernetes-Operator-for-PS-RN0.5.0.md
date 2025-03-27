@@ -16,7 +16,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 * {{ k8spsjira(166) }}: The Operator now updates certificates at all changes in the Custom Resource `tls` section: this fixes the previous behavior, along to which it didn't do anything related to TLS certificates in case of existing SSL secrets, even in the case of wrong/incomplete `tls` configuration
 
-* {{ k8spsjira(217) }}: The user is now able to customize the MySQL Router configuration with the new [proxy.router.configuration](../operator.md#proxy-router-configuration) Custom Resource option
+* {{ k8spsjira(217) }}: The user is now able to customize the MySQL Router configuration with the new [proxy.router.configuration](../operator.md#proxyrouterconfiguration) Custom Resource option
 
 * {{ k8spsjira(141) }}: Add capturing [anonymous telemetry and usage data](../telemetry.md) following the way of other Percona Operators
 
@@ -52,8 +52,8 @@ Other options may also work but have not been tested.
 The following platforms were tested and are officially supported by the Operator
 0.5.0:
 
-* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.22 - 1.25
-* [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.22 - 1.25
-* [Minikube](https://minikube.sigs.k8s.io/docs/) 1.29 (based on Kubernetes 1.26)
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.22 - 1.25
+* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.22 - 1.25
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.29 (based on Kubernetes 1.26)
 
 This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.
