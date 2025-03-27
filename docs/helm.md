@@ -42,8 +42,6 @@ Install Helm following its [official installation instructions :octicons-link-ex
 
     The `my-db` parameter in the above example is the name of [a new release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts) which is created for the Percona Server for MySQL when you install its Helm chart (use any name you like).
 
-## Installing Percona Server for MySQL with customized parameters
-
 The command above installs Percona Server for MySQL with [default parameters](operator.md). Custom options can be passed to a `helm install` command as a `--set key=value[,key=value]` argument. The options passed with a chart can be any of the [Custom Resource options :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-db#installing-the-chart).
 
 The following example will deploy a Percona Server for MySQL in the `my-namespace` namespace, with disabled backups and 20 Gi storage:
@@ -54,7 +52,8 @@ $ helm install my-db percona/ps-db \
   --set backup.enabled=false
 ```
 
+You can find in the documentation for the charts which [Operator :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator#installing-the-chart) and [database :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-db#installing-the-chart) parameters can be customized during installation.
+
 ## Next steps
 
 [Connect to Percona Server for MySQL :material-arrow-right:](connect.md){.md-button}
-
