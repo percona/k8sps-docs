@@ -371,7 +371,7 @@ Specifies whether Service should [route internal traffic :octicons-link-external
 
 ### `mysql.expose.loadBalancerSourceRanges`
 
-The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations).
+The range of client IP addresses from which the load balancer should be reachable (if not set, there are no limitations).
 
 | Value type  | Example    |
 | ----------- | ---------- |
