@@ -3,7 +3,8 @@
 Percona Operator for MySQL uses [Custom Resources :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) to manage options for the various components of the cluster.
 
 * `PerconaServerMySQL` Custom Resource with options for the cluster,
-* `PerconaServerMySQLBackup` and `PerconaServerMySQLRestore` Custom Resources contain options for Percona XtraBackup used to backup Percona XtraDB Cluster and to restore it from backups.
+* `PerconaServerMySQLBackup` Custom Resource contains options for Percona XtraBackup used to backup Percona Server for MySQL
+* `PerconaServerMySQLRestore` Custom Resource contains options for restoring Percona Server for MySQL from backups.
 
 ## PerconaServerMySQL Custom Resource options
 
