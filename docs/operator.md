@@ -712,7 +712,7 @@ Specifies whether Service for HAProxy should [route internal traffic :octicons-l
 
 ### `proxy.haproxy.expose.loadBalancerIP`
 
-The static IP-address for the load balancer.
+The static IP-address for the load balancer. This field is deprecated starting with version 0.10.0. If you have defined it, refer to the [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) for recommendations. 
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -888,7 +888,7 @@ Specifies whether Service for MySQL Router should [route internal traffic :octic
 
 ### `proxy.router.expose.loadBalancerIP`
 
-The static IP-address for the load balancer.
+The static IP-address for the load balancer. This field is deprecated starting with version 0.10.0. If you have defined it, refer to the [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) for recommendations. 
 
 | Value type  | Example    |
 | ----------- | ---------- |
