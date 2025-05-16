@@ -233,6 +233,15 @@ The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `private-registry-credentials` |
 
+### `mysql.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+
 ### `mysql.initImage`
 
 An alternative init image for MySQL Pods.
@@ -256,6 +265,23 @@ Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://k
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `mysql.env.name`
+
+The name of an environment variable for MySQL. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `BOOTSTRAP_READ_TIMEOUT` |
+
+### `mysql.env.value`
+
+The value you set for a MySQL environment variable.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | "600" |
+
 
 ### `mysql.resources.requests.memory`
 
