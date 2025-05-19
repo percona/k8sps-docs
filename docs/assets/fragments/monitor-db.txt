@@ -1,47 +1,51 @@
 In this section you will learn how to monitor Percona Server for MySQL cluster with [Percona Monitoring and Management (PMM) :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/index.html).
 
-!!! note
+PMM is a client/server application. It includes the [PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/reference/index.html#pmm-server) and the number of [PMM Clients :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/reference/index.html#pmm-client) running on each node with the database you wish to monitor.
 
-    Only PMM 2.x versions are supported by the Operator.
-
-PMM is a client/server application. It includes the [PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/details/architecture.html#pmm-server) and the number of [PMM Clients :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/details/architecture.html#pmm-client) running on each node with the database you wish to monitor.
-
-A PMM Client collects needed metrics and sends gathered data to the PMM Server.
- As a user, you connect to the PMM Server to see database metrics on
+A PMM Client collects server metrics, general system metrics, query analytics and sends it to the server
+As a user, you connect to the PMM Server to see database metrics on
 a number of dashboards.
 
 PMM Server and PMM Client are installed separately.
 
+## Considerations
+
+1. Starting with the version 0.10.0, the Operator supports only PMM 3.x versions. The support for PMM 2.x is dropped.
+2. You must run the Operator version 0.10.0 and later to monitor your database with PMM 3.x. Check the [Upgrade the Operator](update.md#upgrading-the-operator-and-crd) tutorial for the update steps.
+3. To use PMM3, PMM Server version must be equal to or newer than the PMM Client.
+
 ## Install PMM Server
 
 You must have PMM Server up and running. You can run PMM Server as a *Docker image*, a *virtual appliance*, or on an *AWS instance*.
-Please refer to the [official PMM documentation :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html)
+Please refer to the [official PMM documentation :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-server/index.html)
 for the installation instructions.
 
 ## Install PMM Client
 
-The following steps are needed for the PMM Client installation as a side-car
-container in your Kubernetes-based environment:
+PMM Client is installed as a side-car container in the database Pods in your Kubernetes-based environment. To install PMM Client, do the following: 
 {.power-number}
 
 1. Authorize PMM Client within PMM Server.
-    <a name="operator-monitoring-client-token"></a>
-    1. [Acquire the API Key from your PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/details/api.html#api-keys-and-authentication). Specify the Admin role when getting the API Key. 
 
-        <i warning>:material-alert: Warning:</i> The API key is not rotated automatically.
+    1. PMM3 uses Grafana service accounts to control access to PMM server components and resources. To authenticate in PMM server, you need a service account token. [Generate a service account and token :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html?h=authe#generate-a-service-account-and-token). Specify the Admin role for the service account. 
 
-    2. Set `pmmserverkey` in the [users Secrets](users.md/#system-users) object to this obtained API Key value. For example, setting the PMM Server API Key to `new_key` in the `cluster1-secrets` object can be done with the following command:
+        !!! warning
+        
+            When you create a service account token, you can select its lifetime: it can be either a permanent token that never expires or the one with the expiration date. PMM server cannot rotate service account tokens after they expire. So you must care care of reconfiguring PMM Client in this case.
 
-        === "in Linux"
+    2. Add the service account token to the `pmmservertoken` option in the [users Secrets](users.md/#system-users) object. Use the following command and replace the `<my-token>` placeholder with your value:
+
+        === ":simple-linux: in Linux"
 
             ```{.bash data-prompt="$"}
-            $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64 --wrap=0)'}}'
+            $ kubectl patch secret/cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64 --wrap=0)'"}}')"
+
             ```
 
-        === "in macOS"
+        === ":simple-apple: in macOS"
 
             ```{.bash data-prompt="$"}
-            $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64)'}}'
+            $ kubectl patch secret/cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n new_key | base64)'"}}')"
             ```
 
 2. Update the `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{ release }}/deploy/cr.yaml) file:
@@ -52,9 +56,10 @@ container in your Kubernetes-based environment:
      ```yaml
      pmm:
        enabled: true
-       image: percona/pmm-client:{{pmm2recommended}}
+       image: percona/pmm-client:{{pmm3recommended}}
        serverHost: monitoring-service
      ``` 
+
 3. Apply the changes:
 
     ``` {.bash data-prompt="$"}
@@ -72,7 +77,16 @@ container in your Kubernetes-based environment:
 ## Check the metrics
 
 Let's see how the collected data is visualized in PMM.
+{.power-number}
 
-Now you can access PMM via *https* in a web browser, with the login/password
-authentication, and the browser is configured to show Percona Server for MySQL
-metrics.
+1. Log in to PMM Server. 
+
+2. Click :simple-mysql: **MySQL** from the left-hand navigation menu.
+
+3. Select your cluster from the **Clusters** drop-down menu and the desired time range on the top of the page. You should see the metrics.
+
+4. Click :simple-mysql: **MySQL**  → Other dashboards to see the list of available dashboards that allow you to drill down to the metrics you are interested in.
+
+5. Click **Explore** from the left-hand navigation menu. In the **Metric** drop-down, start typing `mysql` to see the list of available metrics. 
+
+6. To see the data for the selected metric, click **Run query**. 

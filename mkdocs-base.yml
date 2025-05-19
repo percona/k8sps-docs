@@ -142,7 +142,7 @@ extra: # Used in main.html template and can't be externalized
   ps80recommended: '8.0.40-31'
   pxbrecommended: '8.0.35-31'
   ptrecommended: '3.7.0'
-  pmm2recommended: '2.44.0'
+  pmm3recommended: '3.1.0'
   haproxyrecommended: '2.8.11'
   routerrecommended: '8.0.40'
   orchestratorrecommended: '3.2.6-15'
