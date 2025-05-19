@@ -31,7 +31,7 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
 
         !!! warning
         
-            When you create a service account token, you can select its lifetime: it can be either a permanent token that never expires or the one with the expiration date. PMM server cannot rotate service account tokens after they expire. So you must care care of reconfiguring PMM Client in this case.
+            When you create a service account token, you can select its lifetime: it can be either a permanent token that never expires or the one with the expiration date. PMM server cannot rotate service account tokens after they expire. So you must take care of reconfiguring PMM Client in this case.
 
     2. Add the service account token to the `pmmservertoken` option in the [users Secrets](users.md/#system-users) object. Use the following command and replace the `<my-token>` placeholder with your value:
 
