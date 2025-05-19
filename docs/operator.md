@@ -250,22 +250,6 @@ An alternative init image for MySQL Pods.
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
 
-### `mysql.primaryServiceType`
-
-Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Primary instance if the asyncronous replication is turned on.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `LoadBalancer` |
-
-### `mysql.replicasServiceType`
-
-Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Replica instances if the asyncronous replication is turned on.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `ClusterIP` |
-
 ### `mysql.env.name`
 
 The name of an environment variable for MySQL. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
