@@ -211,6 +211,8 @@ nav:
           
     - Reference:
           - "Custom Resource options": operator.md
+          - "Backup Resource options": backup-cr.md
+          - "Restore Resource options": restore-cr.md
           - "Percona certified images": images.md
           - "Copyright and licensing information": copyright.md
           - "Trademark policy": trademark-policy.md
