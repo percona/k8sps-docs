@@ -212,7 +212,7 @@ Enables or disables the Operator from attempting to fix the issue in the event o
 
 ### `mysql.size`
 
-The number of the Percona Server for MySQL instances.
+The number of the Percona Server for MySQL instances. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -473,7 +473,7 @@ Enables or disables [load balancing with HAProxy :octicons-link-external-16:](ht
 
 ### `proxy.haproxy.size`
 
-The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more.
+The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -741,7 +741,7 @@ Enables or disables MySQL Router.
 
 ### `proxy.router.size`
 
-The number of the Router Pods to provide routing to MySQL Servers.
+The number of the Router Pods to provide routing to MySQL Servers. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -918,7 +918,7 @@ Enables or disables the Orchestrator.
 
 ### `orchestrator.size`
 
-The number of the Orchestrator Pods to provide load balancing.
+The number of the Orchestrator Pods to provide load balancing. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
