@@ -2,7 +2,7 @@
 
 {%set commandName = 'oc' %}
 
-Percona Operator for Percona Server for MySQL is a [Red Hat Certified Operator  :octicons-link-external-16:](https://connect.redhat.com/en/partner-with-us/red-hat-openshift-certification). This means that Percona Operator is portable across hybrid clouds and fully supports the Red Hat OpenShift lifecycle.
+Percona Operator for MySQL is a [Red Hat Certified Operator  :octicons-link-external-16:](https://connect.redhat.com/en/partner-with-us/red-hat-openshift-certification). This means that Percona Operator is portable across hybrid clouds and fully supports the Red Hat OpenShift lifecycle.
 
 To install Percona Server for MySQL on OpenShift means:
 
@@ -15,7 +15,7 @@ To install Percona Server for MySQL on OpenShift means:
 - `oc` command-line tool installed
 - Git client installed
 
-## Installation options
+<!-- ## Installation options
 
 You can install Percona Operator for MySQL on OpenShift using either:
 
@@ -57,11 +57,11 @@ Now you can deploy Percona Server for MySQL
 4. Edit the Custom Resource manifest to fine-tune your cluster configuration. Refer to [Custom Resource reference](operator.md) for the description of available options
 5. Click "Create"
 
-![image](assets/images/olm3.svg)
+![image](assets/images/olm3.svg) -->
 
 ## Install the Operator via the command-line interface
 
-To get started quickly, choose the [Quick install](#quick-install) option.  You deploy the Operator with a single command. 
+To get started quickly, choose the [Quick install](#quick-install) option. This way you deploy the Operator with a single command. 
 
 If you want more control over the installation process, jump to the [Step-by-step installation](#step-by-step-installation)
 
@@ -246,7 +246,7 @@ See [TLS Configuration](TLS.md) for detailed instructions.
 
 
     ```{.bash data-prompt="$" }
-    $ oc apply -f deploy/cr.yaml>
+    $ oc apply -f deploy/cr.yaml
     ```
 
     ??? example "Expected output"
