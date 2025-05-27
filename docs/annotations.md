@@ -94,7 +94,7 @@ To check which **labels** are attached to a specific object, use the additional 
 For example, to see the Operator version associated with a Custom Resource Definition, use the following command:
 
 ```{.bash data-prompt="$"}
-$ kubectl  k get crd perconaservermysqls.ps.percona.com --show-labels
+$ kubectl get crd perconaservermysqls.ps.percona.com --show-labels
 ```
 
 ??? example "Sample output"
