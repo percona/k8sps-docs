@@ -59,9 +59,6 @@ extra_javascript:
    - js/promptremover.js
    - js/consent.js
    - js/percona-select.js
-#   - js/version-select.js
-#  - js/toctree.js
-#  - js/lightgallery.min.js
 
 markdown_extensions:
   attr_list: {}
@@ -86,6 +83,7 @@ markdown_extensions:
         - snippets
         - docs/assets/code
         - docs/assets/fragments
+        - docs/ReleaseNotes
       auto_append:
         - services-banner.md
   pymdownx.highlight: 
@@ -119,7 +117,7 @@ plugins:
   with-pdf:
     output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
     cover_title: "Percona Operator for MySQL based on Percona Server for MySQL documentation"
-    cover_subtitle: 0.9.0 (February 11, 2025)
+    cover_subtitle: 0.10.0 (February 11, 2025)
     author: "Percona Technical Documentation Team"
     cover_logo: docs/assets/images/percona_kubernetes_icon.png
     custom_template_path: _resource/templates
@@ -136,18 +134,6 @@ plugins:
 extra: # Used in main.html template and can't be externalized
   edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
   updated_text: '<i class="uil uil-refresh"></i> Page updated'
-  commandName: 'kubectl'
-  release: '0.9.0'
-  apiversion: '0-9-0'
-  ps80recommended: '8.0.40-31'
-  pxbrecommended: '8.0.35-31'
-  ptrecommended: '3.7.0'
-  pmm2recommended: '2.44.0'
-  haproxyrecommended: '2.8.11'
-  routerrecommended: '8.0.40'
-  orchestratorrecommended: '3.2.6-15'
-  gkerecommended: '1.29'
-  certmanagerrecommended: '1.16.3'
   version:
     provider: mike
 
@@ -217,6 +203,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md
           - "Percona Operator for MySQL 0.9.0 (2025-02-11)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.md
           - "Percona Operator for MySQL 0.8.0 (2024-07-16)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md
           - "Percona Operator for MySQL 0.7.0 (2024-03-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.md
