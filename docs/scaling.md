@@ -6,7 +6,7 @@ results in adding or removing the Pods and scheduling them to available
 Kubernetes nodes.
 
 Scaling can be [vertical](#vertical-scaling) and [horizontal](#horizontal-scaling). Vertical scaling adds more compute or
-storage resources to MongoDB nodes; horizontal scaling is about adding more
+storage resources to MySQL nodes; horizontal scaling is about adding more
 nodes to the cluster. [High availability](architecture.md#high-availability)
 looks technically similar, because it also involves additional nodes, but the
 reason is maintaining liveness of the system in case of server or network
