@@ -58,7 +58,7 @@ This improved validation ensures that every cluster is deployed with the necessa
 
 * [K8SPS-320](https://perconadev.atlassian.net/browse/K8SPS-320) - Added labels to TLS and user secret objects created by the Operator
 
-* [K8SPS-357](https://perconadev.atlassian.net/browse/K8SPS-357), [K8SPS-423](https://perconadev.atlassian.net/browse/K8SPS-423) - Added the `state-monitor` utility to read MySQL state during startup and use it to improve cluster provisioning
+* [K8SPS-357](https://perconadev.atlassian.net/browse/K8SPS-357), [K8SPS-423](https://perconadev.atlassian.net/browse/K8SPS-423) - Added the `state-monitor` utility to read MySQL state during startup. It is a valuable tool to improve cluster provisioning
 
 * [K8SPS-382](https://perconadev.atlassian.net/browse/K8SPS-382) - Removed the `loadBalancerIP` Service type as deprecated
 
@@ -74,7 +74,7 @@ This improved validation ensures that every cluster is deployed with the necessa
 
 * [K8SPS-299](https://perconadev.atlassian.net/browse/K8SPS-299) - Fixed the issue with the Operator failing to initialize the cluster when the size for MySQL is absent in Custom Resource manifest by making the parameters that affect cluster operation mandatory for deployment. If any option has no value, the Operator fails to deploy the cluster 
 
-* [K8SPS-365](https://perconadev.atlassian.net/browse/K8SPS-365) - Fixed the issue with the cluster of `clusterType` set to `group-replication` failing after the upgrade of the MySQL image. The issue was fixed by removing the excessive restart of the `mysql` container after adding a pod to the cluster. 
+* [K8SPS-365](https://perconadev.atlassian.net/browse/K8SPS-365) - Fixed the issue with `clusterType` set to `group-replication` failing after the upgrade of the MySQL image. The issue was fixed by removing the excessive restart of the `mysql` container after adding a pod to the cluster. 
 
 * [K8SPS-375](https://perconadev.atlassian.net/browse/K8SPS-375) - Improved the cluster startup process by handling reconciling errors 
 
@@ -82,8 +82,6 @@ This improved validation ensures that every cluster is deployed with the necessa
 
 
 * [K8SPS-387](https://perconadev.atlassian.net/browse/K8SPS-387) - Added the `wait_for_delete` function to ensure that the cluster or its components are fully cleaned up before performing operations like restoration, scaling, or re-deployment.
-
-
 
 ## Deprecation and removal
 
