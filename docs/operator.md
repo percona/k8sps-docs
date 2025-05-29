@@ -252,7 +252,7 @@ An alternative init image for MySQL Pods.
 
 ### `mysql.env.name`
 
-The name of an environment variable for MySQL. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
+The name of an environment variable for a MySQL container. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -260,7 +260,7 @@ The name of an environment variable for MySQL. The `BOOTSTRAP_READ_TIMEOUT` vari
 
 ### `mysql.env.value`
 
-The value you set for a MySQL environment variable.
+The value you set for the environment variables for a MySQL container.
 
 | Value type  | Example    |
 | ----------- | ---------- |
