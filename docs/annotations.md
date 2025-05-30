@@ -63,6 +63,10 @@ Use **Annotations** when:
 | `app.kubernetes.io/part-of`   | Services, StatefulSets           | Indicates the higher-level application the object belongs to | percona-server                          |
 | `app.kubernetes.io/version`  | CustomResourceDefinition          | Specifies the version of the Percona MySQL Operator. | {{release}} |
 |`percona.com/exposed` | Services | Indicates if the service is exposed externally | true, false |
+| `percona.com/cluster` | Custom Resource | Identifies the MySQL cluster instance | cluster1 |
+| `percona.com/backup-type`| Custom Resource | Specifies the type of backup being performed (e.g. cron for scheduled backups) | cron, manual |
+| `percona.com/backup-ancestor`| Custom Resource | Specifies the name of the backup that was used as a base for the current backup | cluster1-backup-2023-05-23 |
+| `mysql.percona.com/primary`| Pods | Marks the primary node in the MySQL cluster | true |
 
 ### Annotations
 
@@ -71,6 +75,11 @@ Use **Annotations** when:
 | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` | Services | Specifies the protocol for AWS load balancers | http, http-test             |
 | `service.beta.kubernetes.io/aws-load-balancer-backend`         | Services | Specifies the backend type for AWS load balancers | test-type                  |
 | `controller-gen.kubebuilder.io/version`     | CustomResourceDefinition          | Indicates the version of the Kubebuilder controller-gen tool used.             |
+| `percona.com/last-applied-tls` | Services   | Stores the hash of the last applied TLS configuration for the service |
+| `percona.com/last-applied-secret` | Secrets | Stores the hash of the last applied user Secret configuration |
+| `percona.com/configuration-hash` | Services | Used to track and validate configuration changes in the MySQL cluster components |
+| `percona.com/last-config-hash` | Services | Stores the hash of the most recent configuration |
+| `percona.com/passwords-updated`| Secrets | Indicates when passwords were last updated in the Secret |
 
 ## Setting labels and annotations in the Custom Resource
 
