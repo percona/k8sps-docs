@@ -93,13 +93,13 @@ The `loadBalancerIP` type for the Service objects is deprecated in Kubernetes v1
 
 The Operator was developed and tested with the following software: 
 
-* Percona Server for MySQL 
-* Orchestrator 3.2.6-15
-* MySQL Router 8.0.40
-* XtraBackup 8.0.35-31
+* Percona Server for MySQL 8.0.42
+* Orchestrator 3.2.6-17
+* MySQL Router 8.0.42
+* XtraBackup 8.0.35-33
 * Percona Toolkit 3.7.0
-* HAProxy 2.8.11
-* PMM Client 2.44.0
+* HAProxy 2.8.14
+* PMM Client 3.2.0
 
 Other options may also work but have not been tested. 
 
@@ -111,9 +111,10 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [start:platforms]
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.29 - 1.31
-* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.29 - 1.32
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.35.0 (based on Kubernetes 1.32.0)
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.30 - 1.32
+* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.30 - 1.32
+* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.15 - 4.18
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.36.0 (based on Kubernetes 1.33.0)
 
 --8<-- [end:platforms]
 

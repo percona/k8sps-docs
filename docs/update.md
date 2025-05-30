@@ -263,7 +263,7 @@ Manual update of Percona Server for MySQL can be done as follows:
            "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
            "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
            "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-           "pmm": { "image": "percona/pmm-client:{{ pmm2recommended }}" }
+           "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
        }}'
     ```
 
@@ -346,10 +346,12 @@ configuration file as follows:
     Version Server URL (otherwise upgrades will not occur).
 
     === "Percona’s Version Service (default)"
+
         You can use the URL of the official Percona’s Version Service (default).
         Set `upgradeOptions.versionServiceEndpoint` to `https://check.percona.com`.
 
     === "Version Service inside your cluster"
+    
         Alternatively, you can run Version Service inside your cluster. This
         can be done with the `kubectl` command as follows:
 
@@ -367,7 +369,7 @@ configuration file as follows:
 5. Use the `upgradeOptions.schedule` option to specify the update check time in CRON format.
 
     The following example sets the midnight update checks with the official
-    Percona’s Version Service:
+    Percona's Version Service:
 
     ```yaml
     spec:
