@@ -122,25 +122,26 @@ This list only includes the platforms that the Percona Operators are specificall
 
 ## Percona certified images
 
-Find Percona’s certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:
+Find Percona's certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:
 
 --8<-- [start:images]
 
  Image                                                    | Digest                                                           |
 |:---------------------------------------------------------|:-----------------------------------------------------------------|
-| percona/percona-server-mysql-operator:0.9.0 (x86_64)     | be5d29326841981ac0c7f64128732955fd3375800a03a1ddf79cac4d4d4aba09 |
-| percona/percona-server-mysql-operator:0.9.0 (ARM64)      | 0cecb8e96888f91b329b77a6dc8cec486dc2353ee0b12a66e624e6c3a4971416 |
-| percona/percona-mysql-router:8.0.40                      | fcadafd03ef0ce22de4c9331ab5c4754736e7d1350aaee8429db8901c7d93600 |
-| percona/percona-orchestrator:3.2.6-15                    | 8cd2bb428476c52368dab557d560e06597305490ff190e3575854327e14daae8 |
-| percona/percona-toolkit:3.7.0                            | 858a35d772b8e1cbd2316025757829619c6e5e490ce671b2c6dbc42491bcb6c9 |
-| percona/haproxy:2.8.11                                   | 422a210b4170a973f8582ef3d7ddcc879c32bc48f6c66fad8b3154bce4e79b84 |
-| percona/percona-xtrabackup:8.0.35-31                     | 0aa16212c99c92367024623c5640791a139567ec16bdde42751635c433e1b5b2 |
+| percona/percona-server-mysql-operator:0.10.0 (x86_64)     | 406cf9b929eb42a158fc05d6bbde3435d2c46c7fed0a53889d82b335334e8df2 |
+| percona/percona-server-mysql-operator:0.10.0 (ARM64)      | 0889abb9ef079efb164a1046393a5266cd30701fcd53c32db439a2ca93c6dceb |
+| percona/percona-mysql-router:8.0.42                      | a6351fc5774086400f1d1dcf08f4f2d5975b97bc943d3dd98fb870e364066968 |
+| percona/percona-orchestrator:3.2.6-17                    | c1871ddc6ff3eaca7bb03c3aa11db880ae02d623db1203d0858f8566f56ea5f7 |
+| percona/percona-toolkit:3.7.0                            | 17ef2b69a97fa546d1f925c74ca09587ac215085c392761bb4d51f188baa6c0e |
+| percona/haproxy:2.8.14                                   | 6de8c402d83b88dae7403c05183fd75100774defa887c05a57ec04bc25be2305 |
+| percona/percona-xtrabackup:8.0.35-33                     | 57518571b4663ab492bbd2dc8369fea7e8d358b8e544ea8fa1c1eda12207b8e2 |
+| percona/percona-server:8.0.42-33                         | e30ad4bd3729f6a1ab443341a0a9ce10bbe70cb80d14e5e24a25da4bae4305da |
 | percona/percona-server:8.0.40-31                         | 09276abecbc7c38ce9c5453da1728f3e7d81722c56e2837574ace3a021ee92f2 |
 | percona/percona-server:8.0.36-28                         | 423acd206f94b34288d10ed041c3ba42543e26e44f3706621320504a010dd41f |
 | percona/percona-server:8.0.33-25                         | 14ef81039f2dfa5e19a9bf20e39aaf367aae4370db70899bc5217118d6fd2171 |
 | percona/percona-server:8.0.32-24                         | 2107838f98d41172f37c7fc9689095e9ebd0a1af557b687396d92cf00f54ec3f |
-| percona/pmm-client:2.44.0 (x86_64)                       | 19a07dfa8c12a0554308cd11d7d38494ea02a14cfac6c051ce8ff254b7d0a4a7 |
-| percona/pmm-client:2.44.0 (ARM64)                        | 43a542f24bdbd11d0c363c1d5002244b0b4840961a8e219a56df1becad77b068 |
+| percona/pmm-client:3.2.0 (x86_64)                        | 7b1d1798b6446d6c3d5e4005fd9c07be9f4be5859ac2fae908be387cf7b0f50c |
+| percona/pmm-client:3.2.0 (ARM64)                         | 1a36eb47e39dcd275c5ed62da8415c862e560933f48790bbf9b78f41cd3dfd10 |
 
 --8<-- [end:images]
 
