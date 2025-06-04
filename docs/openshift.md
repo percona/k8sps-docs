@@ -2,7 +2,7 @@
 
 {%set commandName = 'oc' %}
 
-Percona Operator for MySQL is a [Red Hat Certified Operator  :octicons-link-external-16:](https://connect.redhat.com/en/partner-with-us/red-hat-openshift-certification). This means that Percona Operator is portable across hybrid clouds and fully supports the Red Hat OpenShift lifecycle.
+You can install Percona Operator for MySQL on OpenShift clusters. This makes it portable across hybrid clouds and it fully supports the Red Hat OpenShift lifecycle.
 
 To install Percona Server for MySQL on OpenShift means:
 
