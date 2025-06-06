@@ -1,7 +1,7 @@
 # Variables used in the documentation
 
 commandName: 'kubectl'
-ps80recommended: '8.0.42'
+ps80recommended: '8.0.42-33'
 pxbrecommended: '8.0.35-33'
 ptrecommended: '3.7.0'
 routerrecommended: '8.0.42'

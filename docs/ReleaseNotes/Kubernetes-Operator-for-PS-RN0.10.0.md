@@ -93,7 +93,7 @@ The `loadBalancerIP` type for the Service objects is deprecated in Kubernetes v1
 
 The Operator was developed and tested with the following software: 
 
-* Percona Server for MySQL 8.0.42
+* Percona Server for MySQL 8.0.42-33
 * Orchestrator 3.2.6-17
 * MySQL Router 8.0.42
 * XtraBackup 8.0.35-33
