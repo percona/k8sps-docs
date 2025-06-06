@@ -119,18 +119,27 @@ plugins:
   exclude:
     glob:
       - "setting-up/client/docker.md"
-  # https://github.com/orzih/mkdocs-with-pdf
-  with-pdf:
-    output_path: "_pdf/percona-operator-for-mysql-ps.pdf"
-    cover_title: "Percona Operator for MySQL based on Percona Server for MySQL documentation"
-    cover_subtitle: 0.9.0 (February 11, 2025)
-    author: "Percona Technical Documentation Team"
-    cover_logo: docs/assets/images/percona_kubernetes_icon.png
-    custom_template_path: _resource/templates
-    enabled_if_env: ENABLE_PDF_EXPORT
   # Check links - but extends build time significantly
   # https://pypi.org/project/mkdocs-htmlproofer-plugin/
   #    htmlproofer: {}
+  print-site: 
+    add_to_navigation: false
+    print_page_title: 'Percona Operator for MySQL based on Percona Server for MySQL documentation'
+    add_print_site_banner: false
+    # Table of contents
+    add_table_of_contents: true
+    toc_title: 'Table of Contents'
+    toc_depth: 2
+    # Content-related
+    add_full_urls: false
+    enumerate_headings: false
+    enumerate_headings_depth: 1
+    enumerate_figures: true
+    add_cover_page: true
+    cover_page_template: "docs/assets/templates/pdf_cover_page.tpl"
+    path_to_pdf: ""
+    include_css: true
+    enabled: true 
   mike:
     version_selector: false
     css_dir: css
