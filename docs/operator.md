@@ -234,6 +234,15 @@ The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `private-registry-credentials` |
 
+### `mysql.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+
 ### `mysql.initImage`
 
 An alternative init image for MySQL Pods.
@@ -242,21 +251,22 @@ An alternative init image for MySQL Pods.
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
 
-### `mysql.primaryServiceType`
+### `mysql.env.name`
 
-Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Primary instance if the asyncronous replication is turned on.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `LoadBalancer` |
-
-### `mysql.replicasServiceType`
-
-Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Replica instances if the asyncronous replication is turned on.
+The name of an environment variable for a MySQL container. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `ClusterIP` |
+| :material-code-string: string     | `BOOTSTRAP_READ_TIMEOUT` |
+
+### `mysql.env.value`
+
+The value you set for the environment variables for a MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | "600" |
+
 
 ### `mysql.resources.requests.memory`
 
