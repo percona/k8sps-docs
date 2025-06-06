@@ -1,0 +1,71 @@
+{# MkDocs template for builds with Material Theme to customize docs layout 
+by adding marketing-requested elements
+#}
+
+{# Import the theme's layout. #}
+{% extends "base.html" %}
+
+{% block announce %}
+  Version 0.10.0 of the <a href="https://github.com/percona/percona-server-mysql-operator">Percona Operator for MySQL</a> is <strong>a tech preview release</strong> and it is <strong>not recommended for production environments</strong>. <strong>As of today, we recommend using</strong> <a href="https://www.percona.com/doc/kubernetes-operator-for-pxc/index.html">Percona Operator for MySQL based on Percona XtraDB Cluster</a>, which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
+{% endblock %}
+
+
+
+             {% block site_nav %}
+            {% if nav %}
+              {% if page.meta and page.meta.hide %}
+                {% set hidden = "hidden" if "navigation" in page.meta.hide %}
+              {% endif %}
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" {{ hidden }}>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    {% include "partials/nav.html" %}
+                    <br>
+                    <label class="md-nav__title" for="__drawer">
+
+  </label> 
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% if "toc.integrate" not in features %}
+              {% if page.meta and page.meta.hide %}
+                {% set hidden = "hidden" if "toc" in page.meta.hide %}
+              {% endif %}
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" {{ hidden }}>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    {% include "partials/toc.html" %}
+                  </div>
+                  <div class="md-sidebar__inner">
+                    {% include "partials/banner.html" %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endblock %}
+
+          {% block content%}
+          
+          {{ super() }}
+          
+          <script>
+            window.addEventListener('beforeprint', (event) => {
+              for (const detailEl of document.querySelectorAll('details')) {
+                if (detailEl.getAttribute('open') == null) {
+                  detailEl.setAttribute('data-was-closed', 'true')
+                }
+                detailEl.setAttribute('open', '')
+              }
+            })
+            window.addEventListener('afterprint', (event) => {
+              for (const detailEl of document.querySelectorAll('details')) {
+                if (detailEl.getAttribute('data-was-closed') != null) {
+                  detailEl.removeAttribute('data-was-closed')
+                  detailEl.removeAttribute('open')
+                }
+              }
+            })
+          </script>
+          
+          {% endblock %}

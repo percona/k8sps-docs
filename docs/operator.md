@@ -3,7 +3,8 @@
 Percona Operator for MySQL uses [Custom Resources :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) to manage options for the various components of the cluster.
 
 * `PerconaServerMySQL` Custom Resource with options for the cluster,
-* `PerconaServerMySQLBackup` and `PerconaServerMySQLRestore` Custom Resources contain options for Percona XtraBackup used to backup Percona XtraDB Cluster and to restore it from backups.
+* `PerconaServerMySQLBackup` Custom Resource contains options for Percona XtraBackup used to backup Percona Server for MySQL
+* `PerconaServerMySQLRestore` Custom Resource contains options for restoring Percona Server for MySQL from backups.
 
 ## PerconaServerMySQL Custom Resource options
 
@@ -211,7 +212,7 @@ Enables or disables the Operator from attempting to fix the issue in the event o
 
 ### `mysql.size`
 
-The number of the Percona Server for MySQL instances.
+The number of the Percona Server for MySQL instances. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -233,6 +234,15 @@ The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `private-registry-credentials` |
 
+### `mysql.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+
 ### `mysql.initImage`
 
 An alternative init image for MySQL Pods.
@@ -241,21 +251,22 @@ An alternative init image for MySQL Pods.
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
 
-### `mysql.primaryServiceType`
+### `mysql.env.name`
 
-Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Primary instance if the asyncronous replication is turned on.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `LoadBalancer` |
-
-### `mysql.replicasServiceType`
-
-Specifies the type of [Kubernetes Service :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) to be used for Replica instances if the asyncronous replication is turned on.
+The name of an environment variable for a MySQL container. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `ClusterIP` |
+| :material-code-string: string     | `BOOTSTRAP_READ_TIMEOUT` |
+
+### `mysql.env.value`
+
+The value you set for the environment variables for a MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | "600" |
+
 
 ### `mysql.resources.requests.memory`
 
@@ -371,7 +382,7 @@ Specifies whether Service should [route internal traffic :octicons-link-external
 
 ### `mysql.expose.loadBalancerSourceRanges`
 
-The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations).
+The range of client IP addresses from which the load balancer should be reachable (if not set, there are no limitations).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -472,7 +483,7 @@ Enables or disables [load balancing with HAProxy :octicons-link-external-16:](ht
 
 ### `proxy.haproxy.size`
 
-The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more.
+The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -712,7 +723,7 @@ Specifies whether Service for HAProxy should [route internal traffic :octicons-l
 
 ### `proxy.haproxy.expose.loadBalancerIP`
 
-The static IP-address for the load balancer.
+The static IP-address for the load balancer. This field is deprecated in Kuberntetes 1.24+ and removed from the Operator starting with version 0.10.0. If you have defined it, refer to the [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) for recommendations. 
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -740,7 +751,7 @@ Enables or disables MySQL Router.
 
 ### `proxy.router.size`
 
-The number of the Router Pods to provide routing to MySQL Servers.
+The number of the Router Pods to provide routing to MySQL Servers. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -888,7 +899,7 @@ Specifies whether Service for MySQL Router should [route internal traffic :octic
 
 ### `proxy.router.expose.loadBalancerIP`
 
-The static IP-address for the load balancer.
+The static IP-address for the load balancer. This field is deprecated in Kuberntetes 1.24+ and removed from the Operator starting with version 0.10.0. If you have defined it, refer to the [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) for recommendations.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -917,7 +928,7 @@ Enables or disables the Orchestrator.
 
 ### `orchestrator.size`
 
-The number of the Orchestrator Pods to provide load balancing.
+The number of the Orchestrator Pods to provide load balancing. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
