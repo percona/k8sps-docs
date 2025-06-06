@@ -1105,7 +1105,7 @@ PMM client Docker image to use.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `percona/pmm-client:{{ pmm2recommended }}` |
+| :material-code-string: string     | `percona/pmm-client:{{ pmm3recommended }}` |
 
 ### `pmm.imagePullPolicy`
 
@@ -1434,7 +1434,7 @@ Percona Toolkit client Docker image to use.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `percona/pmm-client:{{ pmm2recommended }}` |
+| :material-code-string: string     | `percona/pmm-client:{{ pmm3recommended }}` |
 
 ### `toolkit.imagePullPolicy`
 

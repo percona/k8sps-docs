@@ -54,7 +54,7 @@ container in your Kubernetes-based environment:
      ```yaml
      pmm:
        enabled: true
-       image: percona/pmm-client:{{pmm2recommended}}
+       image: percona/pmm-client:{{pmm3recommended}}
        serverHost: monitoring-service
      ``` 
 3. Apply the changes:

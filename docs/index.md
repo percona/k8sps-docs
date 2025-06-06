@@ -1,21 +1,11 @@
 # Percona Operator for MySQL based on Percona Server for MySQL
 
-Kubernetes have added a way to
-manage containerized systems, including database clusters. This management is
-achieved by controllers, declared in configuration files. These controllers
-provide automation with the ability to create objects, such as a container or a
-group of containers called Pods, to listen for a specific event and then
-perform a task.
+Percona Operator for MySQL is a custom controller that extends Kubernetes to automate the entire lifecycle of [Percona Server for MySQL :octicons-link-external-16:](https://www.percona.com/doc/percona-server/LATEST/index.html) clusters. The Operator makes it much simpler to run and reliably manage databases that traditionally require a lot of manual effort on Kubernetes.
 
-This automation adds a level of complexity to the container-based architecture
-and stateful applications, such as a database. A Kubernetes Operator is a
-special type of controller introduced to simplify complex deployments. The
-Operator extends the Kubernetes API with custom resources.
+You declare how you want your Percona Server for MySQL cluster to run (e.g., "I need a 3-node Percona Server for MySQL cluster with backups enabled") using a special Kubernetes configuration file called a Custom Resource. The Operator then takes over. It constantly watches your cluster, understands its unique needs, and automatically performs tasks like deployment, scaling, handling failures, managing backups, and coordinating upgrades.
 
-[Percona Server for MySQL :octicons-link-external-16:](https://www.percona.com/doc/percona-server/LATEST/index.html)
-is a free, fully compatible, enhanced, and open source drop-in replacement for
-any MySQL database. It provides superior performance, scalability, and
-instrumentation.
+[What's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md){.md-button}
+
 
 !!! note
 
