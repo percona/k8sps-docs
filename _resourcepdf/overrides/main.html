@@ -9,6 +9,29 @@ by adding marketing-requested elements
   Version 0.10.0 of the <a href="https://github.com/percona/percona-server-mysql-operator">Percona Operator for MySQL</a> is <strong>a tech preview release</strong> and it is <strong>not recommended for production environments</strong>. <strong>As of today, we recommend using</strong> <a href="https://www.percona.com/doc/kubernetes-operator-for-pxc/index.html">Percona Operator for MySQL based on Percona XtraDB Cluster</a>, which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 {% endblock %}
 
+{% block extrahead %}
+               {{ super() }}
+                 {% set title = config.site_name %}
+                 {% if page and page.meta and page.meta.title %}
+                 {% set title = title ~ " - " ~ page.meta.title %}
+                 {% elif page and page.title and not page.is_homepage %}
+                 {% set title = title ~ " - " ~ page.title %}
+                 {% endif %}
+                 <meta property="og:type" content="website" />
+                 <meta property="og:title" content="{{ title }}" />
+                    <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/ps/assets/images/kubernetes-operators.png">
+                    <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/ps/">
+                </head>
+                <body>
+                </body>
+              </html>
+
+              {% endblock %}
+
+              {% block scripts %}
+              <script src="https://cmp.osano.com/Azqe5vTyLOSbN3OuT/49ad85b5-0418-4794-ab81-7599dddd534c/osano.js"></script>
+              {{ super() }}
+              {% endblock %}
 
 
              {% block site_nav %}
