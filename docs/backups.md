@@ -6,9 +6,7 @@ or on [Azure Blob Storage :octicons-link-external-16:](https://azure.microsoft.c
 
 ![image](assets/images/backup-s3.svg)
 
-The Operator does logical backups, querying Percona Server for MySQL for the
-database data and writing the retrieved data to the backup storage.The backups
-are done using the [Percona XtraBackup :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/) tool.
+The Operator does physical backups using the [Percona XtraBackup :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/) tool.
 
 Backups are controlled by the `backup` section of the
 [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
