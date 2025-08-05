@@ -242,6 +242,29 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `mysql.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `mysql.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to MySQL Pod allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `mysql.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the MySQL image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` | 
 
 ### `mysql.initImage`
 
@@ -504,6 +527,30 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
+
+### `proxy.haproxy.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `proxy.haproxy.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to HAProxy Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `proxy.haproxy.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the HAProxy image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
 
 ### `proxy.haproxy.resources.requests.memory`
 
@@ -773,6 +820,30 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `proxy.router.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `proxy.router.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to Router Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `proxy.router.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the Router image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
+
 ### `proxy.router.initImage`
 
 An alternative init image for MySQL Router Pods.
@@ -949,6 +1020,31 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
+
+### `orchestrator.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `orchestrator.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to Orchestrator Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `orchestrator.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the Orchestrator image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
+
 
 ### `orchestrator.serviceAccountName`
 
@@ -1334,6 +1430,15 @@ A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](htt
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
+
+### `backup.storages.STORAGE-NAME.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration for backup and restore jobs associated with the specific storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
 
 ### `backup.storages.STORAGE-NAME.annotations`
 
