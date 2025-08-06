@@ -51,11 +51,62 @@ Starting with Kubernetes v1.11, a user can increase the size of an existing
 PVC object (considered stable since Kubernetes v1.24).
 The user cannot shrink the size of an existing PVC object.
 
-Certain volume types support PVCs expansion by default. Find exact details about
+Starting from the Operator version 0.11.0, you can scale Percona Server for MySQL storage automatically by configuring the Custom Resource manifest. Alternatively, you can scale the storage manually. For either way, the volume type must support PVCs expansion.
+
+#### Check expansion capability for your volume type
+
+Certain volume types support PVCs expansion by default.  You can run the following command to check if your storage supports the expansion capability:
+
+``` {.bash data-prompt="$" }
+$ kubectl describe sc <storage class name> | grep AllowVolumeExpansion
+```
+
+??? example "Expected output"
+
+    ``` {.text .no-copy}
+    AllowVolumeExpansion: true
+    ```
+
+Find exact details about
 PVCs and the supported volume types in [Kubernetes
 documentation  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims).
 
-In this document we're using the default Percona Server for MySQL cluster name `cluster1`. If you have a different name, replace `cluster1` with in the commands.
+#### Automated scaling with Volume Expansion capability
+
+In this document we're using the default Percona Server for MySQL cluster name `cluster1`. If you have a different name, replace `cluster1` with it in the commands.
+
+To enable automated scaling, do the following:
+
+1. Set the [enableVolumeExpansion](operator.md#enablevolumeexpansion) Custom Resource option to `true` (it is turned off by default). When enabled, the Operator will automatically expand the storage for you when you define a new size in the Custom Resource
+2. Change the
+`mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage` option in the `deploy/cr.yaml` file to the desired storage size.
+
+    Here's the example configuration:
+
+    ```yaml
+    spec:
+      ...
+      enableVolumeExpansion: true
+        ...
+      mysql:
+        ...
+        volumeSpec:
+          ...
+          persistentVolumeClaim:
+            resources:
+              requests:
+                storage: <NEW STORAGE SIZE>
+    ```
+
+3. Apply the new configuration:
+    
+    ``` {.bash data-prompt="$" }
+    $ kubectl apply -f cr.yaml
+    ```
+
+The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running.. After the resize finishes, the Operator deletes this annotation.
+
+#### Manual scaling
 
 To increase the storage size, do the following:
 {.power-number}
@@ -63,7 +114,7 @@ To increase the storage size, do the following:
 1. Extract and backup the cluster configuration
 
     ```{.bash data-prompt="$"}
-    kubectl get ps cluster1 -o yaml > CR_backup.yaml
+    $ kubectl get ps cluster1 -o yaml > CR_backup.yaml
     ```
 
 2. Now you should delete the cluster.
@@ -128,7 +179,7 @@ To increase the storage size, do the following:
     $ kubectl apply -f CR_backup.yaml
     ```
 
-<!-- The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation. -->
+The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation. 
 
 ## Horizontal scaling
 
