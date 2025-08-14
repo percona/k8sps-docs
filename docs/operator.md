@@ -396,6 +396,14 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 | ----------- | ---------- |
 | :material-code-string: string     | `2Gi` |
 
+### `mysql.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `600` |
+
 ### `mysql.configuration`
 
 The `my.cnf` file options to be passed to Percona Server for MySQL instances.
@@ -625,6 +633,14 @@ When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
+### `proxy.haproxy.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
 ### `proxy.haproxy.configuration`
 
 The [custom HAProxy configuration file](haproxy-conf.md#passing-custom-configuration-options-to-haproxy) contents.
@@ -849,6 +865,14 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | ----------- | ---------- |
 | :material-code-string: string     | `DoNotSchedule` |
 
+### `proxy.router.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
 ### `proxy.router.configuration`
 
 Custom configuration options to be passed to MySQL Router.
@@ -1013,6 +1037,15 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `DoNotSchedule` |
+
+### `orchestrator.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
 
 ### `orchestrator.expose.type`
 
