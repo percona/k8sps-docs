@@ -1115,6 +1115,14 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `pmm.mysqlParams`
+
+Enables to pass MySQL parameters to PMM. For example, to change the number of tables (from the default of 1000) beyond which per-table statistics collection is disabled.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
+
 ### `pmm.resources.requests.memory`
 
 The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
@@ -1154,14 +1162,6 @@ Address of the PMM Server to collect data from the cluster.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `monitoring-service` |
-
-### `pmm.serverUser`
-
-The PMM Serve_User. The PMM Server password should be configured using Secrets.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `admin` |
 
 ## <a name="operator-backup-section"></a>Backup section
 
