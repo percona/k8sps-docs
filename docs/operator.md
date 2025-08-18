@@ -252,7 +252,7 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 
 ### `mysql.tolerations`
 
-Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to MySQL Pod allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to MySQL Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
 
 | Value type  | Example    |
 | ----------- | ---------- |
