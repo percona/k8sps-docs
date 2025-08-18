@@ -1287,6 +1287,14 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | **Value**       | string  |
 | **Example**     | `Always` |
 
+### `backup.imagePullSecrets.name`
+
+The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
+
 ### `backup.initImage`
 
 An alternative init image for Percona XtraBackup Pods.
