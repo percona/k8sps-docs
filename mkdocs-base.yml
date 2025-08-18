@@ -209,6 +209,7 @@ nav:
           
     - HOWTOs:
           - "Provide Percona Operator for MySQL single-namespace and multi-namespace deployment": cluster-wide.md
+          - "Change the cluster replication type": change-replication-type.md
           - "Delete the Operator": delete.md
           
     - Reference:

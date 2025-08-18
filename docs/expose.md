@@ -124,12 +124,6 @@ connect via [MySQL X Protocol :octicons-link-external-16:](<https://dev.mysql.co
 mysql-server/latest/page_mysqlx_protocol.html). This is 
 useful for operations such as asynchronous calls.
 
-### Change cluster type
-
-You can change a cluster type from asynchronous replication to group replication or vice versa.  To do it, you must [pause](pause.md) the cluster, change the replication type. After you finished, unpause the cluster.
-
-Changing type on a running cluster is not supported.
-
 ## Expose Individual Pods
 
 Sometimes you need to expose each MySQL instance with its own IP address. This is useful when implementing load balancing at the application level.
