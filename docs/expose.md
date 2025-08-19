@@ -1,72 +1,57 @@
-# Exposing cluster
+# Expose cluster
 
-The Operator provides entry points for accessing the database by client
-applications in several scenarios. In either way the cluster is exposed with
-regular Kubernetes [Service objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/),
-configured by the Operator.
+The Operator provides different ways to access your MySQL database cluster. Each way uses Kubernetes [Service objects :octicons-link-external-16:](https://kubernetes.io/docs/
+concepts/services-networking/service/) to expose the cluster to client applications. These Service objects are configured by the Operator.
 
-This document describes the usage of [Custom Resource manifest options](operator.md)
-to expose the clusters deployed with the Operator. The expose options vary for
-different replication types: [Asynchronous :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html)
-and [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+This document shows you how to configure cluster exposure using options in the [Custom Resource manifest](operator.md). The available options depend on your replication type: [Asynchronous](https://dev.mysql.com/doc/refman/8.0/en/replication.html) or [Group Replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
 
 ## Asynchronous Replication
 
-### Exposing cluster with HAProxy
+### Use HAProxy 
 
-Percona Operator for MySQL provides load balancing and proxy service with
-[HAProxy :octicons-link-external-16:](https://haproxy.org) (enabled by default).
+HAProxy provides load balancing and proxy service for your cluster. It's enabled by default and works with both replication types.
 
 ![image](assets/images/exposure-haproxy.svg)
 
-You can control whether to use it or not by enabling or disabling it via the
-`haproxy.enabled` option in the `deploy/cr.yaml` configuration file.
-
-The following example turns on the asynchronous replication and enables HAProxy:
+To enable HAProxy, set the following in your `deploy/cr.yaml` manifest:
 
 ```yaml
 mysql:
   clusterType: async
   ...
   haproxy: 
-   enabled: true
-   size: 3
-   image: perconalab/percona-xtradb-cluster-operator:{{ release }}-haproxy
+    enabled: true
+    size: 3
+    image: perconalab/percona-xtradb-cluster-operator:{{ release }}-haproxy
 ```
 
-The resulting HAProxy setup will contain the `cluster1-haproxy` service
-listening on ports 3306 (MySQL primary), 3307 (MySQL replicas), and 3309 (the [proxy protocol :octicons-link-external-16:](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
-useful for operations such as asynchronous calls).
+The created HAProxy service (`cluster1-haproxy`) listens on the following ports:
 
-!!! note
+- `3306`: MySQL primary
+- `3307`: MySQL replicas  
+- `3309`: [Proxy protocol
+:octicons-link-external-16:](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
 
-    The Operator currently supports using HAProxy not only with asynchronous
-    replication clusters, but also with group replication clusters.
-
-When the cluster is configured in this way, you can find the endpoint (the
-public IP address of the load balancer in our example) by getting the Service
-object with the `kubectl get service` command:
+To find your HAProxy endpoint, run:
 
 ```{.bash data-prompt="$"}
 $ kubectl get service cluster1-haproxy
-NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
-cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
+
 ```
+??? example "Sample output"
 
-### Exposing cluster without HAProxy
+    ```{.text .no-copy}
+    NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
+    cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
+    ```
 
-With [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html)
-the cluster can be also exposed through a Kubernetes Service called
-`<CLUSTER_NAME>-mysql-primary`: for example, `cluster1-mysql-primary`.
+### Use Primary Service Only
+
+You can expose your cluster with exposing only the primary node through the `<CLUSTER_NAME>-mysql-primary` service. This Service is created by default and is always present. 
 
 ![image](assets/images/exposure-async.svg)
 
-This Service is created by default and is always present. You can change the
-type of the Service object by setting [mysql.primaryServiceType](operator.md#mysqlprimaryservicetype)
-variable in the Custom Resource.
-
-The following example exposes the Primary node of the asynchronous cluster with
-the LoadBalancer object:
+You can change the type of the Service object by setting mysql.primaryServiceType variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your `deploy/cr.yaml` manifest:
 
 ```yaml
 mysql:
@@ -75,35 +60,34 @@ mysql:
   primaryServiceType: LoadBalancer
 ```
 
-When the cluster is configured in this way, you can find the endpoint (the
-public IP address of the load balancer in our example) by getting the Service
-object with the `kubectl get service` command:
+To find your primary service endpoint, run:
 
 ```{.bash data-prompt="$"}
 $ kubectl get service cluster1-mysql-primary
-NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
-cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
 ```
 
-As you could notice, this command also shows mapped ports the application can
-use to communicate with MySQL primary instance (e.g. `3306` for the classic
-MySQL protocol, or `33060` for [MySQL X Protocol :octicons-link-external-16:](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
-useful for operations such as asynchronous calls).
+??? example "Sample output"
+
+    ```{.text .no-copy}
+    NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
+    cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
+    ```
 
 ## Group Replication
 
-Group replication clusters can be configured to use either HAProxy or [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/). Group replication cluster can be exposed with HAProxy similarly to the asynchronous cluster. 
+Group replication clusters can use either HAProxy or [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/)..
 
-If group replication cluster is configured with MySQL Router, it can be 
-exposed through a Kubernetes Service called `<CLUSTER_NAME>-router`: for example,
-`cluster1-router`. Network design in this case looks like this:
+### Use HAProxy
+
+Configure HAProxy the same way as with asynchronous replication.
+
+### Use MySQL Router
+
+MySQL Router provides intelligent routing for group replication clusters. You can expose the cluster through a `<CLUSTER_NAME>-router` Kubernetes Service. 
 
 ![image](assets/images/exposure-gr.svg)
 
-MySQL Router can be configured via the [router section](operator.md#operator-router-section).
-In particular, the [router.expose.type](operator.md#proxyrouterexposetype) option sets the
-type of the correspondent Kubernetes Service object. The following example
-exposes MySQL Router through a LoadBalancer object:
+To configure MySQL Router with the LoadBalancer expose type, modify the `spec.router` section in `deploy/cr.yaml` manifest:
 
 ```yaml
 mysql:
@@ -114,54 +98,77 @@ router:
     type: LoadBalancer
 ```
 
-When the cluster is configured in this way, you can find the endpoint (the
-public IP address of the load balancer in our example) by getting the Service
-object with the `kubectl get service` command:
+To find your MySQL Router endpoint, run:
 
 ```{.bash data-prompt="$"}
 $ kubectl get service cluster1-router
-NAME                TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)                                                       AGE
-my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,6447:31694/TCP,6448:31515/TCP,6449:31686/TCP   18h
 ```
 
-As you could notice, this command also shows mapped ports the application can
-use to communicate with MySQL Router:
+??? example "Sample output"
+
+    ```{.text .no-copy}
+    NAME                TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)                                                       AGE
+    my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,6447:31694/TCP,6448:31515/TCP,6449:31686/TCP   18h
+    ```
+
+The MySQL Router service provides these ports:
 
 * `3306` - read/write, default MySQL clients connection,
 * `33062` - read/write, port for MySQL administrative connections,
 * `6446` - read/write, routing traffic to a Primary node,
 * `6447` - read-only, load balancing the traffic across Replicas.
 
-Additionally, ports `6448` and `6449` are available in the same way to
-connect via [MySQL X Protocol :octicons-link-external-16:](https://dev.mysql.com/doc/dev/mysql-server/latest/page_mysqlx_protocol.html)
+Additional ports `6448` and `6449` are available to
+connect via [MySQL X Protocol :octicons-link-external-16:](<https://dev.mysql.com/doc/dev/>
+mysql-server/latest/page_mysqlx_protocol.html). This is 
 useful for operations such as asynchronous calls.
 
-Alternatively, you can find the endpoint to connect to by `kubectl get ps`
-command:
+### Use Primary Service
 
-```{.bash data-prompt="$"}
-$ kubectl get ps
-NAME       REPLICATION         ENDPOINT        STATE   AGE
-cluster1   group-replication   35.239.63.143   ready   10m
+You can expose your group-replication cluster without a proxy by exposing the primary Pod. Use the Kubernetes Service object named `<CLSUTER_NAME>-mysql-primary` to do this. This Service is created by default and is always present.
+
+You can configure this service using the `mysql.exposePrimary` subsection in the `deploy/cr.yaml` Custom Resource manifest.
+
+For example, to change the type of the Service object to LoadBalancer, specify the following configuration:
+
+```yaml
+mysql:
+   exposePrimary:
+      enabled: true
+      type: LoadBalancer
 ```
 
-## Service per Pod
+Apply the configuration with the `kubectl apply -f deploy/cr.yaml -n <namespace>` command for the changes to come into force. 
 
-Still, sometimes it is required to expose all MySQL instances, where each of
-them gets its own IP address (e.g. in case of load balancing implemented on the
-application level).
+To find your primary service endpoint, run:
+
+```{.bash data-prompt="$"}
+$ kubectl get service cluster1-mysql-primary
+```
+
+??? example "Sample output"
+    
+    ```{.text .no-copy}
+    cluster1-mysql-primary   ClusterIP   34.118.227.188   <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   10m
+    ```
+
+The `cluster1-mysql-primary` Service listens on the following ports:
+
+- `3306` - read/write, default MySQL clients connection,
+- `33062` - read/write, port for MySQL administrative connections,
+- `33060` - read/write, connection to MySQL via the MySQL X protocol
+- `6450` - read/write, connection to MySQL via the MySQL Router
+- `33061` - MySQL Group Replication internal communications port
+
+In addition, the primary Pod is marked with the label `mysql.percona.com/primary=true` to distinguish it from the rest of the Pods.
+
+## Expose Individual Pods
+
+Sometimes you need to expose each MySQL instance with its own IP address. This is useful when implementing load balancing at the application level.
 
 ![image](assets/images/exposure-all.svg)
 
-This is possible by setting the following options in [spec.mysql section](operator.md#operator-mysql-section).
-
-* [mysql.expose.enabled](operator.md#mysqlexposeenabled) enables or disables exposure
-    of MySQL instances,
-* [mysql.expose.type](operator.md#mysqlexposetype) defines the Kubernetes Service
-    object type.
-
-The following example creates a dedicated LoadBalancer Service for each node of
-the MySQL cluster:
+To expose individual pods, configure the following in your `deploy/cr.yaml`:
 
 ```yaml
 mysql:
@@ -170,8 +177,7 @@ mysql:
     type: LoadBalancer
 ```
 
-When the cluster instances are exposed in this way, you can find the
-corresponding Services with the `kubectl get services` command:
+To find all exposed services, run:
 
 ```{.bash data-prompt="$"}
 $ kubectl get services

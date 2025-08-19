@@ -332,13 +332,78 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | ----------- | ---------- |
 | :material-code-string: string     | `DoNotSchedule` |
 
-### `mysql.expose.enabled`
+### `mysql.exposePrimary.enabled`
 
-Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses.
+Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses for cluster type group-replication.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `false` |
+
+### `mysql.exposePrimary.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+### `mysql.exposePrimary.annotations`
+
+The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp`, `service.beta.kubernetes.io/aws-load-balancer-type: nlb` |
+
+### `mysql.exposePrimary.externalTrafficPolicy`
+
+Specifies whether Service should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `mysql.exposePrimary.internalTrafficPolicy`
+
+Specifies whether Service should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `mysql.exposePrimary.labels`
+
+[Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `rack: rack-22` |
+
+### `mysql.exposePrimary.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there are no limitations).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `10.0.0.0/8` |
+
+
+### `mysql.expose.enabled`
+
+Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses. Used with cluster type asynchronous replication.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
 
 ### `mysql.expose.type`
 
