@@ -781,6 +781,31 @@ An alternative init image for MySQL Router Pods.
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
 
+### `proxy.router.ports.name`
+
+The name for a custom or an existing port for the MySQL Router Service. 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `http` |
+
+### `proxy.router.ports.port`
+
+The port exposed by the MySQL Router service to the outside world or other components.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `8443` |
+
+### `proxy.router.ports.targetPort`
+
+The port inside the Pod/container where MySQL Router is actually listening. When a client connects to the external port, Kubernetes forwards that traffic to the `targetPort` value on the backend Pod. A zero (0) value means Kubernetes uses the default internal port or does not do the remapping.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `0` |
+
+
 ### `proxy.router.resources.requests.memory`
 
 The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
