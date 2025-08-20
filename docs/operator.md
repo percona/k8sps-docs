@@ -210,6 +210,15 @@ Enables or disables the Operator from attempting to fix the issue in the event o
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `mysql.vaultSecretName`
+
+Specifies the secret for the [HashiCorp Vault :octicons-link-external-16:](https://developer.hashicorp.com/vault) to carry on [Data at Rest Encryption](encryption.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cluster1-vault`     |
+
+
 ### `mysql.size`
 
 The number of the Percona Server for MySQL instances. This setting is required.
