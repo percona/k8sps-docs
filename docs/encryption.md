@@ -5,6 +5,7 @@ Data-at-rest encryption ensures that stored data remains protected even if the u
 [HashiCorp Vault :octicons-link-external-16:](https://www.vaultproject.io/) is used to securely store and manage encryption keys, enabling automatic key rotation, audit logging, and compliance with enterprise security standards. This setup enhances the overall security posture of your MySQL cluster.
 
 This guide walks you through deploying and configuring HashiCorp Vault to work with Percona Operator for MySQL to enable data-at-rest encryption. 
+
 ## Create the namespace
 
 It is a good practice to isolate workloads in Kubernetes using namespaces. Create a namespace with the following command:
@@ -40,7 +41,7 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
     ??? example "Sample output"
 
         ```{.text .no-copy}
-        NAME: vault2
+        NAME: vault
         LAST DEPLOYED: Wed Aug 20 12:55:38 2025
         NAMESPACE: vault
         STATUS: deployed
@@ -90,7 +91,7 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
     Now, unseal Vault. Run the following command on every Pod where Vault is running:
 
     ```{.bash .data-prompt="$"}
-    $ kubectl exec -it pod/vault2-0 -n $NAMESPACE -- vault operator unseal "$unsealKey"
+    $ kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator unseal "$unsealKey"
     ```
     
     ??? example "Sample output"
@@ -154,7 +155,7 @@ When you started Vault, it generates and starts with a [root token :octicons-lin
 
 ## Create a Secret for Vault
 
-To enable Vault for the Operator, create a Secrets object for it. To do so, create a YAML configuration file and specify the following information:
+To enable Vault for the Operator, create a Secret object for it. To do so, create a YAML configuration file and specify the following information:
 
 * A token to access Vault
 * A Vault server URL
@@ -175,7 +176,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
     stringData:
       keyring_vault.conf: |-
         token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
-        vault_url = http://vault2.vault.svc.cluster.local:8200
+        vault_url = http://vault.vault.svc.cluster.local:8200
         secret_mount_point = ps-secret
     ```
 
@@ -190,7 +191,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
     stringData:
       keyring_vault.conf: |-
         token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
-        vault_url = http://vault2.vault.svc.cluster.local:8200
+        vault_url = https://vault.vault.svc.cluster.local:8200
         secret_mount_point = ps-secret
         vault_ca = /etc/mysql/vault-keyring-secret/ca.cert
     ca.cert: |-
@@ -203,7 +204,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
 
     Note that you must either specify the certificate value or don't declare it at all. Having a commented `#ca.cert` field in the Secret configuration file is not allowed.
 
-Now create a Secrets object:
+Now create a Secret object:
 
 ``` {.bash data-prompt="$" }
 $ kubectl apply -f deploy/vault-secret.yaml -n $NAMESPACE
