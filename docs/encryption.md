@@ -1,6 +1,6 @@
 # Data-at-rest encryption
 
-Data-at-rest encryption ensures that stored data remains protected even if the underlying storage is compromised. Percona Operator for MySQL uses the `keyring_vault` plugin, shipped with Percona Server for MySQL, to encrypt tablespaces, bin logs and backups. 
+Data-at-rest encryption ensures that stored data remains protected even if the underlying storage is compromised. Percona Operator for MySQL uses the `keyring_vault` plugin, shipped with Percona Server for MySQL, to encrypt tablespaces and binlogs. 
 
 [HashiCorp Vault :octicons-link-external-16:](https://www.vaultproject.io/) is used to securely store and manage encryption keys, enabling automatic key rotation, audit logging, and compliance with enterprise security standards. This setup enhances the overall security posture of your MySQL cluster.
 
