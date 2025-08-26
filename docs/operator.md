@@ -1476,44 +1476,4 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `400m` |
 
-## <a name="operator-backupsource-section"></a> PerconaServerMySQLRestore Custom Resource options
-
-[Percona Server for MySQL Restore](backups-restore.md) options are managed by the Operator via the 
-`PerconaServerMySQLRestore` [Custom Resource :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and can be configured via the
-[deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml)
-configuration file. This Custom Resource contains the following options:
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| metadata.name    | string            | The name of the restore                        | true     |
-| spec.clusterName | string            | MySQL Cluster name (the name of your running cluster) | true |
-| spec.backupName  | string            | The name of the backup which should be restored| false    |
-| spec.backupSource| [subdoc](operator.md#operator-restore-backupsource-options-section)| Defines configuration for different restore sources | false |
-
-### <a name="operator-restore-backupsource-options-section"></a>backupSource section
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| destination      | string            | Path to the backup                             | false    |
-| storageName      | string            | The storage name from CR `spec.backup.storages`| false    |
-| s3               | [subdoc](operator.md#operator-restore-s3-options-section)    | Define configuration for s3 compatible storages | false |
-| azure            | [subdoc](operator.md#operator-restore-azure-options-section) | Define configuration for azure blob storage     | false |
-
-### <a name="operator-restore-s3-options-section"></a>backupSource.s3 subsection
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| bucket           | string            | The bucket with a backup                       | true     |
-| credentialsSecret| string            | The Secret name for the backup                 | true     |
-| endpointUrl      | string            | A valid endpoint URL                           | false    |
-| region           | string            | The region corresponding to the S3 bucket      | false    |
-
-### <a name="operator-restore-azure-options-section"></a>backupSource.azure subsection
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| credentialsSecret| string            | The Secret name for the azure blob storage     | true     |
-| container        | string            | The container name of the azure blob storage   | true     |
-| endpointUrl      | string            | A valid endpoint URL                           | false    |
-| storageClass     | string            | The storage class name of the azure storage    | false    |
 
