@@ -45,19 +45,21 @@ $ kubectl get service cluster1-haproxy
     cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
     ```
 
-### Use Primary Service Only
+### Use primary Service Only
 
-You can expose your cluster with exposing only the primary node through the `<CLUSTER_NAME>-mysql-primary` service. This Service is created by default and is always present. 
+You can expose your cluster bypassing the proxy by exposing the primary Pod directly. Specify the `spec.mysql.expose.enabled` option to `true` in your Custom Resource. This creates services for every Pod and you can use the `<CLUSTER_NAME>-mysql-primary` service for connecting to the cluster. 
 
 ![image](assets/images/exposure-async.svg)
 
-You can change the type of the Service object by setting mysql.primaryServiceType variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your `deploy/cr.yaml` manifest:
+You can change the type of the Service object by setting `mysql.expose.type` variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your `deploy/cr.yaml` manifest:
 
 ```yaml
 mysql:
   clusterType: async
   ...
-  primaryServiceType: LoadBalancer
+  expose:
+    enabled: ture
+    type: LoadBalancer
 ```
 
 To find your primary service endpoint, run:

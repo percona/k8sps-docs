@@ -334,7 +334,7 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 
 ### `mysql.exposePrimary.enabled`
 
-Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses for cluster type group-replication.
+Enable or disable exposing Percona Server for MySQL primary node with dedicated IP addresses.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -399,7 +399,7 @@ The range of client IP addresses from which the load balancer should be reachabl
 
 ### `mysql.expose.enabled`
 
-Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses. Used with cluster type asynchronous replication.
+Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses. This setting exposes every Pod in your cluster.
 
 | Value type  | Example    |
 | ----------- | ---------- |
