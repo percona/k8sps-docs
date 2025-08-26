@@ -45,20 +45,20 @@ $ kubectl get service cluster1-haproxy
     cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
     ```
 
-### Use primary Service Only
+### Use Primary Service 
 
-You can expose your cluster bypassing the proxy by exposing the primary Pod directly. Specify the `spec.mysql.expose.enabled` option to `true` in your Custom Resource. This creates services for every Pod and you can use the `<CLUSTER_NAME>-mysql-primary` service for connecting to the cluster. 
+You can expose your cluster without the proxy by exposing the primary Pod directly. Specify the `spec.mysql.exposePrimary.enabled` option to `true` in your Custom Resource. This creates  the `<CLUSTER_NAME>-mysql-primary` service for connecting to the cluster. 
 
 ![image](assets/images/exposure-async.svg)
 
-You can change the type of the Service object by setting `mysql.expose.type` variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your `deploy/cr.yaml` manifest:
+You can change the type of the Service object by setting `mysql.exposePrimary.type` variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your `deploy/cr.yaml` manifest:
 
 ```yaml
 mysql:
   clusterType: async
   ...
-  expose:
-    enabled: ture
+  exposePrimary:
+    enabled: true
     type: LoadBalancer
 ```
 
@@ -75,13 +75,24 @@ $ kubectl get service cluster1-mysql-primary
     cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
     ```
 
+The `cluster1-mysql-primary` Service listens on the following ports:
+
+- `3306` - read/write, default MySQL clients connection,
+- `33062` - read/write, port for MySQL administrative connections,
+- `33060` - read/write, connection to MySQL via the MySQL X protocol
+- `6450` - read/write, connection to MySQL via the MySQL Router
+- `33061` - MySQL Group Replication internal communications port
+
+In addition, the primary Pod is marked with the label `mysql.percona.com/primary=true` to distinguish it from the rest of the Pods.
+
+
 ## Group Replication
 
 Group replication clusters can use either HAProxy or [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/)..
 
 ### Use HAProxy
 
-Configure HAProxy the same way as with asynchronous replication.
+Configure HAProxy the same way as with asynchronous replication. Using HAProxy is the recommended approach.
 
 ### Use MySQL Router
 
@@ -151,7 +162,8 @@ $ kubectl get service cluster1-mysql-primary
 ??? example "Sample output"
     
     ```{.text .no-copy}
-    cluster1-mysql-primary   ClusterIP   34.118.227.188   <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   10m
+    NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
+    cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
     ```
 
 The `cluster1-mysql-primary` Service listens on the following ports:
@@ -183,12 +195,17 @@ To find all exposed services, run:
 
 ```{.bash data-prompt="$"}
 $ kubectl get services
-NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
-...
-cluster1-mysql-0         LoadBalancer   10.40.44.110   104.198.16.21   3306:31009/TCP,33062:31319/TCP,33060:30737/TCP,6033:30660/TCP   75s
-cluster1-mysql-1         LoadBalancer   10.40.42.5     34.70.170.187   3306:30601/TCP,33062:30273/TCP,33060:30910/TCP,6033:30847/TCP   75s
-cluster1-mysql-2         LoadBalancer   10.40.42.158   35.193.50.44    3306:32042/TCP,33062:31576/TCP,33060:31656/TCP,6033:31448/TCP   75s
 ```
+
+??? example "Sample output"
+
+    ```
+    NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
+    ...
+    cluster1-mysql-0         LoadBalancer   10.40.44.110   104.198.16.21   3306:31009/TCP,33062:31319/TCP,33060:30737/TCP,6033:30660/TCP   75s
+    cluster1-mysql-1         LoadBalancer   10.40.42.5     34.70.170.187   3306:30601/TCP,33062:30273/TCP,33060:30910/TCP,6033:30847/TCP   75s
+    cluster1-mysql-2         LoadBalancer   10.40.42.158   35.193.50.44    3306:32042/TCP,33062:31576/TCP,33060:31656/TCP,6033:31448/TCP   75s
+    ```
 
 As you could notice, this command also shows mapped ports the application can
 use to communicate with MySQL instances (e.g. `3306` for the classic MySQL
