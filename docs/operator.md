@@ -396,6 +396,63 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 | ----------- | ---------- |
 | :material-code-string: string     | `2Gi` |
 
+### `mysql.volumeSpec.persistentVolumeClaim.dataSource.name`
+
+The name of PVC used as a data source to [create the Percona Server for MySQL Volumes by cloning :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volume-pvc-datasource/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `source-pvc` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.dataSource.apiGroup`
+
+The [Kubernetes API group :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/#api-groups) to use for [PVC Data Source :octicons-link-external-16:](https://kubernetes-csi.github.io/docs/volume-datasources.html).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     |  |
+
+### `mysql.volumeSpec.persistentVolumeClaim.dataSource.kind`
+
+The [Kubernetes data source type :octicons-link-external-16:](https://kubernetes-csi.github.io/docs/volume-datasources.html#supported-datasources).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `PersistentVolumeClaim` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.dataSourceRef.name`
+
+The name of the resource that you want to clone. This must match the name of an existing PVC in the specified namespace.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `source-pvc` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.dataSourceRef.namespace`
+
+The namespace where the source PVC resides. This allows for [cross-namespace cloning :octicons-link-external-16:](https://kubernetes-csi.github.io/docs/cross-namespace-data-sources.html), which is something `dataSource` cannot do.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `default` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.dataSourceRef.apiGroup`
+
+The [Kubernetes API group :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/#api-groups) of the resource you are referencing for [PVC Data Source :octicons-link-external-16:](https://kubernetes-csi.github.io/docs/volume-datasources.html). Undefined API group means a resource belongs to the core API group.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     |  |
+
+### `mysql.volumeSpec.persistentVolumeClaim.dataSourceRef.kind`
+
+The [kind of Kubernetes resource :octicons-link-external-16:](https://kubernetes-csi.github.io/docs/volume-datasources.html#supported-datasources) you are referencing to use as the data source.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `PersistentVolumeClaim` |
+
+
 ### `mysql.configuration`
 
 The `my.cnf` file options to be passed to Percona Server for MySQL instances.
