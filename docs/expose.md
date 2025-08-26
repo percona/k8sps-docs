@@ -3,11 +3,20 @@
 The Operator provides different ways to access your MySQL database cluster. Each way uses Kubernetes [Service objects :octicons-link-external-16:](https://kubernetes.io/docs/
 concepts/services-networking/service/) to expose the cluster to client applications. These Service objects are configured by the Operator.
 
-This document shows you how to configure cluster exposure using options in the [Custom Resource manifest](operator.md). The available options depend on your replication type: [Asynchronous](https://dev.mysql.com/doc/refman/8.0/en/replication.html) or [Group Replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+This document shows you how to configure cluster exposure using options in the [Custom Resource manifest](operator.md). The available options depend on the [replication type](architecture.md#replication-types-and-proxy-solutions) of your cluster.
 
-## Asynchronous Replication
+For a cluster with [Asynchronous :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html) replication, your options are:
 
-### Use HAProxy 
+* [Use HAProxy](#use-haproxy)
+* [Use the Primary Service](#use-primary-service)
+
+For a cluster with [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html), your options are:
+
+* [Use HAProxy](#use-haproxy) - recommended
+* [Use MySQL Router](#use-mysql-router)
+* [Use the Primary Service](#use-primary-service)
+
+## Use HAProxy 
 
 HAProxy provides load balancing and proxy service for your cluster. It's enabled by default and works with both replication types.
 
@@ -15,22 +24,35 @@ HAProxy provides load balancing and proxy service for your cluster. It's enabled
 
 To enable HAProxy, set the following in your `deploy/cr.yaml` manifest:
 
-```yaml
-mysql:
-  clusterType: async
-  ...
-  haproxy: 
-    enabled: true
-    size: 3
-    image: perconalab/percona-xtradb-cluster-operator:{{ release }}-haproxy
-```
+=== "Asynchronous replication"
+
+    ```yaml
+    mysql:
+      clusterType: async
+      ....
+      haproxy: 
+        enabled: true
+        size: 3
+        image: perconalab/percona-server-mysql-operator:{{ release }}-haproxy
+    ```
+
+=== "Group replication"
+
+    ```yaml
+    mysql:
+      clusterType: group-replication
+      ....
+      haproxy:
+        enabled: true
+        size: 3
+        image: perconalab/percona-server-mysql-operator:{{ release }}-haproxy
+    ```
 
 The created HAProxy service (`cluster1-haproxy`) listens on the following ports:
 
 - `3306`: MySQL primary
 - `3307`: MySQL replicas  
-- `3309`: [Proxy protocol
-:octicons-link-external-16:](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
+- `3309`: [Proxy protocol :octicons-link-external-16:](https://www.haproxy.com/blog/haproxy/proxy-protocol/)
 
 To find your HAProxy endpoint, run:
 
@@ -45,58 +67,11 @@ $ kubectl get service cluster1-haproxy
     cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
     ```
 
-### Use Primary Service 
+## Use MySQL Router
 
-You can expose your cluster without the proxy by exposing the primary Pod directly. Specify the `spec.mysql.exposePrimary.enabled` option to `true` in your Custom Resource. This creates  the `<CLUSTER_NAME>-mysql-primary` service for connecting to the cluster. 
+MySQL Router provides intelligent routing for group replication clusters. This option is left for backward compatibility. We recommend to [Use HAProxy](#use-haproxy) for exposing the cluster.
 
-![image](assets/images/exposure-async.svg)
-
-You can change the type of the Service object by setting `mysql.exposePrimary.type` variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your `deploy/cr.yaml` manifest:
-
-```yaml
-mysql:
-  clusterType: async
-  ...
-  exposePrimary:
-    enabled: true
-    type: LoadBalancer
-```
-
-To find your primary service endpoint, run:
-
-```{.bash data-prompt="$"}
-$ kubectl get service cluster1-mysql-primary
-```
-
-??? example "Sample output"
-
-    ```{.text .no-copy}
-    NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
-    cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
-    ```
-
-The `cluster1-mysql-primary` Service listens on the following ports:
-
-- `3306` - read/write, default MySQL clients connection,
-- `33062` - read/write, port for MySQL administrative connections,
-- `33060` - read/write, connection to MySQL via the MySQL X protocol
-- `6450` - read/write, connection to MySQL via the MySQL Router
-- `33061` - MySQL Group Replication internal communications port
-
-In addition, the primary Pod is marked with the label `mysql.percona.com/primary=true` to distinguish it from the rest of the Pods.
-
-
-## Group Replication
-
-Group replication clusters can use either HAProxy or [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/)..
-
-### Use HAProxy
-
-Configure HAProxy the same way as with asynchronous replication. Using HAProxy is the recommended approach.
-
-### Use MySQL Router
-
-MySQL Router provides intelligent routing for group replication clusters. You can expose the cluster through a `<CLUSTER_NAME>-router` Kubernetes Service. 
+You can expose the cluster through a `<CLUSTER_NAME>-router` Kubernetes Service.
 
 ![image](assets/images/exposure-gr.svg)
 
@@ -136,23 +111,36 @@ connect via [MySQL X Protocol :octicons-link-external-16:](<https://dev.mysql.co
 mysql-server/latest/page_mysqlx_protocol.html). This is 
 useful for operations such as asynchronous calls.
 
-### Use Primary Service
+## Use Primary Service
 
-You can expose your group-replication cluster without a proxy by exposing the primary Pod. Use the Kubernetes Service object named `<CLSUTER_NAME>-mysql-primary` to do this. This Service is created by default and is always present.
+You can expose your cluster without the proxy by exposing the primary Pod directly. Specify the `spec.mysql.exposePrimary.enabled` option to `true` in your Custom Resource. This creates  the `<CLUSTER_NAME>-mysql-primary` service for connecting to the cluster.
 
-You can configure this service using the `mysql.exposePrimary` subsection in the `deploy/cr.yaml` Custom Resource manifest.
+![image](assets/images/exposure-async.svg)
 
-For example, to change the type of the Service object to LoadBalancer, specify the following configuration:
+You can change the type of the Service object by setting `mysql.exposePrimary.type` variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your `deploy/cr.yaml` manifest:
 
-```yaml
-mysql:
-   exposePrimary:
-      enabled: true
-      type: LoadBalancer
-```
+=== "Asynchronous replication"
 
-Apply the configuration with the `kubectl apply -f deploy/cr.yaml -n <namespace>` command for the changes to come into force. 
+    ```yaml
+    mysql:
+      clusterType: async
+      ...
+      exposePrimary:
+        enabled: true
+        type: LoadBalancer
+    ```
 
+=== "Group replication"
+
+    ```yaml
+    mysql:
+      clusterType: group-replication
+      ...
+      exposePrimary:
+        enabled: true
+        type: LoadBalancer
+    ```
+    
 To find your primary service endpoint, run:
 
 ```{.bash data-prompt="$"}
@@ -160,7 +148,7 @@ $ kubectl get service cluster1-mysql-primary
 ```
 
 ??? example "Sample output"
-    
+
     ```{.text .no-copy}
     NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
     cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
@@ -168,11 +156,11 @@ $ kubectl get service cluster1-mysql-primary
 
 The `cluster1-mysql-primary` Service listens on the following ports:
 
-- `3306` - read/write, default MySQL clients connection,
-- `33062` - read/write, port for MySQL administrative connections,
-- `33060` - read/write, connection to MySQL via the MySQL X protocol
-- `6450` - read/write, connection to MySQL via the MySQL Router
-- `33061` - MySQL Group Replication internal communications port
+* `3306` - read/write, default MySQL clients connection,
+* `33062` - read/write, port for MySQL administrative connections,
+* `33060` - read/write, connection to MySQL via the MySQL X protocol
+* `6450` - read/write, connection to MySQL via the MySQL Router
+* `33061` - MySQL Group Replication internal communications port
 
 In addition, the primary Pod is marked with the label `mysql.percona.com/primary=true` to distinguish it from the rest of the Pods.
 
