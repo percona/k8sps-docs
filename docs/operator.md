@@ -267,6 +267,25 @@ The value you set for the environment variables for a MySQL container.
 | ----------- | ---------- |
 | :material-code-string: string     | "600" |
 
+### `mysql.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage. 
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `mysql.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage. 
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 0 |
 
 ### `mysql.resources.requests.memory`
 
@@ -504,6 +523,26 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
+
+### `proxy.haproxy.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `proxy.haproxy.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 0 |
 
 ### `proxy.haproxy.resources.requests.memory`
 
@@ -780,6 +819,26 @@ An alternative init image for MySQL Router Pods.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `proxy.router.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `proxy.router.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 0 |
 
 ### `proxy.router.resources.requests.memory`
 
@@ -1061,6 +1120,26 @@ The range of client IP addresses from which the load balancer should be reachabl
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `10.0.0.0/8` |
+
+### `orchestrator.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 1 |
+
+### `orchestrator.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | 0 |
 
 ### `orchestrator.resources.requests.memory`
 
