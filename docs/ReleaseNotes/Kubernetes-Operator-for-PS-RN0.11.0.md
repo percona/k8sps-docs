@@ -22,7 +22,7 @@ Note that data-at-rest encryption is currently not supported for Percona Server 
 
 ### Support for `emptyDir` and `hostPath` volumes
 
-You can now configure the Operator to use `emptyDir` or `hostPath` volumes for MySQL Pods, in addition to `persistentVolumeClaim` volumes. This extends the number of use cases for using the Operator, such as configuring additional storage for the data you don't need to persist when a Pod restarts, ephemeral workloads, testing CI/CD automation against a database and more. 
+You can now configure the Operator to use `emptyDir` or `hostPath` volumes for MySQL Pods, in addition to `persistentVolumeClaim` volumes. This extends the number of use cases for using the Operator, such as configuring additional storage for the data you don't need to persist when a Pod restarts, ephemeral workloads, testing CI/CD automation against a database and more.
 
 Note the following key points for using volume types:
 
@@ -99,20 +99,19 @@ Kubernetes supports the Persistent Volume expansion as a stable feature since v1
 
 * [K8SPS-308](https://perconadev.atlassian.net/browse/K8SPS-308) - Fixed the issue with smart update reporting errors for the cluster with async replication
 
-* [K8SPS-381](https://perconadev.atlassian.net/browse/K8SPS-381) - Improved restores from Azure blob storage by removing a hardcoded slash 
+* [K8SPS-381](https://perconadev.atlassian.net/browse/K8SPS-381) - Improved restores from Azure blob storage by removing a hardcoded slash
 
-* [K8SPS-394](https://perconadev.atlassian.net/browse/K8SPS-394) - Improved the cluster behavior when a user tries to change a replication type on a running cluster. The cluster  fails because this operation is not allowed on a running cluster. Added documentation with the recommended steps. 
+* [K8SPS-394](https://perconadev.atlassian.net/browse/K8SPS-394) - Improved the cluster behavior when a user tries to change a replication type on a running cluster. The cluster  fails because this operation is not allowed on a running cluster. Added documentation with the recommended steps.
 
 * [K8SPS-396](https://perconadev.atlassian.net/browse/K8SPS-396) - Improved the gr-self-healing tests by replacing assert with readiness check for chaos-daemon
 
 * [K8SPS-425](https://perconadev.atlassian.net/browse/K8SPS-425) - Fixed the cluster boootstrap process for a group replication clusters with MySQL 8.4
 
-
 ## Supported software
 
 --8<-- [start:software]
 
-The Operator was developed and tested with the following software: 
+The Operator was developed and tested with the following software:
 
 * Percona Server for MySQL 8.4.5-5
 * Percona Server for MySQL 8.0.42-33
@@ -126,7 +125,7 @@ The Operator was developed and tested with the following software:
 * PMM Client 3.3.1
 * Cert Manager 1.18.2
 
-Other options may also work but have not been tested. 
+Other options may also work but have not been tested.
 
 --8<-- [end:software]
 
@@ -153,20 +152,24 @@ Find Percona's certified Docker images that you can use with Percona Operator fo
 
  Image                                                    | Digest                                                           |
 |:---------------------------------------------------------|:-----------------------------------------------------------------|
-| percona/percona-server-mysql-operator:0.10.0 (x86_64)     | 406cf9b929eb42a158fc05d6bbde3435d2c46c7fed0a53889d82b335334e8df2 |
-| percona/percona-server-mysql-operator:0.10.0 (ARM64)      | 0889abb9ef079efb164a1046393a5266cd30701fcd53c32db439a2ca93c6dceb |
-| percona/percona-mysql-router:8.0.42                      | a6351fc5774086400f1d1dcf08f4f2d5975b97bc943d3dd98fb870e364066968 |
+| percona/percona-server-mysql-operator:0.11.0             | 3068b1a4d81b5da7676e071040d3b44ff9fec5532cbfabb17f9c7612e8c9d35d |
+| percona/percona-server-mysql-operator:0.11.0 (ARM64)     | b50f215869ca3d9f6a52561171851e8ffa033ca30d0276556e220ad448418b61 |
+| percona/percona-mysql-router:8.4.5                       | e890ecc49c297cc8882b54ba457ff4d25da896cb11269989fa072aa338d620c1 |
+| percona/percona-mysql-router:8.0.42                      | 2364ebb010cc94d7873367e06ad2fadba44f37b81fc78febf3f58a9e61fa5948 |
 | percona/percona-orchestrator:3.2.6-17                    | c1871ddc6ff3eaca7bb03c3aa11db880ae02d623db1203d0858f8566f56ea5f7 |
 | percona/percona-toolkit:3.7.0                            | 17ef2b69a97fa546d1f925c74ca09587ac215085c392761bb4d51f188baa6c0e |
-| percona/haproxy:2.8.14                                   | 6de8c402d83b88dae7403c05183fd75100774defa887c05a57ec04bc25be2305 |
-| percona/percona-xtrabackup:8.0.35-33                     | 57518571b4663ab492bbd2dc8369fea7e8d358b8e544ea8fa1c1eda12207b8e2 |
-| percona/percona-server:8.0.42-33                         | e30ad4bd3729f6a1ab443341a0a9ce10bbe70cb80d14e5e24a25da4bae4305da |
+| percona/haproxy:2.8.15                                   | 49e6987a1c8b27e9111ae1f1168dd51f2840eb6d939ffc157358f0f259819006 |
+| percona/percona-xtrabackup:8.4.0-3                       | 01071522753ad94e11a897859bba4713316d08e493e23555c0094d68da223730 |
+| percona/percona-xtrabackup:8.0.35-33                     | ae56852f0343726409633268cf8c6af92754ea2b5aacbecbec93fa980f8e724d |
+| percona/percona-server:8.4.5-5                           | 9628b1e598c0ec13c2a6b834caa1642bf77f2b4a2d7620b1ba2d8aaf2b708133 |
+| percona/percona-server:8.0.42-33                         | a7cbaa50c43483a07506f7cd5cccc4e587611f6500e1be5df0a93e339b9d3bc5 |
 | percona/percona-server:8.0.40-31                         | 09276abecbc7c38ce9c5453da1728f3e7d81722c56e2837574ace3a021ee92f2 |
 | percona/percona-server:8.0.36-28                         | 423acd206f94b34288d10ed041c3ba42543e26e44f3706621320504a010dd41f |
 | percona/percona-server:8.0.33-25                         | 14ef81039f2dfa5e19a9bf20e39aaf367aae4370db70899bc5217118d6fd2171 |
 | percona/percona-server:8.0.32-24                         | 2107838f98d41172f37c7fc9689095e9ebd0a1af557b687396d92cf00f54ec3f |
-| percona/pmm-client:3.2.0 (x86_64)                        | 7b1d1798b6446d6c3d5e4005fd9c07be9f4be5859ac2fae908be387cf7b0f50c |
-| percona/pmm-client:3.2.0 (ARM64)                         | 1a36eb47e39dcd275c5ed62da8415c862e560933f48790bbf9b78f41cd3dfd10 |
+| percona/pmm-client:3.3.1                                 | 29a9bb1c69fef8bedc4d4a9ed0ae8224a8623fd3eb8676ef40b13fd044188cb4 |
+| percona/pmm-client:3.3.1 (ARM64)                         | 50bccba4cb2c33bd3f6c5e37553bb70345de3f328b23a64ecfa63893f9025c83 |
+
 
 --8<-- [end:images]
 
