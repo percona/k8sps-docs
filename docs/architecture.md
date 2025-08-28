@@ -70,13 +70,13 @@ replication types:
     modification or the actual statement. Then the replica executes each change
     on its own database and obtains consistent set of data.
 
-* **Group Replication** means that a read-write transaction can be executed on any
-    instance, and when it happens, MySQL tries to get consensus with the other
+* **Group Replication** means that a read transaction can be executed on any
+    instance, while write transactions happen only on primary. For a write transaction, MySQL tries to get consensus with the other
     instances before returning it completed back to the client.
 
 Both replication types have their pros and cons.
 
-*Asynchronous replication* is faster. Also, you can distribute read and write
+*Asynchronous replication* is faster. Also, you can distribute read
 requests of your application to different instances. On the other hand, it can
 be less reliable in terms of consistency: replicas may lag behind the primary
 instance, impacting any applications that depend on real-time data. Also, some
@@ -85,7 +85,7 @@ if the primary fails. Finally, asynchronous replication doesn't allow you
 scaling write requests horizontally, leaving vertical scaling (primary
 instance RAM and CPU increase) as the only available option.
 
-*Group replication* allows horizontal scaling of reads, but is slower. Group replication has some
+*Group replication* allows horizontal scaling of reads, preventing stale reads when set with high consistency level, but it is slower. Group replication has some
 [specific limitations :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication-limitations.html).
 Particularly, the number of MySQL instances in a single replication group can't
 exceed 9. Also, extra large transactions can cause noticeable system slowdown,
@@ -107,10 +107,10 @@ with Group Replication.
 
 | Feature | Asynchronous replication + HAProxy | Group Replication + HAProxy/MySQL Router |
 | --- | --- | --- |
-| Writes | Single primary | Multi-primary possible (with consensus) |
+| Writes | Single primary | Single primary |
 | Read scaling | Yes | Yes |
-| Write scaling | No | Limited (higher latency due to consensus) |
-| Consistency | Eventual on replicas | Stronger (group consensus) |
+| Write scaling | No | No |
+| Consistency | Eventual on replicas | Stronger (depending the [Transaction Consistency](https://dev.mysql.com/doc/refman/8.4/en/group-replication-configuring-consistency-guarantees.html)) |
 | Latency | Low | Higher (due to sync)
 | Failover | Orchestrator elects new primary | Native group membership |
 | Max nodes | Higher (practical limits) | 9 per group |
