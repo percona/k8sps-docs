@@ -85,7 +85,7 @@ if the primary fails. Finally, asynchronous replication doesn't allow you
 scaling write requests horizontally, leaving vertical scaling (primary
 instance RAM and CPU increase) as the only available option.
 
-*Group replication* allows horizontal scaling of reads, preventing stale reads when set with high consistency level, but it is slower. Group replication has some
+*Group replication* allows horizontal scaling of reads, preventing stale reads when set with high transaction consistency level, but it is slower. Group replication has some
 [specific limitations :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication-limitations.html).
 Particularly, the number of MySQL instances in a single replication group can't
 exceed 9. Also, extra large transactions can cause noticeable system slowdown,
