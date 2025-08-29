@@ -38,9 +38,9 @@ The Operator excludes problematic characters such as `’ “ \ / : | ;`.
 
 When you create passwords for user secrets yourself, be sure to stick to the approved character set to ensure your services run smoothly.
 
-### Customize connection to MySQL router via configurable ports
+### Customize connection to MySQL Router via configurable ports
 
-You can now modify existing ports for the MySQL router service, as well as add new custom ports. This ability enables you to fine-tune the connection to your Percona Server for MySQL cluster. For example, you can separate access to the database for different applications, so that each one connects to the same MySQL Router but gets a tailored experience based on the port.
+You can now modify existing ports for the MySQL Router service, as well as add new custom ports. This ability enables you to fine-tune the connection to your Percona Server for MySQL cluster. For example, you can separate access to the database for different applications, so that each one connects to the same MySQL Router but gets a tailored experience based on the port.
 
 ### Automated volume resizing
 
@@ -50,14 +50,14 @@ Kubernetes supports the Persistent Volume expansion as a stable feature since v1
 
 * `.spec.pmm.runtimeClassName` field has been removed from the `crd.yaml` and code because it wasn't being used
 * `.spec.backup.imagePullSecrets` will now be applied to the backup and restore jobs
-* `.spec.proxy.haproxy.runtimeClassName` will be applied to the haproxy pods
+* `.spec.proxy.haproxy.runtimeClassName` will be applied to the HAProxy Pods
 * `.spec.pmm.serverUser` is removed as not used in PMM3
 
 ## Changelog
 
 ### New features
 
-* [K8SPS-126](https://perconadev.atlassian.net/browse/K8SPS-126) -  It is now possible to resize Persistent Volume Claims by patching the PerconaServerMySQL custom resource. Change `persistentVolumeClaim.resources.requests.storage` and let the Operator do the scaling.
+* [K8SPS-126](https://perconadev.atlassian.net/browse/K8SPS-126) -  It is now possible to resize Persistent Volume Claims by patching the PerconaServerMySQL Custom Resource. Enable, volume expansion, change `persistentVolumeClaim.resources.requests.storage` and let the Operator do the scaling.
 
 * [K8SPS-421](https://perconadev.atlassian.net/browse/K8SPS-421) - Added data-at-rest encryption support
 
