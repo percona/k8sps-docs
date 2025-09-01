@@ -58,8 +58,8 @@ Use **Annotations** when:
 |-----------------------------|-----------------------------------|------------------------------------------------|-----------------------------------------|
 | `app.kubernetes.io/name`      | Services, StatefulSets, Deployments, etc. | Specifies the name of the application          | percona-server  |
 | `app.kubernetes.io/instance`  | Services, StatefulSets, Deployments | Identifies a specific instance of the application | cluster1 |
-| `app.kubernetes.io/managed-by`| Services, StatefulSets           | Indicates the controller managing the object    | percona-server-mysql-operator |
-| `app.kubernetes.io/component`| Services, StatefulSets           | Specifies the component within the application  | mysql, haproxy, router    | database            |
+| `app.kubernetes.io/managed-by`| Services, StatefulSets           | Indicates the controller managing the object    | percona-server-operator |
+| `app.kubernetes.io/component`| Services, StatefulSets           | Specifies the component within the application  | mysql, haproxy, router                  |
 | `app.kubernetes.io/part-of`   | Services, StatefulSets           | Indicates the higher-level application the object belongs to | percona-server                          |
 | `app.kubernetes.io/version`  | CustomResourceDefinition          | Specifies the version of the Percona MySQL Operator. | {{release}} |
 |`percona.com/exposed` | Services | Indicates if the service is exposed externally | true, false |
@@ -83,7 +83,57 @@ Use **Annotations** when:
 
 ## Setting labels and annotations in the Custom Resource
 
-You can define both Labels and Annotations as `key-value` pairs in the metadata section of a YAML manifest for a specific resource. For example, specifying labels and annotations in the `deploy/cr.yaml` Custom Resource looks as follows:
+You can define both Labels and Annotations as `key-value` pairs in the metadata section of a YAML manifest for a specific resource.
+
+### Set labels and annotations for Pods
+
+You can set labels and annotations for Percona XtraBackup Pods, specific to the backup storage you use. To do this, use the `.spec.backup.storages.<STOARGE_NAME>.annotations`/`.spec.backup.storages.<STOARGE_NAME>.labels` keys in the Custom Resource manifest.
+
+```yaml
+spec:
+  backup:
+    storages:
+      s3-us-west:
+        annotations:
+          testName: scheduled-backup
+        labels:
+          backupWorker: 'True'
+```
+
+### Set labels and annotations for Services
+
+You can set labels and annotations for Services. For example, to control placement based on physical infrastructure or to improve your CI automation. 
+
+Use the following options in the Custom Resource manifest:
+
+* `.spec.mysql.exposePrimary.annotations`/`.spec.mysql.exposePrimary.labels` - for MySQL primary service
+* `.spec.mysql.expose.annotations`/`.spec.mysql.expose.labels` - for MySQL service for every Pod
+* `.spec.proxy.haproxy.expose.annotations`/`.spec.proxy.haproxy.expose.labels` - for HAProxy Service,
+* `.spec.proxy.router.expose.annotations`/`.spec.proxy.router.expose.labels` - for MySQL Router Service
+* `.spec.orchestrator.expose.annotations`/`.spec.orchestrator.expose.labels` -  for the Orchestrator Service
+
+The following example shows how to set labels and annotations for a `<CLUSTER-NAME>-mysql-primary` service:
+
+```yaml
+spec:
+  mysql:
+    exposePrimary:
+      enabled: true
+      type: ClusterIP
+      annotations:
+        my-annotation: annotation-value
+     ...
+      labels:
+        my-label: label-value
+     ...
+```
+
+
+### Set global labels and annotations
+
+You can also use the top-level spec `metadata.annotations` and `metadata.labels`
+options to set annotations and labels at a global level, for all resources
+created by the Operator:
 
 ```yaml
 apiVersion: ps.percona.com/v1alpha1
@@ -110,7 +160,7 @@ $ kubectl get crd perconaservermysqls.ps.percona.com --show-labels
 
     ```{.text .no-copy}
     NAME                                 CREATED AT             LABELS
-    perconaservermysqls.ps.percona.com   2025-05-23T10:40:54Z   mysql.percona.com/version=v0.10.0
+    perconaservermysqls.ps.percona.com   2025-05-23T10:40:54Z   mysql.percona.com/version=v{{release}}
     ```
 
 To check **annotations** associated with an object, use the following command: 
