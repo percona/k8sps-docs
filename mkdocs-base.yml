@@ -229,6 +229,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.11.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md
           - "Percona Operator for MySQL 0.9.0 (2025-02-11)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.md
           - "Percona Operator for MySQL 0.8.0 (2024-07-16)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md

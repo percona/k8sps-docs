@@ -107,7 +107,7 @@ The MySQL Router service provides these ports:
 * `6447` - read-only, load balancing the traffic across Replicas.
 
 Additional ports `6448` and `6449` are available to
-connect via [MySQL X Protocol :octicons-link-external-16:](<https://dev.mysql.com/doc/dev/>
+connect via [MySQL X Protocol :octicons-link-external-16:](https://dev.mysql.com/doc/dev/
 mysql-server/latest/page_mysqlx_protocol.html). This is 
 useful for operations such as asynchronous calls.
 

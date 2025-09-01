@@ -203,7 +203,7 @@ Cluster-wide Operator is upgraded similarly to a single-namespace one. Both depl
 * [Custom Resource Definition (CRD)](operator.md),
 * Database Management System (Percona Server for MySQL).
  
-To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](update.md#upgrading-the-operator-and-crd) concerning the Operator's namespace and a different YAML configuration file: the one with a special `cw-` prefix, `deploy/cw-rbac.yaml`. The resulting steps will look as follows.
+To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](update-operator.md) concerning the Operator's namespace and a different YAML configuration file: the one with a special `cw-` prefix, `deploy/cw-rbac.yaml`. The resulting steps will look as follows.
 
 1. Update the [Custom Resource Definition](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
     for the Operator, and do the same for the Role-based access control:

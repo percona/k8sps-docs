@@ -11,7 +11,7 @@ PMM Server and PMM Client are installed separately.
 ## Considerations
 
 1. Starting with the version 0.10.0, the Operator supports only PMM 3.x versions. The support for PMM 2.x is dropped.
-2. You must run the Operator version 0.10.0 and later to monitor your database with PMM 3.x. Check the [Upgrade the Operator](update.md#upgrading-the-operator-and-crd) tutorial for the update steps.
+2. You must run the Operator version 0.10.0 and later to monitor your database with PMM 3.x. Check the [Upgrade the Operator](update-operator.md) tutorial for the update steps.
 3. To use PMM3, PMM Server version must be equal to or newer than the PMM Client.
 
 ## Install PMM Server
