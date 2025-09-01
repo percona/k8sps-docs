@@ -58,8 +58,8 @@ To find your HAProxy endpoint, run:
 
 ```{.bash data-prompt="$"}
 $ kubectl get service cluster1-haproxy
-
 ```
+
 ??? example "Sample output"
 
     ```{.text .no-copy}

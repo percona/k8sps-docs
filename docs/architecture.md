@@ -99,3 +99,5 @@ Proxy solution used by the Operator for the database cluster depends on the
 replication type used in the cluster. [HAProxy](haproxy-conf.md) can be used
 with both replication types, while [MySQL Router](router-conf.md) can be used
 with Group Replication.
+
+You can change the replication type if needed. Refer to the [Change replication type](change-replication-type.md) guide for step-by-step instructions. Note that replication type change is not supported on a running cluster.
