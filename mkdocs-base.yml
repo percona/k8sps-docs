@@ -194,6 +194,7 @@ nav:
           - "Load Balancing with HAProxy": haproxy-conf.md
           - "MySQL Router Configuration": router-conf.md
           - "Exposing the cluster": expose.md
+          - "Data at rest encryption": encryption.md
           - "Transport Encryption (TLS/SSL)": TLS.md
           - "Telemetry": telemetry.md
           - "Horizontal and vertical scaling": scaling.md
