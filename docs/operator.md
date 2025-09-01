@@ -628,7 +628,7 @@ Enables or disables [load balancing with HAProxy :octicons-link-external-16:](ht
 
 ### `proxy.haproxy.size`
 
-The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more. This setting is required.
+The number of the HAProxy Pods [to provide load balancing](expose.md#use-haproxy). Safe configuration should have 2 or more. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
