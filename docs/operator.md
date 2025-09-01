@@ -411,6 +411,46 @@ The range of client IP addresses from which the load balancer should be reachabl
 | ----------- | ---------- |
 | :material-code-string: string     | `10.0.0.0/8` |
 
+### `mysql.volumeSpec.emptyDir`
+
+Starts a Pod with an empty temporary directory on the Kubernetes node. This directory exists as long as the Pod runs. Data is deleted when the Pod is deleted or moved to another node.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `{}` |
+
+### `mysql.volumeSpec.hostPath.path`
+
+Specifies a path on the host node's filesystem that will be mounted into your Pod when the Pod starts. Enables Pods to share files or access the host resources. Data persists as long as it exists on the host, independent of the Pod. Using the [hostPath](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath) volume type presents many security risks.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `/data` |
+
+### `mysql.volumeSpec.hostPath.type`
+
+Specifies a [type](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath-volume-types) for the hostPath volume.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Directory` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.storageClassName`
+
+Requests a specific storage class for the Persistent Volume Claim. This will cause the PVC to match the right storage class if the cluster has StorageClasses enabled by the admin.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `standard` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.accessModes`
+
+Specify a specific [access mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for a Persistent Volume. Kubernetes uses volume access modes to match PersistentVolumeClaims and PersistentVolumes.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"ReadWriteOnce"` |
+
 ### `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage`
 
 The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Percona Server for MySQL.
