@@ -1610,6 +1610,47 @@ A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](htt
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
+
+### `backup.storages.STORAGE-NAME.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration for backup and restore jobs associated with the specific storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `backup.storages.STORAGE-NAME.containerOptions.env`
+
+The [environment variables set as key-value pairs :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the backup container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- name: VERIFY_TLS<br>  value: "false"</pre> |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xtrabackup`
+
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- "--someflag=abc"</pre> |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xbcloud`
+
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- "--someflag=abc"</pre> |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xbstream`
+
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- "--someflag=abc"</pre> |
+
 ### `backup.storages.STORAGE-NAME.annotations`
 
 The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
