@@ -1537,6 +1537,38 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 | ----------- | ---------- |
 | :material-code-string: string     | |
 
+### `backup.storages.STORAGE-NAME.azure.container`
+
+The name of the [Microsoft Azure blob container :octicons-link-external-16:](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal#create-a-container) for backups.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `""` |
+
+### `backup.storages.STORAGE-NAME.azure.prefix`
+
+The path (sub-folder) to the backups inside the [container :octicons-link-external-16:](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `""` |
+
+### `backup.storages.STORAGE-NAME.azure.endpointUrl`
+
+The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `https://accountName.blob.core.windows.net`|
+
+### `backup.storages.STORAGE-NAME.azure.credentialsSecret`
+
+The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain the `AZURE_STORAGE_ACCOUNT_NAME` and the `AZURE_STORAGE_ACCOUNT_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-cluster-name-backup-azure` |
+
 ### `backup.schedule.name`
 
 Name of the scheduled backup.
