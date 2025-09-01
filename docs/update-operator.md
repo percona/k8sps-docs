@@ -28,7 +28,7 @@ To update the Operator, you need to update the Custom Resource Definition (CRD) 
 
     You can only upgrade the Operator to the nearest `major.minor` version (for example, from `0.10.0` to `0.11.0`).
 
-    If the your current Operator version and the version you want to upgrade to differ by more than one minor version, you need to upgrade step by step. For example, if your current version is `0.9.0` and you want to move to `0.11.0`, first upgrade to `0.10.0`, then to `0.11.0`.
+    If the current Operator version and the version you want to upgrade to differ by more than one minor version, you need to upgrade step by step. For example, if your current version is `0.9.0` and you want to move to `0.11.0`, first upgrade to `0.10.0`, then to `0.11.0`.
 
     Check the [Release notes index](ReleaseNotes/index.md) for the list of the Operator versions.
 
@@ -72,9 +72,8 @@ The upgrade includes the following steps.
 
         Labels set on the Operator Pod will not be updated during upgrade.
 
-4. Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.
+4. ```
 
-    Find the image names [in the list of certified images](images.md).
 
 5. Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.
 
