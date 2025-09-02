@@ -1444,6 +1444,16 @@ Enables or disables making backups.
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `backup.sourceHost`
+
+Specifies the MySQL instance to take a backup from. When defined, takes precedence, regardless the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.
+
+Asynchronous replication clusters with disabled Orchestrator must have the `sourceHost` defined for Operator to make backups. Otherwise, the Operator fails to start a backup and reports an error.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cluster1-mysql-0.<mysql_service_name>.<namespace>` |
+
 ### `backup.image`
 
 The Percona XtraBackup Docker image to use for the backup.
@@ -1618,7 +1628,6 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `image-rc` |
-
 
 ### `backup.storages.STORAGE-NAME.annotations`
 
