@@ -222,3 +222,41 @@ labels:
 The Operator will ignore specified annotations and labels for all objects: Pods,
 Services, etc.
 
+## Specifying labels and annotations ignored by the Operator
+
+Sometimes various Kubernetes flavors can add their own annotations to the
+objects managed by the Operator.
+
+The Operator keeps track of all changes to its objects and can remove
+annotations that it didn't create.
+
+If there are no annotations or labels in the Custom Resource, the Operator does
+nothing if a new label or an annotation is added to the object.
+
+If there is an annotation or a label specified in the Custom Resource, the
+Operator starts to manage annotations and labels. In this case it removes
+unknown annotations and labels.
+
+A cloud provider can add own labels and annotations. Or you may have custom automation tools that add own labels or annotations and you need to keep them. To do this, you can specify which annotations and labels the Operator should ignore by listing them in the `spec.ignoreAnnotations` or
+`spec.ignoreLabels` keys of the `deploy/cr.yaml`, as follows:
+
+```yaml
+spec:
+  ignoreAnnotations:
+    - some.custom.cloud.annotation/smth
+  ignoreLabels:
+    - some.custom.cloud.label/smth
+...
+```
+
+The Operator will ignore any Service annotation or label, key of which
+**starts** with the mentioned above examples. For example, the following
+annotations and labels will be ignored after applying the above `cr.yaml`
+fragment:
+
+```yaml
+annotations:
+  some.custom.cloud.annotation/smth: somethinghere
+labels:
+  some.custom.cloud.label/smth: somethinghere
+```
