@@ -42,3 +42,87 @@ if (selectBox) {
 } else {
     console.log("No version selector available on this website.");
 } 
+
+// Product-specific version selector powered by mike's versions.json
+const productVersionSelect = document.getElementById('productVersionSelect');
+
+if (productVersionSelect) {
+    // Map URL segments to products; extend as needed
+    const productMap = {
+        '/ps/': 'Percona Server for MySQL',
+        '/pxc/': 'Percona XtraDB Cluster'
+    };
+
+    function findProductSegment(pathname) {
+        const candidates = Object.keys(productMap);
+        for (const seg of candidates) {
+            const idx = pathname.indexOf(seg);
+            if (idx !== -1) return { segment: seg, index: idx };
+        }
+        return null;
+    }
+
+    function getBaseParts() {
+        const path = window.location.pathname;
+        const hit = findProductSegment(path);
+        if (!hit) return null;
+        const baseRoot = path.substring(0, hit.index) + hit.segment; // ends with /ps/ or /pxc/
+        const after = path.substring(hit.index + hit.segment.length); // e.g., 0.11.0/...
+        const parts = after.split('/').filter(p => p.length > 0);
+        const currentVersion = parts.length > 0 ? parts[0] : null;
+        const remainder = parts.length > 1 ? parts.slice(1).join('/') : '';
+        return { baseRoot, currentVersion, remainder };
+    }
+
+    function setOptions(versions, selectedVersion) {
+        productVersionSelect.innerHTML = '';
+        versions.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v.version;
+            opt.textContent = v.title || v.version;
+            if (v.version === selectedVersion) opt.selected = true;
+            productVersionSelect.appendChild(opt);
+        });
+    }
+
+    const parts = getBaseParts();
+    if (parts) {
+        // Set a helpful label for screen readers based on the detected product
+        const prodLabel = productMap[parts.baseRoot.endsWith('/') ? parts.baseRoot.slice(-4) : parts.baseRoot] || '';
+        if (prodLabel) {
+            productVersionSelect.setAttribute('aria-label', prodLabel + ' version');
+            productVersionSelect.title = prodLabel + ' version';
+        }
+
+        fetch(parts.baseRoot + 'versions.json')
+            .then(r => (r.ok ? r.json() : []))
+            .then(versions => {
+                if (!Array.isArray(versions)) return;
+                let resolved = null;
+                for (const v of versions) {
+                    if (v.version === parts.currentVersion || (Array.isArray(v.aliases) && v.aliases.includes(parts.currentVersion))) {
+                        resolved = v.version;
+                        break;
+                    }
+                }
+                if (!resolved && versions.length > 0) resolved = versions[0].version;
+                setOptions(versions, resolved);
+
+                productVersionSelect.addEventListener('change', function() {
+                    const newVersion = this.value;
+                    const tail = parts.remainder ? '/' + parts.remainder : '';
+                    const url = parts.baseRoot + newVersion + tail + window.location.search + window.location.hash;
+                    window.location.href = url;
+                });
+            })
+            .catch(() => {
+                // Hide selector if we cannot load versions for this product
+                const wrapper = productVersionSelect.parentElement;
+                if (wrapper) wrapper.style.display = 'none';
+            });
+    } else {
+        // Hide selector when not inside a supported product path
+        const wrapper = productVersionSelect.parentElement;
+        if (wrapper) wrapper.style.display = 'none';
+    }
+}
