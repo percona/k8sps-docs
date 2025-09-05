@@ -29,7 +29,7 @@ This subsection includes the configuration of a backup resource.
 
 ### `sourceHost`
 
-Specifies the MySQL instance to take a backup from. When defined, takes precedence, regardless the cluster type (async or group-replication) and topology. Overrides the `sourceHost` value if defined in the `deploy/cr.yaml`
+Specifies the MySQL instance to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Overrides the `sourceHost` value if defined in the `deploy/cr.yaml`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
