@@ -196,7 +196,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
           name: cluster1-vault
         type: Opaque
         stringData:
-          keyring_vault.conf: |-
+          keyring_vault.cnf: |-
             token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
             vault_url = https://vault.vault.svc.cluster.local:8200
             secret_mount_point = ps-secret
@@ -222,9 +222,9 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         stringData:
           keyring_vault.cnf: |-
             {
-              token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
-              vault_url = http://vault.vault.svc.cluster.local:8200
-              secret_mount_point = ps-secret
+              "token": "hvs.CvmS4c0DPTvHv5eJgXWMJg9r",
+              "vault_url": "https://vault.vault.svc.cluster.local:8200",
+              "secret_mount_point": "ps-secret"
             }
         ```
 
@@ -237,12 +237,12 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
           name: cluster1-vault
         type: Opaque
         stringData:
-          keyring_vault.conf: |-
+          keyring_vault.cnf: |-
             {
-              token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
-              vault_url = https://vault.vault.svc.cluster.local:8200
-              secret_mount_point = ps-secret
-              vault_ca = /etc/mysql/vault-keyring-secret/ca.cert
+              "token": "hvs.CvmS4c0DPTvHv5eJgXWMJg9r",
+              "vault_url": "https://vault.vault.svc.cluster.local:8200",
+              "secret_mount_point": "ps-secret",
+              "vault_ca": "/etc/mysql/vault-keyring-secret/ca.cert"
             }
         ca.cert: |-
           -----BEGIN CERTIFICATE-----
