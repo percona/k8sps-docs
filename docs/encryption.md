@@ -165,7 +165,7 @@ To enable Vault for the Operator, create a Secret object for it. To do so, creat
 
 Depending on Percona Server for MySQL version, you must specify the Vault configuration as follows:
 
-* For Percona Server for MySQL 8.0 - in YAML format 
+* For Percona Server for MySQL 8.0 - as key=value pairs 
 * For Percona Server for MySQL 8.4 - as a JSON object
 
 You can modify the example `deploy/vault-secret.yaml` configuration file:
