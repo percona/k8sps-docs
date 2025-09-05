@@ -163,46 +163,96 @@ To enable Vault for the Operator, create a Secret object for it. To do so, creat
 * Path to TLS certificates if you [deployed Vault with TLS :octicons-link-external-16:](https://developer.hashicorp.com/vault/docs/auth/cert)
 * Contents of the ca.cert certificate file
 
+Depending on Percona Server for MySQL version, you must specify the Vault configuration as follows:
+
+* For Percona Server for MySQL 8.0 - in YAML format 
+* For Percona Server for MySQL 8.4 - as a JSON object
+
 You can modify the example `deploy/vault-secret.yaml` configuration file:
 
-=== "HTTP access without TLS"
+=== "Percona Server for MySQL 8.0"
 
-    ```yaml
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: cluster1-vault
-    type: Opaque
-    stringData:
-      keyring_vault.conf: |-
-        token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
-        vault_url = http://vault.vault.svc.cluster.local:8200
-        secret_mount_point = ps-secret
-    ```
+    === "HTTP access without TLS"
 
-=== "HTTPS access with TLS"
+        ```yaml
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: cluster1-vault
+        type: Opaque
+        stringData:
+          keyring_vault.cnf: |-
+            token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
+            vault_url = http://vault.vault.svc.cluster.local:8200
+            secret_mount_point = ps-secret
+        ```
 
-    ```yaml
-    apiVersion: v1
-    kind: Secret
-    metadata:
-      name: cluster1-vault
-    type: Opaque
-    stringData:
-      keyring_vault.conf: |-
-        token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
-        vault_url = https://vault.vault.svc.cluster.local:8200
-        secret_mount_point = ps-secret
-        vault_ca = /etc/mysql/vault-keyring-secret/ca.cert
-    ca.cert: |-
-      -----BEGIN CERTIFICATE-----
-      MIIEczCCA1ugAwIBAgIBADANBgkqhkiG9w0BAQQFAD..AkGA1UEBhMCR0Ix
-      EzARBgNVBAgTClNvbWUtU3RhdGUxFDASBgNVBAoTC0..0EgTHRkMTcwNQYD
-      7vQMfXdGsRrXNGRGnX+vWDZ3/zWI0joDtCkNnqEpVn..HoX
-      -----END CERTIFICATE-----
-    ```
+    === "HTTPS access with TLS"
 
-    Note that you must either specify the certificate value or don't declare it at all. Having a commented `#ca.cert` field in the Secret configuration file is not allowed.
+        ```yaml
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: cluster1-vault
+        type: Opaque
+        stringData:
+          keyring_vault.conf: |-
+            token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
+            vault_url = https://vault.vault.svc.cluster.local:8200
+            secret_mount_point = ps-secret
+            vault_ca = /etc/mysql/vault-keyring-secret/ca.cert
+        ca.cert: |-
+          -----BEGIN CERTIFICATE-----
+          MIIEczCCA1ugAwIBAgIBADANBgkqhkiG9w0BAQQFAD..AkGA1UEBhMCR0Ix
+          EzARBgNVBAgTClNvbWUtU3RhdGUxFDASBgNVBAoTC0..0EgTHRkMTcwNQYD
+          7vQMfXdGsRrXNGRGnX+vWDZ3/zWI0joDtCkNnqEpVn..HoX
+          -----END CERTIFICATE-----
+        ```
+
+=== "Percona Server for MySQL 8.4"
+
+    === "HTTP access without TLS"
+
+        ```yaml
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: cluster1-vault-84
+        type: Opaque
+        stringData:
+          keyring_vault.cnf: |-
+            {
+              token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
+              vault_url = http://vault.vault.svc.cluster.local:8200
+              secret_mount_point = ps-secret
+            }
+        ```
+
+    === "HTTPS access with TLS"
+
+        ```yaml
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: cluster1-vault
+        type: Opaque
+        stringData:
+          keyring_vault.conf: |-
+            {
+              token = hvs.CvmS4c0DPTvHv5eJgXWMJg9r
+              vault_url = https://vault.vault.svc.cluster.local:8200
+              secret_mount_point = ps-secret
+              vault_ca = /etc/mysql/vault-keyring-secret/ca.cert
+            }
+        ca.cert: |-
+          -----BEGIN CERTIFICATE-----
+          MIIEczCCA1ugAwIBAgIBADANBgkqhkiG9w0BAQQFAD..AkGA1UEBhMCR0Ix
+          EzARBgNVBAgTClNvbWUtU3RhdGUxFDASBgNVBAoTC0..0EgTHRkMTcwNQYD
+          7vQMfXdGsRrXNGRGnX+vWDZ3/zWI0joDtCkNnqEpVn..HoX
+          -----END CERTIFICATE-----
+        ```
+
+  Note that you must either specify the certificate value or don't declare it at all. Having a commented `#ca.cert` field in the Secret configuration file is not allowed.
 
 Now create a Secret object:
 
@@ -223,7 +273,7 @@ $ kubectl patch ps cluster1 \
   --patch '{"spec":{"mysql":{"vaultSecretName":"cluster1-vault"}}}'
 ```
 
-## Use data at rest encryption
+## Use data-at-rest encryption
 
 To use encryption, you can:
 
