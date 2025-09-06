@@ -2,3 +2,4 @@ __pycache__/
 mkdocs/
 site/
 *.md~
+.vscode
