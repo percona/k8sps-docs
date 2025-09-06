@@ -18,6 +18,7 @@ The metadata part of PerconaServerMySQL Custom Resource contains the following k
 MySQL cluster; it should include only [URL-compatible characters :octicons-link-external-16:](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3),
 not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
+
 * `finalizers` subsection:
     * `percona.com/delete-mysql-pods-in-order` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
     * `percona.com/delete-mysql-pvc` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [Persistent Volume Claims :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for Percona Server for MySQL Pods after the cluster deletion event (off by default).
@@ -25,7 +26,51 @@ alphanumeric character;
 
 The toplevel spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
 
-### `initImage`
+## Toplevel `spec` elements
+
+The spec part of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-postgresql-operator/blob/main/deploy/cr.yaml) file contains the following:
+
+### `crVersion`
+
+Version of the Operator the Custom Resource belongs to.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `{{ release }}` |
+
+### `metadata.annotations`
+
+The [Kubernetes annotations  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) metadata that you can set at a global level for all resources created by the Operator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label    | `example-annotation: value` |
+
+### `metadata.labels`
+
+The [Kubernetes labels  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) metadata that you can set at a global level for all resources created by the Operator.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label       | `example-label: value` |
+
+### `pause`
+
+Pause/resume: setting it to `true` gracefully stops the cluster, and setting it to `false` after shut down starts the cluster back.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
+
+### `enableVolumeExpansion`
+
+Enables or disables [automatic storage scaling / volume expansion](scaling.md#automated-scaling-with-volume-expansion-capability).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false`  |
+
+### `initContainer.Image`
 
 An alternative init image for the Operator.
 
@@ -1390,6 +1435,86 @@ Enables to pass MySQL parameters to PMM. For example, to change the number of ta
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
+
+### `pmm.readinessProbes.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `pmm.readinessProbes.timeoutSeconds`
+
+The number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `pmm.readinessProbes.periodSeconds`
+
+How often to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `pmm.readinessProbes.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `pmm.readinessProbes.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `pmm.livenessProbes.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `300` |
+
+### `pmm.livenessProbes.timeoutSeconds`
+
+The number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `pmm.livenessProbes.periodSeconds`
+
+How often to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `pmm.livenessProbes.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `pmm.livenessProbes.failureThreshold`
+
+The number of failed probes required to mark the container unhealthy.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
 
 ### `pmm.resources.requests.memory`
 
