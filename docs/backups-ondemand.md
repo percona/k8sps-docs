@@ -39,7 +39,7 @@ $ kubectl apply -f deploy/backup.yaml
       finalizers:
         - delete-backup
     spec:
-      clusterName: cluster1
+      clusterName: ps-cluster1
       storageName: s3-us-west
     EOF
     ```

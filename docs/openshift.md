@@ -252,7 +252,7 @@ See [TLS Configuration](TLS.md) for detailed instructions.
     ??? example "Expected output"
 
         ```{.text .no-copy}
-        perconaservermysql.ps.percona.com/cluster1 created
+        perconaservermysql.ps.percona.com/ps-cluster1 created
         ```
 
 2. It make take up to 10 minutes to complete the cluster deployment. Use this command to monitor the deployment:
@@ -265,7 +265,7 @@ See [TLS Configuration](TLS.md) for detailed instructions.
 
         ``` {.text .no-copy}
         NAME       REPLICATION         ENDPOINT                    STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-        cluster1   group-replication   cluster1-haproxy.nastena1   ready   3                      3                  6m
+        ps-cluster1   group-replication   ps-cluster1-haproxy.nastena1   ready   3                      3                  6m
         ```
 
     The `ready` status indicates that your cluster is fully operational.

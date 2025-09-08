@@ -62,7 +62,7 @@ To update Percona Server for MySQL to a specific version, do the following:
     === "With PMM Client"
 
         ```{.bash data-prompt="$"}
-        $ kubectl patch ps cluster1 --type=merge --patch '{
+        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
                "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
@@ -80,7 +80,7 @@ To update Percona Server for MySQL to a specific version, do the following:
     === "Without PMM Client"
 
         ```yaml
-        $ kubectl patch ps cluster1 --type=merge --patch '{
+        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
                "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
@@ -99,7 +99,7 @@ To update Percona Server for MySQL to a specific version, do the following:
     `kubectl rollout status` command with the name of your cluster:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl rollout status sts cluster1-ps
+    $ kubectl rollout status sts ps-cluster1-ps
     ```
 
 ## Automated upgrade

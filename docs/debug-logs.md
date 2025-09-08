@@ -12,34 +12,34 @@ logs with the `kubectl logs` command:
 | `--timestamps`                | Print timestamp in the logs (timezone is taken from the container)        |
 | `--previous`                  | Print previous instantiation of a container. This is extremely useful in case of container restart, where there is a need to check the logs on why the container restarted. Logs of previous instantiation might not be available in all the cases. |
 
-In the following examples we will access containers of the `cluster1-mysql-0` Pod.
+In the following examples we will access containers of the `ps-cluster1-mysql-0` Pod.
 
 * Check logs of the `mysql` container:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl logs cluster1-mysql-0 -c mysql
+    $ kubectl logs ps-cluster1-mysql-0 -c mysql
     ```
 
 * Check logs of the `xtrabackup` container:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl logs cluster1-mysql-0 -c xtrabackup
+    $ kubectl logs ps-cluster1-mysql-0 -c xtrabackup
     ```
 
 * Filter logs of the `mysql` container which are not older than 600 seconds:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl logs cluster1-mysql-0 -c mysql --since=600s
+    $ kubectl logs ps-cluster1-mysql-0 -c mysql --since=600s
     ```
 
 * Check logs of a previous instantiation of the `mysql` container, if any:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl logs cluster1-mysql-0 -c mysql --previous
+    $ kubectl logs ps-cluster1-mysql-0 -c mysql --previous
     ```
 
 * Check logs of the `mysql` container, parsing the output with [jq JSON processor :octicons-link-external-16:](https://stedolan.github.io/jq/):
 
     ``` {.bash data-prompt="$" }
-    $ kubectl logs cluster1-mysql-0 -c mysql -f | jq -R 'fromjson?'
+    $ kubectl logs ps-cluster1-mysql-0 -c mysql -f | jq -R 'fromjson?'
     ```
