@@ -70,7 +70,7 @@ default web browser.
     ??? example "Expected output"
 
         ```{.text .no-copy}
-        perconaservermysql.ps.percona.com/cluster1 created
+        perconaservermysql.ps.percona.com/ps-cluster1 created
         ```
 
     This deploys three Percona Server for MySQL instances and one Orchestrator
@@ -89,7 +89,7 @@ default web browser.
 
         ```{.text .no-copy}
         NAME       REPLICATION   ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-        cluster1   async         cluster1-haproxy.default   ready   3       3              3                  5m50s
+        ps-cluster1   async         ps-cluster1-haproxy.default   ready   3       3              3                  5m50s
         ```
 
     You can also track the progress via the Kubernetes dashboard:

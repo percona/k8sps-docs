@@ -17,7 +17,7 @@ $ kubectl get ps
 
     ``` {.text .no-copy}
     NAME       REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-    cluster1   group-replication   cluster1-haproxy.default   ready   3                                3        20m
+    ps-cluster1   group-replication   ps-cluster1-haproxy.default   ready   3                                3        20m
     ```
 
 The Custom Resource should have `ready` state.
@@ -54,7 +54,7 @@ $ kubectl get pods
 The above command provides the following insights:
 
 * `READY` indicates how many containers in the Pod are ready to serve the
-    traffic. In the above example, `cluster1-haproxy-0` container has all two
+    traffic. In the above example, `ps-cluster1-haproxy-0` container has all two
     containers ready (2/2). For an application to work properly, all containers
     of the Pod should be ready.
 * `STATUS` indicates the current status of the Pod. The Pod should be in a
@@ -72,17 +72,17 @@ You can find more details about a specific Pod using the
 `kubectl describe pods <pod-name>` command.
 
 ``` {.bash data-prompt="$" }
-$ kubectl describe pods cluster1-mysql-0
+$ kubectl describe pods ps-cluster1-mysql-0
 ```
 
 ??? example "Expected output"
 
     ``` {.text .no-copy}
     ...
-    Name:         cluster1-mysql-0
+    Name:         ps-cluster1-mysql-0
     Namespace:    default
     ...
-    Controlled By:  StatefulSet/cluster1-mysql
+    Controlled By:  StatefulSet/ps-cluster1-mysql
     Init Containers:
      mysql-init:
     ...

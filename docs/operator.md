@@ -14,7 +14,7 @@ file.
 
 The metadata part of PerconaServerMySQL Custom Resource contains the following keys:
 
-* <a name="metadata-name"></a> `name` (`cluster1` by default) sets the name of your Percona Server for
+* <a name="metadata-name"></a> `name` (`ps-cluster1` by default) sets the name of your Percona Server for
 MySQL cluster; it should include only [URL-compatible characters :octicons-link-external-16:](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3),
 not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
@@ -126,7 +126,7 @@ A name for [users secrets](users.md#users).
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1-secrets` |
+| :material-code-string: string     | `ps-cluster1-secrets` |
 
 ### `sslSecretName`
 
@@ -134,7 +134,7 @@ A secret with TLS certificate generated for *external* communications, see [Tran
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1-ssl`     |
+| :material-code-string: string     | `ps-cluster1-ssl`     |
 
 ### `ignoreAnnotations`
 
@@ -303,7 +303,7 @@ Specifies the secret for the [HashiCorp Vault :octicons-link-external-16:](https
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1-vault`     |
+| :material-code-string: string     | `ps-cluster1-vault`     |
 
 
 ### `mysql.size`

@@ -85,7 +85,7 @@ The upgrade includes the following steps.
     === "With PMM Client"
 
         ```{.bash data-prompt="$"}
-        $ kubectl patch ps cluster1 --type=merge --patch '{
+        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
@@ -103,7 +103,7 @@ The upgrade includes the following steps.
     === "Without PMM Client"
 
         ```yaml
-        $ kubectl patch ps cluster1 --type=merge --patch '{
+        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },

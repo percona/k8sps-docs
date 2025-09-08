@@ -39,7 +39,7 @@ To use the Router, enable it and make sure that HAProxy is disabled.
 
         ```{.text .no-copy}
         NAME       REPLICATION         ENDPOINT                  STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-        cluster1   group-replication   cluster1-router.default   ready   3                                3        53m
+        ps-cluster1   group-replication   ps-cluster1-router.default   ready   3                                3        53m
         ```
 
 ## Configure MySQL Router 
@@ -96,19 +96,19 @@ Before you start, check that you have [enabled the MySQL Router](#enable-mysql-r
         $ kubectl get ps
         ```
 
-    3. Create the ConfigMap. You should use the combination of the cluster name with the `-router` suffix as the naming convention for the ConfigMap. For example, to create the ConfigMap for the cluster `cluster1`, the command is the following:
+    3. Create the ConfigMap. You should use the combination of the cluster name with the `-router` suffix as the naming convention for the ConfigMap. For example, to create the ConfigMap for the cluster `ps-cluster1`, the command is the following:
 
 
         ```{.bash data-prompt="$"}
-        $ kubectl create configmap cluster1-router --from-file=mysqlrouter.conf
+        $ kubectl create configmap ps-cluster1-router --from-file=mysqlrouter.conf
         ```
         
-        Replace the `cluster1` with the corresponding name of your cluster.
+        Replace the `ps-cluster1` with the corresponding name of your cluster.
 
     4. View the created ConfigMap using the following command:
 
         ```{.bash data-prompt="$"}
-        $ kubectl describe configmaps cluster1-mysql
+        $ kubectl describe configmaps ps-cluster1-mysql
         ```
 
  

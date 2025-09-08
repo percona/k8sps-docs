@@ -37,7 +37,7 @@ Running `kubectl describe` command for the appropriate Pod can bring you the
 information about the newly created container:
 
 ```{.bash data-prompt="$"}
-$ kubectl describe pod cluster1-mysql-0
+$ kubectl describe pod ps-cluster1-mysql-0
 ....
 Containers:
 ....
@@ -65,7 +65,7 @@ my-sidecar-1:
 You can login to your sidecar container as follows:
 
 ```{.bash data-prompt="$"}
-$ kubectl exec -it cluster1-mysql-0 -c my-sidecar-1 -- sh
+$ kubectl exec -it ps-cluster1-mysql-0 -c my-sidecar-1 -- sh
 / #
 ```
 

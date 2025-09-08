@@ -31,10 +31,10 @@ If you would like to use *your local shell*, install the following:
 You can configure the settings using the `gcloud` tool. You can run it either in
 the [Cloud Shell :octicons-link-external-16:](https://cloud.google.com/shell/docs/quickstart) or in your
 local shell (if you have installed Google Cloud SDK locally on the previous
-step). The following command will create a cluster named `cluster1`:
+step). The following command will create a cluster named `ps-cluster1`:
 
 ```{.bash data-prompt="$"}
-$ gcloud container clusters create cluster1 --project <project ID> --zone us-central1-a --cluster-version {{ gkerecommended }} --machine-type n1-standard-4 --num-nodes=3
+$ gcloud container clusters create ps-cluster1 --project <project ID> --zone us-central1-a --cluster-version {{ gkerecommended }} --machine-type n1-standard-4 --num-nodes=3
 ```
 
 !!! note
@@ -58,7 +58,7 @@ the command-line access. After you have edited the statement, you may run the
 command in your local shell:
 
 ```{.bash data-prompt="$"}
-$ gcloud container clusters get-credentials cluster1 --zone us-central1-a --project <project name>
+$ gcloud container clusters get-credentials ps-cluster1 --zone us-central1-a --project <project name>
 ```
 
 Finally, use your [Cloud Identity and Access Management (Cloud IAM) :octicons-link-external-16:](https://cloud.google.com/iam)
@@ -118,7 +118,7 @@ $ kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-
     ??? example "Expected output"
 
         ```{.text .no-copy}
-        perconaservermysql.ps.percona.com/cluster1 created
+        perconaservermysql.ps.percona.com/ps-cluster1 created
         ```
 
     !!! note
@@ -151,7 +151,7 @@ $ kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-
 
         ```{.text .no-copy}
         NAME       REPLICATION   ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-        cluster1   async         cluster1-haproxy.default   ready   3       3              3                  5m50s
+        ps-cluster1   async         ps-cluster1-haproxy.default   ready   3       3              3                  5m50s
         ```
 
 ??? note "You can also track the creation process in Google Cloud console via the Object Browser"
@@ -182,15 +182,15 @@ $ kubectl get pods
 
     ```text
     NAME                                            READY   STATUS    RESTARTS      AGE
-    cluster1-haproxy-0                              2/2     Running   0             44m
-    cluster1-haproxy-1                              2/2     Running   0             44m
-    cluster1-haproxy-2                              2/2     Running   0             44m
-    cluster1-mysql-0                                3/3     Running   0             46m
-    cluster1-mysql-1                                3/3     Running   2 (44m ago)   45m
-    cluster1-mysql-2                                3/3     Running   2 (42m ago)   43m
-    cluster1-orc-0                                  2/2     Running   0             46m
-    cluster1-orc-1                                  2/2     Running   0             45m
-    cluster1-orc-2                                  2/2     Running   0             44m
+    ps-cluster1-haproxy-0                              2/2     Running   0             44m
+    ps-cluster1-haproxy-1                              2/2     Running   0             44m
+    ps-cluster1-haproxy-2                              2/2     Running   0             44m
+    ps-cluster1-mysql-0                                3/3     Running   0             46m
+    ps-cluster1-mysql-1                                3/3     Running   2 (44m ago)   45m
+    ps-cluster1-mysql-2                                3/3     Running   2 (42m ago)   43m
+    ps-cluster1-orc-0                                  2/2     Running   0             46m
+    ps-cluster1-orc-1                                  2/2     Running   0             45m
+    ps-cluster1-orc-2                                  2/2     Running   0             44m
     percona-server-mysql-operator-7c984f7c9-mgwh4   1/1     Running   0             47m
     ```
 
@@ -198,7 +198,7 @@ If the command output had shown some errors, you can examine the problematic
 Pod with the `kubectl describe <pod name>` command as follows:
 
 ```{.bash data-prompt="$"}
-$ kubectl describe pod cluster1-mysql-2
+$ kubectl describe pod ps-cluster1-mysql-2
 ```
 
 Review the detailed information for `Warning` statements and then correct the
@@ -225,7 +225,7 @@ There are several ways that you can delete the cluster.
 You can clean up the cluster with the `gcloud container clusters delete <cluster name> --zone <zone location>` command. The return statement requests your confirmation of the deletion. Type `y` to confirm.
 
 ```{.bash data-prompt="$"}
-$ gcloud container clusters delete cluster1 --zone us-central1-a --project <project ID>
+$ gcloud container clusters delete ps-cluster1 --zone us-central1-a --project <project ID>
 ```
 
 The return statement requests your confirmation of the deletion. Type `y` to confirm.

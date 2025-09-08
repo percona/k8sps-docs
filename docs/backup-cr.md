@@ -41,7 +41,7 @@ Specifies the name of the Percona Server for MySQL cluster to back up.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1` |
+| :material-code-string: string     | `ps-cluster1` |
 
 ### `storageName`
 

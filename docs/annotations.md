@@ -57,15 +57,15 @@ Use **Annotations** when:
 | Name                        | Objects                          | Description                                      | Example values                          |
 |-----------------------------|-----------------------------------|------------------------------------------------|-----------------------------------------|
 | `app.kubernetes.io/name`      | Services, StatefulSets, Deployments, etc. | Specifies the name of the application          | percona-server  |
-| `app.kubernetes.io/instance`  | Services, StatefulSets, Deployments | Identifies a specific instance of the application | cluster1 |
-| `app.kubernetes.io/managed-by`| Services, StatefulSets           | Indicates the controller managing the object    | percona-server-operator |
-| `app.kubernetes.io/component`| Services, StatefulSets           | Specifies the component within the application  | mysql, haproxy, router                  |
+| `app.kubernetes.io/instance`  | Services, StatefulSets, Deployments | Identifies a specific instance of the application | ps-cluster1 |
+| `app.kubernetes.io/managed-by`| Services, StatefulSets           | Indicates the controller managing the object    | percona-server-mysql-operator |
+| `app.kubernetes.io/component`| Services, StatefulSets           | Specifies the component within the application  | mysql, haproxy, router    | database            |
 | `app.kubernetes.io/part-of`   | Services, StatefulSets           | Indicates the higher-level application the object belongs to | percona-server                          |
 | `app.kubernetes.io/version`  | CustomResourceDefinition          | Specifies the version of the Percona MySQL Operator. | {{release}} |
 |`percona.com/exposed` | Services | Indicates if the service is exposed externally | true, false |
-| `percona.com/cluster` | Custom Resource | Identifies the MySQL cluster instance | cluster1 |
+| `percona.com/cluster` | Custom Resource | Identifies the MySQL cluster instance | ps-cluster1 |
 | `percona.com/backup-type`| Custom Resource | Specifies the type of backup being performed (e.g. cron for scheduled backups) | cron, manual |
-| `percona.com/backup-ancestor`| Custom Resource | Specifies the name of the backup that was used as a base for the current backup | cluster1-backup-2023-05-23 |
+| `percona.com/backup-ancestor`| Custom Resource | Specifies the name of the backup that was used as a base for the current backup | ps-cluster1-backup-{{year}}-05-23 |
 | `mysql.percona.com/primary`| Pods | Marks the primary node in the MySQL cluster | true |
 
 ### Annotations
@@ -139,7 +139,7 @@ created by the Operator:
 apiVersion: ps.percona.com/v1alpha1
 kind: PerconaServerMySQL
 metadata:
-  name: cluster1
+  name: ps-cluster1
   annotations:
     percona.com/issue-vault-token: "true"
   labels:
@@ -169,10 +169,10 @@ To check **annotations** associated with an object, use the following command:
 kubectl get <resource> <resource-name> -o jsonpath='{.metadata.annotations}'
 ```
 
-For example, this command lists annotations assigned to a `cluster1-mysql-0` Pod:
+For example, this command lists annotations assigned to a `ps-cluster1-mysql-0` Pod:
 
 ``` {.bash data-prompt="$" }
-$ kubectl get pod cluster1-mysql-0 -o jsonpath='{.metadata.annotations}'
+$ kubectl get pod ps-cluster1-mysql-0 -o jsonpath='{.metadata.annotations}'
 ```
 
 ??? example "Sample output"

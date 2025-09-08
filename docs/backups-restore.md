@@ -104,7 +104,7 @@ restoration can be done in the following way.
     metadata:
       name: "restore1"
     spec:
-      clusterName: "cluster1"
+      clusterName: "ps-cluster1"
       backupName: "backup1"
     EOF
     ```

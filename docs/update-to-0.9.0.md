@@ -4,10 +4,10 @@ The upgrade flow for this Operator version differs due to a number of internal c
 
 ## Upgrade the CRD and the Operator
 
-1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to MySQL Shell with the following command (substitute your real cluster name instead of `cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
+1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to MySQL Shell with the following command (substitute your real cluster name instead of `ps-cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
 
     ``` {.bash data-prompt="$" }
-    kubectl exec -n <namespace_name> -it cluster1-mysql-0 -- bash -c 'mysqlsh -u operator -p$(/etc/mysql/mysql-users-secret/operator)'
+    kubectl exec -n <namespace_name> -it ps-cluster1-mysql-0 -- bash -c 'mysqlsh -u operator -p$(/etc/mysql/mysql-users-secret/operator)'
     ```
 
     ??? example "Expected output"
@@ -38,13 +38,13 @@ The upgrade flow for this Operator version differs due to a number of internal c
     ???+ example "Expected output"
 
         ```text
-        cluster1-mysql-0.cluster1-mysql.default:3306
+        ps-cluster1-mysql-0.ps-cluster1-mysql.default:3306
         ```
 
-2. Exec into the `mysql` on this primary Pod (`cluster1-mysql-0` in the above example):
+2. Exec into the `mysql` on this primary Pod (`ps-cluster1-mysql-0` in the above example):
 
     ``` {.bash data-prompt="$" }
-    kubectl exec -n <namespace_name> -it cluster1-mysql-0 -- bash -c 'mysql -u operator -p$(/etc/mysql/mysql-users-secret/operator)'
+    kubectl exec -n <namespace_name> -it ps-cluster1-mysql-0 -- bash -c 'mysql -u operator -p$(/etc/mysql/mysql-users-secret/operator)'
     ```
 
 3. Create the `replication` user with some password (we use `<change-this>` password placeholder in this example):
@@ -82,23 +82,23 @@ The upgrade flow for this Operator version differs due to a number of internal c
 6. Patch the secrets to add this replication password:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl patch -n <namespace_name> secrets cluster1-secrets -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
+    $ kubectl patch -n <namespace_name> secrets ps-cluster1-secrets -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
     ```
 
     ??? example "Expected output"
 
         ```text
-        secret/cluster1-secrets patched
+        secret/ps-cluster1-secrets patched
         ```
 
     ``` {.bash data-prompt="$" }
-    $ kubectl patch -n <namespace_name> secrets internal-cluster1 -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
+    $ kubectl patch -n <namespace_name> secrets internal-ps-cluster1 -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
     ```
 
     ??? example "Expected output"
 
         ```text
-        secret/internal-cluster1 patched
+        secret/internal-ps-cluster1 patched
         ```
 
 ## Upgrade the database

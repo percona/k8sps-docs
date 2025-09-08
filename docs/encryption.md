@@ -31,4 +31,3 @@ Percona Operator for MySQL uses Percona XtraBackup for backups and fully support
 ## Next steps
 
 [Configure data-at-rest encryption](encryption-setup.md){.md-button}
-

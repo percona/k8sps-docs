@@ -174,7 +174,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: cluster1-vault
+          name: ps-cluster1-vault
         type: Opaque
         stringData:
           keyring_vault.cnf: |-
@@ -189,7 +189,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: cluster1-vault
+          name: ps-cluster1-vault
         type: Opaque
         stringData:
           keyring_vault.cnf: |-
@@ -213,7 +213,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: cluster1-vault-84
+          name: ps-cluster1-vault-84
         type: Opaque
         stringData:
           keyring_vault.cnf: |-
@@ -230,7 +230,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: cluster1-vault
+          name: ps-cluster1-vault
         type: Opaque
         stringData:
           keyring_vault.cnf: |-
@@ -263,10 +263,10 @@ Now, reference the Vault Secret in the Operator Custom Resource manifest. Note t
 Since this is a running cluster, we will apply a patch:
 
 ``` {.bash data-prompt="$" }
-$ kubectl patch ps cluster1 \
+$ kubectl patch ps ps-cluster1 \
   --namespace $NAMESPACE \
   --type=merge \
-  --patch '{"spec":{"mysql":{"vaultSecretName":"cluster1-vault"}}}'
+  --patch '{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'
 ```
 
 ## Use data-at-rest encryption

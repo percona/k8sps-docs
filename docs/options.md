@@ -22,7 +22,7 @@ configuration file by editing the configuration section of the
 
 ```yaml
 spec:
-  secretsName: cluster1-secrets
+  secretsName: ps-cluster1-secrets
   mysql:
     ...
       configuration: |
@@ -67,17 +67,17 @@ The syntax for `kubectl create configmap` command is:
 $ kubectl create configmap <cluster-name>-mysql <resource-type=resource-name>
 ```
 
-The following example defines `cluster1-mysql` as the configmap name and the
+The following example defines `ps-cluster1-mysql` as the configmap name and the
 `my.cnf` file as the data source:
 
 ```{.bash data-prompt="$"}
-$ kubectl create configmap cluster1-mysql --from-file=my.cnf
+$ kubectl create configmap ps-cluster1-mysql --from-file=my.cnf
 ```
 
 To view the created configmap, use the following command:
 
 ```{.bash data-prompt="$"}
-$ kubectl describe configmaps cluster1-mysql
+$ kubectl describe configmaps ps-cluster1-mysql
 ```
 
 ## Use a Secret Object
@@ -139,7 +139,7 @@ create a `deploy/mysql-secret.yaml` file with the following contents:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cluster1-mysql
+  name: ps-cluster1-mysql
 data:
   my.cnf: "bWF4X2Nvbm5lY3Rpb25zPTI1MAo"
 ```
@@ -157,7 +157,7 @@ $ kubectl create -f deploy/mysql-secret.yaml
     command:
 
     ```{.bash data-prompt="$"}
-    $ kubectl rollout restart statefulset cluster1-mysql
+    $ kubectl rollout restart statefulset ps-cluster1-mysql
     ```
 
 ## Auto-tuning MySQL options

@@ -19,7 +19,7 @@ object with credentials needed to access the storage.
     apiVersion: v1
     kind: Secret
     metadata:
-      name: cluster1-s3-credentials
+      name: ps-cluster1-s3-credentials
     type: Opaque
     data:
       AWS_ACCESS_KEY_ID: UkVQTEFDRS1XSVRILUFXUy1BQ0NFU1MtS0VZ
@@ -68,7 +68,7 @@ object with credentials needed to access the storage.
           s3:
             bucket: S3-BACKUP-BUCKET-NAME-HERE
             region: us-west-2
-            credentialsSecret: cluster1-s3-credentials
+            credentialsSecret: ps-cluster1-s3-credentials
     ```
 
     If you use some S3-compatible storage instead of the original
@@ -90,7 +90,7 @@ object with credentials needed to access the storage.
     `credentialsSecret` which is a [Kubernetes
     secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/)
     for backups. Value of this key should be the same as the name used to
-    create the secret object (`cluster1-s3-credentials` in the last
+    create the secret object (`ps-cluster1-s3-credentials` in the last
     example).
 
 === "Microsoft Azure Blob storage"
@@ -105,7 +105,7 @@ object with credentials needed to access the storage.
     apiVersion: v1
     kind: Secret
     metadata:
-      name: cluster1-azure-credentials
+      name: ps-cluster1-azure-credentials
     type: Opaque
     data:
       AZURE_STORAGE_ACCOUNT_NAME: UkVQTEFDRS1XSVRILUFXUy1BQ0NFU1MtS0VZ
@@ -153,7 +153,7 @@ object with credentials needed to access the storage.
           type: azure
           azure:
             container: <your-container-name>
-            credentialsSecret: cluster1-azure-credentials
+            credentialsSecret: ps-cluster1-azure-credentials
     ```
 
     The options within this subsection are further explained in the
@@ -163,5 +163,5 @@ object with credentials needed to access the storage.
     `credentialsSecret` which is a [Kubernetes
     secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/)
     for backups. Value of this key should be the same as the name used to
-    create the secret object (`cluster1-azure-credentials` in the last
+    create the secret object (`ps-cluster1-azure-credentials` in the last
     example).
