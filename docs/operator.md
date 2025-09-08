@@ -1444,15 +1444,15 @@ Enables or disables making backups.
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
-### `backup.sourceHost`
+### `backup.sourcePod`
 
-Specifies the MySQL instance to take a backup from. When defined, takes precedence, regardless the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.
+Specifies the MySQL instance Pod to take a backup from. When defined, takes precedence, regardless the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.
 
-Asynchronous replication clusters that consist of more than one Pod and have the Orchestrator disabled must have the `sourceHost` defined for the Operator to make backups. Otherwise, the Operator fails to start a backup and reports an error.
+Asynchronous replication clusters that consist of more than one Pod and have the Orchestrator disabled must have the `sourcePod` defined for the Operator to make backups. Otherwise, the Operator fails to start a backup and reports an error.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1-mysql-0.<mysql_service_name>.<namespace>` |
+| :material-code-string: string     | `ps-cluster1-mysql-1` |
 
 ### `backup.image`
 

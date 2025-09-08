@@ -27,13 +27,13 @@ The metadata part of the `deploy/backup.yaml` contains metadata about the resour
 
 This subsection includes the configuration of a backup resource.
 
-### `sourceHost`
+### `sourcePod`
 
-Specifies the MySQL instance to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Overrides the `sourceHost` value if defined in the `deploy/cr.yaml`.
+Specifies the MySQL instance to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Overrides the `sourcePod` value if defined in the `deploy/cr.yaml`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1-mysql-0.<mysql_service_name>.<namespace>` |
+| :material-code-string: string     | `ps-cluster1-mysql-1` |
 
 ### `clusterName`
 
