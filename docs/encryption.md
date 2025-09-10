@@ -17,6 +17,8 @@ The data is encrypted before being written to disk. When you need to read the da
 
 Key rotation is replacing the old master encryption key with the new one. When a new master encryption key is created, it is stored in Vault and tablespace keys are re-encrypted with it. The entire dataset is not re-encrypted and this makes the key rotation a fast and lightweight operation.
 
+Read more about key rotation in the [Rotate the master key :octicons-link-external-16:](https://docs.percona.com/percona-server/8.0/rotating-master-key.html).
+
 ## Backups and encryption
 
 Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up encrypted data. The backups remain encrypted, ensuring your data is secure both on your live cluster and in your backup storage.
