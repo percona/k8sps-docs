@@ -33,7 +33,7 @@ Specifies the MySQL instance to take a backup from. When defined, takes preceden
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `ps-cluster1-mysql-1` |
+| :material-code-string: string     | `ps-cluster1-mysql-0` |
 
 ### `clusterName`
 

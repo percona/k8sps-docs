@@ -1452,7 +1452,7 @@ Asynchronous replication clusters that consist of more than one Pod and have the
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `ps-cluster1-mysql-1` |
+| :material-code-string: string     | `ps-cluster1-mysql-0` |
 
 ### `backup.image`
 
