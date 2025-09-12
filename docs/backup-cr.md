@@ -27,6 +27,14 @@ The metadata part of the `deploy/backup.yaml` contains metadata about the resour
 
 This subsection includes the configuration of a backup resource.
 
+### `sourcePod`
+
+Specifies the MySQL instance to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Overrides the `sourcePod` value if defined in the `deploy/cr.yaml`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-mysql-0` |
+
 ### `clusterName`
 
 Specifies the name of the Percona Server for MySQL cluster to back up. 
@@ -42,3 +50,4 @@ Specifies the name of the storage where to save a backup. It must match the name
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `s3-us-west` |
+
