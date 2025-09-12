@@ -24,9 +24,9 @@ A PodDisruptionBudget (PDB) in Kubernetes helps keep your applications available
 
 With this release, you can now configure PodDisruptionBudgets for MySQL, HAProxy, MySQL Router, and Orchestrator Pods, thus ensuring your cluster remains available, even during disruptions or planned maintenance.
 
-### Customize backup and restore configuration
+### Fine-tune backup and restore operations
 
-The Operator sets sensible defaults for backups and restores to ensure their smooth flow. If you need more control, you can fine-tune XtraBackup, xbstream, and xbcloud settings. To do this, add your custom backup configuration in the Custom Resource manifest, and your restore settings in the restore configuration file. Set your parameters under the `spec.containerOptions` section:
+The Operator sets sensible defaults for backups and restores to ensure their smooth flow. If you need more control, you can fine-tune `xtrabackup`, `xbstream`, and `xbcloud` settings. You can do this globally via the `deploy/cr.yaml` Custom resource manifest or individually for a specific backup / restore operation via the respective `deploy/backup.yaml` or `deploy/restore.yaml` manifests. In either case, define your configuration in the `spec.containerOptions` subsection. For example:
 
 ```yaml
 spec:
@@ -45,6 +45,8 @@ spec:
              xbstream:
              - "--someflag=abc"
 ```
+
+Note that individual settings take precedence over the global ones. Read more about fine- tuning backups and restores and how the settings are applied in our [documentation](../backups-fine-tune.md)
 
 ### Monitor PMM Client health and status
 
