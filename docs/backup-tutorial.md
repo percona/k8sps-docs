@@ -53,7 +53,7 @@ $ cd percona-server-mysql-operator
     apiVersion: v1
     kind: Secret
     metadata:
-      name: cluster1-s3-credentials
+      name: ps-cluster1-s3-credentials
     type: Opaque
     data:
       AWS_ACCESS_KEY_ID: <YOUR_AWS_ACCESS_KEY_ID>
@@ -84,7 +84,7 @@ $ cd percona-server-mysql-operator
           s3:
             bucket: S3-BACKUP-BUCKET-NAME-HERE
             region: us-west-2
-            credentialsSecret: cluster1-s3-credentials
+            credentialsSecret: ps-cluster1-s3-credentials
           ...
     ```
 
@@ -122,7 +122,7 @@ Custom Resource, you can make your first backup.
       finalizers:
         - percona.com/delete-backup
     spec:
-      clusterName: cluster1
+      clusterName: ps-cluster1
       storageName: s3-us-west
     ```
 
@@ -142,7 +142,7 @@ Custom Resource, you can make your first backup.
 
 	    ```{.text .no-copy}
 	    NAME      CLUSTER       STORAGE      DESTINATION                                      STATUS    COMPLETED   AGE
-	    backup1   cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s
+	    backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s
 	    ```
 
 	When the status changes to `Succeeded`, backup is made.

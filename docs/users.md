@@ -15,7 +15,7 @@ There are no unprivileged (general purpose) user accounts created by
 default. If you need general purpose users, please run commands below:
 
 ```{.bash data-prompt="$" data-prompt-second="mysql>"}
-$ kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- mysql -hcluster1-mysql -uroot -proot_password
+$ kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- mysql -hps-cluster1-mysql -uroot -proot_password
 mysql> GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%' IDENTIFIED BY 'password1';
 ```
 
@@ -29,7 +29,7 @@ ProxySQL:
 
 ```{.bash data-prompt="$"}
 $ kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- bash -il
-percona-client:/$ mysql -h cluster1-mysql-primary -uuser1 -ppassword1
+percona-client:/$ mysql -h ps-cluster1-mysql-primary -uuser1 -ppassword1
 mysql> SELECT * FROM database1.table1 LIMIT 1;
 ```
 
@@ -53,7 +53,7 @@ started.
     generate random passwords for system users not found in the
     existing Secrets object.
 
-The name of the required Secrets (`cluster1-secrets` by default)
+The name of the required Secrets (`ps-cluster1-secrets` by default)
 should be set in the `spec.secretsName` option of the `deploy/cr.yaml`
 configuration file.
 
@@ -77,7 +77,7 @@ The following table shows system users’ names and purposes.
 ### YAML Object Format
 
 The default name of the Secrets object for these users is
-`cluster1-secrets` and can be set in the CR for your cluster in
+`ps-cluster1-secrets` and can be set in the CR for your cluster in
 `spec.secretName` to something different. When you create the object yourself,
 it should match the following simple format:
 
@@ -85,7 +85,7 @@ it should match the following simple format:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cluster1-secrets
+  name: ps-cluster1-secrets
 type: Opaque
 stringData:
   root: root_password
@@ -106,18 +106,18 @@ If you want to update any field, you’ll need to encode the value into base64
 format. To do this, you can run `echo -n "password" | base64 --wrap=0` (or just
 `echo -n "password" | base64` in case of Apple macOS) in your local shell to get
 valid values. For example, setting the Admin user’s password to `new_password`
-in the `cluster1-secrets` object can be done with the following command:
+in the `ps-cluster1-secrets` object can be done with the following command:
 
 === "in Linux"
 
     ```{.bash data-prompt="$"}
-    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64 --wrap=0)'"}}'
+    $ kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64 --wrap=0)'"}}'
     ```
 
 === "in macOS"
 
     ```{.bash data-prompt="$"}
-    $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
+    $ kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
     ```
 
 ### Password rotation policies and timing

@@ -38,14 +38,14 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
         === ":simple-linux: in Linux"
 
             ```{.bash data-prompt="$"}
-            $ kubectl patch secret/cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64 --wrap=0)'"}}')"
+            $ kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64 --wrap=0)'"}}')"
 
             ```
 
         === ":simple-apple: in macOS"
 
             ```{.bash data-prompt="$"}
-            $ kubectl patch secret/cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n new_key | base64)'"}}')"
+            $ kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n new_key | base64)'"}}')"
             ```
 
 2. Update the `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{ release }}/deploy/cr.yaml) file:

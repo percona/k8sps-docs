@@ -7,12 +7,12 @@ Here’s how to get it:
     ```{.bash data-prompt="$"}
     $ {{ commandName }} get secrets
     ```
-    It will show you the list of Secrets objects (by default the Secrets object you are interested in has `cluster1-secrets` name).
+    It will show you the list of Secrets objects (by default the Secrets object you are interested in has `ps-cluster1-secrets` name).
 
-2. Use the following command to get the password of the `root` user.  Substitute `cluster1` with your value, if needed:
+2. Use the following command to get the password of the `root` user.  Substitute `ps-cluster1` with your value, if needed:
     
     ```{.bash data-prompt="$"}
-    $ {{ commandName }} get secret cluster1-secrets -o yaml
+    $ {{ commandName }} get secret ps-cluster1-secrets -o yaml
     ```
     
     The command returns the YAML file with generated Secrets, including the `root` password, which
@@ -48,12 +48,12 @@ Here’s how to get it:
 
     === "If using HAProxy (default)"
         ``` {.bash data-prompt="$" }
-        $ mysql -h cluster1-haproxy -uroot -p<root password>
+        $ mysql -h ps-cluster1-haproxy -uroot -p<root password>
         ```
 
     === "If using MySQL Router"
         ``` {.bash data-prompt="$" }
-        $ mysql -h cluster1-router -uroot -p<root password>
+        $ mysql -h ps-cluster1-router -uroot -p<root password>
         ```
     
     ??? example "Expected output"

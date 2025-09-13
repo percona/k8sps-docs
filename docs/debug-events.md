@@ -12,8 +12,8 @@ $ kubectl get events
 
     ``` {.text .no-copy}
     LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
-    3s          Normal    Provisioning             persistentvolumeclaim/datadir-cluster1-mysql-2        External provisioner is provisioning volume for claim "default/datadir-cluster1-mysql-2"
-    3s          Normal    ProvisioningSucceeded    persistentvolumeclaim/datadir-cluster1-mysql-2        Successfully provisioned volume pvc-fbd347c2-adf7-413b-86bb-b5e381313cc0
+    3s          Normal    Provisioning             persistentvolumeclaim/datadir-ps-cluster1-mysql-2        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-2"
+    3s          Normal    ProvisioningSucceeded    persistentvolumeclaim/datadir-ps-cluster1-mysql-2        Successfully provisioned volume pvc-fbd347c2-adf7-413b-86bb-b5e381313cc0
     ...
     ```
 
@@ -28,9 +28,9 @@ $ kubectl get events --sort-by=".lastTimestamp"
 
     ``` {.text .no-copy}
     LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
-    33m         Warning   FailedScheduling           pod/cluster1-mysql-0                                  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
-    33m         Normal    Provisioning               persistentvolumeclaim/datadir-cluster1-mysql-0        External provisioner is provisioning volume for claim "default/datadir-cluster1-mysql-0"
-    33m         Normal    ProvisioningSucceeded      persistentvolumeclaim/datadir-cluster1-mysql-0        Successfully provisioned volume pvc-aad3d7cf-2bd4-4823-8e6f-38b9a8528aaa
+    33m         Warning   FailedScheduling           pod/ps-cluster1-mysql-0                                  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+    33m         Normal    Provisioning               persistentvolumeclaim/datadir-ps-cluster1-mysql-0        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-0"
+    33m         Normal    ProvisioningSucceeded      persistentvolumeclaim/datadir-ps-cluster1-mysql-0        Successfully provisioned volume pvc-aad3d7cf-2bd4-4823-8e6f-38b9a8528aaa
     ...
     ```
 
@@ -52,7 +52,7 @@ $ kubectl get events -oyaml | yq .items[11]
     involvedObject:
       apiVersion: v1
       kind: Pod
-      name: cluster1-mysql-0
+      name: ps-cluster1-mysql-0
       namespace: default
       resourceVersion: "623"
       uid: 689338c7-d5f7-4bfb-9f7e-ca1d13e782a3
@@ -61,7 +61,7 @@ $ kubectl get events -oyaml | yq .items[11]
     message: '0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.'
     metadata:
       creationTimestamp: "2024-07-16T08:57:32Z"
-      name: cluster1-mysql-0.17e2a5c04f66588f
+      name: ps-cluster1-mysql-0.17e2a5c04f66588f
       namespace: default
       resourceVersion: "625"
       uid: 6d4a0eeb-8eea-4e1d-91f5-91fb795bd743
@@ -80,51 +80,51 @@ For example, the following command provides events of Pod only:
 $ kubectl get events --field-selector involvedObject.kind=Pod
 ```
 
-More fields can be added to the field-selector flag for filtering events further. For example, the following command provides events of the `cluster1-mysql-0` Pod:
+More fields can be added to the field-selector flag for filtering events further. For example, the following command provides events of the `ps-cluster1-mysql-0` Pod:
 
 ```{.bash data-prompt="$"}
-$ kubectl get events --field-selector involvedObject.kind=Pod,involvedObject.name=cluster1-mysql-0
+$ kubectl get events --field-selector involvedObject.kind=Pod,involvedObject.name=ps-cluster1-mysql-0
 ```
 
 ???+ example "Expected output"
 
     ``` {.text .no-copy}
     LAST SEEN   TYPE      REASON            OBJECT                 MESSAGE
-    53m         Normal    Created           pod/cluster1-mysql-0   Created container mysql
-    53m         Normal    Started           pod/cluster1-mysql-0   Started container mysql
-    53m         Normal    Pulling           pod/cluster1-mysql-0   Pulling image "percona/percona-server-mysql-operator:0.8.0-backup"
+    53m         Normal    Created           pod/ps-cluster1-mysql-0   Created container mysql
+    53m         Normal    Started           pod/ps-cluster1-mysql-0   Started container mysql
+    53m         Normal    Pulling           pod/ps-cluster1-mysql-0   Pulling image "percona/percona-server-mysql-operator:0.8.0-backup"
     ...
     ```
 
 Same way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.) to investigate any problems to them:
 
 ```{.bash data-prompt="$"}
-$ kubectl get events --field-selector involvedObject.kind=PerconaServerMySQL,involvedObject.name=cluster1
+$ kubectl get events --field-selector involvedObject.kind=PerconaServerMySQL,involvedObject.name=ps-cluster1
 ```
 
 ???+ example "Expected output"
 
     ``` {.text .no-copy}
     LAST SEEN   TYPE      REASON                     OBJECT                        MESSAGE
-    10m         Warning   AsyncReplicationNotReady   perconaservermysql/cluster1   cluster1-mysql-1: [not_replicating]
+    10m         Warning   AsyncReplicationNotReady   perconaservermysql/ps-cluster1   ps-cluster1-mysql-1: [not_replicating]
     ...
     ```
 
 Alternatively, you can see events for a specific object in the output of `kubectl describe` command:
 
 ```{.bash data-prompt="$"}
-$ kubectl describe ps cluster1
+$ kubectl describe ps ps-cluster1
 ```
 
 ??? example "Expected output"
 
     ``` {.text .no-copy}
-    Name:         cluster1
+    Name:         ps-cluster1
     ...
     Events:
       Type     Reason                    Age                From           Message
       ----     ------                    ----               ----           -------
-      Warning  AsyncReplicationNotReady  10m (x23 over 13m)    ps-controller  cluster1-mysql-1: [not_replicating]
+      Warning  AsyncReplicationNotReady  10m (x23 over 13m)    ps-controller  ps-cluster1-mysql-1: [not_replicating]
     ...
     ```
 

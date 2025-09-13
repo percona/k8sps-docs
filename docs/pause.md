@@ -30,12 +30,12 @@ reached their Running status:
 
 ``` {.text .no-copy}
 NAME                                             READY   STATUS    RESTARTS   AGE
-cluster1-mysql-0                                 2/2     Running   0          3m43s
-cluster1-mysql-1                                 2/2     Running   0          3m3s
-cluster1-mysql-2                                 2/2     Running   0          2m27s
-cluster1-router-c89b8487-bbtqm                   1/1     Running   0          89s
-cluster1-router-c89b8487-cll6l                   1/1     Running   0          89s
-cluster1-router-c89b8487-q6mnl                   1/1     Running   0          89s
+ps-cluster1-mysql-0                                 2/2     Running   0          3m43s
+ps-cluster1-mysql-1                                 2/2     Running   0          3m3s
+ps-cluster1-mysql-2                                 2/2     Running   0          2m27s
+ps-cluster1-router-c89b8487-bbtqm                   1/1     Running   0          89s
+ps-cluster1-router-c89b8487-cll6l                   1/1     Running   0          89s
+ps-cluster1-router-c89b8487-q6mnl                   1/1     Running   0          89s
 percona-server-mysql-operator-7ff9cff46f-6dtgs   1/1     Running   0          13m
 ```
 

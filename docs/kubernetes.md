@@ -96,10 +96,10 @@
 
     ```{.text .no-copy}
     NAME                                                 READY   STATUS    RESTARTS        AGE
-    cluster1-mysql-0                                     1/1     Running   0               7m6s
-    cluster1-mysql-1                                     1/1     Running   1 (5m39s ago)   6m4s
-    cluster1-mysql-2                                     1/1     Running   1 (4m40s ago)   5m7s
-    cluster1-orc-0                                       2/2     Running   0               7m6s
+    ps-cluster1-mysql-0                                     1/1     Running   0               7m6s
+    ps-cluster1-mysql-1                                     1/1     Running   1 (5m39s ago)   6m4s
+    ps-cluster1-mysql-2                                     1/1     Running   1 (4m40s ago)   5m7s
+    ps-cluster1-orc-0                                       2/2     Running   0               7m6s
     percona-server-for-mysql-operator-54c5c87988-xfmlf   1/1     Running   0               7m42s
     ```
 

@@ -48,7 +48,7 @@ To enable HAProxy, set the following in your `deploy/cr.yaml` manifest:
         image: perconalab/percona-server-mysql-operator:{{ release }}-haproxy
     ```
 
-The created HAProxy service (`cluster1-haproxy`) listens on the following ports:
+The created HAProxy service (`ps-cluster1-haproxy`) listens on the following ports:
 
 - `3306`: MySQL primary
 - `3307`: MySQL replicas  
@@ -57,14 +57,14 @@ The created HAProxy service (`cluster1-haproxy`) listens on the following ports:
 To find your HAProxy endpoint, run:
 
 ```{.bash data-prompt="$"}
-$ kubectl get service cluster1-haproxy
+$ kubectl get service ps-cluster1-haproxy
 ```
 
 ??? example "Sample output"
 
     ```{.text .no-copy}
     NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
-    cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
+    ps-cluster1-haproxy   ClusterIP   10.76.2.102   <none>        3306/TCP,3307/TCP,3309/TCP   2m32s
     ```
 
 ## Use MySQL Router
@@ -89,7 +89,7 @@ router:
 To find your MySQL Router endpoint, run:
 
 ```{.bash data-prompt="$"}
-$ kubectl get service cluster1-router
+$ kubectl get service ps-cluster1-router
 ```
 
 ??? example "Sample output"
@@ -144,17 +144,17 @@ You can change the type of the Service object by setting `mysql.exposePrimary.ty
 To find your primary service endpoint, run:
 
 ```{.bash data-prompt="$"}
-$ kubectl get service cluster1-mysql-primary
+$ kubectl get service ps-cluster1-mysql-primary
 ```
 
 ??? example "Sample output"
 
     ```{.text .no-copy}
     NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
-    cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
+    ps-cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
     ```
 
-The `cluster1-mysql-primary` Service listens on the following ports:
+The `ps-cluster1-mysql-primary` Service listens on the following ports:
 
 * `3306` - read/write, default MySQL clients connection,
 * `33062` - read/write, port for MySQL administrative connections,
@@ -190,9 +190,9 @@ $ kubectl get services
     ```
     NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
     ...
-    cluster1-mysql-0         LoadBalancer   10.40.44.110   104.198.16.21   3306:31009/TCP,33062:31319/TCP,33060:30737/TCP,6033:30660/TCP   75s
-    cluster1-mysql-1         LoadBalancer   10.40.42.5     34.70.170.187   3306:30601/TCP,33062:30273/TCP,33060:30910/TCP,6033:30847/TCP   75s
-    cluster1-mysql-2         LoadBalancer   10.40.42.158   35.193.50.44    3306:32042/TCP,33062:31576/TCP,33060:31656/TCP,6033:31448/TCP   75s
+    ps-cluster1-mysql-0         LoadBalancer   10.40.44.110   104.198.16.21   3306:31009/TCP,33062:31319/TCP,33060:30737/TCP,6033:30660/TCP   75s
+    ps-cluster1-mysql-1         LoadBalancer   10.40.42.5     34.70.170.187   3306:30601/TCP,33062:30273/TCP,33060:30910/TCP,6033:30847/TCP   75s
+    ps-cluster1-mysql-2         LoadBalancer   10.40.42.158   35.193.50.44    3306:32042/TCP,33062:31576/TCP,33060:31656/TCP,6033:31448/TCP   75s
     ```
 
 As you could notice, this command also shows mapped ports the application can

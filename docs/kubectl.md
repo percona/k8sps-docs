@@ -72,7 +72,7 @@ Here's a sequence of steps to follow:
     ??? example "Expected output"
 
         ```{.text .no-copy}
-        perconaservermysql.ps.percona.com/cluster1 created
+        perconaservermysql.ps.percona.com/ps-cluster1 created
         ```
 
 4. Check the Operator and the database Pods status.
@@ -85,7 +85,7 @@ Here's a sequence of steps to follow:
 
         ```{.text .no-copy}
         NAME       REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-        cluster1   group-replication   cluster1-haproxy.default   ready   3                                3        20m
+        ps-cluster1   group-replication   ps-cluster1-haproxy.default   ready   3                                3        20m
         ```
 
     The creation process may take some time. When the process is over your cluster obtains the `ready` status.

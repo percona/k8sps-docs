@@ -38,7 +38,7 @@ The steps are the following:
     ??? example "Sample output"
 
         ```{.text .no-copy}
-        perconaservermysql.ps.percona.com "cluster1" deleted
+        perconaservermysql.ps.percona.com "ps-cluster1" deleted
         ```
 
     It may take a while to stop and delete the cluster. 
@@ -149,14 +149,14 @@ Choose the instructions relevant to the way you installed the Operator.
         ??? example "Sample output"
 
             ```{.text .no-copy}
-            cluster1    <namespace>         1           2023-10-31 10:18:10.763049 +0100 CET    deployed    ps-db-{{release}}        {{release}}
+            ps-cluster1    <namespace>         1           2023-10-31 10:18:10.763049 +0100 CET    deployed    ps-db-{{release}}        {{release}}
             my-op       <namespace>         1           2023-10-31 10:15:18.41444 +0100 CET     deployed    ps-operator-{{release}}   {{release}}
             ```
 
     2. Delete the [release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts) for Percona XtraDB Cluster 
 
         ```{.bash data-prompt="$"}
-        $ helm uninstall cluster1 --namespace <namespace>
+        $ helm uninstall ps-cluster1 --namespace <namespace>
         ```
 
     3. Delete the [release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts) for the Operator 
@@ -186,23 +186,23 @@ To manually clean up resources, do the following:
 
             ```{.text .no-copy}
             NAME                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-            datadir-cluster1-mysql-0   Bound    pvc-8683d0ab-7ed4-48cb-93a9-bc6ceb6ec285   2G         RWO            standard       <unset>                 47m
-            datadir-cluster1-mysql-1   Bound    pvc-fbc5a8a4-94ff-4259-9d15-f798c97e0788   2G         RWO            standard       <unset>                 45m
-            datadir-cluster1-mysql-2   Bound    pvc-4c164ff3-a4f5-431c-9aa8-e5c7eb71a31b   2G         RWO            standard       <unset>                 44m
+            datadir-ps-cluster1-mysql-0   Bound    pvc-8683d0ab-7ed4-48cb-93a9-bc6ceb6ec285   2G         RWO            standard       <unset>                 47m
+            datadir-ps-cluster1-mysql-1   Bound    pvc-fbc5a8a4-94ff-4259-9d15-f798c97e0788   2G         RWO            standard       <unset>                 45m
+            datadir-ps-cluster1-mysql-2   Bound    pvc-4c164ff3-a4f5-431c-9aa8-e5c7eb71a31b   2G         RWO            standard       <unset>                 44m
             ```
 
-    2. Delete PVCs related to your cluster. The following command deletes PVCs for the `cluster1` cluster:
+    2. Delete PVCs related to your cluster. The following command deletes PVCs for the `ps-cluster1` cluster:
 
         ```{.bash data-prompt="$"}
-        $ kubectl delete pvc datadir-cluster1-mysql-0 datadir-cluster1-mysql-1 datadir-cluster1-mysql-2 -n <namespace>
+        $ kubectl delete pvc datadir-ps-cluster1-mysql-0 datadir-ps-cluster1-mysql-1 datadir-ps-cluster1-mysql-2 -n <namespace>
         ```    
 
         ??? example "Sample output"       
 
             ```{.text .no-copy}
-            persistentvolumeclaim "datadir-cluster1-mysql-0" deleted
-            persistentvolumeclaim "datadir-cluster1-mysql-1" deleted
-            persistentvolumeclaim "datadir-cluster1-mysql-2" deleted
+            persistentvolumeclaim "datadir-ps-cluster1-mysql-0" deleted
+            persistentvolumeclaim "datadir-ps-cluster1-mysql-1" deleted
+            persistentvolumeclaim "datadir-ps-cluster1-mysql-2" deleted
             ```    
 
 2. Delete the Secrets

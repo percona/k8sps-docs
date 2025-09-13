@@ -17,11 +17,11 @@ Here's how to get it:
 
     === "via kubectl" 
 
-        `cluster1-secrets`
+        `ps-cluster1-secrets`
 
     === "via Helm"
 
-        `cluster1-ps-db-secrets`
+        `ps-cluster1-ps-db-secrets`
 
 2. Retrieve the password for the root user. Replace the `secret-name` and `namespace` with your values in the following commands:
 
