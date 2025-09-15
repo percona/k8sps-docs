@@ -87,7 +87,7 @@ You can define both Labels and Annotations as `key-value` pairs in the metadata 
 
 ### Set labels and annotations for Pods
 
-You can set labels and annotations for Percona XtraBackup Pods, specific to the backup storage you use. To do this, use the `.spec.backup.storages.<STOARGE_NAME>.annotations`/`.spec.backup.storages.<STOARGE_NAME>.labels` keys in the Custom Resource manifest.
+You can set labels and annotations for Percona XtraBackup Pods, specific to the backup storage you use. To do this, use the `.spec.backup.storages.<STORAGE_NAME>.annotations`/`.spec.backup.storages.<STORAGE_NAME>.labels` keys in the Custom Resource manifest.
 
 ```yaml
 spec:
