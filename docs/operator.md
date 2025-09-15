@@ -1625,7 +1625,7 @@ The [environment variables set as key-value pairs :octicons-link-external-16:](h
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-text-long: subdoc     | <pre>- name: VERIFY_TLS<br>  value: "false"</pre> |
+| :material-text-long: subdoc     | <pre>- name: CUSTOM_ENV<br>  value: "some-value"</pre> |
 
 ### `backup.storages.STORAGE-NAME.containerOptions.args.xtrabackup`
 
