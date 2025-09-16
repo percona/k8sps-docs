@@ -1,0 +1,43 @@
+<div class="page-actions-banner">
+  <div class="page-actions-dropdown">
+    <button class="dropdown-toggle">Page Actions ▼</button>
+    <div class="dropdown-menu">
+      {% if "content.action.view" in features %}
+        {% if page.edit_url and "/blob/" in page.edit_url %}
+          {% set part = "blob" %}
+        {% else %}
+          {% set part = "edit" %}
+        {% endif %}
+        <a href="{{ page.edit_url | replace(part, 'raw') }}"
+           title="{{ lang.t('action.view') }}"
+           class="md-content__button md-icon page-action-link"
+           target="_blank">View page source</a>
+      {% endif %}
+      {% if "content.action.edit" in features %}
+        <a href="{{ page.edit_url }}"
+           title="{{ lang.t('action.edit') }}"
+           class="md-content__button md-icon page-action-link"
+           rel="edit"
+           target="_blank">Edit the page</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggles = document.querySelectorAll('.dropdown-toggle');
+    var menus = document.querySelectorAll('.dropdown-menu');
+    toggles.forEach(function(toggle, i) {
+      var menu = menus[i];
+      if (toggle && menu) {
+        toggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', function() {
+          menu.style.display = 'none';
+        });
+      }
+    });
+  });
+</script>

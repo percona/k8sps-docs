@@ -1,3 +1,60 @@
+/* Page actions dropdown banner styles */
+.page-actions-banner {
+  margin-top: 1em;
+}
+.page-actions-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-toggle {
+  padding: 0.5em 1em;
+  border-radius: 6px;
+  border: 1px solid var(--md-typeset-a-color);
+  background: #fff;
+  color: var(--md-typeset-a-color);
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.dropdown-toggle:hover {
+  color: var(--md-primary-fg-color);
+  border-color: var(--md-primary-fg-color);
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background: #fff;
+  border: 1px solid var(--md-typeset-a-color);
+  border-radius: 6px;
+  min-width: 180px;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.page-action-link {
+  display: block;
+  padding: 0.5em 1em;
+  color: var(--md-typeset-a-color);
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+}
+.page-action-link:hover {
+  color: var(--md-primary-fg-color);
+  background: rgba(20,142,255,0.08);
+}
+/* Slate palette support */
+.md-typeset[data-md-color-scheme="slate"] .dropdown-toggle,
+.md-typeset[data-md-color-scheme="slate"] .page-action-link {
+  color: var(--md-typeset-a-color);
+  border-color: var(--md-typeset-a-color);
+}
+.md-typeset[data-md-color-scheme="slate"] .dropdown-toggle:hover,
+.md-typeset[data-md-color-scheme="slate"] .page-action-link:hover {
+  color: var(--md-primary-fg-color);
+  border-color: var(--md-primary-fg-color);
+  background: rgba(20,142,255,0.12);
+}
 @media print {
     /* Adjusts positioning of admonition icon */
     .md-typeset :is(.admonition-title,summary):before {
@@ -21,39 +78,24 @@
   line-height: 1.6;
 }
 
-.edit-page-icon svg {
-  width: 1.7em;
-  height: 1.7em;
-  margin-right: 0.4em;
-  fill: currentColor; /* Makes icon match text color */
-}
-
-.edit-page-box {
-  display: flex;
+/* Style the link */
+.edit-page-link {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 0.5em 1em;
-  border: 2px solid rgb(20,142,255);
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 1.1em;
-  color: rgb(20,142,255);
-  background-color: transparent;
+  gap: 0.6em;
   text-decoration: none;
-  width: 100%;
-  max-width: 100%;
-  transition: 
-    background-color 0.25s ease,
-    color 0.25s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  margin-top: 1rem;
+  color: var(--md-typeset-a-color);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+  transition: color 0.2s ease;
   cursor: pointer;
 }
 
-.edit-page-box:hover {
-  background-color: transparent;
-  color: rgb(11,39,140) 33%;
-  transform: translateY(-2px); 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+/* Bigger icon, aligned with text */
+.edit-page-icon svg {
+  width: 1.4em;    
+  height: 1.4em;
+  fill: currentColor;
+  vertical-align: middle;
 }

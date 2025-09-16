@@ -32,7 +32,5 @@ extra:
           name: This page could be improved
           data: 0
           note: >- 
-            Thank you for your feedback! Help us improve by using our 
-            <a href="https://docs.google.com/forms/d/1bkWACehjqlwA0AKf-qTJcXvYbOSYgze8iTPXjntqmNo/edit" target="_blank" rel="noopener">
-            feedback form</a>.
+            Thank you for your feedback! Want to improve this page? Click the <strong>Improve this page</strong> button above to submit a pull request!
 
