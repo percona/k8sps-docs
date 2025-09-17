@@ -10,13 +10,11 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ### Full MySQL 8.4 support now available
 
-With this release, data-at-rest encryption is now fully supported for Percona Server for MySQL 8.4.
+With this release, data-at-rest encryption is now supported for Percona Server for MySQL 8.4.
 
-In the previous release, we have added support for Percona Server for MySQL 8.4 within the Operator. However, data-at-rest encryption was not yet available. That limitation has now been lifted, unlocking the full potential of Percona Server for MySQL’s latest major version.
+In the previous release, we have added support for Percona Server for MySQL 8.4 within the Operator. However, data-at-rest encryption was not yet available. That limitation has now been lifted, unlocking the full potential of Percona Server for MySQL’s latest major version. Check our [documentation](../encryption-setup.md) for Percona Server for MySQL 8.4-specific setup instructions.
 
-This improvement empowers you to take full advantage of Percona Server for MySQL 8.4’s features while benefiting from seamless, automated lifecycle management provided by the Operator.
-
-Check our [documentation](../encryption-setup.md) for Percona Server for MySQL 8.4-specific setup instructions.
+This improvement empowers you to take full advantage of Percona Server for MySQL 8.4’s features while benefiting from seamless, automated lifecycle management provided by the Operator. Percona Server for MySQL 8.4 is now the default version for deploying a database cluster.
 
 ### Ensure cluster availability with PodDisruptionBudgets
 
@@ -136,16 +134,16 @@ For asynchronous replication clusters, the Operator must know the cluster topolo
 
 The Operator was developed and tested with the following software:
 
-* Percona Server for MySQL 8.4.5-5
-* Percona Server for MySQL 8.0.42-33
-* XtraBackup 8.4.0-3
-* XtraBackup 8.0.35-33
-* MySQL Router 8.4.5-5
-* MySQL Router 8.0.42
-* HAProxy 2.8.15
-* Orchestrator 3.2.6-17
-* Percona Toolkit 3.7.0
-* PMM Client 3.3.1
+* Percona Server for MySQL 8.4.6-6
+* Percona Server for MySQL 8.0.43-34
+* XtraBackup 8.4.0-4
+* XtraBackup 8.0.35-34
+* MySQL Router 8.4.6-6
+* MySQL Router 8.0.43-34
+* HAProxy 2.8.15-1
+* Orchestrator 3.2.6-18
+* Percona Toolkit 3.7.0-2
+* PMM Client 3.4.0
 * Cert Manager 1.18.2
 
 Other options may also work but have not been tested.
@@ -158,10 +156,10 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [start:platforms]
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.31 - 1.33
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.30 - 1.33
 * [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.31 - 1.33
 * [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.15 - 4.19
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.36.0 (based on Kubernetes 1.33.1)
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.37.0 (based on Kubernetes 1.34.0)
 
 --8<-- [end:platforms]
 
