@@ -104,21 +104,13 @@ For asynchronous replication clusters, the Operator must know the cluster topolo
 
 * [K8SPS-478](https://perconadev.atlassian.net/browse/K8SPS-478) - Improved bootstrapper behavior to determine if incremental recovery is possible and specify it when adding new instances to the existing cluster.
 
-??? Internal task * [K8SPS-490](https://perconadev.atlassian.net/browse/K8SPS-490) - Improved Telemetry data collection by using the centralized Telemetry system.
-
-??? Seems internal improvement * [K8SPS-520](https://perconadev.atlassian.net/browse/K8SPS-520) - Release jobs have been moved to the Hetzner hosting platform.
-
 ### Bugs fixed
-
-??? Still Open * [K8SPS-181](https://perconadev.atlassian.net/browse/K8SPS-181) - Fixed the issue with MySQL pods getting Out-of-memory (OOM) killed in group replication clusters by decreasing the `innodb_buffer_pool_size` value to 50%.
-??? Still Open * [K8SPS-268](https://perconadev.atlassian.net/browse/K8SPS-268) - Ensured all log messages are properly represented in the Operator logs.
-??? Confirmation * [K8SPS-271](https://perconadev.atlassian.net/browse/K8SPS-271) - Fixed an issue where connections were dropped during DDL operations on low-resource clusters.
 
 * [K8SPS-371](https://perconadev.atlassian.net/browse/K8SPS-371) - Added the ability to set a backup source Pod to ensure backups are made for clusters with asynchronous replication when the Orchestrator is disabled.
 
 * [K8SPS-374](https://perconadev.atlassian.net/browse/K8SPS-374) - Fixed the issue with the Operator reporting the reconciliation error when an async cluster was being paused or recovered.
 
-??? Still Open * [K8SPS-378](https://perconadev.atlassian.net/browse/K8SPS-378) - Fixed an issue where the cluster would remain in an unready state if the Orchestrator was scaled down to 1 Pod.
+* [K8SPS-378](https://perconadev.atlassian.net/browse/K8SPS-378) - Fixed an issue where the cluster would remain in an unready state if the Orchestrator was scaled down to 1 Pod.
 
 * [K8SPS-430](https://perconadev.atlassian.net/browse/K8SPS-430) - The Operator now updates TLS certificates when new Subject Alternative Names (SANs) are added to the CR.
 
