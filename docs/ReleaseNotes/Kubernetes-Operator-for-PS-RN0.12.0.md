@@ -33,7 +33,7 @@ spec:
       <STORAGE-NAME>:
          containerOptions:
            env:
-           - name: VERIFY_TLS
+           - name: CUSTOM_VAR
              value: "false"
            args:
              xtrabackup:
@@ -44,7 +44,7 @@ spec:
              - "--someflag=abc"
 ```
 
-Note that individual settings take precedence over the global ones. Read more about fine- tuning backups and restores and how the settings are applied in our [documentation](../backups-fine-tune.md)
+Note that individual settings take precedence over the global ones. Read more about fine-tuning backups and restores and how the settings are applied in our [documentation](../backups-fine-tune.md)
 
 ### Monitor PMM Client health and status
 
@@ -76,6 +76,8 @@ For asynchronous replication clusters, the Operator must know the cluster topolo
 
 * The default cluster name has been changed to `ps-cluster1` to prevent possible conflicts if you have custom resources of both Percona Operator for MySQL based on Percona Server for MySQL and Percona XtraDB Cluster in the same namespace.
 
+* The API version in CRD has changed from `v1alpha` to `v1`. If you installed the CRD when the Operator version was older than 0.12.0, you must update the API version in the CRD manually before the upgrade to version 0.12.0. 
+
 ## Changelog
 
 ### New features
@@ -103,6 +105,8 @@ For asynchronous replication clusters, the Operator must know the cluster topolo
 * [K8SPS-466](https://perconadev.atlassian.net/browse/K8SPS-466) - Added ability to set global labels and annotations for all Kubernetes objects created by the Operator.
 
 * [K8SPS-478](https://perconadev.atlassian.net/browse/K8SPS-478) - Improved bootstrapper behavior to determine if incremental recovery is possible and specify it when adding new instances to the existing cluster.
+
+* [K8SPS-488](https://perconadev.atlassian.net/browse/K8SPS-488) - Switched to using API version `v1` in custom resource definitions
 
 ### Bugs fixed
 
