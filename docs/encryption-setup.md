@@ -137,7 +137,7 @@ When you started Vault, it generates and starts with a [root token :octicons-lin
     $ vault login hvs.CvmS4c0DPTvHv5eJgXWMJg9r
     ```
 
-3. Enable the secrets engine at the mount path. The following command enables KV secrets engine v2 and the `ps-secret` mount-path:
+3. Enable the secrets engine at the mount path. The following command enables KV secrets engine v2 at the `ps-secret` mount-path:
     
      ``` {.bash data-prompt="$" }
      $ vault secrets enable --version=2 -path=ps-secret kv
