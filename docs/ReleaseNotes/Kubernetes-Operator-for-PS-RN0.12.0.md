@@ -48,7 +48,7 @@ Note that individual settings take precedence over the global ones. Read more ab
 
 ### Monitor PMM Client health and status
 
-Percona Monitoring and Management (PMM) is a great tool to monitor the health of your database cluster. Now you can also learn if PMM itself is healthy using probes - a Kubernetes diagnostics mechanism to check the health and status of containers. Use the spec.pmm.readinessProbes.*and spec.pmm.livenessProbes.* Custom Resource options to fine-tune Readiness and Liveness probes for PMM Client.
+Percona Monitoring and Management (PMM) is a great tool to monitor the health of your database cluster. Now you can also learn if PMM itself is healthy using probes - a Kubernetes diagnostics mechanism to check the health and status of containers. Use the `spec.pmm.readinessProbes.*` and `spec.pmm.livenessProbes.*` Custom Resource options to fine-tune Readiness and Liveness probes for PMM Client.
 
 ### Define a source Pod for backups
 
@@ -62,7 +62,7 @@ spec:
 
 These options let you tailor your backup strategy to fit your organization's policies.
 
-For asynchronous replication clusters, the Operator must know the cluster topology to run a backup. For this, either enable the Orchestrator in your deployment. Or specify the `backupPod`, if your cluster has more than one MySQL Pods. 
+For asynchronous replication clusters, the Operator must know the cluster topology to run a backup. For this, either enable the Orchestrator in your deployment. Or specify the `sourcePod` value, if your cluster has more than one MySQL Pods. 
 
 
 ## Deprecation, rename and removal
