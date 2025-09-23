@@ -59,19 +59,21 @@ To update Percona Server for MySQL to a specific version, do the following:
 
     Since this is a working cluster, the way to update the Custom Resource is to [apply a patch  :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) with the `kubectl patch ps` command.
 
+    The following commands update Percona Server for MySQL version 8.4.x. If you run Percona Server for MySQL 8.0.x, change the image to the {{ ps80recommended }} version.
+
     === "With PMM Client"
 
         ```{.bash data-prompt="$"}
         $ kubectl patch ps cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
-               "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+               "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                "proxy":{
                   "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
                   "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
+               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
                "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
                "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
            }}'
@@ -83,13 +85,13 @@ To update Percona Server for MySQL to a specific version, do the following:
         $ kubectl patch ps cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
-               "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+               "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                "proxy":{
                   "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
                   "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
+               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
                "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
            }}'
         ```

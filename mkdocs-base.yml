@@ -193,7 +193,6 @@ nav:
             - "Restore from a previously saved backup": backups-restore.md
             - "Fine-tune backups and restores": backups-fine-tune.md
             - "Delete the unneeded backup": backups-delete.md
-          - "Upgrade Database and Operator": update.md
           - "Application and system users": users.md
           - "Anti-affinity and tolerations": constraints.md
           - "Labels and annotations": annotations.md
@@ -201,7 +200,9 @@ nav:
           - "Load Balancing with HAProxy": haproxy-conf.md
           - "MySQL Router Configuration": router-conf.md
           - "Exposing the cluster": expose.md
-          - "Data at rest encryption": encryption.md
+          - Data-at-rest encryption:
+              - "About data-at-rest encryption": encryption.md
+              - "Configure data-at-rest encryption": encryption-setup.md
           - "Transport Encryption (TLS/SSL)": TLS.md
           - "Telemetry": telemetry.md
           - "Horizontal and vertical scaling": scaling.md
@@ -218,6 +219,7 @@ nav:
     - HOWTOs:
           - "Provide Percona Operator for MySQL single-namespace and multi-namespace deployment": cluster-wide.md
           - "Change the cluster replication type": change-replication-type.md
+          - "Retrieve Percona certified images": image-query.md
           - "Delete the Operator": delete.md
           
     - Reference:
