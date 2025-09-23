@@ -66,7 +66,7 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 
 ### `enableVolumeExpansion`
 
-Enables or disables [automatic storage scaling / volume expansion](scaling.md#automated-scaling-with-volume-expansion-capability).
+Enables or disables [automatic storage scaling / volume expansion](scaling.md#storage-resizing-with-volume-expansion-capability).
 
 | Value type  | Example    |
 | ----------- | ---------- |

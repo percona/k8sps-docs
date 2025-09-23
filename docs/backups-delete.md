@@ -1,4 +1,4 @@
-## Delete the unneeded backup
+# Delete the unneeded backup
 
 Manual deleting of a previously saved backup requires not more than the backup
 name. This name can be taken from the list of available backups returned

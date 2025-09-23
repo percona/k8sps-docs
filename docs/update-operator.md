@@ -37,6 +37,11 @@ compatible with the newest Operator version and the two older minor versions.
 If the Operator version is older than the CRD *by no more than two versions*, you
 should be able to continue using the old Operator version.
 But updating the CRD *and* Operator is the **recommended path**.
+3. The API version in CRDs is changed from `v1alpha` to `v1`. To update to version 0.12.0, you must manually delete the CRDs, apply new ones and recreate the cluster. To keep the data, do the following:
+
+    * check that the `percona.com/delete-mysql-pvc` finalizer is not enabled in `deploy/cr.yaml`
+    * don't delete PVCs manually
+    * Recreate the cluster with the same name. The Operator then automatically reuses the same PVCs.
 
 ### Manual upgrade
 
