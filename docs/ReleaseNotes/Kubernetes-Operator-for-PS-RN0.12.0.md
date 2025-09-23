@@ -44,7 +44,7 @@ spec:
              - "--someflag=abc"
 ```
 
-Note that individual settings take precedence over the global ones. Read more about fine-tuning backups and restores and how the settings are applied in our [documentation](../backups-fine-tune.md)
+Note that individual settings take precedence over the global ones. Read more about fine-tuning backups and restores and how the settings are applied in our [documentation](../backups-fine-tune.md).
 
 ### Monitor PMM Client health and status
 
@@ -76,7 +76,15 @@ For asynchronous replication clusters, the Operator must know the cluster topolo
 
 * The default cluster name has been changed to `ps-cluster1` to prevent possible conflicts if you have custom resources of both Percona Operator for MySQL based on Percona Server for MySQL and Percona XtraDB Cluster in the same namespace.
 
-* The API version in CRD has changed from `v1alpha` to `v1`. If you installed the CRD when the Operator version was older than 0.12.0, you must update the API version in the CRD manually before the upgrade to version 0.12.0. 
+* The API version in CRD has changed from `v1alpha` to `v1`. Read more about updates in [Known limitations](#known-limitations).
+
+## Known limitations
+
+Due to the API version change, CRD updates are currently not supported. In order to update to version 0.12.0, you must manually delete the CRDs, apply new ones and recreate the cluster. To keep the data, do the following:
+
+* check that the `percona.com/delete-mysql-pvc` finalizer is not enabled in `deploy/cr.yaml`
+* don't delete PVCs manually
+* Recreate the cluster with the same name. The Operator then automatically reuses the same PVCs.
 
 ## Changelog
 

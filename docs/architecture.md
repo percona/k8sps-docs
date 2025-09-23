@@ -123,7 +123,7 @@ You can change the replication type if needed. Refer to the [Change replication 
 
 ### What to read next
 
-* [Operator configuration and Custom Resources](operator.md#perconaservermysql)
+* [Operator configuration and Custom Resources](operator.md)
 * [HAProxy configuration](haproxy-conf.md)
 * [MySQL Router configuration](router-conf.md)
 * [Backups](backups.md)
