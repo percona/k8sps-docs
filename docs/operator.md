@@ -25,13 +25,53 @@ alphanumeric character;
 
 The top-level spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
 
-### `initImage`
+### `initContainer.image`
 
 An alternative init image for the Operator.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the initial Operator installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100M` |
+
+### `initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `initContainer.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `secretsName`
 
@@ -275,13 +315,53 @@ Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://
 | ----------- | ---------- |
 | :material-code-string: string     | `my-secret-1` | 
 
-### `mysql.initImage`
+### `mysql.initContainer.image`
 
-An alternative init image for MySQL Pods.
+An alternative init image for Percona Server for MySQL.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `mysql.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the MySQL installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `mysql.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100M` |
+
+### `mysql.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `mysql.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `mysql.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `mysql.env.name`
 
@@ -1013,13 +1093,53 @@ Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://
 | ----------- | ---------- |
 | :material-code-string: string     | `my-secret-1` |
 
-### `proxy.router.initImage`
+### `proxy.router.initContainer.image`
 
 An alternative init image for MySQL Router Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `proxy.router.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the image used for MySQL Router Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `proxy.router.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used while for MySQL Router Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100M` |
+
+### `proxy.router.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used while for MySQL Router Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `proxy.router.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `proxy.router.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `proxy.router.podDisruptionBudget.maxUnavailable`
 
@@ -1275,13 +1395,53 @@ The [Kubernetes Service Account :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `ercona-server-mysql-operator-orchestrator` |
 
-### `orchestrator.initImage`
+### `orchestrator.initContainer.image`
 
 An alternative init image for Orchestrator Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `orchestrator.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the image used for Orchestrator Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `orchestrator.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100M` |
+
+### `orchestrator.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `orchestrator.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `orchestrator.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `orchestrator.affinity.antiAffinityTopologyKey`
 
@@ -1555,13 +1715,53 @@ The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `my-secret-1` |
 
-### `backup.initImage`
+### `backup.initContainer.mage`
 
 An alternative init image for Percona XtraBackup Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:{{ release }}` |
+
+### `backup.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the image used for Percona XtraBackup Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `backup.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.while the initial Operator installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100M` |
+
+### `backup.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `backup.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `backup.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `backup.containerSecurityContext`
 
