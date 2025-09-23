@@ -85,7 +85,7 @@ The upgrade includes the following steps.
 
     Since this is a working cluster, the way to update the Custom Resource is to [apply a patch  :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) with the `kubectl patch ps` command.
 
-    The following commands update Percona Server for MySQL version 8.4.x. If you run Percona Server for MySQL 8.0.x, change the image to the {{ ps80recommended }} version.
+    The following commands update Percona Server for MySQL version 8.4.x. If you run Percona Server for MySQL 8.0.x, change the `mysql`, `backup`, `router` images to the corresponding 8.0.x version. Refer to [Percona certified images](images.md) for versions.
 
     === "With PMM Client"
 
@@ -96,10 +96,10 @@ The upgrade includes the following steps.
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                "proxy":{
                   "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
+                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
+               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
                "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
                "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
            }}'
@@ -114,10 +114,10 @@ The upgrade includes the following steps.
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                "proxy":{
                   "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
+                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxbrecommended }}" },
+               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
                "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
            }}'
         ```
@@ -138,7 +138,7 @@ Operator with the `helm upgrade` command.
 
 2. Next, update the Operator deployment. 
 
-   === "With default parameters"
+    === "With default parameters"
 
         If you installed the Operator with default parameters, the upgrade can be done as follows: 
         
