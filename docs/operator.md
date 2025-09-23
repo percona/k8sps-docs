@@ -20,9 +20,11 @@ not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
 
 * `finalizers` subsection:
+
     * `percona.com/delete-mysql-pods-in-order` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
     * `percona.com/delete-mysql-pvc` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [Persistent Volume Claims :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for Percona Server for MySQL Pods after the cluster deletion event (off by default). It also triggers deletion of user Secrets.
     * `percona.com/delete-ssl` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](TLS.md) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
+
 
 The top-level spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
 
@@ -168,7 +170,7 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 
 ### `allowUnsafeConfigurations`
 
-Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3 or more than 9 Percona Server for MySQL instances. **This option is deprecated and will be removed in future releases**. Use `unsafeFlags` subsection instead. Setting `allowUnsafeConfigurations` won’t have any effect with the Operator version 0.8.0 and newer, and upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under the [unsafeFlags](#operator-unsafeflags-section) subsection set to `true`. 
+Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3 or more than 9 Percona Server for MySQL instances. **This option is deprecated and will be removed in future releases**. Use `unsafeFlags` subsection instead. Setting `allowUnsafeConfigurations` won’t have any effect with the Operator version 0.8.0 and newer, and upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under the [unsafeFlags](#operator-unsafeflags-section) subsection set to `true`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -254,7 +256,7 @@ A [cert-manager issuer group :octicons-link-external-16:](https://cert-manager.i
 | ----------- | ---------- |
 | :material-code-string: string     | `cert-manager.io` |
 
-## <a name="operator-upgradeoptions-section"></a>Upgrade options section
+## <a name="operator-upgrade-options-section"></a>Upgrade options section
 
 The `upgradeOptions` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
 
@@ -268,7 +270,7 @@ The Version Service URL used to check versions compatibility for upgrade.
 
 ### `upgradeOptions.apply`
 
-Specifies how images are picked up from the version service on initial start by the Operator. `Never` or `Disabled` will completely disable quering version service for images, otherwise it can be set to `Latest` or `Recommended` or to a specific version string of Percona Server for MySQL (e.g. `8.0.32-24`) that is wished to be version-locked (so that the user can control the version running) |
+Specifies how images are picked up from the version service on initial start by the Operator. `Never` or `Disabled` will completely disable querying version service for images, otherwise it can be set to `Latest` or `Recommended` or to a specific version string of Percona Server for MySQL (e.g. `8.0.32-24`) that is wished to be version-locked (so that the user can control the version running) |
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -423,6 +425,7 @@ The value you set for the environment variables for a MySQL container.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | "600" |
+
 
 ### `mysql.podDisruptionBudget.maxUnavailable`
 
@@ -824,7 +827,7 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 
 ### `proxy.haproxy.tolerations`
 
-Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to HAProxy Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to HAProxy Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as resource constraints being temporary unreachable, without being evicted immediately.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1438,7 +1441,7 @@ The [Kubernetes Service Account :octicons-link-external-16:](https://kubernetes.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `ercona-server-mysql-operator-orchestrator` |
+| :material-code-string: string     | `percona-server-mysql-operator-orchestrator` |
 
 ### `orchestrator.initContainer.image`
 
@@ -2031,6 +2034,38 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `image-rc` |
+
+### `backup.storages.STORAGE-NAME.containerOptions.env`
+
+The [environment variables set as key-value pairs :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the backup container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- name: CUSTOM_ENV<br>  value: "some-value"</pre> |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xtrabackup`
+
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- "--someflag=abc"</pre> |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xbcloud`
+
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- "--someflag=abc"</pre> |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xbstream`
+
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- "--someflag=abc"</pre> |
 
 ### `backup.storages.STORAGE-NAME.annotations`
 
