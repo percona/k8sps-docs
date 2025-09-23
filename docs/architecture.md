@@ -119,6 +119,8 @@ with Group Replication.
 Tip: Choose Group Replication for stronger consistency and read scaling; choose
 asynchronous replication for lower write latency and simpler topology.
 
+You can change the replication type if needed. Refer to the [Change replication type](change-replication-type.md) guide for step-by-step instructions. Note that replication type change is not supported on a running cluster.
+
 ### What to read next
 
 * [Operator configuration and Custom Resources](operator.md#perconaservermysql)

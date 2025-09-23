@@ -14,7 +14,7 @@
 
 ## Release Highlights
 
-* You can now use the [HAProxy load balancer](../expose.md#exposing-cluster-with-haproxy) in front of the cluster configured for the asynchronous replication. The feature is turned on by default, allowing HAProxy to route traffic and monitor the health of the nodes
+* You can now use the [HAProxy load balancer](../expose.md#use-haproxy) in front of the cluster configured for the asynchronous replication. The feature is turned on by default, allowing HAProxy to route traffic and monitor the health of the nodes
 
 * Starting from this release, the Operator [automatically generates](../TLS.md#install-and-use-the-cert-manager) TLS certificates and turns on transport encryption by default at cluster creation time. This includes both external certificates which allow users to connect to a cluster via the encrypted channel, and internal ones used for communication between MySQL nodes
 
@@ -28,7 +28,7 @@
 
 * {{ k8spsjira(23) }} Add [cert-manager support](../TLS.md#install-and-use-the-cert-manager) to generate and update TLS certificates automatically
 * {{ k8spsjira(31) }} Show `ready` state in the custom resource output produced by the `kubectl get ps` command only after all LoadBalancers are ready
-* {{ k8spsjira(59) }} Add [mysql.primaryServiceType](../operator.md#mysqlprimaryservicetype) Custom Resource option to configure the primary exposure type in one place instead of exposing all Pods with specific Service type
+* {{ k8spsjira(59) }} Add `mysql.primaryServiceType` Custom Resource option to configure the primary exposure type in one place instead of exposing all Pods with specific Service type
 * {{ k8spsjira(88) }} Allow configuring `prefix` field for backup storages via the [backup.s3.prefix](../operator.md#backupstoragesstorage-names3prefix) Custom Resource option
 * {{ k8spsjira(93) }} Avoid running multiple backups on the same Pod by either scheduling new backup to another Node or blocking it until the running one finishes
 * {{ k8spsjira(97) }} [S3 backup finalizer](../backups-ondemand.md#finalizers) now triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object

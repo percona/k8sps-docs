@@ -6,7 +6,7 @@ You declare how you want your Percona Server for MySQL cluster to run (e.g., "I 
 
 For you, this means reduced operational overhead, faster deployments, and a highly available, self-healing database infrastructure that can run consistently across any cloud environment.
 
-[What's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md){.md-button}
+[What's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN{{release}}.md){.md-button}
 
 
 !!! note
