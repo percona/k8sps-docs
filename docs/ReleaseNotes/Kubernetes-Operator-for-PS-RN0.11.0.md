@@ -42,9 +42,9 @@ When you create passwords for user secrets yourself, be sure to stick to the app
 
 You can now modify existing ports for the MySQL Router service, as well as add new custom ports. This ability enables you to fine-tune the connection to your Percona Server for MySQL cluster. For example, you can separate access to the database for different applications, so that each one connects to the same MySQL Router but gets a tailored experience based on the port.
 
-### Automated volume resizing
+### Ability to resize the volume with Volume Expansion capability
 
-Kubernetes supports the Persistent Volume expansion as a stable feature since v1.24. Using it with the Operator previously involved manual operations. Now this is automated, and users can resize their PVCs by just changing the value of the `resources.requests.storage` option in the PerconaServerMySQL custom resource.
+Previously, users could resize the storage by deleting the cluster and manually adjusting the storage size in custom resources. Now users can leverage the Volume Expansion capability available in Kubernetes and resize their PVCs by just changing the value of the `resources.requests.storage` option in the PerconaServerMySQL custom resource. The Operator handles the resizing flow thus reducing the intervention required from the user.
 
 ## Deprecation, rename and removal
 

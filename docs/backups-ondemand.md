@@ -15,7 +15,7 @@ contains correctly configured keys and is applied with `kubectl` command, use
 
 * **storage name** from `deploy/cr.yaml` in the `spec.storageName` key.
 
-* <a name="finalizers"></a>**S3 backup finalizer** set by the `metadata.finalizers.delete-backup` key (it triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object).
+* <a name="finalizers"></a>**S3 backup finalizer** set by the `metadata.finalizers.percona.com/delete-backup` key (it triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object).
 
 The example of such file is [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup.yaml).
 
@@ -37,7 +37,7 @@ $ kubectl apply -f deploy/backup.yaml
     metadata:
       name: backup1
       finalizers:
-        - delete-backup
+        - percona.com/delete-backup
     spec:
       clusterName: cluster1
       storageName: s3-us-west
