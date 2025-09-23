@@ -20,10 +20,10 @@ not exceed 22 characters, start with an alphabetic character, and end with an
 alphanumeric character;
 * `finalizers` subsection:
     * `percona.com/delete-mysql-pods-in-order` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
-    * `percona.com/delete-mysql-pvc` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [Persistent Volume Claims :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for Percona Server for MySQL Pods after the cluster deletion event (off by default).
+    * `percona.com/delete-mysql-pvc` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [Persistent Volume Claims :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for Percona Server for MySQL Pods after the cluster deletion event (off by default). It also triggers deletion of user Secrets.
     * `percona.com/delete-ssl` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](TLS.md) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
 
-The toplevel spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
+The top-level spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
 
 ### `initImage`
 
@@ -210,6 +210,15 @@ Enables or disables the Operator from attempting to fix the issue in the event o
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `mysql.vaultSecretName`
+
+Specifies the secret for the [HashiCorp Vault :octicons-link-external-16:](https://developer.hashicorp.com/vault) to carry on [Data at Rest Encryption](encryption.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cluster1-vault`     |
+
+
 ### `mysql.size`
 
 The number of the Percona Server for MySQL instances. This setting is required.
@@ -242,6 +251,29 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `mysql.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `mysql.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to MySQL Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `mysql.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the MySQL image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` | 
 
 ### `mysql.initImage`
 
@@ -351,13 +383,78 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | ----------- | ---------- |
 | :material-code-string: string     | `DoNotSchedule` |
 
-### `mysql.expose.enabled`
+### `mysql.exposePrimary.enabled`
 
-Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses.
+Enable or disable exposing Percona Server for MySQL primary node with dedicated IP addresses.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `false` |
+
+### `mysql.exposePrimary.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+.type`
+
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ClusterIP` |
+
+### `mysql.exposePrimary.annotations`
+
+The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp`, `service.beta.kubernetes.io/aws-load-balancer-type: nlb` |
+
+### `mysql.exposePrimary.externalTrafficPolicy`
+
+Specifies whether Service should [route external traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `mysql.exposePrimary.internalTrafficPolicy`
+
+Specifies whether Service should [route internal traffic :octicons-link-external-16:](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Cluster` |
+
+### `mysql.exposePrimary.labels`
+
+[Labels are key-value pairs attached to objects :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `rack: rack-22` |
+
+### `mysql.exposePrimary.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there are no limitations).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `10.0.0.0/8` |
+
+
+### `mysql.expose.enabled`
+
+Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses. This setting exposes every Pod in your cluster.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
 
 ### `mysql.expose.type`
 
@@ -407,6 +504,46 @@ The range of client IP addresses from which the load balancer should be reachabl
 | ----------- | ---------- |
 | :material-code-string: string     | `10.0.0.0/8` |
 
+### `mysql.volumeSpec.emptyDir`
+
+Starts a Pod with an empty temporary directory on the Kubernetes node. This directory exists as long as the Pod runs. Data is deleted when the Pod is deleted or moved to another node.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `{}` |
+
+### `mysql.volumeSpec.hostPath.path`
+
+Specifies a path on the host node's filesystem that will be mounted into your Pod when the Pod starts. Enables Pods to share files or access the host resources. Data persists as long as it exists on the host, independent of the Pod. Using the [hostPath](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath) volume type presents many security risks.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `/data` |
+
+### `mysql.volumeSpec.hostPath.type`
+
+Specifies a [type](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath-volume-types) for the hostPath volume.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Directory` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.storageClassName`
+
+Requests a specific storage class for the Persistent Volume Claim. This will cause the PVC to match the right storage class if the cluster has StorageClasses enabled by the admin.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `standard` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.accessModes`
+
+Specify a specific [access mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for a Persistent Volume. Kubernetes uses volume access modes to match PersistentVolumeClaims and PersistentVolumes.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"ReadWriteOnce"` |
+
 ### `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage`
 
 The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Percona Server for MySQL.
@@ -414,6 +551,14 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `2Gi` |
+
+### `mysql.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `600` |
 
 ### `mysql.configuration`
 
@@ -502,7 +647,7 @@ Enables or disables [load balancing with HAProxy :octicons-link-external-16:](ht
 
 ### `proxy.haproxy.size`
 
-The number of the HAProxy Pods [to provide load balancing](expose.md#exposing-cluster-with-haproxy). Safe configuration should have 2 or more. This setting is required.
+The number of the HAProxy Pods [to provide load balancing](expose.md#use-haproxy). Safe configuration should have 2 or more. This setting is required.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -543,6 +688,30 @@ To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://ku
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | 0 |
+
+### `proxy.haproxy.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `proxy.haproxy.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to HAProxy Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `proxy.haproxy.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the HAProxy image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
 
 ### `proxy.haproxy.resources.requests.memory`
 
@@ -663,6 +832,14 @@ When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
+
+### `proxy.haproxy.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
 
 ### `proxy.haproxy.configuration`
 
@@ -812,6 +989,30 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `proxy.router.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `proxy.router.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to Router Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `proxy.router.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the Router image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
+
 ### `proxy.router.initImage`
 
 An alternative init image for MySQL Router Pods.
@@ -839,6 +1040,30 @@ To learn more, see [podDisruptionBudgets :octicons-link-external-16:](https://ku
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | 0 |
+
+### `proxy.router.ports.name`
+
+The name for a custom or an existing port for the MySQL Router Service. 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `http` |
+
+### `proxy.router.ports.port`
+
+The port exposed by the MySQL Router service to the outside world or other components.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `8443` |
+
+### `proxy.router.ports.targetPort`
+
+The port inside the Pod/container where MySQL Router is actually listening. When a client connects to the external port, Kubernetes forwards that traffic to the `targetPort` value on the backend Pod. A zero (0) value means Kubernetes uses the default internal port or does not do the remapping.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `0` |
 
 ### `proxy.router.resources.requests.memory`
 
@@ -907,6 +1132,14 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `DoNotSchedule` |
+
+### `proxy.router.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
 
 ### `proxy.router.configuration`
 
@@ -1009,6 +1242,31 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `orchestrator.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+### `orchestrator.tolerations`
+
+Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to Orchestrator Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `orchestrator.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the Orchestrator image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
+
+
 ### `orchestrator.serviceAccountName`
 
 The [Kubernetes Service Account :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the Orchestrator Pods.
@@ -1072,6 +1330,15 @@ What to do with a Pod if it doesn't satisfy the [Kubernetes Pod Topology Spread 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `DoNotSchedule` |
+
+### `orchestrator.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
 
 ### `orchestrator.expose.type`
 
@@ -1194,6 +1461,14 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `pmm.mysqlParams`
+
+Enables to pass MySQL parameters to PMM. For example, to change the number of tables (from the default of 1000) beyond which per-table statistics collection is disabled.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
+
 ### `pmm.resources.requests.memory`
 
 The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
@@ -1234,14 +1509,6 @@ Address of the PMM Server to collect data from the cluster.
 | ----------- | ---------- |
 | :material-code-string: string     | `monitoring-service` |
 
-### `pmm.serverUser`
-
-The PMM Serve_User. The PMM Server password should be configured using Secrets.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `admin` |
-
 ## <a name="operator-backup-section"></a>Backup section
 
 The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
@@ -1269,6 +1536,14 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 
 | **Value**       | string  |
 | **Example**     | `Always` |
+
+### `backup.imagePullSecrets.name`
+
+The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
 
 ### `backup.initImage`
 
@@ -1414,6 +1689,15 @@ A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](htt
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
 
+### `backup.storages.STORAGE-NAME.runtimeClassName`
+
+Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration for backup and restore jobs associated with the specific storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `image-rc` |
+
+
 ### `backup.storages.STORAGE-NAME.annotations`
 
 The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
@@ -1469,6 +1753,38 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | |
+
+### `backup.storages.STORAGE-NAME.azure.container`
+
+The name of the [Microsoft Azure blob container :octicons-link-external-16:](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal#create-a-container) for backups.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `""` |
+
+### `backup.storages.STORAGE-NAME.azure.prefix`
+
+The path (sub-folder) to the backups inside the [container :octicons-link-external-16:](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `""` |
+
+### `backup.storages.STORAGE-NAME.azure.endpointUrl`
+
+The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `https://accountName.blob.core.windows.net`|
+
+### `backup.storages.STORAGE-NAME.azure.credentialsSecret`
+
+The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain the `AZURE_STORAGE_ACCOUNT_NAME` and the `AZURE_STORAGE_ACCOUNT_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-cluster-name-backup-azure` |
 
 ### `backup.schedule.name`
 
@@ -1555,44 +1871,4 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `400m` |
 
-## <a name="operator-backupsource-section"></a> PerconaServerMySQLRestore Custom Resource options
-
-[Percona Server for MySQL Restore](backups-restore.md) options are managed by the Operator via the 
-`PerconaServerMySQLRestore` [Custom Resource :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and can be configured via the
-[deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml)
-configuration file. This Custom Resource contains the following options:
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| metadata.name    | string            | The name of the restore                        | true     |
-| spec.clusterName | string            | MySQL Cluster name (the name of your running cluster) | true |
-| spec.backupName  | string            | The name of the backup which should be restored| false    |
-| spec.backupSource| [subdoc](operator.md#operator-restore-backupsource-options-section)| Defines configuration for different restore sources | false |
-
-### <a name="operator-restore-backupsource-options-section"></a>backupSource section
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| destination      | string            | Path to the backup                             | false    |
-| storageName      | string            | The storage name from CR `spec.backup.storages`| false    |
-| s3               | [subdoc](operator.md#operator-restore-s3-options-section)    | Define configuration for s3 compatible storages | false |
-| azure            | [subdoc](operator.md#operator-restore-azure-options-section) | Define configuration for azure blob storage     | false |
-
-### <a name="operator-restore-s3-options-section"></a>backupSource.s3 subsection
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| bucket           | string            | The bucket with a backup                       | true     |
-| credentialsSecret| string            | The Secret name for the backup                 | true     |
-| endpointUrl      | string            | A valid endpoint URL                           | false    |
-| region           | string            | The region corresponding to the S3 bucket      | false    |
-
-### <a name="operator-restore-azure-options-section"></a>backupSource.azure subsection
-
-| Key              | Value type        | Description                                    | Required |
-| ---------------- | ----------------- | ---------------------------------------------- | -------- |
-| credentialsSecret| string            | The Secret name for the azure blob storage     | true     |
-| container        | string            | The container name of the azure blob storage   | true     |
-| endpointUrl      | string            | A valid endpoint URL                           | false    |
-| storageClass     | string            | The storage class name of the azure storage    | false    |
 

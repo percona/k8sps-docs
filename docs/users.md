@@ -72,7 +72,7 @@ The following table shows system users’ names and purposes.
 | Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
 | Operator Admin | operator     | operator            | Database administrative user, should be used only by the Operator      |
 | Replication    | replication  | replication         | Administrative user needed for replication                             |
-| PMM Server API Key | | pmmserverkey | [API Key used to access PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
+| PMM Server token | | pmmservertoken | [The service token used to access PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html) |
 
 ### YAML Object Format
 
@@ -120,7 +120,7 @@ in the `cluster1-secrets` object can be done with the following command:
     $ kubectl patch secret/cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
     ```
 
-### Password Rotation Policies and Timing
+### Password rotation policies and timing
 
 When there is a change in user secrets, the Operator
 creates the necessary transaction to change passwords. This rotation happens
@@ -131,6 +131,22 @@ take any action beyond changing the password.
 
     Please don’t change `secretName` option in CR, make changes inside
     the secrets object itself.
+
+### Passwords with special characters
+
+The Operator automatically generates passwords for user secrets with special characters to increase security. It uses the following set of characters:
+
+* Uppercase letters (A–Z)
+* Lowercase letters (a–z)
+* Digits (0–9)
+* Special symbols: `! $ % & ( ) * + , - . < = > ? @ [ ] ^ _ { } ~ #`
+
+This character set has been carefully selected to ensure correct functioning of SQL, shell scripts, YAML files and connection strings.
+
+To avoid issues in these contexts, the following characters are excluded: single quotes ('), double quotes ("), backslashes (\),
+forward slashes (/), colons (:), pipes (|), semicolons (;) and backticks (`).
+
+You can define passwords for user secrets yourself. When doing so, be sure to stick to the approved character set to ensure your services run smoothly.
 
 ### Marking System Users In MySQL
 

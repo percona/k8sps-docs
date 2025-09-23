@@ -9,7 +9,7 @@ also on any Kubernetes-based environment with the installed Operator.
     has a Secrets object with the same user passwords as in the original cluster.
     More details about secrets can be found in [System Users](users.md#system-users).
 
-The example of the restore configuration file is [deploy/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml). The options that can be used in it are described in the [restore options reference](operator.md#perconaservermysqlrestore-custom-resource-options).
+The example of the restore configuration file is [deploy/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml). The options that can be used in it are described in the [restore options reference](restore-cr.md).
 
 Following things are needed to restore a previously saved backup:
 
