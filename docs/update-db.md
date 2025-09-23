@@ -70,10 +70,10 @@ To update Percona Server for MySQL to a specific version, do the following:
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                "proxy":{
                   "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
+                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
                "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
                "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
            }}'
@@ -88,10 +88,10 @@ To update Percona Server for MySQL to a specific version, do the following:
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                "proxy":{
                   "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
+                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
                },
                "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
                "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
            }}'
         ```
