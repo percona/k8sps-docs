@@ -58,8 +58,8 @@ Use **Annotations** when:
 |-----------------------------|-----------------------------------|------------------------------------------------|-----------------------------------------|
 | `app.kubernetes.io/name`      | Services, StatefulSets, Deployments, etc. | Specifies the name of the application          | percona-server  |
 | `app.kubernetes.io/instance`  | Services, StatefulSets, Deployments | Identifies a specific instance of the application | cluster1 |
-| `app.kubernetes.io/managed-by`| Services, StatefulSets           | Indicates the controller managing the object    | percona-server-mysql-operator |
-| `app.kubernetes.io/component`| Services, StatefulSets           | Specifies the component within the application  | mysql, haproxy, router    | database            |
+| `app.kubernetes.io/managed-by`| Services, StatefulSets           | Indicates the controller managing the object    | percona-server-operator |
+| `app.kubernetes.io/component`| Services, StatefulSets           | Specifies the component within the application  | mysql, haproxy, router                  |
 | `app.kubernetes.io/part-of`   | Services, StatefulSets           | Indicates the higher-level application the object belongs to | percona-server                          |
 | `app.kubernetes.io/version`  | CustomResourceDefinition          | Specifies the version of the Percona MySQL Operator. | {{release}} |
 |`percona.com/exposed` | Services | Indicates if the service is exposed externally | true, false |
@@ -83,7 +83,57 @@ Use **Annotations** when:
 
 ## Setting labels and annotations in the Custom Resource
 
-You can define both Labels and Annotations as `key-value` pairs in the metadata section of a YAML manifest for a specific resource. For example, specifying labels and annotations in the `deploy/cr.yaml` Custom Resource looks as follows:
+You can define both Labels and Annotations as `key-value` pairs in the metadata section of a YAML manifest for a specific resource.
+
+### Set labels and annotations for Pods
+
+You can set labels and annotations for Percona XtraBackup Pods, specific to the backup storage you use. To do this, use the `.spec.backup.storages.<STORAGE_NAME>.annotations`/`.spec.backup.storages.<STORAGE_NAME>.labels` keys in the Custom Resource manifest.
+
+```yaml
+spec:
+  backup:
+    storages:
+      s3-us-west:
+        annotations:
+          testName: scheduled-backup
+        labels:
+          backupWorker: 'True'
+```
+
+### Set labels and annotations for Services
+
+You can set labels and annotations for Services. For example, to control placement based on physical infrastructure or to improve your CI automation. 
+
+Use the following options in the Custom Resource manifest:
+
+* `.spec.mysql.exposePrimary.annotations`/`.spec.mysql.exposePrimary.labels` - for MySQL primary service
+* `.spec.mysql.expose.annotations`/`.spec.mysql.expose.labels` - for MySQL service for every Pod
+* `.spec.proxy.haproxy.expose.annotations`/`.spec.proxy.haproxy.expose.labels` - for HAProxy Service,
+* `.spec.proxy.router.expose.annotations`/`.spec.proxy.router.expose.labels` - for MySQL Router Service
+* `.spec.orchestrator.expose.annotations`/`.spec.orchestrator.expose.labels` -  for the Orchestrator Service
+
+The following example shows how to set labels and annotations for a `<CLUSTER-NAME>-mysql-primary` service:
+
+```yaml
+spec:
+  mysql:
+    exposePrimary:
+      enabled: true
+      type: ClusterIP
+      annotations:
+        my-annotation: annotation-value
+     ...
+      labels:
+        my-label: label-value
+     ...
+```
+
+
+### Set global labels and annotations
+
+You can also use the top-level spec `metadata.annotations` and `metadata.labels`
+options to set annotations and labels at a global level, for all resources
+created by the Operator:
 
 ```yaml
 apiVersion: ps.percona.com/v1alpha1
@@ -110,7 +160,7 @@ $ kubectl get crd perconaservermysqls.ps.percona.com --show-labels
 
     ```{.text .no-copy}
     NAME                                 CREATED AT             LABELS
-    perconaservermysqls.ps.percona.com   2025-05-23T10:40:54Z   mysql.percona.com/version=v0.10.0
+    perconaservermysqls.ps.percona.com   2025-05-23T10:40:54Z   mysql.percona.com/version=v{{release}}
     ```
 
 To check **annotations** associated with an object, use the following command: 
@@ -172,3 +222,41 @@ labels:
 The Operator will ignore specified annotations and labels for all objects: Pods,
 Services, etc.
 
+## Specifying labels and annotations ignored by the Operator
+
+Sometimes various Kubernetes flavors can add their own annotations to the
+objects managed by the Operator.
+
+The Operator keeps track of all changes to its objects and can remove
+annotations that it didn't create.
+
+If there are no annotations or labels in the Custom Resource, the Operator does
+nothing if a new label or an annotation is added to the object.
+
+If there is an annotation or a label specified in the Custom Resource, the
+Operator starts to manage annotations and labels. In this case it removes
+unknown annotations and labels.
+
+A cloud provider can add own labels and annotations. Or you may have custom automation tools that add own labels or annotations and you need to keep them. To do this, you can specify which annotations and labels the Operator should ignore by listing them in the `spec.ignoreAnnotations` or
+`spec.ignoreLabels` keys of the `deploy/cr.yaml`, as follows:
+
+```yaml
+spec:
+  ignoreAnnotations:
+    - some.custom.cloud.annotation/smth
+  ignoreLabels:
+    - some.custom.cloud.label/smth
+...
+```
+
+The Operator will ignore any Service annotation or label, key of which
+**starts** with the mentioned above examples. For example, the following
+annotations and labels will be ignored after applying the above `cr.yaml`
+fragment:
+
+```yaml
+annotations:
+  some.custom.cloud.annotation/smth: somethinghere
+labels:
+  some.custom.cloud.label/smth: somethinghere
+```
