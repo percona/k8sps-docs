@@ -66,7 +66,7 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 4. After Vault is installed, you need to initialize it. Run the following command:
 
     ```{.bash .data-prompt="$"}
-    $ kubectl exec -it pod/vault-0 -- vault operator init -key-shares=1 -key-threshold=1 -format=json > /tmp/vault-init
+    $ kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator init -key-shares=1 -key-threshold=1 -format=json > /tmp/vault-init
     ```
     
     The command does the following:
