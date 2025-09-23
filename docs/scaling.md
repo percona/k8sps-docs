@@ -73,7 +73,7 @@ documentation  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/
 
 #### Storage resizing with Volume Expansion capability
 
-In this document we're using the default Percona Server for MySQL cluster name `cluster1`. If you have a different name, replace `cluster1` with it in the commands.
+In this document we're using the default Percona Server for MySQL cluster name `ps-cluster1`. If you have a different name, replace `ps-cluster1` with it in the commands.
 
 To enable storage resizing via volume expansion, do the following:
 
@@ -114,7 +114,7 @@ To increase the storage size manually, do the following:
 1. Extract and backup the cluster configuration
 
     ```{.bash data-prompt="$"}
-    $ kubectl get ps cluster1 -o yaml > CR_backup.yaml
+    $ kubectl get ps ps-cluster1 -o yaml > CR_backup.yaml
     ```
 
 2. Now you should delete the cluster.
@@ -126,13 +126,13 @@ To increase the storage size manually, do the following:
     You can use the following command to delete the cluster:
 
     ```{.bash data-prompt="$"}
-    $ kubectl delete ps cluster1
+    $ kubectl delete ps ps-cluster1
     ```
 
 3. For each node, edit the yaml to resize the PVC object.
 
     ```{.bash data-prompt="$"}
-    $ kubectl edit pvc datadir-cluster1-mysql-0
+    $ kubectl edit pvc datadir-ps-cluster1-mysql-0
     ```
 
     In the yaml, edit the spec.resources.requests.storage value.
@@ -149,8 +149,8 @@ To increase the storage size manually, do the following:
     Perform the same operation on the other nodes.
 
     ```{.bash data-prompt="$"}
-    $ kubectl edit pvc datadir-cluster1-mysql-1
-    $ kubectl edit pvc datadir-cluster1-mysql-2
+    $ kubectl edit pvc datadir-ps-cluster1-mysql-1
+    $ kubectl edit pvc datadir-ps-cluster1-mysql-2
     ```
 
 4. In the CR configuration file, use vim or another text editor to edit
@@ -190,7 +190,7 @@ this option and applying the updated configuration file. This may be done in a
 specifically saved config, or on the fly, using the following command:
 
 ```{.bash data-prompt="$"}
-$ kubectl patch ps cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
+$ kubectl patch ps ps-cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
 ```
 
 In this example we have changed the size of the Percona Server for MySQL

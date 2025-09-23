@@ -39,7 +39,7 @@ $ kubectl apply -f deploy/backup.yaml
       finalizers:
         - percona.com/delete-backup
     spec:
-      clusterName: cluster1
+      clusterName: ps-cluster1
       storageName: s3-us-west
     EOF
     ```

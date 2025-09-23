@@ -29,7 +29,7 @@ Specifies the name of the Percona Server for MySQL cluster to restore.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1` |
+| :material-code-string: string     | `ps-cluster1` |
 
 ### `backupName`
 
@@ -65,7 +65,7 @@ Specifies the Secrets object name with the credentials to access the storage wit
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `cluster1-s3-credentials` | 
+| :material-code-string: string     | `ps-cluster1-s3-credentials` | 
  
 
 ### `backupSource.storage.s3.region`

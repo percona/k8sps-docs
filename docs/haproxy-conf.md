@@ -16,7 +16,7 @@ For example, you can use the following command to enable HAProxy for existing
 cluster:
 
 ```{.bash data-prompt="$"}
-$ kubectl patch ps cluster1 --type=merge --patch '{
+$ kubectl patch ps ps-cluster1 --type=merge --patch '{
   "spec": {
      "proxy": {
        "haproxy": {
@@ -29,13 +29,13 @@ $ kubectl patch ps cluster1 --type=merge --patch '{
   }}'
 ```
 
-The resulting HAPproxy setup will contain the `cluster1-haproxy` service
+The resulting HAPproxy setup will contain the `ps-cluster1-haproxy` service
 listening on ports 3306 (MySQL cluster zero member) and 3307 (other members).
 
 This service is pointing to the MySQL cluster member number zero
-(`cluster1-mysql-0`) on the default 3306 port when this member is available. If
+(`ps-cluster1-mysql-0`) on the default 3306 port when this member is available. If
 a zero member is not available, members are selected in descending order of
-their numbers (e.g. `cluster1-mysql-2`, then `cluster1-mysql-1`, etc.). It can
+their numbers (e.g. `ps-cluster1-mysql-2`, then `ps-cluster1-mysql-1`, etc.). It can
 be used for both read and write load, or it can also be used just for write load
 (single writer mode) in setups with split write and read loads. On 3307 port
 this service selects MySQL cluster members to serve queries following the Round

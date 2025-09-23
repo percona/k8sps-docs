@@ -14,6 +14,10 @@ orchestratorrecommended: '3.2.6-17'
 certmanagerrecommended: '1.18.2'
 gkerecommended: '1.33'
 
+# Global variables
+
+year: '2025'
+
 # Release related variables
 
 release: '0.11.0'
