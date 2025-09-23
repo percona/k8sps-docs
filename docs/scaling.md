@@ -71,11 +71,11 @@ Find exact details about
 PVCs and the supported volume types in [Kubernetes
 documentation  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims).
 
-#### Automated scaling with Volume Expansion capability
+#### Storage resizing with Volume Expansion capability
 
 In this document we're using the default Percona Server for MySQL cluster name `cluster1`. If you have a different name, replace `cluster1` with it in the commands.
 
-To enable automated scaling, do the following:
+To enable storage resizing via volume expansion, do the following:
 
 1. Set the [enableVolumeExpansion](operator.md#enablevolumeexpansion) Custom Resource option to `true` (it is turned off by default). When enabled, the Operator will automatically expand the storage for you when you define a new size in the Custom Resource
 2. Change the
@@ -106,9 +106,9 @@ To enable automated scaling, do the following:
 
 The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running.. After the resize finishes, the Operator deletes this annotation.
 
-#### Manual scaling
+#### Manual resizing
 
-To increase the storage size, do the following:
+To increase the storage size manually, do the following:
 {.power-number}
 
 1. Extract and backup the cluster configuration
