@@ -219,7 +219,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
           keyring_vault.cnf: |-
             {
               "token": "hvs.CvmS4c0DPTvHv5eJgXWMJg9r",
-              "vault_url": "https://vault.vault.svc.cluster.local:8200",
+              "vault_url": "http://vault.vault.svc.cluster.local:8200",
               "secret_mount_point": "ps-secret"
             }
         ```
