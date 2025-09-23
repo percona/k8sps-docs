@@ -4,7 +4,9 @@ Percona Operator for MySQL is a custom controller that extends Kubernetes to aut
 
 You declare how you want your Percona Server for MySQL cluster to run (e.g., "I need a 3-node Percona Server for MySQL cluster with backups enabled") using a special Kubernetes configuration file called a Custom Resource. The Operator then takes over. It constantly watches your cluster, understands its unique needs, and automatically performs tasks like deployment, scaling, handling failures, managing backups, and coordinating upgrades.
 
-[What's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md){.md-button}
+For you, this means reduced operational overhead, faster deployments, and a highly available, self-healing database infrastructure that can run consistently across any cloud environment.
+
+[What's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN{{release}}.md){.md-button}
 
 
 !!! note

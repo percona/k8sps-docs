@@ -15,7 +15,7 @@ The Operator is natively integrated with PMM 3, enabling you to monitor the heal
 Note that the support for PMM2 is dropped. This means you must do the following to monitor your deployment further:
 
 * transition to PMM 3 if you had PMM 2 to. The PMM documentation explains how to upgrade.
-* run the Operator version 0.10.0. Check the [Upgrade the Operator](../update.md#upgrading-the-operator-and-crd) tutorial for the update steps.
+* run the Operator version 0.10.0. Check the [Upgrade the Operator](../update-operator.md) tutorial for the update steps.
 * ensure that PMM 3 Server version must be equal to or newer than the PMM Client.
 
 ### Support for deployments on OpenShift

@@ -1,21 +1,24 @@
 # Variables used in the documentation
 
 commandName: 'kubectl'
+ps84recommended: '8.4.5-5'
 ps80recommended: '8.0.42-33'
-pxbrecommended: '8.0.35-33'
+pxb84recommended: '8.4.0-3'
+pxb80recommended: '8.0.35-33'
+router84recommended: '8.4.5-5'
+routerrecommended: '8.0.42'
 ptrecommended: '3.7.0'
-routerrecommended: '8.0.42'
-pmm3recommended: '3.2.0'
-haproxyrecommended: '2.8.14'
-routerrecommended: '8.0.42'
+pmm3recommended: '3.3.1'
+haproxyrecommended: '2.8.15'
 orchestratorrecommended: '3.2.6-17'
-gkerecommended: '1.30'
-certmanagerrecommended: '1.17.2'
+certmanagerrecommended: '1.18.2'
+gkerecommended: '1.33'
 
 # Release related variables
 
-apiversion: '0-10-0'
-release: '0.10.0'
+release: '0.11.0'
 date: 
+  v0_11_0: '2025-09-01'
   v0_10_0: '2025-06-04'
+
 
