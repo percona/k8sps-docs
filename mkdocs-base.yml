@@ -14,6 +14,7 @@ theme:
   name: material
   logo: assets/operators-mark.svg
   favicon: assets/operators-fav.svg
+  icon: fontawesome-solid-edit
   custom_dir: _resource/overrides/
   font:
     text: Roboto
