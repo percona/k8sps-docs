@@ -151,8 +151,8 @@ $ oc apply --server-side -f deploy/crd.yaml
 If you're using a non-privileged user, grant the required permissions by applying the following clusterrole:
 
 ``` {.bash data-prompt="$" }
-$ oc create clusterrole psmdb-admin --verb="*" --resource=perconaserverMySQLs.psmdb.percona.com,perconaserverMySQLs.psmdb.percona.com/status,perconaserverMySQLbackups.psmdb.percona.com,perconaserverMySQLbackups.psmdb.percona.com/status,perconaserverMySQLrestores.psmdb.percona.com,perconaserverMySQLrestores.psmdb.percona.com/status
-$ oc adm policy add-cluster-role-to-user psmdb-admin <some-user>
+$ oc create clusterrole ps-admin --verb="*" --resource=perconaservemysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
+$ oc adm policy add-cluster-role-to-user ps-admin <some-user>
 ```
 
 If you have a [cert-manager  
