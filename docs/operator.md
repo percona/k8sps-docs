@@ -797,6 +797,22 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `proxy.haproxy.schedulerName`
+
+The name of a Kubernetes scheduler used to assign HAProxy Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `default-scheduler` |
+
+### `proxy.haproxy.priorityClassName`
+
+The name of the Kubernetes [PriorityClass :octicons-external-link-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `high-priority` |
+
 ### `proxy.haproxy.podDisruptionBudget.maxUnavailable`
 
 The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
