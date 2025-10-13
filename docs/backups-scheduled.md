@@ -1,4 +1,5 @@
 # Making scheduled backups
+ 
 
 Backups schedule is defined in the `backup` section of the Custom
 Resource and can be configured via the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
@@ -39,4 +40,59 @@ backup:
      storageName: s3-us-west
   ...
 ```
+
+## Managing multiple backup schedules
+
+You can define multiple backup schedules to meet different recovery and compliance needs. For example, create daily backups for quick recovery from recent changes and monthly backups for long-term retention or audit purposes. 
+
+When using the same storage location for multiple schedules, be aware of these important considerations:
+
+1. **Retention policy conflicts.** The Operator only applies retention policies to the first schedule in your configuration. For example, if you set daily backups to keep 5 copies and monthly backups to keep 3 copies, the Operator will only keep 5 total backups in storage, not 8 as you might expect. However, all backup objects will still appear in `kubectl get ps-backup` output.
+
+2. **Concurrent backup conflicts.** When multiple schedules run simultaneously and write to the same storage path, backups can overwrite each other, resulting in incomplete or corrupted data.
+
+To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule.
+
+The configuration steps are the following:
+
+1. Create separate storage configurations in your Custom Resource with different names
+2. Specify unique buckets or prefixes for each storage configuration
+3. Assign different storage names to specific schedules
+
+Here is the example configuration:
+
+    ```yaml
+    storages:
+      minio1:
+        type: s3
+        s3:
+          credentialsSecret: minio-secret
+          bucket: my-bucket
+          prefix: minio1
+          endpointUrl: "http://minio.minio.svc.cluster.local:9000/"
+        verifyTLS: false
+      minio2:
+        type: s3
+        s3:
+          credentialsSecret: minio-secret
+          bucket: my-bucket
+          prefix: minio2
+          endpointUrl: "http://minio.minio.svc.cluster.local:9000/"
+        verifyTLS: false
+
+    ....
+
+    backup:
+      schedule:
+      - name: "daily-backup"
+        schedule: "*/1 * * * *"
+        keep: 2
+        storageName: minio1
+      - name: "monthly-backup"
+        schedule: "*/2 * * * *"
+        keep: 5
+        storageName: minio2
+    ```
+
+
 
