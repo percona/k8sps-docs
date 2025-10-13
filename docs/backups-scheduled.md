@@ -85,11 +85,11 @@ Here is the example configuration:
     backup:
       schedule:
       - name: "daily-backup"
-        schedule: "*/1 * * * *"
+        schedule: "0 2 * * *"
         keep: 2
         storageName: minio1
       - name: "monthly-backup"
-        schedule: "*/2 * * * *"
+        schedule: "0 2 1 * *"
         keep: 5
         storageName: minio2
     ```
