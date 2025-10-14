@@ -122,7 +122,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 
 ### `secretsName`
 
-A name for [users secrets](users.md#users).
+A name for [users secrets](users.md#users). When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets`. Otherwise, it uses the provided name.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -130,7 +130,7 @@ A name for [users secrets](users.md#users).
 
 ### `sslSecretName`
 
-A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md) for details.
+A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md) for details. When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets-ssl`. Otherwise, it uses the provided name.
 
 | Value type  | Example    |
 | ----------- | ---------- |
