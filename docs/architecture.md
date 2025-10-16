@@ -70,6 +70,8 @@ replication types:
     modification or the actual statement. Then the replica executes each change
     on its own database and obtains consistent set of data.
 
+    This replication type is in Beta state and we don't recommend it for production use yet.
+
 * **Group Replication** means that a read transaction can be executed on any
     instance, while write transactions happen only on primary. For a write transaction, MySQL tries to get consensus with the other
     instances before returning it completed back to the client.
