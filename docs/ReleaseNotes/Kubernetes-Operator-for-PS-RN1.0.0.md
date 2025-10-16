@@ -1,136 +1,100 @@
-# Percona Operator for MySQL 0.12.0 ({{date.v0_12_0}})
+# Percona Operator for MySQL 1.0.0 ({{date.1_0_0}})
 
 [Installation](../System-Requirements.md#installation-guidelines){.md-button}
 
-Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.12.0 of the Percona Operator for MySQL is still **a tech preview release**, and it is **not recommended for production environments**. 
-
-**As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
+Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.
 
 ## Release highlights
 
-### Full MySQL 8.4 support now available
+This release marks the **General Availability (GA) of Percona Operator for MySQL using Percona Server for MySQL with the group replication type**. The asynchronous replication has the Beta status and we don't recommend using it in production yet.
 
-With this release, data-at-rest encryption is now supported for Percona Server for MySQL 8.4.
+With the GA status of the Operator, you can confidently deploy and run it in production environments, benefiting from long-term maintenance and enterprise-grade reliability.
 
-In the previous release, we have added support for Percona Server for MySQL 8.4 within the Operator. However, data-at-rest encryption was not yet available. That limitation has now been lifted, unlocking the full potential of Percona Server for MySQL’s latest major version. Check our [documentation](../encryption-setup.md) for Percona Server for MySQL 8.4-specific setup instructions.
+Alternatively, you may opt for [Percona Operator for MySQL based on Percona XtraDB Cluster](https://www.percona.com/doc/kubernetes-operator-for-pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
-This improvement empowers you to take full advantage of Percona Server for MySQL 8.4’s features while benefiting from seamless, automated lifecycle management provided by the Operator. Percona Server for MySQL 8.4 is now the default version for deploying a database cluster.
+This release focuses on stability and bug fixing, ensuring the Operator is ready for production use. Additionally, it introduces these improvements:
 
-### Ensure cluster availability with PodDisruptionBudgets
+### Now certified on OpenShift: Seamless Operator lifecycle management
 
-A PodDisruptionBudget (PDB) in Kubernetes helps keep your applications available during voluntary disruptions, such as deleting a deployment or draining a node for maintenance. A PDB sets a limit on how many Pods can be unavailable at the same time due to these voluntary actions.
+The Operator images are now officially certified for OpenShift. This unlocks full support for the Operator Lifecycle Manager (OLM) so that you can install, upgrade and manage the Operator's lifecycle directly from the OpenShift console.
 
-With this release, you can now configure PodDisruptionBudgets for MySQL, HAProxy, MySQL Router, and Orchestrator Pods, thus ensuring your cluster remains available, even during disruptions or planned maintenance.
+What this means for you:
 
-### Fine-tune backup and restore operations
+* Simplified installation: Deploy Operators directly from the OpenShift UI with just a few clicks.
+*  Streamlined updates: Stay current with automatic or manual updates via OLM.
+*  Enterprise-grade assurance: Certified images meet Red Hat’s security and compatibility standards.
+* Better integration: Leverage OpenShift-native workflows for lifecycle management, RBAC, and monitoring.
+* Scalable operations: Simplify cluster-wide rollouts and reduce manual overhead.
 
-The Operator sets sensible defaults for backups and restores to ensure their smooth flow. If you need more control, you can fine-tune `xtrabackup`, `xbstream`, and `xbcloud` settings. You can do this globally via the `deploy/cr.yaml` Custom resource manifest or individually for a specific backup / restore operation via the respective `deploy/backup.yaml` or `deploy/restore.yaml` manifests. In either case, define your configuration in the `spec.containerOptions` subsection. For example:
+Whether you're a platform engineer streamlining cluster operations, a DBA managing resilient data services, or an architect driving standardization — this improvement brings you closer to a secure, scalable and policy-aligned infrastructure.
 
-```yaml
-spec:
-  backup:
-    storages:
-      <STORAGE-NAME>:
-         containerOptions:
-           env:
-           - name: CUSTOM_VAR
-             value: "false"
-           args:
-             xtrabackup:
-             - "--someflag=abc"
-             xbcloud:
-             - "--someflag=abc"
-             xbstream:
-             - "--someflag=abc"
-```
+### Streamlined custom configuration usage for backup and restore processes
 
-Note that individual settings take precedence over the global ones. Read more about fine-tuning backups and restores and how the settings are applied in our [documentation](../backups-fine-tune.md).
+In previous version we have added the ability to fine-tune backups and restores by defining `xtrabackup`, `xbstream`, and `xbcloud` settings globally via the Custom Resource manifest, or individually via a specific backup / restore manifest. 
 
-### Monitor PMM Client health and status
+In this release we improved how the Operator applies these settings: now individual configuration always takes precedence over global settings. 
 
-Percona Monitoring and Management (PMM) is a great tool to monitor the health of your database cluster. Now you can also learn if PMM itself is healthy using probes - a Kubernetes diagnostics mechanism to check the health and status of containers. Use the `spec.pmm.readinessProbes.*` and `spec.pmm.livenessProbes.*` Custom Resource options to fine-tune Readiness and Liveness probes for PMM Client.
-
-### Define a source Pod for backups
-
-You can now explicitly define from what MySQL instance Pod the Operator should make a backup. You can specify the Pod in the deploy/cr.yaml to apply it for all backups, both scheduled and on-demand. You can also override it for an on-demand backup in its resource manifest.
-
-```yaml
-spec:
-  backup:
-      sourcePod: ps-cluster1-mysql-1
-```
-
-These options let you tailor your backup strategy to fit your organization's policies.
-
-For asynchronous replication clusters, the Operator must know the cluster topology to run a backup. For this, either enable the Orchestrator in your deployment. Or specify the `sourcePod` value, if your cluster has more than one MySQL Pods. 
-
+With this improvement you have maximum flexibility: you can define consistent default settings for the entire cluster, but still tailor individual backup or restore operations as needed. This way you can optimize performance, troubleshoot, or customize specific scenarios without affecting the global configuration.
 
 ## Deprecation, rename and removal
 
-* The `.spec.initImage` field has been replaced by the `.spec.initContainer` subsection, which follows Kubernetes best practices for defining containers that run before the main containers in a Pod. The `initContainer` feature is helpful for setup tasks such as:
-
-   - Initializing data
-   - Waiting for services to become available
-   - Setting permissions
-   - Pulling secrets or configuration files
-
-* The default cluster name has been changed to `ps-cluster1` to prevent possible conflicts if you have custom resources of both Percona Operator for MySQL based on Percona Server for MySQL and Percona XtraDB Cluster in the same namespace.
-
-* The API version in CRD has changed from `v1alpha` to `v1`. Read more about updates in [Known limitations](#known-limitations).
+* Changed paths for example configuration files for backups and restores. They are now stored in the `deploy/backup/` folder. Adjust your automation worklfows with this new path, if needed.
 
 ## Known limitations
 
-Due to the API version change, CRD updates are currently not supported. In order to update to version 0.12.0, you must manually delete the CRDs, apply new ones and recreate the cluster. To keep the data, do the following:
+If you defined several schedules for the same remote backup storage, be aware of the following limitations:
 
-* check that the `percona.com/delete-mysql-pvc` finalizer is not enabled in `deploy/cr.yaml`
-* don't delete PVCs manually
-* Recreate the cluster with the same name. The Operator then automatically reuses the same PVCs.
+1. **Retention policy conflicts.** The Operator only applies retention policies to the first schedule in your configuration. For example, if you set daily backups to keep 5 copies and monthly backups to keep 3 copies, the Operator will only keep 5 total backups in storage, not 8 as you might expect. However, all backup objects will still appear in `kubectl get ps-backup` output.
+
+2. **Concurrent backup conflicts.** When multiple schedules run simultaneously and write to the same storage path, backups can overwrite each other, resulting in incomplete or corrupted data.
+
+To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the [documentation](../backups-scheduled.md#managing-multiple-backup-schedules) for more information and  configuration steps.
 
 ## Changelog
 
-### New features
+## Improvements
 
-* [K8SPS-400](https://perconadev.atlassian.net/browse/K8SPS-400) - Improved flexibility for backups and restores via adding support for custom options for `xtrabackup`, `xbstream`, and `xbcloud` binaries.
+* [K8SPS-469](https://perconadev.atlassian.net/browse/K8SPS-469) - Improved log message to display clearer and more informative error messages in case of authorization issues to a backup storage.
+??? Still open - [K8SPS-516](https://perconadev.atlassian.net/browse/K8SPS-516) - Improved stability and performance for operations involving large datasets.
+??? Still open - [K8SPS-537](https://perconadev.atlassian.net/browse/K8SPS-537) - Extended the test suite for the automatic update process to include MySQL version 8.4.
 
-* [K8SPS-405](https://perconadev.atlassian.net/browse/K8SPS-405) - Users can now configure the LivenessProbe for the PMM Client container, allowing for custom timeouts and improved container health checks.
+### Fixed bugs
 
-* [K8SPS-413](https://perconadev.atlassian.net/browse/K8SPS-413) - Add ability to set  resources and `containerSecurityContext` for init containers.
+- [K8SPS-491](https://perconadev.atlassian.net/browse/K8SPS-491) - Percona Operator for MySQL  now automatically generates the secrets object in the format `<cluster-name>-secrets`, if it's not explicitly defined in the Custom resource, preventing common startup errors.
 
-* [K8SPS-480](https://perconadev.atlassian.net/browse/K8SPS-480) - Added support for data-at-rest encryption for MySQL 8.4.
+* [K8SPS-492](https://perconadev.atlassian.net/browse/K8SPS-492) - Fixed the issue with the Operator sending the unsupported `Error` event type during the Group Replication cluster startup by sending the `Warning` event type instead.  
 
-### Improvements
+* [K8SPS-498](https://perconadev.atlassian.net/browse/K8SPS-498) - Stopped unnecessary updates to the `resourceVersion`field of the cluster objects during its initialization.
 
-* [K8SPS-172](https://perconadev.atlassian.net/browse/K8SPS-172) - The operator now includes logs for all haproxy manipulations, providing better visibility for operations like adding, deleting, or downscaling.
+- [K8SPS-501](https://perconadev.atlassian.net/browse/K8SPS-501) - Fixed the issue with the Operator failing to update the PVC when expanding database volumes by retrying the operation.
 
-* [K8SPS-269](https://perconadev.atlassian.net/browse/K8SPS-269) - All Kubernetes objects created by the Operator now have appropriate labels, including the Orchestrator configmap in async clusters. This improves object filtering and grouping.
+??? Still open - [K8SPS-517](https://perconadev.atlassian.net/browse/K8SPS-517) - Fixed an issue that prevented MySQL clone operations from completing successfully due to a default 10-second read timeout, which caused "query interrupted" errors. This was resolved by increasing the default read/write timeouts to 3600 seconds (1 hour) for long-running operations and enhancing error handling for better reliability and debugging.
 
-* [K8SPS-417](https://perconadev.atlassian.net/browse/K8SPS-417) - Added ability to define PodDisruptionBudget, which helps manage voluntary disruptions to your cluster.
+* [K8SPS-518](https://perconadev.atlassian.net/browse/K8SPS-518) - ConfigMap settings were fixed to ensure proper labels are applied when deploying clusters with various replication and router configurations.
 
-* [K8SPS-427](https://perconadev.atlassian.net/browse/K8SPS-427) - Simplified the Custom Resource (CR) validation logic by using Kubernetes validations for CR input.
+??? Open - [K8SPS-521](https://perconadev.atlassian.net/browse/K8SPS-521) - A specific single-leader election mechanism within group replication is now disabled by default.
 
-* [K8SPS-464](https://perconadev.atlassian.net/browse/K8SPS-464) - The Operator will now automatically set the `crVersion` to the Operator's current version if it is not defined by the user.
+* [K8SPS-524](https://perconadev.atlassian.net/browse/K8SPS-524) - Fixed the issue with successful backups displaying the incorrect state description. The state description field is irrelevant for successful backups and is not present.
 
-* [K8SPS-466](https://perconadev.atlassian.net/browse/K8SPS-466) - Added ability to set global labels and annotations for all Kubernetes objects created by the Operator.
+* [K8SPS-529](https://perconadev.atlassian.net/browse/K8SPS-529) - Removed reconciliation of backups that entered the error state due to underlying configuration issues and keep their state for troubleshooting.
 
-* [K8SPS-478](https://perconadev.atlassian.net/browse/K8SPS-478) - Improved bootstrapper behavior to determine if incremental recovery is possible and specify it when adding new instances to the existing cluster.
+* [K8SPS-533](https://perconadev.atlassian.net/browse/K8SPS-533) - The individual configuration for `xbcloud`, `xbstream` and `xtrabackup` tools specified directly for a backup or a restore object now fully overrides any default arguments set in the cluster's custom resource.
 
-* [K8SPS-488](https://perconadev.atlassian.net/browse/K8SPS-488) - Switched to using API version `v1` in custom resource definitions
+- [K8SPS-535](https://perconadev.atlassian.net/browse/K8SPS-535) - Backup deletion operations no longer display an erroneous failure message when the backup is successfully removed from storage.
 
-### Bugs fixed
+* [K8SPS-539](https://perconadev.atlassian.net/browse/K8SPS-539) - Fixed the issue with excessive CPU utilization of the `ps-entrypoint.sh` recovery by adding a backoff mechanism to the file existence check. This improves cluster operation in envionments where CPU resources are a concern.
 
-* [K8SPS-371](https://perconadev.atlassian.net/browse/K8SPS-371) - Added the ability to set a backup source Pod to ensure backups are made for clusters with asynchronous replication when the Orchestrator is disabled.
+??? In progress * [K8SPS-548](https://perconadev.atlassian.net/browse/K8SPS-548) - Improved Group Replication self-healing and resolved a sporadic failure where a pod would not become ready after a full cluster crash.
 
-* [K8SPS-374](https://perconadev.atlassian.net/browse/K8SPS-374) - Fixed the issue with the Operator reporting the reconciliation error when an async cluster was being paused or recovered.
+- [K8SPS-550](https://perconadev.atlassian.net/browse/K8SPS-550) - Fixed the issue with service accounts defined for HAProxy Pods via Custom Resource not being applied.
 
-* [K8SPS-378](https://perconadev.atlassian.net/browse/K8SPS-378) - Fixed an issue where the cluster would remain in an unready state if the Orchestrator was scaled down to 1 Pod.
+??? Open * [K8SPS-551](https://perconadev.atlassian.net/browse/K8SPS-551) - Fixed the issue with the operator self-healing test on Openshift failing with the `fsGroup: Invalid value: 1001` error  if a network is lost.
 
-* [K8SPS-430](https://perconadev.atlassian.net/browse/K8SPS-430) - The Operator now updates TLS certificates when new Subject Alternative Names (SANs) are added to the CR.
+* [K8SPS-560](https://perconadev.atlassian.net/browse/K8SPS-560) - Fixed the issue with scheduled backups failing due to conflicting job names when multiple backups run concurrently.
 
-* [K8SPS-465](https://perconadev.atlassian.net/browse/K8SPS-465) - Readiness and liveness probes have been added for HAProxy Pods to ensure their health.
+* [K8SPS-564](https://perconadev.atlassian.net/browse/K8SPS-564) - Fixed the issue with both  HAProxy or Router being deployed when both are enabled by validating the configuration and either reporting the error or deploying only one proxy. This prevents unintended dual deployments.
 
-* [K8SPS-475](https://perconadev.atlassian.net/browse/K8SPS-475) - Fixed an issue where the `exposePrimary.labels` field was incorrectly applied to the service selector. The exposed services now contain global labels together with the exposed labels and the selectors do not contain labels.
-
-* [K8SPS-494](https://perconadev.atlassian.net/browse/K8SPS-494) - Fixed the issue with the constant update of the `resourceVersion` of the PerconaServerMySQL object after a cluster is created. The issue was caused by the Operator receiving stale objects during reconciliation, which resulted in the `InnoDBClusterBootstrapped` condition being set twice in every loop and constantly updating its last transition time. The Fix updates the status directly after setting the condition and waits for consistency with the API server.
+- [K8SPS-565](https://perconadev.atlassian.net/browse/K8SPS-565) - Restores now complete successfully when using an auto-generated secrets name for clusters.
 
 ## Supported software
 
