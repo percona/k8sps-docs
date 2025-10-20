@@ -39,11 +39,11 @@ The settings you define here are used for both backup and restore jobs, although
 
 ## Overriding configuration for Specific Jobs
 
-For on-demand backups and restores, you can provide specific `containerOptions` for the `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` objects in the respective `deploy/backup.yaml` and  `deploy/restore.yaml` custom resources. This is helpful when you need a one-off task with unique settings that you don't want to apply globally.
+For on-demand backups and restores, you can provide specific `containerOptions` for the `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` objects in the respective `deploy/backup/backup.yaml` and  `deploy/backup/restore.yaml` custom resources. This is helpful when you need a one-off task with unique settings that you don't want to apply globally.
 
 ### Example for an on-demand backup
 
-To apply specific settings for a single backup job, edit the `deploy/backup.yaml` manifest.
+To apply specific settings for a single backup job, edit the `deploy/backup/backup.yaml` manifest.
 
 ```yaml
 apiVersion: ps.percona.com/v1alpha1
@@ -69,7 +69,7 @@ You can see here that only `xtrabackup` and `xbcloud` arguments are specified. T
 
 ### Example for a Restore
 
-Similarly, for a restore operation, you can define options in the `deploy/restore.yaml` manifest.
+Similarly, for a restore operation, you can define options in the `deploy/backup/restore.yaml` manifest.
 
 ```yaml
 apiVersion: ps.percona.com/v1alpha1
