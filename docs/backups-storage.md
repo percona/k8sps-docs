@@ -12,7 +12,7 @@ object with credentials needed to access the storage.
     Since backups are stored separately on the Amazon S3, a secret with
     `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` should be present on
     the Kubernetes cluster. The secrets file with these base64-encoded keys should
-    be created: for example [deploy/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup-s3.yaml) file with the following
+    be created: for example [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup-s3.yaml) file with the following
     contents.
 
     ```yaml
@@ -50,7 +50,7 @@ object with credentials needed to access the storage.
     obviously they should contain proper values to make this access
     possible). To have effect secrets file should be applied with the
     appropriate command to create the secret object,
-    e.g. `kubectl apply -f deploy/backup-s3.yaml` (for Kubernetes).
+    e.g. `kubectl apply -f deploy/backup/backup-s3.yaml` (for Kubernetes).
 
     All the data needed to access the S3-compatible cloud to store backups should be
     put into the `backup.storages` subsection. Here is an example
@@ -98,7 +98,7 @@ object with credentials needed to access the storage.
     Since backups are stored separately on [Azure Blob Storage :octicons-link-external-16:](https://azure.microsoft.com/en-us/services/storage/blobs/),
     a secret with `AZURE_STORAGE_ACCOUNT_NAME` and `AZURE_STORAGE_ACCOUNT_KEY` should be present on
     the Kubernetes cluster. The secrets file with these base64-encoded keys should
-    be created: for example `deploy/backup-azure.yaml` file with the following
+    be created: for example `deploy/backup/backup-azure.yaml` file with the following
     contents.
 
     ```yaml
@@ -136,7 +136,7 @@ object with credentials needed to access the storage.
     (and obviously they should contain proper values to make this access
     possible). To have effect secrets file should be applied with the appropriate
     command to create the secret object, e.g.
-    `kubectl apply -f deploy/backup-azure.yaml` (for Kubernetes).
+    `kubectl apply -f deploy/backup/backup-azure.yaml` (for Kubernetes).
 
     All the data needed to access the Azure Blob storage to store backups should be
     put into the `backup.storages` subsection. Here is an example

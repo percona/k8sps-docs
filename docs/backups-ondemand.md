@@ -17,12 +17,12 @@ contains correctly configured keys and is applied with `kubectl` command, use
 
 * <a name="finalizers"></a>**S3 backup finalizer** set by the `metadata.finalizers.percona.com/delete-backup` key (it triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object).
 
-The example of such file is [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup.yaml).
+The example of such file is [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup.yaml).
 
 When the backup destination is configured and applied with kubectl apply -f deploy/cr.yaml command, make backup as follows:
 
 ```{.bash data-prompt="$"}
-$ kubectl apply -f deploy/backup.yaml
+$ kubectl apply -f deploy/backup/backup.yaml
 ```
 
 !!! note

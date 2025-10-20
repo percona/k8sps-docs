@@ -20,4 +20,4 @@ The Operator allows doing backups in two ways:
     [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
     file to be executed automatically in proper time.
 * *On-demand backups* can be done manually at any moment and are configured in
-    the [deploy/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup.yaml).
+    the [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup.yaml).
