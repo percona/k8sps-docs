@@ -194,11 +194,13 @@ Here's how the Operator manages labels and annotations:
 * If there are no annotations or labels in the `expose*.*` subsections of the Custom Resource, the Operator does
 nothing if a new label or an annotation is added to the Service object.
 
-* If you haven't [exposed individual Pods](expose.md#expose-individual-pods) and no Service per Pod is created, the Operator **won’t remove any annotations and labels** from any Services related to this expose subsection. Though, you can still add annotations and labels via the Custom Resource in this case. Use the appropriate `expose.annotations` and `expose.labels fields`.
+* The Operator doesn't remove any [global labels or annotations](#set-global-labels-and-annotations) that you defined in the `spec.metadata` section of the Custom Resource.
+
+* The Operator keeps custom annotations and labels a Service if the `expose.labels` and `expose.annotations` fields in the Custom Resource are empty for this Service. If they are not empty, the Operator overrides custom labels and annotations with the `expose.annotations` and `expose.labels` values.
 
 * If you [exposed individual Pods](expose.md#expose-individual-pods), the Operator removes unknown annotations and labels from Services that the Operator created for Pods.
 
-Yet it is still possible to specify which annotations and labels the Operator should keep. It is useful if a cloud provider adds own labels and annotations to Services. Or you may have custom automation tools that add own labels or annotations and you need to keep them.
+You can still specify which annotations and labels the Operator should keep. It is useful if a cloud provider adds own labels and annotations to Services. Or you may have custom automation tools that add own labels or annotations and you need to keep them.
 
 List these labels and annotations in the `spec.ignoreAnnotations` or `spec.ignoreLabels` fields of the `deploy/cr.yaml`, as follows:
 
@@ -212,3 +214,25 @@ spec:
 ```
 
 The label and annotation values must exactly match the ones defined for the Service to be kept.
+
+## Delete labels and annotations
+
+The Operator can only add custom labels and annotations to objects and it cannot delete them. This means you mst manually delete custom annotations and labels when they are no longer needed.
+
+To delete a label or an annotation, run the following commands:
+
+* For labels:
+
+   ```
+   kubectl label <resource> <name> <label-key>-
+   ```
+
+   where `<label-key>` is the label you want to delete.
+
+* For annotations:
+
+   ```
+   kubectl annotate <resource> <name> <annotation-key>-
+   ```
+
+   where `<annotation-key>` is the annotation you want to delete.
