@@ -1,61 +1,66 @@
 # Percona Operator for MySQL based on Percona Server for MySQL
 
-If you run MySQL and want easier operations, better reliability, and to use modern cloud workflows - Percona Operator for MySQL is here for you. 
+Percona Operator for MySQL automates managing your MySQL databases on Kubernetes, making this process simple, reliable, and worry-free. Built on [Percona Server for MySQL :octicons-link-external-16:](https://www.percona.com/doc/percona-server/LATEST/index.html), the Operator brings enterprise-grade reliability,
+performance, and observability right out of the box.
 
-Percona Operator for MySQL is based on [Percona Server for MySQL :octicons-link-external-16:](https://www.percona.com/doc/percona-server/LATEST/index.html), delivering enhanced performance, better observability and robust backup capabilities right out of the box.
-
-Think of Percona Operator for MySQL as a MySQL automation engine inside your Kubernetes cluster. You define your desired setup in a YAML configuration file—and the Operator makes it real. It automates all database management operations for you, from deployment to scaling, backups and upgrades - everything you need to have a reliable, production ready database from day one.
-
-The Operator constantly watches your cluster, understands its unique needs and automatically manages its lifecycle ensuring it operates as you intended.
+With Percona Operator for MySQL, you can quickly set up, scale, and protect your databases using easy-to-understand configuration files. The Operator takes care of everyday tasks such as deployment, backups, updates, and failover, so you can focus on your applications and your business, not on manual database management.
 
 !!! note ""
+    Percona Operator for MySQL is generally available with [**group replication**](architecture.md#replication-types-and-proxy-solutions). Asynchronous replication is still in Beta and not recommended for production yet.
 
-    Percona Operator for MySQL is General Availability with [**group replication**](architecture.md#replication-types-and-proxy-solutions). Asynchronous replication remains in Beta state, and we don't recommend it for production use yet.
+[Get started :material-arrow-down:](#get-started-today){ .md-button }
+[See what's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN{{release}}.md){.md-button}
 
-[What's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN{{release}}.md){.md-button}
+## Why choose Percona Operator for MySQL?
 
-## Why to use the Operator
+### Deploy and manage with ease
 
-*  DBAs & SREs choose it because it reduces manual toil—no more babysitting clusters or writing custom failover logic.
-*  DevOps teams use it to deploy MySQL consistently across environments, with infrastructure as code.
-*  Architects choose it for its portability, reliability, and open source flexibility and benefit from no vendor lock-in.
+No need for complicated scripts or manual setups. Define your database
+requirements in a YAML file, and have the Operator to automatically create, configure,
+and manage your entire MySQL cluster. 
 
+### Built for reliability
 
-## Ready to get started? 
+From day one, your database comes with robust features you need for production: high availability, automated backups, built-in monitoring, and strong security. Everything is ready to use right out of the box.
 
-Starting with the Operator is easy. Follow our documentation and you'll be set up in a minute.
+### Cloud-native by design
 
-[Quickstart guides :material-arrow-right:](quickstart.md){ .md-button }
+Whether you use AWS, Google Cloud, Azure, or any other Kubernetes platform, the Operator fits right in. Enjoy a consistent, cloud-native MySQL experience everywhere.
 
+## Get started today
+
+Set up Percona Operator for MySQL in just a few minutes. Start with our simple guides and begin managing your databases with confidence.
+
+[Quickstart guide :material-arrow-right:](quickstart.md){ .md-button }
 
 <div data-grid markdown><div data-banner markdown>
 
 ## :fontawesome-solid-magnifying-glass: Discover the Operator { .title }
 
-Learn the Operator's features, how it works and what it consists of.
+Learn about all the features Percona Operator for MySQL offers, how it works, and how it can help you.
 
 [Features :material-arrow-right:](features.md){ .md-button }
 
 </div><div data-banner markdown>
 
-## :material-security: Security and encryption { .title }
+## :material-security: Security you can trust { .title }
 
-Rest assured! Learn more about our security features designed to protect your valuable data.
+Your data safety is our priority. See how our Operator protects your information with advanced security and encryption options.
 
-[Security measures :material-arrow-right:](TLS.md){ .md-button }
+[Security features :material-arrow-right:](TLS.md){ .md-button }
 
 </div><div data-banner markdown>
 
 ### :material-backup-restore: Backup management { .title }
 
-Learn what you can do to maintain regular backups of your Percona Server for MySQL cluster.
+Learn how to keep your MySQL databases backed up and ready for a quick restore whenever you need it.
 
-[Backup management :material-arrow-right:](backups.md){ .md-button }
+[Backup options :material-arrow-right:](backups.md){ .md-button }
 
 </div><div data-banner markdown>
 
 ### :material-frequently-asked-questions: Troubleshooting { .title }
 
-Our comprehensive resources will help you overcome challenges, from everyday issues to specific doubts.
+Need assistance? Our troubleshooting guides cover common questions and step-by-step solutions.
 
 [Diagnostics :material-arrow-right:](debug.md){.md-button}

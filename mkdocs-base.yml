@@ -160,6 +160,7 @@ nav:
     - Welcome: index.md
     - get-help.md
     - Features:
+          - "Overview": features.md
           - "Design and architecture": architecture.md
     - Quickstart guides:
           - Overview: quickstart.md
