@@ -14,9 +14,9 @@ Alternatively, you may opt for [Percona Operator for MySQL based on Percona Xtra
 
 This release focuses on stability and bug fixing, ensuring the Operator is ready for production use. Additionally, it introduces these improvements:
 
-### Now certified on OpenShift: Seamless Operator lifecycle management
+### Seamless Operator lifecycle management on OpenShift OLM
 
-The Operator images are now officially certified for OpenShift. This unlocks full support for the Operator Lifecycle Manager (OLM) so that you can install, upgrade and manage the Operator's lifecycle directly from the OpenShift console.
+The Operator images are passing official certification for OpenShift. When passed, this unlocks full support for the Operator Lifecycle Manager (OLM) so that you can install, upgrade and manage the Operator's lifecycle directly from the OpenShift console.
 
 What this means for you:
 
@@ -26,7 +26,7 @@ What this means for you:
 * Better integration: Leverage OpenShift-native workflows for lifecycle management, RBAC, and monitoring.
 * Scalable operations: Simplify cluster-wide rollouts and reduce manual overhead.
 
-Whether you're a platform engineer streamlining cluster operations, a DBA managing resilient data services, or an architect driving standardization — this improvement brings you closer to a secure, scalable and policy-aligned infrastructure.
+All OpenShift-related features will become available to users as soon as certification is confirmed. Whether you're a platform engineer, DBA, or architect, this advancement will bring you closer to a secure, scalable, and policy-driven infrastructure.
 
 ### Streamlined custom configuration usage for backup and restore processes
 

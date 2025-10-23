@@ -23,7 +23,7 @@ year: '2025'
 
 # Release related variables
 
-release: '0.12.0'
+release: '1.0.0'
 date: 
   1_0_0: '2025-10-23'
   v0_12_0: '2025-09-23'
