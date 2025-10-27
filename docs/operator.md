@@ -348,7 +348,7 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 
 ### `mysql.schedulerName`
 
-The name of a Kubernetes scheduler used to assign MySQL Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign MySQL Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -615,6 +615,30 @@ The number of failed probes required to mark the container unhealthy.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
+
+### `mysql.env.name`
+
+Name of an environment variable for MySQL Pods. Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `BOOTSTRAP_READ_TIMEOUT` |
+
+### `mysql.env.value`
+
+Value of an environment variable for MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"600"` |
+
+### `mysql.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for MySQL Pods. 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-env-secret` |
 
 ### `mysql.affinity.antiAffinityTopologyKey`
 
@@ -952,7 +976,7 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 
 ### `proxy.haproxy.schedulerName`
 
-The name of a Kubernetes scheduler used to assign HAProxy Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign HAProxy Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1431,6 +1455,30 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `200m` |
 
+### `proxy.router.env.name`
+
+Name of an environment variable for MySQL Router Pods. Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `MY_ENV` |
+
+### `proxy.router.env.value`
+
+Value of an environment variable for MySQL Router Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"1000"` |
+
+### `proxy.router.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for MySQL Router Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-env-secret` |
+
 ### `proxy.router.podDisruptionBudget.maxUnavailable`
 
 The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
@@ -1662,7 +1710,7 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 
 ### `orchestrator.schedulerName`
 
-The name of a Kubernetes scheduler used to assign Orchestrator Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign Orchestrator Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1787,6 +1835,30 @@ When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
+
+### `orchestrator.env.name`
+
+Name of an environment variable for Orchestrator Pods. Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `MY_ENV` |
+
+### `orchestrator.env.value`
+
+Value of an environment variable for Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"1000"` |
+
+### `orchestrator.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-env-secret` |
 
 ### `orchestrator.tolerations`
 
