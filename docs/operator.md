@@ -536,7 +536,7 @@ The number of failed probes required to mark the container unready.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `mysql.readinessProbes.initialDelaySeconds`
+### `mysql.readinessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -544,7 +544,7 @@ The number of seconds to wait before performing the first [readiness probe :octi
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `mysql.readinessProbes.timeoutSeconds`
+### `mysql.readinessProbe.timeoutSeconds`
 
 The number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -552,7 +552,7 @@ The number of seconds after which the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `10` |
 
-### `mysql.readinessProbes.periodSeconds`
+### `mysql.readinessProbe.periodSeconds`
 
 How often to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -560,7 +560,7 @@ How often to perform the [readiness probe :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `10` |
 
-### `mysql.readinessProbes.successThreshold`
+### `mysql.readinessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -568,7 +568,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `mysql.readinessProbes.failureThreshold`
+### `mysql.readinessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unready.
 
@@ -576,7 +576,7 @@ The number of failed probes required to mark the container unready.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `mysql.livenessProbes.initialDelaySeconds`
+### `mysql.livenessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -584,7 +584,7 @@ The number of seconds to wait before performing the first [liveness probe :octic
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `15` |
 
-### `mysql.livenessProbes.timeoutSeconds`
+### `mysql.livenessProbe.timeoutSeconds`
 
 The number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -592,7 +592,7 @@ The number of seconds after which the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `10` |
 
-### `mysql.livenessProbes.periodSeconds`
+### `mysql.livenessProbe.periodSeconds`
 
 How often to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -600,7 +600,7 @@ How often to perform the [liveness probe :octicons-link-external-16:](https://ku
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `10` |
 
-### `mysql.livenessProbes.successThreshold`
+### `mysql.livenessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -608,7 +608,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `mysql.livenessProbes.failureThreshold`
+### `mysql.livenessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unhealthy.
 
@@ -1147,7 +1147,7 @@ The number of failed probes required to mark the container unready.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `proxy.haproxy.readinessProbes.timeoutSeconds`
+### `proxy.haproxy.readinessProbe.timeoutSeconds`
 
 Number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -1155,7 +1155,7 @@ Number of seconds after which the [readiness probe :octicons-link-external-16:](
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.readinessProbes.periodSeconds`
+### `proxy.haproxy.readinessProbe.periodSeconds`
 
 How often (in seconds) to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -1163,7 +1163,7 @@ How often (in seconds) to perform the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `proxy.haproxy.readinessProbes.successThreshold`
+### `proxy.haproxy.readinessProbe.successThreshold`
 
 Minimum consecutive successes for the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
 
@@ -1171,7 +1171,7 @@ Minimum consecutive successes for the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.readinessProbes.failureThreshold`
+### `proxy.haproxy.readinessProbe.failureThreshold`
 
 When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
 
@@ -1179,7 +1179,7 @@ When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/doc
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `proxy.haproxy.livenessProbes.timeoutSeconds`
+### `proxy.haproxy.livenessProbe.timeoutSeconds`
 
 Number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -1187,7 +1187,7 @@ Number of seconds after which the [liveness probe :octicons-link-external-16:](h
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.livenessProbes.periodSeconds`
+### `proxy.haproxy.livenessProbe.periodSeconds`
 
 How often (in seconds) to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -1195,7 +1195,7 @@ How often (in seconds) to perform the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `proxy.haproxy.livenessProbes.successThreshold`
+### `proxy.haproxy.livenessProbe.successThreshold`
 
 Minimum consecutive successes for the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
 
@@ -1203,7 +1203,7 @@ Minimum consecutive successes for the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.livenessProbes.failureThreshold`
+### `proxy.haproxy.livenessProbe.failureThreshold`
 
 When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
 
@@ -1772,7 +1772,7 @@ The number of failed probes required to mark the container unready.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `orchestrator.readinessProbes.timeoutSeconds`
+### `orchestrator.readinessProbe.timeoutSeconds`
 
 Number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -1780,7 +1780,7 @@ Number of seconds after which the [readiness probe :octicons-link-external-16:](
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `orchestrator.readinessProbes.periodSeconds`
+### `orchestrator.readinessProbe.periodSeconds`
 
 How often (in seconds) to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -1788,7 +1788,7 @@ How often (in seconds) to perform the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `orchestrator.readinessProbes.successThreshold`
+### `orchestrator.readinessProbe.successThreshold`
 
 Minimum consecutive successes for the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
 
@@ -1796,7 +1796,7 @@ Minimum consecutive successes for the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `orchestrator.readinessProbes.failureThreshold`
+### `orchestrator.readinessProbe.failureThreshold`
 
 When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
 
@@ -1804,7 +1804,7 @@ When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/doc
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `orchestrator.livenessProbes.timeoutSeconds`
+### `orchestrator.livenessProbe.timeoutSeconds`
 
 Number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -1812,7 +1812,7 @@ Number of seconds after which the [liveness probe :octicons-link-external-16:](h
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `orchestrator.livenessProbes.periodSeconds`
+### `orchestrator.livenessProbe.periodSeconds`
 
 How often (in seconds) to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -1820,7 +1820,7 @@ How often (in seconds) to perform the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `orchestrator.livenessProbes.successThreshold`
+### `orchestrator.livenessProbe.successThreshold`
 
 Minimum consecutive successes for the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
 
@@ -1828,7 +1828,7 @@ Minimum consecutive successes for the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `orchestrator.livenessProbes.failureThreshold`
+### `orchestrator.livenessProbe.failureThreshold`
 
 When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
 
