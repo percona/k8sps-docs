@@ -35,11 +35,15 @@ Once you've covered the basics, prepare your cluster for production workloads:
 - [Enable TLS/SSL encryption](TLS.md) - Secure connections between your applications and the database
 - [Configure data-at-rest encryption](encryption.md) - Protect your data at rest with encryption keys
 
+### Configure access to your cluster for external applications
+
+- [Configure HAProxy](haproxy-conf.md) or [MySQL Router](router-conf.md) - Customize load balancing behavior
+- [Expose your cluster](expose.md) - Configure external access if your applications need it
+
 ### Performance and reliability
 
 - [Scale your cluster](scaling.md) - Add more nodes for better performance or increase resources for existing nodes
 - [Configure MySQL options](options.md) - Tune MySQL settings for your workload requirements
-- [Expose your cluster](expose.md) - Configure external access if your applications need it
 - [Fine-tune backups and restores](backups-fine-tune.md) - Optimize backup performance and customize restore operations
 
 ### Monitoring and observability
@@ -50,8 +54,6 @@ Once you've covered the basics, prepare your cluster for production workloads:
 
 As you become more comfortable with the Operator, explore these advanced features:
 
-- [Configure HAProxy](haproxy-conf.md) or [MySQL Router](router-conf.md) - Customize load balancing behavior
-- [Change replication type](change-replication-type.md) - Switch between group replication and asynchronous replication
 - [Add sidecar containers](sidecar.md) - Extend functionality with custom containers
 - [Multi-namespace deployment](cluster-wide.md) - Configure Operator-wide or namespace-specific deployments
 
@@ -60,9 +62,3 @@ As you become more comfortable with the Operator, explore these advanced feature
 - [Understand the architecture](architecture.md) - Deep dive into how the Operator works and its components
 - [Review all configuration options](operator.md) - Complete reference for Custom Resource settings
 
-## Get help
-
-If you run into issues or have questions:
-
-- [Troubleshooting guide](debug.md) - Common issues and how to resolve them
-- [Get help](get-help.md) - Community support and resources
