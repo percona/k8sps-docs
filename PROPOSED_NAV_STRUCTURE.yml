@@ -1,0 +1,133 @@
+# PROPOSED NAVIGATION STRUCTURE - Newbie-First Approach
+# Copy this section to replace the nav: section in mkdocs-base.yml
+
+nav:
+
+    - Home: index.md
+    - Get help: get-help.md
+    
+    # ============================================
+    # PHASE 1: GETTING STARTED (Newbie Path)
+    # ============================================
+    - Getting Started:
+          - "Quick start (5 minutes)": quickstart.md
+          - "System requirements": System-Requirements.md
+          - "Install the Operator":
+              - "Install with Helm (recommended)": helm.md
+              - "Install with kubectl": kubectl.md
+          - "Platform-specific installation":
+              - "Minikube (local testing)": minikube.md
+              - "Google Kubernetes Engine (GKE)": gke.md
+              - "Amazon EKS": eks.md
+              - "OpenShift": openshift.md
+              - "Generic Kubernetes": kubernetes.md
+          - "Verify your installation":
+              - "Connect to your database": connect.md
+              - "Insert sample data": data-insert.md
+              - "What's next?": what-next.md
+    
+    # ============================================
+    # PHASE 2: UNDERSTAND THE OPERATOR
+    # ============================================
+    - Understanding:
+          - "Features and capabilities": features.md  # Create this if needed
+          - "Architecture and design": architecture.md
+          - "How the Operator works": architecture.md
+    
+    # ============================================
+    # PHASE 3: ESSENTIAL OPERATIONS (Daily Tasks)
+    # ============================================
+    - Essential Operations:
+          - "Backups":
+              - "Backup overview": backups.md
+              - "Configure backup storage": backups-storage.md
+              - "Schedule automatic backups": backups-scheduled.md
+              - "Create on-demand backup": backups-ondemand.md
+              - "Restore from backup": backups-restore.md
+              - "Delete backups": backups-delete.md
+          - "Monitoring":
+              - "Monitor with PMM": monitoring.md
+              - "Monitoring tutorial": monitoring-tutorial.md
+          - "Scaling":
+              - "Scale your cluster": scaling.md
+          - "User management":
+              - "Application and system users": users.md
+    
+    # ============================================
+    # PHASE 4: PRODUCTION CONFIGURATION
+    # ============================================
+    - Production Configuration:
+          - "Security":
+              - "Enable TLS/SSL encryption": TLS.md
+              - "Data-at-rest encryption": encryption.md
+              - "Configure encryption": encryption-setup.md
+          - "Networking":
+              - "Expose your cluster": expose.md
+              - "Configure HAProxy": haproxy-conf.md
+              - "Configure MySQL Router": router-conf.md
+          - "High availability":
+              - "Anti-affinity and tolerations": constraints.md
+              - "Pause or restart cluster": pause.md
+          - "Performance tuning":
+              - "Configure MySQL options": options.md
+              - "Fine-tune backups and restores": backups-fine-tune.md
+          - "Multi-namespace deployment": cluster-wide.md
+    
+    # ============================================
+    # PHASE 5: ADVANCED OPERATIONS
+    # ============================================
+    - Advanced Operations:
+          - "Upgrades":
+              - "Upgrade overview": update.md
+              - "Upgrade the Operator": update-operator.md
+              - "Upgrade the database": update-db.md
+              - "Migration guide (0.8.0 to 0.9.0)": update-to-0.9.0.md
+          - "Replication":
+              - "Change replication type": change-replication-type.md
+          - "Advanced features":
+              - "Add sidecar containers": sidecar.md
+              - "Labels and annotations": annotations.md
+              - "Configure telemetry": telemetry.md
+          - "Cleanup":
+              - "Delete the Operator": delete.md
+    
+    # ============================================
+    # PHASE 6: TROUBLESHOOTING (When Things Break)
+    # ============================================
+    - Troubleshooting:
+          - "Troubleshooting guide": debug.md
+          - "Check cluster events": debug-events.md
+          - "View and analyze logs": debug-logs.md
+          - "Debug with shell access": debug-shell.md
+    
+    # ============================================
+    # PHASE 7: REFERENCE (Quick Lookup)
+    # ============================================
+    - Reference:
+          - "Custom Resource options": operator.md
+          - "Backup Resource options": backup-cr.md
+          - "Restore Resource options": restore-cr.md
+          - "Certified images": images.md
+          - "Image query tool": image-query.md
+          - "Legal":
+              - "Copyright": copyright.md
+              - "Trademark policy": trademark-policy.md
+    
+    # ============================================
+    # PHASE 8: RELEASE NOTES
+    # ============================================
+    - Release Notes:
+          - "Release notes index": ReleaseNotes/index.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.11.0.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md
+          - "Percona Operator for MySQL 0.9.0 (2025-02-11)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.md
+          - "Percona Operator for MySQL 0.8.0 (2024-07-16)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md
+          - "Percona Operator for MySQL 0.7.0 (2024-03-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.md
+          - "Percona Operator for MySQL 0.6.0 (2023-09-05)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.md
+          - "Percona Operator for MySQL 0.5.0 (2023-03-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md
+          - "Percona Operator for MySQL 0.4.0 (2023-01-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md
+          - "Percona Operator for MySQL 0.3.0 (2022-09-29)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.md
+          - "Percona Operator for MySQL 0.2.0 (2022-06-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.md
+          - "Percona Distribution for MySQL Operator based on Percona Server for MySQL 0.1.0 (2022-01-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.1.0.md
+
