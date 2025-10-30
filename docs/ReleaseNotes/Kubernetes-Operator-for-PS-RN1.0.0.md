@@ -36,6 +36,32 @@ In this release we improved how the Operator applies these settings: now individ
 
 With this improvement you have maximum flexibility: you can define consistent default settings for the entire cluster, but still tailor individual backup or restore operations as needed. This way you can optimize performance, troubleshoot, or customize specific scenarios without affecting the global configuration.
 
+### Increased timeouts for read, write and clone operations inside MySQL cluster
+
+To improve reliability of clone operations in asynchronous MySQL clusters, especially when transferring large datasets (2GB and more), we've increased the default timeouts for read,write and clone operations to 3600 seconds. This change helps prevent premature failures caused by network delays or slow disk I/O during large data transfers.
+
+The following timeouts are now set to 3600s by default:
+
+* `BOOTSTRAP_CLONE_TIMEOUT`
+* `BOOTSTRAP_READ_TIMEOUT`
+* `BOOTSTRAP_WRITE_TIMEOUT`
+
+You can fine-tune the timeout for cloning in your custom resource (CR) using environment variables:
+
+```yaml
+spec:
+  mysql:
+    env:
+      - name: BOOTSTRAP_CLONE_TIMEOUT
+        value: "3600"
+      - name: BOOTSTRAP_READ_TIMEOUT
+        value: "3600"
+      - name: BOOTSTRAP_WRITE_TIMEOUT
+        value: "3600"
+```
+
+This update ensures smoother provisioning and bootstrapping of new database nodes, especially in environments with large datasets or variable network conditions.
+
 ## Deprecation, rename and removal
 
 * Changed paths for example configuration files for backups and restores. They are now stored in the `deploy/backup/` folder. Adjust your automation worklfows with this new path, if needed.
@@ -56,7 +82,7 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 * [K8SPS-469](https://perconadev.atlassian.net/browse/K8SPS-469) - Improved log message to display clearer and more informative error messages in case of authorization issues to a backup storage.
 ??? Still open - [K8SPS-516](https://perconadev.atlassian.net/browse/K8SPS-516) - Improved stability and performance for operations involving large datasets.
-??? Still open - [K8SPS-537](https://perconadev.atlassian.net/browse/K8SPS-537) - Extended the test suite for the automatic update process to include MySQL version 8.4.
+* [K8SPS-537](https://perconadev.atlassian.net/browse/K8SPS-537) - Extended the test suite for the automatic update process to include MySQL version 8.4.
 
 ### Fixed bugs
 
@@ -68,11 +94,11 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 - [K8SPS-501](https://perconadev.atlassian.net/browse/K8SPS-501) - Fixed the issue with the Operator failing to update the PVC when expanding database volumes by retrying the operation.
 
-??? Still open - [K8SPS-517](https://perconadev.atlassian.net/browse/K8SPS-517) - Fixed an issue that prevented MySQL clone operations from completing successfully due to a default 10-second read timeout, which caused "query interrupted" errors. This was resolved by increasing the default read/write timeouts to 3600 seconds (1 hour) for long-running operations and enhancing error handling for better reliability and debugging.
+* [K8SPS-517](https://perconadev.atlassian.net/browse/K8SPS-517) - Fixed an issue that prevented MySQL clone operations from completing successfully due to a default 10-second read timeout, which caused "query interrupted" errors. This was resolved by increasing the default read/write timeouts to 3600 seconds (1 hour) for long-running operations and enhancing error handling for better reliability and debugging.
 
 * [K8SPS-518](https://perconadev.atlassian.net/browse/K8SPS-518) - ConfigMap settings were fixed to ensure proper labels are applied when deploying clusters with various replication and router configurations.
 
-??? Open - [K8SPS-521](https://perconadev.atlassian.net/browse/K8SPS-521) - A specific single-leader election mechanism within group replication is now disabled by default.
+* [K8SPS-521](https://perconadev.atlassian.net/browse/K8SPS-521) - Fixed an issue where mysql-shell would overwrite Group Replication options in my.cnf during cluster creation. The operator now parses my.cnf and explicitly passes user-defined settings (like group_replication_single_primary_mode and group_replication_paxos_single_leader) to dba.createCluster(), ensuring user customizations are respected.
 
 * [K8SPS-524](https://perconadev.atlassian.net/browse/K8SPS-524) - Fixed the issue with successful backups displaying the incorrect state description. The state description field is irrelevant for successful backups and is not present.
 

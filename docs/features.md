@@ -23,7 +23,6 @@ Protect your data with Percona XtraBackup - an enterprise-grade backup solution 
 
 - Scheduled backups with configurable retention policies
 - On-demand backups for critical operations
-- Point-in-time recovery with precise restore capabilities
 
 ### Automated scaling and resource management
 
