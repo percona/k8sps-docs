@@ -10,9 +10,8 @@ These are the most important tasks to tackle right away:
 
 You've created a single backup, but production workloads need automated backup schedules to protect your data continuously.
 
-- [Configure backup storage](backups-storage.md) - Set up S3 or Azure Blob Storage for your backups
 - [Schedule automatic backups](backups-scheduled.md) - Configure daily, weekly, or custom backup schedules with retention policies
-- [Restore from backup](backups-restore.md) - Learn how to restore your data when needed
+- [Restore from a backup](backups-restore.md) - Learn how to restore your data when needed
 
 ### 2. Create application users
 

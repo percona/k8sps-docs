@@ -11,7 +11,11 @@ Whenever you create or update a `PerconaServerMySQL` Custom Resource, the Operat
 
 These operations ensure that your actual database environment always matches your request.
 
-Each MySQL node in your cluster contains a complete copy of your data, synchronized across all nodes. The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally.
+Each MySQL node in your cluster contains a complete copy of your data, synchronized across all nodes. 
+
+![image](assets/images/replication.svg)
+
+The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally. Read more about [high-availability](architecture.md#high-availability) 
 
 To keep your data safe and persistent, the Operator uses Kubernetes storage systems called Persistent Volumes (PVs) and PersistentVolumeClaims (PVCs). When you request storage for your database, a PVC automatically finds and attaches available storage for you. If a node fails, the Kubernetes storage system can move your data to another node, making sure your database remains available and your data stays protected.
 

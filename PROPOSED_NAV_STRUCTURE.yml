@@ -67,21 +67,26 @@ nav:
               - "Configure MySQL Router": router-conf.md
           - "High availability":
               - "Anti-affinity and tolerations": constraints.md
-              - "Pause or restart cluster": pause.md
+              
           - "Performance tuning":
               - "Configure MySQL options": options.md
               - "Fine-tune backups and restores": backups-fine-tune.md
           - "Multi-namespace deployment": cluster-wide.md
     
+    - Cluster lifecycle Management:
+        - Upgrade:
+            - "Upgrade overview": update.md
+            - "Upgrade the Operator": update-operator.md
+            - "Upgrade the database": update-db.md
+            - "Migration guide (0.8.0 to 0.9.0)": update-to-0.9.0.md
+        - "Pause or restart cluster": pause.md
+        - Cleanup:
+            - "Delete the Operator": delete.md
+            
     # ============================================
     # PHASE 5: ADVANCED OPERATIONS
     # ============================================
     - Advanced Operations:
-          - "Upgrades":
-              - "Upgrade overview": update.md
-              - "Upgrade the Operator": update-operator.md
-              - "Upgrade the database": update-db.md
-              - "Migration guide (0.8.0 to 0.9.0)": update-to-0.9.0.md
           - "Replication":
               - "Change replication type": change-replication-type.md
           - "Advanced features":
