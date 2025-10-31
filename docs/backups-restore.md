@@ -9,7 +9,7 @@ also on any Kubernetes-based environment with the installed Operator.
     has a Secrets object with the same user passwords as in the original cluster.
     More details about secrets can be found in [System Users](users.md#system-users).
 
-The example of the restore configuration file is [deploy/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/restore.yaml). The options that can be used in it are described in the [restore options reference](restore-cr.md).
+The example of the restore configuration file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/restore.yaml). The options that can be used in it are described in the [restore options reference](restore-cr.md).
 
 Following things are needed to restore a previously saved backup:
 
@@ -37,7 +37,7 @@ Following things are needed to restore a previously saved backup:
 When the correct names for the backup and the cluster are known, backup
 restoration can be done in the following way.
 
-1. Set appropriate keys in the `deploy/restore.yaml` file.
+1. Set appropriate keys in the `deploy/backup/restore.yaml` file.
 
     * set `spec.clusterName` key to the name of the target cluster to restore
         the backup on,
@@ -89,7 +89,7 @@ restoration can be done in the following way.
 2. After that, the actual restoration process can be started as follows:
 
     ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/restore.yaml
+    $ kubectl apply -f deploy/backup/restore.yaml
     ```
 
 !!! note

@@ -1,6 +1,6 @@
 # Restore Resource options for Percona Server for MySQL
 
-A Restore resource is a Kubernetes object that tells the Operator how to restore your database from a specific backup. The `deploy/restore.yaml` file is a template for creating restore resources. It defines the `PerconaServerMySQLRestore` resource.
+A Restore resource is a Kubernetes object that tells the Operator how to restore your database from a specific backup. The `deploy/backup/restore.yaml` file is a template for creating restore resources. It defines the `PerconaServerMySQLRestore` resource.
 
 This document describes all available options that you can use to customize a restore. 
 
@@ -15,7 +15,7 @@ Defines the type of resource being created: `PerconaServerMySQLRestore`.
 
 ## `metadata`
 
-The metadata part of the `deploy/restore.yaml` contains metadata about the resource, such as its name and other attributes. It includes the following keys:
+The metadata part of the `deploy/backup/restore.yaml` contains metadata about the resource, such as its name and other attributes. It includes the following keys:
 
 * `name` - The name of the restore object used to identify it in your deployment. You use this name to track the restore operation status and view information about it.
 

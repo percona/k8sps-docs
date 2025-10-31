@@ -15,7 +15,7 @@ Defines the type of resource being created: `PerconaServerMySQLBackup`.
 
 ## `metadata`
 
-The metadata part of the `deploy/backup.yaml` contains metadata about the resource, such as its name and other attributes. It includes the following keys:
+The metadata part of the `deploy/backup/backup.yaml` contains metadata about the resource, such as its name and other attributes. It includes the following keys:
 
 * `finalizers` ensure safe deletion of resources in Kubernetes under certain conditions. This subsection includes the following finalizers:
   
