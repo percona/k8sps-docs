@@ -23,7 +23,7 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
 
     * name of your EKS cluster,
     * AWS region in which you wish to deploy your cluster,
-    * the amount of nodes you would like tho have,
+    * the amount of nodes you would like to have,
     * the desired ratio between [on-demand :octicons-link-external-16:](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-on-demand-instances.html)
         and [spot :octicons-link-external-16:](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html)
         instances in the total number of nodes.
@@ -103,7 +103,7 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
 {% include 'assets/fragments/connectivity.txt' %}
 
 
-6. You can also check wether you can connect to MySQL from the outside
+6. You can also check whether you can connect to MySQL from the outside
     with the help of the `kubectl port-forward` command as follows:
 
     ```{.bash data-prompt="$"}
