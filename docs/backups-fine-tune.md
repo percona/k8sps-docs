@@ -72,7 +72,7 @@ Note that the settings you specify here are used, overriding any global configur
 
 ### Example for a Restore
 
-Similarly, for a restore operation, you can define options in the `deploy/restore.yaml` manifest.
+Similarly, for a restore operation, you can define options in the `deploy/backup/restore.yaml` manifest.
 
 ```yaml
 apiVersion: ps.percona.com/v1alpha1
