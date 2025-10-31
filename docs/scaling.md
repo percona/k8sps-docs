@@ -104,7 +104,7 @@ To enable storage resizing via volume expansion, do the following:
     $ kubectl apply -f cr.yaml
     ```
 
-The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running.. After the resize finishes, the Operator deletes this annotation.
+The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation.
 
 #### Manual resizing
 
@@ -120,7 +120,7 @@ To increase the storage size manually, do the following:
 2. Now you should delete the cluster.
 
     <!-- UNCOMMENT THIS WHEN FINALIZERS GET WORKING
-    warining Make sure that :ref:`delete-pxc-pvc<finalizers-pxc>` finalizer
+    warning Make sure that :ref:`delete-pxc-pvc<finalizers-pxc>` finalizer
     is not set in your custom resource, **otherwise
     all cluster data will be lost!** -->
     You can use the following command to delete the cluster:

@@ -104,7 +104,7 @@ $ cd percona-server-mysql-operator
  
 ## Make a logical backup
 
-Now when your have the [configured storage](#configure-backup-storage) in your
+Now when you have the [configured storage](#configure-backup-storage) in your
 Custom Resource, you can make your first backup.
 {.power-number}
 
