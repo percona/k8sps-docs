@@ -346,6 +346,39 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 | ----------- | ---------- |
 | :material-code-string: string     | `image-rc` |
 
+### `mysql.schedulerName`
+
+The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign MySQL Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `default-scheduler` |
+
+### `mysql.priorityClassName`
+
+The name of the Kubernetes [PriorityClass :octicons-external-link-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `high-priority` |
+
+### `mysql.nodeSelector`
+
+[Kubernetes nodeSelector :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `disktype: ssd` |
+
+### `mysql.serviceAccountName`
+
+The [Kubernetes Service Account :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `percona-server-mysql-operator-orchestrator` |
+
+
 ### `mysql.tolerations`
 
 Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to MySQL Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
@@ -462,6 +495,150 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `1G` |
+
+### `mysql.startupProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `mysql.startupProbe.timeoutSeconds`
+
+The number of seconds after which the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `43200` |
+
+### `mysql.startupProbe.periodSeconds`
+
+How often to perform the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `mysql.startupProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `mysql.startupProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `mysql.readinessProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `mysql.readinessProbe.timeoutSeconds`
+
+The number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `mysql.readinessProbe.periodSeconds`
+
+How often to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `mysql.readinessProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `mysql.readinessProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `mysql.livenessProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `mysql.livenessProbe.timeoutSeconds`
+
+The number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `mysql.livenessProbe.periodSeconds`
+
+How often to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `mysql.livenessProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `mysql.livenessProbe.failureThreshold`
+
+The number of failed probes required to mark the container unhealthy.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `mysql.env.name`
+
+Name of an environment variable for MySQL Pods. Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `BOOTSTRAP_READ_TIMEOUT` |
+
+### `mysql.env.value`
+
+Value of an environment variable for MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"600"` |
+
+### `mysql.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for MySQL Pods. 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-env-secret` |
 
 ### `mysql.affinity.antiAffinityTopologyKey`
 
@@ -797,6 +974,39 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
+### `proxy.haproxy.schedulerName`
+
+The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign HAProxy Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `default-scheduler` |
+
+### `proxy.haproxy.priorityClassName`
+
+The name of the Kubernetes [PriorityClass :octicons-external-link-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `high-priority` |
+
+### `proxy.haproxy.nodeSelector`
+
+[Kubernetes nodeSelector :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector). It enables you to define node labels thereby ensuring that Pods will be scheduled onto nodes that have each of the labels you specify.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `disktype: ssd` |
+
+### `proxy.haproxy.serviceAccountName`
+
+The [Kubernetes Service Account :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the HAProxy Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `percona-server-mysql-operator-orchestrator` |
+
+
 ### `proxy.haproxy.podDisruptionBudget.maxUnavailable`
 
 The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
@@ -897,7 +1107,47 @@ Name of a Secret with environment variables for HAProxy.
 | ----------- | ---------- |
 | :material-code-string: string     | `haproxy-env-secret` |
 
-### `proxy.haproxy.readinessProbes.timeoutSeconds`
+### `proxy.haproxy.startupProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `proxy.haproxy.startupProbe.timeoutSeconds`
+
+The number of seconds after which the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `43200` |
+
+### `proxy.haproxy.startupProbe.periodSeconds`
+
+How often to perform the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `proxy.haproxy.startupProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `proxy.haproxy.startupProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `proxy.haproxy.readinessProbe.timeoutSeconds`
 
 Number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -905,7 +1155,7 @@ Number of seconds after which the [readiness probe :octicons-link-external-16:](
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.readinessProbes.periodSeconds`
+### `proxy.haproxy.readinessProbe.periodSeconds`
 
 How often (in seconds) to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -913,7 +1163,7 @@ How often (in seconds) to perform the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `proxy.haproxy.readinessProbes.successThreshold`
+### `proxy.haproxy.readinessProbe.successThreshold`
 
 Minimum consecutive successes for the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
 
@@ -921,7 +1171,7 @@ Minimum consecutive successes for the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.readinessProbes.failureThreshold`
+### `proxy.haproxy.readinessProbe.failureThreshold`
 
 When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
 
@@ -929,7 +1179,7 @@ When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/doc
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `proxy.haproxy.livenessProbes.timeoutSeconds`
+### `proxy.haproxy.livenessProbe.timeoutSeconds`
 
 Number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -937,7 +1187,7 @@ Number of seconds after which the [liveness probe :octicons-link-external-16:](h
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.livenessProbes.periodSeconds`
+### `proxy.haproxy.livenessProbe.periodSeconds`
 
 How often (in seconds) to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -945,7 +1195,7 @@ How often (in seconds) to perform the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `proxy.haproxy.livenessProbes.successThreshold`
+### `proxy.haproxy.livenessProbe.successThreshold`
 
 Minimum consecutive successes for the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
 
@@ -953,7 +1203,7 @@ Minimum consecutive successes for the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `3` |
 
-### `proxy.haproxy.readinessProbes.failureThreshold`
+### `proxy.haproxy.livenessProbe.failureThreshold`
 
 When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
 
@@ -1081,6 +1331,22 @@ The range of client IP addresses from which the load balancer should be reachabl
 | ----------- | ---------- |
 | :material-code-string: string     | `10.0.0.0/8` |
 
+### `proxy.haproxy.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the HAProxy installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `proxy.haproxy.podSecurityContext`
+
+A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
+
 ## <a name="operator-router-section"></a>Router subsection
 
 The `proxy.router` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/), which can act as a proxy for Group replication.
@@ -1188,6 +1454,30 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `200m` |
+
+### `proxy.router.env.name`
+
+Name of an environment variable for MySQL Router Pods. Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `MY_ENV` |
+
+### `proxy.router.env.value`
+
+Value of an environment variable for MySQL Router Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"1000"` |
+
+### `proxy.router.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for MySQL Router Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-env-secret` |
 
 ### `proxy.router.podDisruptionBudget.maxUnavailable`
 
@@ -1418,6 +1708,158 @@ Specifies the name of the [RuntimeClass :octicons-link-external-16:](https://kub
 | ----------- | ---------- |
 | :material-code-string: string     | `image-rc` |
 
+### `orchestrator.schedulerName`
+
+The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign Orchestrator Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `default-scheduler` |
+
+### `orchestrator.priorityClassName`
+
+The name of the Kubernetes [PriorityClass :octicons-external-link-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `high-priority` |
+
+### `orchestrator.nodeSelector`
+
+[Kubernetes nodeSelector :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector). It enables you to define node labels thereby ensuring that Pods will be scheduled onto nodes that have each of the labels you specify.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-label-outline: label     | `disktype: ssd` |
+
+### `orchestrator.startupProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `orchestrator.startupProbe.timeoutSeconds`
+
+The number of seconds after which the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `43200` |
+
+### `orchestrator.startupProbe.periodSeconds`
+
+How often to perform the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `orchestrator.startupProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `orchestrator.startupProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `orchestrator.readinessProbe.timeoutSeconds`
+
+Number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `orchestrator.readinessProbe.periodSeconds`
+
+How often (in seconds) to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `orchestrator.readinessProbe.successThreshold`
+
+Minimum consecutive successes for the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `orchestrator.readinessProbe.failureThreshold`
+
+When the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `orchestrator.livenessProbe.timeoutSeconds`
+
+Number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `orchestrator.livenessProbe.periodSeconds`
+
+How often (in seconds) to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `orchestrator.livenessProbe.successThreshold`
+
+Minimum consecutive successes for the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `3` |
+
+### `orchestrator.livenessProbe.failureThreshold`
+
+When the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `orchestrator.env.name`
+
+Name of an environment variable for Orchestrator Pods. Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `MY_ENV` |
+
+### `orchestrator.env.value`
+
+Value of an environment variable for Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"1000"` |
+
+### `orchestrator.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-env-secret` |
+
 ### `orchestrator.tolerations`
 
 Specifies the [Kubernetes tolerations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to Orchestrator Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
@@ -1595,6 +2037,22 @@ The range of client IP addresses from which the load balancer should be reachabl
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `10.0.0.0/8` |
+
+### `orchestrator.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the Orchestrator installation.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `orchestrator.podSecurityContext`
+
+A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups: [1001, 1002, 1003]</pre> |
 
 ### `orchestrator.podDisruptionBudget.maxUnavailable`
 
