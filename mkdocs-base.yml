@@ -157,80 +157,93 @@ extra: # Used in main.html template and can't be externalized
 # Common navigation for percona.com, render.com and PDF
 nav:
 
-    - Welcome: index.md
+    - Home: index.md
     - get-help.md
-    - Features:
+    - Understand the Operator:
+          - "Features and capabilities": features.md
+          - "How the Operator works": how-it-works.md
           - "Design and architecture": architecture.md
-    - Quickstart guides:
+    
+    - Quick start:
           - Overview: quickstart.md
-          - 1. Quick install:
+          - 1. System requirements: System-Requirements.md
+          - 2. Install the Operator:
             - "Install with Helm": helm.md
             - "Install with kubectl": kubectl.md
-          - 2. Connect to the database: connect.md
-          - 3. Insert data: data-insert.md
-          - 4. Make a backup: backup-tutorial.md
-          - 5. Monitor the database with PMM: monitoring-tutorial.md
+          - 3. Connect to the database: connect.md
+          - 4. Insert data: data-insert.md
+          - 5. Make a backup: backup-tutorial.md
+          - 6. Monitor the database with PMM: monitoring-tutorial.md
           - what-next.md
           
-    - Installation:
-          - "System Requirements": System-Requirements.md
+    - Platform-specific installation:
           - "Install on Minikube": minikube.md
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
           - "Install on OpenShift": openshift.md
           - "Generic Kubernetes installation": kubernetes.md
+    
+    - Daily operations:  
+          - Backup and restore:
+              - "About backups": backups.md
+              - "Configure storage for backups": backups-storage.md
+              - "Make scheduled backups": backups-scheduled.md
+              - "Make on-demand backup": backups-ondemand.md
+              - "Restore from a previously saved backup": backups-restore.md
+              - "Fine-tune backups and restores": backups-fine-tune.md
+              - "Delete the unneeded backup": backups-delete.md
+          - Monitoring:
+              - "Monitor your cluster with PMM": monitoring.md
+#              - "Monitor Kubernetes": monitoring-kubernetes.md
+          - "Scale your cluster": scaling.md
+          - "Manage users": users.md
 
-    - Upgrade:
-          - "About upgrades": update.md
-          - "Upgrade the Operator": update-operator.md
-          - "Upgrade the database": update-db.md
-          - "Upgrade from version 0.8.0 to 0.9.0": update-to-0.9.0.md
-          
-    - Configuration and Management:
-          - Backup and restore: 
-            - "About backups": backups.md
-            - "Configure storage for backups": backups-storage.md
-            - "Make scheduled backups": backups-scheduled.md
-            - "Make on-demand backup": backups-ondemand.md
-            - "Restore from a previously saved backup": backups-restore.md
-            - "Fine-tune backups and restores": backups-fine-tune.md
-            - "Delete the unneeded backup": backups-delete.md
-          - "Application and system users": users.md
-          - "Anti-affinity and tolerations": constraints.md
-          - "Labels and annotations": annotations.md
-          - "Changing MySQL Options": options.md
-          - "Load Balancing with HAProxy": haproxy-conf.md
-          - "MySQL Router Configuration": router-conf.md
-          - "Exposing the cluster": expose.md
+    - Production configuration:
+          - "Enable TLS/SSL encryption": TLS.md
           - Data-at-rest encryption:
               - "About data-at-rest encryption": encryption.md
               - "Configure data-at-rest encryption": encryption-setup.md
-          - "Transport Encryption (TLS/SSL)": TLS.md
-          - "Telemetry": telemetry.md
-          - "Horizontal and vertical scaling": scaling.md
-          - "Monitor with Percona Monitoring and Management (PMM)": monitoring.md
+          - External access:
+              - "Expose your cluster": expose.md
+              - "Configure HAProxy": haproxy-conf.md
+              - "Configure MySQL Router": router-conf.md
+          - constraints.md             
+          - "Fine-tune MySQL options": options.md
+          - "Multi-namespace deployment": cluster-wide.md
+    
+    - Cluster lifecycle management:
+        - Upgrade:
+            - "About upgrades": update.md
+            - "Upgrade the Operator": update-operator.md
+            - "Upgrade the database": update-db.md
+            - "Migration guide (0.8.0 to 0.9.0)": update-to-0.9.0.md
+        - "Pause or restart the cluster": pause.md
+        - Cleanup:
+            - "Delete the Operator": delete.md
+
+    - Advanced operations:
+          - "Change replication type": change-replication-type.md
           - "Add sidecar containers": sidecar.md
-          - "Restart or pause the cluster": pause.md
-          
+          - "Labels and annotations": annotations.md
+          - "Configure telemetry": telemetry.md
+
     - Troubleshooting:
           - "Initial troubleshooting": debug.md
           - "Exec into the container": debug-shell.md
           - "Check the events": debug-events.md
           - "Check the logs": debug-logs.md
           
-    - HOWTOs:
-          - "Provide Percona Operator for MySQL single-namespace and multi-namespace deployment": cluster-wide.md
-          - "Change the cluster replication type": change-replication-type.md
-          - "Retrieve Percona certified images": image-query.md
-          - "Delete the Operator": delete.md
-          
     - Reference:
-          - "Custom Resource options": operator.md
-          - "Backup Resource options": backup-cr.md
-          - "Restore Resource options": restore-cr.md
-          - "Percona certified images": images.md
-          - "Copyright and licensing information": copyright.md
-          - "Trademark policy": trademark-policy.md
+        - Custom Resource reference:
+            - "Custom Resource options": operator.md
+            - "Backup Resource options": backup-cr.md
+            - "Restore Resource options": restore-cr.md
+        - Certified images:
+            - "Percona certified images": images.md
+            - "Retrieve certified images": image-query.md
+        - Legal:
+            - "Copyright and licensing information": copyright.md
+            - "Trademark policy": trademark-policy.md
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md

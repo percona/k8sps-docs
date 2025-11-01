@@ -1,4 +1,4 @@
-# Binding Distribution for MySQL components to Specific Kubernetes Nodes
+# Control Pod scheduling on specific Kubernetes nodes with affinity, anti‑affinity and tolerations
 
 The Operator automatically assigns Pods to nodes with sufficient resources for balanced distribution across the cluster. You can configure Pods to be scheduled on specific nodes. For example, for improved performance on the SSD
 equipped machine or for cost optimization by choosing the nodes in the same availability zone.
