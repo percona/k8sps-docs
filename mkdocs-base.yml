@@ -164,14 +164,9 @@ nav:
 
     - Home: index.md
     - get-help.md
-<<<<<<< HEAD
     - Understand the Operator:
           - "Features and capabilities": features.md
           - "How the Operator works": how-it-works.md
-=======
-    - Features:
-          - "Overview": features.md
->>>>>>> Created the features page
           - "Design and architecture": architecture.md
     
     - Quick start:

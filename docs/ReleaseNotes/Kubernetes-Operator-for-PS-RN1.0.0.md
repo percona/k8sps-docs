@@ -21,8 +21,8 @@ The Operator images are passing official certification for OpenShift. When passe
 What this means for you:
 
 * Simplified installation: Deploy Operators directly from the OpenShift UI with just a few clicks.
-*  Streamlined updates: Stay current with automatic or manual updates via OLM.
-*  Enterprise-grade assurance: Certified images meet Red Hat’s security and compatibility standards.
+* Streamlined updates: Stay current with automatic or manual updates via OLM.
+* Enterprise-grade assurance: Certified images meet Red Hat's security and compatibility standards.
 * Better integration: Leverage OpenShift-native workflows for lifecycle management, RBAC, and monitoring.
 * Scalable operations: Simplify cluster-wide rollouts and reduce manual overhead.
 
@@ -65,6 +65,7 @@ This update ensures smoother provisioning and bootstrapping of new database node
 ## Deprecation, rename and removal
 
 * Changed paths for example configuration files for backups and restores. They are now stored in the `deploy/backup/` folder. Adjust your automation worklfows with this new path, if needed.
+* The Custom Resource options `spec.pmm.readinessProbes` and `spec.pmm.livenessProbes` have been renamed to the singular `spec.pmm.readinessProbe` and `spec.pmm.livenessProbe`, respectively. Please update your application configurations to use these new field names as needed.
 
 ## Known limitations
 
@@ -83,16 +84,17 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 * [K8SPS-469](https://perconadev.atlassian.net/browse/K8SPS-469) - Improved log message to display clearer and more informative error messages in case of authorization issues to a backup storage.
 ??? Still open - [K8SPS-516](https://perconadev.atlassian.net/browse/K8SPS-516) - Improved stability and performance for operations involving large datasets.
 * [K8SPS-537](https://perconadev.atlassian.net/browse/K8SPS-537) - Extended the test suite for the automatic update process to include MySQL version 8.4.
+* [K8SPS-574](https://perconadev.atlassian.net/browse/K8SPS-574) - Align readiness and liveness probe naming to be in the singular form to correspond to  to the Kubernetes API structure
 
 ### Fixed bugs
 
-- [K8SPS-491](https://perconadev.atlassian.net/browse/K8SPS-491) - Percona Operator for MySQL  now automatically generates the secrets object in the format `<cluster-name>-secrets`, if it's not explicitly defined in the Custom resource, preventing common startup errors.
+* [K8SPS-491](https://perconadev.atlassian.net/browse/K8SPS-491) - Percona Operator for MySQL  now automatically generates the secrets object in the format `<cluster-name>-secrets`, if it's not explicitly defined in the Custom resource, preventing common startup errors.
 
 * [K8SPS-492](https://perconadev.atlassian.net/browse/K8SPS-492) - Fixed the issue with the Operator sending the unsupported `Error` event type during the Group Replication cluster startup by sending the `Warning` event type instead.  
 
 * [K8SPS-498](https://perconadev.atlassian.net/browse/K8SPS-498) - Stopped unnecessary updates to the `resourceVersion`field of the cluster objects during its initialization.
 
-- [K8SPS-501](https://perconadev.atlassian.net/browse/K8SPS-501) - Fixed the issue with the Operator failing to update the PVC when expanding database volumes by retrying the operation.
+* [K8SPS-501](https://perconadev.atlassian.net/browse/K8SPS-501) - Fixed the issue with the Operator failing to update the PVC when expanding database volumes by retrying the operation.
 
 * [K8SPS-517](https://perconadev.atlassian.net/browse/K8SPS-517) - Fixed an issue that prevented MySQL clone operations from completing successfully due to a default 10-second read timeout, which caused "query interrupted" errors. This was resolved by increasing the default read/write timeouts to 3600 seconds (1 hour) for long-running operations and enhancing error handling for better reliability and debugging.
 
@@ -106,13 +108,13 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 * [K8SPS-533](https://perconadev.atlassian.net/browse/K8SPS-533) - The individual configuration for `xbcloud`, `xbstream` and `xtrabackup` tools specified directly for a backup or a restore object now fully overrides any default arguments set in the cluster's custom resource.
 
-- [K8SPS-535](https://perconadev.atlassian.net/browse/K8SPS-535) - Backup deletion operations no longer display an erroneous failure message when the backup is successfully removed from storage.
+* [K8SPS-535](https://perconadev.atlassian.net/browse/K8SPS-535) - Backup deletion operations no longer display an erroneous failure message when the backup is successfully removed from storage.
 
 * [K8SPS-539](https://perconadev.atlassian.net/browse/K8SPS-539) - Fixed the issue with excessive CPU utilization of the `ps-entrypoint.sh` recovery by adding a backoff mechanism to the file existence check. This improves cluster operation in envionments where CPU resources are a concern.
 
-??? In progress * [K8SPS-548](https://perconadev.atlassian.net/browse/K8SPS-548) - Improved Group Replication self-healing and resolved a sporadic failure where a pod would not become ready after a full cluster crash.
+* [K8SPS-548](https://perconadev.atlassian.net/browse/K8SPS-548) - Improved Group Replication self-healing test and resolved a sporadic failure where a pod would not become ready after a full cluster crash.
 
-- [K8SPS-550](https://perconadev.atlassian.net/browse/K8SPS-550) - Fixed the issue with service accounts defined for HAProxy Pods via Custom Resource not being applied.
+* [K8SPS-550](https://perconadev.atlassian.net/browse/K8SPS-550) - Fixed the issue with service accounts defined for HAProxy Pods via Custom Resource not being applied.
 
 ??? Open * [K8SPS-551](https://perconadev.atlassian.net/browse/K8SPS-551) - Fixed the issue with the operator self-healing test on Openshift failing with the `fsGroup: Invalid value: 1001` error  if a network is lost.
 
@@ -120,7 +122,7 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 * [K8SPS-564](https://perconadev.atlassian.net/browse/K8SPS-564) - Fixed the issue with both  HAProxy or Router being deployed when both are enabled by validating the configuration and either reporting the error or deploying only one proxy. This prevents unintended dual deployments.
 
-- [K8SPS-565](https://perconadev.atlassian.net/browse/K8SPS-565) - Restores now complete successfully when using an auto-generated secrets name for clusters.
+* [K8SPS-565](https://perconadev.atlassian.net/browse/K8SPS-565) - Restores now complete successfully when using an auto-generated secrets name for clusters.
 
 ## Supported software
 
