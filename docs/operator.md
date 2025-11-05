@@ -2135,7 +2135,7 @@ Enables to pass MySQL parameters to PMM. For example, to change the number of ta
 | ----------- | ---------- |
 | :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
 
-### `pmm.readinessProbes.initialDelaySeconds`
+### `pmm.readinessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -2143,7 +2143,7 @@ The number of seconds to wait before performing the first [readiness probe :octi
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `15` |
 
-### `pmm.readinessProbes.timeoutSeconds`
+### `pmm.readinessProbe.timeoutSeconds`
 
 The number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -2151,7 +2151,7 @@ The number of seconds after which the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `15` |
 
-### `pmm.readinessProbes.periodSeconds`
+### `pmm.readinessProbe.periodSeconds`
 
 How often to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -2159,7 +2159,7 @@ How often to perform the [readiness probe :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `pmm.readinessProbes.successThreshold`
+### `pmm.readinessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -2167,7 +2167,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `pmm.readinessProbes.failureThreshold`
+### `pmm.readinessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unready.
 
@@ -2175,7 +2175,7 @@ The number of failed probes required to mark the container unready.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `pmm.livenessProbes.initialDelaySeconds`
+### `pmm.livenessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -2183,7 +2183,7 @@ The number of seconds to wait before performing the first [liveness probe :octic
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `300` |
 
-### `pmm.livenessProbes.timeoutSeconds`
+### `pmm.livenessProbe.timeoutSeconds`
 
 The number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -2191,7 +2191,7 @@ The number of seconds after which the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `pmm.livenessProbes.periodSeconds`
+### `pmm.livenessProbe.periodSeconds`
 
 How often to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -2199,7 +2199,7 @@ How often to perform the [liveness probe :octicons-link-external-16:](https://ku
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `10` |
 
-### `pmm.livenessProbes.successThreshold`
+### `pmm.livenessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -2207,7 +2207,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `pmm.livenessProbes.failureThreshold`
+### `pmm.livenessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unhealthy.
 
