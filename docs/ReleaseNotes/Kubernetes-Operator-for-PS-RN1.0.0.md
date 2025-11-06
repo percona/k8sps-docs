@@ -82,7 +82,6 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 ## Improvements
 
 * [K8SPS-469](https://perconadev.atlassian.net/browse/K8SPS-469) - Improved log message to display clearer and more informative error messages in case of authorization issues to a backup storage.
-??? Still open - [K8SPS-516](https://perconadev.atlassian.net/browse/K8SPS-516) - Improved stability and performance for operations involving large datasets.
 * [K8SPS-537](https://perconadev.atlassian.net/browse/K8SPS-537) - Extended the test suite for the automatic update process to include MySQL version 8.4.
 * [K8SPS-574](https://perconadev.atlassian.net/browse/K8SPS-574) - Align readiness and liveness probe naming to be in the singular form to correspond to  to the Kubernetes API structure
 
@@ -116,8 +115,6 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 * [K8SPS-550](https://perconadev.atlassian.net/browse/K8SPS-550) - Fixed the issue with service accounts defined for HAProxy Pods via Custom Resource not being applied.
 
-??? Open * [K8SPS-551](https://perconadev.atlassian.net/browse/K8SPS-551) - Fixed the issue with the operator self-healing test on Openshift failing with the `fsGroup: Invalid value: 1001` error  if a network is lost.
-
 * [K8SPS-560](https://perconadev.atlassian.net/browse/K8SPS-560) - Fixed the issue with scheduled backups failing due to conflicting job names when multiple backups run concurrently.
 
 * [K8SPS-564](https://perconadev.atlassian.net/browse/K8SPS-564) - Fixed the issue with both  HAProxy or Router being deployed when both are enabled by validating the configuration and either reporting the error or deploying only one proxy. This prevents unintended dual deployments.
@@ -130,17 +127,17 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 The Operator was developed and tested with the following software:
 
-* Percona Server for MySQL 8.4.6-6
-* Percona Server for MySQL 8.0.43-34
-* XtraBackup 8.4.0-4
-* XtraBackup 8.0.35-34
-* MySQL Router 8.4.6-6
-* MySQL Router 8.0.43-34
-* HAProxy 2.8.15-1
+* Percona Server for MySQL 8.4.6-6.1
+* Percona Server for MySQL 8.0.43-34.1
+* XtraBackup 8.4.0-4.1
+* XtraBackup 8.0.35-34.1
+* MySQL Router 8.4.6-6.1
+* MySQL Router 8.0.43-34.1
+* HAProxy 2.8.15
 * Orchestrator 3.2.6-18
 * Percona Toolkit 3.7.0-2
-* PMM Client 3.4.0
-* Cert Manager 1.18.2
+* PMM Client 3.4.1
+* Cert Manager 1.19.1
 
 Other options may also work but have not been tested.
 
@@ -152,10 +149,10 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [start:platforms]
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.30 - 1.33
-* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.31 - 1.33
-* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.15 - 4.19
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.37.0 (based on Kubernetes 1.34.0)
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.31 - 1.33
+* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.31 - 1.34
+* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.16 - 4.20
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.37.0 with Kubernetes v1.34.0
 
 --8<-- [end:platforms]
 
