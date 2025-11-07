@@ -41,7 +41,7 @@ backup:
   ...
 ```
 
-## Managing multiple backup schedules
+## Managing multiple backup schedules in the same storage
 
 You can define multiple backup schedules to meet different recovery and compliance needs. For example, create daily backups for quick recovery from recent changes and monthly backups for long-term retention or audit purposes. 
 
