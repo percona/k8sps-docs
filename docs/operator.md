@@ -2367,11 +2367,15 @@ The number of retries to make a backup (by default, 6 retries are made).
 
 ### `backup.storages.STORAGE-NAME.type`
 
-The cloud storage type used for backups. Only `s3` and `azure` types are supported.
+The cloud storage type used for backups. The following types are supported: `s3`, `gcs` and `azure`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `s3` |
+
+
+### `backup.storages.STORAGE-NAME.type`
+
 
 ### `backup.storages.STORAGE-NAME.verifyTLS`
 

@@ -33,14 +33,14 @@ object with credentials needed to access the storage.
 
         === "in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64 --wrap=0
+            ```bash
+            echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
         === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64
+            ```bash
+            echo -n 'plain-text-string' | base64
             ```    
 
     The `name` value is the [Kubernetes
@@ -119,14 +119,14 @@ object with credentials needed to access the storage.
 
         === "in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64 --wrap=0
+            ```bash
+            echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
         === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64
+            ```bash
+            echo -n 'plain-text-string' | base64
             ```    
 
     The `name` value is the [Kubernetes
@@ -177,14 +177,14 @@ object with credentials needed to access the storage.
 
        === "in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64 --wrap=0
+            ```bash
+            echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
         === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64
+            ```bash
+            echo -n 'plain-text-string' | base64
             ```
 
     Here's the example configuration of the Secret file:
@@ -220,8 +220,8 @@ object with credentials needed to access the storage.
           ...
           storages:
             gcp-cs:
-              type: s3
-              s3:
+              type: gcs
+              gcs:
                 bucket: GCS-BACKUP-BUCKET-NAME-HERE
                 region: us-east-1
                 credentialsSecret: ps-cluster1-gcp-credentials
