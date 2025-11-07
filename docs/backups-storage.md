@@ -33,14 +33,14 @@ object with credentials needed to access the storage.
 
         === "in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64 --wrap=0
+            ```bash
+            echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
         === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64
+            ```bash
+            echo -n 'plain-text-string' | base64
             ```    
 
     The `name` value is the [Kubernetes
@@ -119,14 +119,14 @@ object with credentials needed to access the storage.
 
         === "in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64 --wrap=0
+            ```bash
+            echo -n 'plain-text-string' | base64 --wrap=0
             ```    
 
         === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ echo -n 'plain-text-string' | base64
+            ```bash
+            echo -n 'plain-text-string' | base64
             ```    
 
     The `name` value is the [Kubernetes

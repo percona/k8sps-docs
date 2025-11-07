@@ -63,8 +63,8 @@ To update Percona Server for MySQL to a specific version, do the following:
 
     === "With PMM Client"
 
-        ```{.bash data-prompt="$"}
-        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
+        ```bash
+        kubectl patch ps ps-cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
@@ -100,8 +100,8 @@ To update Percona Server for MySQL to a specific version, do the following:
     You can track the rollout process in real time with the
     `kubectl rollout status` command with the name of your cluster:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl rollout status sts ps-cluster1-ps
+    ```bash
+    kubectl rollout status sts ps-cluster1-ps
     ```
 
 ## Automated upgrade
@@ -163,8 +163,8 @@ We recommend to [update PMM Server :octicons-link-external-16:](https://docs.per
         Alternatively, you can run Version Service inside your cluster. This
         can be done with the `kubectl` command as follows:
 
-        ``` {.bash data-prompt="$" }
-        $ kubectl run version-service --image=perconalab/version-service --env="SERVE_HTTP=true" --port 11000 --expose
+        ```bash
+        kubectl run version-service --image=perconalab/version-service --env="SERVE_HTTP=true" --port 11000 --expose
         ```
 
 5. Specify the schedule to check for the new versions in in CRON format for the `upgradeOptions.schedule` option.
@@ -190,6 +190,6 @@ We recommend to [update PMM Server :octicons-link-external-16:](https://docs.per
 
 6. Apply your changes to the Custom Resource in the usual way:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f deploy/cr.yaml
+    ```bash
+    kubectl apply -f deploy/cr.yaml
     ```

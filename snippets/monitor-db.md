@@ -36,14 +36,14 @@ container in your Kubernetes-based environment:
 
         === "in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64 --wrap=0)'}}'
+            ```bash
+            kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64 --wrap=0)'}}'
             ```
 
         === "in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64)'}}'
+            ```bash
+            kubectl patch secret/cluster1-secrets -p '{"data":{"pmmserverkey": '$(echo -n new_key | base64)'}}'
             ```
 
 2. Update the `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{ release }}/deploy/cr.yaml) file:
@@ -57,18 +57,19 @@ container in your Kubernetes-based environment:
        image: percona/pmm-client:{{pmm3recommended}}
        serverHost: monitoring-service
      ``` 
+
 3. Apply the changes:
 
-    ``` {.bash data-prompt="$"}
+    ```bash
     $ kubectl apply -f deploy/cr.yaml -n <namespace>
     ```
 
 4. Check that corresponding Pods are not in a cycle of stopping and restarting.
     This cycle occurs if there are errors on the previous steps:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl get pods -n <namespace>
-    $ kubectl logs  <cluster-name>-mysql-0 -c pmm-client -n <namespace>
+    ```bash
+    kubectl get pods -n <namespace>
+    kubectl logs  <cluster-name>-mysql-0 -c pmm-client -n <namespace>
     ```
 
 ## Check the metrics

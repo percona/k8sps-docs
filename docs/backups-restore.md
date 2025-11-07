@@ -18,8 +18,8 @@ Following things are needed to restore a previously saved backup:
 * Find out correct names for the **backup** and the **cluster**. Available
     backups can be listed with the following command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps-backup
+    ```bash
+    kubectl get ps-backup
     ```
 
     !!! note
@@ -30,8 +30,8 @@ Following things are needed to restore a previously saved backup:
     And the following command will list existing Percona Distribution for MySQL
     Cluster names in the current Kubernetes-based environment:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps
+    ```bash
+    kubectl get ps
     ```
 
 When the correct names for the backup and the cluster are known, backup
@@ -88,8 +88,8 @@ restoration can be done in the following way.
             ```
 2. After that, the actual restoration process can be started as follows:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/backup/restore.yaml
+    ```bash
+    kubectl apply -f deploy/backup/restore.yaml
     ```
 
 !!! note
@@ -97,8 +97,8 @@ restoration can be done in the following way.
     Storing backup settings in a separate file can be replaced by passing
     its content to the `kubectl apply` command as follows:
 
-    ```{.bash data-prompt="$"}
-    $ cat <<EOF | kubectl apply -f-
+    ```bash
+    cat <<EOF | kubectl apply -f-
     apiVersion: "ps.percona.com/v1alpha1"
     kind: "PerconaServerMySQLRestore"
     metadata:
