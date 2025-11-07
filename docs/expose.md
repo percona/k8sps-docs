@@ -56,8 +56,8 @@ The created HAProxy service (`ps-cluster1-haproxy`) listens on the following por
 
 To find your HAProxy endpoint, run:
 
-```{.bash data-prompt="$"}
-$ kubectl get service ps-cluster1-haproxy
+```bash
+kubectl get service ps-cluster1-haproxy
 ```
 
 ??? example "Sample output"
@@ -88,8 +88,8 @@ router:
 
 To find your MySQL Router endpoint, run:
 
-```{.bash data-prompt="$"}
-$ kubectl get service ps-cluster1-router
+```bash
+kubectl get service ps-cluster1-router
 ```
 
 ??? example "Sample output"
@@ -143,8 +143,8 @@ You can change the type of the Service object by setting `mysql.exposePrimary.ty
     
 To find your primary service endpoint, run:
 
-```{.bash data-prompt="$"}
-$ kubectl get service ps-cluster1-mysql-primary
+```bash
+kubectl get service ps-cluster1-mysql-primary
 ```
 
 ??? example "Sample output"
@@ -181,8 +181,8 @@ mysql:
 
 To find all exposed services, run:
 
-```{.bash data-prompt="$"}
-$ kubectl get services
+```bash
+kubectl get services
 ```
 
 ??? example "Sample output"

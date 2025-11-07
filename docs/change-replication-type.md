@@ -10,8 +10,8 @@ You can also change the replication type for your cluster from group replication
 
 1. [Pause](pause.md) the cluster. Since the cluster is running, run the `kubectl patch` command to update the cluster configuration. Replace the `<namespace>` placeholder with your namespace. For example, for the cluster with the name `ps-cluster1`, the command is:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl patch ps ps-cluster1 -n <namespace> --type json -p='[{"op":"add","path":"/spec/pause","value":true}]'    
+    ```bash
+    kubectl patch ps ps-cluster1 -n <namespace> --type json -p='[{"op":"add","path":"/spec/pause","value":true}]'    
     ```
      
 2. Edit the `deploy/cr.yaml` file and set the `mysql.clusterType` option to `async`. Make sure you have HAProxy enabled as a proxy in your configuration.
@@ -28,14 +28,14 @@ You can also change the replication type for your cluster from group replication
 
 3. Apply the new configuration:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
     ```
 
 4. Unpause the cluster.
 
-    ```{.bash data-prompt="$"}
-    $ kubectl patch ps ps-cluster1 -n <namespace> --type json -p='[{"op":"add","path":"/spec/pause","value":false}]'    
+    ```bash
+    kubectl patch ps ps-cluster1 -n <namespace> --type json -p='[{"op":"add","path":"/spec/pause","value":false}]'    
     ```
 
 5. Wait for the cluster to be resumed. Check the status with the `kubectl get ps` command.

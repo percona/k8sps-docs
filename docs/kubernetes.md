@@ -3,8 +3,8 @@
 
 1. First of all, clone the percona-server-mysql-operator repository:
 
-    ```{.bash data-prompt="$"}
-    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    ```bash
+    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
     cd percona-server-mysql-operator
     ```
 
@@ -19,8 +19,8 @@
     standard set of resources which Kubernetes “knows” about with the new
     items (in our case ones which are the core of the operator). [Apply it :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/server-side-apply/) as follows:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply --server-side -f deploy/crd.yaml
+    ```bash
+    kubectl apply --server-side -f deploy/crd.yaml
     ```
 
     This step should be done only once; it does not need to be repeated
@@ -29,9 +29,9 @@
 3. The next thing to do is to add the `mysql` namespace to Kubernetes,
     not forgetting to set the correspondent context for further steps:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl create namespace mysql
-    $ kubectl config set-context $(kubectl config current-context) --namespace=mysql
+    ```bash
+    kubectl create namespace mysql
+    kubectl config set-context $(kubectl config current-context) --namespace=mysql
     ```
 
     !!! note
@@ -45,8 +45,8 @@
     about users and roles can be found in [Kubernetes
     documentation :octicons-link-external-16:](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#default-roles-and-role-bindings)).
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/rbac.yaml
+    ```bash
+    kubectl apply -f deploy/rbac.yaml
     ```
 
     !!! note
@@ -58,8 +58,8 @@
 
     Finally it’s time to start the operator within Kubernetes:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/operator.yaml
+    ```bash
+    kubectl apply -f deploy/operator.yaml
     ```
 
 5. Now that’s time to add the Percona Server for MySQL Users secrets to
@@ -71,8 +71,8 @@
     After editing is finished, users secrets should be created using the
     following command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl create -f deploy/secrets.yaml
+    ```bash
+    kubectl create -f deploy/secrets.yaml
     ```
 
     More details about secrets can be found in [Users](users.md).
@@ -86,8 +86,8 @@
 7. After the operator is started and user secrets are added, Percona Server for
     MySQL can be created at any time with the following command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/cr.yaml
+    ```bash
+    kubectl apply -f deploy/cr.yaml
     ```
 
     Creation process will take some time. The process is over when both

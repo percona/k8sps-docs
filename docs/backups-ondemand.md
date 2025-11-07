@@ -21,8 +21,8 @@ The example of such file is [deploy/backup/backup.yaml :octicons-link-external-1
 
 When the backup destination is configured and applied with kubectl apply -f deploy/cr.yaml command, make backup as follows:
 
-```{.bash data-prompt="$"}
-$ kubectl apply -f deploy/backup/backup.yaml
+```bash
+kubectl apply -f deploy/backup/backup.yaml
 ```
 
 !!! note
@@ -30,8 +30,8 @@ $ kubectl apply -f deploy/backup/backup.yaml
     Storing backup settings in a separate file can be replaced by
     passing its content to the `kubectl apply` command as follows:
 
-    ```{.bash data-prompt="$"}
-    $ cat <<EOF | kubectl apply -f-
+    ```bash
+    cat <<EOF | kubectl apply -f-
     apiVersion: ps.percona.com/v1alpha1
     kind: PerconaServerMySQLBackup
     metadata:

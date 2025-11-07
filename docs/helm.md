@@ -15,15 +15,15 @@ Install Helm following its [official installation instructions :octicons-link-ex
 1. Add the Percona’s Helm charts repository and make your Helm client up to
     date with it:
 
-    ```{.bash data-prompt="$"}
-    $ helm repo add percona https://percona.github.io/percona-helm-charts/
-    $ helm repo update
+    ```bash
+    helm repo add percona https://percona.github.io/percona-helm-charts/
+    helm repo update
     ```
 
 2. Install the Percona Operator for MySQL:
 
-    ```{.bash data-prompt="$"}
-    $ helm install my-op percona/ps-operator
+    ```bash
+    helm install my-op percona/ps-operator
     ```
 
     The `my-op` parameter in the above example is the name of [a new release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts)
@@ -36,8 +36,8 @@ Install Helm following its [official installation instructions :octicons-link-ex
 
 3. Install Percona Server for MySQL:
 
-    ```{.bash data-prompt="$"}
-    $ helm install my-db percona/ps-db
+    ```bash
+    helm install my-db percona/ps-db
     ```
 
     The `my-db` parameter in the above example is the name of [a new release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts) which is created for the Percona Server for MySQL when you install its Helm chart (use any name you like).
@@ -46,8 +46,8 @@ The command above installs Percona Server for MySQL with [default parameters](op
 
 The following example will deploy a Percona Server for MySQL in the `my-namespace` namespace, with disabled backups and 20 Gi storage:
 
-```{.bash data-prompt="$"}
-$ helm install my-db percona/ps-db \
+```bash
+helm install my-db percona/ps-db \
   --set mysql.volumeSpec.pvc.resources.requests.storage=20Gi \
   --set backup.enabled=false
 ```

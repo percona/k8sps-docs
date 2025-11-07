@@ -9,8 +9,8 @@ Here's how to get it:
 
 1. List the Secrets objects
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get secrets -n <namespace>
+    ```bash
+    kubectl get secrets -n <namespace>
     ```
 
     The Secrets object we target is named as `<cluster_name>-secrets`. The `<cluster_name>` value is the [name of your Percona Server for MySQL](operator.md#metadata-name). The default variant for the Secrets object is:
@@ -25,14 +25,14 @@ Here's how to get it:
 
 2. Retrieve the password for the root user. Replace the `secret-name` and `namespace` with your values in the following commands:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get secret <secret-name> -n <namespace> --template='{{"{{"}}.data.root | base64decode{{"}}"}}{{"{{"}}"\n"{{"}}"}}'
+    ```bash
+    kubectl get secret <secret-name> -n <namespace> --template='{{"{{"}}.data.root | base64decode{{"}}"}}{{"{{"}}"\n"{{"}}"}}'
     ```
 
 3. Run a container with `mysql` tool and connect its console output to your terminal. The following command does this, naming the new Pod `percona-client`:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl run -n <namespace> -i --rm --tty percona-client \ 
+    ```bash
+    kubectl run -n <namespace> -i --rm --tty percona-client \ 
     --image=percona:8.4 --restart=Never -- bash -il
     ```
 
@@ -42,13 +42,13 @@ Here's how to get it:
     [MySQL Router](router-conf.md) (can be used with Group Replication clusters only):
 
     === "with HAProxy (default)"
-        ```{.bash data-prompt="$"}
-        $ mysql -h <cluster_name>-haproxy -uroot -p'<root_password>'
+        ```bash
+        mysql -h <cluster_name>-haproxy -uroot -p'<root_password>'
         ```
 
     === "with MySQL Router"
-        ```{.bash data-prompt="$"}
-        $ mysql -h <cluster_name>-router -uroot -p'<root_password>'
+        ```bash
+        mysql -h <cluster_name>-router -uroot -p'<root_password>'
         ```
 
 Congratulations! You have connected to Percona Server for MySQL. 

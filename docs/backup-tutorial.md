@@ -16,9 +16,9 @@ If you don’t have access to AWS, you can use any S3-compatible storage like [M
 Also, we will use some files from the Operator repository for setting up
 backups. So, clone the percona-server-mysql-operator repository:
 
-``` {.bash data-prompt="$" }
-$ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
-$ cd percona-server-mysql-operator
+```bash
+git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+cd percona-server-mysql-operator
 ```
 
 !!! note
@@ -32,16 +32,16 @@ $ cd percona-server-mysql-operator
 
     === "on Linux" 
 
-        ```{.bash data-prompt="$"}
-        $ echo -n 'AWS_ACCESS_KEY_ID' | base64 --wrap=0
-        $ echo -n 'AWS_SECRET_ACCESS_KEY' | base64 --wrap=0
+        ```bash
+        echo -n 'AWS_ACCESS_KEY_ID' | base64 --wrap=0
+        echo -n 'AWS_SECRET_ACCESS_KEY' | base64 --wrap=0
         ``` 
 
     === "on MacOS" 
 
-        ```{.bash data-prompt="$"}
-        $ echo -n 'AWS_ACCESS_KEY_ID' | base64 
-        $ echo -n 'AWS_SECRET_ACCESS_KEY' | base64 
+        ```bash
+        echo -n 'AWS_ACCESS_KEY_ID' | base64 
+        echo -n 'AWS_SECRET_ACCESS_KEY' | base64 
         ```
 
 2. Edit the [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup-s3.yaml) example Secrets configuration file and specify the following:
@@ -62,7 +62,7 @@ $ cd percona-server-mysql-operator
 
 3. Create the Secrets object from this yaml file. Specify your namespace instead of the `<namespace>` placeholder:
 
-	```{.bash data-prompt="$"}
+	```bash
  kubectl apply -f deploy/backup/backup-s3.yaml -n <namespace>
 	```
 
@@ -98,8 +98,8 @@ $ cd percona-server-mysql-operator
   
 5. Apply the configuration. Specify your namespace instead of the `<namespace>` placeholder:
 
-	```{.bash data-prompt="$"}
-	$ kubectl apply -f deploy/cr.yaml -n <namespace>
+	```bash
+	kubectl apply -f deploy/cr.yaml -n <namespace>
 	```
  
 ## Make a logical backup
@@ -128,14 +128,14 @@ Custom Resource, you can make your first backup.
 
 2. Apply the configuration. This instructs the Operator to start a backup. Specify your namespace instead of the `<namespace>` placeholder:
 
-    ```{.bash data-prompt="$"}
-	$ kubectl apply -f deploy/backup/backup.yaml -n <namespace>
+    ```bash
+	kubectl apply -f deploy/backup/backup.yaml -n <namespace>
 	```
 
 3. Track the backup progress. 
 
-    ```{.bash data-prompt="$"}
-	$ kubectl get ps-backup -n <namespace>
+    ```bash
+	kubectl get ps-backup -n <namespace>
 	```
 
 	??? example "Output"
@@ -153,14 +153,14 @@ You may face issues with the backup. To identify the issue, you can do the follo
 
 * View the information about the backup with the following command:
 
-   ```{.bash data-prompt="$"}
-   $ kubectl get ps-backup <backup-name> -n <namespace> -o yaml
+   ```bash
+   kubectl get ps-backup <backup-name> -n <namespace> -o yaml
    ```
 
 * [View the backup-agent logs](debug-logs.md). Use the previous command to find the name of the pod where the backup was made:
   
-  ```{.bash data-prompt="$"}
-  $ kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
+  ```bash
+  kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
   ```
 
 Congratulations! You have made the first backup manually. Want to learn more about backups? See the [Backup and restore](backups.md) section for how to [restore from a previously saved backup](backups-restore.md).

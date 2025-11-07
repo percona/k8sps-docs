@@ -15,8 +15,8 @@ the `haproxy.enabled` option in the `deploy/cr.yaml` configuration file.
 For example, you can use the following command to enable HAProxy for existing
 cluster:
 
-```{.bash data-prompt="$"}
-$ kubectl patch ps ps-cluster1 --type=merge --patch '{
+```bash
+kubectl patch ps ps-cluster1 --type=merge --patch '{
   "spec": {
      "proxy": {
        "haproxy": {

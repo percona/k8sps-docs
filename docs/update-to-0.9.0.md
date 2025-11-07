@@ -6,7 +6,7 @@ The upgrade flow for this Operator version differs due to a number of internal c
 
 1. Find the name of the MySQL primary Pod. For example, you can do it by quering MySQL. Get access to MySQL Shell with the following command (substitute your real cluster name instead of `ps-cluster1`, if needed, and use your namespace instead of the `<namespace_name>` placeholder):
 
-    ``` {.bash data-prompt="$" }
+    ```bash
     kubectl exec -n <namespace_name> -it ps-cluster1-mysql-0 -- bash -c 'mysqlsh -u operator -p$(/etc/mysql/mysql-users-secret/operator)'
     ```
 
@@ -31,8 +31,8 @@ The upgrade flow for this Operator version differs due to a number of internal c
 
     Now, execute the following request in MySQL Shell:
 
-    ``` {.bash data-prompt=">" }
-    > dba.getCluster().status().defaultReplicaSet.primary
+    ```sh
+    dba.getCluster().status().defaultReplicaSet.primary
     ```
 
     ???+ example "Expected output"
@@ -43,7 +43,7 @@ The upgrade flow for this Operator version differs due to a number of internal c
 
 2. Exec into the `mysql` on this primary Pod (`ps-cluster1-mysql-0` in the above example):
 
-    ``` {.bash data-prompt="$" }
+    ```bash
     kubectl exec -n <namespace_name> -it ps-cluster1-mysql-0 -- bash -c 'mysql -u operator -p$(/etc/mysql/mysql-users-secret/operator)'
     ```
 
@@ -57,8 +57,8 @@ The upgrade flow for this Operator version differs due to a number of internal c
 
     === "in Linux"
 
-        ```{.bash data-prompt="$"}
-        $ echo -n '<change-this>' | base64 --wrap=0
+        ```bash
+        echo -n '<change-this>' | base64 --wrap=0
         ```
 
         ??? example "Expected output"
@@ -69,8 +69,8 @@ The upgrade flow for this Operator version differs due to a number of internal c
 
     === "in macOS"
 
-        ```{.bash data-prompt="$"}
-        $ echo -n '<change-this>' | base64
+        ```bash
+        echo -n '<change-this>' | base64
         ```    
 
         ??? example "Expected output"
@@ -81,8 +81,8 @@ The upgrade flow for this Operator version differs due to a number of internal c
 
 6. Patch the secrets to add this replication password:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl patch -n <namespace_name> secrets ps-cluster1-secrets -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
+    ```bash
+    kubectl patch -n <namespace_name> secrets ps-cluster1-secrets -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
     ```
 
     ??? example "Expected output"
@@ -91,8 +91,8 @@ The upgrade flow for this Operator version differs due to a number of internal c
         secret/ps-cluster1-secrets patched
         ```
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl patch -n <namespace_name> secrets internal-ps-cluster1 -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
+    ``` bash
+    kubectl patch -n <namespace_name> secrets internal-ps-cluster1 -p '{"data": { "replication": "PGNoYW5nZS10aGlzPg==" } }'
     ```
 
     ??? example "Expected output"
