@@ -30,3 +30,4 @@ Choose how you wish to install the Operator:
 * [on Google Kubernetes Engine (GKE)](gke.md)
 * [on Amazon Elastic Kubernetes Service (AWS EKS)](eks.md)
 * [in a Kubernetes-based environment](kubernetes.md)
+* [on OpenShift](openshift.md)

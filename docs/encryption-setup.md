@@ -6,7 +6,7 @@ This guide walks you through deploying and configuring HashiCorp Vault to work w
 
 It is a good practice to isolate workloads in Kubernetes using namespaces. Create a namespace with the following command:
 
-```{.bash .data-prompt="$"}
+```{.bash data-prompt="$"}
 $ kubectl create namespace vault
 ```
 
@@ -30,8 +30,7 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 2. Install Vault 
 
     ``` {.bash data-prompt="$" }
-    $ helm upgrade --install vault hashicorp/vault \ 
-      --namespace $NAMESPACE \
+    $ helm upgrade --install vault hashicorp/vault --namespace $NAMESPACE 
     ```
 
     ??? example "Sample output"
@@ -65,7 +64,7 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
 4. After Vault is installed, you need to initialize it. Run the following command:
 
-    ```{.bash .data-prompt="$"}
+    ```{.bash data-prompt="$"}
     $ kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator init -key-shares=1 -key-threshold=1 -format=json > /tmp/vault-init
     ```
     
@@ -80,13 +79,13 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
     Retrieve the unseal key from the file:
 
-    ```{.bash .data-prompt="$"}
+    ```{.bash data-prompt="$"}
     $ unsealKey=$(jq -r ".unseal_keys_b64[]" < /tmp/vault-init)
     ```
 
     Now, unseal Vault. Run the following command on every Pod where Vault is running:
 
-    ```{.bash .data-prompt="$"}
+    ```{.bash data-prompt="$"}
     $ kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator unseal "$unsealKey"
     ```
     
@@ -120,24 +119,29 @@ When you started Vault, it generates and starts with a [root token :octicons-lin
 
 1. Extract the Vault root token from the file where you saved the init response output:
 
-    ```{.bash .data-prompt="$"}
+    ```{.bash data-prompt="$"}
     $ cat /tmp/vault-init | jq -r ".root_token"
     ```
 
     ??? example "Sample output"
 
         ```{.text .no-copy}
-        hvs.CvmS4c0DPTvHv5eJgXWMJg9r
+        hvs.*************Jg9r
         ```
 
-2. Authenticate in Vault with this token:
+2. Connect to Vault Pod:
 
     ``` {.bash data-prompt="$" }
     $ kubectl exec -it vault-0 -n $NAMESPACE -- /bin/sh
-    $ vault login hvs.CvmS4c0DPTvHv5eJgXWMJg9r
     ```
 
-3. Enable the secrets engine at the mount path. The following command enables KV secrets engine v2 at the `ps-secret` mount-path:
+3. Authenticate in Vault with this token:
+    
+    ```{.bash data-prompt="$" }
+    $ vault login hvs.*************Jg9r
+    ```
+
+4. Enable the secrets engine at the mount path. The following command enables KV secrets engine v2 at the `ps-secret` mount-path:
     
      ``` {.bash data-prompt="$" }
      $ vault secrets enable --version=2 -path=ps-secret kv
@@ -213,7 +217,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: ps-cluster1-vault-84
+          name: ps-cluster1-vault
         type: Opaque
         stringData:
           keyring_vault.cnf: |-

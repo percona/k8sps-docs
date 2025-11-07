@@ -194,7 +194,7 @@ nav:
               - "Delete the unneeded backup": backups-delete.md
           - Monitoring:
               - "Monitor your cluster with PMM": monitoring.md
-#              - "Monitor Kubernetes": monitoring-kubernetes.md
+#              - "Monitor Kubernetes": monitor-kubernetes.md
           - "Scale your cluster": scaling.md
           - "Manage users": users.md
 

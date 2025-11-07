@@ -16,9 +16,11 @@ PMM Server and PMM Client are installed separately.
 
 ## Install PMM Server
 
-You must have PMM Server up and running. You can run PMM Server as a *Docker image*, a *virtual appliance*, or on an *AWS instance*.
+You must have PMM Server up and running. You can run PMM Server as a *Docker container*, a *virtual appliance*, or on an *AWS instance*.
 Please refer to the [official PMM documentation :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-server/index.html)
-for the installation instructions.
+for the installation instructions. 
+
+For Kubernetes environment, we recommend to install PMM from the [Helm chart :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-server/deployment-options/helm/index.html). 
 
 ## Install PMM Client
 
@@ -27,7 +29,9 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
 
 1. Authorize PMM Client within PMM Server.
 
-    1. PMM3 uses Grafana service accounts to control access to PMM server components and resources. To authenticate in PMM server, you need a service account token. [Generate a service account and token :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html?h=authe#generate-a-service-account-and-token). Specify the Admin role for the service account. 
+    1. PMM3 uses Grafana service accounts to control access to PMM server components and resources. To authenticate in PMM server, you need a service account token. Use PMM documentation to [generate a service account with the **Admin** role and token :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html?h=authe#generate-a-service-account-and-token).
+
+        The token must have the format `glsa_*************************_9e35351b`. 
 
         !!! warning
         
@@ -45,7 +49,7 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
         === ":simple-apple: in macOS"
 
             ```{.bash data-prompt="$"}
-            $ kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n new_key | base64)'"}}')"
+            $ kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64)'"}}')"
             ```
 
 2. Update the `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{ release }}/deploy/cr.yaml) file:
@@ -65,6 +69,8 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
     ``` {.bash data-prompt="$"}
     $ kubectl apply -f deploy/cr.yaml -n <namespace>
     ```
+    
+    This triggers the Operator to restart your cluster Pods. 
 
 4. Check that corresponding Pods are not in a cycle of stopping and restarting.
     This cycle occurs if there are errors on the previous steps:
