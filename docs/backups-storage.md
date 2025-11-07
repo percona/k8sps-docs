@@ -12,7 +12,7 @@ object with credentials needed to access the storage.
     Since backups are stored separately on the Amazon S3, a secret with
     `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` should be present on
     the Kubernetes cluster. The secrets file with these base64-encoded keys should
-    be created: for example [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup-s3.yaml) file with the following
+    be created: for example [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup-secret-s3.yaml) file with the following
     contents.
 
     ```yaml
@@ -73,10 +73,10 @@ object with credentials needed to access the storage.
 
     If you use some S3-compatible storage instead of the original
     Amazon S3, the [endpointURL :octicons-link-external-16:](https://docs.min.io/docs/aws-cli-with-minio.html) is needed in the `s3` subsection which points to the actual cloud used for backups and
-    is specific to the cloud provider. For example, using [Google Cloud :octicons-link-external-16:](https://cloud.google.com) involves the [following :octicons-link-external-16:](https://storage.googleapis.com) endpointUrl:
+    is specific to the cloud provider. For example, using the endpoint URL for MinIO will be:
 
     ```yaml
-    endpointUrl: https://storage.googleapis.com
+    endpointUrl: https://minio-service:9000
     ```
 
     Also you can use [prefix](operator.md#backupstoragesstorage-names3prefix) option to
@@ -165,3 +165,70 @@ object with credentials needed to access the storage.
     for backups. Value of this key should be the same as the name used to
     create the secret object (`ps-cluster1-azure-credentials` in the last
     example).
+
+=== "Google Cloud Storage"
+
+    To use Google Cloud Storage for storing backups, create a Secret object with the access credentials to this storage. Use the `deploy/backup/backup-secret-gcp.yaml` file as the example. You must specify the following information:
+
+    *  `name` is the name of the Kubernetes secret which you will reference in the Custom Resource
+    * `ACCESS_KEY_ID` and `SECRET_ACCESS_KEY` are base64 encoded keys to access GCS storage. 
+
+       Use the following command to encode the keys:
+
+       === "in Linux"
+
+            ```{.bash data-prompt="$"}
+            $ echo -n 'plain-text-string' | base64 --wrap=0
+            ```    
+
+        === "in macOS"
+
+            ```{.bash data-prompt="$"}
+            $ echo -n 'plain-text-string' | base64
+            ```
+
+    Here's the example configuration of the Secret file:
+
+    ```title="deploy/backup/backup-secret-gcp.yaml"
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ps-cluster1-gcp-credentials
+    type: Opaque
+    data:
+      ACCESS_KEY_ID: Z2NwLWFjY2Vzcy1rZXkK
+      SECRET_ACCESS_KEY: Z2NwLXNlY3JldC1rZXkK
+    ```
+    
+    1. Create the Secret object with this file:
+
+       ```bash
+       kubectl apply -f deploy/backup/backup-secret-gcp.yaml -n <namespace>
+       ```
+
+    2. Configure the storage in the Custom Resource. Modify the `deploy/cr.yaml` file and define the following information:
+
+        *  `bucket` where the data will be stored
+        *  `region` - location of the bucket
+        * `credentialsSecret` - the name of the Secret you created previously
+
+        Here's the example:
+
+        ```yaml
+        backup:
+          enabled: true
+          ...
+          storages:
+            gcp-cs:
+              type: s3
+              s3:
+                bucket: GCS-BACKUP-BUCKET-NAME-HERE
+                region: us-east-1
+                credentialsSecret: ps-cluster1-gcp-credentials
+        ```
+
+    3. Apply the configuration:
+
+       ```bash
+       kubectl apply -f deploy/cr.yaml -n <namespace>
+       ```
