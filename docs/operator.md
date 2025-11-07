@@ -2373,10 +2373,6 @@ The cloud storage type used for backups. The following types are supported: `s3`
 | ----------- | ---------- |
 | :material-code-string: string     | `s3` |
 
-
-### `backup.storages.STORAGE-NAME.type`
-
-
 ### `backup.storages.STORAGE-NAME.verifyTLS`
 
 Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate.
@@ -2616,6 +2612,38 @@ The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/c
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `my-cluster-name-backup-azure` |
+
+### `backup.storages.STORAGE-NAME.gcs.bucket`
+
+The name of the storage bucket.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `bucket-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.prefix`
+
+The path to the data directory in the bucket. If undefined, backups are stored in the bucket's root directory.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `prefix-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.endpointUrl`
+
+The URL to access the data in Google Cloud Storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"https://storage.googleapis.com"` |
+
+### `backup.storages.STORAGE-NAME.gcs.credentialsSecret`
+
+The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain the `ACCESS_KEY_ID` and the `SECRET_ACCESS_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-gcp-credentials` |
 
 ### `backup.schedule.name`
 
