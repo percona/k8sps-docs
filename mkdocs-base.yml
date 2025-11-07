@@ -241,6 +241,7 @@ nav:
         - Certified images:
             - "Percona certified images": images.md
             - "Retrieve certified images": image-query.md
+        - Version compatibility: versions.md
         - Legal:
             - "Copyright and licensing information": copyright.md
             - "Trademark policy": trademark-policy.md
