@@ -35,7 +35,7 @@ Here’s how to get it:
 4. Run a container with `mysql` tool and connect its console output to your terminal. The following command will do this, naming the new Pod `percona-client`:
 
     ```{.bash data-prompt="$"}
-    $ {{ commandName }} run -i --rm --tty percona-client --image=percona:8.0 --restart=Never -- bash -il
+    $ {{ commandName }} run -i --rm --tty percona-client --image=percona:8.4 --restart=Never -- bash -il
     ```
 
     It may require some time to execute the command and deploy the correspondent Pod.
@@ -61,11 +61,11 @@ Here’s how to get it:
         ```{.text .no-copy}
         mysql: [Warning] Using a password on the command line interface can be insecure.
         Welcome to the MySQL monitor.  Commands end with ; or \g.
-        Your MySQL connection id is 4065
-        Server version: 8.0.29-21 Percona Server (GPL), Release 21, Revision c59f87d2854
+        Your MySQL connection id is 1665
+        Server version: {{ps84recommended}} Percona Server (GPL), Release 6, Revision dbba4396
 
-        Copyright (c) 2009-2022 Percona LLC and/or its affiliates
-        Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+        Copyright (c) 2009-{{year}} Percona LLC and/or its affiliates
+        Copyright (c) 2000, {{year}}, Oracle and/or its affiliates.
 
         Oracle is a registered trademark of Oracle Corporation and/or its
         affiliates. Other names may be trademarks of their respective
