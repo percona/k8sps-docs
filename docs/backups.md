@@ -9,7 +9,7 @@ or on [Azure Blob Storage :octicons-link-external-16:](https://azure.microsoft.c
 The Operator does physical backups using the [Percona XtraBackup :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/) tool.
 
 Backups are controlled by the `backup` section of the
-[deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+[deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
 file. This section contains the [backup.enabled](operator.md#backupenabled) key
 (it should be set to `true` to enable backups), and the number of options in the
 `storages` subsection, [needed to access cloud to store backups](backups-storage.md).
@@ -17,7 +17,7 @@ file. This section contains the [backup.enabled](operator.md#backupenabled) key
 The Operator allows doing backups in two ways:
 
 * *Scheduled backups* are configured in the
-    [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+    [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
     file to be executed automatically in proper time.
 * *On-demand backups* can be done manually at any moment and are configured in
-    the [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup.yaml).
+    the [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup.yaml).

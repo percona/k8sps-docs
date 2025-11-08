@@ -91,5 +91,5 @@ haproxy:
       http-request use-service prometheus-exporter if { path /metrics }
 ```
 
-the actual default configuration file can be found [here :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/build/haproxy-global.cfg).
+the actual default configuration file can be found [here :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/build/haproxy-global.cfg).
 
