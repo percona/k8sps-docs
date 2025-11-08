@@ -12,7 +12,7 @@ monitoring solutions, etc.
 ## Adding a sidecar container
 
 You can add sidecar containers to Percona Server for MySQL Pods. Just use
-`sidecars` subsection ing the `mysql` section of the `deploy/cr.yaml`
+`sidecars` subsection in the `mysql` section of the `deploy/cr.yaml`
 configuration file. In this subsection, you should specify the name and image of
 your container and possibly a command to run:
 
@@ -95,17 +95,14 @@ PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the
     - mountPath: /volume1
       name: sidecar-volume-claim
   sidecarPVCs:
-  - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: sidecar-volume-claim
+  - name: sidecar-volume-claim
     spec:
       resources:
-        requests:
-          storage: 1Gi
+          requests:
+            storage: 1Gi
       volumeMode: Filesystem
       accessModes:
-        - ReadWriteOnce
+          - ReadWriteOnce
 ```
 
 ### Secret
@@ -144,7 +141,6 @@ and mounts it to the `my-sidecar-1` container’s filesystem under the
 ### configMap
 
 You can use a [configMap volume :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/#configmap) to pass some configuration data to the container.
-Secrets are stored with the Kubernetes API and mounted to the container as RAM-stored files.
 
 You can mount a configMap volume as follows:
 

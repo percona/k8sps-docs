@@ -918,7 +918,7 @@ Name of the [custom sidecar container](sidecar.md) volume for Replica Set Pods.
 
 ### `mysql.sidecarPVCs`
 
-[Persistent Volume Claim :octicons-link-external-16:](https://v1-20.docs.kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md) volume for Replica Set Pods |
+[Persistent Volume Claim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](sidecar.md) volume for Replica Set Pods |
 
 | Value type  | Example    |
 | ----------- | ---------- |
