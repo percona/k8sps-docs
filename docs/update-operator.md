@@ -4,7 +4,7 @@ To update the Operator, you need to update the Custom Resource Definition (CRD) 
 
 ## Considerations for Kubernetes Cluster versions and upgrades
 
-1. Before upgrading the Kubernetes cluster, have a disaster recovery plan in place. Ensure that a backup is taken prior to the upgrade, and that point-in-time recovery is enabled to meet your Recovery Point Objective (RPO).
+1. Before upgrading the Kubernetes cluster, have a disaster recovery plan in place. Ensure that a backup is taken prior to the upgrade.
 
 2. Plan your Kubernetes cluster or Operator upgrades with version compatibility in mind.
 
@@ -20,15 +20,15 @@ To update the Operator, you need to update the Custom Resource Definition (CRD) 
 
 ## Considerations for Operator upgrades
 
-1. The Operator version has three digits separated by a dot (`.`) in the format `major.minor.patch`. Here's how you can understand the version `0.11.0`:
+1. The Operator version has three digits separated by a dot (`.`) in the format `major.minor.patch`. Here's how you can understand the version `1.0.0`:
 
-    * `0` is the major version 
-    * `11` is the minor version
-    * `0` is the patch version.
+    * `1` is the major version 
+    * `0` is the minor version
+    * `1` is the patch version.
 
-    You can only upgrade the Operator to the nearest `major.minor` version (for example, from `0.10.0` to `0.11.0`).
+    You can only upgrade the Operator to the nearest `major.minor` version (for example, from `1.0.0` to `1.0.1`).
 
-    If the current Operator version and the version you want to upgrade to differ by more than one minor version, you need to upgrade step by step. For example, if your current version is `0.9.0` and you want to move to `0.11.0`, first upgrade to `0.10.0`, then to `0.11.0`.
+    If the current Operator version and the version you want to upgrade to differ by more than one minor version, you need to upgrade step by step. For example, if your current version is `1.0.0` and you want to move to `1.0.2`, first upgrade to `1.0.1`, then to `1.0.2`.
 
     Check the [Release notes index](ReleaseNotes/index.md) for the list of the Operator versions.
 
@@ -45,22 +45,25 @@ But updating the CRD *and* Operator is the **recommended path**.
 
 ### Manual upgrade
 
+Before you start, export your namespace as an environment variable to simplify the configuration:
+
+```bash
+export NAMESPACE=<my-namespace>
+```
+
 The upgrade includes the following steps.
 
 1. Update the Custom Resource Definition for the Operator and the Role-based access control. Take the latest versions from the official repository on GitHub with the following commands:
 
     ```bash
-    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
-    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
+    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
+    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
     ```
 
 2. Next, update the Percona Server for MySQL Operator Deployment in Kubernetes by changing the container image of the Operator Pod to the latest version. Find the image name for the current Operator release [in the list of certified images](images.md). Then [apply a patch :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to the Operator Deployment and specify the image name and version. Use the following command to update the Operator to the `{{ release }}` version:
 
     ```bash
-    kubectl patch deployment percona-server-mysql-operator \
-      --namespace <your-namespace> \
-      --type=merge \
-      --patch '{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"percona/percona-server-mysql-operator:{{release}}"}]}}}}'
+    kubectl patch deployment -n $NAMESPACE percona-server-mysql-operator --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "perconalab/percona-server-mysql-operator:{{release}}"}]'
     ```
    
     For previous releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/)
@@ -77,50 +80,9 @@ The upgrade includes the following steps.
 
         Labels set on the Operator Pod will not be updated during upgrade.
 
-4. Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.
+4. Update the Custom Resource, the database and components. This step ensures all new features and improvements of the latest release work well within your environment. 
 
-    Find the image names [in the list of certified images](images.md).
-
-    We recommend to update the PMM Server **before** the upgrade of PMM Client. If you haven't updated your PMM Server yet, exclude PMM Client from the list of images to update.
-
-    Since this is a working cluster, the way to update the Custom Resource is to [apply a patch  :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) with the `kubectl patch ps` command.
-
-    The following commands update Percona Server for MySQL version 8.4.x. If you run Percona Server for MySQL 8.0.x, change the `mysql`, `backup`, `router` images to the corresponding 8.0.x version. Refer to [Percona certified images](images.md) for versions.
-
-    === "With PMM Client"
-
-        ```bash
-        kubectl patch ps ps-cluster1 --type=merge --patch '{
-           "spec": {
-               "crVersion":"{{ release }}",
-               "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-               "proxy":{
-                  "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
-               },
-               "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-               "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-               "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-           }}'
-        ```
-
-    === "Without PMM Client"
-
-        ```bash
-        kubectl patch ps ps-cluster1 --type=merge --patch '{
-           "spec": {
-               "crVersion":"{{ release }}",
-               "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-               "proxy":{
-                  "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
-               },
-               "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-               "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-           }}'
-        ```
+   [Update the Custom Resource, the database and components :material-arrow-down:](#update-the-custom-resource-the-database-and-components){.md-button}
 
 ### Upgrade via helm
 
@@ -132,8 +94,8 @@ Operator with the `helm upgrade` command.
     the same for the Role-based access control:
 
     ```bash
-    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
-    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
+    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
+    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
     ```
 
 2. Next, update the Operator deployment. 
@@ -156,3 +118,10 @@ Operator with the `helm upgrade` command.
         helm upgrade my-op percona/ps-operator --version {{ release }} -f my-values.yaml
         ```
 
+3. Update the Custom Resource, the database and components. This step ensures all new features and improvements of the latest release work well within your environment.
+
+   [Update the Custom Resource, the database and components :material-arrow-down:](#update-the-custom-resource-the-database-and-components){.md-button}
+
+### Update the Custom Resource, the database and components
+
+{% include 'assets/fragments/update-db-commands.txt' %}
