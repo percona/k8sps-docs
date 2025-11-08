@@ -465,6 +465,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `512M` |
 
+### `mysql.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for a Percona Server for MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
 ### `mysql.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
@@ -472,6 +480,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `1G` |
+
+### `mysql.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `mysql.startupProbe.initialDelaySeconds`
 
@@ -1503,6 +1519,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `256M` |
 
+### `proxy.router.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
 ### `proxy.router.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
@@ -1510,6 +1534,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `256M` |
+
+### `proxy.router.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `proxy.router.affinity.antiAffinityTopologyKey`
 
@@ -2054,6 +2086,15 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `128M` |
 
+### `orchestrator.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+
 ### `orchestrator.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
@@ -2061,6 +2102,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `256M` |
+
+### `orchestrator.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `orchestrator.volumeSpec.persistentVolumeClaim.resources.requests.storage`
 
