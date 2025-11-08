@@ -1,7 +1,7 @@
 # Configure storage for backups
 
 You can configure storage for backups in the `backup.storages` subsection of the
-Custom Resource, using the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+Custom Resource, using the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
 configuration file.
 
 You should also create the [Kubernetes Secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/)
@@ -12,7 +12,7 @@ object with credentials needed to access the storage.
     Since backups are stored separately on the Amazon S3, a secret with
     `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` should be present on
     the Kubernetes cluster. The secrets file with these base64-encoded keys should
-    be created: for example [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup-s3.yaml) file with the following
+    be created: for example [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-s3.yaml) file with the following
     contents.
 
     ```yaml
@@ -54,7 +54,7 @@ object with credentials needed to access the storage.
 
     All the data needed to access the S3-compatible cloud to store backups should be
     put into the `backup.storages` subsection. Here is an example
-    of [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+    of [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
     which uses Amazon S3 storage for backups:
 
     ```yaml
@@ -140,7 +140,7 @@ object with credentials needed to access the storage.
 
     All the data needed to access the Azure Blob storage to store backups should be
     put into the `backup.storages` subsection. Here is an example
-    of [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+    of [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
     which uses Azure Blob storage for backups:
 
     ```yaml

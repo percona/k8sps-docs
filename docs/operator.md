@@ -9,8 +9,7 @@ Percona Operator for MySQL uses [Custom Resources :octicons-link-external-16:](h
 ## PerconaServerMySQL Custom Resource options
 
 Percona Server for MySQL managed by the Operator is configured via the spec section
-of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
-file.
+of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file.
 
 The metadata part of PerconaServerMySQL Custom Resource contains the following keys:
 
@@ -26,11 +25,11 @@ alphanumeric character;
     * `percona.com/delete-ssl` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](TLS.md) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
 
 
-The top-level spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
+The top-level spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) are the following ones:
 
 ## Toplevel `spec` elements
 
-The spec part of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-postgresql-operator/blob/main/deploy/cr.yaml) file contains the following:
+The spec part of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains the following:
 
 ### `crVersion`
 
@@ -178,7 +177,7 @@ Prevents users from configuring a cluster with unsafe parameters such as startin
 
 ## <a name="operator-unsafeflags-section"></a>Unsafe flags section
 
-The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *After switching to unsafe configurations permissive mode you will not be able to switch the cluster back by setting same keys to `false`, the flags will be ignored*.
+The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *After switching to unsafe configurations permissive mode you will not be able to switch the cluster back by setting same keys to `false`, the flags will be ignored*.
 
 ### `unsafeFlags.mysqlSize`
 
@@ -222,7 +221,7 @@ Allows users to set [orchestrator.size](#orchestratorsize) option to a value les
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
-The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
+The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
 
 ### `tls.SANs`
 
@@ -258,7 +257,7 @@ A [cert-manager issuer group :octicons-link-external-16:](https://cert-manager.i
 
 ## <a name="operator-upgrade-options-section"></a>Upgrade options section
 
-The `upgradeOptions` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
+The `upgradeOptions` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
 
 ### `upgradeOptions.versionServiceEndpoint`
 
@@ -278,7 +277,7 @@ Specifies how images are picked up from the version service on initial start by 
 
 ## <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
-The `mysql` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains general
+The `mysql` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains general
 configuration options for the Percona Server for MySQL.
 
 ### `mysql.clusterType`
@@ -927,7 +926,7 @@ Name of the [custom sidecar container](sidecar.md) volume for Replica Set Pods.
 
 ## <a name="operator-haproxy-section"></a>HAProxy subsection
 
-The `proxy.haproxy` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+The `proxy.haproxy` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
 file contains configuration options for the HAProxy service.
 
 ### `proxy.haproxy.enabled`
@@ -1337,7 +1336,7 @@ A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](htt
 
 ## <a name="operator-router-section"></a>Router subsection
 
-The `proxy.router` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/), which can act as a proxy for Group replication.
+The `proxy.router` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration options for the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/), which can act as a proxy for Group replication.
 
 ### `proxy.router.enabled`
 
@@ -1669,7 +1668,7 @@ The range of client IP addresses from which the load balancer should be reachabl
 
 ## <a name="operator-orchestrator-section"></a>Orchestrator section
 
-The `orchestrator` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
+The `orchestrator` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains
 configuration options for the Orchestrator - a replication topology manager, used if asynchronous replication is turned on.
 
 ### `orchestrator.enabled`
@@ -2121,7 +2120,7 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 
 ## <a name="operator-pmm-section"></a>PMM section
 
-The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
+The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration
 options for Percona Monitoring and Management.
 
 ### `pmm.enabled`
@@ -2278,7 +2277,7 @@ Address of the PMM Server to collect data from the cluster.
 
 ## <a name="operator-backup-section"></a>Backup section
 
-The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
 file contains the following configuration options for the regular Percona XtraDB Cluster backups.
 
 ### `backup.enabled`
@@ -2668,7 +2667,7 @@ The name of the storage for the backups configured in the `storages` subsection.
 
 ## <a name="operator-pt-section"></a>Percona Toolkit section
 
-The `toolkit` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
+The `toolkit` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration
 options for [Percona Toolkit :octicons-link-external-16:](https://docs.percona.com/percona-toolkit/).
 
 ### `toolkit.image`

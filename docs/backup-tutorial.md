@@ -44,7 +44,7 @@ cd percona-server-mysql-operator
         echo -n 'AWS_SECRET_ACCESS_KEY' | base64 
         ```
 
-2. Edit the [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup-s3.yaml) example Secrets configuration file and specify the following:
+2. Edit the [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-s3.yaml) example Secrets configuration file and specify the following:
 
     * the `metadata.name` key is the name which you use to refer your Kubernetes Secret
     * the base64-encoded S3 credentials
@@ -108,7 +108,7 @@ Now when you have the [configured storage](#configure-backup-storage) in your
 Custom Resource, you can make your first backup.
 {.power-number}
 
-1. To make a backup, you need the configuration file. Edit the sample [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup.yaml) configuration file and specify the following:
+1. To make a backup, you need the configuration file. Edit the sample [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup.yaml) configuration file and specify the following:
 
     * `metadata.name` - specify the backup name. You will use this name to restore from this backup
     * `spec.clusterName` - specify the name of your cluster. This is the name you specified when deploying Percona Server for MySQL cluster.
