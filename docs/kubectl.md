@@ -85,7 +85,7 @@ Here's a sequence of steps to follow:
 
         ```{.text .no-copy}
         NAME       REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-        ps-cluster1   group-replication   ps-cluster1-haproxy.default   ready   3                                3        20m
+        ps-cluster1   group-replication   ps-cluster1-haproxy.<namespace>   ready   3                                3        20m
         ```
 
     The creation process may take some time. When the process is over your cluster obtains the `ready` status.

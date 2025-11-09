@@ -44,12 +44,12 @@ cd percona-server-mysql-operator
         echo -n 'AWS_SECRET_ACCESS_KEY' | base64 
         ```
 
-2. Edit the [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-s3.yaml) example Secrets configuration file and specify the following:
+2. Edit the [deploy/backup/backup-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-secret-s3.yaml) example Secrets configuration file and specify the following:
 
     * the `metadata.name` key is the name which you use to refer your Kubernetes Secret
     * the base64-encoded S3 credentials
 
-    ```yaml title="deploy/backup/backup-s3.yaml"
+    ```yaml title="deploy/backup/backup-secret-s3.yaml"
     apiVersion: v1
     kind: Secret
     metadata:
@@ -63,13 +63,13 @@ cd percona-server-mysql-operator
 3. Create the Secrets object from this yaml file. Specify your namespace instead of the `<namespace>` placeholder:
 
 	```bash
- kubectl apply -f deploy/backup/backup-s3.yaml -n <namespace>
+  kubectl apply -f deploy/backup/backup-secret-s3.yaml -n <namespace>
 	```
 
 4. Update your `deploy/cr.yaml` configuration. Specify the following parameters in the `backup` section:
 
     * set the `storages.<NAME>.type` to `s3`. Substitute the `<NAME>` part with some arbitrary name that you will later use to refer this storage when making backups and restores.
-    * set the `storages.<NAME>.s3.credentialsSecret` to the name you used to refer your Kubernetes Secret (`my-cluster-name-backup-s3` in the previous step).
+    * set the `storages.<NAME>.s3.credentialsSecret` to the name you used to refer your Kubernetes Secret (`ps-cluster1-s3-credentials` in the previous step).
     * specify the S3 bucket name for the `storages.<NAME>.s3.bucket` option
     * specify the  region in the `storages.<NAME>.s3.region` option. Also you can use the `storages.<NAME>.s3.prefix` option to specify the path (a sub-folder) to the backups inside the S3 bucket. If prefix is not set, backups are stored in the root directory.
 
@@ -104,7 +104,7 @@ cd percona-server-mysql-operator
  
 ## Make a logical backup
 
-Now when you have the [configured storage](#configure-backup-storage) in your
+Now that you have the [configured storage](#configure-backup-storage) in your
 Custom Resource, you can make your first backup.
 {.power-number}
 
@@ -129,14 +129,14 @@ Custom Resource, you can make your first backup.
 2. Apply the configuration. This instructs the Operator to start a backup. Specify your namespace instead of the `<namespace>` placeholder:
 
     ```bash
-	kubectl apply -f deploy/backup/backup.yaml -n <namespace>
-	```
+	  kubectl apply -f deploy/backup/backup.yaml -n <namespace>
+	  ```
 
 3. Track the backup progress. 
 
     ```bash
-	kubectl get ps-backup -n <namespace>
-	```
+	  kubectl get ps-backup -n <namespace>
+	  ```
 
 	??? example "Output"
 
@@ -151,13 +151,13 @@ Custom Resource, you can make your first backup.
 
 You may face issues with the backup. To identify the issue, you can do the following:
 
-* View the information about the backup with the following command:
+1. View the information about the backup with the following command:
 
    ```bash
    kubectl get ps-backup <backup-name> -n <namespace> -o yaml
    ```
 
-* [View the backup-agent logs](debug-logs.md). Use the previous command to find the name of the pod where the backup was made:
+2. [View the backup-agent logs](debug-logs.md). Use the command from sep 1 to find the name of the pod where the backup was made. Check for the information in the `.status.backupSourcefield` to find the Pod where the backup process was run. To view the logs, run the following command:
   
   ```bash
   kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
