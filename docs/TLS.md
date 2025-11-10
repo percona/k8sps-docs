@@ -80,7 +80,7 @@ You can generate TLS certificates manually instead of using the Operator's autom
 
 When you follow the steps from this guide, you'll generate these certificate files:
 
-* `server.pem` - Server certificate for MongoDB nodes
+* `server.pem` - Server certificate for MySQL nodes
 * `server-key.pem` - Private key for the server certificate  
 * `ca.pem` - Certificate Authority certificate
 * `ca-key.pem` - Certificate Authority private key
