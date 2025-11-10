@@ -79,3 +79,39 @@ List backups with this command:
 ```bash
 kubectl get ps-backup -n $NAMESPACE
 ```
+
+## Specifying the backup source
+
+When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object's status:
+
+```
+$ kubectl get ps-backup backup1 -o yaml
+```
+
+??? example "Sample output"
+
+    ```{.text .no-copy}
+    apiVersion: ps.percona.com/v1
+    kind: PerconaServerMySQLBackup
+    metadata:
+      name: backup1
+      ...
+    status:
+      backupSource: cluster1-mysql-1.cluster1-mysql.<namespace>
+      ...
+    ```
+
+You can specify the source pod in the backup object to run the backup on this specific pod:
+
+```yaml
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLBackup
+metadata:
+  name: backup1
+  finalizers:
+    - percona.com/delete-backup
+spec:
+  clusterName: ps-cluster1
+  storageName: s3-us-west
+  sourcePod: ps-cluster1-mysql-2
+```

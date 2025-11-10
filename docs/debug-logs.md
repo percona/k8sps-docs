@@ -38,8 +38,24 @@ In the following examples we will access containers of the `ps-cluster1-mysql-0`
     $ kubectl logs ps-cluster1-mysql-0 -c mysql --previous
     ```
 
-* Check logs of the `mysql` container, parsing the output with [jq JSON processor :octicons-link-external-16:](https://stedolan.github.io/jq/):
+* Check logs of the `mysql` container for `ERROR` messages:
 
     ``` {.bash data-prompt="$" }
-    $ kubectl logs ps-cluster1-mysql-0 -c mysql -f | jq -R 'fromjson?'
+    $ kubectl logs ps-cluster1-mysql-0 -c mysql | grep 'ERROR'
+    ```
+
+- Check logs of the operator:
+    ``` {.bash data-prompt="$"}
+    $ kubectl logs -l "app.kubernetes.io/name=percona-server-mysql-operator" --tail=-1
+    ```
+
+* Check logs of the operator, parsing the output with [jq JSON processor :octicons-link-external-16:](https://stedolan.github.io/jq/) (requires `LOG_STRUCTURED` to be `true`):
+
+    ``` {.bash data-prompt="$"}
+    $ kubectl logs -l "app.kubernetes.io/name=percona-server-mysql-operator" --tail=-1 -f | jq -R 'fromjson?'
+    ```
+
+- Check logs of the HAProxy pod for configuration issues:
+    ``` {.bash data-prompt="$"}
+    $ kubectl logs ps-cluster1-haproxy-0 | grep 'The custom config /etc/haproxy-custom/haproxy.cfg is not valid and will be ignored.'
     ```
