@@ -46,7 +46,7 @@ If you [use cert-manager](#install-and-use-the-cert-manager):
         If you don't use cert-manager, list your secrets:
 
         ```bash
-        kubectl get secrtes -n $NAMESPACE
+        kubectl get secrets -n $NAMESPACE
         ```
 
         Then either use the default ones or the one you created
