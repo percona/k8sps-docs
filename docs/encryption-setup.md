@@ -217,7 +217,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: ps-cluster1-vault
+          name: ps-cluster1-vault-84
         type: Opaque
         stringData:
           keyring_vault.cnf: |-
@@ -234,7 +234,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: ps-cluster1-vault
+          name: ps-cluster1-vault-84
         type: Opaque
         stringData:
           keyring_vault.cnf: |-
@@ -254,10 +254,10 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
 
   Note that you must either specify the certificate value or don't declare it at all. Having a commented `#ca.cert` field in the Secret configuration file is not allowed.
 
-Now create a Secret object:
+Now create a Secret object. Replace the `<namespace>` placeholder with the namespace where your database cluster is deployed:
 
-``` {.bash data-prompt="$" }
-$ kubectl apply -f deploy/vault-secret.yaml -n $NAMESPACE
+```bash
+kubectl apply -f deploy/vault-secret.yaml -n <namespace>
 ```
 
 ## Reference the Secret in your Custom Resource manifest 
@@ -266,9 +266,9 @@ Now, reference the Vault Secret in the Operator Custom Resource manifest. Note t
 
 Since this is a running cluster, we will apply a patch:
 
-``` {.bash data-prompt="$" }
-$ kubectl patch ps ps-cluster1 \
-  --namespace $NAMESPACE \
+```bash
+kubectl patch ps ps-cluster1\
+  --namespace <namesapce> \
   --type=merge \
   --patch '{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'
 ```
