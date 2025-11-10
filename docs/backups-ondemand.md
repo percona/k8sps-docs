@@ -8,7 +8,7 @@
     export NAMESPACE = <namespace>
     ```
 
-2. Check the configuration in the `deploy/cr.yaml` file:
+2. Check the configuration of the `PerconaServerMySQL` object:
 
     * Check that the `backup.enabled` key is set to `true`. Use the following command:
 
@@ -16,8 +16,7 @@
        kubectl get ps <cluster-name> -n $NAMESPACE -o jsonpath='{.spec.backup.enabled}'
        ```
 
-    * [Configure backup storage](backups-storage.md) in the
-    `backup.storages` subsection.
+    * Verify that you have [configured backup storage](backups-storage.md) and specified its configuration in the `backup.storages` subsection of the Custom Resource.
 
 ## Backup steps
 
@@ -31,7 +30,7 @@ Specify the following keys:
 * Set the `metadata.name` key to assign a name to the backup.
 * Set the `spec.clusterName` key to the name of your cluster.
 * Set the `spec.storageName` key to a storage configuration defined in your `deploy/cr.yaml` file.
-* Optionally, add the `percona.com/delete-backup` entry under `metadata.finalizers` to enable deletion of backup files from S3-compatible storage when the backup object is removed (manually or by schedule).
+* Optionally, add the `percona.com/delete-backup` entry under `metadata.finalizers` to enable deletion of backup files from a cloud storage when the backup object is removed (manually or by schedule).
 
 Pass this information to the Operator:
 

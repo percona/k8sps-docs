@@ -143,7 +143,7 @@ Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following
                 storage:
                   gcs:
                     bucket: operator-testing
-                    credentialsSecret: ps-cluster1-s3-credentials-gcp
+                    credentialsSecret: ps-cluster1-gcp-credentials
                   type: gcs
             ```
 
