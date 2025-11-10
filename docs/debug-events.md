@@ -39,7 +39,7 @@ When there are too many events and there is a need of filtering output, tools li
 Example:
 
 ```bash
-kubectl get events -oyaml | yq .items[11]
+kubectl get events -o yaml | yq '.items[11]'
 ```
 
 ??? example "Expected output"
@@ -79,6 +79,8 @@ For example, the following command provides events of Pod only:
 ```bash
 kubectl get events --field-selector involvedObject.kind=Pod
 ```
+
+See the full list of supported `involvedObject` fields [here](https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/object-reference/#ObjectReference).
 
 More fields can be added to the field-selector flag for filtering events further. For example, the following command provides events of the `ps-cluster1-mysql-0` Pod:
 
