@@ -84,8 +84,24 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
     deployment.apps/percona-server-for-mysql-operator created
     ```
 
-4. The operator has been started, and you can create the Percona Distribution
-    for MySQL cluster:
+4. The operator has been started, and you can create the Percona Distribution for MySQL cluster:
+
+    !!! warning
+
+        Starting with 1.30, Amazon EKS no longer includes the default annotation on the gp2 StorageClass resource applied to newly created clusters.
+
+        You need to specify storageClassName explicitly in cr.yaml:
+
+        ```
+        mysql:
+          ...
+          volumeSpec:
+            persistentVolumeClaim:
+              storageClassName: gp2
+              resources:
+                requests:
+                  storage: 20Gi
+        ```
 
     ```bash
     kubectl apply -f deploy/cr.yaml
