@@ -34,9 +34,7 @@ To update the Operator, you need to update the Custom Resource Definition (CRD) 
 
 2. CRD supports the **last 3 minor versions of the Operator**. This means it is
 compatible with the newest Operator version and the two older minor versions.
-If the Operator version is older than the CRD *by no more than two versions*, you
-should be able to continue using the old Operator version.
-But updating the CRD *and* Operator is the **recommended path**.
+
 3. The API version in CRDs is changed from `v1alpha` to `v1`. To update to version 0.12.0, you must manually delete the CRDs, apply new ones and recreate the cluster. To keep the data, do the following:
 
     * check that the `percona.com/delete-mysql-pvc` finalizer is not enabled in `deploy/cr.yaml`
@@ -60,11 +58,24 @@ The upgrade includes the following steps.
     kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
     ```
 
-2. Next, update the Percona Server for MySQL Operator Deployment in Kubernetes by changing the container image of the Operator Pod to the latest version. Find the image name for the current Operator release [in the list of certified images](images.md). Then [apply a patch :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to the Operator Deployment and specify the image name and version. Use the following command to update the Operator to the `{{ release }}` version:
+2. Next, update the Percona Server for MySQL Operator Deployment in Kubernetes by changing the container image of the Operator Pod to the latest version. Find the image name for the current Operator release [in the list of certified images](images.md). Use the following command to update the Operator to the `{{ release }}` version:
 
-    ```bash
-    kubectl patch deployment -n $NAMESPACE percona-server-mysql-operator --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "perconalab/percona-server-mysql-operator:{{release}}"}]'
-    ```
+    === "For single-namespace deployment"
+
+        Use the following command if you deploy both the Operator and the database cluster in the same namespace:
+
+        ```bash
+        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/operator.yaml
+        ```
+
+    === "For cluster-wide deployment"
+
+        If you deployed the Operator to manage several clusters in different namespaces (the so-called [cluster-wide mode](cluster-wide.md)), use the following command
+
+        ```bash
+        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/cw-operator.yaml
+        ```
+
    
     For previous releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/)
 

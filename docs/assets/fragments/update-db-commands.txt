@@ -8,216 +8,220 @@ Since this is a working cluster, the way to update the Custom Resource is to [ap
 
 Select the command that matches your setup from the sections below.
 
-#### MySQL 8.4 - Asynchronous replication
+=== "MySQL 8.4"
 
-Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Router.
+    === "Asynchronous replication"
 
-=== "With PMM Client"
+        Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Router.
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-           "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-       }}'
-    ```
+        * **With PMM Client**
 
-=== "Without PMM Client"
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
+               }}'
+            ```
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-       }}'
-    ```
+        * **Without PMM Client**
 
-#### MySQL 8.4 - Group replication with HAProxy
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
+               }}'
+            ```
 
-Group replication with HAProxy uses HAProxy only. It does not use MySQL Router or Orchestrator.
+    === "Group replication with HAProxy"
 
-=== "With PMM Client"
+        Group replication with HAProxy uses HAProxy only. It does not use MySQL Router or Orchestrator.
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-           "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-       }}'
-    ```
+        * **With PMM Client**
 
-=== "Without PMM Client"
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
+               }}'
+            ```
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-       }}'
-    ```
+        * **Without PMM Client**
 
-#### MySQL 8.4 - Group replication with MySQL Router
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
+               }}'
+            ```
 
-Group replication with MySQL Router uses MySQL Router only. It does not use HAProxy or Orchestrator.
+    === "Group replication with MySQL Router"
 
-=== "With PMM Client"
+        Group replication with MySQL Router uses MySQL Router only. It does not use HAProxy or Orchestrator.
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-           "proxy":{
-              "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-           "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-       }}'
-    ```
+        * **With PMM Client**
 
-=== "Without PMM Client"
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
+                   "proxy":{
+                      "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
+               }}'
+            ```
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-           "proxy":{
-              "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-       }}'
-    ```
+        * **Without PMM Client**
 
-#### MySQL 8.0 - Asynchronous replication
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
+                   "proxy":{
+                      "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
+               }}'
+            ```
 
-Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Router.
+=== "MySQL 8.0"
 
-=== "With PMM Client"
+    === "Asynchronous replication"
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-           "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-       }}'
-    ```
+        Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Router.
 
-=== "Without PMM Client"
+        * **With PMM Client**
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-       }}'
-    ```
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
+               }}'
+            ```
 
-#### MySQL 8.0 - Group replication with HAProxy
+        * **Without PMM Client**
 
-Group replication with HAProxy uses HAProxy only. It does not use MySQL Router or Orchestrator.
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
+               }}'
+            ```
 
-=== "With PMM Client"
+    === "Group replication with HAProxy"
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-           "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-       }}'
-    ```
+        Group replication with HAProxy uses HAProxy only. It does not use MySQL Router or Orchestrator.
 
-=== "Without PMM Client"
+        * **With PMM Client**
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
-           "proxy":{
-              "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-       }}'
-    ```
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
+               }}'
+            ```
 
-#### MySQL 8.0 - Group replication with MySQL Router
+        * **Without PMM Client**
 
-Group replication with MySQL Router uses MySQL Router only. It does not use HAProxy or Orchestrator.
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+                   "proxy":{
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
+               }}'
+            ```
 
-=== "With PMM Client"
+    === "Group replication with MySQL Router"
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
-           "proxy":{
-              "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-           "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-       }}'
-    ```
+        Group replication with MySQL Router uses MySQL Router only. It does not use HAProxy or Orchestrator.
 
-=== "Without PMM Client"
+        * **With PMM Client**
 
-    ```bash
-    kubectl patch ps ps-cluster1 --type=merge --patch '{
-       "spec": {
-           "crVersion":"{{ release }}",
-           "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
-           "proxy":{
-              "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
-           },
-           "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
-           "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-       }}'
-    ```
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+                   "proxy":{
+                      "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
+               }}'
+            ```
+
+        * **Without PMM Client**
+
+            ```bash
+            kubectl patch ps ps-cluster1 --type=merge --patch '{
+               "spec": {
+                   "crVersion":"{{ release }}",
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
+                   "proxy":{
+                      "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
+                   },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
+               }}'
+            ```
