@@ -157,7 +157,7 @@ You may face issues with the backup. To identify the issue, you can do the follo
    kubectl get ps-backup <backup-name> -n <namespace> -o yaml
    ```
 
-2. [View the backup-agent logs](debug-logs.md). Use the command from step 1 to find the name of the pod where the backup was made. Check for the information in the `.status.backupSourcefield` to find the Pod where the backup process was run. To view the logs, run the following command:
+2. [View the backup-agent logs](debug-logs.md). Use the command from step 1 to find the name of the pod where the backup was made. Check for the information in the `.status.backupSource` field to find the Pod where the backup process was run. To view the logs, run the following command:
   
   ```bash
   kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
