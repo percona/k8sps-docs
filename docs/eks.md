@@ -88,9 +88,9 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
 
     !!! warning
 
-        Starting with 1.30, Amazon EKS no longer includes the default annotation on the gp2 StorageClass resource applied to newly created clusters.
+        Starting with 1.30, Amazon EKS no longer automatically applies the default annotation for the `gp2` StorageClass to newly created clusters.
 
-        You need to specify storageClassName explicitly in cr.yaml:
+        You need to specify the storageClassName explicitly in `deploy/cr.yaml`:
 
         ```
         mysql:
