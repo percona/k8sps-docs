@@ -105,7 +105,7 @@ Before you start, make sure you have:
     ```
 
 
-2. Generate a Certificate Authority (CA). Uou will use it to sign your server certificates. 
+2. Generate a Certificate Authority (CA). You will use it to sign your server certificates. 
 
     ```bash
     cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
