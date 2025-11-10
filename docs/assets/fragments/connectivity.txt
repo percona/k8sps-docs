@@ -47,13 +47,13 @@ Here’s how to get it:
     [MySQL Router](router-conf.md) (can be used with Group Replication clusters):
 
     === "If using HAProxy (default)"
-        ``` {.bash data-prompt="$" }
-        $ mysql -h ps-cluster1-haproxy -uroot -p<root password>
+        ``` bash
+        mysql -h ps-cluster1-haproxy -uroot -p<root password>
         ```
 
     === "If using MySQL Router"
-        ``` {.bash data-prompt="$" }
-        $ mysql -h ps-cluster1-router -uroot -p<root password>
+        ```bash
+        mysql -h ps-cluster1-router -uroot -p<root password>
         ```
     
     ??? example "Expected output"
@@ -79,8 +79,8 @@ Here’s how to get it:
     The following example uses the MySQL prompt to check the
     `max_connections` variable:
 
-    ```{.bash data-prompt="mysql>"}
-    mysql> SHOW VARIABLES LIKE "max_connections";
+    ```sql
+    SHOW VARIABLES LIKE "max_connections";
     ```
 
     ??? example "Expected output"

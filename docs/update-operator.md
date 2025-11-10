@@ -49,15 +49,15 @@ The upgrade includes the following steps.
 
 1. Update the Custom Resource Definition for the Operator and the Role-based access control. Take the latest versions from the official repository on GitHub with the following commands:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
     ```
 
 2. Next, update the Percona Server for MySQL Operator Deployment in Kubernetes by changing the container image of the Operator Pod to the latest version. Find the image name for the current Operator release [in the list of certified images](images.md). Then [apply a patch :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to the Operator Deployment and specify the image name and version. Use the following command to update the Operator to the `{{ release }}` version:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl patch deployment percona-server-mysql-operator \
+    ```bash
+    kubectl patch deployment percona-server-mysql-operator \
       --namespace <your-namespace> \
       --type=merge \
       --patch '{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"percona/percona-server-mysql-operator:{{release}}"}]}}}}'
@@ -69,8 +69,8 @@ The upgrade includes the following steps.
     You can track the rollout process in real time with the
     `kubectl rollout status` command with the name of your cluster:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl rollout status deployments percona-server-mysql-operator
+    ```bash
+    kubectl rollout status deployments percona-server-mysql-operator
     ```
 
     !!! note
@@ -89,8 +89,8 @@ The upgrade includes the following steps.
 
     === "With PMM Client"
 
-        ```{.bash data-prompt="$"}
-        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
+        ```bash
+        kubectl patch ps ps-cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
@@ -107,8 +107,8 @@ The upgrade includes the following steps.
 
     === "Without PMM Client"
 
-        ```yaml
-        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
+        ```bash
+        kubectl patch ps ps-cluster1 --type=merge --patch '{
            "spec": {
                "crVersion":"{{ release }}",
                "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
@@ -131,9 +131,9 @@ Operator with the `helm upgrade` command.
     for the Operator, taking it from the official repository on Github, and do
     the same for the Role-based access control:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
+    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
     ```
 
 2. Next, update the Operator deployment. 
@@ -142,8 +142,8 @@ Operator with the `helm upgrade` command.
 
         If you installed the Operator with default parameters, the upgrade can be done as follows: 
         
-        ``` {.bash data-prompt="$" }
-        $ helm upgrade my-op percona/ps-operator --version {{ release }}
+        ```bash 
+        helm upgrade my-op percona/ps-operator --version {{ release }}
         ```
 
     === "With customized parameters"
@@ -152,7 +152,7 @@ Operator with the `helm upgrade` command.
 
         You can get the list of the used options in YAML format with the `helm get values my-op -a > my-values.yaml` command. Then pass this file directly to the upgrade command as follows:
 
-        ``` {.bash data-prompt="$" }
-        $ helm upgrade my-op percona/ps-operator --version {{ release }} -f my-values.yaml
+        ```bash
+        helm upgrade my-op percona/ps-operator --version {{ release }} -f my-values.yaml
         ```
 

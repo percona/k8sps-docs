@@ -17,12 +17,12 @@ contains correctly configured keys and is applied with `kubectl` command, use
 
 * <a name="finalizers"></a>**S3 backup finalizer** set by the `metadata.finalizers.percona.com/delete-backup` key (it triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object).
 
-The example of such file is [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup.yaml).
+The example of such file is [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup.yaml).
 
 When the backup destination is configured and applied with kubectl apply -f deploy/cr.yaml command, make backup as follows:
 
-```{.bash data-prompt="$"}
-$ kubectl apply -f deploy/backup/backup.yaml
+```bash
+kubectl apply -f deploy/backup/backup.yaml
 ```
 
 !!! note
@@ -30,8 +30,8 @@ $ kubectl apply -f deploy/backup/backup.yaml
     Storing backup settings in a separate file can be replaced by
     passing its content to the `kubectl apply` command as follows:
 
-    ```{.bash data-prompt="$"}
-    $ cat <<EOF | kubectl apply -f-
+    ```bash
+    cat <<EOF | kubectl apply -f-
     apiVersion: ps.percona.com/v1alpha1
     kind: PerconaServerMySQLBackup
     metadata:
@@ -43,3 +43,34 @@ $ kubectl apply -f deploy/backup/backup.yaml
       storageName: s3-us-west
     EOF
     ```
+
+## Specifying the backup source
+
+When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object's status:
+
+```
+$ kubectl get ps-backup backup1 -o yaml
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLBackup
+metadata:
+  name: backup1
+  ...
+status:
+  backupSource: cluster1-mysql-1.cluster1-mysql.<namespace>
+  ...
+```
+
+You can specify the source pod in the backup object to run the backup on this specific pod:
+
+```
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLBackup
+metadata:
+  name: backup1
+  finalizers:
+    - percona.com/delete-backup
+spec:
+  clusterName: ps-cluster1
+  storageName: s3-us-west
+  sourcePod: ps-cluster1-mysql-2
+```

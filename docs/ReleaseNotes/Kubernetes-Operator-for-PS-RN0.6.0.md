@@ -29,7 +29,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 * {{ k8spsjira(205) }}: Update user passwords on a per-user basis instead of a cumulative update so that if an error occurs while changing a user's password, other system users are not affected
 * {{ k8spsjira(270) }}: Use more clear [Controller](https://kubernetes.io/docs/concepts/architecture/controller/) names in log messages to ease troubleshooting
 * {{ k8spsjira(280) }}: Full cluster crash recovery with group replication is now using MySQL shell built-in checks to detect the member with latest transactions and reboots from it, making the cluster prone to data loss
-* {{ k8spsjira(281) }}: The Operator [can now be run locally](https://github.com/percona/percona-server-mysql-operator/blob/main/CONTRIBUTING.md#1-contributing-to-the-source-tree) against a remote Kubernetes cluster, which simplifies the development process, substantially shortening the way to make and try minor code improvements
+* {{ k8spsjira(281) }}: The Operator [can now be run locally :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/CONTRIBUTING.md#1-contributing-to-the-source-tree) against a remote Kubernetes cluster, which simplifies the development process, substantially shortening the way to make and try minor code improvements
 
 ## Bugs Fixed
 

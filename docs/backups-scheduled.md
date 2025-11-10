@@ -2,7 +2,7 @@
  
 
 Backups schedule is defined in the `backup` section of the Custom
-Resource and can be configured via the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+Resource and can be configured via the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
 file.
 
 1. The `backup.storages` subsection should contain at least one [configured storage](backups-storage.md).
@@ -41,7 +41,7 @@ backup:
   ...
 ```
 
-## Managing multiple backup schedules
+## Managing multiple backup schedules in the same storage
 
 You can define multiple backup schedules to meet different recovery and compliance needs. For example, create daily backups for quick recovery from recent changes and monthly backups for long-term retention or audit purposes. 
 

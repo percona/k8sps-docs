@@ -104,6 +104,10 @@ plugins:
   search: 
     separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
   git-revision-date: {}
+  git-committers:
+    enabled: !ENV [CI, false]
+    repository: percona/k8sps-docs
+    branch: "main"  
   meta-descriptions:
     export_csv: false
     quiet: false

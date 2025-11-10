@@ -61,103 +61,75 @@ The steps to install the *cert-manager* are the following:
     $ kubectl get pods -n cert-manager
     ```
 
-The result should display the *cert-manager* and webhook active and running:
+    The result should display the *cert-manager* and webhook active and running:
 
-```{.text .no-copy}
-NAME                                       READY   STATUS    RESTARTS   AGE
-cert-manager-69f748766f-6chvt              1/1     Running   0          65s
-cert-manager-cainjector-7cf6557c49-l2cwt   1/1     Running   0          66s
-cert-manager-webhook-58f4cff74d-th4pp      1/1     Running   0          65s
-```
+    ??? example "Expected output"
+
+        ```{.text .no-copy}
+        NAME                                       READY   STATUS    RESTARTS   AGE
+        cert-manager-69f748766f-6chvt              1/1     Running   0          65s
+        cert-manager-cainjector-7cf6557c49-l2cwt   1/1     Running   0          66s
+        cert-manager-webhook-58f4cff74d-th4pp      1/1     Running   0          65s
+        ```
 
 Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you [check certificates for expiration](#), you will find that they are valid and short-term.
 
 ## Generate certificates manually
 
-You can generate TLS certificates manually instead of using the Operator's automatic certificate generation. This approach gives you full control over certificate properties and is useful for production environments with specific security requirements.
+To generate certificates manually, follow these steps:
 
-### What you'll create
+1. Provision a Certificate Authority (CA) to generate TLS certificates
 
-When you follow the steps from this guide, you'll generate these certificate files:
+2. Generate a CA key and certificate file with the server details
 
-* `server.pem` - Server certificate for MySQL nodes
-* `server-key.pem` - Private key for the server certificate  
-* `ca.pem` - Certificate Authority certificate
-* `ca-key.pem` - Certificate Authority private key
+3. Create the server TLS certificates using the CA keys, certs, and server
+    details
 
-Next, create the server TLS certificates using the CA keys, certs, and server details and then reference this Secret in the Custom Resource.
+The set of commands generate certificates with the following attributes:
 
-### Prerequisites
+* `Server-pem` - Certificate
 
-Before you start, make sure you have:
+* `Server-key.pem` - the private key
 
-* `cfssl` and `cfssljson` tools installed on your system
-* Your cluster name and namespace ready
-* Access to your Kubernetes cluster
+* `ca.pem` - Certificate Authority
 
-### Generate certificates
-
-1. Replace `ps-cluster1` and `my-namespace` with your actual cluster name and namespace in the commands below:
-
-    ```bash
-    CLUSTER_NAME=ps-cluster1
-    NAMESPACE=my-namespace
-    ```
-
-
-2. Generate a Certificate Authority (CA). You will use it to sign your server certificates. 
-
-    ```bash
-    cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
-    {
-      "CN": "Root CA",
-      "key": {
-        "algo": "rsa",
-        "size": 2048
-      }
-    }
-    EOF
-    ```
-
-    The output is two files: `ca.pem` (the CA certificate) and `ca-key.pem` (the CA private key).
-
-3. Generate the Server Certificate using the CA. This command generates a server certificate and key, signed by your newly-created CA. The certificate will be valid for all hosts required by your cluster components. 
-
-    ```bash
-    cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
-    {
-      "hosts": [
-        "*.${CLUSTER_NAME}-mysql",
-        "*.${CLUSTER_NAME}-mysql.${NAMESPACE}",
-        "*.${CLUSTER_NAME}-mysql.${NAMESPACE}.svc",
-        "*.${CLUSTER_NAME}-orchestrator",
-        "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}",
-        "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}.svc",
-        "*.${CLUSTER_NAME}-router",
-        "*.${CLUSTER_NAME}-router.${NAMESPACE}",
-        "*.${CLUSTER_NAME}-router.${NAMESPACE}.svc"
-      ],
-      "CN": "${CLUSTER_NAME}-mysql",
-      "key": {
-        "algo": "rsa",
-        "size": 2048
-      }
-    }
-    EOF
-    ```
-    
-    The outputs are `server.pem` (the server certificate) and `server-key.pem` (the server private key).
-
-### Create the Kubernetes Secret from the generated certificates
-
-This command packages the generated certificate and key files into a Kubernetes secret named `my-cluster-ssl` in your chosen namespace. 
+A secret must be added to `cr.yaml/spec/sslSecretName`.
 
 ```bash
-kubectl create secret generic my-cluster-ssl -n $NAMESPACE \
-  --from-file=tls.crt=server.pem \
-  --from-file=tls.key=server-key.pem \
-  --from-file=ca.crt=ca.pem \
-  --type=kubernetes.io/tls
+cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
+{
+  "CN": "Root CA",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  }
+}
+EOF
+
+cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
+{
+  "hosts": [
+    "*.${CLUSTER_NAME}-mysql",
+    "*.${CLUSTER_NAME}-mysql.${NAMESPACE}",
+    "*.${CLUSTER_NAME}-mysql.${NAMESPACE}.svc",
+    "*.${CLUSTER_NAME}-orchestrator",
+    "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}",
+    "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}.svc",
+    "*.${CLUSTER_NAME}-router",
+    "*.${CLUSTER_NAME}-router.${NAMESPACE}",
+    "*.${CLUSTER_NAME}-router.${NAMESPACE}.svc"
+  ],
+  "CN": "${CLUSTER_NAME}-mysql",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  }
+}
+EOF
+
+kubectl create secret generic my-cluster-ssl --from-file=tls.crt=server.pem --
+from-file=tls.key=server-key.pem --from-file=ca.crt=ca.pem --
+type=kubernetes.io/tls
 ```
 
 ### Configure your cluster

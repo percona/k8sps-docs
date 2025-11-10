@@ -24,15 +24,15 @@ To use the Router, enable it and make sure that HAProxy is disabled.
 
 2. Update the cluster to apply the new configuration:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/cr.yaml
+    ```bash
+    kubectl apply -f deploy/cr.yaml
     ```
 
     When the process is over your cluster will obtain the `ready` status. You
     can check it with the following command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps
+    ```bash
+    kubectl get ps
     ```
 
     ??? example "Expected output"
@@ -71,8 +71,8 @@ Before you start, check that you have [enabled the MySQL Router](#enable-mysql-r
 
     2. Update the cluster to apply the new configuration
 
-        ```{.bash data-prompt="$"}
-        $ kubectl apply -f deploy.cr.yaml
+        ```bash
+        kubectl apply -f deploy.cr.yaml
         ```
 
 === "ConfigMap"
@@ -92,23 +92,23 @@ Before you start, check that you have [enabled the MySQL Router](#enable-mysql-r
 
     2. Get the name of your cluster to pass the configuration
 
-        ```{.bash data-prompt="$"}
-        $ kubectl get ps
+        ```bash
+        kubectl get ps
         ```
 
     3. Create the ConfigMap. You should use the combination of the cluster name with the `-router` suffix as the naming convention for the ConfigMap. For example, to create the ConfigMap for the cluster `ps-cluster1`, the command is the following:
 
 
-        ```{.bash data-prompt="$"}
-        $ kubectl create configmap ps-cluster1-router --from-file=mysqlrouter.conf
+        ```bash
+        kubectl create configmap ps-cluster1-router --from-file=mysqlrouter.conf
         ```
         
         Replace the `ps-cluster1` with the corresponding name of your cluster.
 
     4. View the created ConfigMap using the following command:
 
-        ```{.bash data-prompt="$"}
-        $ kubectl describe configmaps ps-cluster1-mysql
+        ```bash
+        kubectl describe configmaps ps-cluster1-mysql
         ```
 
  

@@ -41,15 +41,15 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
 
         === ":simple-linux: in Linux"
 
-            ```{.bash data-prompt="$"}
-            $ kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64 --wrap=0)'"}}')"
+            ```bash
+            kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64 --wrap=0)'"}}')"
 
             ```
 
         === ":simple-apple: in macOS"
 
-            ```{.bash data-prompt="$"}
-            $ kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64)'"}}')"
+            ```bash
+            kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n new_key | base64)'"}}')"
             ```
 
 2. Update the `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{ release }}/deploy/cr.yaml) file:
@@ -66,8 +66,8 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
 
 3. Apply the changes:
 
-    ``` {.bash data-prompt="$"}
-    $ kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
     ```
     
     This triggers the Operator to restart your cluster Pods. 
@@ -75,9 +75,9 @@ PMM Client is installed as a side-car container in the database Pods in your Kub
 4. Check that corresponding Pods are not in a cycle of stopping and restarting.
     This cycle occurs if there are errors on the previous steps:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl get pods -n <namespace>
-    $ kubectl logs  <cluster-name>-mysql-0 -c pmm-client -n <namespace>
+    ```bash
+    kubectl get pods -n <namespace>
+    kubectl logs  <cluster-name>-mysql-0 -c pmm-client -n <namespace>
     ```
 
 ## Check the metrics

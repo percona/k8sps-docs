@@ -31,7 +31,7 @@ With our latest release, we put an all-hands-on-deck approach towards fine-tunin
 
 ## Improvements
 
-* {{ k8spsjira(129) }}: The documentation on how to build and test the Operator [is now available](https://github.com/percona/percona-server-mysql-operator/blob/main/e2e-tests/README.md)
+* {{ k8spsjira(129) }}: The documentation on how to build and test the Operator [is now available :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/e2e-tests/README.md)
 * {{ k8spsjira(295) }}: Certificate issuer errors are now reflected in the Custom Resource status message and can be easily checked with the `kubectl get ps -o yaml` command
 * {{ k8spsjira(326) }}: The mysql-monit Orchestrator sidecar container now inherits orchestrator resources following the way that HAProxy mysql-monit container does (thanks to SlavaUtesinov for contribution)
 

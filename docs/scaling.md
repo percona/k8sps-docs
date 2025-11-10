@@ -113,8 +113,8 @@ To increase the storage size manually, do the following:
 
 1. Extract and backup the cluster configuration
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps ps-cluster1 -o yaml > CR_backup.yaml
+    ```bash
+    kubectl get ps ps-cluster1 -o yaml > CR_backup.yaml
     ```
 
 2. Now you should delete the cluster.
@@ -125,14 +125,14 @@ To increase the storage size manually, do the following:
     all cluster data will be lost!** -->
     You can use the following command to delete the cluster:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl delete ps ps-cluster1
+    ```bash
+    kubectl delete ps ps-cluster1
     ```
 
 3. For each node, edit the yaml to resize the PVC object.
 
-    ```{.bash data-prompt="$"}
-    $ kubectl edit pvc datadir-ps-cluster1-mysql-0
+    ```bash
+    kubectl edit pvc datadir-ps-cluster1-mysql-0
     ```
 
     In the yaml, edit the spec.resources.requests.storage value.
@@ -148,16 +148,16 @@ To increase the storage size manually, do the following:
 
     Perform the same operation on the other nodes.
 
-    ```{.bash data-prompt="$"}
-    $ kubectl edit pvc datadir-ps-cluster1-mysql-1
-    $ kubectl edit pvc datadir-ps-cluster1-mysql-2
+    ```bash
+    kubectl edit pvc datadir-ps-cluster1-mysql-1
+    kubectl edit pvc datadir-ps-cluster1-mysql-2
     ```
 
 4. In the CR configuration file, use vim or another text editor to edit
     the PVC size. 
 
-    ```{.bash data-prompt="$"}
-    $ vim CR_backup.yaml
+    ```bash
+    vim CR_backup.yaml
     ```
 
 5. Set the new storage size for the `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage` option:
@@ -175,8 +175,8 @@ To increase the storage size manually, do the following:
 
 6. Apply the updated configuration to the cluster.
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f CR_backup.yaml
+    ```bash
+    kubectl apply -f CR_backup.yaml
     ```
 
 The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation. 
@@ -189,8 +189,8 @@ configuration. That’s why scaling the cluster needs nothing more but changing
 this option and applying the updated configuration file. This may be done in a
 specifically saved config, or on the fly, using the following command:
 
-```{.bash data-prompt="$"}
-$ kubectl patch ps ps-cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
+```bash
+kubectl patch ps ps-cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
 ```
 
 In this example we have changed the size of the Percona Server for MySQL

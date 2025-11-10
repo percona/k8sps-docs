@@ -57,27 +57,27 @@ You should use the combination of the cluster name with the `-mysql`
 suffix as the naming convention for the configmap. To find the cluster
 name, you can use the following command:
 
-```{.bash data-prompt="$"}
-$ kubectl get ps
+```bash
+kubectl get ps
 ```
 
 The syntax for `kubectl create configmap` command is:
 
-```{.bash data-prompt="$"}
-$ kubectl create configmap <cluster-name>-mysql <resource-type=resource-name>
+```bash
+kubectl create configmap <cluster-name>-mysql <resource-type=resource-name>
 ```
 
 The following example defines `ps-cluster1-mysql` as the configmap name and the
 `my.cnf` file as the data source:
 
-```{.bash data-prompt="$"}
-$ kubectl create configmap ps-cluster1-mysql --from-file=my.cnf
+```bash
+kubectl create configmap ps-cluster1-mysql --from-file=my.cnf
 ```
 
 To view the created configmap, use the following command:
 
-```{.bash data-prompt="$"}
-$ kubectl describe configmaps ps-cluster1-mysql
+```bash
+kubectl describe configmaps ps-cluster1-mysql
 ```
 
 ## Use a Secret Object
@@ -92,8 +92,8 @@ name and the `mysql` suffix.
 
     To find the cluster name, you can use the following command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps
+    ```bash
+    kubectl get ps
     ```
 
 Configuration options should be put inside a specific key inside of the `data`
@@ -104,7 +104,7 @@ Actual options should be encoded with [Base64 :octicons-link-external-16:](https
 For example, let’s define a `my.cnf` configuration file and put there a pair
 of MySQL options we used in the previous example:
 
-```default
+```
 max_connections=250
 ```
 
@@ -113,14 +113,14 @@ follows:
 
 === "in Linux"
 
-    ```{.bash data-prompt="$"}
-    $ cat my.cnf | base64 --wrap=0
+    ```bash
+    cat my.cnf | base64 --wrap=0
     ```
 
 === "in macOS"
 
-    ```{.bash data-prompt="$"}
-    $ cat my.cnf | base64
+    ```bash
+    cat my.cnf | base64
     ```
 
 !!! note
@@ -128,8 +128,8 @@ follows:
     Similarly, you can read the list of options from a Base64 encoded
     string:
 
-    ```{.bash data-prompt="$"}
-    $ echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
+    ```bash
+    echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
     ```
 
 Finally, use a yaml file to create the Secret object. For example, you can
@@ -146,8 +146,8 @@ data:
 
 When ready, apply it with the following command:
 
-```{.bash data-prompt="$"}
-$ kubectl create -f deploy/mysql-secret.yaml
+```bash
+kubectl create -f deploy/mysql-secret.yaml
 ```
 
 !!! note
@@ -156,8 +156,8 @@ $ kubectl create -f deploy/mysql-secret.yaml
     cluster has updated the configuration. You can do it with the following
     command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl rollout restart statefulset ps-cluster1-mysql
+    ```bash
+    kubectl rollout restart statefulset ps-cluster1-mysql
     ```
 
 ## Auto-tuning MySQL options

@@ -25,14 +25,14 @@ The steps are the following:
 
 1. List the Custom Resources. Replace the `<namespace>` placeholder with your value
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps -n <namespace>
+    ```bash
+    kubectl get ps -n <namespace>
     ```
 
 2. Delete the Custom Resource with the name of your cluster
 
-    ```{.bash data-prompt="$"}
-    $ kubectl delete ps <cluster_name> -n <namespace>
+    ```bash
+    kubectl delete ps <cluster_name> -n <namespace>
     ```
 
     ??? example "Sample output"
@@ -46,8 +46,8 @@ The steps are the following:
 
 3. Check that the cluster is deleted by listing the Custom Resources again:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps -n <namespace>
+    ```bash
+    kubectl get ps -n <namespace>
     ```
 
     ??? example "Sample output"
@@ -67,8 +67,8 @@ Choose the instructions relevant to the way you installed the Operator.
 
     1. List the deployments. Replace the `<namespace>` placeholder with your namespace.
 
-        ```{.bash data-prompt="$"}
-        $ kubectl get deploy -n <namespace>
+        ```bash
+        kubectl get deploy -n <namespace>
         ```
 
         ??? example "Sample output"
@@ -80,8 +80,8 @@ Choose the instructions relevant to the way you installed the Operator.
 
     2. Delete the `percona-*` deployment
 
-        ```{.bash data-prompt="$"}
-        $ kubectl delete deploy percona-server-mysql-operator -n <namespace>
+        ```bash
+        kubectl delete deploy percona-server-mysql-operator -n <namespace>
         ```
 
         ??? example "Sample output"
@@ -92,8 +92,8 @@ Choose the instructions relevant to the way you installed the Operator.
 
     3. Check that the Operator is deleted by listing the Pods. As a result you should have no Pods related to it.
 
-        ```{.bash data-prompt="$"}
-        $ kubectl get pods -n <namespace>
+        ```bash
+        kubectl get pods -n <namespace>
         ```
         
         ??? example "Sample output"
@@ -108,8 +108,8 @@ Choose the instructions relevant to the way you installed the Operator.
 
         Get the list of CRDs. 
 
-        ```{.bash data-prompt="$"}
-        $ kubectl get crd
+        ```bash
+        kubectl get crd
         ```
 
         ??? example "Sample output"
@@ -123,8 +123,8 @@ Choose the instructions relevant to the way you installed the Operator.
 
     5. Delete the `percona*.ps.percona.com` CRDs
 
-        ```{.bash data-prompt="$"}
-        $ kubectl delete crd perconaservermysqlbackups.ps.percona.com perconaservermysqlrestores.ps.percona.com perconaservermysqls.ps.percona.com
+        ```bash
+        kubectl delete crd perconaservermysqlbackups.ps.percona.com perconaservermysqlrestores.ps.percona.com perconaservermysqls.ps.percona.com
         ``` 
 
         ??? example "Sample output"
@@ -142,8 +142,8 @@ Choose the instructions relevant to the way you installed the Operator.
 
     1. List the Helm charts:
 
-        ```{.bash data-prompt="$"}
-        $ helm list -n <namespace>
+        ```bash
+        helm list -n <namespace>
         ```
 
         ??? example "Sample output"
@@ -155,14 +155,14 @@ Choose the instructions relevant to the way you installed the Operator.
 
     2. Delete the [release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts) for Percona XtraDB Cluster 
 
-        ```{.bash data-prompt="$"}
-        $ helm uninstall ps-cluster1 --namespace <namespace>
+        ```bash
+        helm uninstall ps-cluster1 --namespace <namespace>
         ```
 
     3. Delete the [release object :octicons-link-external-16:](https://helm.sh/docs/intro/using_helm/#three-big-concepts) for the Operator 
 
-        ```{.bash data-prompt="$"}
-        $ helm uninstall my-op --namespace <namespace>
+        ```bash
+        helm uninstall my-op --namespace <namespace>
         ```
 
 ## Clean up resources
@@ -178,8 +178,8 @@ To manually clean up resources, do the following:
 
     1. List PVCs. Replace the `<namespace>` placeholder with your namespace:
 
-        ```{.bash data-prompt="$"}
-        $ kubectl get pvc -n <namespace>
+        ```bash
+        kubectl get pvc -n <namespace>
         ```    
 
         ??? example "Sample output"    
@@ -193,8 +193,8 @@ To manually clean up resources, do the following:
 
     2. Delete PVCs related to your cluster. The following command deletes PVCs for the `ps-cluster1` cluster:
 
-        ```{.bash data-prompt="$"}
-        $ kubectl delete pvc datadir-ps-cluster1-mysql-0 datadir-ps-cluster1-mysql-1 datadir-ps-cluster1-mysql-2 -n <namespace>
+        ```bash
+        kubectl delete pvc datadir-ps-cluster1-mysql-0 datadir-ps-cluster1-mysql-1 datadir-ps-cluster1-mysql-2 -n <namespace>
         ```    
 
         ??? example "Sample output"       
@@ -209,13 +209,13 @@ To manually clean up resources, do the following:
 
     1. List Secrets:
 
-        ```{.bash data-prompt="$"}
-        $ kubectl get secrets -n <namespace>
+        ```bash
+        kubectl get secrets -n <namespace>
         ```    
 
     2. Delete the Secret:
         
-        ```{.bash data-prompt="$"}
-        $ kubectl delete secret <secret_name> -n <namespace>
+        ```bash
+        kubectl delete secret <secret_name> -n <namespace>
         ```
 

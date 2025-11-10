@@ -44,29 +44,29 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
 
     So, create the namespace and save it in the namespace context for subsequent commands as follows (replace the `<namespace name>` placeholder with some descriptive name):
 
-    ```{.bash data-prompt="$"}
-    $ kubectl create namespace <namespace name>
-    $ kubectl config set-context $(kubectl config current-context) --namespace=<namespace name>
+    ```bash
+    kubectl create namespace <namespace name>
+    kubectl config set-context $(kubectl config current-context) --namespace=<namespace name>
     ```
 
     At success, you will see the message that namespace/<namespace name> was created, and the context was modified.
 
 2. Use the following `git clone` command to download the correct branch of the percona-server-mysql-operator repository:
 
-    ```{.bash data-prompt="$"}
-    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    ```bash
+    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
     ```
 
     After the repository is downloaded, change the directory to run the rest of the commands in this document:
 
-    ```{.bash data-prompt="$"}
-    $ cd percona-server-mysql-operator
+    ```bash
+    cd percona-server-mysql-operator
     ```
 
 3. Deploy the Operator [using :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/server-side-apply/) the following command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply --server-side -f deploy/bundle.yaml
+    ```bash
+    kubectl apply --server-side -f deploy/bundle.yaml
     ```
 
     The following confirmation is returned:
@@ -84,11 +84,27 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
     deployment.apps/percona-server-for-mysql-operator created
     ```
 
-4. The operator has been started, and you can create the Percona Distribution
-    for MySQL cluster:
+4. The operator has been started, and you can create the Percona Distribution for MySQL cluster:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/cr.yaml
+    !!! warning
+
+        Starting with 1.30, Amazon EKS no longer automatically applies the default annotation for the `gp2` StorageClass to newly created clusters.
+
+        You need to specify the storageClassName explicitly in `deploy/cr.yaml`:
+
+        ```
+        mysql:
+          ...
+          volumeSpec:
+            persistentVolumeClaim:
+              storageClassName: gp2
+              resources:
+                requests:
+                  storage: 20Gi
+        ```
+
+    ```bash
+    kubectl apply -f deploy/cr.yaml
     ```
 
     The process could take some time.
@@ -106,7 +122,7 @@ Also, you need to configure AWS CLI with your credentials according to the [offi
 6. You can also check whether you can connect to MySQL from the outside
     with the help of the `kubectl port-forward` command as follows:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl port-forward svc/ps-cluster1-mysql-primary 3306:3306 &
-    $ mysql -h 127.0.0.1 -P 3306 -uroot -p<root password>
+    ```bash
+    kubectl port-forward svc/ps-cluster1-mysql-primary 3306:3306 &
+    mysql -h 127.0.0.1 -P 3306 -uroot -p<root password>
     ```
