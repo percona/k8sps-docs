@@ -46,7 +46,7 @@ kubectl apply -f deploy/backup/backup.yaml
 
 ## Specifying the backup source
 
-When you create a backup object, operator selects a pod to take the backup from. You can see the backup source pod in the backup object's status:
+When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object's status:
 
 ```
 $ kubectl get ps-backup backup1 -o yaml
