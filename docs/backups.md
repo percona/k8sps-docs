@@ -6,7 +6,7 @@ or on [Azure Blob Storage :octicons-link-external-16:](https://azure.microsoft.c
 
 ![image](assets/images/backup-s3.svg)
 
-The Operator does physical backups using the [Percona XtraBackup :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/) tool.
+The Operator does physical backups using the [Percona XtraBackup :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/) tool. In each database pod, there is a sidecar container called `xtrabackup`. It runs a simple HTTP server that accepts requests for starting and deleting backups. When a new PerconaServerMySQLBackup object is created, operator creates a `Job` and this job starts the backup by sending a HTTP request to the backup source pod.
 
 Backups are controlled by the `backup` section of the
 [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
