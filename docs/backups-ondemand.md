@@ -60,7 +60,7 @@ status:
   ...
 ```
 
-The source pod can also be specified in the backup object to run the backup on a specific pod:
+You can specify the source pod in the backup object to run the backup on this specific pod:
 
 ```
 apiVersion: ps.percona.com/v1
