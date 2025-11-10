@@ -92,9 +92,6 @@ default web browser.
         ps-cluster1   async         ps-cluster1-haproxy.default   ready   3       3              3                  5m50s
         ```
 
-    You can also track the progress via the Kubernetes dashboard:
-
-    ![image](assets/images/minikube-pods.svg)
 
 ## Verify the cluster operation
 
