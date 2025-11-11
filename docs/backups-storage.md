@@ -223,7 +223,6 @@ object with credentials needed to access the storage.
               type: gcs
               gcs:
                 bucket: GCS-BACKUP-BUCKET-NAME-HERE
-                region: us-east-1
                 credentialsSecret: ps-cluster1-gcp-credentials
         ```
 
