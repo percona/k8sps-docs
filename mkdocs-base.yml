@@ -88,6 +88,7 @@ markdown_extensions:
         - docs/assets/code
         - docs/assets/fragments
         - docs/ReleaseNotes
+        - docs/
       auto_append:
         - services-banner.md
   pymdownx.highlight: 
@@ -222,7 +223,6 @@ nav:
             - "About upgrades": update.md
             - "Upgrade the Operator": update-operator.md
             - "Upgrade the database": update-db.md
-            - "Migration guide (0.8.0 to 0.9.0)": update-to-0.9.0.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:
             - "Delete the Operator": delete.md
