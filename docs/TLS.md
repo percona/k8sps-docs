@@ -72,7 +72,7 @@ The steps to install the *cert-manager* are the following:
         cert-manager-webhook-58f4cff74d-th4pp      1/1     Running   0          65s
         ```
 
-Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you [check certificates for expiration](#), you will find that they are valid and short-term.
+Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you check certificates for expiration, you will find that they are valid and short-term.
 
 ## Generate certificates manually
 
