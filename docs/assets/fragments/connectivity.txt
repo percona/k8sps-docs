@@ -35,7 +35,7 @@ Here’s how to get it:
 4. Run a container with `mysql` tool and connect its console output to your terminal. The following command will do this, naming the new Pod `percona-client`:
 
     ```{.bash data-prompt="$"}
-    $ {{ commandName }} run -i --rm --tty percona-client --image=percona:8.4 --restart=Never -- bash -il
+    $ {{ commandName }} run -i --rm --tty percona-client --image=percona/percona-server:8.4 --restart=Never -- bash -il
     ```
 
     It may require some time to execute the command and deploy the correspondent Pod.
