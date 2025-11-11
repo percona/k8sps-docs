@@ -11,6 +11,6 @@ Below you can find the versions of software components and platforms that have b
 
 ## Platforms
 
-| Operator | [GKE :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine)         | [EKS :octicons-link-external-16:](https://aws.amazon.com)         | [Openshift :octicons-link-external-16:](https://www.redhat.com/en/technologies/cloud-computing/openshift) | [AKS :octicons-link-external-16:](https://azure.microsoft.com/en-us/services/kubernetes-service/) | [Minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube)                          |
-|:--------|:------------|:------------|:------------|:--------------|:--------------------|
-|[1.0.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md)  | 1.31 - 1.33 | 1.31 - 1.34 | 4.16 - 4.20 |  | 1.37.0 |
+| Operator | [GKE :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine)         | [EKS :octicons-link-external-16:](https://aws.amazon.com)         | [Openshift :octicons-link-external-16:](https://www.redhat.com/en/technologies/cloud-computing/openshift) | [Minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube)                          |
+|:--------|:------------|:------------|:------------|:--------------------|
+|[1.0.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md)  | 1.31 - 1.33 | 1.31 - 1.34 | 4.16 - 4.20 |  1.37.0 |
