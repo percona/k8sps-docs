@@ -193,7 +193,9 @@ nav:
               - "Configure storage for backups": backups-storage.md
               - "Make scheduled backups": backups-scheduled.md
               - "Make on-demand backup": backups-ondemand.md
-              - "Restore from a previously saved backup": backups-restore.md
+              - Restore from a backup:
+                - "On the same cluster": backups-restore.md
+                - "On a new cluster": backups-restore-to-new-cluster.md
               - "Fine-tune backups and restores": backups-fine-tune.md
               - "Delete the unneeded backup": backups-delete.md
           - Monitoring:
