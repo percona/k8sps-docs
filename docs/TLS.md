@@ -94,6 +94,10 @@ The set of commands generate certificates with the following attributes:
 * `ca.pem` - Certificate Authority
 
 A secret must be added to `cr.yaml/spec/sslSecretName`.
+```bash
+export NAMESPACE=<namespace>
+export CLUSTER_NAME=ps-cluster1
+```
 
 ```bash
 cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
@@ -127,7 +131,7 @@ cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare ser
 }
 EOF
 
-kubectl create secret generic my-cluster-ssl --from-file=tls.crt=server.pem --
+kubectl create secret generic ps-cluster1-ssl --from-file=tls.crt=server.pem --
 from-file=tls.key=server-key.pem --from-file=ca.crt=ca.pem --
 type=kubernetes.io/tls
 ```
@@ -138,14 +142,13 @@ After creating the Secret, reference it in your cluster configuration in the dep
 
 ```yaml
 spec:
-  sslSecretName: my-cluster-ssl
+  sslSecretName: ps-cluster1-ssl
 ```
 
-Apply the configuration to update the cluster:
+Apply the configuration  and create the cluster:
 
 ```bash
 kubectl apply -f deploy/cr.yaml -n $NAMESPACE
 ```
 
-This triggers your Pods to restart.
 
