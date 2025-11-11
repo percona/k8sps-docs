@@ -2387,7 +2387,7 @@ The number of retries to make a backup (by default, 6 retries are made).
 
 ### `backup.storages.STORAGE-NAME.type`
 
-The cloud storage type used for backups. Only `s3` and `azure` types are supported.
+The cloud storage type used for backups. The following types are supported: `s3`, `gcs` and `azure`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2632,6 +2632,38 @@ The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/c
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `my-cluster-name-backup-azure` |
+
+### `backup.storages.STORAGE-NAME.gcs.bucket`
+
+The name of the storage bucket.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `bucket-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.prefix`
+
+The path to the data directory in the bucket. If undefined, backups are stored in the bucket's root directory.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `prefix-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.endpointUrl`
+
+The URL to access the data in Google Cloud Storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"https://storage.googleapis.com"` |
+
+### `backup.storages.STORAGE-NAME.gcs.credentialsSecret`
+
+The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain the `ACCESS_KEY_ID` and the `SECRET_ACCESS_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-gcp-credentials` |
 
 ### `backup.schedule.name`
 
