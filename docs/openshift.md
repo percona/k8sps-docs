@@ -163,7 +163,7 @@ If you have a [cert-manager
     non-privileged user:
 
 ``` {.bash data-prompt="$" }
-$ oc create clusterrole cert-admin --verb="*" --resource=iissuers.certmanager.k8s.io,certificates.certmanager.k8s.io
+$ oc create clusterrole cert-admin --verb="*" --resource=issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
 $ oc adm policy add-cluster-role-to-user cert-admin <some-user>
 ```
 
@@ -255,7 +255,7 @@ See [TLS Configuration](TLS.md) for detailed instructions.
         perconaservermysql.ps.percona.com/ps-cluster1 created
         ```
 
-2. It make take up to 10 minutes to complete the cluster deployment. Use this command to monitor the deployment:
+2. It may take up to 10 minutes to complete the cluster deployment. Use this command to monitor the deployment:
 
     ``` {.bash data-prompt="$" }
     $ oc get ps

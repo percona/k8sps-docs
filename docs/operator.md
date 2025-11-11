@@ -9,8 +9,7 @@ Percona Operator for MySQL uses [Custom Resources :octicons-link-external-16:](h
 ## PerconaServerMySQL Custom Resource options
 
 Percona Server for MySQL managed by the Operator is configured via the spec section
-of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
-file.
+of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file.
 
 The metadata part of PerconaServerMySQL Custom Resource contains the following keys:
 
@@ -26,11 +25,11 @@ alphanumeric character;
     * `percona.com/delete-ssl` if present, activates the [Finalizer :octicons-link-external-16:](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](TLS.md) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
 
 
-The top-level spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) are the following ones:
+The top-level spec elements of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) are the following ones:
 
 ## Toplevel `spec` elements
 
-The spec part of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-postgresql-operator/blob/main/deploy/cr.yaml) file contains the following:
+The spec part of the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains the following:
 
 ### `crVersion`
 
@@ -178,7 +177,7 @@ Prevents users from configuring a cluster with unsafe parameters such as startin
 
 ## <a name="operator-unsafeflags-section"></a>Unsafe flags section
 
-The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *After switching to unsafe configurations permissive mode you will not be able to switch the cluster back by setting same keys to `false`, the flags will be ignored*.
+The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *After switching to unsafe configurations permissive mode you will not be able to switch the cluster back by setting same keys to `false`, the flags will be ignored*.
 
 ### `unsafeFlags.mysqlSize`
 
@@ -222,7 +221,7 @@ Allows users to set [orchestrator.size](#orchestratorsize) option to a value les
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
-The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
+The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
 
 ### `tls.SANs`
 
@@ -258,7 +257,7 @@ A [cert-manager issuer group :octicons-link-external-16:](https://cert-manager.i
 
 ## <a name="operator-upgrade-options-section"></a>Upgrade options section
 
-The `upgradeOptions` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
+The `upgradeOptions` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
 
 ### `upgradeOptions.versionServiceEndpoint`
 
@@ -278,7 +277,7 @@ Specifies how images are picked up from the version service on initial start by 
 
 ## <a name="operator-mysql-section"></a>Percona Server for MySQL section
 
-The `mysql` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains general
+The `mysql` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains general
 configuration options for the Percona Server for MySQL.
 
 ### `mysql.clusterType`
@@ -322,13 +321,6 @@ The Docker image of the Percona Server for MySQL used (actual image names for Pe
 | ----------- | ---------- |
 | :material-code-string: string     | `percona/percona-server:{{ ps80recommended }}` |
 
-### `mysql.imagePullSecrets.name`
-
-The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets).
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `private-registry-credentials` |
 
 ### `mysql.imagePullPolicy`
 
@@ -356,7 +348,7 @@ The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kuberne
 
 ### `mysql.priorityClassName`
 
-The name of the Kubernetes [PriorityClass :octicons-external-link-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+The name of the Kubernetes [PriorityClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -443,22 +435,6 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `200m` |
 
-### `mysql.env.name`
-
-The name of an environment variable for a MySQL container. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `BOOTSTRAP_READ_TIMEOUT` |
-
-### `mysql.env.value`
-
-The value you set for the environment variables for a MySQL container.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | "600" |
-
 
 ### `mysql.podDisruptionBudget.maxUnavailable`
 
@@ -488,6 +464,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `512M` |
 
+### `mysql.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for a Percona Server for MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
 ### `mysql.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
@@ -495,6 +479,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `1G` |
+
+### `mysql.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `mysql.startupProbe.initialDelaySeconds`
 
@@ -618,7 +610,9 @@ The number of failed probes required to mark the container unhealthy.
 
 ### `mysql.env.name`
 
-Name of an environment variable for MySQL Pods. Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
+Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
+
+Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -626,7 +620,7 @@ Name of an environment variable for MySQL Pods. Read more about defining environ
 
 ### `mysql.env.value`
 
-Value of an environment variable for MySQL Pods.
+The value you set for the environment variables for a MySQL container.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -704,13 +698,6 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
 
-.type`
-
-The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-string: string     | `ClusterIP` |
 
 ### `mysql.exposePrimary.annotations`
 
@@ -871,7 +858,7 @@ The `my.cnf` file options to be passed to Percona Server for MySQL instances.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | <pre>&#124;<br>`[mysqld]`<br>`max_connections=250`</pre> |
+| :material-code-string: string     | <pre>`[mysqld]`<br>`max_connections=250`</pre> |
 
 ### `mysql.sidecars.image`
 
@@ -939,7 +926,7 @@ Name of the [custom sidecar container](sidecar.md) volume for Replica Set Pods.
 
 ## <a name="operator-haproxy-section"></a>HAProxy subsection
 
-The `proxy.haproxy` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+The `proxy.haproxy` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
 file contains configuration options for the HAProxy service.
 
 ### `proxy.haproxy.enabled`
@@ -984,7 +971,7 @@ The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kuberne
 
 ### `proxy.haproxy.priorityClassName`
 
-The name of the Kubernetes [PriorityClass :octicons-external-link-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+The name of the Kubernetes [PriorityClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1349,7 +1336,7 @@ A custom [Kubernetes Security Context for a Pod :octicons-link-external-16:](htt
 
 ## <a name="operator-router-section"></a>Router subsection
 
-The `proxy.router` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration options for the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/), which can act as a proxy for Group replication.
+The `proxy.router` subsection in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration options for the [MySQL Router :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-router/8.0/en/), which can act as a proxy for Group replication.
 
 ### `proxy.router.enabled`
 
@@ -1425,7 +1412,7 @@ A custom [Kubernetes Security Context for a Container :octicons-link-external-16
 
 ### `proxy.router.initContainer.resources.requests.memory`
 
-The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used while for MySQL Router Pods installation.
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1433,7 +1420,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 
 ### `proxy.router.initContainer.resources.requests.cpu`
 
-[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used while for MySQL Router Pods installation.
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1531,6 +1518,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `256M` |
 
+### `proxy.router.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
 ### `proxy.router.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
@@ -1538,6 +1533,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `256M` |
+
+### `proxy.router.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `proxy.router.affinity.antiAffinityTopologyKey`
 
@@ -1665,7 +1668,7 @@ The range of client IP addresses from which the load balancer should be reachabl
 
 ## <a name="operator-orchestrator-section"></a>Orchestrator section
 
-The `orchestrator` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains
+The `orchestrator` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains
 configuration options for the Orchestrator - a replication topology manager, used if asynchronous replication is turned on.
 
 ### `orchestrator.enabled`
@@ -1718,7 +1721,7 @@ The name of a [Kubernetes scheduler :octicons-link-external-16:](https://kuberne
 
 ### `orchestrator.priorityClassName`
 
-The name of the Kubernetes [PriorityClass :octicons-external-link-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+The name of the Kubernetes [PriorityClass :octicons-link-external-16:](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass), which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2082,6 +2085,15 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `128M` |
 
+### `orchestrator.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+
 ### `orchestrator.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
@@ -2089,6 +2101,14 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `256M` |
+
+### `orchestrator.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
 
 ### `orchestrator.volumeSpec.persistentVolumeClaim.resources.requests.storage`
 
@@ -2100,7 +2120,7 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 
 ## <a name="operator-pmm-section"></a>PMM section
 
-The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
+The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration
 options for Percona Monitoring and Management.
 
 ### `pmm.enabled`
@@ -2135,7 +2155,7 @@ Enables to pass MySQL parameters to PMM. For example, to change the number of ta
 | ----------- | ---------- |
 | :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
 
-### `pmm.readinessProbes.initialDelaySeconds`
+### `pmm.readinessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -2143,7 +2163,7 @@ The number of seconds to wait before performing the first [readiness probe :octi
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `15` |
 
-### `pmm.readinessProbes.timeoutSeconds`
+### `pmm.readinessProbe.timeoutSeconds`
 
 The number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -2151,7 +2171,7 @@ The number of seconds after which the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `15` |
 
-### `pmm.readinessProbes.periodSeconds`
+### `pmm.readinessProbe.periodSeconds`
 
 How often to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -2159,7 +2179,7 @@ How often to perform the [readiness probe :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `pmm.readinessProbes.successThreshold`
+### `pmm.readinessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -2167,7 +2187,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `pmm.readinessProbes.failureThreshold`
+### `pmm.readinessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unready.
 
@@ -2175,7 +2195,7 @@ The number of failed probes required to mark the container unready.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `pmm.livenessProbes.initialDelaySeconds`
+### `pmm.livenessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -2183,7 +2203,7 @@ The number of seconds to wait before performing the first [liveness probe :octic
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `300` |
 
-### `pmm.livenessProbes.timeoutSeconds`
+### `pmm.livenessProbe.timeoutSeconds`
 
 The number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -2191,7 +2211,7 @@ The number of seconds after which the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `pmm.livenessProbes.periodSeconds`
+### `pmm.livenessProbe.periodSeconds`
 
 How often to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -2199,7 +2219,7 @@ How often to perform the [liveness probe :octicons-link-external-16:](https://ku
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `10` |
 
-### `pmm.livenessProbes.successThreshold`
+### `pmm.livenessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -2207,7 +2227,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `pmm.livenessProbes.failureThreshold`
+### `pmm.livenessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unhealthy.
 
@@ -2257,7 +2277,7 @@ Address of the PMM Server to collect data from the cluster.
 
 ## <a name="operator-backup-section"></a>Backup section
 
-The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml)
+The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
 file contains the following configuration options for the regular Percona XtraDB Cluster backups.
 
 ### `backup.enabled`
@@ -2270,7 +2290,7 @@ Enables or disables making backups.
 
 ### `backup.sourcePod`
 
-Specifies the MySQL instance Pod to take a backup from. When defined, takes precedence, regardless the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.
+Specifies the MySQL instance Pod to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.
 
 Asynchronous replication clusters that consist of more than one Pod and have the Orchestrator disabled must have the `sourcePod` defined for the Operator to make backups. Otherwise, the Operator fails to start a backup and reports an error.
 
@@ -2301,7 +2321,7 @@ The [Kubernetes ImagePullSecret :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `my-secret-1` |
 
-### `backup.initContainer.mage`
+### `backup.initContainer.image`
 
 An alternative init image for Percona XtraBackup Pods.
 
@@ -2319,7 +2339,7 @@ A custom [Kubernetes Security Context for a Container :octicons-link-external-16
 
 ### `backup.initContainer.resources.requests.memory`
 
-The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.while the initial Operator installation.
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2575,7 +2595,7 @@ The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/c
 
 ### `backup.storages.STORAGE-NAME.s3.endpointUrl`
 
-The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) 
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2599,7 +2619,7 @@ The path (sub-folder) to the backups inside the [container :octicons-link-extern
 
 ### `backup.storages.STORAGE-NAME.azure.endpointUrl`
 
-The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) |
+The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud) 
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2679,7 +2699,7 @@ The name of the storage for the backups configured in the `storages` subsection.
 
 ## <a name="operator-pt-section"></a>Percona Toolkit section
 
-The `toolkit` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) file contains configuration
+The `toolkit` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration
 options for [Percona Toolkit :octicons-link-external-16:](https://docs.percona.com/percona-toolkit/).
 
 ### `toolkit.image`
@@ -2724,7 +2744,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 
 ### `toolkit.resources.limits.cpu`
 
-[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container |
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container 
 
 | Value type  | Example    |
 | ----------- | ---------- |

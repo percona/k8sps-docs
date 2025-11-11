@@ -47,9 +47,21 @@ individual Pods. You can do it as follows:
 $ kubectl get pods
 ```
 
-???+ example "Expected output"
+??? example "Expected output"
 
-    --8<-- "./docs/assets/code/kubectl-get-pods-response.txt"
+    ``` {.text .no-copy}
+    NAME                                            READY   STATUS    RESTARTS      AGE
+    cluster1-haproxy-0                              2/2     Running   0             44m
+    cluster1-haproxy-1                              2/2     Running   0             44m
+    cluster1-haproxy-2                              2/2     Running   0             44m
+    cluster1-mysql-0                                3/3     Running   0             46m
+    cluster1-mysql-1                                3/3     Running   2 (44m ago)   45m
+    cluster1-mysql-2                                3/3     Running   2 (42m ago)   43m
+    cluster1-orc-0                                  2/2     Running   0             46m
+    cluster1-orc-1                                  2/2     Running   0             45m
+    cluster1-orc-2                                  2/2     Running   0             44m
+    percona-server-mysql-operator-7c984f7c9-mgwh4   1/1     Running   0             47m
+    ```
 
 The above command provides the following insights:
 

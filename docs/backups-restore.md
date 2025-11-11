@@ -1,105 +1,74 @@
 # Restore the cluster from a previously saved backup
 
-Backup can be restored not only on the Kubernetes cluster where it was made, but
-also on any Kubernetes-based environment with the installed Operator.
+You can restore from a backup as follows:
 
-!!! note
+* On the same Kubernetes cluster and in the same namespace where you made the backup
+* On a [new cluster deployed in a different Kubernetes-based environment](backups-restore-to-new-cluster.md).
 
-    When restoring to a new Kubernetes-based environment, make sure it
-    has a Secrets object with the same user passwords as in the original cluster.
-    More details about secrets can be found in [System Users](users.md#system-users).
+This document focuses on the restore to the same cluster.
 
-The example of the restore configuration file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/restore.yaml). The options that can be used in it are described in the [restore options reference](restore-cr.md).
+To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml). 
 
-Following things are needed to restore a previously saved backup:
+You can check available options in the [restore options reference](restore-cr.md).
 
-* Make sure that the cluster is running.
+## Before you begin
 
-* Find out correct names for the **backup** and the **cluster**. Available
-    backups can be listed with the following command:
+To restore from a backup on the same cluster and namespace, do the following:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps-backup
+1. Export the namespace as an environment variable. Replace the `<namespace>` placeholder with your value:
+
+    ```bash
+    export NAMESPACE = <namespace>
     ```
 
-    !!! note
+2. Make sure that the cluster is running. Use this command to check it:
 
-        Obviously, you can make this check only on the same cluster on
-        which you have previously made the backup.
-
-    And the following command will list existing Percona Distribution for MySQL
-    Cluster names in the current Kubernetes-based environment:
-
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps
+    ```bash
+    kubectl get ps <cluster-name> -n $NAMESPACE
     ```
 
-When the correct names for the backup and the cluster are known, backup
-restoration can be done in the following way.
+3. List backups with the following command:
 
-1. Set appropriate keys in the `deploy/backup/restore.yaml` file.
-
-    * set `spec.clusterName` key to the name of the target cluster to restore
-        the backup on,
-
-    * if you are restoring backup on the *same* Kubernetes-based cluster you have
-        used to save this backup, set `spec.backupName` key to the name of your
-        backup,
-
-    * if you are restoring backup on the Kubernetes-based cluster *different*
-        from one you have used to save this backup, set `spec.backupSource`
-        subsection instead of `spec.backupName` field to point on the appropriate
-        cloud storage:
-
-        === "S3-compatible storage"
-
-            The `backupSource` key should contain `destination` key equal to the
-            S3 [bucket :octicons-link-external-16:](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html)
-            with a special `s3://` prefix, followed by the necessary S3
-            configuration keys, same as in `deploy/cr.yaml` file:
-
-            ```yaml
-            ...
-            backupSource:
-              destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-              s3:
-                bucket: S3-BUCKET-NAME
-                credentialsSecret: my-cluster-name-backup-s3
-                region: us-west-2
-                endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                ...
-            ```
-
-        === "Azure Blob storage"
-
-            The `backupSource` key should contain `destination` key equal to the
-            Azure Blob [container :octicons-link-external-16:](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction#containers)
-            and backup name, followed by the necessary Azure
-            configuration keys, same as in `deploy/cr.yaml` file:
-
-            ```yaml
-            ...
-            backupSource:
-              destination: AZURE-CONTAINER-NAME/BACKUP-NAME
-              azure:
-                container: AZURE-CONTAINER-NAME
-                credentialsSecret: my-cluster-azure-secret
-                ...
-            ```
-2. After that, the actual restoration process can be started as follows:
-
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/backup/restore.yaml
+    ```bash
+    kubectl get ps-backup -n $NAMESPACE
     ```
 
-!!! note
+## Restore steps
 
-    Storing backup settings in a separate file can be replaced by passing
-    its content to the `kubectl apply` command as follows:
+When the correct names for the backup and the cluster are known,configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following keys:
 
-    ```{.bash data-prompt="$"}
-    $ cat <<EOF | kubectl apply -f-
-    apiVersion: "ps.percona.com/v1alpha1"
+* set `spec.clusterName` key to the name of the target cluster to restore the backup on
+* set `spec.backupName` key to the name of your backup. This is the value from the output of the `kubectl get ps-backup` command.
+
+Pass this information to the Operator
+
+=== "via the YAML manifest"
+
+    1. Edit the `deploy/backup/restore.yaml` file:
+       
+        ```yaml
+        apiVersion: ps.percona.com/v1
+        kind: PerconaServerMySQLRestore
+        metadata:
+          name: restore1
+        spec: 
+          clusterName: ps-cluster1
+          backupName: backup1
+        ```
+        
+    2. Start the restore process:
+
+        ```bash
+        kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
+        ```
+
+=== "via the command line"
+
+    Instead of storing restore settings in a separate file, you can pass them directly to the `kubectl apply` command as follows:
+
+    ```bash
+    cat <<EOF | kubectl apply -n $NAMESPACE  -f-
+    apiVersion: "ps.percona.com/v1"
     kind: "PerconaServerMySQLRestore"
     metadata:
       name: "restore1"
@@ -108,3 +77,24 @@ restoration can be done in the following way.
       backupName: "backup1"
     EOF
     ```
+
+## View restore details 
+
+When you start the restore, the restore job is created. You can check the job details using these commands:
+
+```bash
+kubectl get job
+```
+
+??? example  "Sample output"
+
+    ```
+    xb-restore-restore2                                Running    0/1                      0s
+    xb-restore-restore2                                Complete             1/1           25s        25s
+    ```
+
+You can check the restore progress with this command:
+
+```bash
+kubectl get ps-restore -n $NAMESPACE
+```

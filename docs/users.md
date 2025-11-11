@@ -12,11 +12,18 @@ considered separately in the following sections.
 ## Unprivileged users
 
 There are no unprivileged (general purpose) user accounts created by
-default. If you need general purpose users, please run commands below:
+default. If you need general purpose users, run the following commands:
 
-```{.bash data-prompt="$" data-prompt-second="mysql>"}
-$ kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- mysql -hps-cluster1-mysql -uroot -proot_password
-mysql> GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%' IDENTIFIED BY 'password1';
+Start a temporary Percona MySQL client Pod and connect to MySQL in your cluster
+
+```bash
+kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- mysql -hps-cluster1-mysql -uroot -proot_password
+```
+
+The following SQL command creates a new user `user1` with the password `password1`, and grants this user all privileges on all tables in the `database1` database. The `@'%'` means that the user can connect from any host.
+
+```sql
+GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%' IDENTIFIED BY 'password1';
 ```
 
 !!! note
@@ -27,8 +34,8 @@ Verify that the user was created successfully. If successful, the
 following command will let you successfully login to MySQL shell via
 ProxySQL:
 
-```{.bash data-prompt="$"}
-$ kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- bash -il
+```bash
+kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- bash -il
 percona-client:/$ mysql -h ps-cluster1-mysql-primary -uuser1 -ppassword1
 mysql> SELECT * FROM database1.table1 LIMIT 1;
 ```
@@ -110,14 +117,14 @@ in the `ps-cluster1-secrets` object can be done with the following command:
 
 === "in Linux"
 
-    ```{.bash data-prompt="$"}
-    $ kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64 --wrap=0)'"}}'
+    ```bash
+    kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64 --wrap=0)'"}}'
     ```
 
 === "in macOS"
 
-    ```{.bash data-prompt="$"}
-    $ kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
+    ```bash
+    kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
     ```
 
 ### Password rotation policies and timing

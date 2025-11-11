@@ -1,38 +1,68 @@
 # Making on-demand backup
 
-To make an on-demand backup, the user should first make changes in the
-`deploy/cr.yaml` configuration file: set the `backup.enabled` key to
-`true` and [configure backup storage](backups-storage.md) in the
-`backup.storages` subsection.
+## Before you begin 
 
-When the `deploy/cr.yaml` file
-contains correctly configured keys and is applied with `kubectl` command, use
-*a special backup configuration YAML file* with the following contents:
+1. Export the namespace as an environment variable. Replace the `<namespace>` placeholder with your value:
 
-* **backup name** in the `metadata.name` key,
+    ```bash
+    export NAMESPACE = <namespace>
+    ```
 
-* **Percona Distribution for MySQL Cluster name** in the `clusterName` key,
+2. Check the configuration of the `PerconaServerMySQL` object:
 
-* **storage name** from `deploy/cr.yaml` in the `spec.storageName` key.
+    * Check that the `backup.enabled` key is set to `true`. Use the following command:
 
-* <a name="finalizers"></a>**S3 backup finalizer** set by the `metadata.finalizers.percona.com/delete-backup` key (it triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object).
+       ```bash
+       kubectl get ps <cluster-name> -n $NAMESPACE -o jsonpath='{.spec.backup.enabled}'
+       ```
 
-The example of such file is [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/backup/backup.yaml).
+    * Verify that you have [configured backup storage](backups-storage.md) and specified its configuration in the `backup.storages` subsection of the Custom Resource.
 
-When the backup destination is configured and applied with kubectl apply -f deploy/cr.yaml command, make backup as follows:
+## Backup steps
 
-```{.bash data-prompt="$"}
-$ kubectl apply -f deploy/backup/backup.yaml
-```
+To make an on-demand backup, use
+*a special backup configuration YAML file*. The example of such file is [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup.yaml).
 
-!!! note
+You can check available options in the [Backup resource reference](backup-cr.md)
 
-    Storing backup settings in a separate file can be replaced by
-    passing its content to the `kubectl apply` command as follows:
+Specify the following keys:
 
-    ```{.bash data-prompt="$"}
-    $ cat <<EOF | kubectl apply -f-
-    apiVersion: ps.percona.com/v1alpha1
+* Set the `metadata.name` key to assign a name to the backup.
+* Set the `spec.clusterName` key to the name of your cluster.
+* Set the `spec.storageName` key to a storage configuration defined in your `deploy/cr.yaml` file.
+* Optionally, add the `percona.com/delete-backup` entry under `metadata.finalizers` to enable deletion of backup files from a cloud storage when the backup object is removed (manually or by schedule).
+
+Pass this information to the Operator:
+
+=== "via the YAML manifest"
+
+    1. Edit the `deploy/backup/backup.yaml` file:
+       
+        ```yaml
+        apiVersion: ps.percona.com/v1
+        kind: PerconaServerMySQLBackup
+        metadata:
+          name: backup1
+          finalizers:
+            - percona.com/delete-backup
+        spec:
+          clusterName: ps-cluster1
+          storageName: s3-us-west
+        ```
+        
+    2. Start the backup process:
+
+        ```bash
+        kubectl apply -f deploy/backup/backup.yaml -n $NAMESPACE
+        ```
+
+=== "via the command line"
+
+    Instead of storing backup settings in a separate file, you can pass them directly to the `kubectl apply` command as follows:
+
+    ```bash
+    cat <<EOF | kubectl apply -n $NAMESPACE -f-
+    apiVersion: ps.percona.com/v1
     kind: PerconaServerMySQLBackup
     metadata:
       name: backup1
@@ -43,3 +73,45 @@ $ kubectl apply -f deploy/backup/backup.yaml
       storageName: s3-us-west
     EOF
     ```
+
+List backups with this command:
+
+```bash
+kubectl get ps-backup -n $NAMESPACE
+```
+
+## Specifying the backup source
+
+When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object's status:
+
+```
+$ kubectl get ps-backup backup1 -o yaml
+```
+
+??? example "Sample output"
+
+    ```{.text .no-copy}
+    apiVersion: ps.percona.com/v1
+    kind: PerconaServerMySQLBackup
+    metadata:
+      name: backup1
+      ...
+    status:
+      backupSource: cluster1-mysql-1.cluster1-mysql.<namespace>
+      ...
+    ```
+
+You can specify the source pod in the backup object to run the backup on this specific pod:
+
+```yaml
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLBackup
+metadata:
+  name: backup1
+  finalizers:
+    - percona.com/delete-backup
+spec:
+  clusterName: ps-cluster1
+  storageName: s3-us-west
+  sourcePod: ps-cluster1-mysql-2
+```

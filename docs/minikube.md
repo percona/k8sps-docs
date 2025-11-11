@@ -30,15 +30,15 @@ default web browser.
 
 1. Clone the percona-server-mysql-operator repository:
 
-    ```{.bash data-prompt="$"}
-    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
-    $ cd percona-server-mysql-operator
+    ```bash
+    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    cd percona-server-mysql-operator
     ```
 
 2. Deploy the operator with the following command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/bundle.yaml
+    ```bash
+    kubectl apply -f deploy/bundle.yaml
     ```
 
     ??? example "Expected output"
@@ -63,8 +63,8 @@ default web browser.
     When done, apply the updated ``deploy/cr.yaml`` file with the following
     command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl apply -f deploy/cr.yaml
+    ```bash
+    kubectl apply -f deploy/cr.yaml
     ```
 
     ??? example "Expected output"
@@ -81,8 +81,8 @@ default web browser.
     cluster will obtain the `ready` status. You can check it with the following
     command:
 
-    ```{.bash data-prompt="$"}
-    $ kubectl get ps
+    ```bash
+    kubectl get ps
     ```
 
     ??? example "Expected output"

@@ -51,16 +51,16 @@ The steps to install the *cert-manager* are the following:
 
 The following commands perform all the needed actions:
 
-```{.bash data-prompt="$"}
-$ kubectl create namespace cert-manager
-$ kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
-$ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v{{ certmanagerrecommended }}/cert-manager.yaml
+```bash
+kubectl create namespace cert-manager
+kubectl label namespace cert-manager certmanager.k8s.io/disable-validation=true
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v{{ certmanagerrecommended }}/cert-manager.yaml
 ```
 
 After the installation, you can verify the *cert-manager* by running the following command:
 
-```{.bash data-prompt="$"}
-$ kubectl get pods -n cert-manager
+```bash
+kubectl get pods -n cert-manager
 ```
 
 The result should display the *cert-manager* and webhook active and running.
@@ -86,8 +86,8 @@ The set of commands generate certificates with the following attributes:
 
 A secret must be added to `cr.yaml/spec/sslSecretName`.
 
-```{.bash data-prompt="$"}
-$ cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
+```bash
+cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
 {
   "CN": "Root CA",
   "key": {
@@ -97,7 +97,7 @@ $ cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
 }
 EOF
 
-$ cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
+cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
 {
   "hosts": [
     "*.${CLUSTER_NAME}-mysql",
@@ -118,7 +118,7 @@ $ cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare s
 }
 EOF
 
-$ kubectl create secret generic my-cluster-ssl --from-file=tls.crt=server.pem --
+kubectl create secret generic my-cluster-ssl --from-file=tls.crt=server.pem --
 from-file=tls.key=server-key.pem --from-file=ca.crt=ca.pem --
 type=kubernetes.io/tls
 ```
