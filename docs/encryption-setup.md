@@ -259,18 +259,35 @@ Now create a Secret object:
 ``` {.bash data-prompt="$" }
 $ kubectl apply -f deploy/vault-secret.yaml -n $NAMESPACE
 ```
+!!! warning "If your deployment uses Group Replication as the cluster type, you must pause the cluster before patching to enable encryption."
+
+    After you add the required secret, unpause the cluster to resume normal operation.
 
 ## Reference the Secret in your Custom Resource manifest 
 
 Now, reference the Vault Secret in the Operator Custom Resource manifest. Note that the Secret name is the one you specified in the `metadata.name` field when you created a Secret.
 
+For group-replication cluster type, we need PAUSE cluster first:
+``` {.bash data-prompt="$" }
+$ kubectl patch ps ps-cluster1 \
+  --namespace $<ps-cluster-namespace> \
+  --type=merge \
+  --patch '{"spec": {"pause": true}}'
+```
 Since this is a running cluster, we will apply a patch:
 
 ``` {.bash data-prompt="$" }
 $ kubectl patch ps ps-cluster1 \
-  --namespace $NAMESPACE \
+  --namespace $<ps-cluster-namespace> \
   --type=merge \
   --patch '{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'
+```
+UNPAUSE cluster in case of group-replication cluster type:
+``` {.bash data-prompt="$" }
+$ kubectl patch ps ps-cluster1 \
+  --namespace $<ps-cluster-namespace> \
+  --type=merge \
+  --patch '{"spec": {"pause": false}}'
 ```
 
 ## Use data-at-rest encryption
