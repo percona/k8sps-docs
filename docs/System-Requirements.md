@@ -29,4 +29,5 @@ Choose how you wish to install the Operator:
 * [on Minikube](minikube.md)
 * [on Google Kubernetes Engine (GKE)](gke.md)
 * [on Amazon Elastic Kubernetes Service (AWS EKS)](eks.md)
+* [on OpenShift](openshift.md)
 * [in a Kubernetes-based environment](kubernetes.md)
