@@ -20,15 +20,15 @@ To update the Operator, you need to update the Custom Resource Definition (CRD) 
 
 ## Considerations for Operator upgrades
 
-1. The Operator version has three digits separated by a dot (`.`) in the format `major.minor.patch`. Here's how you can understand the version `1.0.0`:
+1. The Operator version has three digits separated by a dot (`.`) in the format `major.minor.patch`. Here's how you can understand the version `1.0.1`:
 
     * `1` is the major version 
     * `0` is the minor version
     * `1` is the patch version.
 
-    You can only upgrade the Operator to the nearest `major.minor` version (for example, from `1.0.0` to `1.0.1`).
+    You can only upgrade the Operator to the nearest `major.minor` version (for example, from `1.0.0` to `1.1.0`).
 
-    If the current Operator version and the version you want to upgrade to differ by more than one minor version, you need to upgrade step by step. For example, if your current version is `1.0.0` and you want to move to `1.0.2`, first upgrade to `1.0.1`, then to `1.0.2`.
+    If the current Operator version and the version you want to upgrade to differ by more than one minor version, you need to upgrade step by step. For example, if your current version is `1.0.0` and you want to move to `1.2.0`, first upgrade to `1.1.0`, then to `1.2.0`.
 
     Check the [Release notes index](ReleaseNotes/index.md) for the list of the Operator versions.
 
