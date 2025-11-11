@@ -80,7 +80,7 @@ spec:
     orchestratorSize: false
     proxy: false
     proxySize: true
-  crVersion: 1.0.0
+  crVersion: {{release}}
   secretsName: minimal-cluster-secrets
   sslSecretName: minimal-cluster-ssl
   updateStrategy: SmartUpdate
@@ -90,7 +90,7 @@ spec:
   mysql:
     clusterType: group-replication
     autoRecovery: true
-    image: perconalab/percona-server-mysql-operator:main-psmysql8.4
+    image: percona/percona-server:{{ps84recommended}}
     imagePullPolicy: Always
     size: 1
 
@@ -121,7 +121,7 @@ spec:
     haproxy:
       enabled: true
       size: 1
-      image: perconalab/percona-server-mysql-operator:main-haproxy
+      image: percona/haproxy:{{haproxyrecommended}}
       imagePullPolicy: Always
 
       podDisruptionBudget:
@@ -139,10 +139,10 @@ spec:
     router:
       enabled: false
       size: 1
-      image: perconalab/percona-server-mysql-operator:main-haproxy
+      image: percona/percona-mysql-router:{{router84recommended}}
   backup:
     enabled: false
-    image: perconalab/percona-server-mysql-operator:main-backup8.4
+    image: percona/percona-xtrabackup:{{pxb84recommended}}
 ```
 
 After making this change, deploy your MySQL cluster:
