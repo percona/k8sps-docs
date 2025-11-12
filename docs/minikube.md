@@ -1,44 +1,46 @@
 # Install Percona Server for MySQL on Minikube
 
-Installing the Percona Operator for MySQL on [minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube)
-is the easiest way to try it locally without a cloud provider. Minikube runs
-Kubernetes on GNU/Linux, Windows, or macOS system using a system-wide
-hypervisor, such as VirtualBox, KVM/QEMU, VMware Fusion, Hyper-V or even Docker itself. Using it is
-a popular way to test the Kubernetes application locally prior to deploying it
-on a cloud.
+[Minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube) lets you run a Kubernetes cluster locally without a cloud provider. It works on Linux, Windows, and macOS using a hypervisor like VirtualBox, KVM/QEMU, VMware Fusion, Hyper-V, or Docker. This makes it perfect for testing the Operator before deploying it in a cloud or in production
 
 ## Prerequisites
 
-To run Percona Operator for MySQL on Minikube you should first of all [install Minikube :octicons-link-external-16:](https://kubernetes.io/docs/tasks/tools/install-minikube/),
-using a way recommended for your system. This includes the installation of
-the following three components:
+Before you begin, you need to [install Minikube :octicons-link-external-16:](https://kubernetes.io/docs/tasks/tools/install-minikube/) on your system. The installation includes three components:
 
-1. kubectl tool,
-2. a hypervisor, if it is not already installed,
-3. actual Minikube package
+1. **kubectl** - the Kubernetes command-line tool
+2. **A hypervisor** - if you don't already have one installed
+3. **Minikube** - the Minikube package itself
 
-After the installation, run `minikube start --memory=4096 --cpus=3`
-(parameters increase the virtual machine limits for the CPU cores and memory,
-to ensure stable work of the Operator). Being executed, this command will
-download needed virtualized images, then initialize and run the
-cluster. After Minikube is successfully started, you can optionally run the
-Kubernetes dashboard, which visually represents the state of your cluster.
-Executing `minikube dashboard` will start the dashboard and open it in your
-default web browser.
+After installing Minikube, start it with increased resources to ensure the Operator runs smoothly:
 
-## Install the Operator and deploy your MySQL cluster
+```bash
+minikube start --memory=4096 --cpus=3
+```
 
-1. Clone the percona-server-mysql-operator repository:
+This command downloads the necessary virtualized images, then initializes and starts your local Kubernetes cluster. The `--memory=4096` and `--cpus=3` parameters allocate more resources to the virtual machine, which helps the Operator run reliably.
+
+!!! tip "Optional: Kubernetes Dashboard"
+
+    You can optionally start the Kubernetes dashboard to visualize your cluster. Run:
+
+    ```bash
+    minikube dashboard
+    ```
+
+    This opens the dashboard in your default web browser, giving you a visual view of your cluster's state.
+
+## Install the Operator 
+
+1. Clone the repository and navigate into it:
 
     ```bash
     git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
     cd percona-server-mysql-operator
     ```
 
-2. Deploy the operator with the following command:
+2. Deploy the Operator to your Minikube cluster
 
     ```bash
-    kubectl apply -f deploy/bundle.yaml
+    kubectl apply--server-side -f deploy/bundle.yaml
     ```
 
     ??? example "Expected output"
@@ -56,51 +58,41 @@ default web browser.
         deployment.apps/percona-server-mysql-operator created
         ```
 
-3. Because minikube runs locally, the Operator will be unable to spread the
-    cluster on several nodes. Therefore default ``deploy/cr.yaml`` file should
-    be edited to adapt the Operator for the installation on a single computer.
-    Set **all occasions** of the `antiAffinityTopologyKey` key to `"none"`.
-    When done, apply the updated ``deploy/cr.yaml`` file with the following
-    command:
+## Configure and deploy your MySQL cluster
 
-    ```bash
-    kubectl apply -f deploy/cr.yaml
+Since Minikube runs on a single node, the default configuration doesn't fit. Use the minimal configuration adjusted for Minikube environment.
+
+```bash
+kubectl apply -f deploy/cr-minimal.yaml
+```
+
+??? example "Expected output"
+
+    ```{.text .no-copy}
+    perconaservermysql.ps.percona.com/ps-cluster1 created
     ```
 
-    ??? example "Expected output"
+This creates a group-replication cluster with one Percona Server for MySQL instances and one HAProxy instance. For more configuration options, see the `deploy/cr.yaml` file and the [Custom Resource Options](operator.md) reference.
 
-        ```{.text .no-copy}
-        perconaservermysql.ps.percona.com/ps-cluster1 created
-        ```
+### Check the cluster status
 
-    This deploys three Percona Server for MySQL instances and one Orchestrator
-    instance. For more configuration options please see `deploy/cr.yaml` and
-    [Custom Resource Options](operator.md).
+The cluster creation process takes a few minutes. Monitor the status with:
 
-    The creation process may take some time. When the process is over your
-    cluster will obtain the `ready` status. You can check it with the following
-    command:
+```bash
+kubectl get ps
+```
 
-    ```bash
-    kubectl get ps
+Wait until the `STATE` column shows `ready`. This indicates your cluster is fully operational.
+
+??? example "Expected output"
+
+    ```{.text .no-copy}
+    NAME           REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+    ps-cluster1   group-replication    ps-cluster1-haproxy.default   ready   1                     1                  5m50s
     ```
-
-    ??? example "Expected output"
-
-        ```{.text .no-copy}
-        NAME       REPLICATION   ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-        ps-cluster1   async         ps-cluster1-haproxy.default   ready   3       3              3                  5m50s
-        ```
-
-    You can also track the progress via the Kubernetes dashboard:
-
-    ![image](assets/images/minikube-pods.svg)
 
 ## Verify the cluster operation
 
-It may take ten minutes to get the cluster started. When `kubectl get ps`
-command finally shows you the cluster status as `ready`, you can try to connect
-to the cluster.
+It typically takes about ten minutes for the cluster to start. Once `kubectl get ps` shows the cluster status as `ready`, you can connect to it and start using your MySQL database.
 
 {% include 'assets/fragments/connectivity.txt' %}
-

@@ -182,10 +182,10 @@ nav:
           - what-next.md
           
     - Platform-specific installation:
-          - "Install on Minikube": minikube.md
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
           - "Install on OpenShift": openshift.md
+          - "Install on Minikube": minikube.md
           - "Generic Kubernetes installation": kubernetes.md
     
     - Daily operations:  
