@@ -15,9 +15,9 @@ The way to instruct the Operator how it should run the database upgrades is to s
 * `Disabled` - the Operator doesn't not carry on upgrades automatically. You must upgrade the Custom Resource and images manually.
 * `Recommended` - the Operator automatically updates the database and components to the version flagged as Recommended.
 * `Latest` - the Operator automatically updates the database and components to the most recent available version
-* `version` - specify the specific database version that you want to update to in the format `{{ pxc80recommended }}`, `{{ pxc57recommended }}`, etc.. The Operator updates the database to it automatically. Find available versions [in the list of certified images](images.md).
+* `version` - specify the specific database version that you want to update to in the format `{{ ps84recommended }}`, `{{ ps80recommended }}`, etc. The Operator updates the database to it automatically. Find available versions [in the list of certified images](images.md).
 
-For previous versions, refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/)).
+For previous versions, refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/).
 
 ## Minor upgrade to a specific version
 
@@ -27,21 +27,15 @@ For the procedures in this tutorial, we assume that you have set up the `Smart U
 
 ### Before you start
 
-We recommend to [update PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html)  before upgrading PMM Client.
+Before updating the database, complete the following preparation steps:
 
-### Procedure
+1. Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the [Operator upgrade guide](update-operator.md).
 
-To update Percona Server for MySQL to a specific version, do the following:
+2. Check the [Custom Resource](operator.md) manifest configuration to ensure the following:
 
-1. Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the [Operator upgrade guide](update-operator.md)
+    * `spec.updateStrategy` option is set to `SmartUpdate`
+    * `spec.upgradeOptions.apply` option is set to `Never` or `Disabled` (this means that the Operator will not carry on upgrades automatically)
 
-2. Check the [Custom Resource](operator.md) manifest configuration to be the following:
-
-    * `spec.updateStrategy` option is set to `SmartUpdate`, 
-    * `spec.upgradeOptions.apply` option is set to `Never`
-    or `Disabled` (this means that the Operator will not carry on upgrades
-    automatically).
-    
     ```yaml
     ...
     spec:
@@ -51,58 +45,25 @@ To update Percona Server for MySQL to a specific version, do the following:
         ...
     ```
 
-3. Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.
+3. Before selecting the update command, identify your current setup:
 
-    Find the image names [in the list of certified images](images.md).
+    * **MySQL version**: Check your current `mysql.image` value in your Custom Resource
+    * **Replication type**: Check the `mysql.clusterType` option in your Custom Resource (`async` or `group`)
+    * **Proxy type**: For async replication, you use HAProxy. For group replication, check if `proxy.haproxy.enabled` or `proxy.router.enabled` is set to `true` in your Custom Resource
 
-    We recommend to update the PMM Server **before** the upgrade of PMM Client. If you haven't updated your PMM Server yet, exclude PMM Client from the list of images to update.
+4. We recommend to [update PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html) before upgrading PMM Client.
 
-    Since this is a working cluster, the way to update the Custom Resource is to [apply a patch  :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) with the `kubectl patch ps` command.
+### Update commands
 
-    The following commands update Percona Server for MySQL version 8.4.x. If you run Percona Server for MySQL 8.0.x, change the image to the {{ ps80recommended }} version.
+{% include 'assets/fragments/update-db-commands.txt' %}
 
-    === "With PMM Client"
+### Track the upgrade progress
 
-        ```bash
-        kubectl patch ps ps-cluster1 --type=merge --patch '{
-           "spec": {
-               "crVersion":"{{ release }}",
-               "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-               "proxy":{
-                  "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
-               },
-               "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-               "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
-               "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
-           }}'
-        ```
+After applying the patch, the deployment rollout will be automatically triggered. You can track the rollout process in real time with the `kubectl rollout status` command with the name of your cluster:
 
-    === "Without PMM Client"
-
-        ```yaml
-        $ kubectl patch ps ps-cluster1 --type=merge --patch '{
-           "spec": {
-               "crVersion":"{{ release }}",
-               "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
-               "proxy":{
-                  "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" },
-                  "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
-               },
-               "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-               "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
-               "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
-           }}'
-        ```
-
-4. The deployment rollout will be automatically triggered by the applied patch.
-    You can track the rollout process in real time with the
-    `kubectl rollout status` command with the name of your cluster:
-
-    ```bash
-    kubectl rollout status sts ps-cluster1-ps
-    ```
+```bash
+kubectl rollout status sts ps-cluster1-ps
+```
 
 ## Automated upgrade
 

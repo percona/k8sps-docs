@@ -5,9 +5,9 @@ Server for MySQL to newer versions.
 
 The upgrade process consists of these steps:
 
-* upgrade the Operator;
-* update the Custom Resource Definition version,
-* upgrade the database (Percona Server for MySQL).
+* update the Custom Resource Definition version
+* upgrade the Operator
+* upgrade the database (Percona Server for MySQL)
 
 ## Update scenarios
 
