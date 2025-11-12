@@ -40,7 +40,7 @@ This command downloads the necessary virtualized images, then initializes and st
 2. Deploy the Operator to your Minikube cluster
 
     ```bash
-    kubectl apply -f deploy/bundle.yaml
+    kubectl apply--server-side -f deploy/bundle.yaml
     ```
 
     ??? example "Expected output"
@@ -60,95 +60,10 @@ This command downloads the necessary virtualized images, then initializes and st
 
 ## Configure and deploy your MySQL cluster
 
-Since Minikube runs on a single node, you need to adjust the default configuration. The Operator normally spreads pods across multiple nodes, but Minikube only has one node available.
-
-Edit the `deploy/cr.yaml` file and set **all occurrences** of the `antiAffinityTopologyKey` key to `"none"`. This allows the Operator to run all pods on a single node.
-
-Here's the example of the modified `deploy/cr.yaml` file:
-
-```yaml
-apiVersion: ps.percona.com/v1
-kind: PerconaServerMySQL
-metadata:
-  name: minimal-cluster
-  finalizers:
-    - percona.com/delete-mysql-pods-in-order
-spec:
-  unsafeFlags:
-    mysqlSize: true
-    orchestrator: false
-    orchestratorSize: false
-    proxy: false
-    proxySize: true
-  crVersion: {{release}}
-  secretsName: minimal-cluster-secrets
-  sslSecretName: minimal-cluster-ssl
-  updateStrategy: SmartUpdate
-  upgradeOptions:
-    versionServiceEndpoint: https://check.percona.com
-    apply: disabled
-  mysql:
-    clusterType: group-replication
-    autoRecovery: true
-    image: percona/percona-server:{{ps84recommended}}
-    imagePullPolicy: Always
-    size: 1
-
-    podDisruptionBudget:
-      maxUnavailable: 1
-
-    resources:
-      requests:
-        memory: 1Gi
-      limits:
-        memory: 2Gi
-
-    affinity:
-      antiAffinityTopologyKey: "none"
-
-    exposePrimary:
-      enabled: true
-
-    volumeSpec:
-      persistentVolumeClaim:
-        resources:
-          requests:
-            storage: 2Gi
-
-    gracePeriod: 600
-
-  proxy:
-    haproxy:
-      enabled: true
-      size: 1
-      image: percona/haproxy:{{haproxyrecommended}}
-      imagePullPolicy: Always
-
-      podDisruptionBudget:
-        maxUnavailable: 1
-
-      resources:
-        requests:
-          memory: 1Gi
-          cpu: 600m
-
-      gracePeriod: 30
-
-      affinity:
-        antiAffinityTopologyKey: "none"
-    router:
-      enabled: false
-      size: 1
-      image: percona/percona-mysql-router:{{router84recommended}}
-  backup:
-    enabled: false
-    image: percona/percona-xtrabackup:{{pxb84recommended}}
-```
-
-After making this change, deploy your MySQL cluster:
+Since Minikube runs on a single node, the default configuration doesn't fit. Use the minimal configuration adjusted for Minikube environment.
 
 ```bash
-kubectl apply -f deploy/cr.yaml
+kubectl apply -f deploy/cr-minimal.yaml
 ```
 
 ??? example "Expected output"
@@ -157,7 +72,7 @@ kubectl apply -f deploy/cr.yaml
     perconaservermysql.ps.percona.com/ps-cluster1 created
     ```
 
-This creates a cluster with three Percona Server for MySQL instances and one Orchestrator instance. For more configuration options, see the `deploy/cr.yaml` file and the [Custom Resource Options](operator.md) reference.
+This creates a group-replication cluster with one Percona Server for MySQL instances and one HAProxy instance. For more configuration options, see the `deploy/cr.yaml` file and the [Custom Resource Options](operator.md) reference.
 
 ### Check the cluster status
 
@@ -172,8 +87,8 @@ Wait until the `STATE` column shows `ready`. This indicates your cluster is full
 ??? example "Expected output"
 
     ```{.text .no-copy}
-    NAME       REPLICATION   ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
-    ps-cluster1   async         ps-cluster1-haproxy.default   ready   3       3              3                  5m50s
+    NAME           REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+    ps-cluster1   group-replication    ps-cluster1-haproxy.default   ready   1                     1                  5m50s
     ```
 
 ## Verify the cluster operation
