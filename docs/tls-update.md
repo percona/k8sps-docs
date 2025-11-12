@@ -131,7 +131,7 @@ as follows.
    --type=kubernetes.io/tls -o yaml --dry-run=client | kubectl apply -f -
     ```
 
-8. The cluster will go through a rolling reconciliation, but it will do it
+8. The cluster will go through a rolling restart, but it will do it
    without problems, as every node already has a new CA certificate (as a part
    of the combined CA certificate), and can successfully allow joiners with new
    TLS certificate to join. Joiner node also has a combined CA certificate, so
@@ -149,7 +149,7 @@ as follows.
    --type=kubernetes.io/tls -o yaml --dry-run=client | kubectl apply -f -
     ```
 
-10. The cluster will go through a rolling reconciliation, but it will do it
+10. The cluster will go through a rolling restart, but it will do it
     without problems: the old CA certificate is removed, and every node is
     already using new TLS certificate and no nodes rely on the old CA
     certificate any more.
