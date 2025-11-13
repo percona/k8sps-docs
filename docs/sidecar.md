@@ -79,8 +79,13 @@ which were tested with sidecar containers and are known to work.
 ### Persistent Volume
 
 You can use [Persistent volumes :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) when you need dynamically provisioned storage which doesn’t depend on the Pod lifecycle.
+
 To use such volume, you should *claim* durable storage with [persistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/#persistentvolumeclaim) without specifying any non-important details.
 
+!!! important
+
+    You can use PVCs with sidecar containers only when you deploy a new cluster. Updates to running cluster are not supported.
+    
 The following example requests 1G storage with `sidecar-volume-claim`
 PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the
 `my-sidecar-1` container’s filesystem under the `/volume1` directory:
