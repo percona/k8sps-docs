@@ -85,7 +85,7 @@ To use such volume, you should *claim* durable storage with [persistentVolumeCla
 !!! important
 
     You can use PVCs with sidecar containers only when you deploy a new cluster. Updates to running cluster are not supported.
-    
+
 The following example requests 1G storage with `sidecar-volume-claim`
 PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the
 `my-sidecar-1` container’s filesystem under the `/volume1` directory:
@@ -103,11 +103,11 @@ PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the
   - name: sidecar-volume-claim
     spec:
       resources:
-          requests:
-            storage: 1Gi
+        requests:
+        storage: 1Gi
       volumeMode: Filesystem
       accessModes:
-          - ReadWriteOnce
+        - ReadWriteOnce
 ```
 
 ### Secret
