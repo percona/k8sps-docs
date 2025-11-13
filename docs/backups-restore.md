@@ -98,3 +98,7 @@ You can check the restore progress with this command:
 ```bash
 kubectl get ps-restore -n $NAMESPACE
 ```
+
+## Troubleshooting
+
+If you face issues with restore, refer to our [Restore troubleshooting guide](debug-backup-restore.md#restores) for help.

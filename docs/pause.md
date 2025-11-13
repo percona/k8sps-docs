@@ -17,7 +17,7 @@ Pausing the cluster may take some time, and when the process is over, you will
 see only the Operator Pod running:
 
 ``` {.bash data-prompt="$" }
-$ kubectl get pods
+kubectl get pods
 NAME                                             READY   STATUS    RESTARTS   AGE
 percona-server-mysql-operator-7ff9cff46f-6dtgs   1/1     Running   0          9m19s
 ```

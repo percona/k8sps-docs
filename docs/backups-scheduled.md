@@ -118,3 +118,7 @@ Or to filter for a specific schedule:
 ```bash
 kubectl get ps-backup -l percona.com/backup-ancestor=0ed1d-sat-night-backup -n <namespace>
 ```
+
+## Troubleshooting
+
+If you face issues with backups, refer to our [Backup troubleshooting guide](debug-backup-restore.md) for help.

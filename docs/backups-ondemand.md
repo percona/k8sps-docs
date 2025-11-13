@@ -85,7 +85,7 @@ kubectl get ps-backup -n $NAMESPACE
 When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object's status:
 
 ```
-$ kubectl get ps-backup backup1 -o yaml
+kubectl get ps-backup backup1 -o yaml
 ```
 
 ??? example "Sample output"
@@ -115,3 +115,7 @@ spec:
   storageName: s3-us-west
   sourcePod: ps-cluster1-mysql-2
 ```
+
+## Troubleshooting
+
+If you face issues with backups, refer to our [Backup troubleshooting guide](debug-backup-restore.md) for help.

@@ -6,8 +6,8 @@ In the following examples we will access the container `mysql` of the `ps-cluste
 
 * Run `date` command:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- date
+    ```bash
+    kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- date
     ```
 
     ??? example "Expected output"
@@ -27,23 +27,33 @@ In the following examples we will access the container `mysql` of the `ps-cluste
 
 * Print `/var/log/mysqld.log` file to a terminal:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- cat /var/log/mysqld.log
+    ```bash
+    kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- cat /var/log/mysqld.log
     ```
 
-* Similarly, opening an Interactive terminal, executing a pair of commands in
-    the container, and exiting it may look as follows:
+* The following example demonstrates how to enter an interactive shell in a container, run a few commands, and then exit:
 
-    ```{.bash data-prompt="$" data-prompt-second="[mysql@ps-cluster1-mysql-0 /]$"}
-    $ kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- bash
-    [mysql@ps-cluster1-mysql-0 /]$ hostname
-    ps-cluster1-mysql-0
-    [mysql@ps-cluster1-mysql-0 /]$ ls /var/log/mysqld.log
-    /var/log/mysqld.log
-    [mysql@ps-cluster1-mysql-0 /]$ exit
-    exit
-    $
-    ```
+    1. Start an interactive shell session inside the container:
+
+        ```bash
+        kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- bash
+        ```
+
+    2. Inside the shell, you can run commands such as:
+
+        ```bash
+        hostname
+        ```
+
+        ```bash
+        ls /var/log/mysqld.log
+        ```
+
+    3. To exit the container shell, use:
+
+        ```bash
+        exit
+        ```
 
 ## Avoid the restart-on-fail loop for Percona Server for MySQL containers
 
@@ -60,8 +70,8 @@ of the container entry point is triggered by the presence of the
 For example, you can do it for the `mysql` container of an appropriate Percona
 Server for MySQL instance as follows:
 
-``` {.bash data-prompt="$" }
-$ kubectl exec -it ps-cluster1-mysql-0 -c mysql -- sh -c 'touch /var/lib/mysql/sleep-forever'
+```bash
+kubectl exec -it ps-cluster1-mysql-0 -c mysql -- sh -c 'touch /var/lib/mysql/sleep-forever'
 ```
 
 The instance will restart automatically and run in its usual way as soon as you
