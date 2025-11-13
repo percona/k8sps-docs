@@ -17,6 +17,10 @@ The following tools are used in this guide and therefore should be preinstalled:
 
 Also, you need to configure AWS CLI with your credentials according to the [official guide :octicons-link-external-16:](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
 
+## Before you start
+
+Check the [System Requirements](System-Requirements.md) to ensure your environment meets the necessary prerequisites.
+
 ## Create the EKS cluster
 
 1. To create your cluster, you will need the following data:

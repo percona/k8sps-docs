@@ -214,7 +214,7 @@ nav:
               - "Expose your cluster": expose.md
               - "Configure HAProxy": haproxy-conf.md
               - "Configure MySQL Router": router-conf.md
-          - constraints.md             
+          - "Control Pod scheduling": constraints.md             
           - "Fine-tune MySQL options": options.md
           - "Multi-namespace deployment": cluster-wide.md
     

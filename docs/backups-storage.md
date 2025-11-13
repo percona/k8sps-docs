@@ -4,7 +4,7 @@ You configure backup storage in the `backup.storages` subsection of your Custom 
 
 Before configuring storage, you need to create a [Kubernetes Secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) object that contains the credentials needed to access your storage.
 
-=== "Amazon S3 or S3-compatible storage"
+=== ":fontawesome-brands-amazon: Amazon S3 or S3-compatible storage"
 
     To use Amazon S3 or S3-compatible storage for backups, create a Secret object with your access credentials. Use the [deploy/backup/backup-secret-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-secret-s3.yaml) file as an example. You must specify the following information:
 
@@ -13,13 +13,13 @@ Before configuring storage, you need to create a [Kubernetes Secret :octicons-li
 
         Use the following command to encode the keys:
 
-        === "in Linux"
+        === ":simple-linux: in Linux"
 
             ```bash
             echo -n 'plain-text-string' | base64 --wrap=0
             ```
 
-        === "in macOS"
+        === ":simple-apple: in macOS"
 
             ```bash
             echo -n 'plain-text-string' | base64
@@ -85,7 +85,7 @@ Before configuring storage, you need to create a [Kubernetes Secret :octicons-li
 
     For more configuration options, see the [Operator Custom Resource options](operator.md#operator-backup-section).
 
-=== "Microsoft Azure Blob storage"
+=== ":material-microsoft-azure: Microsoft Azure Blob storage"
 
     To use [Azure Blob Storage :octicons-link-external-16:](https://azure.microsoft.com/en-us/services/storage/blobs/) for storing backups, create a Secret object with your access credentials. Use the [deploy/backup/backup-secret-azure.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-secret-azure.yaml) file as an example. You must specify the following information:
 
@@ -94,13 +94,13 @@ Before configuring storage, you need to create a [Kubernetes Secret :octicons-li
 
         Use the following command to encode the credentials:
 
-        === "in Linux"
+        === ":simple-linux: in Linux"
 
             ```bash
             echo -n 'plain-text-string' | base64 --wrap=0
             ```
 
-        === "in macOS"
+        === ":simple-apple: in macOS"
 
             ```bash
             echo -n 'plain-text-string' | base64
@@ -152,7 +152,7 @@ Before configuring storage, you need to create a [Kubernetes Secret :octicons-li
 
     For more configuration options, see the [Operator Custom Resource options](operator.md#operator-backup-section).
 
-=== "Google Cloud Storage"
+=== ":material-google-cloud: Google Cloud Storage"
 
     To use Google Cloud Storage for storing backups, create a Secret object with your access credentials. Use the [deploy/backup/backup-secret-gcp.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-secret-gcp.yaml) file as an example. You must specify the following information:
 
@@ -161,13 +161,13 @@ Before configuring storage, you need to create a [Kubernetes Secret :octicons-li
 
         Use the following command to encode the keys:
 
-        === "in Linux"
+        === ":simple-linux: in Linux"
 
             ```bash
             echo -n 'plain-text-string' | base64 --wrap=0
             ```
 
-        === "in macOS"
+        === ":simple-apple: in macOS"
 
             ```bash
             echo -n 'plain-text-string' | base64

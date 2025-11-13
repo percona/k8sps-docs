@@ -15,6 +15,10 @@ To install Percona Server for MySQL on OpenShift means:
 - `oc` command-line tool installed
 - Git client installed
 
+## Before you start
+
+Check the [System Requirements](System-Requirements.md) to ensure your environment meets the necessary prerequisites.
+
 <!-- ## Installation options
 
 You can install Percona Operator for MySQL on OpenShift using either:

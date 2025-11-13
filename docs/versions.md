@@ -4,7 +4,7 @@ Below you can find the versions of software components and platforms that have b
 
 ## Cluster components
 
-| Operator | [MySQL :octicons-link-external-16:](https://www.percona.com/software/mysql-database/percona-server) | [Percona XtraBackup :octicons-link-external-16:](https://www.percona.com/software/mysql-database/percona-xtrabackup) | [HA Proxy :octicons-link-external-16:](https://www.haproxy.org/) | [MySQL Router :octicons-link-external-16:](https://www.mysql.com/products/enterprise/router.html) | [Orchestrator :octicons-link-external-16:](https://github.com/percona/orchestrator) | [Percona Toolkit :octicons-link-external-16:](https://www.percona.com/percona-toolkit) |
+| Operator | [Percona Server for MySQL :octicons-link-external-16:](https://www.percona.com/software/mysql-database/percona-server) | [Percona XtraBackup :octicons-link-external-16:](https://www.percona.com/software/mysql-database/percona-xtrabackup) | [HA Proxy :octicons-link-external-16:](https://www.haproxy.org/) | [MySQL Router :octicons-link-external-16:](https://www.mysql.com/products/enterprise/router.html) | [Orchestrator :octicons-link-external-16:](https://github.com/percona/orchestrator) | [Percona Toolkit :octicons-link-external-16:](https://www.percona.com/percona-toolkit) |
 |:--------|:--------|:---------------------------------------------------------------------------|:--------|:-----------|:-------------|:-------------------|
 |[1.0.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md)| 8.4.6-6.1, 8.0.43-34.1 | 8.4.0-4.1, 8.0.35-34.1 | 2.8.15 | 8.4.6-6.1, 8.0.43-34.1 | 3.2.6-18 | 3.7.0-2 |
 
