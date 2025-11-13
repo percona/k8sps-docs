@@ -10,7 +10,7 @@ The overall troubleshooting workflow looks like this:
 4. Check source pod logs. For backups, review logs from the `xtrabackup` container in the source pod. For restores, view logs of the Pod created by the restore Job.
 5. Verify configuration. Ensure storage configurations, credentials, and cluster settings are correct.
 
-Refer to the following sections for details
+Refer to the following sections for details.
 
 ## Backups
 
