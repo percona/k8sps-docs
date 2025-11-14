@@ -64,7 +64,7 @@ This update ensures smoother provisioning and bootstrapping of new database node
 
 ## Deprecation, rename and removal
 
-* Changed paths for example configuration files for backups and restores. They are now stored in the `deploy/backup/` folder. Adjust your automation worklfows with this new path, if needed.
+* Changed paths for example configuration files for backups and restores. They are now stored in the `deploy/backup/` folder. Adjust your automation workflows with this new path, if needed.
 * The Custom Resource options `spec.pmm.readinessProbes` and `spec.pmm.livenessProbes` have been renamed to the singular `spec.pmm.readinessProbe` and `spec.pmm.livenessProbe`, respectively. Please update your application configurations to use these new field names as needed.
 
 ## Known limitations
