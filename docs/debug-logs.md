@@ -16,46 +16,49 @@ In the following examples we will access containers of the `ps-cluster1-mysql-0`
 
 * Check logs of the `mysql` container:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl logs ps-cluster1-mysql-0 -c mysql
+    ``` bash
+    kubectl logs ps-cluster1-mysql-0 -c mysql
     ```
 
 * Check logs of the `xtrabackup` container:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl logs ps-cluster1-mysql-0 -c xtrabackup
+    ``` bash
+    kubectl logs ps-cluster1-mysql-0 -c xtrabackup
     ```
+
+    See more about troubleshooting backups in the [Troubleshoot backups and restores](debug-backup-restore.md) chapter.
 
 * Filter logs of the `mysql` container which are not older than 600 seconds:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl logs ps-cluster1-mysql-0 -c mysql --since=600s
+    ``` bash
+    kubectl logs ps-cluster1-mysql-0 -c mysql --since=600s
     ```
 
 * Check logs of a previous instantiation of the `mysql` container, if any:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl logs ps-cluster1-mysql-0 -c mysql --previous
+    ``` bash
+    kubectl logs ps-cluster1-mysql-0 -c mysql --previous
     ```
 
 * Check logs of the `mysql` container for `ERROR` messages:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl logs ps-cluster1-mysql-0 -c mysql | grep 'ERROR'
+    ``` bash
+    kubectl logs ps-cluster1-mysql-0 -c mysql | grep 'ERROR'
     ```
 
-- Check logs of the operator:
+* Check logs of the Operator:
+
     ``` {.bash data-prompt="$"}
-    $ kubectl logs -l "app.kubernetes.io/name=percona-server-mysql-operator" --tail=-1
+    kubectl logs -l "app.kubernetes.io/name=percona-server-mysql-operator" --tail=-1
     ```
 
 * Check logs of the operator, parsing the output with [jq JSON processor :octicons-link-external-16:](https://stedolan.github.io/jq/) (requires `LOG_STRUCTURED` to be `true`):
 
     ``` {.bash data-prompt="$"}
-    $ kubectl logs -l "app.kubernetes.io/name=percona-server-mysql-operator" --tail=-1 -f | jq -R 'fromjson?'
+    kubectl logs -l "app.kubernetes.io/name=percona-server-mysql-operator" --tail=-1 -f | jq -R 'fromjson?'
     ```
 
 - Check logs of the HAProxy pod for configuration issues:
     ``` {.bash data-prompt="$"}
-    $ kubectl logs ps-cluster1-haproxy-0 | grep 'The custom config /etc/haproxy-custom/haproxy.cfg is not valid and will be ignored.'
+    kubectl logs ps-cluster1-haproxy-0 | grep 'The custom config /etc/haproxy-custom/haproxy.cfg is not valid and will be ignored.'
     ```
