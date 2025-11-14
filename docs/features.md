@@ -15,7 +15,7 @@ Never lose sleep over database downtime again. The Operator provides robust high
 - Health monitoring with automatic recovery from node failures
 - Zero-downtime upgrades with rolling update strategies
 
-Choose between [group replication](architecture.md#replication-types-and-proxy-solutions) (GA) for stronger consistency or [asynchronous replication](architecture.md#replication-types-and-proxy-solutions) (Beta) for lower latency—both with automatic failover capabilities.
+Choose between [group replication](architecture.md#group-replication) (GA) for stronger consistency or [asynchronous replication](architecture.md#asynchronous-replication-tech-preview) (tech preview) for lower latency—both with automatic failover capabilities.
 
 ### Automated backup and restore flows
 

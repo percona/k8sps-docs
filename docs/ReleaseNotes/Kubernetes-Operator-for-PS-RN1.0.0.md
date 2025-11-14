@@ -75,7 +75,7 @@ If you defined several schedules for the same remote backup storage, be aware of
 
 2. **Concurrent backup conflicts.** When multiple schedules run simultaneously and write to the same storage path, backups can overwrite each other, resulting in incomplete or corrupted data.
 
-To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the [documentation](../backups-scheduled.md#managing-multiple-backup-schedules) for more information and  configuration steps.
+To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the [documentation](../backups-scheduled.md#managing-multiple-backup-schedules-in-the-same-storage) for more information and  configuration steps.
 
 ## Changelog
 

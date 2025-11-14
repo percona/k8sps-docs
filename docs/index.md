@@ -6,7 +6,7 @@ performance, and observability right out of the box.
 With Percona Operator for MySQL, you can quickly set up, scale, and protect your databases using easy-to-understand configuration files. The Operator takes care of everyday tasks such as deployment, backups, updates, and failover, so you can focus on your applications and your business, not on manual database management.
 
 !!! note ""
-    Percona Operator for MySQL is generally available with [**group replication**](architecture.md#replication-types-and-proxy-solutions). Asynchronous replication is still in Beta and not recommended for production yet.
+    Percona Operator for MySQL is generally available with [**group replication**](architecture.md#group-replication). Asynchronous replication is still in tech preview and is not recommended for production yet.
 
 [Get started :material-arrow-down:](#get-started-today){ .md-button }
 [See what's new in version {{release}}](ReleaseNotes/Kubernetes-Operator-for-PS-RN{{release}}.md){.md-button}
