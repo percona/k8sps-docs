@@ -6,7 +6,7 @@ Percona Operator for MySQL brings production-grade automation to MySQL deploymen
 
 ## Release highlights
 
-This release marks the **General Availability (GA) of Percona Operator for MySQL using Percona Server for MySQL with the group replication type**. The asynchronous replication has the Beta status and we don't recommend using it in production yet.
+This release marks the **General Availability (GA) of Percona Operator for MySQL using Percona Server for MySQL with the group replication type**. The asynchronous replication has the tech preview status and we don't recommend using it in production yet.
 
 With the GA status of the Operator, you can confidently deploy and run it in production environments, benefiting from long-term maintenance and enterprise-grade reliability.
 
@@ -38,7 +38,7 @@ With this improvement you have maximum flexibility: you can define consistent de
 
 ### Increased timeouts for read, write and clone operations inside MySQL cluster
 
-To improve reliability of clone operations in asynchronous MySQL clusters, especially when transferring large datasets (2GB and more), we've increased the default timeouts for read,write and clone operations to 3600 seconds. This change helps prevent premature failures caused by network delays or slow disk I/O during large data transfers.
+To improve reliability of clone operations in asynchronous MySQL clusters, especially when transferring large datasets, we've increased the default timeouts for read,write and clone operations to 3600 seconds. This change helps prevent premature failures caused by network delays or slow disk I/O during large data transfers.
 
 The following timeouts are now set to 3600s by default:
 
@@ -91,7 +91,7 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 * [K8SPS-492](https://perconadev.atlassian.net/browse/K8SPS-492) - Fixed the issue with the Operator sending the unsupported `Error` event type during the Group Replication cluster startup by sending the `Warning` event type instead.  
 
-* [K8SPS-498](https://perconadev.atlassian.net/browse/K8SPS-498) - Stopped unnecessary updates to the `resourceVersion`field of the cluster objects during its initialization.
+* [K8SPS-498](https://perconadev.atlassian.net/browse/K8SPS-498) - Stopped unnecessary updates to the `resourceVersion` field of the cluster objects during its initialization.
 
 * [K8SPS-501](https://perconadev.atlassian.net/browse/K8SPS-501) - Fixed the issue with the Operator failing to update the PVC when expanding database volumes by retrying the operation.
 
