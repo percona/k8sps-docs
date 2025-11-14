@@ -10,7 +10,7 @@ Select the command that matches your setup from the sections below.
 
 === "MySQL 8.4"
 
-    === "Asynchronous replication (Beta)"
+    === "Asynchronous replication (tech preview)"
 
         Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Router.
 
@@ -119,7 +119,7 @@ Select the command that matches your setup from the sections below.
 
 === "MySQL 8.0"
 
-    === "Asynchronous replication (Beta)"
+    === "Asynchronous replication (tech preview)"
 
         Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Router.
 

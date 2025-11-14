@@ -1,6 +1,6 @@
 # Change replication type
 
-By default, Percona Operator for MySQL is deployed with [group-replication](architecture.md#replication-types-and-proxy-solutions) replication type and HAProxy enabled. 
+By default, Percona Operator for MySQL is deployed with [group-replication](architecture.md#group-replication) replication type and HAProxy enabled. 
 
 You can change the proxy from HAProxy to MySQL Router or vice versa. Note that you can use MySQL router only with the group-replication replication type.
 

@@ -27,7 +27,7 @@ Each MySQL node in your cluster contains a complete copy of your data, replicate
 
 The Operator supports two replication types, each with different characteristics for performance, consistency, and availability. You [choose the replication type](operator.md#mysqlclustertype) when configuring your cluster.
 
-### Asynchronous replication (Beta)
+### Asynchronous replication (tech preview)
 
 With asynchronous replication, writes complete on the primary instance without waiting for replicas. After a write completes, the primary records the change in its binary log, and replicas apply these changes independently.
 
@@ -38,7 +38,7 @@ With asynchronous replication, writes complete on the primary instance without w
 * **Consistency** - Eventual consistency: replicas may lag behind the primary instance, which can affect applications requiring real-time data. There is a risk that some transactions committed on the primary may be lost if it fails before replicas catch up.
 * **Write scaling** - Does not allow for horizontal write scaling; scaling writes relies on vertical scaling, which is increasing the resources (RAM, CPU) of the primary instance, rather than on adding more write nodes.
 * **Failover** - Orchestrator handles automatic primary election and replication topology recovery.
-* **Status** - Currently in Beta and not recommended for production use.
+* **Status** - Currently in tech preview and not recommended for production use.
 
 ### Group replication
 
