@@ -10,6 +10,11 @@ When you have already installed *cert-manager*, nothing else is needed: just
 deploy the Operator, and the Operator will request a certificate from the
 *cert-manager*.
 
+The cert-manager generates short-term certificates valid for 3 months. 
+
+![image](assets/images/certificates.svg)
+
+
 ## Install *cert-manager*
 
 The cert-manager requires its own namespace

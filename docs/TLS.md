@@ -1,12 +1,9 @@
 # Transport Layer Security (TLS)
 
 The Percona Operator for MySQL uses Transport Layer
-Security (TLS) cryptographic protocol for the following types of communication:
+Security (TLS) cryptographic protocol for the communication between the client application and the cluster.
 
-* External - communication between the client application and the cluster.
-* Internal - communication between Percona Server for MySQL instances. The internal certificate is also used as an authorization method.
-
-TLS security can be configured in several ways.
+You can configure TLS security in several ways.
 
 * By default, the Operator **generates long-term certificates** automatically during the cluster creation if there are no certificate secrets available. The Operator's self-signed issuer is local to the Operator Namespace. This self-signed issuer is created because Percona Distribution for MySQL
         requires all certificates issued by the same source.
