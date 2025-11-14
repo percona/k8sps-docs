@@ -25,7 +25,7 @@ From day one, your database comes with robust features you need for production: 
 
 ### Cloud-native by design
 
-Whether you use AWS, Google Cloud, Azure, or any other Kubernetes platform, the Operator fits right in. Enjoy a consistent, cloud-native MySQL experience everywhere.
+Whether you use AWS, Google Cloud or any other Kubernetes platform, the Operator fits right in. Enjoy a consistent, cloud-native MySQL experience everywhere.
 
 ## Get started today
 
