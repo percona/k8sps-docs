@@ -168,15 +168,15 @@ Image                                                    | Digest               
 |:---------------------------------------------------------|:-----------------------------------------------------------------|
 | percona/percona-server-mysql-operator:1.0.0             | 36d82324630c7b2030c6f96df8dc8433726c1236f915e790825a54571dbca7f3 |
 | percona/percona-server-mysql-operator:1.0.0 (ARM64)     | fa9e3082d51d3c52f6cefbd1be129f4585effba7ca6221fd1234a481ddcd61a5 |
-| percona/percona-server:8.4.6-6.1                         | 3654cdd74646f11afe15b48de61ed3224ab72e7cd9ddea560725b77e2fa0ec93 |
-| percona/percona-server:8.0.43-34.1                       | aef5deeef0dbaddce47cb0045c6064faab9f501b3a914d42fc40240314607df9 |
+| percona/percona-server:8.4.6-6.1                         | ea97c9df3e362728fc3819c28c841498f5a1765945b9556bc964b218b7d4dc97 |
+| percona/percona-server:8.0.43-34.1                       | 315efeac572c48cc6f118bba7e0b2545ad396142f60328f2db9620ae0ad57e45 |
 | percona/percona-xtrabackup:8.4.0-4.1                     | 840260525cf27e299b5edc7b48ad19caea03ad3ea7349000d0fc6de627b2fb10 |
 | percona/percona-xtrabackup:8.0.35-34.1                   | 967bafa0823c90aa8fa9c25a9012be36b0deef64e255294a09148d77ce6aea68 |
-| percona/percona-mysql-router:8.4.6                       | 59df1dcbecb636a67bcbb1dfcfd8f5710f8e516a44bfc68b936f24947a0f7b6e |
-| percona/percona-mysql-router:8.0.43                      | 1f246c634547c5efdf26cba0f037500b347709d78d8759bd6c0ccc903ffc31a4 |
-| percona/percona-orchestrator:3.2.6-18                    | 6fa4c515363c2a89a13accb0a58ba66519329afc04ad31c400775ced96bc8c09 |
+| percona/percona-mysql-router:8.4.6                       | e083c632c118cd4af472d9030a7900401f4b338e069c91996fe33747b77be985 |
+| percona/percona-mysql-router:8.0.43                      | 3a420b803cd39c7c2a3ff414d45d1858df39599961339f5c02df0681f558ccdd |
+| percona/percona-orchestrator:3.2.6-18                    | a8a70f8882925b0a1a46893376e29af73646117b22e1eeb5a0a89876a907651f |
 | percona/haproxy:2.8.15                                   | e64e468ac0ed2036ee164631469cc71821dcb84a6d568883f704d0eacaf84bb4 |
-| percona/percona-toolkit:3.7.0-2                          | 17ef2b69a97fa546d1f925c74ca09587ac215085c392761bb4d51f188baa6c0e |
+| percona/percona-toolkit:3.7.0-2                          | b7a4a2ca71ebf2b35786ab614221cbefb032fd5dfb5c5a478efcdd23931dd70b |
 | percona/pmm-client:3.4.1                                 | 1c59d7188f8404e0294f4bfb3d2c3600107f808a023668a170a6b8036c56619b |
 | percona/pmm-client:3.4.1 (ARM64)                         | 2d23ba3e6f0ae88201be15272c5038d7c38f382ad8222cd93f094b5a20b854a5 |
 
