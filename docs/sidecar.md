@@ -104,7 +104,7 @@ PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the
     spec:
       resources:
         requests:
-        storage: 1Gi
+          storage: 1Gi
       volumeMode: Filesystem
       accessModes:
         - ReadWriteOnce
