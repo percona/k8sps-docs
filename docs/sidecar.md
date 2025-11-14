@@ -12,7 +12,7 @@ monitoring solutions, etc.
 ## Adding a sidecar container
 
 You can add sidecar containers to Percona Server for MySQL Pods. Just use
-`sidecars` subsection ing the `mysql` section of the `deploy/cr.yaml`
+`sidecars` subsection in the `mysql` section of the `deploy/cr.yaml`
 configuration file. In this subsection, you should specify the name and image of
 your container and possibly a command to run:
 
@@ -79,7 +79,12 @@ which were tested with sidecar containers and are known to work.
 ### Persistent Volume
 
 You can use [Persistent volumes :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) when you need dynamically provisioned storage which doesn’t depend on the Pod lifecycle.
+
 To use such volume, you should *claim* durable storage with [persistentVolumeClaim :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/#persistentvolumeclaim) without specifying any non-important details.
+
+!!! important
+
+    You can use PVCs with sidecar containers only when you deploy a new cluster. Updates to running cluster are not supported.
 
 The following example requests 1G storage with `sidecar-volume-claim`
 PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the
@@ -95,10 +100,7 @@ PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the
     - mountPath: /volume1
       name: sidecar-volume-claim
   sidecarPVCs:
-  - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: sidecar-volume-claim
+  - name: sidecar-volume-claim
     spec:
       resources:
         requests:
@@ -144,7 +146,6 @@ and mounts it to the `my-sidecar-1` container’s filesystem under the
 ### configMap
 
 You can use a [configMap volume :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/#configmap) to pass some configuration data to the container.
-Secrets are stored with the Kubernetes API and mounted to the container as RAM-stored files.
 
 You can mount a configMap volume as follows:
 
