@@ -6,8 +6,8 @@ This guide walks you through deploying and configuring HashiCorp Vault to work w
 
 It is a good practice to isolate workloads in Kubernetes using namespaces. Create a namespace with the following command:
 
-```{.bash .data-prompt="$"}
-$ kubectl create namespace vault
+```{.bash data-prompt="$"}
+kubectl create namespace vault
 ```
 
 Export the namespace as an environment variable to simplify further configuration and management
@@ -22,16 +22,15 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
 1. Add and update the Vault Helm repository.
 
-    ``` {.bash data-prompt="$" }
-    $ helm repo add hashicorp https://helm.releases.hashicorp.com
-    $ helm repo update
+    ``` bash
+    helm repo add hashicorp https://helm.releases.hashicorp.com
+    helm repo update
     ```
 
 2. Install Vault 
 
-    ``` {.bash data-prompt="$" }
-    $ helm upgrade --install vault hashicorp/vault \ 
-      --namespace $NAMESPACE \
+    ``` bash
+    helm upgrade --install vault hashicorp/vault --namespace $NAMESPACE 
     ```
 
     ??? example "Sample output"
@@ -53,7 +52,7 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
 3. Retrieve the Pod name where Vault is running:
 
-    ```{.bash data-prompt="$" }
+    ```bash
     $(kubectl -n $NAMESPACE get pod -l app.kubernetes.io/name=vault -o jsonpath='{.items[0].metadata.name}')
     ```
 
@@ -65,8 +64,8 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
 4. After Vault is installed, you need to initialize it. Run the following command:
 
-    ```{.bash .data-prompt="$"}
-    $ kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator init -key-shares=1 -key-threshold=1 -format=json > /tmp/vault-init
+    ```{.bash data-prompt="$"}
+    kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator init -key-shares=1 -key-threshold=1 -format=json > /tmp/vault-init
     ```
     
     The command does the following:
@@ -80,14 +79,14 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
     Retrieve the unseal key from the file:
 
-    ```{.bash .data-prompt="$"}
-    $ unsealKey=$(jq -r ".unseal_keys_b64[]" < /tmp/vault-init)
+    ```{.bash data-prompt="$"}
+    unsealKey=$(jq -r ".unseal_keys_b64[]" < /tmp/vault-init)
     ```
 
     Now, unseal Vault. Run the following command on every Pod where Vault is running:
 
-    ```{.bash .data-prompt="$"}
-    $ kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator unseal "$unsealKey"
+    ```{.bash data-prompt="$"}
+    kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator unseal "$unsealKey"
     ```
     
     ??? example "Sample output"
@@ -120,27 +119,32 @@ When you started Vault, it generates and starts with a [root token :octicons-lin
 
 1. Extract the Vault root token from the file where you saved the init response output:
 
-    ```{.bash .data-prompt="$"}
-    $ cat /tmp/vault-init | jq -r ".root_token"
+    ```{.bash data-prompt="$"}
+    cat /tmp/vault-init | jq -r ".root_token"
     ```
 
     ??? example "Sample output"
 
         ```{.text .no-copy}
-        hvs.CvmS4c0DPTvHv5eJgXWMJg9r
+        hvs.*************Jg9r
         ```
 
-2. Authenticate in Vault with this token:
+2. Connect to Vault Pod:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl exec -it vault-0 -n $NAMESPACE -- /bin/sh
-    $ vault login hvs.CvmS4c0DPTvHv5eJgXWMJg9r
+    ``` bash
+    kubectl exec -it vault-0 -n $NAMESPACE -- /bin/sh
     ```
 
-3. Enable the secrets engine at the mount path. The following command enables KV secrets engine v2 at the `ps-secret` mount-path:
+3. Authenticate in Vault with this token:
     
-     ``` {.bash data-prompt="$" }
-     $ vault secrets enable --version=2 -path=ps-secret kv
+    ```bash
+    vault login hvs.*************Jg9r
+    ```
+
+4. Enable the secrets engine at the mount path. The following command enables KV secrets engine v2 at the `ps-secret` mount-path:
+    
+     ``` bash
+     vault secrets enable --version=2 -path=ps-secret kv
      ```
 
     ??? example "Sample output"
@@ -230,7 +234,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
         apiVersion: v1
         kind: Secret
         metadata:
-          name: ps-cluster1-vault
+          name: ps-cluster1-vault-84
         type: Opaque
         stringData:
           keyring_vault.cnf: |-
@@ -250,24 +254,67 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
 
   Note that you must either specify the certificate value or don't declare it at all. Having a commented `#ca.cert` field in the Secret configuration file is not allowed.
 
-Now create a Secret object:
+Now create a Secret object. Replace the `<namespace>` placeholder with the namespace where your database cluster is deployed:
 
-``` {.bash data-prompt="$" }
-$ kubectl apply -f deploy/vault-secret.yaml -n $NAMESPACE
+```bash
+kubectl apply -f deploy/vault-secret.yaml -n <namespace>
 ```
+!!! warning "If your deployment uses Group Replication as the cluster type, you must pause the cluster before patching to enable encryption."
+
+    After you add the required secret, unpause the cluster to resume normal operation.
 
 ## Reference the Secret in your Custom Resource manifest 
 
 Now, reference the Vault Secret in the Operator Custom Resource manifest. Note that the Secret name is the one you specified in the `metadata.name` field when you created a Secret.
 
-Since this is a running cluster, we will apply a patch:
+1. Export the namespace where the cluster is deployed as an environment variable:
 
-``` {.bash data-prompt="$" }
-$ kubectl patch ps ps-cluster1 \
-  --namespace $NAMESPACE \
-  --type=merge \
-  --patch '{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'
-```
+    ```bash
+    export ps-cluster-namespace = <cluster-namespace>
+    ```
+
+2. Update the cluster configuration. Since this is a running cluster, we will apply a patch.
+
+    === "Group replication"
+
+        1. Pause the cluster:
+
+            ``` bash
+            kubectl patch ps ps-cluster1 \
+              --namespace $<ps-cluster-namespace> \
+              --type=merge \
+              --patch '{"spec": {"pause": true}}'
+            ```
+        
+        2. Apply the patch referencing your Secret. Note for MySQL 8.0 the default Secret name is `ps-cluster1-vault` and for MySQL 8.4 - `ps-cluster1-vault-84`. Use the following command as an example and specify the Secret name for the MySQL version you're using:
+
+            ``` bash
+            kubectl patch ps ps-cluster1 \
+              --namespace $<ps-cluster-namespace> \
+              --type=merge \
+              --patch '{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'
+            ```
+
+        3. Unpause the cluster:
+            
+            ``` bash
+            kubectl patch ps ps-cluster1 \
+              --namespace $<ps-cluster-namespace> \
+              --type=merge \
+              --patch '{"spec": {"pause": false}}'
+            ```
+
+    === "Asynchronous replication"
+
+        Apply the patch referencing your Secret. Note for MySQL 8.0 the default Secret name is `ps-cluster1-vault` and for MySQL 8.4 - `ps-cluster1-vault-84`. Use the following command as an example and specify the Secret name for the MySQL version you're using:
+        
+        ```bash
+        kubectl patch ps ps-cluster1 \
+          --namespace $<ps-cluster-namespace> \
+          --type=merge \
+          --patch '{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'
+        ```
+
 
 ## Use data-at-rest encryption
 

@@ -27,7 +27,7 @@ With our latest release, we put an all-hands-on-deck approach towards fine-tunin
 ## New features
 
 * {{ k8spsjira(275) }}: The Operator now checks if the needed Secrets exist and connects to the storage to check the existence of a backup before starting the restore process
-* {{ k8spsjira(277) }}: The new `topologySpreadConstraints` Custom Resource option allows to use [Pod Topology Spread Constraints :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods) to achieve even distribution of Pods across the Kubernetes cluster
+* {{ k8spsjira(277) }}: The new `topologySpreadConstraints` Custom Resource option allows to use [Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods) to achieve even distribution of Pods across the Kubernetes cluster
 
 ## Improvements
 

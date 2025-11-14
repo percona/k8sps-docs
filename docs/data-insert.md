@@ -1,4 +1,4 @@
-#3. Insert sample data 
+# Insert sample data 
 
 In this tutorial you will learn how to insert sample data into Percona Server for MySQL.
 

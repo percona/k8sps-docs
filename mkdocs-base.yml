@@ -201,12 +201,16 @@ nav:
               - "Delete the unneeded backup": backups-delete.md
           - Monitoring:
               - "Monitor your cluster with PMM": monitoring.md
-#              - "Monitor Kubernetes": monitoring-kubernetes.md
+#              - "Monitor Kubernetes": monitor-kubernetes.md
           - "Scale your cluster": scaling.md
           - "Manage users": users.md
 
     - Production configuration:
-          - "Enable TLS/SSL encryption": TLS.md
+          - TLS/SSL encryption: 
+            - "About TLS/SSL security": TLS.md
+            - "Configure TLS using cert-manager": tls-cert-manager.md
+            - "Generate certificates manually": tls-manual.md
+            - "Update certificates": tls-update.md
           - Data-at-rest encryption:
               - "About data-at-rest encryption": encryption.md
               - "Configure data-at-rest encryption": encryption-setup.md

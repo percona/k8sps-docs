@@ -1,4 +1,4 @@
-#2. Connect to Percona Server for MySQL
+# Connect to Percona Server for MySQL
 
 In this tutorial, you will connect to the Percona Server for MySQL you deployed previously.
 
