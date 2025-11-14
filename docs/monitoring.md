@@ -11,5 +11,5 @@ PMM Client has the following probes:
 * **Readiness probe** determines when a PMM Client is available and ready to accept traffic
 * **Liveness probe** determines when to restart a PMM Client
 
-To configure probes, use the `spec.pmm.readinessProbes` and `spec.pmm.livenessProbes` Custom Resource options.
+To configure probes, use the `spec.pmm.readinessProbe` and `spec.pmm.livenessProbe` Custom Resource options.
 

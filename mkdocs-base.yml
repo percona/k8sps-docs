@@ -88,6 +88,7 @@ markdown_extensions:
         - docs/assets/code
         - docs/assets/fragments
         - docs/ReleaseNotes
+        - docs/
       auto_append:
         - services-banner.md
   pymdownx.highlight: 
@@ -181,10 +182,10 @@ nav:
           - what-next.md
           
     - Platform-specific installation:
-          - "Install on Minikube": minikube.md
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
           - "Install on OpenShift": openshift.md
+          - "Install on Minikube": minikube.md
           - "Generic Kubernetes installation": kubernetes.md
     
     - Daily operations:  
@@ -193,7 +194,9 @@ nav:
               - "Configure storage for backups": backups-storage.md
               - "Make scheduled backups": backups-scheduled.md
               - "Make on-demand backup": backups-ondemand.md
-              - "Restore from a previously saved backup": backups-restore.md
+              - Restore from a backup:
+                - "On the same cluster": backups-restore.md
+                - "On a new cluster": backups-restore-to-new-cluster.md
               - "Fine-tune backups and restores": backups-fine-tune.md
               - "Delete the unneeded backup": backups-delete.md
           - Monitoring:
@@ -215,7 +218,7 @@ nav:
               - "Expose your cluster": expose.md
               - "Configure HAProxy": haproxy-conf.md
               - "Configure MySQL Router": router-conf.md
-          - constraints.md             
+          - "Control Pod scheduling": constraints.md             
           - "Fine-tune MySQL options": options.md
           - "Multi-namespace deployment": cluster-wide.md
     
@@ -224,7 +227,6 @@ nav:
             - "About upgrades": update.md
             - "Upgrade the Operator": update-operator.md
             - "Upgrade the database": update-db.md
-            - "Migration guide (0.8.0 to 0.9.0)": update-to-0.9.0.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:
             - "Delete the Operator": delete.md
@@ -249,6 +251,7 @@ nav:
         - Certified images:
             - "Percona certified images": images.md
             - "Retrieve certified images": image-query.md
+        - Version compatibility: versions.md
         - Legal:
             - "Copyright and licensing information": copyright.md
             - "Trademark policy": trademark-policy.md

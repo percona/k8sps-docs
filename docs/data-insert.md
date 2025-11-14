@@ -1,6 +1,6 @@
 # Insert sample data 
 
-In this tutorial you will learn to insert sample data to Percona Server for MySQL.
+In this tutorial you will learn how to insert sample data into Percona Server for MySQL.
 
 We will enter SQL statements via the same MySQL shell we used to [connect to the database](connect.md).
 {.power-number}
@@ -54,7 +54,7 @@ We will enter SQL statements via the same MySQL shell we used to [connect to the
         Records: 4  Duplicates: 0  Warnings: 0
         ```
 
-4. Query the collection to verify the data insertion
+4. Query the database to verify the data insertion
 
     ```mysql
     SELECT *
@@ -74,9 +74,9 @@ We will enter SQL statements via the same MySQL shell we used to [connect to the
         +----+-------------------+----------------------+
         ```
 
-5. Updating data in the database would be not much more difficult:
+5. To update data in the database, execute the following statement:
 
-    ```mysql
+    ```sql
     UPDATE  extraordinary_gentlemen
        SET occupation = "submariner"
     WHERE name = "Nemo";

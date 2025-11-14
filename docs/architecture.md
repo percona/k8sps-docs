@@ -117,8 +117,8 @@ For configuration details, see:
 
 Now that you understand the architecture, explore these topics:
 
-* [Operator configuration and Custom Resources](operator.md) - Learn how to configure your cluster
 * [Backups](backups.md) - Understand backup and restore operations
 * [Scaling](scaling.md) - Scale your cluster horizontally or vertically
 * [High availability configuration](constraints.md) - Configure anti-affinity and pod distribution
 * [Updating and upgrades](update.md) - Keep your cluster up to date
+* [Operator Custom Resource reference](operator.md) - Description of available configuration options

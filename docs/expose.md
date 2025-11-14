@@ -24,7 +24,7 @@ HAProxy provides load balancing and proxy service for your cluster. It's enabled
 
 To enable HAProxy, set the following in your `deploy/cr.yaml` manifest:
 
-=== "Asynchronous replication"
+=== "Asynchronous replication (Beta)"
 
     ```yaml
     mysql:

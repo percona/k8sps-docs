@@ -26,6 +26,10 @@ If you would like to use *your local shell*, install the following:
     gcloud components install kubectl
     ```
 
+## Before you start
+
+Check the [System Requirements](System-Requirements.md) to ensure your environment meets the necessary prerequisites.
+
 ## Create and configure the GKE cluster
 
 You can configure the settings using the `gcloud` tool. You can run it either in

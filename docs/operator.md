@@ -2155,7 +2155,7 @@ Enables to pass MySQL parameters to PMM. For example, to change the number of ta
 | ----------- | ---------- |
 | :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
 
-### `pmm.readinessProbes.initialDelaySeconds`
+### `pmm.readinessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -2163,7 +2163,7 @@ The number of seconds to wait before performing the first [readiness probe :octi
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `15` |
 
-### `pmm.readinessProbes.timeoutSeconds`
+### `pmm.readinessProbe.timeoutSeconds`
 
 The number of seconds after which the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -2171,7 +2171,7 @@ The number of seconds after which the [readiness probe :octicons-link-external-1
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `15` |
 
-### `pmm.readinessProbes.periodSeconds`
+### `pmm.readinessProbe.periodSeconds`
 
 How often to perform the [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -2179,7 +2179,7 @@ How often to perform the [readiness probe :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `pmm.readinessProbes.successThreshold`
+### `pmm.readinessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -2187,7 +2187,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `pmm.readinessProbes.failureThreshold`
+### `pmm.readinessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unready.
 
@@ -2195,7 +2195,7 @@ The number of failed probes required to mark the container unready.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `pmm.livenessProbes.initialDelaySeconds`
+### `pmm.livenessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
@@ -2203,7 +2203,7 @@ The number of seconds to wait before performing the first [liveness probe :octic
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `300` |
 
-### `pmm.livenessProbes.timeoutSeconds`
+### `pmm.livenessProbe.timeoutSeconds`
 
 The number of seconds after which the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
@@ -2211,7 +2211,7 @@ The number of seconds after which the [liveness probe :octicons-link-external-16
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `5` |
 
-### `pmm.livenessProbes.periodSeconds`
+### `pmm.livenessProbe.periodSeconds`
 
 How often to perform the [liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/). Measured in seconds.
 
@@ -2219,7 +2219,7 @@ How often to perform the [liveness probe :octicons-link-external-16:](https://ku
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `10` |
 
-### `pmm.livenessProbes.successThreshold`
+### `pmm.livenessProbe.successThreshold`
 
 The number of successful probes required to mark the container successful.
 
@@ -2227,7 +2227,7 @@ The number of successful probes required to mark the container successful.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `pmm.livenessProbes.failureThreshold`
+### `pmm.livenessProbe.failureThreshold`
 
 The number of failed probes required to mark the container unhealthy.
 
@@ -2387,7 +2387,7 @@ The number of retries to make a backup (by default, 6 retries are made).
 
 ### `backup.storages.STORAGE-NAME.type`
 
-The cloud storage type used for backups. Only `s3` and `azure` types are supported.
+The cloud storage type used for backups. The following types are supported: `s3`, `gcs` and `azure`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2632,6 +2632,38 @@ The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/c
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `my-cluster-name-backup-azure` |
+
+### `backup.storages.STORAGE-NAME.gcs.bucket`
+
+The name of the storage bucket.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `bucket-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.prefix`
+
+The path to the data directory in the bucket. If undefined, backups are stored in the bucket's root directory.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `prefix-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.endpointUrl`
+
+The URL to access the data in Google Cloud Storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"https://storage.googleapis.com"` |
+
+### `backup.storages.STORAGE-NAME.gcs.credentialsSecret`
+
+The [Kubernetes secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain the `ACCESS_KEY_ID` and the `SECRET_ACCESS_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-gcp-credentials` |
 
 ### `backup.schedule.name`
 
