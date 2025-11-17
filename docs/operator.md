@@ -137,7 +137,7 @@ A secret with TLS certificate generated for *external* communications, see [Tran
 
 ### `ignoreAnnotations`
 
-The list of annotations [to be ignored](annotations.md#annotations-ignore) by the Operator.
+The list of annotations [to be ignored](annotations.md#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -145,7 +145,7 @@ The list of annotations [to be ignored](annotations.md#annotations-ignore) by th
 
 ### `ignoreLabels`
 
-The list of labels [to be ignored](annotations.md#annotations-ignore) by the Operator.
+The list of labels [to be ignored](annotations.md#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -221,7 +221,7 @@ Allows users to set [orchestrator.size](#orchestratorsize) option to a value les
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
-The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](TLS.md#install-and-use-the-cert-manager).
+The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](tls-cert-manager.md).
 
 ### `tls.SANs`
 

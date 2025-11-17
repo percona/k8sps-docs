@@ -3,7 +3,7 @@
 The Operator provides different ways to access your MySQL database cluster. Each way uses Kubernetes [Service objects :octicons-link-external-16:](https://kubernetes.io/docs/
 concepts/services-networking/service/) to expose the cluster to client applications. These Service objects are configured by the Operator.
 
-This document shows you how to configure cluster exposure using options in the [Custom Resource manifest](operator.md). The available options depend on the [replication type](architecture.md#replication-types-and-proxy-solutions) of your cluster.
+This document shows you how to configure cluster exposure using options in the [Custom Resource manifest](operator.md). The available options depend on the [replication type](architecture.md#replication-type-and-proxy-comparison) of your cluster.
 
 For a cluster with [Asynchronous :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html) replication, your options are:
 
@@ -24,7 +24,7 @@ HAProxy provides load balancing and proxy service for your cluster. It's enabled
 
 To enable HAProxy, set the following in your `deploy/cr.yaml` manifest:
 
-=== "Asynchronous replication (Beta)"
+=== "Asynchronous replication (tech preview)"
 
     ```yaml
     mysql:

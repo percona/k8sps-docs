@@ -58,8 +58,6 @@ See more detailed instructions on configuring scheduled backups in [our document
 
 * Both upgrade to the Operator version 0.9.0 and the appropriate database cluster upgrade can not be done in a usual way due to a number of internal changes, and require additional manual operations.
 
-    * Upgrading the Operator can be done with [this workaround](../update-to-0.9.0.md)
-    * Upgrading the database cluster can be done by [deleting and recreating it](../delete.md#delete-the-database-cluster)
 
 ## Supported Platforms
 
