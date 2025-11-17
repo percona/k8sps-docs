@@ -30,7 +30,7 @@ All OpenShift-related features will become available to users as soon as certifi
 
 ### Streamlined custom configuration usage for backup and restore processes
 
-In previous version we have added the ability to fine-tune backups and restores by defining `xtrabackup`, `xbstream`, and `xbcloud` settings globally via the Custom Resource manifest, or individually via a specific backup / restore manifest. 
+In previous version we have added the ability to fine-tune backups and restores by defining `xtrabackup`, `xbstream` and `xbcloud` settings globally via the Custom Resource manifest, or individually via a specific backup / restore manifest. 
 
 In this release we improved how the Operator applies these settings: now individual configuration always takes precedence over global settings. 
 
@@ -38,7 +38,7 @@ With this improvement you have maximum flexibility: you can define consistent de
 
 ### Increased timeouts for read, write and clone operations inside MySQL cluster
 
-To improve reliability of clone operations in asynchronous MySQL clusters, especially when transferring large datasets, we've increased the default timeouts for read,write and clone operations to 3600 seconds. This change helps prevent premature failures caused by network delays or slow disk I/O during large data transfers.
+To improve reliability of clone operations in asynchronous MySQL clusters, especially when transferring large datasets, we've increased the default timeouts for read, write and clone operations to 3600 seconds. This change helps prevent premature failures caused by network delays or slow disk I/O during large data transfers.
 
 The following timeouts are now set to 3600s by default:
 
@@ -156,7 +156,7 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [end:platforms]
 
-This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.
+This list only includes the platforms on which the Percona Operators are specifically tested as part of the release process. Compatibility with other Kubernetes flavors and versions depends on the backward compatibility provided by Kubernetes itself.
 
 ## Percona certified images
 
