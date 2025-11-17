@@ -1,6 +1,6 @@
 # Percona Operator for MySQL 1.0.0 ({{date.1_0_0}})
 
-[Installation](../System-Requirements.md#installation-guidelines){.md-button}
+[Installation](https://docs.percona.com/percona-operator-for-mysql/ps/System-Requirements.html#installation-guidelines){.md-button}
 
 Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.
 
@@ -23,7 +23,7 @@ What this means for you:
 * Simplified installation: Deploy Operators directly from the OpenShift UI with just a few clicks.
 * Streamlined updates: Stay current with automatic or manual updates via OLM.
 * Enterprise-grade assurance: Certified images meet Red Hat's security and compatibility standards.
-* Better integration: Leverage OpenShift-native workflow for lifecycle management, RBAC, and monitoring.
+* Better integration: Leverage OpenShift-native workflows for lifecycle management, RBAC, and monitoring.
 * Scalable operations: Simplify cluster-wide rollouts and reduce manual overhead.
 
 All OpenShift-related features will become available to users as soon as certification is confirmed. Whether you're a platform engineer, DBA, or architect, this advancement will bring you closer to a secure, scalable, and policy-driven infrastructure.
@@ -64,7 +64,7 @@ This update ensures smoother provisioning and bootstrapping of new database node
 
 ## Deprecation, rename and removal
 
-* Changed paths for example configuration files for backups and restores. They are now stored in the `deploy/backup/` folder. Adjust your automation workflow with this new path, if needed.
+* Changed paths for example configuration files for backups and restores. They are now stored in the `deploy/backup/` folder. Adjust your automation workflows with this new path, if needed.
 * The Custom Resource options `spec.pmm.readinessProbes` and `spec.pmm.livenessProbes` have been renamed to the singular `spec.pmm.readinessProbe` and `spec.pmm.livenessProbe`, respectively. Please update your application configurations to use these new field names as needed.
 
 ## Known limitations
@@ -75,7 +75,7 @@ If you defined several schedules for the same remote backup storage, be aware of
 
 2. **Concurrent backup conflicts.** When multiple schedules run simultaneously and write to the same storage path, backups can overwrite each other, resulting in incomplete or corrupted data.
 
-To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the [documentation](../backups-scheduled.md#managing-multiple-backup-schedules-in-the-same-storage) for more information and  configuration steps.
+To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the [documentation](https://docs.percona.com/percona-operator-for-mysql/ps/backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage) for more information and  configuration steps.
 
 ## Changelog
 
@@ -128,7 +128,6 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 ## Supported software
 
---8<-- [start:software]
 
 The Operator was developed and tested with the following software:
 
@@ -146,20 +145,16 @@ The Operator was developed and tested with the following software:
 
 Other options may also work but have not been tested.
 
---8<-- [end:software]
 
 ## Supported platforms
 
-Percona Operators are designed for compatibility with all [CNCF-certified :octicons-link-external-16:](https://www.cncf.io/training/certification/software-conformance/) Kubernetes distributions. Our release process includes targeted testing and validation on major cloud provider platforms and OpenShift, as detailed below:
+Percona Operators are designed for compatibility with all [CNCF-certified](https://www.cncf.io/training/certification/software-conformance/) Kubernetes distributions. Our release process includes targeted testing and validation on major cloud provider platforms and OpenShift, as detailed below:
 
---8<-- [start:platforms]
+* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) 1.31 - 1.33
+* [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com) 1.31 - 1.34
+* [OpenShift](https://www.openshift.com) 4.16 - 4.20
+* [Minikube](https://minikube.sigs.k8s.io/docs/) 1.37.0 with Kubernetes v1.34.0
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.31 - 1.33
-* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.31 - 1.34
-* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.16 - 4.20
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.37.0 with Kubernetes v1.34.0
-
---8<-- [end:platforms]
 
 This list only includes the platforms on which the Percona Operators are specifically tested as part of the release process. Compatibility with other Kubernetes flavors and versions depends on the backward compatibility provided by Kubernetes itself.
 
@@ -167,25 +162,3 @@ This list only includes the platforms on which the Percona Operators are specifi
 
 Find Percona's certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:
 
---8<-- [start:images]
-
-Image                                                    | Digest                                                           |
-|:---------------------------------------------------------|:-----------------------------------------------------------------|
-| percona/percona-server-mysql-operator:1.0.0             | 36d82324630c7b2030c6f96df8dc8433726c1236f915e790825a54571dbca7f3 |
-| percona/percona-server-mysql-operator:1.0.0 (ARM64)     | fa9e3082d51d3c52f6cefbd1be129f4585effba7ca6221fd1234a481ddcd61a5 |
-| percona/percona-server:8.4.6-6.1                         | ea97c9df3e362728fc3819c28c841498f5a1765945b9556bc964b218b7d4dc97 |
-| percona/percona-server:8.0.43-34.1                       | 315efeac572c48cc6f118bba7e0b2545ad396142f60328f2db9620ae0ad57e45 |
-| percona/percona-xtrabackup:8.4.0-4.1                     | 840260525cf27e299b5edc7b48ad19caea03ad3ea7349000d0fc6de627b2fb10 |
-| percona/percona-xtrabackup:8.0.35-34.1                   | 967bafa0823c90aa8fa9c25a9012be36b0deef64e255294a09148d77ce6aea68 |
-| percona/percona-mysql-router:8.4.6                       | e083c632c118cd4af472d9030a7900401f4b338e069c91996fe33747b77be985 |
-| percona/percona-mysql-router:8.0.43                      | 3a420b803cd39c7c2a3ff414d45d1858df39599961339f5c02df0681f558ccdd |
-| percona/percona-orchestrator:3.2.6-18                    | a8a70f8882925b0a1a46893376e29af73646117b22e1eeb5a0a89876a907651f |
-| percona/haproxy:2.8.15                                   | e64e468ac0ed2036ee164631469cc71821dcb84a6d568883f704d0eacaf84bb4 |
-| percona/percona-toolkit:3.7.0-2                          | b7a4a2ca71ebf2b35786ab614221cbefb032fd5dfb5c5a478efcdd23931dd70b |
-| percona/pmm-client:3.4.1                                 | 1c59d7188f8404e0294f4bfb3d2c3600107f808a023668a170a6b8036c56619b |
-| percona/pmm-client:3.4.1 (ARM64)                         | 2d23ba3e6f0ae88201be15272c5038d7c38f382ad8222cd93f094b5a20b854a5 |
-
-
---8<-- [end:images]
-
-[Find images for previous versions :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/){.md-button}
