@@ -109,7 +109,7 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 * [K8SPS-535](https://perconadev.atlassian.net/browse/K8SPS-535) - Backup deletion operations no longer display an erroneous failure message when the backup is successfully removed from storage.
 
-* [K8SPS-539](https://perconadev.atlassian.net/browse/K8SPS-539) - Fixed the issue with excessive CPU utilization of the `ps-entrypoint.sh` recovery by adding a backoff mechanism to the file existence check. This improves cluster operation in envionments where CPU resources are a concern.
+* [K8SPS-539](https://perconadev.atlassian.net/browse/K8SPS-539) - Fixed the issue with excessive CPU utilization of the `ps-entrypoint.sh` recovery by adding a backoff mechanism to the file existence check. This improves cluster operation in environments where CPU resources are a concern.
 
 * [K8SPS-548](https://perconadev.atlassian.net/browse/K8SPS-548) - Improved Group Replication self-healing test and resolved a sporadic failure where a pod would not become ready after a full cluster crash.
 
