@@ -16,7 +16,7 @@ With Percona Operator for MySQL, you can quickly set up, scale, and protect your
 ### Deploy and manage with ease
 
 No need for complicated scripts or manual setups. Define your database
-requirements in a YAML file, and have the Operator to automatically create, configure,
+requirements in a YAML file, and have the Operator automatically create, configure,
 and manage your entire MySQL cluster. 
 
 ### Built for reliability
