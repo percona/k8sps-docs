@@ -24,7 +24,7 @@ The Operator provides two approaches:
 
 This approach does not require the knowledge of how Kubernetes assigns Pods to specific nodes.
 
-Use the `topologyKey` option with these values:
+Use the `antiAffinityTopologyKey` option with these values:
 
 * `kubernetes.io/hostname` - Pods avoid the same host
 * `topology.kubernetes.io/zone` - Pods avoid the same zone  
@@ -33,7 +33,7 @@ Use the `topologyKey` option with these values:
 
 **Example** 
 
-This configuration forces Percona XtraDB Cluster Pods to avoid reside on the same node:
+This configuration forces Percona Server for MySQL Pods to avoid reside on the same node:
 
 ```yaml
 affinity:
@@ -42,7 +42,7 @@ affinity:
 
 ### Advanced anti-affinity via Kubernetes constraints
 
-For complex scheduling requirements, use the `advanced` option. This disables the `topologyKey` effect and allows the use of standard Kubernetes affinity constraints:
+For complex scheduling requirements, use the `advanced` option. This disables the `antiAffinityTopologyKey` effect and allows the use of standard Kubernetes affinity constraints:
 
 ```yaml
 affinity:
