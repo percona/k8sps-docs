@@ -17,7 +17,7 @@ default. If you need general purpose users, run the following commands:
 Start a temporary Percona MySQL client Pod and connect to MySQL in your cluster
 
 ```bash
-kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- mysql -hps-cluster1-mysql -uroot -proot_password
+kubectl run -it --rm percona-client --image=percona:8.4 --restart=Never -- mysql -hps-cluster1-mysql -uroot -proot_password
 ```
 
 The following SQL command creates a new user `user1` with the password `password1`, and grants this user all privileges on all tables in the `database1` database. The `@'%'` means that the user can connect from any host.
@@ -33,11 +33,10 @@ FLUSH PRIVILEGES;
     MySQL password here should not exceed 32 characters due to the [replication-specific limit introduced in MySQL 5.7.5 :octicons-link-external-16:](https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html).
 
 Verify that the user was created successfully. If successful, the
-following command will let you successfully login to MySQL shell via
-ProxySQL:
+following command will let you successfully login to MySQL shell:
 
 ```bash
-kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- bash -il
+kubectl run -it --rm percona-client --image=percona:8.4 --restart=Never -- bash -il
 percona-client:/$ mysql -h ps-cluster1-mysql-primary -uuser1 -ppassword1
 mysql> SELECT * FROM database1.table1 LIMIT 1;
 ```
