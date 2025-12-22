@@ -23,7 +23,9 @@ kubectl run -it --rm percona-client --image=percona:8.0 --restart=Never -- mysql
 The following SQL command creates a new user `user1` with the password `password1`, and grants this user all privileges on all tables in the `database1` database. The `@'%'` means that the user can connect from any host.
 
 ```sql
-GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%' IDENTIFIED BY 'password1';
+CREATE USER 'user1'@'%' IDENTIFIED BY 'password1';
+GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%';
+FLUSH PRIVILEGES;
 ```
 
 !!! note
