@@ -24,7 +24,7 @@ The Operator provides two approaches:
 
 This approach does not require the knowledge of how Kubernetes assigns Pods to specific nodes.
 
-Use the `topologyKey` option with these values:
+Use the `antiAffinityTopologyKey` option with these values:
 
 * `kubernetes.io/hostname` - Pods avoid the same host
 * `topology.kubernetes.io/zone` - Pods avoid the same zone  
@@ -33,7 +33,7 @@ Use the `topologyKey` option with these values:
 
 **Example** 
 
-This configuration forces Percona XtraDB Cluster Pods to avoid reside on the same node:
+This configuration forces Percona Server for MySQL Pods to avoid reside on the same node:
 
 ```yaml
 affinity:
@@ -42,7 +42,7 @@ affinity:
 
 ### Advanced anti-affinity via Kubernetes constraints
 
-For complex scheduling requirements, use the `advanced` option. This disables the `topologyKey` effect and allows the use of standard Kubernetes affinity constraints:
+For complex scheduling requirements, use the `advanced` option. This disables the `antiAffinityTopologyKey` effect and allows the use of standard Kubernetes affinity constraints:
 
 ```yaml
 affinity:
@@ -137,3 +137,21 @@ priorityClassName: high-priority
 ```
 
 See [Kubernetes Pod Priority documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption) for more information on how to define and use priority classes in your cluster.
+
+## Pod Disruption Budgets
+
+A Pod Disruption Budget (PDB) in Kubernetes helps keep your applications available during voluntary disruptions, such as deleting a deployment or draining a node for maintenance by a cluster administrator. A Pod Disruption Budget sets a limit on how many Pods can be unavailable at the same time due to these voluntary actions. 
+
+You can configure Pod disruption budget for Percona Server for MySQL, HAProxy, MySQL Router and Orchestrator Pods using the `podDisruptionBudget` option in the Custom Resource.
+
+This is the example configuration for Percona Server for MySQL Pods:
+
+```yaml
+mysql:
+  podDisruptionBudget:
+      maxUnavailable: 1
+      minAvailable: 0
+```
+
+Refer to [the official Kubernetes
+documentation :octicons-link-external-16:](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) for more information about Pod disruption budgets and [considerations how to protect your application :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/configure-pdb/#protecting-an-application-with-a-poddisruptionbudget).
