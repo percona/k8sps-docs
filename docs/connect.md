@@ -33,7 +33,7 @@ Here's how to get it:
 
     ```bash
     kubectl run -n <namespace> -i --rm --tty percona-client \ 
-    --image=percona:8.4 --restart=Never -- bash -il
+    --image=percona:8.0 --restart=Never -- bash -il
     ```
 
     Executing it may require some time to deploy the corresponding Pod.
