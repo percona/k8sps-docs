@@ -1,0 +1,73 @@
+# Cluster components environment variables
+
+You can pass environment variables using `env` and `envFrom` options to the following parts of the `PerconaServerMySQL` spec (paths refer to fields documented in [Custom Resource options](operator.md)):
+
+| Component | Custom Resource options |
+| --------- | ------------------------ |
+| MySQL (Percona Server) Pods | `spec.mysql.env`, `spec.mysql.envFrom` |
+| HAProxy | `spec.proxy.haproxy.env`, `spec.proxy.haproxy.envFrom` |
+| MySQL Router | `spec.proxy.router.env`, `spec.proxy.router.envFrom` |
+| Orchestrator | `spec.orchestrator.env`, `spec.orchestrator.envFrom` |
+| Backup and restore Jobs (per storage) | `spec.backup.storages.<storage-name>.containerOptions.env` |
+
+Environment variables for backup and restore jobs are passed to the `xtrabackup`, `xbcloud`, and `xbstream` processes as described in [Fine-tune backups and restores](backups-fine-tune.md).
+
+The Custom Resource also includes `spec.toolkit` (`ContainerSpec` with `env` / `envFrom` in the API). The Percona Toolkit `pt-heartbeat` container is built by the Operator with a fixed environment (see [Percona Toolkit (`pt-heartbeat`)](#percona-toolkit-pt-heartbeat)); it does not append `spec.toolkit.env` in the current implementation. Use [sidecars](sidecar.md) if you need an extra container with arbitrary environment.
+
+## Percona Server environment variables 
+
+You can set the following environment variables to customize bootstrap and asynchronous replication:
+
+| Variable | Purpose |
+| -------- | ------- |
+| `BOOTSTRAP_READ_TIMEOUT` | Non-negative integer (seconds). Used as MySQL client read/write timeout for bootstrap and replication operations when connecting to the local instance. If unset, defaults apply inside the client layer. |
+| `BOOTSTRAP_CLONE_TIMEOUT` | Non-negative integer (seconds). Maximum time allowed for a [MySQL clone :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html) operation during asynchronous bootstrap. If unset, a default clone timeout is used. |
+| `ASYNC_SOURCE_RETRY_COUNT` | Non-negative integer. Passed through to replication configuration for asynchronous clusters. |
+| `ASYNC_SOURCE_CONNECT_RETRY` | Non-negative integer. Passed through to replication configuration for asynchronous clusters. |
+
+## HAProxy environment variables
+
+The following environment variables are available for HAProxy:
+
+| Variable | Purpose |
+| -------- | ------- |
+| `HA_CONNECTION_TIMEOUT` | Sets the timeout (in milliseconds) for HAProxy health checks on MySQL nodes. The default is 10000 milliseconds (10 seconds), but you can increase this value for unstable Kubernetes networking or if you experience soft lockups on nodes. |
+| `HA_RLIMIT_NOFILE` | Sets the soft file descriptor limit in the entrypoint before HAProxy container starts. The default value is 1048576. If the set value is invalid, the Operator falls back to the default one. |
+| `HA_SERVER_OPTIONS` | Extra server options passed into generated HAProxy server lines ([`haproxy_add_mysql_nodes.sh` :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/build/haproxy_add_mysql_nodes.sh)). |
+
+## MySQL Router environment variables
+
+These environment variables are available for MySQL Router:
+
+| Variable | Purpose |
+| -------- | ------- |
+| `ROUTER_DIR` | Working directory for Router files (default `/tmp/router`). |
+| `OPERATOR_USER` | MySQL user for bootstrap (default `operator`). |
+
+## Orchestrator environment variables
+
+You can set the following environment variables for the Orchestrator entrypoint:
+
+| Variable | Purpose |
+| -------- | ------- |
+| `ORC_CONF_PATH` | Base path for Orchestrator configuration (default `/etc/orchestrator`). |
+| `ORC_CONF_FILE` | Full path to the generated JSON config. |
+| `ORC_TOPOLOGY_USER` | MySQL topology user name (default `orchestrator`). |
+
+Topology and TLS material are wired from mounted Secrets and configuration volumes.
+
+### Percona Toolkit (`pt-heartbeat`)
+
+For asynchronous replication with Orchestrator, the Operator adds a `pt-heartbeat` container ([`pkg/mysql` :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/pkg/mysql/mysql.go)). It receives `HEARTBEAT_PASSWORD` from the internal Secret and `CLONE_TIMEOUT_SECONDS` when supported. The script ([`heartbeat-entrypoint.sh` :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/build/heartbeat-entrypoint.sh)) uses:
+
+| Variable | Purpose |
+| -------- | ------- |
+| `CLONE_TIMEOUT_SECONDS` | Upper bound (seconds) to wait for clone completion before starting `pt-heartbeat` (script default `3600` if unset). |
+| `MYSQL_USERNAME` | MySQL user for admin checks (default `monitor`). |
+| `HEARTBEAT_PASSWORD` | Password for the `heartbeat` MySQL user used by `pt-heartbeat`. |
+
+### Backup and restore Jobs
+
+Backup and restore Pods get storage credentials and metadata from the Operator (for example `BACKUP_NAME`, `BACKUP_DEST`, `VERIFY_TLS`, `CONTAINER_OPTIONS`, `STORAGE_TYPE`, cloud credentials, and `SRC_NODE` for restores). See [`pkg/xtrabackup` :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/pkg/xtrabackup/xtrabackup.go).
+
+You can add arbitrary variables under `spec.backup.storages.<name>.containerOptions.env`; they are merged into the backup/restore Job containers together with the storage-specific variables above.

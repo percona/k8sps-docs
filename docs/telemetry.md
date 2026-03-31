@@ -34,3 +34,5 @@ Open the `operator.yaml` file with your text editor, find the value of the
     ...
   ```
 
+For all supported Operator environment variables and how to change them after installation, see [Configure Operator environment variables](env-vars-operator.md).
+

@@ -1,0 +1,127 @@
+# Define custom environment variables for cluster components
+
+Cluster environment variables let you inject configuration without rebuilding container images. You can use them to:
+
+* Align container behavior with your platform (time zone, locale, tuning flags understood by the entrypoint or sidecars).
+* Pass non-sensitive runtime options to MySQL, HAProxy, MySQL Router, Orchestrator, or backup tooling.
+* Load values from a Secret when you must not store them in the Custom Resource.
+
+You can configure custom environment variables in these ways:
+
+* Set them in the [Custom Resource](operator.md) directly.
+* Load variables from a ConfigMap (`envFrom` with `configMapRef`).
+* Load variables from a Secret (`envFrom` with `secretRef`).
+
+## Supported components
+
+Custom `env` and `envFrom` are supported for these components:
+
+| Component | Custom Resource options |
+| --------- | ------------------------ |
+| MySQL (Percona Server) Pods | `spec.mysql.env`, `spec.mysql.envFrom` |
+| HAProxy | `spec.proxy.haproxy.env`, `spec.proxy.haproxy.envFrom` |
+| MySQL Router | `spec.proxy.router.env`, `spec.proxy.router.envFrom` |
+| Orchestrator | `spec.orchestrator.env`, `spec.orchestrator.envFrom` |
+| Percona Toolkit job Pod | `spec.toolkit.env`, `spec.toolkit.envFrom` (when the Toolkit section is used) |
+| Backup worker Pods (per storage) | `spec.backup.storages.<storage-name>.containerOptions.env` |
+
+Environment variables for backup and restore jobs can also affect the backup sidecar processes; see [Fine-tune backups and restores](backups-fine-tune.md).
+
+**Examples in the default manifest:** The sample [`deploy/cr.yaml` :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) shows commented examples for MySQL (`BOOTSTRAP_READ_TIMEOUT`, async replication-related variables), HAProxy (`HA_CONNECTION_TIMEOUT`), Router, Orchestrator, backup storage, and Toolkit.
+
+## Set variables directly in the Custom Resource
+
+Use this method when you have a small number of non-sensitive values and you want everything in one file.
+
+1. Edit the Custom Resource (for example `deploy/cr.yaml`).
+
+    ```yaml
+    spec:
+      mysql:
+        env:
+          - name: TZ
+            value: "UTC"
+    ```
+
+2. Apply the change:
+
+    ``` {.bash data-prompt="$" }
+    kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```
+
+The Operator reconciles the cluster; depending on what changed, Pods may be recreated or restarted.
+
+## Load variables from a ConfigMap
+
+Use this when you want to share the same variables across clusters or update them without editing the full Custom Resource.
+
+1. Set your namespace (replace `my-namespace` as needed):
+
+    ``` {.bash data-prompt="$" }
+    export NAMESPACE=my-namespace
+    ```
+
+2. Create a ConfigMap manifest, for example `mysql-env-config.yaml`:
+
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: ps-env-config
+    data:
+      TZ: "UTC"
+    ```
+
+3. Create the ConfigMap:
+
+    ``` {.bash data-prompt="$" }
+    kubectl apply -f mysql-env-config.yaml -n $NAMESPACE
+    ```
+
+4. Reference it in the Custom Resource:
+
+    ```yaml
+    spec:
+      mysql:
+        envFrom:
+          - configMapRef:
+              name: ps-env-config
+    ```
+
+5. Apply the Custom Resource:
+
+    ``` {.bash data-prompt="$" }
+    kubectl apply -f deploy/cr.yaml -n $NAMESPACE
+    ```
+
+## Load variables from a Secret
+
+Use this when you need to supply sensitive values (tokens, passwords, keys). Prefer `stringData` in the Secret manifest so Kubernetes encodes values for you.
+
+1. Create a Secret manifest, for example `mysql-env-secrets.yaml`:
+
+    ```yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: ps-env-secrets
+    type: Opaque
+    stringData:
+      MY_SECRET_TOKEN: "replace-with-your-token"
+    ```
+
+2. Apply the Secret and reference it from the Custom Resource:
+
+    ```yaml
+    spec:
+      mysql:
+        envFrom:
+          - secretRef:
+              name: ps-env-secrets
+    ```
+
+Secrets are stored in etcd in encoded form; treat them as sensitive and restrict RBAC accordingly.
+
+## Combine `env` and `envFrom`
+
+You can use both explicit `env` entries and `envFrom` on the same component. If the same variable name appears in multiple sources, Kubernetes resolution order applies (later entries in `env` override earlier ones; see the Kubernetes documentation for details).
