@@ -4,7 +4,7 @@ You can configure the Percona Operator for MySQL by setting environment variable
 
 You can set environment variables in the following ways:
 
-* For installations with `kubectl`, edit the Operator Deployment manifest (`deploy/bundle.yaml` / `deploy/operator.yaml` or `deploy/bundle-cw.yaml` / `deploy/operator-cw.yaml` in the [percona-server-mysql-operator :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator) repository) before you apply it. You can also  change the existing Deployment with `kubectl patch` or `kubectl edit`.
+* For installations with `kubectl`, edit the Operator Deployment manifest (`deploy/bundle.yaml` / `deploy/operator.yaml` or `deploy/bundle-cw.yaml` / `deploy/operator-cw.yaml` in the [percona-server-mysql-operator :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator) repository) before you apply it. You can also change the existing Deployment with `kubectl patch` or `kubectl edit`.
 * For Helm installations, you can set environment variables through Helm values. Use the [ps-operator chart values :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator).
 * For OpenShift installations that use OLM, configure environment variables in the Subscription.
 

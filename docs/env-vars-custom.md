@@ -96,7 +96,7 @@ For example, you want to set a time zone to keep logs aligned across MySQL conta
 
 ### Load variables from a ConfigMap
 
-Use this when you want to share the same variables across multiple clusters or update them without editing the Custom resource
+Use this when you want to share the same variables across multiple clusters or update them without editing the Custom Resource.
 
 1. Export the namespace where your cluster is running as an environment variable. Replace my-namespace with your value:
     
@@ -159,7 +159,7 @@ For example, you need to provide a token used by a custom sidecar container.
     export NAMESPACE=my-namespace
     ```
 
-3. Create a Secret configuration file, for example, `integration-token.yaml`. Use `stringData` so values are encoded when stored:
+3. Create a Secret configuration file, for example, `integration-token.yaml`. Specify your encoded value within:
 
     ```yaml title="integration-token.yaml"
     apiVersion: v1
@@ -167,7 +167,7 @@ For example, you need to provide a token used by a custom sidecar container.
     metadata:
       name: ps-app-env
     type: Opaque
-    stringData:
+    data:
       MY_INTEGRATION_TOKEN: "your-base64-encoded-token"
     ```
 
