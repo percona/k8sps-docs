@@ -41,3 +41,7 @@ You can create backups in two ways:
 * **On-demand backups**: Create these manually whenever you need them. You configure them in the
     [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup.yaml)
     file.
+
+## Point-in-time recovery
+
+Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to [restore to a specific GTID or timestamp](backups-pitr.md). That flow uses a binlog server and object storage alongside your normal backup configuration.

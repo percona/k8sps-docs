@@ -2288,6 +2288,94 @@ Enables or disables making backups.
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `backup.pitr.enabled`
+
+Enables or disables point-in-time recovery functionality.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `backup.binlogServer.size`
+
+Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. Any value you define here will be ignored. To learn more, see [Point-in-time recovery](backups-pitr.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `6` |
+
+### `backup.binlogServer.image`
+
+The Docker image to use to deploy Percona Binarylog Server
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-binlog-server:0.2.0` |
+
+### `backup.binlogServer.imagePullPolicy`
+
+The [policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) the kubelet uses to update Percona Binarylog Server image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `backup.binlogServer.imagePullSecrets.name`
+
+The name of the Secret the kubelet uses to authenticate to a private repository
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
+
+### `backup.binlogServer.serverID`
+
+The unique ID that Percona Binarylog Server uses to connect to MySQL as a replication client for binlogs collection.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `100` |
+
+### `backup.binlogServer.storage.s3.bucket`
+
+The name of the bucket on the AWS s3 or s3-compatible storage where to stream binlogs
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `S3-BACKUP-BUCKET-NAME-HERE` |
+
+### `backup.binlogServer.storage.s3.credentialsSecret`
+
+The Kubernetes secret for binlogs. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-s3-credentials` |
+
+### `backup.binlogServer.storage.s3.endpointUrl`
+
+The URL to access the bucket on the S3-compatible storage. Not needed for AWS S3 storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `https://s3.amazonaws.com` |
+
+### `backup.binlogServer.storage.s3.prefix`
+
+The path to the data directory in the bucket.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `PREFIX-NAME` |
+
+### `backup.binlogServer.storage.s3.region`
+
+The location of the bucket. This option is mandatory for Amazon and all S3-compatible storages.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `us-east-1` |
+
 ### `backup.sourcePod`
 
 Specifies the MySQL instance Pod to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.

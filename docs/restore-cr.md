@@ -39,6 +39,39 @@ Specifies the name of a backup to be used for a restore. This backup should be f
 | ----------- | ---------- |
 | :material-code-string: string     | `backup1` |
 
+## `pitr` section
+
+This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup from `backupName` and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a binlog server in the cluster; see [Point-in-time recovery](backups-pitr.md) for details.
+
+#### `pitr.type`
+
+The type of point-in-time recovery. Supported values are:
+
+| Value   | Meaning                                      |
+| ------- | -------------------------------------------- |
+| `gtid`  | Restore just before the specified GTID target (`pitr.gtid`). |
+| `date`  | Restore just before the specified timestamp (`pitr.date`). |
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `gtid` |
+
+#### `pitr.gtid`
+
+The exact GTID for point-in-time recovery, specified in the format "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:nnn". Used when `pitr.type` is `gtid`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `3E11FA47-71CA-11E1-9E33-C80AA9429562:1-5` |
+
+#### `pitr.date`
+
+Timestamp string used when `pitr.type` is `date`. Specified in the format "yyyy-mm-dd hh:mm:ss" .
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `2026-03-30 14:32:00` |
+
 ## The `backupSource` subsection
 
 Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment. 
