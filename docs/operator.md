@@ -2683,7 +2683,7 @@ Scheduled time of the backup, specified in the [crontab format :octicons-link-ex
 
 ### `backup.schedule.keep`
 
-The amount of most recent backups to store. Older backups are automatically deleted. Set `keep` to zero or completely remove it to disable automatic deletion of backups.
+The amount of most recent backups to store. Older backups are automatically deleted. Set `keep` to zero or completely remove it to disable automatic deletion of backups. Note that `keep` is ignored for [incremental](backups-delete.md#full-vs-incremental-backup-schedules) backups.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2696,6 +2696,14 @@ The name of the storage for the backups configured in the `storages` subsection.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `s3-us-west` |
+
+### `backup.schedule.type`
+
+The backup type. Supported values: `full`, `incremental`. When undefined, defaults to `full`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `full` |
 
 ## <a name="operator-pt-section"></a>Percona Toolkit section
 

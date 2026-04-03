@@ -22,6 +22,13 @@ The following diagram outlines this workflow:
 
 ![image](assets/images/backup-job.svg)
 
+## Backup types
+
+You can make the following types of physical backups:
+
+* Full backup - contains full data set
+* An incremental backup - contains only the changes that occurred since the previous backup. To learn more, read [Incremental backups](backups-incremental.md). 
+
 ## Configuring backups
 
 You configure backups in the `backup` section of your
@@ -29,9 +36,10 @@ You configure backups in the `backup` section of your
 file. This section includes:
 
 * The [backup.enabled](operator.md#backupenabled) key, which you set to `true` to enable backups
+* The [backups.type](operator.md#backuptype) key to set the type of a backup you wish to make.
 * The `storages` subsection, where you [configure access to your cloud storage](backups-storage.md)
 
-## Backup types
+## Backup runs
 
 You can create backups in two ways:
 

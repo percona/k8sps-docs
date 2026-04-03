@@ -51,7 +51,23 @@ Specifies the name of the storage where to save a backup. It must match the name
 | ----------- | ---------- |
 | :material-code-string: string     | `s3-us-west` |
 
-## `containerOptions.env`
+### `type`
+
+Specifies the backup type. Supported values: `full`, `incremental`. When undefined, defaults to `full`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `full` |
+
+### `incrementalBaseBackupName`
+
+Specifies the backup to serve as the base for the incremental chain. This option is only valid when `type` is set to `incremental`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-backup` |
+
+### `containerOptions.env`
 
 The [environment variables set as key-value pairs :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the backup job.
 
@@ -59,7 +75,7 @@ The [environment variables set as key-value pairs :octicons-link-external-16:](h
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>- name: VERIFY_TLS<br>  value: "false"</pre> |
 
-## `containerOptions.args.xtrabackup`
+### `containerOptions.args.xtrabackup`
 
 Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
 

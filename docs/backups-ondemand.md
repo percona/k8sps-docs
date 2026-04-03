@@ -18,6 +18,8 @@
 
     * Verify that you have [configured backup storage](backups-storage.md) and specified its configuration in the `backup.storages` subsection of the Custom Resource.
 
+3. For incremental backups, check [implementation specifics and rules](backups-incremental.md#implementation-specifics-and-rules).
+
 ## Backup steps
 
 To make an on-demand backup, use
@@ -30,6 +32,8 @@ Specify the following keys:
 * Set the `metadata.name` key to assign a name to the backup.
 * Set the `spec.clusterName` key to the name of your cluster.
 * Set the `spec.storageName` key to a storage configuration defined in your `deploy/cr.yaml` file.
+* Set the `spec.type` key to make an [incremental backup](backups-incremental.md). When unset, a full backup is made by default.
+* Optionally, specify the base backup for the `spec.incrementalBaseBackupName`. This option is only valid for the  `spec.type=incremental`.
 * Optionally, add the `percona.com/delete-backup` entry under `metadata.finalizers` to enable deletion of backup files from a cloud storage when the backup object is removed (manually or by schedule).
 
 Pass this information to the Operator:
