@@ -19,8 +19,6 @@ To install Percona Server for MySQL on OpenShift means:
 
 Check the [System Requirements](System-Requirements.md) to ensure your environment meets the necessary prerequisites.
 
-<!-- ## Installation options
-
 You can install Percona Operator for MySQL on OpenShift using either:
 
 - The [Operator Lifecycle Manager :octicons-link-external-16:](https://docs.redhat.com/en/documentation/openshift_container_platform/4.2/html/operators/understanding-the-operator-lifecycle-manager-olm#olm-overview_olm-understanding-olm) web interface 
@@ -32,26 +30,35 @@ Choose the method that best suits your needs. The web interface is recommended f
 
 Operator Lifecycle Manager (OLM) is a part of the [Operator Framework :octicons-link-external-16:](https://github.com/operator-framework) that allows you to install, update, and manage the Operators lifecycle on the OpenShift platform.
 
-### Step 1: Access OperatorHub
+### Prerequisites
 
-1. Login to the OLM
-2. Navigate to the OperatorHub page
-3. Search for "Percona Operator for MySQL", select "Percona Operator for MySQL based on Percona Server for MySQL"
-4. Click "Install"
+Before you start, ensure you have the following:
 
-![image](assets/images/olm1.svg)
+1. You can log in to the OLM console
+2. You have the ARN role assigned to your OLM user.
 
-### Step 2: Configure the installation
+### Install the Operator Deployment
 
-1. Select the Operator version
-2. Choose the target namespace: a default one or your custom one. You can create a namespace (an OpenShift project) right away by clicking the **Create Project** and filling in project details like name, display name and description.
-3. Click "Install"
+Follow these steps to deploy the Operator and Percona Distribution for PostgreSQL cluster:
 
-![image](assets/images/olm2.svg)
+1. Login to the OLM.
+2. Navigate to the Software Catalog.
+3. Search for "Percona Operator for MySQL", select "Percona Operator for MySQL based on Percona Server for MySQL". You may need to change the project for your user:
+
+    ![image](assets/images/olm1.svg)
+
+4. Then click "Continue", and "Install".
+    
+    ![image](assets/images/olm1-1.svg)
+
+5. A new page opens where you specify the ARN role assigned to your user. You also choose the Operator version and the Namespace / OpenShift project you would like to install the Operator into. You can create a namespace (an OpenShift project) right away by clicking the **Create Project** and filling in project details like name, display name and description.
+6. Click "Install"
+
+    ![image](assets/images/olm2.svg)
 
 You can track the install process on the Installed Operators page. The Operator should report the **Succeeded** status.
 
-### Step 3: Deploy Percona Server for MySQL
+### Deploy Percona Server for MySQL
 
 Now you can deploy Percona Server for MySQL
 
@@ -61,13 +68,23 @@ Now you can deploy Percona Server for MySQL
 4. Edit the Custom Resource manifest to fine-tune your cluster configuration. Refer to [Custom Resource reference](operator.md) for the description of available options
 5. Click "Create"
 
-![image](assets/images/olm3.svg) -->
+    ![image](assets/images/olm3.svg) 
+
+6. Upon successful installation The Operator should report the **Succeeded** status for the database cluster.
+    
+    ![image](assets/images/olm4.svg)
 
 ## Install the Operator via the command-line interface
 
-To get started quickly, choose the [Quick install](#quick-install) option. This way you deploy the Operator with a single command. 
+The following steps install the latest version of the Operator with default parameters. To install a specific version, replace the `v{{ release }}` tag with your value. See the full list of tags [in the Operator repository :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/tags) on GitHub.
 
-If you want more control over the installation process, jump to the [Step-by-step installation](#step-by-step-installation)
+To install the Operator with customized parameters, see [Install Percona Operator for MySQL with customized parameters](custom-install.md).
+
+Choose the approach that fits your needs:
+
+* [**Quick install**](#quick-install) — Apply a single bundle file. Use this when you want to get started quickly with default settings.
+* [**Step-by-step install**](#step-by-step-installation) — Run each installation step separately. Use this when
+ you want more control over the installation process or you need to customize the installation.
 
 ### Quick install
 
@@ -77,15 +94,15 @@ If you want more control over the installation process, jump to the [Step-by-ste
 
         You must specify the correct branch with the `-b` option while cloning the code on this step. Please be careful.
 
-    ``` {.bash data-prompt="$" }
-    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
-    $ cd percona-server-mysql-operator
+    ```bash
+    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    cd percona-server-mysql-operator
     ```
 
 2. Create the Kubernetes namespace for your cluster. It is a good practice to isolate workloads in Kubernetes by installing the Operator in a custom namespace. Replace the `<namespace>` placeholder with your value.
 
-    ``` {.bash data-prompt="$" }
-    $ oc create namespace <namespace>
+    ```bash
+    oc create namespace <namespace>
     ```
 
     ??? example "Expected output"
@@ -97,7 +114,7 @@ If you want more control over the installation process, jump to the [Step-by-ste
 3. A `bundle.yaml` is a Kubernetes manifest that packages Operator metadata and resources. By applying this file, Kubernetes creates the Custom Resource Definition, sets up role-based access control and installs the Operator in one single action. Replace the `<namespace>` placeholder with your value:
    
     ```{.bash data-prompt="$" }
-    $ oc apply --server-side -f deploy/bundle.yaml -n <namespace>
+    oc apply --server-side -f deploy/bundle.yaml -n <namespace>
     ```
 
     ??? example "Expected output"
@@ -127,9 +144,9 @@ Use the following commands to clone the `percona-server-mysql-operator` reposito
 
     You must specify the correct branch with the `-b` option while cloning the code on this step. Please be careful.
 
-``` {.bash data-prompt="$" }
-$ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
-$ cd percona-server-mysql-operator
+```bash
+git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+cd percona-server-mysql-operator
 ```
 
 #### Step 2: Create the Custom Resource Definition
@@ -138,12 +155,12 @@ At this step you must create the Custom Resource Definition for Percona Operator
 
 The Custom Resource Definition extends the standard set of resources which Kubernetes "knows" about with new items.
 
-You create the Custom Resource Definition only once. All other deployments will use this Custom Resource Definition. 
+You create the Custom Resource Definition only once. It is not bound to a specific namespace and all other deployments will use this Custom Resource Definition. 
 
 Use the following command to create the Custom Resource Definition:
 
-``` {.bash data-prompt="$" }
-$ oc apply --server-side -f deploy/crd.yaml
+```bash
+oc apply --server-side -f deploy/crd.yaml
 ```
 
 !!! warning
@@ -154,9 +171,9 @@ $ oc apply --server-side -f deploy/crd.yaml
 
 If you're using a non-privileged user, grant the required permissions by applying the following clusterrole:
 
-``` {.bash data-prompt="$" }
-$ oc create clusterrole ps-admin --verb="*" --resource=perconaservermysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
-$ oc adm policy add-cluster-role-to-user ps-admin <some-user>
+```bash
+oc create clusterrole ps-admin --verb="*" --resource=perconaservermysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
+oc adm policy add-cluster-role-to-user ps-admin <some-user>
 ```
 
 If you have a [cert-manager  
@@ -166,17 +183,17 @@ If you have a [cert-manager
     html) installed, add these permissions to manage certificates with a 
     non-privileged user:
 
-``` {.bash data-prompt="$" }
-$ oc create clusterrole cert-admin --verb="*" --resource=issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
-$ oc adm policy add-cluster-role-to-user cert-admin <some-user>
+```bash
+oc create clusterrole cert-admin --verb="*" --resource=issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
+oc adm policy add-cluster-role-to-user cert-admin <some-user>
 ```
 
 #### Step 4: Create a project
 
 A project in OpenShift corresponds to a Kubernetes namespace. When you create a new project, you isolate workloads in it. 
 
-``` {.bash data-prompt="$" }
-$ oc new-project ps
+```bash
+oc new-project ps
 ```
 
 ??? example "Sample output"
@@ -189,50 +206,50 @@ The command automatically sets context to this project so that all further resou
 
 Role-Based Access Control (RBAC) manages resource access in OpenShift. The Operator needs specific permissions to run Percona Server for MySQL properly. These permissions are defined within roles. 
 
-``` {.bash data-prompt="$" }
-$ oc apply -f deploy/rbac.yaml
+```bash
+oc apply -f deploy/rbac.yaml
 ```
 
 #### Step 6: Deploy the Operator
 
 Now you can deploy the Operator with the following command:
 
-``` {.bash data-prompt="$" }
-$ oc apply -f deploy/operator.yaml
+```bash
+oc apply -f deploy/operator.yaml
 ```
 
-## Install Percona Server for MySQL
+### Install Percona Server for MySQL
 
 After installing the Operator, you can deploy Percona Server for MySQL. This section guides you through the process of setting up secrets, certificates, and creating your first cluster.
 
-### Step 1: Configure secrets (optional)
+#### Step 1: Configure secrets (optional)
 
 By default, the Operator generates users Secrets automatically, so you don't have to do anything. Yet if you wish to use your own Secrets, here's how:
 
 1. Edit the `deploy/secrets.yaml` file to set up your MySQL users and passwords:
 
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: my-cluster-secrets
-type: Opaque
-stringData:
-  root: your-root-password
-  xtrabackup: your-xtrabackup-password
-  monitor: your-monitor-password
-  clustercheck: your-clustercheck-password
-  proxyadmin: your-proxyadmin-password
-  pmmserver: your-pmm-server-password
-```
+    ```yaml
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: my-cluster-secrets
+    type: Opaque
+    stringData:
+      root: your-root-password
+      xtrabackup: your-xtrabackup-password
+      monitor: your-monitor-password
+      clustercheck: your-clustercheck-password
+      proxyadmin: your-proxyadmin-password
+      pmmserver: your-pmm-server-password
+    ```
 
 2. Apply the secrets:
 
-``` {.bash data-prompt="$" }
-$ oc create -f deploy/secrets.yaml
-```
+    ```bash
+    oc create -f deploy/secrets.yaml
+    ```
 
-### Step 2: Configure certificates (optional)
+#### Step 2: Configure certificates (optional)
 
 The Operator handles certificate generation automatically so don't have to do anything. However, if you need custom certificates:
 
@@ -242,15 +259,15 @@ The Operator handles certificate generation automatically so don't have to do an
 
 See [TLS Configuration](TLS.md) for detailed instructions.
 
-### Step 3: Deploy the database cluster
+#### Step 3: Deploy the database cluster
 
 1. To deploy Percona Server for MySQL cluster means to create a Custom Resource for it in OpenShift. This Custom Resource uses the Percona Server for MySQL Operator, which automates the deployment, scaling, and management of MySQL clusters.
 
     The Custom Resource is described by the `deploy/cr.yaml` file. So to create it, you need to apply this file as follows:
 
 
-    ```{.bash data-prompt="$" }
-    $ oc apply -f deploy/cr.yaml
+    ```bash
+    oc apply -f deploy/cr.yaml
     ```
 
     ??? example "Expected output"
@@ -261,8 +278,8 @@ See [TLS Configuration](TLS.md) for detailed instructions.
 
 2. It may take up to 10 minutes to complete the cluster deployment. Use this command to monitor the deployment:
 
-    ``` {.bash data-prompt="$" }
-    $ oc get ps
+    ```bash
+    oc get ps
     ```
 
     ??? example "Expected output"
