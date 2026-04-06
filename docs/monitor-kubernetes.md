@@ -36,7 +36,7 @@ To set up monitoring of Kubernetes, you need the following:
 
 ### Prepare your environment
 
-1. Create the Namespace where you want to set up monitoring. The following command creates the Namespace `monitoring-system`. You can specify a different name. In the latter steps, specify your namespace instead of the `<namespace>` placeholder.
+1. Create the Namespace where you want to set up monitoring. The following command creates the Namespace `monitoring-system`. You can specify a different name. In the following steps, specify your namespace instead of the `<namespace>` placeholder.
 
     ```bash
     kubectl create namespace monitoring-system
@@ -93,7 +93,7 @@ To set up monitoring of Kubernetes, you need the following:
 
             ```bash
             echo -n <pmm-token> | base64 --wrap=0
-            ````
+            ```
 
         === "in macOS"
 
@@ -101,7 +101,7 @@ To set up monitoring of Kubernetes, you need the following:
             echo -n <pmm-token>| base64
             ```
 
-    2. Create the YAML file for the [Kubernetes Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) and specify the base64-encoded PMM server token value within. Let's name this file `pmm-api-vmoperator.yaml`.
+    2. Create the YAML file for the [Kubernetes Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) and specify the base64-encoded PMM server token value within. Change the `namespace` option value to your namespace. Let's name this file `pmm-api-vmoperator.yaml`.
 
         ```yaml title="pmm-api-vmoperator.yaml"
         apiVersion: v1
