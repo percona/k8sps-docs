@@ -36,7 +36,8 @@ You configure backups in the `backup` section of your
 file. This section includes:
 
 * The [backup.enabled](operator.md#backupenabled) key, which you set to `true` to enable backups
-* The [backups.type](operator.md#backuptype) key to set the type of a backup you wish to make.
+* The [backup.schedule.type](operator.md#backupscheduletype) key to set the type for scheduled backups.
+* The [PerconaServerMySQLBackup.spec.type](backup-cr.md#type) field to set the type for on-demand backups.
 * The `storages` subsection, where you [configure access to your cloud storage](backups-storage.md)
 
 ## Backup runs
