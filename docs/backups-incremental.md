@@ -37,11 +37,11 @@ By default, the Operator uses the **latest full backup** as the base for both **
 
 !!! important
 
-   The `percona.com/base-backup-name` annotation is internal and serves to correctly link incremental backups to the base one. Removing or editing it will lead to unpredicted results and data corruption. Don't remove nor edit this annotation.
+   The `percona.com/base-backup-name` annotation is internal and serves to correctly link incremental backups to the base one. Removing or editing it will lead to unpredictable results and data corruption. Don't remove or edit this annotation.
 
 ## How restore from an incremental backup works
 
-The restore flow is unified for both full and incremental backups. The Operator identifies the backup type by name or destination. To identify the increments and reconstruct the chain, the backup destination has now the `.incr` prefix in the path. The Operator downloads the full backup and all related increments and sorts them in the correct order. Then it restores the full backup first and applies each incremental backup. This provides a better restore performance.
+The restore flow is unified for both full and incremental backups. The Operator identifies the backup type by name or destination. To identify the increments and reconstruct the chain, the backup destination has now the `.incr` path segment. The Operator downloads the full backup and all related increments and sorts them in the correct order. Then it restores the full backup first and applies each incremental backup. This provides a better restore performance.
 
 Here's how it works in detail:
 
@@ -82,7 +82,7 @@ With incremental backups, you gain the following benefits:
 
 ### Restore rules
 
-1. You can make either an in-place restore pointing at an incremental backup object in the `backupName` option, or make a cross-cluster restore specifying the incremental backup path for the `dataSource` option.
+1. You can make either an in-place restore pointing at an incremental backup object in the `backupName` option, or make a cross-cluster restore specifying the incremental backup path for the `dataSource.destination` option.
 2. Restores that use `backupSource` work across clusters and namespaces when the storage destination is reachable; incremental paths remain discoverable because of the `.incr` layout.
 3. Restore always needs the full chain: full backup first, then increments in order, up to the backup you selected.
 4. You can only restore from incremental backups to the state captured by the backup itself. Support for point-in-time recovery will be introduced in future releases.

@@ -1,6 +1,6 @@
 # Delete unneeded backups
 
-You can delete backups in the following way:
+You can delete backups in the following ways:
 
 * Configure the retention policy for full backups and have the Operator delete them according to this policy rules.
 * Delete backups of any type manually. However, deleting incremental backups has rules. To learn more, see [Deleting incremental backup chains](#deleting-incremental-backup-chains).

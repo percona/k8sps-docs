@@ -33,7 +33,7 @@ Specify the following keys:
 * Set the `spec.clusterName` key to the name of your cluster.
 * Set the `spec.storageName` key to a storage configuration defined in your `deploy/cr.yaml` file.
 * Set the `spec.type` key to make an [incremental backup](backups-incremental.md). When unset, a full backup is made by default.
-* Optionally, specify the base backup for the `spec.incrementalBaseBackupName`. This option is only valid for the  `spec.type=incremental`.
+* Optionally, specify the base backup for the `spec.incrementalBaseBackupName`. This option is only valid for the `spec.type=incremental`.
 * Optionally, add the `percona.com/delete-backup` entry under `metadata.finalizers` to enable deletion of backup files from a cloud storage when the backup object is removed (manually or by schedule).
 
 Pass this information to the Operator:
