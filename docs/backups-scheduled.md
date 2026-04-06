@@ -14,7 +14,7 @@ To schedule backups, specify the following configuration in your Custom Resource
     * `name` - a unique name for this backup schedule
     * `schedule` - the backup schedule in [crontab format :octicons-link-external-16:](https://en.wikipedia.org/wiki/Cron). For example, `"0 0 * * 6"` runs every Saturday at midnight.
     * `storageName` - the name of your [configured storage](backups-storage.md) where backups will be stored
-    * `type` - the backup type: full physical or [incremental](backups-incremental.md)
+    * `type` (optional) - the backup type: `full` (default) or [incremental](backups-incremental.md)
     * `keep` (optional) - the number of backups to keep in storage. Older backups are automatically deleted when this limit is reached. Note that this option is ignored for incremental backups.
 
 Here's an example configuration that creates a **full backup** every Sunday at 2:00 AM and incremental backups **every day** at 3:00 AM. The configuration keeps the last 3 full backups:
