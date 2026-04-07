@@ -1,8 +1,9 @@
-mkdocs
+properdocs
 mkdocs-macros-plugin
 mkdocs-exclude
 markdown-include
 mkdocs-material
+mkdocs-materialx
 mkdocs-with-pdf
 mkdocs-git-revision-date-localized-plugin
 mkdocs-material-extensions
@@ -14,3 +15,4 @@ mike
 mkdocs-print-site-plugin
 mkdocs-open-in-new-tab
 mkdocs-git-committers-plugin-2
+mkdocs-document-dates

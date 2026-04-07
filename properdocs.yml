@@ -1,0 +1,29 @@
+# MkDocs configuration for default Material-themed build
+INHERIT: properdocs-base.yml
+
+site_url: https://docs.percona.com/percona-operator-for-mysql/ps/
+
+theme:
+  name: material
+  custom_dir: _resourcepdf/overrides
+# Theme features
+  features:
+    - search.highlight
+    - navigation.top
+    - navigation.tracking
+    - content.tabs.link
+#    - content.action.edit
+    - content.action.view
+    - content.code.copy
+
+plugins:
+  document-dates:
+    position: bottom
+    type: timeago  
+
+#Google Analytics configuration 
+extra:
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
+    

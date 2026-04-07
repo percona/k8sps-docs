@@ -1,0 +1,272 @@
+# MkDocs configuration
+# Used as base - look for .yml files with INHERIT
+site_name: Percona Operator for MySQL
+site_description: Documentation
+site_author: Percona LLC
+site_url: ""
+copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2026
+use_directory_urls: false
+repo_name: percona/k8sps-docs
+repo_url: https://github.com/percona/k8sps-docs
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  logo: assets/operators-mark.svg
+  favicon: assets/operators-fav.svg
+  custom_dir: _resource/overrides/
+  font:
+    text: Roboto
+    code: Roboto Mono
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Color theme set to Automatic. Click to change
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Color theme set to Light Mode. Click to change
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Color theme set to Dark Mode. Click to change
+
+# Theme features
+
+  features:
+    - search.highlight
+    - navigation.top
+    - navigation.path
+    - content.tabs.link
+
+extra_css:
+  - https://unicons.iconscout.com/release/v3.0.3/css/line.css
+  - https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css
+#  - css/version-select.css
+  - css/nocopy.css
+  - css/design.css
+  - css/osano.css
+  - css/operators.css
+  - css/extra.css
+  - css/rating.css
+
+extra_javascript:
+   - js/promptremover.js
+   - js/consent.js
+   - js/percona-select.js
+   - js/rating.js
+
+markdown_extensions:
+  attr_list: {}
+  toc:
+    permalink: true
+  md_in_html: {}
+  admonition: {}
+  def_list: {}
+  meta: {}
+  smarty: { smart_angled_quotes: true }
+  pymdownx.details: {}
+  pymdownx.mark: {}
+  pymdownx.smartsymbols: {}
+  pymdownx.tilde: {}
+  pymdownx.superfences: 
+    custom_fences:
+      - name: mermaid
+        class: mermaid
+        format: !!python/name:pymdownx.superfences.fence_code_format
+  pymdownx.tabbed:
+    alternate_style: true
+  pymdownx.tasklist:
+    custom_checkbox: true
+  pymdownx.snippets:
+      base_path:
+        - snippets
+        - docs/assets/code
+        - docs/assets/fragments
+        - docs/ReleaseNotes
+        - docs/
+      auto_append:
+        - services-banner.md
+  pymdownx.highlight: 
+    use_pygments: true
+  pymdownx.emoji:
+    emoji_index: !!python/name:material.extensions.emoji.twemoji
+    emoji_generator: !!python/name:material.extensions.emoji.to_svg
+    options:
+      custom_icons:
+        - _resource/overrides/.icons
+
+plugins:
+  section-index: {}
+  search: 
+    separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  meta-descriptions:
+    export_csv: false
+    quiet: false
+    enable_checks: false
+    min_length: 50
+    max_length: 160
+  macros:
+    include_yaml:
+      - "variables.yml"
+  # https://pypi.org/project/mkdocs-exclude/
+  exclude:
+    glob:
+      - "setting-up/client/docker.md"
+      
+  # Check links - but extends build time significantly
+  # https://pypi.org/project/mkdocs-htmlproofer-plugin/
+  #    htmlproofer: {}
+  mike:
+    version_selector: false
+    css_dir: css
+    javascript_dir: js
+    canonical_version: null
+    
+  open-in-new-tab: {}
+  print-site: 
+    add_to_navigation: false
+    print_page_title: 'Percona Operator for MySQL based on Percona Server for MySQL documentation'
+    add_print_site_banner: false
+    # Table of contents
+    add_table_of_contents: true
+    toc_title: 'Table of Contents'
+    toc_depth: 2
+    # Content-related
+    add_full_urls: false
+    enumerate_headings: false
+    enumerate_headings_depth: 1
+    enumerate_figures: true
+    add_cover_page: true
+    cover_page_template: "docs/assets/templates/pdf_cover_page.tpl"
+    path_to_pdf: ""
+    include_css: true
+    enabled: true 
+
+
+extra: # Used in main.html template and can't be externalized
+  edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
+  updated_text: '<i class="uil uil-refresh"></i> Page updated'
+  version:
+    provider: mike
+
+# Common navigation for percona.com, render.com and PDF
+nav:
+
+    - Home: index.md
+    - get-help.md
+    - Understand the Operator:
+          - "Features and capabilities": features.md
+          - "How the Operator works": how-it-works.md
+          - "Design and architecture": architecture.md
+    
+    - Quick start:
+          - Overview: quickstart.md
+          - 1. System requirements: System-Requirements.md
+          - 2. Install the Operator:
+            - "Install with Helm": helm.md
+            - "Install with kubectl": kubectl.md
+          - 3. Connect to the database: connect.md
+          - 4. Insert data: data-insert.md
+          - 5. Make a backup: backup-tutorial.md
+          - 6. Monitor the database with PMM: monitoring-tutorial.md
+          - what-next.md
+          
+    - Platform-specific installation:
+          - "Install on Google Kubernetes Engine (GKE)": gke.md
+          - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
+          - "Install on OpenShift": openshift.md
+          - "Install on Minikube": minikube.md
+          - "Generic Kubernetes installation": kubernetes.md
+    
+    - Daily operations:  
+          - Backup and restore:
+              - "About backups": backups.md
+              - "Configure storage for backups": backups-storage.md
+              - "Make scheduled backups": backups-scheduled.md
+              - "Make on-demand backup": backups-ondemand.md
+              - Restore from a backup:
+                - "On the same cluster": backups-restore.md
+                - "On a new cluster": backups-restore-to-new-cluster.md
+              - "Fine-tune backups and restores": backups-fine-tune.md
+              - "Delete the unneeded backup": backups-delete.md
+          - Monitoring:
+              - "Monitor your cluster with PMM": monitoring.md
+              - "Monitor Kubernetes": monitor-kubernetes.md
+          - "Scale your cluster": scaling.md
+          - "Manage users": users.md
+
+    - Production configuration:
+          - TLS/SSL encryption: 
+            - "About TLS/SSL security": TLS.md
+            - "Configure TLS using cert-manager": tls-cert-manager.md
+            - "Generate certificates manually": tls-manual.md
+            - "Update certificates": tls-update.md
+          - Data-at-rest encryption:
+              - "About data-at-rest encryption": encryption.md
+              - "Configure data-at-rest encryption": encryption-setup.md
+          - External access:
+              - "Expose your cluster": expose.md
+              - "Configure HAProxy": haproxy-conf.md
+              - "Configure MySQL Router": router-conf.md
+          - "Control Pod scheduling": constraints.md             
+          - "Fine-tune MySQL options": options.md
+          - "Multi-namespace deployment": cluster-wide.md
+    
+    - Cluster lifecycle management:
+        - Upgrade:
+            - "About upgrades": update.md
+            - "Upgrade the Operator": update-operator.md
+            - "Upgrade the database": update-db.md
+        - "Pause or restart the cluster": pause.md
+        - Cleanup:
+            - "Delete the Operator": delete.md
+
+    - Advanced operations:
+          - "Change replication type": change-replication-type.md
+          - "Add sidecar containers": sidecar.md
+          - "Labels and annotations": annotations.md
+          - "Configure telemetry": telemetry.md
+
+    - Troubleshooting:
+          - "Initial troubleshooting": debug.md
+          - "Exec into the container": debug-shell.md
+          - "Check the events": debug-events.md
+          - "Check the logs": debug-logs.md
+          - "Troubleshoot backups and restores": debug-backup-restore.md
+          
+    - Reference:
+        - Custom Resource reference:
+            - "Custom Resource options": operator.md
+            - "Backup Resource options": backup-cr.md
+            - "Restore Resource options": restore-cr.md
+        - Certified images:
+            - "Percona certified images": images.md
+            - "Retrieve certified images": image-query.md
+        - Version compatibility: versions.md
+        - Legal:
+            - "Copyright and licensing information": copyright.md
+            - "Trademark policy": trademark-policy.md
+          
+    - Release Notes:
+          - "Release notes index": ReleaseNotes/index.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.11.0.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md
+          - "Percona Operator for MySQL 0.9.0 (2025-02-11)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.md
+          - "Percona Operator for MySQL 0.8.0 (2024-07-16)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md
+          - "Percona Operator for MySQL 0.7.0 (2024-03-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.md
+          - "Percona Operator for MySQL 0.6.0 (2023-09-05)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.md
+          - "Percona Operator for MySQL 0.5.0 (2023-03-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md
+          - "Percona Operator for MySQL 0.4.0 (2023-01-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md
+          - "Percona Operator for MySQL 0.3.0 (2022-09-29)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.md
+          - "Percona Operator for MySQL 0.2.0 (2022-06-30)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.md
+          - "Percona Distribution for MySQL Operator based on Percona Server for MySQL 0.1.0 (2022-01-25)": ReleaseNotes/Kubernetes-Operator-for-PS-RN0.1.0.md
