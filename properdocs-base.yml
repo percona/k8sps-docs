@@ -11,7 +11,7 @@ repo_url: https://github.com/percona/k8sps-docs
 edit_uri: edit/main/docs/
 
 theme:
-  name: material
+  name: materialx
   logo: assets/operators-mark.svg
   favicon: assets/operators-fav.svg
   custom_dir: _resource/overrides/
