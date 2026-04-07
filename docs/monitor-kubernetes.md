@@ -52,28 +52,47 @@ To set up monitoring of Kubernetes, you need the following:
 
 === ":material-run-fast: Quick install"
 
-    1. To install the Victoria Metrics Kubernetes monitoring stack with the default parameters, use the quick install command. Replace the following placeholders with your values:
+    Use the [quick install script](https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/quick-install.sh) and the set of flags that describe your PMM Server and Kubernetes environment to install Victoria Metrics Kubernetes monitoring stack with a single command. The script installs Victoria Metrics Kubernetes monitoring stack with default parameters.
+    
+    Replace the following placeholders with your values:
 
-        * `PMM-SERVER-TOKEN` - The [PMM Server service account token](#set-up-authentication-in-pmm-server)
-        * `PMM-SERVER-URL` - The URL to access the PMM Server 
-        * `UNIQUE-K8s-CLUSTER-IDENTIFIER` - Identifier for the Kubernetes cluster. It can be the name you defined during the cluster creation.
+    * `PMM-SERVER-TOKEN` - The [PMM Server service account token](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html?h=authe#generate-a-service-account-and-token)
+    * `PMM-SERVER-URL` - The URL to access the PMM Server 
+    * `UNIQUE-K8s-CLUSTER-IDENTIFIER` - Identifier for the Kubernetes cluster. It can be the name you defined during the cluster creation.
 
-           You should use a unique identifier for each Kubernetes cluster. The use of the same identifier for more than one Kubernetes cluster will result in the conflicts during the metrics collection.
+        You should use a unique identifier for each Kubernetes cluster. The use of the same identifier for more than one Kubernetes cluster will result in the conflicts during the metrics collection.
 
-        * `NAMESPACE` - The namespace where the Victoria metrics Kubernetes stack will be installed. If you haven't created the namespace before, it will be created during the command execution.
+    * `NAMESPACE` - The namespace where the Victoria metrics Kubernetes stack will be installed. If you haven't created the namespace before, it will be created during the command execution.
 
-          We recommend to use a separate namespace like `monitoring-system`.
+        We recommend to use a separate namespace like `monitoring-system`.
 
-          ```bash
-          curl -fsL  https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/quick-install.sh | bash -s -- --api-key <PMM-SERVER-TOKEN> --pmm-server-url <PMM-SERVER-URL> --k8s-cluster-id <UNIQUE-K8s-CLUSTER-IDENTIFIER> --namespace $NAMESPACE
-          ```
+        === "Without Prometheus node-exporter"
 
-        !!! note
-
-            The Prometheus node exporter is not installed by default since it requires privileged containers with the access to the host file system. If you need the metrics for Nodes, add the `--node-exporter-enabled` flag as follows:
+            By default, Prometheus node exporter is not installed with this stack because it requires privileged access to the host system, which may not be desirable in some Kubernetes environments. Also, you may already have a solution in place to scrape and analyze hardware- and kernel-level metrics. 
+            
+            The following command installs the Victoria Metrics Kubernetes monitoring stack without Prometheus node exporter. To install it with the node-exporter, refer to the adjacent tab ("With Prometheus node-exporter") for instructions.
 
             ```bash
-            curl -fsL  https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/quick-install.sh | bash -s -- --api-key <PMM-SERVER-TOKEN> --pmm-server-url <PMM-SERVER-URL> --k8s-cluster-id <UNIQUE-K8s-CLUSTER-IDENTIFIER> --namespace <NAMESPACE> --node-exporter-enabled
+            curl -fsL https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/quick-install.sh \
+            | bash -s -- \
+              --api-key <PMM-SERVER-TOKEN> \
+              --pmm-server-url <PMM-SERVER-URL> \
+              --k8s-cluster-id <UNIQUE-K8s-CLUSTER-IDENTIFIER> \
+              --namespace $NAMESPACE
+            ```
+
+        === "With Prometheus node-exporter"
+
+            To install Victoria Metrics Kubernetes monitoring stack with the metrics for Nodes, add the `--node-exporter-enabled` flag as follows:
+
+            ```bash
+            curl -fsL https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/ refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/quick-install.sh \
+            | bash -s -- \
+              --api-key <PMM-SERVER-TOKEN> \
+              --pmm-server-url <PMM-SERVER-URL> \
+              --k8s-cluster-id <UNIQUE-K8s-CLUSTER-IDENTIFIER> \
+              --namespace $NAMESPACE \
+              --node-exporter-enabled
             ```
 
 === ":fontawesome-solid-user-gear: Install manually"
@@ -116,13 +135,13 @@ To set up monitoring of Kubernetes, you need the following:
 
     3. Create the Secrets object using the YAML file you created previously.
 
-        ```
+        ```bash
         kubectl apply -f pmm-api-vmoperator.yaml -n $NAMESPACE
         ```
 
     4. Check that the secret is created. The following command checks the secret for the resource named `pmm-token-vmoperator` (as defined in the `metadata.name` option in the secrets file). If you defined another resource name, specify your value.  
 
-       ```
+       ```bash
        kubectl get secret pmm-token-vmoperator -n $NAMESPACE
        ```
 
@@ -134,7 +153,7 @@ To set up monitoring of Kubernetes, you need the following:
 
     Use the [example `configmap.yaml` configuration file :octicons-link-external-16:](https://github.com/Percona-Lab/k8s-monitoring/blob/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/ksm-configmap.yaml) to create the ConfigMap.
 
-    ```
+    ```bash
     kubectl apply -f https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/ksm-configmap.yaml -n $NAMESPACE
     ```
 
@@ -142,32 +161,32 @@ To set up monitoring of Kubernetes, you need the following:
 
     #### Install the Victoria Metrics Kubernetes monitoring stack
 
-    1. Add the dependency repositories of [victoria-metrics-k8s-stack :octicons-link-external-16:](https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-k8s-stack) chart.
+    5. Add the dependency repositories of [victoria-metrics-k8s-stack :octicons-link-external-16:](https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-metrics-k8s-stack) chart.
 
-        ```
+        ```bash
         helm repo add grafana https://grafana.github.io/helm-charts
         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
         ```    
 
-    2. Add the Victoria Metrics Kubernetes monitoring stack repository.
+    6. Add the Victoria Metrics Kubernetes monitoring stack repository.
 
-        ```
+        ```bash
         helm repo add vm https://victoriametrics.github.io/helm-charts/
         ```    
 
-    3. Update the repositories.
+    7. Update the repositories.
 
-        ```
+        ```bash
         helm repo update
         ```    
 
-    4. Install the Victoria Metrics Kubernetes monitoring stack Helm chart. You need to specify the following configuration:
+    8. Install the Victoria Metrics Kubernetes monitoring stack Helm chart. You need to specify the following configuration:
 
         * the URL to access the PMM server in the `externalVM.write.url` option in the format `<PMM-SERVER-URL>/victoriametrics/api/v1/write`. The URL can contain either the IP address or the hostname of the PMM server.
         * the unique name or an ID of the Kubernetes cluster in the `vmagent.spec.externalLabels.k8s_cluster_id` option. Ensure to set different values if you are sending metrics from multiple Kubernetes clusters to the same PMM Server. 
         * The Namespace must be the same as the Namespace for the Secret and ConfigMap
 
-        ```
+        ```bash
         helm install vm-k8s vm/victoria-metrics-k8s-stack \
         -f https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/values.yaml \
         --set externalVM.write.url=<PMM-SERVER-URL>/victoriametrics/api/v1/write \
@@ -189,24 +208,38 @@ To set up monitoring of Kubernetes, you need the following:
 
 Check the Pods. 
 
-```
+```bash
 kubectl get pods -n $NAMESPACE
 ```
 
-??? example "Sample output" 
-
-    ```{.text .no-copy}
-    NAME                                                        READY   STATUS    RESTARTS   AGE
-    vm-k8s-grafana-5f6bdb8c7c-d5bw5                             3/3     Running   0          90m
-    vm-k8s-kube-state-metrics-57c5977d4f-6jtbj                  1/1     Running   0          81m
-    vm-k8s-prometheus-node-exporter-kntfk                       1/1     Running   0          90m
-    vm-k8s-prometheus-node-exporter-mjrvj                       1/1     Running   0          90m
-    vm-k8s-prometheus-node-exporter-v98c8                       1/1     Running   0          90m
-    vm-k8s-victoria-metrics-operator-6b7f4f786d-sctp8           1/1     Running   0          90m
-    vmagent-vm-k8s-victoria-metrics-k8s-stack-fbc86c9db-rz8wk   2/2     Running   0          90m    
-    ```
-
 What Pods are running depends on the configuration chosen in values used while installing `victoria-metrics-k8s-stack` chart.
+
+=== "Without Prometheus node-exporter"
+
+    ??? example "Sample output" 
+
+        ```{.text .no-copy}
+        NAME                                                        READY   STATUS    RESTARTS   AGE
+        vm-k8s-grafana-5f6bdb8c7c-d5bw5                             3/3     Running   0          90m
+        vm-k8s-kube-state-metrics-57c5977d4f-6jtbj                  1/1     Running   0          81m
+        vm-k8s-victoria-metrics-operator-6b7f4f786d-sctp8           1/1     Running   0          90m
+        vmagent-vm-k8s-victoria-metrics-k8s-stack-fbc86c9db-rz8wk   2/2     Running   0          90m    
+        ```    
+
+=== "With Prometheus node-exporter"
+
+    ??? example "Sample output" 
+
+        ```{.text .no-copy}
+        NAME                                                        READY   STATUS    RESTARTS   AGE
+        vm-k8s-grafana-5f6bdb8c7c-d5bw5                             3/3     Running   0          90m
+        vm-k8s-kube-state-metrics-57c5977d4f-6jtbj                  1/1     Running   0          81m
+        vm-k8s-prometheus-node-exporter-kntfk                       1/1     Running   0          90m
+        vm-k8s-prometheus-node-exporter-mjrvj                       1/1     Running   0          90m
+        vm-k8s-prometheus-node-exporter-v98c8                       1/1     Running   0          90m
+        vm-k8s-victoria-metrics-operator-6b7f4f786d-sctp8           1/1     Running   0          90m
+        vmagent-vm-k8s-victoria-metrics-k8s-stack-fbc86c9db-rz8wk   2/2     Running   0          90m    
+        ```
 
 ## Verify metrics capture
 
