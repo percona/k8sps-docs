@@ -72,7 +72,7 @@ With incremental backups, you gain the following benefits:
 ### Backup chain rules
 
 1. A full backup is required to start the incremental chain. If none exists, the Operator does not start the incremental backup.
-2. A full and incremental backups must be **on the same storage**. 
+2. A base full backup and incremental backups derived from it must be **on the same storage**. 
 3. By default, the Operator uses the most recent full backup to start the incremental chain. You can explicitly specify the base backup in the `spec.incrementalBaseBackupName` option in the backup configuration file. If the specified backup is valid, the Operator starts the incremental backup chain from it.
 4. If the base backup already has the incremental backup chain, the Operator uses the most recent increment to continue the chain.
 ???5. Backups are **streamed** to storage; the Operator does not keep a separate local copy of the full chain on disk.

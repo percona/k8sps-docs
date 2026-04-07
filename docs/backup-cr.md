@@ -61,7 +61,7 @@ Specifies the backup type. Supported values: `full`, `incremental`. When undefin
 
 ### `incrementalBaseBackupName`
 
-Specifies the backup to serve as the base for the incremental chain. This option is only valid when `type` is set to `incremental`.
+Specifies the backup to serve as the base for the incremental chain. This option is only valid when `type` is set to `incremental`. When undefined, the Operator uses the most recent full backup as the base for the incremental chain.
 
 | Value type  | Example    |
 | ----------- | ---------- |
