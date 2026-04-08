@@ -229,7 +229,11 @@ nav:
     - Cluster lifecycle management:
         - Upgrade:
             - "About upgrades": update.md
-            - "Upgrade the Operator": update-operator.md
+            - Upgrade the Operator and CRD:
+              - Considerations for upgrades: update-operator.md
+              - Manual upgrade: update-crd-manual.md
+              - With Helm: update-crd-helm.md
+              - Via OLM: update-openshift.md
             - "Upgrade the database": update-db.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:

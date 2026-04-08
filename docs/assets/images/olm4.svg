@@ -1914,7 +1914,7 @@
        clip-path="url(#clipPath93-9)"
        style="-inkscape-font-specification:'Arial, Normal';font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:14.2222228px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          style="font-variant:normal;font-weight:normal;font-size:14.2222228px;font-family:Arial;writing-mode:lr-tb;fill:#0066cc;fill-opacity:1;fill-rule:nonzero;stroke:none;-inkscape-font-specification:'Arial, Normal';font-style:normal;font-stretch:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-         x="0 9.9679565 18.143936 26.291901 30.91188 38.275848 46.423813 54.221786 57.48378 64.553741 71.567719 78.931686 82.05368 85.175674 92.539642 100.70161 103.82361"
+         x="0"
          y="0"
          sodipodi:role="line"
          id="tspan92">Upgrade available</tspan></text>
@@ -1925,7 +1925,7 @@
        clip-path="url(#clipPath85)"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.2222px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.2222px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;fill:#0066cc;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         x="0 9.4200745 18.015137 23.115173 30.630219 39.645279 48.150345 56.130402 59.265427 71.430511 80.565567 89.160629 94.41066 102.09071 107.76076 116.77582 122.34085 125.47588 131.11592 140.13098 145.69601 148.83104 161.74612 169.80118 178.99625 191.16133"
+         x="0"
          y="0"
          sodipodi:role="line"
          id="tspan84">Percona Operator for MySQL</tspan></text>
@@ -1936,10 +1936,10 @@
        clip-path="url(#clipPath86)"
        style="-inkscape-font-specification:'Arial, Normal';font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:14.2222228px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          style="font-variant:normal;font-weight:normal;font-size:14.2222228px;font-family:Arial;writing-mode:lr-tb;fill:#0066cc;fill-opacity:1;fill-rule:nonzero;stroke:none;-inkscape-font-specification:'Arial, Normal';font-style:normal;font-stretch:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-         x="0 9.1800537 17.16011 24.210159 32.83522 41.940277 45.075302 54.090363 62.595428 65.730453 75.150528 83.74559 88.845627 96.360672 105.37573 113.8808 121.86086 124.99588 134.08595 139.92099 145.17102 153.15108 164.07115"
+         x="0"
          y="0"
          sodipodi:role="line"
-         id="tspan85">based on Percona XtraDB</tspan></text>
+         id="tspan85">based on Percona Server</tspan></text>
     <text
        id="text86"
        xml:space="preserve"
@@ -1947,10 +1947,10 @@
        clip-path="url(#clipPath87)"
        style="-inkscape-font-specification:'Arial, Normal';font-family:Arial;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:14.2222228px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          style="font-variant:normal;font-weight:normal;font-size:14.2222228px;font-family:Arial;writing-mode:lr-tb;fill:#0066cc;fill-opacity:1;fill-rule:nonzero;stroke:none;-inkscape-font-specification:'Arial, Normal';font-style:normal;font-stretch:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-         x="0 10.800079 14.070099 22.575165 29.400223 35.070267 43.665329"
+         x="0"
          y="0"
          sodipodi:role="line"
-         id="tspan86">Cluster</tspan></text>
+         id="tspan86">for MySQL</tspan></text>
     <text
        id="text87"
        xml:space="preserve"
@@ -1958,7 +1958,8 @@
        clip-path="url(#clipPath88)"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.2222px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"><tspan
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.2222px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;writing-mode:lr-tb;fill:#6a6e73;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         x="34.775864 42.937836 47.431808 55.355774 62.369751 65.491745 73.639709 81.451691 89.599655 92.861649 100.81361 107.78558 111.04758 119.79753 127.5955 132.08948 139.00545 147.13942 154.86739"
+         x="34.775864"
+         y="0"
          sodipodi:role="line"
          id="tspan87">provided by Percona</tspan></text>
     <text
@@ -1971,6 +1972,6 @@
          x="0"
          y="0"
          sodipodi:role="line"
-         id="tspan87-6">1.14.0</tspan></text>
+         id="tspan87-6">1.1.0</tspan></text>
   </g>
 </svg>
