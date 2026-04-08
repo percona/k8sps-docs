@@ -5,9 +5,22 @@ You can delete backups in the following ways:
 * Configure the retention policy for full backups and have the Operator delete them according to this policy rules.
 * Delete backups of any type manually. However, deleting incremental backups has rules. To learn more, see [Deleting incremental backup chains](#deleting-incremental-backup-chains).
 
+## How the Operator handles backup deletion
+
+Every `PerconaServerMySQLBackup` backup object has the `percona.com/delete-backup` [Kubernetes finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers). This finalizer controls the deletion lifecycle of a backup object. This is done to prevent orphaned backup data and make the deletion flow predictable. 
+
+**How it works**:
+
+* When a backup is created, the Operator adds the `percona.com/delete-backup` finalizer to `metadata.finalizers` on the backup object.
+* While the finalizer is present, Kubernetes does not fully remove the `PerconaServerMySQLBackup` object after a delete request. The resource stays until every finalizer is cleared.
+* After you run `kubectl delete ps-backup …`, the Operator marks the specified backup object for deletion  by setting the `metadata.deletionTimestamp` value. The Operator’s backup controller sees this and, if `percona.com/delete-backup` finalizer is listed, runs cleanup: removes associated [PersistentVolumeClaims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PVCs) or deletes backup data in a remote storage.
+* When cleanup finishes, the Operator removes the `percona.com/delete-backup` finalizer. Kubernetes then completes deletion of the backup resource.
+
+You can force the deletion of a backup by manually removing the `percona.com/delete-backup` finalizer from the backup object. Be aware that doing this bypasses the Operator's cleanup steps and may leave backup data or resources orphaned. Only do this if you fully understand the consequences and are certain it is safe.
+
 ## Configure retention for full scheduled backups 
 
-In the cluster Custom Resource, each entry under `backup.schedule` can include an optional **`keep`** field. This field specifies how many most recent successful backups of that schedule to keep. When the count exceeds the `keep` value, the Operator deletes older backup objects.
+In the cluster Custom Resource, each entry under `backup.schedule`  with the type `full` can include an optional `keep` field. This field specifies how many most recent successful backups of that schedule to keep. When the count exceeds the `keep` value, the Operator deletes older backup objects.
 
 | Setting | Behavior |
 | ------- | -------- |

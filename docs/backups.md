@@ -15,8 +15,9 @@ The Operator stores your MySQL backups outside the Kubernetes cluster on cloud s
 The Operator creates physical backups using [Percona XtraBackup :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/). Here's how it works:
 
 1. Each database Pod includes a sidecar container called `xtrabackup` that runs an HTTP server.
-2. When you create a backup, the Operator creates a Job that sends an HTTP request to the backup source pod.
+2. When you create a backup, the Operator creates a Job that sends an HTTP request to the backup source Pod.
 3. The `xtrabackup` container receives the request and starts the backup process.
+4. Backups are streamed to storage; the Operator does not keep a separate local copy of the backup on disk.
 
 The following diagram outlines this workflow:
 
