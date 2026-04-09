@@ -7,7 +7,7 @@ Operator with the `helm upgrade` command.
 The helm upgrade command updates only the Operator deployment. The [update flow for the database management system](update-db.md) is the same for all installation methods, whether it was installed via Helm or `kubectl`.
 
 1. Update the [Custom Resource Definition  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
-    for the Operator, taking it from the official repository on Github, and do
+    for the Operator, taking it from the official repository on GitHub, and do
     the same for the Role-based access control:
 
     ```bash
