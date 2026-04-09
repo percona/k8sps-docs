@@ -27,7 +27,7 @@ The helm upgrade command updates only the Operator deployment. The [update flow 
 
     === "With customized parameters"
 
-        If you installed the Operator with some [customized parameters :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/pxc-operator#installing-the-chart), you should list these options in the upgrade command.
+        If you installed the Operator with some [customized parameters :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator#installing-the-chart), you should list these options in the upgrade command.
 
         You can get the list of the used options in YAML format with the `helm get values my-op -a > my-values.yaml` command. Then pass this file directly to the upgrade command as follows:
 
