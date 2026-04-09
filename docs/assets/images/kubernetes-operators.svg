@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="800"
+   height="418"
+   viewBox="0 0 800 418"
+   fill="none"
+   role="img"
+   aria-labelledby="title desc"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="kubernetes-operators.svg"
+   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.77002407"
+     inkscape:cx="361.677"
+     inkscape:cy="325.31451"
+     inkscape:window-width="1512"
+     inkscape:window-height="862"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g12" />
+  <title
+     id="title">Percona Kubernetes Operators Documentation</title>
+  <desc
+     id="desc">Banner with Percona wordmark paths from one-color light artwork, subtitle, blue gradient, triangle watermark, and Percona Operators glyph.</desc>
+  <defs
+     id="defs2">
+    <linearGradient
+       id="operators-banner-bg"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="0"
+       gradientUnits="objectBoundingBox">
+      <stop
+         offset="0"
+         stop-color="rgb(15, 100, 150)"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="rgb(42, 166, 223)"
+         id="stop2" />
+    </linearGradient>
+    <style
+       type="text/css"
+       id="style2">&#10;      @font-face {&#10;        font-family: &quot;Poppins&quot;;&#10;        font-style: normal;&#10;        font-weight: 400;&#10;        src: url(&quot;../../fonts/Poppins-Regular.ttf&quot;) format(&quot;truetype&quot;);&#10;      }&#10;    </style>
+  </defs>
+  <rect
+     width="800"
+     height="418"
+     fill="url(#operators-banner-bg)"
+     id="rect2" />
+  <!-- PERCONA wordmark: vector paths from Percona - One Color - Light.svg (letters only; no left mark, no TM) -->
+  <g
+     fill="#fff"
+     transform="translate(44 84) scale(0.43) translate(-313 -71)"
+     id="g6">
+    <path
+       d="M356.5,152.6h-18.8v33.6H313v-112h45.9c26.8,0,43,15.8,43,38.7v0.3C401.9,139.1,381.7,152.6,356.5,152.6L356.5,152.6z M376.9,113.4c0-11-7.7-17-20.1-17h-19.1v34.2h19.6c12.4,0,19.6-7.4,19.6-17V113.4L376.9,113.4z"
+       id="path2" />
+    <polygon
+       points="415.7,186.2 415.7,74.2 500.5,74.2 500.5,96.1 440.3,96.1 440.3,118.9 493.3,118.9 493.3,140.8 440.3,140.8 440.3,164.3 501.3,164.3 501.3,186.3 415.7,186.3"
+       id="polygon2" />
+    <path
+       d="M588.9,186.2l-24.1-35.8h-19.4v35.8h-24.7v-112H572c26.5,0,42.4,13.9,42.4,37v0.3c0,18.1-9.8,29.5-24.1,34.7l27.5,40H588.9L588.9,186.2z M589.4,112.4c0-10.6-7.4-16-19.4-16h-24.6v32.2h25.1c12,0,18.9-6.4,18.9-15.8V112.4L589.4,112.4z"
+       id="path3" />
+    <path
+       d="M685.3,189.2c-33.5,0-58.4-25.8-58.4-58.4v-0.3c0-32.3,24.4-58.7,59.4-58.7c21.5,0,34.3,7.1,44.9,17.5l-15.9,18.3c-8.8-8-17.7-12.8-29.1-12.8c-19.2,0-33,15.9-33,35.4v0.3c0,19.5,13.5,35.7,33,35.7c13,0,21-5.2,29.9-13.3l15.9,16C720.3,181.4,707.3,189.2,685.3,189.2L685.3,189.2z"
+       id="path4" />
+    <path
+       d="M798.2,189.2c-35.2,0-60.4-26.1-60.4-58.4v-0.3c0-32.3,25.5-58.7,60.7-58.7c35.1,0,60.4,26.1,60.4,58.4v0.3C858.8,162.8,833.3,189.2,798.2,189.2 M832.7,130.5c0-19.5-14.3-35.7-34.5-35.7S764,110.7,764,130.2v0.3c0,19.5,14.3,35.7,34.5,35.7s34.2-15.9,34.2-35.4V130.5z"
+       id="path5" />
+    <polygon
+       points="994.9,186.3 1050.3,71.8 1105.6,186.3 1077.8,186.3 1050.3,129.3 1022.8,186.3"
+       id="polygon5" />
+    <polygon
+       points="984.7,74.2 984.7,189.2 900.4,121.1 900.4,186.1 874.1,186.1 874.1,71.8 958.5,139.6 958.5,74.2"
+       id="polygon6" />
+  </g>
+  <!-- Triangle + Percona Operators glyph (right) -->
+  <g
+     transform="translate(595 212)"
+     id="g10">
+    <path
+       d="M 0 -188 L -162 94 L 162 94 Z"
+       fill="none"
+       stroke="rgba(255,255,255,0.22)"
+       stroke-width="2.5"
+       id="path6" />
+    <g
+       transform="scale(0.182) translate(-561.755 -561.755)"
+       fill="#fff"
+       id="g9">
+      <path
+         d="M1079.79,1010.89H43.71L561.75,113.62l518.04,897.27ZM72.03,994.54h979.44L561.75,146.32,72.03,994.54Z"
+         id="path7" />
+      <path
+         d="M285.46,815.31l31.02,82.63h452.56l68.58-82.63H285.46Z"
+         id="path8" />
+      <polyline
+         points="338.58 786.24 485.24 528.52 504.78 562.26 376.93 786.24"
+         id="polyline8" />
+      <polygon
+         points="607.11 706.43 653.19 786.24 801.39 786.24 607.11 449.74 412.83 786.24 561.03 786.24 607.11 706.43"
+         id="polygon8" />
+      <polygon
+         points="471.65 449.74 521.09 535.38 570.54 449.74 471.65 449.74"
+         id="polygon9" />
+    </g>
+  </g>
+  <!-- Title lines: Poppins Regular; size (~28px) and vertical rhythm matched to kubernetes-operators.png -->
+  <g
+     fill="#fff"
+     font-family="Poppins, sans-serif"
+     font-size="28"
+     font-weight="400"
+     id="g12">
+    <text
+       x="44"
+       y="228"
+       id="text10"
+       style="font-size:42.6667px"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:42.6667px;font-family:Poppins, sans-serif;-inkscape-font-specification:'Poppins, sans-serif'"
+         id="tspan12">Kubernetes</tspan></text>
+    <text
+       x="44"
+       y="268"
+       id="text11"
+       style="font-size:42.6667px">Operators</text>
+    <text
+       x="44"
+       y="308"
+       id="text12"
+       style="font-size:42.6667px">Documentation</text>
+  </g>
+</svg>
