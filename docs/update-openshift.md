@@ -3,7 +3,7 @@
 The upgrade on OpenShift consists of two steps:
 
 * Upgrade the Operator Deployment
-* Upgrade the database cluster
+* [Upgrade the database cluster](update-db.md)
 
 ## Upgrade the Operator via Operator Lifecycle Manager (OLM)
 

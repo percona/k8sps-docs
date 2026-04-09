@@ -22,15 +22,15 @@ The upgrade includes the following steps.
         Use the following command if you deploy both the Operator and the database cluster in the same namespace:
 
         ```bash
-        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/operator.yaml
+        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/operator.yaml -n $NAMESPACE
         ```
 
     === "For cluster-wide deployment"
 
-        If you deployed the Operator to manage several clusters in different namespaces (the so-called [cluster-wide mode](cluster-wide.md)), use the following command
+        If you deployed the Operator to manage several clusters in different namespaces (the so-called [cluster-wide mode](cluster-wide.md)), use the following command:
 
         ```bash
-        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/cw-operator.yaml
+        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/cw-operator.yaml -n $NAMESPACE
         ```
 
     For previous releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/)
@@ -40,7 +40,7 @@ The upgrade includes the following steps.
     `kubectl rollout status` command with the name of your cluster:
 
     ```bash
-    kubectl rollout status deployments percona-server-mysql-operator
+    kubectl rollout status deployments percona-server-mysql-operator -n $NAMESPACE
     ```
 
     !!! note
