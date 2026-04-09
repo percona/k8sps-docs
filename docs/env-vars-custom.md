@@ -69,18 +69,12 @@ Full field definitions are in [Custom Resource options](operator.md).
 
 Use this method when you have a small number of non-sensitive values and you want everything in a single file.
 
-For example, you want to set a time zone to keep logs aligned across MySQL containers and to override the soft file descriptor limit for HAProxy.
+For example, you want to override the soft file descriptor limit for HAProxy.
 
 1. Edit the `deploy/cr.yaml` Custom Resource manifest:
 
     ```yaml
     spec:
-      mysql:
-        env:
-          - name: TZ
-            value: "UTC"
-          - name: BOOTSTRAP_READ_TIMEOUT
-            value: "600"
       proxy:
         haproxy:
           env:
@@ -98,28 +92,27 @@ For example, you want to set a time zone to keep logs aligned across MySQL conta
 
 Use this when you want to share the same variables across multiple clusters or update them without editing the Custom Resource.
 
-1. Export the namespace where your cluster is running as an environment variable. Replace my-namespace with your value:
+1. Export the namespace where your cluster is running as an environment variable. Replace `<my-namespace>` with your value:
     
     ```bash
-    export NAMESPACE=my-namespace
+    export NAMESPACE = my-namespace
     ```
 
-2. Create a ConfigMap file. For example, `mysql-configmap.yaml`. Specify the variables within:
+2. Create a ConfigMap file. For example, `haproxy-configmap.yaml`. Specify the variables within:
 
-    ```yaml title="mysql-configmap.yaml"
+    ```yaml title="haproxy-configmap.yaml"
     apiVersion: v1
     kind: ConfigMap
     metadata:
-      name: ps-mysql-env
+      name: ps-haproxy-env
     data:
-      TZ: "UTC"
-      BOOTSTRAP_READ_TIMEOUT: "600"
+      HA_CONNECTION_TIMEOUT: "30"
     ```
 
 3. Create a ConfigMap object:
      
     ```bash
-    kubectl apply -f mysql-configmap.yaml -n $NAMESPACE
+    kubectl apply -f haproxy-configmap.yaml -n $NAMESPACE
 
 4. Reference the ConfigMap in the Custom Resource:
 
@@ -128,7 +121,7 @@ Use this when you want to share the same variables across multiple clusters or u
       mysql:
         envFrom:
           - configMapRef:
-              name: ps-mysql-env
+              name: ps-haproxy-env
     ```
 
 5. Apply the changes:
