@@ -12,7 +12,7 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
-  logo: assets/operators-mark.svg
+  logo: assets/operators-logo.svg
   favicon: assets/operators-fav.svg
   custom_dir: _resource/overrides/
   font:
