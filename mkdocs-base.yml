@@ -4,7 +4,7 @@ site_name: Percona Operator for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
-copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2025
+copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2026
 use_directory_urls: false
 repo_name: percona/k8sps-docs
 repo_url: https://github.com/percona/k8sps-docs
@@ -275,6 +275,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.11.0.md
