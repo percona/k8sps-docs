@@ -28,21 +28,23 @@ Choose the method that best suits your needs. The web interface is recommended f
 
 ## Install the Operator via the Operator Lifecycle Manager (OLM)
 
-Operator Lifecycle Manager (OLM) is a part of the [Operator Framework :octicons-link-external-16:](https://github.com/operator-framework) that allows you to install, update, and manage the Operators lifecycle on the OpenShift platform.
+Operator Lifecycle Manager (OLM) is a part of the [Operator Framework :octicons-link-external-16:](https://github.com/operator-framework) that allows you to install, update, and manage the Operators lifecycle on the OpenShift platform via the web interface.
+
+This tutorial provides guidelines for OpenShift v4.20. Follow closely the requirements for your OpenShift version.
 
 ### Prerequisites
 
 Before you start, ensure you have the following:
 
-1. You can log in to the OLM console
-2. You have the ARN role assigned to your OLM user.
+1. You can log in to the OpenShift console
+2. You have the ARN role assigned to your OLM user (for OpenShift 4.20).
 
 ### Install the Operator Deployment
 
-Follow these steps to deploy the Operator and Percona Distribution for PostgreSQL cluster:
+Follow these steps to deploy the Operator and Percona Server for MySQL cluster:
 
-1. Login to the OLM.
-2. Navigate to the Software Catalog.
+1. Login to the OpenShift console.
+2. Navigate to the Ecosystem -> Software Catalog.
 3. Search for "Percona Operator for MySQL", select "Percona Operator for MySQL based on Percona Server for MySQL". You may need to change the project for your user:
 
     ![image](assets/images/olm1.svg)
@@ -51,7 +53,10 @@ Follow these steps to deploy the Operator and Percona Distribution for PostgreSQ
     
     ![image](assets/images/olm1-1.svg)
 
-5. A new page opens where you specify the ARN role assigned to your user. You also choose the Operator version and the Namespace / OpenShift project you would like to install the Operator into. You can create a namespace (an OpenShift project) right away by clicking the **Create Project** and filling in project details like name, display name and description.
+5. A new page opens where you choose the Operator version and the Namespace / OpenShift project you would like to install the Operator into. You can create a namespace (an OpenShift project) right away by clicking the **Create Project** and filling in project details like name, display name and description.
+     
+     For OpenShift 4.20, you also need to specify the ARN role assigned to your user.
+
 6. Click "Install"
 
     ![image](assets/images/olm2.svg)
@@ -70,7 +75,7 @@ Now you can deploy Percona Server for MySQL
 
     ![image](assets/images/olm3.svg) 
 
-6. Upon successful installation The Operator should report the **Succeeded** status for the database cluster.
+6. Upon successful installation, you should see the "Ready" status for the database cluster.
     
     ![image](assets/images/olm4.svg)
 
