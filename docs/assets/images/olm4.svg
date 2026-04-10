@@ -1939,7 +1939,7 @@
          x="0 9.1800537 17.16011 24.210159 32.83522 41.940277 45.075302 54.090363 62.595428 65.730453 75.150528 83.74559 88.845627 96.360672 105.37573 113.8808 121.86086 124.99588 134.08595 139.92099 145.17102 153.15108 164.07115"
          y="0"
          sodipodi:role="line"
-         id="tspan85">based on Percona XtraDB</tspan></text>
+         id="tspan85">based on Percona Server for MySQL</tspan></text>
     <text
        id="text86"
        xml:space="preserve"
@@ -1971,6 +1971,6 @@
          x="0"
          y="0"
          sodipodi:role="line"
-         id="tspan87-6">1.14.0</tspan></text>
+         id="tspan87-6">1.1.0</tspan></text>
   </g>
 </svg>
