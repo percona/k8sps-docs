@@ -65,3 +65,33 @@
             rgba(0,0,0,0.3) 95%
         );
 }
+
+/* Header foreground loads after design.css; wins if MaterialX stylesheet is merged before extras. */
+body[data-md-color-scheme="default"] .md-header,
+body[data-md-color-scheme="default"] .md-tabs,
+html[data-md-color-scheme="default"] .md-header,
+html[data-md-color-scheme="default"] .md-tabs {
+    color: #fff !important;
+}
+body[data-md-color-scheme="default"] .md-header a,
+body[data-md-color-scheme="default"] .md-header .md-source,
+body[data-md-color-scheme="default"] .md-header .md-source__repository,
+html[data-md-color-scheme="default"] .md-header a,
+html[data-md-color-scheme="default"] .md-header .md-source,
+html[data-md-color-scheme="default"] .md-header .md-source__repository {
+    color: inherit !important;
+}
+@media screen and (min-width: 60em) {
+    body[data-md-color-scheme="default"] .md-header .md-search__input::placeholder,
+    html[data-md-color-scheme="default"] .md-header .md-search__input::placeholder {
+        color: rgba(255, 255, 255, 0.72) !important;
+    }
+    body[data-md-color-scheme="default"] .md-header .md-search__input + .md-search__icon,
+    html[data-md-color-scheme="default"] .md-header .md-search__input + .md-search__icon {
+        color: #fff !important;
+    }
+}
+body[data-md-color-scheme="default"] .md-header .md-search__input ~ .md-search__icon,
+html[data-md-color-scheme="default"] .md-header .md-search__input ~ .md-search__icon {
+    color: rgba(255, 255, 255, 0.72) !important;
+}

@@ -79,6 +79,9 @@
     /* Primitives */
     --md-hue: 220;
     --md-primary-fg-color: var(--sky700);
+    /* Header chrome and search use these; custom primary in MaterialX may omit them in light mode. */
+    --md-primary-bg-color: var(--white);
+    --md-primary-bg-color--light: rgba(255, 255, 255, 0.72);
 
     /* Type */
     --md-typeset-color: var(--stone900);
@@ -142,6 +145,13 @@
 
     /* Tables */
     --md-typeset-table-color: hsla(var(--md-hue),0%,100%,0.25)
+}
+
+/* Light scheme is on `body` in stock Material; some builds attach it to `html` instead. */
+body[data-md-color-scheme="default"],
+html[data-md-color-scheme="default"] {
+    --md-primary-bg-color: var(--white) !important;
+    --md-primary-bg-color--light: rgba(255, 255, 255, 0.72) !important;
 }
 
 /* Typography */
@@ -242,7 +252,41 @@
     font-weight: bold;
     padding: 0.4167em 1.6em;
     border-radius: 10rem;
-    transition: all 0.2s ease-out;
+    border-style: solid;
+    border-width: 0.1rem;
+    transition: color 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+/*
+ * Outlined buttons: Material’s hover uses accent fill; we keep a visible border.
+ * Light mode: white fill. Dark (slate): transparent fill so buttons match the page background.
+ */
+body[data-md-color-scheme="default"] .md-typeset .md-button:not(.md-button--primary),
+html[data-md-color-scheme="default"] .md-typeset .md-button:not(.md-button--primary) {
+    background-color: var(--white) !important;
+    border-color: var(--md-typeset-a-color) !important;
+    color: var(--md-typeset-a-color) !important;
+}
+body[data-md-color-scheme="default"] .md-typeset .md-button:not(.md-button--primary):focus,
+body[data-md-color-scheme="default"] .md-typeset .md-button:not(.md-button--primary):hover,
+html[data-md-color-scheme="default"] .md-typeset .md-button:not(.md-button--primary):focus,
+html[data-md-color-scheme="default"] .md-typeset .md-button:not(.md-button--primary):hover {
+    background-color: var(--white) !important;
+    border-color: var(--md-accent-fg-color) !important;
+    color: var(--md-accent-fg-color) !important;
+}
+body[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary),
+html[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary) {
+    background-color: transparent !important;
+    border-color: var(--md-typeset-a-color) !important;
+    color: var(--md-typeset-a-color) !important;
+}
+body[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):focus,
+body[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):hover,
+html[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):focus,
+html[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):hover {
+    background-color: transparent !important;
+    border-color: var(--md-accent-fg-color) !important;
+    color: var(--md-accent-fg-color) !important;
 }
 .md-typeset .md-button--primary {
     color: var(--md-accent-bg-color);
@@ -251,11 +295,6 @@
 .md-typeset .md-button--primary:focus,
 .md-typeset .md-button--primary:hover {
     box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 2px 4px -1px rgba(0, 0, 0, 0.20);
-}
-.md-typeset .md-button:not(.md-button--primary):focus,
-.md-typeset .md-button:not(.md-button--primary):hover {
-    background: none;
-    color: var(--md-accent-fg-color);
 }
 .md-typeset code {
     font-size: 0.9091em;

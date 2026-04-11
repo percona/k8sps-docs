@@ -33,7 +33,9 @@ Set up Percona Operator for MySQL in just a few minutes. Start with our simple g
 
 [Quickstart guide :material-arrow-right:](quickstart.md){ .md-button }
 
-<div data-grid markdown><div data-banner markdown>
+<div data-grid markdown>
+
+<div data-banner markdown>
 
 ## :fontawesome-solid-magnifying-glass: Discover the Operator { .title }
 
@@ -64,3 +66,5 @@ Learn how to keep your MySQL databases backed up and ready for a quick restore w
 Need assistance? Our troubleshooting guides cover common questions and step-by-step solutions.
 
 [Diagnostics :material-arrow-right:](debug.md){.md-button}
+</div>
+</div>
