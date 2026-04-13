@@ -43,6 +43,14 @@ spec:
 
 It's important to understand how the Operator prioritizes compression and other backup tool settings when they're defined both globally in your cluster's Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see [Fine-tuning backup and restore operations](backups-fine-tune.md).
 
+## Restore from a compressed backup
+
+You can make a restore either using the [`backupName`](restore-cr.md#backupname) or the [`backupSource`](restore-cr.md#the-backupsource-subsection) options. 
+
+When you specify a backup name, the Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.
+
+When restoring using the `backupSource` option, indicate if the backup is compressed by setting the `backupSource.compressed` option to `true`. For such backups, the Operator will automatically decompress them during the restore preparation stage.
+
 ## Choosing a compression algorithm
 
 Percona XtraBackup supports multiple compression algorithms with different trade‑offs. Your choice depends on CPU capacity, how often you run backups, and how much you want to shrink data on disk or over the network.
