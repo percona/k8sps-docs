@@ -13,8 +13,14 @@
 
 python -m pip install --upgrade pip
 pip install wheel
+pip install yq
 
-mkdocs build -f ./mkdocs.yml
+
+# This command extracts the value of the 'release' key from variables.yml and stores it in the 'version' variable.
+version=$(yq e '.release' < variables.yml)
+
+mike deploy $version
+mike set-default $version
 
 #for filename in docs/ReleaseNotes/*.md; do
 #  mv "$filename.bak" "$filename"
