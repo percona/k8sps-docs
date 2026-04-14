@@ -57,9 +57,9 @@ extra_css:
   - css/rating.css
 
 extra_javascript:
-#   - js/promptremover.js
+   - js/promptremover.js
    - js/consent.js
- #  - js/percona-select.js
+   - js/percona-select.js
    - js/rating.js
 
 markdown_extensions:
@@ -153,6 +153,8 @@ plugins:
 
 
 extra: # Used in main.html template and can't be externalized
+  edit_page_text: '<i class="uil uil-pen"></i> <b>Edit this page</b>'
+  updated_text: '<i class="uil uil-refresh"></i> Page updated'
   version:
     provider: mike
 
@@ -222,19 +224,11 @@ nav:
           - "Control Pod scheduling": constraints.md             
           - "Fine-tune MySQL options": options.md
           - "Multi-namespace deployment": cluster-wide.md
-          - Define environment variables:
-              - Overview: env-vars.md
-              - "Configure Operator environment variables": env-vars-operator.md
-              - "Define environment variables for cluster components": env-vars-custom.md
     
     - Cluster lifecycle management:
         - Upgrade:
             - "About upgrades": update.md
-            - Upgrade the Operator and CRD:
-              - Considerations for upgrades: update-operator.md
-              - Manual upgrade: update-crd-manual.md
-              - With Helm: update-crd-helm.md
-              - Via OLM: update-openshift.md
+            - "Upgrade the Operator": update-operator.md
             - "Upgrade the database": update-db.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:

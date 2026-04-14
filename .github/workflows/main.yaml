@@ -4,7 +4,8 @@ on:
     branches: 
       - main
       - test-version-switcher
-
+  permissions: 
+    contents: write
      
 jobs:
   build:
