@@ -177,7 +177,19 @@ Prevents users from configuring a cluster with unsafe parameters such as startin
 
 ## <a name="operator-unsafeflags-section"></a>Unsafe flags section
 
-The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *After switching to unsafe configurations permissive mode you will not be able to switch the cluster back by setting same keys to `false`, the flags will be ignored*.
+The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. *
+
+!!! warning
+
+    Once unsafe configurations are enabled, you cannot revert these settings simply by setting the same keys back to `false`. Any such changes will be ignored, so enable these options with caution.
+
+### `unsafeFlags.backupNonReadyCluster`
+
+Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is not yet ready.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
 
 ### `unsafeFlags.mysqlSize`
 
