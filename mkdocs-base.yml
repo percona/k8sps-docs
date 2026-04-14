@@ -179,6 +179,7 @@ nav:
           - 2. Install the Operator:
             - "Install with Helm": helm.md
             - "Install with kubectl": kubectl.md
+            - "Install with customized parameters": custom-install.md
           - 3. Connect to the database: connect.md
           - 4. Insert data: data-insert.md
           - 5. Make a backup: backup-tutorial.md
@@ -225,6 +226,10 @@ nav:
           - "Control Pod scheduling": constraints.md             
           - "Fine-tune MySQL options": options.md
           - "Multi-namespace deployment": cluster-wide.md
+          - Define environment variables:
+              - Overview: env-vars.md
+              - "Configure Operator environment variables": env-vars-operator.md
+              - "Define environment variables for cluster components": env-vars-custom.md
     
     - Cluster lifecycle management:
         - Upgrade:
