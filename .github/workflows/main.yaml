@@ -1,16 +1,16 @@
-name: Build Percona Operator for MySQL docs
+name: Build Percona Operator for PostgreSQL docs
 on:
   push:
     branches: 
       - main
       - test-version-switcher
-  permissions: 
-    contents: write
      
 jobs:
   build:
     name: Deploy docs
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps: 
       #Pull the latest changes
@@ -18,7 +18,6 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0  # fetch all commits/branches
-
       #Prepare the env
       - name: Set up Python
         uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
@@ -37,7 +36,6 @@ jobs:
           echo "GIT_USER=percona-platform-robot:${ROBOT_TOKEN}" >> $GITHUB_ENV
 
 
-
       #Extract release from YAML
       - name: Extract release from variables
         run: |
@@ -53,11 +51,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install wheel
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      #Ensure remote uses robot
-      - name: Ensure remote uses robot
-        run: |
-            git remote set-url origin https://percona-platform-robot:${{ secrets.ROBOT_TOKEN }}@github.com/percona/k8sps-docs.git
 
      
      # Deploy docs
