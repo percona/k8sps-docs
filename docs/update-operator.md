@@ -41,98 +41,12 @@ compatible with the newest Operator version and the two older minor versions.
     * don't delete PVCs manually
     * Recreate the cluster with the same name. The Operator then automatically reuses the same PVCs.
 
-### Manual upgrade
+## Upgrade guides
 
-Before you start, export your namespace as an environment variable to simplify the configuration:
+Choose the upgrade instructions below based on how you originally deployed the Operator:
 
-```bash
-export NAMESPACE=<my-namespace>
-```
+[Manual upgrade](update-crd-manual.md){.md-button}
+[Upgrade via Helm](update-crd-helm.md){.md-button}
+[Upgrade on OpenShift](update-openshift.md){.md-button}
 
-The upgrade includes the following steps.
 
-1. Update the Custom Resource Definition for the Operator and the Role-based access control. Take the latest versions from the official repository on GitHub with the following commands:
-
-    ```bash
-    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
-    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
-    ```
-
-2. Next, update the Percona Server for MySQL Operator Deployment in Kubernetes by changing the container image of the Operator Pod to the latest version. Find the image name for the current Operator release [in the list of certified images](images.md). Use the following command to update the Operator to the `{{ release }}` version:
-
-    === "For single-namespace deployment"
-
-        Use the following command if you deploy both the Operator and the database cluster in the same namespace:
-
-        ```bash
-        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/operator.yaml
-        ```
-
-    === "For cluster-wide deployment"
-
-        If you deployed the Operator to manage several clusters in different namespaces (the so-called [cluster-wide mode](cluster-wide.md)), use the following command
-
-        ```bash
-        kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/cw-operator.yaml
-        ```
-
-   
-    For previous releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/)
-
-3. The deployment rollout will be automatically triggered.
-    You can track the rollout process in real time with the
-    `kubectl rollout status` command with the name of your cluster:
-
-    ```bash
-    kubectl rollout status deployments percona-server-mysql-operator
-    ```
-
-    !!! note
-
-        Labels set on the Operator Pod will not be updated during upgrade.
-
-4. Update the Custom Resource, the database and components. This step ensures all new features and improvements of the latest release work well within your environment. 
-
-   [Update the Custom Resource, the database and components :material-arrow-down:](#update-the-custom-resource-the-database-and-components){.md-button}
-
-### Upgrade via helm
-
-If you have [installed the Operator using Helm](helm.md), you can upgrade the
-Operator with the `helm upgrade` command.
-
-1. Update the [Custom Resource Definition  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
-    for the Operator, taking it from the official repository on Github, and do
-    the same for the Role-based access control:
-
-    ```bash
-    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/crd.yaml
-    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/rbac.yaml
-    ```
-
-2. Next, update the Operator deployment. 
-
-    === "With default parameters"
-
-        If you installed the Operator with default parameters, the upgrade can be done as follows: 
-        
-        ```bash 
-        helm upgrade my-op percona/ps-operator --version {{ release }}
-        ```
-
-    === "With customized parameters"
-
-        If you installed the Operator with some [customized parameters :octicons-link-external-16:](https://github.com/percona/percona-helm-charts/tree/main/charts/pxc-operator#installing-the-chart), you should list these options in the upgrade command.
-
-        You can get the list of the used options in YAML format with the `helm get values my-op -a > my-values.yaml` command. Then pass this file directly to the upgrade command as follows:
-
-        ```bash
-        helm upgrade my-op percona/ps-operator --version {{ release }} -f my-values.yaml
-        ```
-
-3. Update the Custom Resource, the database and components. This step ensures all new features and improvements of the latest release work well within your environment.
-
-   [Update the Custom Resource, the database and components :material-arrow-down:](#update-the-custom-resource-the-database-and-components){.md-button}
-
-### Update the Custom Resource, the database and components
-
-{% include 'assets/fragments/update-db-commands.txt' %}
