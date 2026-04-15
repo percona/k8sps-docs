@@ -1,10 +1,27 @@
 # Backup compression support in Percona Operator for MySQL
 
-Percona Operator for MySQL uses Percona XtraBackup (PXB) to create backups.  PXB supports backup compression with [multiple algorithms](#choosing-a-compression-algorithm), and the Operator exposes this capability too. 
+Percona Operator for MySQL uses Percona XtraBackup (PXB) to create backups.  The Operator exposes this capability too, supporting compression using the `zstd` compression algorithm. 
 
 Compression works for both full and [incremental](backups-incremental.md) backups, and you can configure it for [scheduled](backups-scheduled.md) and [on‑demand](backups-ondemand.md) backups.
 
 With this ability to compress backups, you can reduce the size of your backups, and lower storage and data‑transfer costs.
+
+## Configure global compression 
+
+You can configure compression using the MySQL configuration file. This setting applies to both scheduled and on-demand backups for all backup storages that you use. 
+
+```yaml
+spec:
+  mysql:
+    image: percona/percona-server:{{ps84recommended}}
+    configuration: |
+      ...
+      [xtrabackup]
+      compress=zstd
+      ...
+```
+
+You can override the compression [for scheduled backups per specific storage](#configure-compression-for-scheduled-backups) or for a particular [on-demand backup](#configure-compression-for-ondemand-backups). 
 
 ## Configure compression for scheduled backups
 
@@ -18,7 +35,7 @@ spec:
         containerOptions:
           args:
             xtrabackup: 
-              - "--compress=lz4"
+              - "--compress"
 ```
 
 ## Configure compression for on‑demand backups
@@ -38,7 +55,7 @@ spec:
   containerOptions:
     args:
       xtrabackup:
-        - "--compress=lz4"
+        - "--compress"
 ```
 
 It's important to understand how the Operator prioritizes compression and other backup tool settings when they're defined both globally in your cluster's Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see [Fine-tuning backup and restore operations](backups-fine-tune.md).
@@ -49,6 +66,7 @@ You can make a restore either using the [`backupName`](restore-cr.md#backupname)
 
 The Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.
 
+<!--
 
 ## Choosing a compression algorithm
 
@@ -58,3 +76,4 @@ Percona XtraBackup supports multiple compression algorithms with different trade
 |-----------|----------|------|------|---------------|
 | **ZSTD** | Most production environments | Excellent compression ratio, modern algorithm, good balance of speed and size | Slightly higher CPU usage compared to LZ4 | When you want strong compression without significantly impacting backup time |
 | **LZ4** | High‑throughput environments, frequent backups, or CPU‑constrained nodes | Very fast compression and decompression, low CPU overhead | Larger backup size compared to ZSTD | When speed matters more than maximum compression |
+-->
