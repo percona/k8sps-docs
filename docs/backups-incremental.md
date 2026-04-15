@@ -2,6 +2,10 @@
 
 !!! admonition "Version added: [1.1.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md)"
 
+!!! admonition ""
+
+    This feature is in the tech preview stage. The behavior can change in future releases.
+
 If your database grows quickly or sees heavy write traffic, you may want frequent backups. Taking a full backup every time costs more storage, takes longer to upload, and adds load to the cluster.
 
 **Incremental** backups copy only what changed since the previous backup in the chain. They are usually smaller, faster to transfer, and cheaper to keep in the backup storage.
@@ -62,7 +66,6 @@ Here's how it works in detail:
 With incremental backups, you gain the following benefits:
 
 * strengthen your backup strategy by creating multiple restore points
-* improve backup and restore performance thanks to smaller backup sizes
 * increase storage efficiency by avoiding duplication of unchanged data
 * lower system load, since smaller backups require fewer compute resources and reduce impact on your cluster
 * reduce both storage and data‑transfer costs
@@ -75,10 +78,9 @@ With incremental backups, you gain the following benefits:
 2. A base full backup and incremental backups derived from it must be **on the same storage**. 
 3. By default, the Operator uses the most recent full backup to start the incremental chain. You can explicitly specify the base backup in the `spec.incrementalBaseBackupName` option in the backup configuration file. If the specified backup is valid, the Operator starts the incremental backup chain from it.
 4. If the base backup already has the incremental backup chain, the Operator uses the most recent increment to continue the chain.
-???5. Backups are **streamed** to storage; the Operator does not keep a separate local copy of the full chain on disk.
-6. Retention applies to the chain as a unit: deleting the **base** full backup removes the **entire** incremental chain that depends on it, so you do not leave orphaned increments. Specifying the retention policy for increments is not supported.
-7. You cannot delete an increment in the middle of a chain as it would break its continuity. You can delete only the **last** increment in the chain or the base backup, which removes the whole chain.
-8.  The Operator blocks two concurrent incremental backups against the **same** chain to avoid ambiguous ordering.
+5. Retention applies to the chain as a unit: deleting the **base** full backup removes the **entire** incremental chain that depends on it, so you do not leave orphaned increments. Specifying the retention policy for increments is not supported.
+6. You cannot delete an increment in the middle of a chain as it would break its continuity. You can delete only the **last** increment in the chain or the base backup, which removes the whole chain.
+7.  The Operator prevents to run two concurrent incremental backups against the **same** chain to avoid ambiguous ordering. The Operator runs increments one by one.
 
 ### Restore rules
 
@@ -87,3 +89,7 @@ With incremental backups, you gain the following benefits:
 3. Restore always needs the full chain: full backup first, then increments in order, up to the backup you selected.
 4. You can only restore from incremental backups to the state captured by the backup itself. Support for point-in-time recovery will be introduced in future releases.
 
+## Known limitations
+
+- If a backup in your chain fails but some data was already uploaded to storage, your restore still includes that failed backup, so the restore fails. Whenever any backup in the chain fails, start a new chain.
+- If the checkpoint file is missing from a backup directory, your next incremental backup can hang. Start a new chain.

@@ -17,7 +17,7 @@ To schedule backups, specify the following configuration in your Custom Resource
     * `type` (optional) - the backup type: `full` (default) or [incremental](backups-incremental.md)
     * `keep` (optional) - the number of backups to keep in storage. Older backups are automatically deleted when this limit is reached. Note that this option is ignored for incremental backups.
 
-Here's an example configuration that creates a **full backup** every Sunday at 2:00 AM and incremental backups **every day** at 3:00 AM. The configuration keeps the last 3 full backups:
+Here's an example configuration that creates a **full backup** every Sunday at 2:00 AM and incremental backups **every day** at 3:00 AM. The configuration keeps the last 3 full backups and incremental chains derived from them:
 
 ```yaml
 ...
