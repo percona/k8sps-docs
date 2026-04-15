@@ -47,7 +47,7 @@ It's important to understand how the Operator prioritizes compression and other 
 
 You can make a restore either using the [`backupName`](restore-cr.md#backupname) or the [`backupSource`](restore-cr.md#the-backupsource-subsection) options. 
 
-When you specify a backup name, the Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.
+The Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.
 
 
 ## Choosing a compression algorithm
