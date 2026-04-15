@@ -84,9 +84,9 @@ To set up monitoring of Kubernetes, you need the following:
     
     1. Create the Namespace where you want to set up monitoring. The following command creates the Namespace `monitoring-system`. You can specify a different name. In the following steps, specify your namespace instead of the `<namespace>` placeholder.
 
-    ```bash
-    kubectl create namespace monitoring-system
-    ```
+        ```bash
+        kubectl create namespace monitoring-system
+        ```
 
     2. Export the namespace as the environment variable to simplify further configuration
 
@@ -259,7 +259,7 @@ Here's how to check the metrics:
 
        ![image](assets/images/cadvisor.svg)
 
-    * kubelet:
+    * `kubelet`:
 
        ![image](assets/images/kubelet.svg)
 
@@ -276,7 +276,7 @@ To remove Victoria metrics Kubernetes stack used for Kubernetes cluster monitori
 
     Replace the `<NAMESPACE>` placeholder with the namespace you specified during the Victoria metrics Kubernetes stack installation: 
 
-    ```
+    ```bash
     bash <(curl -fsL https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/cleanup.sh) --namespace <NAMESPACE>
     ```
 
@@ -284,13 +284,13 @@ To remove Victoria metrics Kubernetes stack used for Kubernetes cluster monitori
 
     Replace the `<NAMESPACE>` placeholder with the namespace you specified during the Victoria metrics Kubernetes stack installation: 
 
-    ```
+    ```bash
     bash <(curl -fsL https://raw.githubusercontent.com/Percona-Lab/k8s-monitoring/refs/tags/{{k8s_monitor_tag}}/vm-operator-k8s-stack/cleanup.sh) --namespace <NAMESPACE> --keep-crd 
     ```
 
 Check that the Victoria metrics Kubernetes stack is deleted:
 
-```
+```bash
 helm list -n $NAMESPACE
 ```
 
@@ -298,7 +298,7 @@ The output should provide the empty list.
 
 If you face any issues with the removal, uninstall the stack manually:
 
-```
-helm uninstall vm-k8s-stack -n < namespace> 
+```bash
+helm uninstall vm-k8s-stack -n $NAMESPACE 
 ```
 
