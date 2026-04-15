@@ -8,13 +8,13 @@ This document describes how to set up monitoring of the Kubernetes cluster healt
 
 ## Considerations
 
-1. In this setup we use [Victoria Metrics kubernetes monitoring stack](https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack) Helm chart. When customizing the chart's values, consider the following:
+In this setup we use [Victoria Metrics kubernetes monitoring stack](https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack) Helm chart. When customizing the chart's values, consider the following:
 
-    * Since we use the PMM server for monitoring, there is no need to store the data in Victoria Metrics Operator. Therefore, the Victoria Metrics Helm chart is installed with the `vmsingle.enabled` and `vmcluster.enabled` parameters set to `false` in this setup.
-    * The Prometheus node exporter is not installed by default since it requires privileged containers with the access to the host file system. If you need the metrics for Nodes, enable the Prometheus node exporter by setting the `prometheus-node-exporter.enabled` flag in the Victoria Metrics Helm chart to `true`.
-    * [Check all the role-based access control (RBAC) rules](https://helm.sh/docs/topics/rbac/) of the `victoria-metrics-k8s-stack` chart and the dependencies chart, and modify them based on your requirements. 
+* Since we use the PMM server for monitoring, there is no need to store the data in Victoria Metrics Operator. Therefore, the Victoria Metrics Helm chart is installed with the `vmsingle.enabled` and `vmcluster.enabled` parameters set to `false` in this setup.
+* The Prometheus node exporter is not installed by default since it requires privileged containers with the access to the host file system. If you need the metrics for Nodes, enable the Prometheus node exporter by setting the `prometheus-node-exporter.enabled` flag in the Victoria Metrics Helm chart to `true`.
+* [Check all the role-based access control (RBAC) rules](https://helm.sh/docs/topics/rbac/) of the `victoria-metrics-k8s-stack` chart and the dependencies chart, and modify them based on your requirements. 
 
-2. This setup is used for a 1:1 mapping from Kubernetes cluster to the PMM server. If you wish to monitor more than one Kubernetes cluster in a single PMM server, provide the unique cluster ID for the `victoria-metrics-k8s-stack` chart. The dashboard must support filtering per Kubernetes cluster. You also need to properly [relabel the metrics](https://docs.victoriametrics.com/vmagent.html#relabeling) from the backend.
+
 
 ## Pre-requisites
 
@@ -22,31 +22,9 @@ To set up monitoring of Kubernetes, you need the following:
 
 1. PMM Server up and running. You can run PMM Server in Kubernetes, as a Docker image, a virtual appliance, or on an AWS instance. Please refer to the [official PMM documentation :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-server/index.html) for the installation instructions.
 
-2. [Helm v3 :octicons-link-external-16:](https://docs.helm.sh/using_helm/#installing-helm).
-3. [kubectl :octicons-link-external-16:](https://kubernetes.io/docs/tasks/tools/).
-4. PMM service account token. The token must have the role **Admin**. Use PMM documentation to [generate a service account with the **Admin** role and token :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html?h=authe#generate-a-service-account-and-token).
-
-    The token must have the format `glsa_*************************_9e35351b`.
-
-    !!! warning
-
-        When you create a service account token, you can select its lifetime: it can be either a permanent token that never expires or the one with the expiration date. PMM server cannot rotate service account tokens after they expire. So you must take care of reconfiguring PMM Client in this case.
+2. [Helm :octicons-link-external-16:](https://docs.helm.sh/)
 
 ## Procedure
-
-### Prepare your environment
-
-1. Create the Namespace where you want to set up monitoring. The following command creates the Namespace `monitoring-system`. You can specify a different name. In the following steps, specify your namespace instead of the `<namespace>` placeholder.
-
-    ```bash
-    kubectl create namespace monitoring-system
-    ```
-
-2. Export the namespace as the environment variable to simplify further configuration
-
-    ```bash
-    export NAMESPACE=monitoring-system
-    ```
 
 ### Install the Victoria Metrics Kubernetes monitoring stack
 
@@ -102,6 +80,20 @@ To set up monitoring of Kubernetes, you need the following:
     * Since we use the PMM Server for monitoring, there is no need to store the data in Victoria Metrics Operator. Therefore, the Victoria Metrics Helm chart is installed with the `vmsingle.enabled` and `vmcluster.enabled` parameters set to `false` in this setup.
     * [Check all the role-based access control (RBAC) rules :octicons-link-external-16:](https://helm.sh/docs/topics/rbac/) of the `victoria-metrics-k8s-stack` chart and the dependencies chart, and modify them based on your requirements.
 
+    #### Prepare your environment
+    
+    1. Create the Namespace where you want to set up monitoring. The following command creates the Namespace `monitoring-system`. You can specify a different name. In the following steps, specify your namespace instead of the `<namespace>` placeholder.
+
+    ```bash
+    kubectl create namespace monitoring-system
+    ```
+
+    2. Export the namespace as the environment variable to simplify further configuration
+
+        ```bash
+        export NAMESPACE=monitoring-system
+        ```
+    
     #### Set up authentication in PMM Server
 
     To access the PMM Server resources and perform actions on the server, configure authentication.
