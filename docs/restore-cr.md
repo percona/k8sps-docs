@@ -51,14 +51,6 @@ Specifies the path to the backup on the storage
 | ----------- | ---------- |
 | :material-code-string: string     | `s3://bucket-name/backup-destination/` |
 
-### `backupSource.compressed`
-
-Indicates if a backup is [compressed](backups-compressed.md). 
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-code-boolean: boolean     | `false` |
-
 ### `backupSource.storage.s3.bucket`
 
 Specifies the name of the bucket where the backup that you wish to restore from is saved.
