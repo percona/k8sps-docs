@@ -18,7 +18,7 @@ To deliver fast and reliable point-in-time recovery, the Operator uses a new app
 
 Point-in-time recovery is released as a **tech preview**. We do not recommend using it in production environments yet. However, we strongly encourage you to try it out in staging or test clusters and share your feedback. Your input will directly shape how we refine and finalize this capability in future releases.
 
-### Incremental backups
+### Incremental backups (tech preview)
 
 This release introduces incremental backups for MySQL clusters, giving you a faster, more efficient, and more cost effective way to protect your data. Instead of creating a full backup every time, the Operator now captures only the changes since the previous backup, significantly reducing backup size, storage usage, and data transfer overhead. Incremental backups also lower the load on your cluster, helping you maintain performance even during frequent backup operations. This feature works seamlessly with all [supported backup storages](../backups-storage.md) and integrates with both [scheduled](../backups-scheduled.md) and [on-demand](../backups-ondemand.md) backup jobs.
 
