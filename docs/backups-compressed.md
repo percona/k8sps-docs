@@ -49,7 +49,6 @@ You can make a restore either using the [`backupName`](restore-cr.md#backupname)
 
 When you specify a backup name, the Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.
 
-When restoring using the `backupSource` option, indicate if the backup is compressed by setting the `backupSource.compressed` option to `true`. For such backups, the Operator will automatically decompress them during the restore preparation stage.
 
 ## Choosing a compression algorithm
 
