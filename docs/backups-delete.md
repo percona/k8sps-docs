@@ -11,7 +11,7 @@ Every `PerconaServerMySQLBackup` backup object has the `percona.com/delete-backu
 
 **How it works**:
 
-* When a backup is created, the Operator adds the `percona.com/delete-backup` finalizer to `metadata.finalizers` on the backup object.
+* When a backup is created and its configuration includes the `percona.com/delete-backup` finalizer, the Operator adds this finalizer to `metadata.finalizers` on the backup object.
 * While the finalizer is present, Kubernetes does not fully remove the `PerconaServerMySQLBackup` object after a delete request. The resource stays until every finalizer is cleared.
 * After you run `kubectl delete ps-backup …`, the Operator marks the specified backup object for deletion  by setting the `metadata.deletionTimestamp` value. The Operator’s backup controller sees this and, if `percona.com/delete-backup` finalizer is listed, deletes backup data in a remote storage.
 * When cleanup finishes, the Operator removes the `percona.com/delete-backup` finalizer. Kubernetes then completes deletion of the backup resource.
@@ -52,10 +52,10 @@ See also [`backup.schedule.keep`](operator.md#backupschedulekeep) in the Custom 
 
 Incremental backups depend on a **chain**: one **full** backup plus **increments** on the same storage. See [Incremental backups](backups-incremental.md) for how chains are built.
 
-Retention works differently than for standalone full backups:
+Retention works differently than for standalone full backups, if the `percona.com/delete-backup` finalizer exists in the backup object:
 
 * **Deleting the base full backup** removes the **entire** incremental chain that derives from it (the Operator does not leave orphaned increments).
-* You **cannot** delete an increment **in the middle** of a chain—that would break continuity. You may delete only:
+* You **cannot** delete an increment **in the middle** of a chain as that would break continuity. You may delete only:
   
   * the **last** increment in the chain (the tip), or  
   * the **full** backup at the base (which removes the whole chain).

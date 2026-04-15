@@ -76,7 +76,7 @@ With incremental backups, you gain the following benefits:
 
 1. A full backup is required to start the incremental chain. If none exists, the Operator does not start the incremental backup.
 2. A base full backup and incremental backups derived from it must be **on the same storage**. 
-3. By default, the Operator uses the most recent full backup to start the incremental chain. You can explicitly specify the base backup in the `spec.incrementalBaseBackupName` option in the backup configuration file. If the specified backup is valid, the Operator starts the incremental backup chain from it.
+3. By default, the Operator uses the most recent full backup to start the incremental chain. You can explicitly specify the base full backup in the `spec.incrementalBaseBackupName` option in the backup configuration file. If the specified full backup is valid, the Operator starts the incremental backup chain from it.
 4. If the base backup already has the incremental backup chain, the Operator uses the most recent increment to continue the chain.
 5. Retention applies to the chain as a unit: deleting the **base** full backup removes the **entire** incremental chain that depends on it, so you do not leave orphaned increments. Specifying the retention policy for increments is not supported.
 6. You cannot delete an increment in the middle of a chain as it would break its continuity. You can delete only the **last** increment in the chain or the base backup, which removes the whole chain.
