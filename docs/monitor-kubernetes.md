@@ -60,7 +60,7 @@ To set up monitoring of Kubernetes, you need the following:
     * `PMM-SERVER-URL` - The URL to access the PMM Server 
     * `UNIQUE-K8s-CLUSTER-IDENTIFIER` - Identifier for the Kubernetes cluster. It can be the name you defined during the cluster creation.
 
-        You should use a unique identifier for each Kubernetes cluster. The use of the same identifier for more than one Kubernetes cluster will result in the conflicts during the metrics collection.
+         You should use a unique identifier for each Kubernetes cluster. The use of the same identifier for more than one Kubernetes cluster will result in the conflicts during the metrics collection.
 
     * `NAMESPACE` - The namespace where the Victoria metrics Kubernetes stack will be installed. If you haven't created the namespace before, it will be created during the command execution.
 
@@ -243,9 +243,25 @@ What Pods are running depends on the configuration chosen in values used while i
 
 ## Verify metrics capture
 
-1. Connect to the PMM server.
-2. Click **Explore** and switch to the **Code** mode.
-3. Check that the required metrics are captured, type the following in the Metrics browser dropdown:
+The Victoria Metrics kubernetes chart captures the following metrics:
+
+1. **cAdvisor (Container Advisor):** Embedded in the kubelet on each node. It observes resource usage and performance characteristics of running containers.
+2. **kubelet:** The node agent that runs pods, interacts with the container runtime, mounts volumes, and reports node and pod status to the control plane.
+3. **CoreDNS:** The cluster DNS server that resolves service names and external names for pods.
+4. **kube-state-metrics (KSM):** Listens to the Kubernetes API and emits metrics about object state (Deployments, Pods, PVCs, etc.), not low-level container performance.
+5. **Node exporter:** A daemon that exposes host-level hardware and OS metrics (CPU, memory, disk, filesystem, network stack statistics) from /proc and /sys.
+6. **Kubernetes API server (kube-apiserver):** Exposes metrics about requests to the API, admission, authentication, etcd interactions (from the API server’s perspective), and control-plane load.
+7. **Control plane components:** When running as pods: `kube-controller-manager`, `etcd`, `kube-scheduler`.
+`
+    * `kube-controller-manager`: Runs controllers that reconcile desired state (ReplicaSet, endpoints, service accounts, garbage collection, etc.).
+    * `kube-scheduler`: Assigns pods to nodes based on filters and scoring.
+    * `etcd`: The consistent key-value store for all Kubernetes state.
+
+Here's how to check the metrics:
+
+5. Connect to the PMM server.
+6. Click **Explore** and switch to the **Code** mode.
+7. Check that the required metrics are captured, type the following in the Metrics browser dropdown:
 
     * [cadvisor :octicons-link-external-16:](https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md):
 
@@ -257,7 +273,7 @@ What Pods are running depends on the configuration chosen in values used while i
 
     * [kube-state-metrics :octicons-link-external-16:](https://github.com/kubernetes/kube-state-metrics/tree/main/docs) metrics that also include Custom resource metrics for the Operator and database deployed in your Kubernetes cluster:
 
-      ![image](assets/images/ps-metric.svg)
+      ![image](assets/images/ps-metrics.svg)
 
 
 ## Uninstall Victoria metrics Kubernetes stack
@@ -293,8 +309,4 @@ If you face any issues with the removal, uninstall the stack manually:
 ```
 helm uninstall vm-k8s-stack -n < namespace> 
 ```
-
-    * [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics/tree/main/docs) metrics that also include Custom resource metrics for the Operators deployed in your Kubernetes cluster:
-
-      ![image](assets/images/pg_metric.svg)
 
