@@ -94,7 +94,9 @@ Before performing a point-in-time recovery, ensure you have:
 * Determined either the GTID set (for restoring up to a specific transaction) or the exact timestamp (for restoring up to a specific time)
 * Configured the backup storage appropriately
 
-### Example 1. Restore to a specific transaction
+Also check the [implementation specifics](backups-pitr.md#implementation-specifics) and [known limitations](backups-pitr.md#known-limitations)
+
+### Example 1. Restore to a specific time
 
 1. Edit the [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml) and specify the following options:
     
@@ -126,7 +128,7 @@ Before performing a point-in-time recovery, ensure you have:
     kubectl apply -f deploy/backup/restore.yaml -n <namespace>
     ```
 
-### Example 2. Restore to a specific timestamp
+### Example 2. Restore to a specific transaction
 
 1. Edit the [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml) and specify the following options:
 

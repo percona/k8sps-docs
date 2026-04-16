@@ -127,4 +127,4 @@ With point-in-time recovery, you get finer control over when you come back onlin
 
 - Data at rest encryption is not supported with point-in-time recovery
 - You cannot change the prefix for the Binlog Server.
-* When specifying storage for the restore object, you cannot use the storage configuration defined for the Binlog Server.
+* For point-in-time recovery you cannot use the backupSource.storage as the location for the binlogs. You must have the Binlog Server configured in the cluster's configuration.
