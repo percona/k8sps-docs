@@ -116,32 +116,24 @@ This makes cluster management more predictable and avoids unexpected stalls duri
 
 * [K8SPS-684](https://perconadev.atlassian.net/browse/K8SPS-684) - Resolved a connection drop issue that occurred whenever the HAProxy configuration was reloaded. This ensures stable and uninterrupted application connectivity during proxy maintenance or scaling events.
 
-## Deprecation, Rename and Removal
-
-### Operators in Red Hat Marketplace catalog are no longer maintained
-
-Red Hat Marketplace was discontinued in April 2025. Percona Operator for MySQL will remain listed in the Marketplace catalog, but it won’t be updated beyond OpenShift 4.22.
-
-If you use the Operator from Red Hat Marketplace, switch to the Certified Operator Catalog for future updates and support.
-
-
 ## Supported software
 
 --8<-- [start:software]
 
 The Operator was developed and tested with the following software:
 
-* Percona Server for MySQL 8.4.6-6.1
-* Percona Server for MySQL 8.0.43-34.1
-* XtraBackup 8.4.0-4.1
-* XtraBackup 8.0.35-34.1
-* MySQL Router 8.4.6-6.1
-* MySQL Router 8.0.43-34.1
-* HAProxy 2.8.15
-* Orchestrator 3.2.6-18
-* Percona Toolkit 3.7.0-2
-* PMM Client 3.4.1
+* Percona Server for MySQL 8.4.8-8.1
+* Percona Server for MySQL 8.0.45-36.1
+* XtraBackup 8.4.0-5.1
+* XtraBackup 8.0.35-35.1
+* MySQL Router 8.4.8
+* MySQL Router 8.0.45
+* HAProxy 2.8.18-1
+* Orchestrator 3.2.6-20
+* Percona Toolkit 3.7.1
+* PMM Client 3.7.0
 * Cert Manager 1.19.1
+* Percona Binlog Server 0.2.1
 
 Other options may also work but have not been tested.
 
@@ -153,10 +145,11 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [start:platforms]
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.31 - 1.33
-* [Amazon Elastic Container Service for Kubernetes (EKS) :octicons-link-external-16:](https://aws.amazon.com) 1.31 - 1.34
-* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.16 - 4.20
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.37.0 with Kubernetes v1.34.0
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.32 - 1.35
+* [Amazon Elastic Kubernetes Service (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/) 1.33 - 1.35
+* [Azure Kubernetes Service (AKS) :octicons-link-external-16:](https://azure.microsoft.com/en-us/products/kubernetes-service) 1.33 - 1.35
+* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.18.36 - 4.21.8
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.38.1 based on Kubernetes v1.35.1
 
 --8<-- [end:platforms]
 
