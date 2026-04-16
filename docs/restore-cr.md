@@ -72,6 +72,16 @@ Timestamp string used when `pitr.type` is `date`. Specified in the format "yyyy-
 | ----------- | ---------- |
 | :material-code-string: string     | `2026-03-30 14:32:00` |
 
+#### `pitr.force`
+
+Forces the `mysql` client to run with the `--force` flag and this silently ignores all SQL errors during binlog replay.
+
+**Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch: boolean     | `false` |
+
 ## The `backupSource` subsection
 
 Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment. 

@@ -6,7 +6,7 @@
 
 A base backup captures your data at a single moment in time. Restoring from such a backup is enough in many cases. However, if you need to undo a bad migration, recover right before someone dropped the wrong table, or meet a tighter recovery point, a base backup alone won't give you that level of precision.
 
-To address these use cases, you must be able to restore the database to a specific moment or to a specific transaction. To do that means to apply the binary logs generated after the backup on top of it, because they contain all subsequent changes. This process is called point-in-time recovery and is available in the Operator starting with v 1.1.0.
+To address these use cases, you must be able to restore the database to a specific moment or to a specific transaction. To do that means to apply the binary logs generated after the backup on top of it, because they contain all subsequent changes. This process is called point-in-time recovery and is available in the Operator starting with v1.1.0.
 
 This feature is in the tech preview stage. We don't recommend using it in production yet, but we encourage you to try it out and share your feedback.
 
