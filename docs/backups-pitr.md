@@ -91,7 +91,34 @@ With point-in-time recovery, you get finer control over when you come back onlin
 
 ## Known limitations
 
-The Binlog Server supports only AWS S3 and S3-compatible storage services for streaming binlogs to. Use the same operational practices as for backup buckets: credentials via Secrets, correct endpoint URL (including scheme where required), region, and TLS options consistent with your environment.
+- The Binlog Server currently supports only AWS S3 and S3-compatible storage services for streaming binlogs. Use the same practices as backups: provide credentials via Kubernetes Secrets, set the endpoint URL (including scheme if required), region, and TLS options to match your environment.
 
-If something fails mid-restore, use the same discipline as with any restore: inspect **`PerconaServerMySQLRestore` status**, the **restore and PITR Jobs**, and [Troubleshoot backups and restores](debug-backup-restore.md).
-   
+* If the Operator user password is different from the password saved in the base backup, point-in-time recovery will fail. You must take a new full backup after changing the Operator user password to ensure point-in-time recovery works.
+
+* During point-in-time recovery, updates made by `mysql-shell` can result in replication errors such as:
+  
+   ```
+   2026-04-15T10:58:08.911878Z 11 [ERROR] [MY-010584] [Repl] Replica SQL: Could not execute Update_rows event on table mysql_innodb_cluster_metadata.instances; Can't find record in 'instances', Error_code: 1032; handler error HA_ERR_KEY_NOT_FOUND; the event's source log FIRST, end_log_pos 162397, Error_code: MY-001032
+   ```
+  
+   If you want to ignore such errors, add `force: true` to the PITR section of your restore spec:
+  
+   ```yaml
+   apiVersion: ps.percona.com/v1
+   kind: PerconaServerMySQLRestore
+   metadata:
+     name: restore1
+   spec:
+     clusterName: cluster1
+     backupName: backup1
+     pitr:
+       force: true
+       type: date
+       date: "2026-04-16 21:12:00"
+   ```
+
+  The `force: true` option uses the `--force` flag with the MySQL client and will silently ignore all SQL errors during binlog replay. **Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
+
+* Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting `spec.backup.backoffLimit=0` in your `cr.yaml` to prevent automatic job retries.
+
+- If something fails mid-restore, use the same discipline as with any restore: inspect **`PerconaServerMySQLRestore` status**, the **restore and PITR jobs**, and refer to our [Restore troubleshooting guide](debug-backup-restore.md).
