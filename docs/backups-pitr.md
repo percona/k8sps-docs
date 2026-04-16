@@ -30,7 +30,7 @@ You can restore the database up to a specific moment in time or up to a specific
 
 ## Binary log collection
 
-The Operator requires binary logs (binlogs) for point-in-time recovery. The Operator collects them using the [Percona Binlog Server :octicons-link-external-16:](https://github.com/Percona-Lab/percona-binlog-server) command‑line utility. The Binlog Server connects to MySQL as a replication client and streams binlogs to a cloud storage to a dedicated folder. It can resume collection automatically after being interrupted or stopped.
+The Operator requires binary logs (binlogs) for point-in-time recovery. The Operator collects them using the Percona Binlog Server command‑line utility. The Binlog Server connects to MySQL as a replication client and streams binlogs to a cloud storage to a dedicated folder. It can resume collection automatically after being interrupted or stopped.
 
 ```mermaid
 flowchart LR
