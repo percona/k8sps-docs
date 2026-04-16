@@ -12,7 +12,7 @@ This release focuses on backups improvements enabling more efficient and flexibl
 
 This release introduces point-in-time recovery, giving you precise control over how far back you restore your MySQL cluster. Instead of recovering only to the moment a backup was taken, you can now roll the database forward to a specific transaction or timestamp. This is invaluable when you need to undo a bad migration, recover right before someone dropped the wrong table, or meet tighter RPO requirements with minimal data loss.
 
-Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona [Percona Binlog Server :octicons-link-external-16:](https://github.com/Percona-Lab/percona-binlog-server) to collect binary logs and the `mysqlbinlog` client to apply them during the restore. Read more about the workflow in our [documentation](../backups-pitr.md)
+Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona Binlog Server to collect binary logs and the `mysqlbinlog` client to apply them during the restore. Read more about the workflow in our [documentation](../backups-pitr.md)
 
 Point-in-time recovery is released as a **tech preview**. We do not recommend using it in production environments yet. However, we strongly encourage you to try it out in staging or test clusters and share your feedback. Your input will directly shape how we refine and finalize this capability in future releases.
 
