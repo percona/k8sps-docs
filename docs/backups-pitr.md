@@ -119,7 +119,7 @@ With point-in-time recovery, you get finer control over when you come back onlin
        date: "2026-04-16 21:12:00"
    ```
 
-  The `force: true` option enables the `--force` _mysqlbinlong_ flag and will silently ignore all SQL errors during binlog replay. **Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
+  The `force: true` option enables the `--force` flag with the MySQL client and will silently ignore all SQL errors during binlog replay. **Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
 
 * Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting `spec.backup.backoffLimit=0` in your `cr.yaml` to prevent automatic job retries.
 
