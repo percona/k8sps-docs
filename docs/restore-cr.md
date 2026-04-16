@@ -41,7 +41,7 @@ Specifies the name of a backup to be used for a restore. This backup should be f
 
 ## `pitr` section
 
-This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup from `backupName` and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a binlog server in the cluster; see [Point-in-time recovery](backups-pitr.md) for details.
+This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup from `backupName` and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a Binlog Servr in the cluster; see [Point-in-time recovery](backups-pitr.md) for details.
 
 #### `pitr.type`
 
@@ -58,7 +58,7 @@ The type of point-in-time recovery. Supported values are:
 
 #### `pitr.gtid`
 
-The exact GTID for point-in-time recovery, specified in the format "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:nnn". Used when `pitr.type` is `gtid`.
+The exact GTID set for point-in-time recovery, specified in the format "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:nnn". Used when `pitr.type` is `gtid`.
 
 | Value type  | Example    |
 | ----------- | ---------- |

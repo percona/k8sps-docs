@@ -9,8 +9,6 @@ This document focuses on the restore to the same cluster.
 
 ## Restore scenarios
 
-## Restore scenarios
-
 Select how you wish to restore:
 
 * [Without point-in-time recovery](#restore-from-a-backup-without-point-in-time-recovery)
