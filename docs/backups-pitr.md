@@ -123,9 +123,12 @@ With point-in-time recovery, you get finer control over when you come back onlin
 
 * Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting `spec.backup.backoffLimit=0` in your `cr.yaml` to prevent automatic job retries.
 
-- If something fails mid-restore, use the same discipline as with any restore: inspect **`PerconaServerMySQLRestore` status**, the **restore and PITR jobs**, and refer to our [Restore troubleshooting guide](debug-backup-restore.md).
-- Data at rest encryption is not supported with point-in-time recovery
+- If something fails mid-restore, use the same discipline as with any restore: inspect **`PerconaServerMySQLRestore` status**, the **restore and PITR jobs**, and refer to our [Restore troubleshooting guide](debug-backup-restore.md).\
+  
+- Data at rest encryption is not supported with point-in-time recovery.
+  
 - You cannot change the prefix for the Binlog Server.
+
 * For point-in-time recovery you cannot use the backupSource.storage as the location for the binlogs. You must have the Binlog Server configured in the cluster's configuration.
 
 * The Binlog Server may encounter issues if the number of objects in the point-in-time recovery bucket becomes too high. In such situations, the binlog server can get stuck and enter a CrashLoopBackOff state, unable to proceed with point-in-time recovery operations. This is due to how the Binlog Server processes or lists these objects internally. To recover from this state you need to delete old objects from the bucket manually. If the issue isn't caught within the binlog's expiration period, restoring the database becomes significantly more difficult. To reduce the risk of getting into this situation, monitor point-in-time recovery your bucket object count and clean up binlogs regularly.
