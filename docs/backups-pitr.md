@@ -6,7 +6,7 @@
 
 A base backup captures your data at a single moment in time. Restoring from such a backup is enough in many cases. However, if you need to undo a bad migration, recover right before someone dropped the wrong table, or meet a tighter recovery point, a base backup alone won't give you that level of precision.
 
-To address these use cases, you must be able to restore the database to a specific moment or to a specific transaction. To do that means to apply the binary logs generated after the backup on top of it, because they contain all subsequent changes. This process is called point-in-time recovery and is available in the Operator starting with v1.1.0.
+To address these use cases, you must be able to restore the database to a specific point in time or to a specific transaction. To do that means to apply the binary logs generated after the backup up to that particular point/transaction target, as they contain all subsequent database changes leading to it. This process is called point-in-time recovery and is available in the Operator starting with v1.1.0.
 
 This feature is in the tech preview stage. We don't recommend using it in production yet, but we encourage you to try it out and share your feedback.
 
@@ -14,8 +14,8 @@ This feature is in the tech preview stage. We don't recommend using it in produc
 
 The Operator implements point-in-time recovery in two stages:
 
-* Restores a base physical backup taken with `PerconaXtraBackup`
-* Replays binary log on top of the base backup to bring the database to the desired moment or transaction. A binary log records all changes made to the database, such as updates, inserts, and deletes.
+1. Restores a base physical backup taken with `PerconaXtraBackup`
+2. Replays binary logs on top of the base backup to bring the database to the desired point in time or transaction. A binary log records all changes made to the database, such as updates, inserts, and deletes.
   
 The Operator decodes binary logs using the `mysqlbinlog` client and applies them sequentially.
 
@@ -30,7 +30,7 @@ You can restore the database up to a specific moment in time or up to a specific
 
 ## Binary log collection
 
-The Operator requires binary logs (binlogs) for point-in-time recovery. The Operator collects them using the Percona Binlog Server command‑line utility. The Binlog Server connects to MySQL as a replication client and streams binlogs to a cloud storage to a dedicated folder. It can resume collection automatically after being interrupted or stopped.
+The Operator requires binary logs (binlogs) for point-in-time recovery. The Operator collects them using the Percona Binlog Server command‑line utility. The Binlog Server connects to MySQL as a replication client and uploads binlogs to a dedicated object storage location. It can resume collection automatically after being interrupted or stopped.
 
 ```mermaid
 flowchart LR
@@ -58,7 +58,7 @@ spec:
             endpointURL: https://s3.amazonaws.com
 ```
 
-After you apply the changes, the Operator starts Percona Binary log Server Pod, which continuously collects binlogs and stores them in the configured location.
+After you apply the changes, the Operator starts the Percona Binary log Server Pod, which continuously collects binlogs and stores them in the configured location.
 
 ## Point-in-time recovery workflow
 
@@ -66,16 +66,16 @@ Let's have a closer look at how point-in-time recovery works:
 
 When you trigger a restore with a point-in-time recovery target, the Operator does the following:
 
-1. Execs into the Binlog Server Pod and searches for required binlogs
+1. Execs into the Binlog Server Pod and searches for the required binlogs
 2. Pauses the cluster
-3. Restores the base backup
+3. Identifies the closest base backup leading to that point and restores it
 4. Runs the point-in-time recovery Job that:
    
     * Starts a temporary `mysqld` instance
     * Retrieves binlogs from the storage and applies them to the `mysql` client
     * Shuts down the temporary `mysqld` instance
   
-5. Unpauses the cluster.
+5. Rebootstraps the cluster based on the restored dataset.
 
 For how to configure and start a point-in-time recovery, refer to the [Make a restore with point-in-time recovery on the same cluster](backups-restore.md#restore-with-point-in-time-recovery) and [Make a restore with point-in-time recovery on the new cluster](backups-restore-to-new-cluster.md#restore-with-point-in-time-recovery) tutorials.
 
@@ -83,12 +83,12 @@ With point-in-time recovery, you get finer control over when you come back onlin
 
 ## Implementation specifics
 
-1. Point-in-time recovery is supported for both asynchronous and group replication types.
+1. Point-in-time recovery is supported for both asynchronous and group replication topologies.
 2. The Binlog Server is deployed with the number of Pods restricted to 1. This is because it connects to MySQL as a replication client with a specific server ID and only one instance can connect to the database with the same ID. Any number you set for the `size` in the Custom Resource will be ignored.
-3. Enabling the Binlog Server requires GTID mode on the cluster for replaying binary logs. This mode is enabled by default.
-4. The cluster is paused during point-in-time recovery. The Operator starts a temporary `mysqld` which that operates on the data PVC.
+3. Enabling the Binlog Server requires the GTID mode to be enabled on the cluster for replaying binary logs. This mode is enabled by default.
+4. The cluster is paused during point-in-time recovery. The Operator starts a temporary `mysqld` pod to perform the restore operation using the data PVC.
 5. The Binlog Server must be running before the restore begins. The reconciler locates the required binlogs before pausing the cluster.
-6. The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the prefix when configuring the storage for the Binlog Server.
+6. The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the folder name (`prefix`) when configuring the storage for the Binlog Server.
 
 
 ## Known limitations
@@ -119,7 +119,7 @@ With point-in-time recovery, you get finer control over when you come back onlin
        date: "2026-04-16 21:12:00"
    ```
 
-  The `force: true` option uses the `--force` flag with the MySQL client and will silently ignore all SQL errors during binlog replay. **Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
+  The `force: true` option enables the `--force` _mysqlbinlong_ flag and will silently ignore all SQL errors during binlog replay. **Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
 
 * Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting `spec.backup.backoffLimit=0` in your `cr.yaml` to prevent automatic job retries.
 
