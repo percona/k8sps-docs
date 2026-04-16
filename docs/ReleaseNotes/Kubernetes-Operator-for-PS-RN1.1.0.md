@@ -12,15 +12,15 @@ This release focuses on backups improvements enabling more efficient and flexibl
 
 This release introduces point-in-time recovery, giving you precise control over how far back you restore your MySQL cluster. Instead of recovering only to the moment a backup was taken, you can now roll the database forward to a specific transaction or timestamp. This is invaluable when you need to undo a bad migration, recover right before someone dropped the wrong table, or meet tighter RPO requirements with minimal data loss.
 
-Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology.
-
-To deliver fast and reliable point-in-time recovery, the Operator uses a new approach: it converts binary logs into relay logs and applies them using MySQL’s native SQL thread. By reusing MySQL's built in replication engine, the Operator can apply logs concurrently. This significantly improves restore performance, especially on large datasets. Read more about the workflow in our [documentation](../backups-pitr.md)
+Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona [Percona Binlog Server :octicons-link-external-16:](https://github.com/Percona-Lab/percona-binlog-server) to collect binary logs and the `mysqlbinlog` client to apply them during the restore. Read more about the workflow in our [documentation](../backups-pitr.md)
 
 Point-in-time recovery is released as a **tech preview**. We do not recommend using it in production environments yet. However, we strongly encourage you to try it out in staging or test clusters and share your feedback. Your input will directly shape how we refine and finalize this capability in future releases.
 
 ### Incremental backups (tech preview)
 
 This release introduces incremental backups for MySQL clusters, giving you a faster, more efficient, and more cost effective way to protect your data. Instead of creating a full backup every time, the Operator now captures only the changes since the previous backup, significantly reducing backup size, storage usage, and data transfer overhead. Incremental backups also lower the load on your cluster, helping you maintain performance even during frequent backup operations. This feature works seamlessly with all [supported backup storages](../backups-storage.md) and integrates with both [scheduled](../backups-scheduled.md) and [on-demand](../backups-ondemand.md) backup jobs.
+
+Incremental backups are released as a **tech preview** feature and we don't recommend them for production environments yet. However, we encourage you to try them out and leave your feedback. This will help us shape the future of this functionality.
 
 Learn more about incremental backups in our [documentation](../backups-incremental.md)
 
@@ -90,8 +90,6 @@ This makes cluster management more predictable and avoids unexpected stalls duri
 
 * [K8SPS-467](https://perconadev.atlassian.net/browse/K8SPS-467) - Set the default temporary path for PMM agents to /tmp/pmm to improve platform compatibility. This update specifically resolves file system permission issues encountered on platforms like OpenShift.
 
-* [K8SPS-497](https://perconadev.atlassian.net/browse/K8SPS-497) - Enhanced the heartbeat entrypoint to properly handle SIGTERM signals for faster pod termination. This ensures that the MySQL pod shuts down gracefully and respects the defined termination grace period.
-
 * [K8SPS-595](https://perconadev.atlassian.net/browse/K8SPS-595) - Replaced Operator panics with structured error handling when invalid storage configurations are detected. Users will now receive clear diagnostic messages instead of operator crashes, facilitating easier troubleshooting.
 
 * [K8SPS-601](https://perconadev.atlassian.net/browse/K8SPS-601) - Reclassified status changes and replication warnings as "Normal" event types in Kubernetes. This update reduces monitoring noise by distinguishing expected operational transitions from critical failures.
@@ -112,15 +110,19 @@ This makes cluster management more predictable and avoids unexpected stalls duri
 
 * [K8SPS-653](https://perconadev.atlassian.net/browse/K8SPS-653) - Corrected a validation error where the Operator would default to asynchronous replication even when not explicitly requested. The Operator now adheres to the intended cluster type, preventing unexpected deployment failures.
 
-* [K8SPS-655](https://perconadev.atlassian.net/browse/K8SPS-655) - Fixed a recovery failure where a node killed due to out-of-memory (OOM) errors could not rejoin the cluster. Nodes now correctly reinitialize and synchronize with the Group Replication cluster after a memory-related crash.
-
 * [K8SPS-661](https://perconadev.atlassian.net/browse/K8SPS-661) - Resolved an issue where primary nodes retained stale replication configurations after a Kubernetes node restart. This fix ensures that primary nodes are always initialized with the most current cluster state. (Thank you Alexander Khozya for reporting this issue)
 
 * [K8SPS-669](https://perconadev.atlassian.net/browse/K8SPS-669) - Enabled automated recovery for clusters that have suffered a complete loss of quorum. The Operator can now detect and rebuild the cluster automatically, significantly reducing recovery time is case of failures.
 
-* [K8SPS-683](https://perconadev.atlassian.net/browse/K8SPS-683) - Fixed an issue where the Operator would delete the primary pod without first performing a switchover during SmartUpdate. The cluster now gracefully transfers the primary role to a secondary node before updating the old primary, minimizing write downtime.
-
 * [K8SPS-684](https://perconadev.atlassian.net/browse/K8SPS-684) - Resolved a connection drop issue that occurred whenever the HAProxy configuration was reloaded. This ensures stable and uninterrupted application connectivity during proxy maintenance or scaling events.
+
+## Deprecation, Rename and Removal
+
+### Operators in Red Hat Marketplace catalog are no longer maintained
+
+Red Hat Marketplace was discontinued in April 2025. Percona Operator for MySQL will remain listed in the Marketplace catalog, but it won’t be updated beyond OpenShift 4.22.
+
+If you use the Operator from Red Hat Marketplace, switch to the Certified Operator Catalog for future updates and support.
 
 
 ## Supported software
