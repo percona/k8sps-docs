@@ -30,7 +30,7 @@ You can restore the database up to a specific moment in time or up to a specific
 
 ## Binary log collection
 
-The Operator requires binary logs (binlogs) for point-in-time recovery. The Operator collects them using the [Percona Binlog Server :octicons-link-external-16:](https://github.com/Percona-Lab/percona-binlog-server) command‑line utility. The Binlog Server connects to MySQL as a replication client and streams binlogs to a cloud storage. It can resume collection automatically after being interrupted or stopped.
+The Operator requires binary logs (binlogs) for point-in-time recovery. The Operator collects them using the [Percona Binlog Server :octicons-link-external-16:](https://github.com/Percona-Lab/percona-binlog-server) command‑line utility. The Binlog Server connects to MySQL as a replication client and streams binlogs to a cloud storage to a dedicated folder. It can resume collection automatically after being interrupted or stopped.
 
 ```mermaid
 flowchart LR
@@ -54,6 +54,7 @@ spec:
             bucket: my-binlogs
             credentialsSecret: my-s3-secret
             region: us-east-1
+            prefix: binlogs
             endpointURL: https://s3.amazonaws.com
 ```
 
@@ -87,6 +88,7 @@ With point-in-time recovery, you get finer control over when you come back onlin
 3. Enabling the Binlog Server requires GTID mode on the cluster for replaying binary logs. This mode is enabled by default.
 4. The cluster is paused during point-in-time recovery. The Operator starts a temporary `mysqld` which that operates on the data PVC.
 5. The Binlog Server must be running before the restore begins. The reconciler locates the required binlogs before pausing the cluster.
+6. The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the prefix when configuring the storage for the Binlog Server.
 
 
 ## Known limitations
@@ -122,3 +124,7 @@ With point-in-time recovery, you get finer control over when you come back onlin
 * Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting `spec.backup.backoffLimit=0` in your `cr.yaml` to prevent automatic job retries.
 
 - If something fails mid-restore, use the same discipline as with any restore: inspect **`PerconaServerMySQLRestore` status**, the **restore and PITR jobs**, and refer to our [Restore troubleshooting guide](debug-backup-restore.md).
+
+- Data at rest encryption is not supported with point-in-time recovery
+- You cannot change the prefix for the Binlog Server.
+* When specifying storage for the restore object, you cannot use the storage configuration defined for the Binlog Server.
