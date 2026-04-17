@@ -24,13 +24,13 @@ k8s_monitor_tag: 'v0.1.2'
 
 # Global variables
 
-year: '2025'
+year: '2026'
 
 # Release related variables
 
 release: '1.1.0'
 date: 
-  1_1_0: '2026-04-16'
+  1_1_0: '2026-04-17'
   1_0_0: '2025-11-17'
   v0_12_0: '2025-09-23'
   v0_11_0: '2025-09-01'
