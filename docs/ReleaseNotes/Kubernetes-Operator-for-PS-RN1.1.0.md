@@ -12,7 +12,7 @@ This release focuses on backups improvements enabling more efficient and flexibl
 
 This release introduces point-in-time recovery, giving you precise control over how far back you restore your MySQL cluster. Instead of recovering only to the moment a backup was taken, you can now roll the database forward to a specific transaction or timestamp. This is invaluable when you need to undo a bad migration, recover right before someone dropped the wrong table, or meet tighter RPO requirements with minimal data loss.
 
-Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona Binlog Server to collect binary logs and the `mysqlbinlog` client to apply them during the restore. Read more about the workflow in our [documentation](../backups-pitr.md)
+Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona Binlog Server to collect binary logs and the `mysqlbinlog` client to apply them during the restore. Read more about the workflow in our [documentation](../backups-pitr.md).
 
 Point-in-time recovery is released as a **tech preview**. We do not recommend using it in production environments yet. However, we strongly encourage you to try it out in staging or test clusters and share your feedback. Your input will directly shape how we refine and finalize this capability in future releases.
 
@@ -22,7 +22,7 @@ This release introduces incremental backups for MySQL clusters, giving you a fas
 
 Incremental backups are released as a **tech preview** feature and we don't recommend them for production environments yet. However, we encourage you to try them out and leave your feedback. This will help us shape the future of this functionality.
 
-Learn more about incremental backups in our [documentation](../backups-incremental.md)
+Learn more about incremental backups in our [documentation](../backups-incremental.md).
 
 ### Backup compression
 
@@ -55,7 +55,7 @@ In some cases, the default number of attempts for a replica to reconnect to its 
   
 Specify new values directly in the Custom Resource to match your environment’s needs. 
 
-Read more about other environment variables in our [documentation](../env-vars-custom.md)
+Read more about other environment variables in our [documentation](../env-vars-custom.md).
 
 This makes cluster management more predictable and avoids unexpected stalls during replication interruptions.
 
