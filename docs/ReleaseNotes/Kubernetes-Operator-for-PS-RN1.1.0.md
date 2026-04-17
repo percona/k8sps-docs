@@ -69,6 +69,7 @@ This makes cluster management more predictable and avoids unexpected stalls duri
 
 * The `.status.storage.s3.storageClass` has now the type `string`
 * The `v1.^.status.storage.s3.storageClass` field is removed
+* Added the `incrementalBaseBackupName` option. You can only specify a full backup as a value.
 
 ## Changelog
 
