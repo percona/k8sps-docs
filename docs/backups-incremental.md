@@ -45,7 +45,7 @@ By default, the Operator uses the **latest full backup** as the base for both **
 
 ## How restore from an incremental backup works
 
-The restore flow is unified for both full and incremental backups. The Operator identifies the backup type by name or destination. To identify the increments and reconstruct the chain, the backup destination has now the `.incr` path segment. The Operator downloads the full backup and all related increments and sorts them in the correct order. Then it restores the full backup first and applies each incremental backup. This provides a better restore performance.
+The restore flow is unified for both full and incremental backups. The Operator identifies the backup type by name or destination. To identify the increments and reconstruct the chain, the backup destination has now the `.incr` path segment. The Operator downloads the full backup and all related increments and sorts them in the correct order. Then it restores the full backup first and applies each incremental backup. 
 
 If you make a [point-in-time recovery](backups-pitr.md), it also applies binlogs on top, after restoring all backups. To learn more how it works, check [the point-in-time recovery workflow](backups-pitr.md#how-the-operator-performs-pointintime-recovery).
 
@@ -62,6 +62,17 @@ Here's how it works in detail:
 !!! admonition "Path layout"
 
     Incremental destinations use an `.incr` segment in the path so the Operator can tell full and incremental artifacts apart. A typical pattern resembles `prefix/<cluster>-<timestamp>-full.incr/<cluster>-<timestamp>-incr`; exact layout follows your `prefix` and storage settings.
+
+    Here's the example:
+
+    ```
+    s3://bucket/prefix/
+    my-cluster-2026-04-06-full/           # base full backup
+    my-cluster-2026-04-06-full.incr/   # incremental chain directory
+        my-cluster-2026-04-07T000000-incr/  # Monday's incremental
+        my-cluster-2026-04-08T000000-incr/    # Tuesday's incremental
+        my-cluster-2026-04-09T000000-incr/    # Wednesday's incremental
+    ```
 
 ## Why you need incremental backups
 
@@ -86,7 +97,7 @@ With incremental backups, you gain the following benefits:
 
 ### Restore rules
 
-1. You can make either an in-place restore pointing at an incremental backup object in the `backupName` option, or make a cross-cluster restore specifying the incremental backup path for the `dataSource.destination` option.
+1. You can make either an in-place restore pointing at an incremental backup object in the `backupName` option, or make a cross-cluster restore specifying the incremental backup path for the `backupSource.destination` option.
 2. Restores that use `backupSource` work across clusters and namespaces when the storage destination is reachable; incremental paths remain discoverable because of the `.incr` layout.
 3. Restore always needs the full chain: full backup first, then increments in order, up to the backup you selected.
 

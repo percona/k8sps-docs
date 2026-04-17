@@ -7,11 +7,11 @@ You can delete backups in the following ways:
 
 ## How the Operator handles backup deletion
 
-Every `PerconaServerMySQLBackup` backup object has the `percona.com/delete-backup` [Kubernetes finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers). This finalizer controls the deletion lifecycle of a backup object. This is done to prevent orphaned backup data and make the deletion flow predictable. 
+The `percona.com/delete-backup` [Kubernetes finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) defined within a `PerconaServerMySQLBackup` backup object controls its deletion lifecycle. This is done to prevent orphaned backup data.
 
 **How it works**:
 
-* When a backup is created and its configuration includes the `percona.com/delete-backup` finalizer, the Operator adds this finalizer to `metadata.finalizers` on the backup object.
+* To start a backup, the Operator creates a backup object. Scheduled backups include the `percona.com/delete-backup` finalizer in the `metadata.finalizers` section by default. For on-demand backups, you can choose to add or remove this finalizer during configuration. This finalizer controls whether the Operator cleans up the backup data from the storage before deletion.
 * While the finalizer is present, Kubernetes does not fully remove the `PerconaServerMySQLBackup` object after a delete request. The resource stays until every finalizer is cleared.
 * After you run `kubectl delete ps-backup …`, the Operator marks the specified backup object for deletion  by setting the `metadata.deletionTimestamp` value. The Operator’s backup controller sees this and, if `percona.com/delete-backup` finalizer is listed, deletes backup data in a remote storage.
 * When cleanup finishes, the Operator removes the `percona.com/delete-backup` finalizer. Kubernetes then completes deletion of the backup resource.
