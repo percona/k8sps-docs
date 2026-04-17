@@ -34,7 +34,7 @@ Compression works for full and [incremental backups](#incremental-backups-tech-p
 
 During the restore, the Operator automatically detects whether a backup is compressed and decompresses it as part of the restore workflow, so no additional steps are required from you.
 
-Currently the Operator supports only the `zstd` compression algorithm. This is a known limitation and will be lifted after the [PXB-3568](https://perconadev.atlassian.net/browse/PXB-3568) is resolved.
+Currently the Operator supports only the `zstd` compression algorithm. There is a known limitation for the `lz4` compression algorithm and it will be lifted after the [PXB-3568](https://perconadev.atlassian.net/browse/PXB-3568) is resolved.
 
 To learn more about compressed backups, read our [documentation](../backups-compressed.md).
 
@@ -69,7 +69,7 @@ This makes cluster management more predictable and avoids unexpected stalls duri
 
 * The `.status.storage.s3.storageClass` has now the type `string`
 * The `v1.^.status.storage.s3.storageClass` field is removed
-* Added the `incrementalBaseBackupName` option. You can only specify a full backup as a value.
+* Added the `incrementalBaseBackupName` option. This option can be set only when the backup configuration has `spec.type` set to `incremental`, and its value must refer to an existing full backup.
 
 ## Changelog
 
@@ -101,7 +101,7 @@ This makes cluster management more predictable and avoids unexpected stalls duri
 
 ### Fixed bugs
 
-* [K8SPS-530](https://perconadev.atlassian.net/browse/K8SPS-530) - Fixed an issue where the delete-backup finalizer would block the deletion of backups stuck in the starting state. Users can now immediately remove pending or failed backup resources without waiting for a timeout.
+* [K8SPS-530](https://perconadev.atlassian.net/browse/K8SPS-530) - Fixed an issue where the `percona/delete-backup` finalizer would block the deletion of backups stuck in the starting state. Users can now immediately remove pending or failed backup resources without waiting for a timeout.
 
 * [K8SPS-616](https://perconadev.atlassian.net/browse/K8SPS-616) - Removed the requirement for a backup image when backups are explicitly disabled in the configuration. This simplifies the Custom Resource definition by eliminating unnecessary parameters for unused features.
 
@@ -184,9 +184,10 @@ Image                                                    | Digest               
 | percona/haproxy:2.8.18-1 (ARM64)                         | 8271dafc8db4d1a4e5a446b3618ec8bed95837c7e9066cce0898ffefdf6b36f1 |
 | percona/percona-toolkit:3.7.1-3                          | 7fd2092b0ac8addf44163a5a7e1999acf5ae34ccffe77aeb005aa6ea8a8cfc5d |
 | percona/percona-toolkit:3.7.1-3 (ARM64)                  | afa0a0c7826433071da8f16077830977522240f03959e0b57db14ecad2357cca |
-| percona/pmm-client:3.7.0                                 | 1c59d7188f8404e0294f4bfb3d2c3600107f808a023668a170a6b8036c56619b |
-| percona/pmm-client:3.7.0 (ARM64)                         | 2d23ba3e6f0ae88201be15272c5038d7c38f382ad8222cd93f094b5a20b854a5 |
-| percona/percona-server-mysql-operator:1.1.0-binlog-server-0.2.1 | 8b8d70f6969a201b1a6f87df2c65d7ff6c9525a5eda1f870dbfbfb88a751611c |
+| percona/pmm-client:3.7.0                                 | 3ddfd925a9f6bb0daee88021e0310f8375f550afd70b7f2d0980509b7f3fb777 |
+| percona/pmm-client:3.7.0 (ARM64)                         | 2701042087701c70666fd88383bfac22368c339a033b15e364bd6dd417ad1922 |
+| percona/percona-server-mysql-operator:1.1.0-binlog-server-0.2.1 | 9ffb7db0094dc0c39f6ec794b70a33db6e4cd19aa4ca38cd6a9b05bc5bbea63c |
+| percona/percona-server-mysql-operator:1.1.0-binlog-server-0.2.1 (ARM64) | 97ad1244d08773eb6e6121c4b45424d88d2a624fbd26eb40ab907d054999e154 |
 
 
 --8<-- [end:images]
