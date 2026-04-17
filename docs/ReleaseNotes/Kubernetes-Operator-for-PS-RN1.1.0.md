@@ -30,7 +30,7 @@ Percona Operator for MySQL now supports backup compression, giving you faster, l
 
 Compressed backups are smaller in size, which means they stream to object storage quicker and consume less storage space as compared to uncompressed ones. In practice, this reduces both storage and data transfer costs.
 
-Compression works for full and [incremental backups](#incremental-backups), and you can use it for both on demand and scheduled backup workflows. You configure compression globally or per backup storage directly in the Custom Resource and can choose from [compression algorithms supported by Percona XtraBackup](../backups-compressed.md#choosing-a-compression-algorythm). For example, override the compression algorithm for a specific on-demand backup. 
+Compression works for full and [incremental backups](#incremental-backups-tech-preview), and you can use it for both on demand and scheduled backup workflows. Configure compression globally or per backup storage directly in the Custom Resource . You can also override the compression algorithm for a specific on-demand backup. 
 
 During the restore, the Operator automatically detects whether a backup is compressed and decompresses it as part of the restore workflow, so no additional steps are required from you.
 
@@ -55,7 +55,7 @@ In some cases, the default number of attempts for a replica to reconnect to its 
   
 Specify new values directly in the Custom Resource to match your environment’s needs. 
 
-Read more about other environment variables in our [documentation](../env-var-custom.md)
+Read more about other environment variables in our [documentation](../env-vars-custom.md)
 
 This makes cluster management more predictable and avoids unexpected stalls during replication interruptions.
 
