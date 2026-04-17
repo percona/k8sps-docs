@@ -47,6 +47,8 @@ By default, the Operator uses the **latest full backup** as the base for both **
 
 The restore flow is unified for both full and incremental backups. The Operator identifies the backup type by name or destination. To identify the increments and reconstruct the chain, the backup destination has now the `.incr` path segment. The Operator downloads the full backup and all related increments and sorts them in the correct order. Then it restores the full backup first and applies each incremental backup. This provides a better restore performance.
 
+If you make a [point-in-time recovery](backups-pitr.md), it also applies binlogs on top, after restoring all backups. To learn more how it works, check [the point-in-time recovery workflow](backups-pitr.md#how-the-operator-performs-pointintime-recovery).
+
 Here's how it works in detail:
 
 1. You create a `PerconaServerMySQLRestore` object and reference the incremental backup with `backupName` (same cluster) or `backupSource` (remote path / another environment).
@@ -87,7 +89,7 @@ With incremental backups, you gain the following benefits:
 1. You can make either an in-place restore pointing at an incremental backup object in the `backupName` option, or make a cross-cluster restore specifying the incremental backup path for the `dataSource.destination` option.
 2. Restores that use `backupSource` work across clusters and namespaces when the storage destination is reachable; incremental paths remain discoverable because of the `.incr` layout.
 3. Restore always needs the full chain: full backup first, then increments in order, up to the backup you selected.
-4. You can only restore from incremental backups to the state captured by the backup itself. Support for point-in-time recovery will be introduced in future releases.
+
 
 ## Known limitations
 
