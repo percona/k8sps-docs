@@ -15,12 +15,20 @@ The Operator stores your MySQL backups outside the Kubernetes cluster on cloud s
 The Operator creates physical backups using [Percona XtraBackup :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/). Here's how it works:
 
 1. Each database Pod includes a sidecar container called `xtrabackup` that runs an HTTP server.
-2. When you create a backup, the Operator creates a Job that sends an HTTP request to the backup source pod.
+2. When you create a backup, the Operator creates a Job that sends an HTTP request to the backup source Pod.
 3. The `xtrabackup` container receives the request and starts the backup process.
+4. Backups are streamed to storage; the Operator does not keep a separate local copy of the backup on disk.
 
 The following diagram outlines this workflow:
 
 ![image](assets/images/backup-job.svg)
+
+## Backup types
+
+You can make the following types of physical backups:
+
+* Full backup - contains full data set
+* An incremental backup - contains only the changes that occurred since the previous backup. To learn more, read [Incremental backups](backups-incremental.md). 
 
 ## Configuring backups
 
@@ -29,9 +37,11 @@ You configure backups in the `backup` section of your
 file. This section includes:
 
 * The [backup.enabled](operator.md#backupenabled) key, which you set to `true` to enable backups
+* The [backup.schedule.type](operator.md#backupscheduletype) key to set the type for scheduled backups.
+* The [PerconaServerMySQLBackup.spec.type](backup-cr.md#type) field to set the type for on-demand backups.
 * The `storages` subsection, where you [configure access to your cloud storage](backups-storage.md)
 
-## Backup types
+## Backup runs
 
 You can create backups in two ways:
 
