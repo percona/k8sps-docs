@@ -2300,6 +2300,302 @@ Enables or disables making backups.
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `backup.pitr.enabled`
+
+Enables or disables point-in-time recovery functionality.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `backup.binlogServer.size`
+
+Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. The Custom Resource allows only `1` (larger values are rejected). To learn more, see [Point-in-time recovery](backups-pitr.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+### `backup.binlogServer.image`
+
+The Docker image to use to deploy Percona Binarylog Server.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-binlog-server:0.2.1` |
+
+### `backup.binlogServer.imagePullPolicy`
+
+The [policy :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) the `kubelet` uses to pull the Percona Binarylog Server image.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `backup.binlogServer.imagePullSecrets.name`
+
+The name of a Secret the `kubelet` uses to authenticate to a private image registry. You can list several Secrets as an array of objects with the `name` key.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-secret-1` |
+
+### `backup.binlogServer.serverId`
+
+The unique server ID that Percona Binarylog Server uses when connecting to MySQL as a replication client for binlog collection.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `100` |
+
+### `backup.binlogServer.storage.s3.bucket`
+
+The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `S3-BACKUP-BUCKET-NAME-HERE` |
+
+### `backup.binlogServer.storage.s3.credentialsSecret`
+
+The Kubernetes Secret for binlog storage. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-s3-credentials` |
+
+### `backup.binlogServer.storage.s3.endpointUrl`
+
+The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `https://s3.amazonaws.com` |
+
+### `backup.binlogServer.storage.s3.prefix`
+
+The path prefix (folder) in the bucket where binlogs are stored. You cannot change the prefix after you configured the Binlog Server.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `PREFIX_NAME` |
+
+### `backup.binlogServer.storage.s3.region`
+
+The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `us-west-2` |
+
+### `backup.binlogServer.connectTimeout`
+
+Timeout in seconds for establishing a connection to MySQL. 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `backup.binlogServer.readTimeout`
+
+The maximum time in seconds the Binlog Server waits to read data from the MySQL instance.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `backup.binlogServer.writeTimeout`
+
+The maximum time in seconds the Binlog Server waits to write data to a remote server.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `backup.binlogServer.idleTime`
+
+The maximum time in seconds the Binlog Server stays in idle mode before trying to reconnect.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `backup.binlogServer.affinity.antiAffinityTopologyKey`
+
+The Kubernetes [topologyKey :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)  constraint for node anti-affinity on Percona Binarylog Server Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `kubernetes.io/hostname` |
+
+### `backup.binlogServer.affinity.advanced`
+
+In cases where the pods require complex tuning the advanced option turns off the topologykey effect. This setting allows the standard Kubernetes affinity constraints of any complexity to be used.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `backup.binlogServer.checkpointInterval`
+
+How often the Binlog Server writes checkpoints - the snapshot of its state. 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `30s` |
+
+### `backup.binlogServer.checkpointSize`
+
+Defines the size threshold for checkpoints. Default is 16M.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `16M` |
+
+### `backup.binlogServer.containerSecurityContext`
+
+A custom [Kubernetes security context for a container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the Percona Binlog Server container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `backup.binlogServer.env`
+
+Custom [environment variables :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the Percona Binarylog Server container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `[]` |
+
+### `backup.binlogServer.envFrom`
+
+The source for the bulk-import of all key-value pairs from a ConfigMap or Secret as environment variables for the Percona Binarylog Server container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `[]` |
+
+### `backup.binlogServer.initContainer.image`
+
+The container image for the Binlog Server init container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-server-mysql-operator:main` |
+
+### `backup.binlogServer.initContainer.containerSecurityContext`
+
+A custom [Kubernetes security context for a container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the Binlog Server init container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `backup.binlogServer.initContainer.resources.requests.memory`
+
+[Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `backup.binlogServer.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
+
+### `backup.binlogServer.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100M` |
+
+### `backup.binlogServer.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `backup.binlogServer.initImage`
+
+An alternative init image for the Percona Binarylog Server Pod. Leave empty to use the default one.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `""` |
+
+### `backup.binlogServer.logLevel`
+
+Log level for the Percona Binarylog Server. Defaults to `info`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `info` |
+
+### `backup.binlogServer.podSecurityContext`
+
+A custom [Kubernetes Pod security context :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for Percona Binarylog Server Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups:<br>  - 1001</pre> |
+
+### `backup.binlogServer.resources.requests.memory`
+
+[Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `backup.binlogServer.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200m` |
+
+### `backup.binlogServer.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100M` |
+
+### `backup.binlogServer.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
+### `backup.binlogServer.rewriteFileSize`
+
+Specifies the maximum binlog file size for rewrite. Defaults to `128M`. Set to an empty string to use the default.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `128M` |
+
+### `backup.binlogServer.sslMode`
+
+The TLS mode for the Binlog Server connection to MySQL. Defaults to `verify_identity`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `verify_identity` |
+
 ### `backup.sourcePod`
 
 Specifies the MySQL instance Pod to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.

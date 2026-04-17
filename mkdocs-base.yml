@@ -200,7 +200,8 @@ nav:
               - "Incremental backups": backups-incremental.md
               - "Make scheduled backups": backups-scheduled.md
               - "Make on-demand backup": backups-ondemand.md
-              - "Compress backups": backups-compressed.md
+              - "Point-in-time recovery": backups-pitr.md
+              - "Compressed backups": backups-compressed.md
               - Restore from a backup:
                 - "On the same cluster": backups-restore.md
                 - "On a new cluster": backups-restore-to-new-cluster.md
