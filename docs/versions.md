@@ -6,6 +6,7 @@ Below you can find the versions of software components and platforms that have b
 
 | Operator | [Percona Server for MySQL :octicons-link-external-16:](https://www.percona.com/software/mysql-database/percona-server) | [Percona XtraBackup :octicons-link-external-16:](https://www.percona.com/software/mysql-database/percona-xtrabackup) | [HA Proxy :octicons-link-external-16:](https://www.haproxy.org/) | [MySQL Router :octicons-link-external-16:](https://www.mysql.com/products/enterprise/router.html) | [Orchestrator :octicons-link-external-16:](https://github.com/percona/orchestrator) | [Percona Toolkit :octicons-link-external-16:](https://www.percona.com/percona-toolkit) |
 |:--------|:--------|:---------------------------------------------------------------------------|:--------|:-----------|:-------------|:-------------------|
+|[1.1.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md)| 8.4.8-8.1, 8.0.45-36.1 | 8.4.0-5.1, 8.0.35-35.1 | 2.8.18-1 | 8.4.8, 8.0.45 | 3.2.6-20 | 3.7.1 |
 |[1.0.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md)| 8.4.6-6.1, 8.0.43-34.1 | 8.4.0-4.1, 8.0.35-34.1 | 2.8.15 | 8.4.6-6.1, 8.0.43-34.1 | 3.2.6-18 | 3.7.0-2 |
 
 
@@ -13,4 +14,5 @@ Below you can find the versions of software components and platforms that have b
 
 | Operator | [GKE :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine)         | [EKS :octicons-link-external-16:](https://aws.amazon.com)         | [Openshift :octicons-link-external-16:](https://www.redhat.com/en/technologies/cloud-computing/openshift) | [Minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube)                          |
 |:--------|:------------|:------------|:------------|:--------------------|
+|[1.1.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md)  | 1.32 - 1.35 | 1.33 - 1.35 | 4.18 - 4.21 | 1.38.1 |
 |[1.0.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md)  | 1.31 - 1.33 | 1.31 - 1.34 | 4.16 - 4.20 |  1.37.0 |

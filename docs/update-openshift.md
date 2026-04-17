@@ -7,7 +7,7 @@ The upgrade on OpenShift consists of two steps:
 
 ## Upgrade the Operator via Operator Lifecycle Manager (OLM)
 
-You can upgrade the Operator Deployment for MySQL that was [installed on the OpenShift platform using OLM](openshift.md#install-via-the-operator-lifecycle-manager-olm) directly through the Operator Lifecycle Manager.
+You can upgrade the Operator Deployment for MySQL that was [installed on the OpenShift platform using OLM](openshift.md#install-percona-server-for-mysql-on-openshift) directly through the Operator Lifecycle Manager.
 
 If you know the OLM upgrade workflow, jump to the [update Deployment steps](#upgrade-the-operator).
 

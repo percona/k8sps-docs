@@ -1,4 +1,4 @@
-# Point in time recovery
+# Point-in-time recovery
 
 !!! admonition ""
 
@@ -6,7 +6,7 @@
 
 A base backup captures your data at a single moment in time. Restoring from such a backup is enough in many cases. However, if you need to undo a bad migration, recover right before someone dropped the wrong table, or meet a tighter recovery point, a base backup alone won't give you that level of precision.
 
-To address these use cases, you must be able to restore the database to a specific point in time or to a specific transaction. To do that means to apply the binary logs generated after the backup up to that particular point/transaction target, as they contain all subsequent database changes leading to it. This process is called point-in-time recovery and is available in the Operator starting with v1.1.0.
+To address these use cases, you must be able to restore the database to a specific point in time or to a specific transaction. To do that means to apply the binary logs generated after the backup up to that particular point/transaction target, as they contain all subsequent database changes leading to it. This process is called point-in-time recovery and is available in the Operator starting with version [1.1.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md).
 
 This feature is in the tech preview stage. We don't recommend using it in production yet, but we encourage you to try it out and share your feedback.
 
