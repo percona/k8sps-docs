@@ -1,0 +1,98 @@
+To connect to Percona Server for MySQL you will need the password for the root user. Passwords are stored in the [Secrets :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) object, which was generated during the previous steps.
+
+Here’s how to get it:
+
+1. List the Secrets objects.
+
+    ```{.bash data-prompt="$"}
+    $ {{ commandName }} get secrets
+    ```
+    It will show you the list of Secrets objects (by default the Secrets object you are interested in has `ps-cluster1-secrets` name).
+
+2. Use the following command to get the password of the `root` user.  Substitute `ps-cluster1` with your value, if needed:
+    
+    ```{.bash data-prompt="$"}
+    $ {{ commandName }} get secret ps-cluster1-secrets -o yaml
+    ```
+    
+    The command returns the YAML file with generated Secrets, including the `root` password, which
+    should look as follows:
+
+    ```{.yaml .no-copy}
+    ...
+    data:
+      ...
+      root: <base64-encoded-password>
+    ```
+
+3. The actual password is base64-encoded. Use the following command to bring it
+    back to a human-readable form:
+
+    ```{.bash data-prompt="$"}
+    $ echo '<base64-encoded-password>' | base64 --decode
+    ```
+
+4. Run a container with `mysql` tool and connect its console output to your terminal. The following command will do this, naming the new Pod `percona-client`:
+
+    ```{.bash data-prompt="$"}
+    $ {{ commandName }} run -i --rm --tty percona-client --image=percona/percona-server:8.4 --restart=Never -- bash -il
+    ```
+
+    It may require some time to execute the command and deploy the correspondent Pod.
+
+5. Now run `mysql` tool in the `percona-client` command shell using the password
+    obtained from the Secret instead of the `<root password>` placeholder.
+    The command will look different depending on whether the cluster uses load
+    balancing with [HAProxy](haproxy-conf.md) (the default behavior) or uses
+    [MySQL Router](router-conf.md) (can be used with Group Replication clusters):
+
+    === "If using HAProxy (default)"
+        ``` bash
+        mysql -h ps-cluster1-haproxy -uroot -p<root password>
+        ```
+
+    === "If using MySQL Router"
+        ```bash
+        mysql -h ps-cluster1-router -uroot -p<root password>
+        ```
+    
+    ??? example "Expected output"
+
+        ```{.text .no-copy}
+        mysql: [Warning] Using a password on the command line interface can be insecure.
+        Welcome to the MySQL monitor.  Commands end with ; or \g.
+        Your MySQL connection id is 1665
+        Server version: {{ps84recommended}} Percona Server (GPL), Release 6, Revision dbba4396
+
+        Copyright (c) 2009-{{year}} Percona LLC and/or its affiliates
+        Copyright (c) 2000, {{year}}, Oracle and/or its affiliates.
+
+        Oracle is a registered trademark of Oracle Corporation and/or its
+        affiliates. Other names may be trademarks of their respective
+        owners.
+
+        Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+        mysql>
+        ```
+
+    The following example uses the MySQL prompt to check the
+    `max_connections` variable:
+
+    ```sql
+    SHOW VARIABLES LIKE "max_connections";
+    ```
+
+    ??? example "Expected output"
+
+        ```{.text .no-copy}
+        +-----------------+-------+
+        | Variable_name   | Value |
+        +-----------------+-------+
+        | max_connections | 158   |
+        +-----------------+-------+
+        1 row in set (0.02 sec)
+
+        mysql> 
+        ```
+
