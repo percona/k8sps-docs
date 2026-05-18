@@ -29,7 +29,7 @@ year: '2026'
 # Release related variables
 
 release: '1.1.0'
-#pruned_release: '1.0.0'
+#pruned_release: '1.1.0'
 
 date: 
   1_1_0: '2026-04-17'
