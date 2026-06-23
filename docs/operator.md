@@ -2302,7 +2302,7 @@ Enables or disables making backups.
 
 ### `backup.encryptionKeySecret.name`
 
-The name of the Kubernetes Secret that stores the key used to [encrypt backups](backups-encrypted.md) before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage .
+The name of the Kubernetes Secret that stores the key used to [encrypt backups](backups-encrypted.md) before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage.
 
 | Value type  | Example    |
 | ----------- | ---------- |
