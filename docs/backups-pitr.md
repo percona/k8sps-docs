@@ -43,7 +43,7 @@ flowchart LR
 
 To enable binlog collection, configure the `spec.backup.pitr` section in your Custom Resource:
 
-```
+```yaml
 spec:
   backup:
     pitr:
@@ -88,8 +88,7 @@ With point-in-time recovery, you get finer control over when you come back onlin
 3. Enabling the Binlog Server requires the GTID mode to be enabled on the cluster for replaying binary logs. This mode is enabled by default.
 4. The cluster is paused during point-in-time recovery. The Operator starts a temporary `mysqld` pod to perform the restore operation using the data PVC.
 5. The Binlog Server must be running before the restore begins. The reconciler locates the required binlogs before pausing the cluster.
-6. The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the folder name (`prefix`) when configuring the storage for the Binlog Server.
-
+6. The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the folder name (`prefix`) when configuring storage for the Binlog Server.
 
 ## Known limitations
 
@@ -119,7 +118,9 @@ With point-in-time recovery, you get finer control over when you come back onlin
        date: "2026-04-16 21:12:00"
    ```
 
-  The `force: true` option enables the `--force` flag with the MySQL client and will silently ignore all SQL errors during binlog replay. **Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
+   The `force: true` option enables the `--force` flag with the MySQL client and will silently ignore all SQL errors during binlog replay. **Warning:** This might result in data loss if underlying replication or data integrity errors are ignored.
+
+* Binlog storage for point-in-time recovery is configured separately from base backup storage. The Operator uses the settings under `spec.backup.pitr.binlogServer` of the cluster Custom Resource during the in-place restore on the same cluster. For cross-cluster restore, specify the Binlog storage settings  under `spec.pitr.backupSource.binlogServer` in the restore object.
 
 * Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting `spec.backup.backoffLimit=0` in your `cr.yaml` to prevent automatic job retries.
 
@@ -129,6 +130,4 @@ With point-in-time recovery, you get finer control over when you come back onlin
   
 - You cannot change the prefix for the Binlog Server.
 
-* For point-in-time recovery you cannot use the backupSource.storage as the location for the binlogs. You must have the Binlog Server configured in the cluster's configuration.
-
-* The Binlog Server may encounter issues if the number of objects in the point-in-time recovery bucket becomes too high. In such situations, the binlog server can get stuck and enter a CrashLoopBackOff state, unable to proceed with point-in-time recovery operations. This is due to how the Binlog Server processes or lists these objects internally. To recover from this state you need to delete old objects from the bucket manually. If the issue isn't caught within the binlog's expiration period, restoring the database becomes significantly more difficult. To reduce the risk of getting into this situation, monitor point-in-time recovery your bucket object count and clean up binlogs regularly.
+* The Binlog Server may encounter issues if the number of objects in the point-in-time recovery bucket becomes too high. In such situations, the Binlog Server can get stuck and enter a CrashLoopBackOff state, unable to proceed with point-in-time recovery operations. This is due to how the Binlog Server processes or lists these objects internally. To recover from this state you need to delete old objects from the bucket manually. If the issue isn't caught within the binlog's expiration period, restoring the database becomes significantly more difficult. To reduce the risk of getting into this situation, monitor point-in-time recovery your bucket object count and clean up binlogs regularly.
