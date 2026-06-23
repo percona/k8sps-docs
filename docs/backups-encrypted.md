@@ -48,7 +48,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: my-encryption-key
-stringData:
+data:
   encryptionKey: <base64-encoded-string>
 ```
 

@@ -2310,7 +2310,7 @@ The name of the Kubernetes Secret that stores the key used to [encrypt backups](
 
 ### `backup.encryptionKeySecret.key`
 
-The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. This is a global setting and applies to all storages unless overridden for a sppecific storage. 
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. This is a global setting and applies to all storages unless overridden for a specific storage.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2728,7 +2728,7 @@ Enable or disable verification of the storage server TLS certificate. Disabling 
 
 ### `backup.storages.STORAGE-NAME.encryptionKeySecret.name`
 
-The name of the Kubernetes Secret that that contains the key used to [encrypt backups](backups-encrypted.md) for this storage location. When set, it takes precedence over [`backup.encryptionKeySecret.name`](#backupencryptionkeysecretname).
+The name of the Kubernetes Secret that contains the key used to [encrypt backups](backups-encrypted.md) for this storage location. When set, it takes precedence over [`backup.encryptionKeySecret.name`](#backupencryptionkeysecretname).
 
 | Value type  | Example    |
 | ----------- | ---------- |

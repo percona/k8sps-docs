@@ -437,7 +437,7 @@ Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following
             credentialsSecret: ps-cluster1-s3-credentials
             region: us-west-2
       pitr:
-        type: time
+        type: date
         date: "{{year}}-05-01T15:30:00Z"
     ```
 
