@@ -115,7 +115,7 @@ Custom Resource, you can make your first backup.
     * `spec.storageName` - specify the name of your already configured storage.
 
     ```yaml title="deploy/backup/backup.yaml"
-    apiVersion: ps.percona.com/v1alpha1
+    apiVersion: ps.percona.com/v1
     kind: PerconaServerMySQLBackup
     metadata:
       name: backup1
