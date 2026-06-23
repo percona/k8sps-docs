@@ -47,7 +47,7 @@ Specifies the name of the Percona Server for MySQL cluster to back up.
 
 Specifies the name of the storage where to save a backup. It must match the name you specified in the `spec.backup.storages` subsection of the `deploy/cr.yaml` file.
 
-If the cluster or the matching storage entry defines [`encryptionKeySecret`](operator.md#backupencryptionkeysecret), the Operator encrypts this backup automatically. See [Encrypted backups](backups-encrypted.md).
+If the cluster or the matching storage entry defines [`encryptionKeySecret`](operator.md#backupencryptionkeysecretname), the Operator encrypts this backup automatically. See [Encrypted backups](backups-encrypted.md).
 
 | Value type  | Example    |
 | ----------- | ---------- |
