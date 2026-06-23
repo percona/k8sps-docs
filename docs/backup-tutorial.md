@@ -129,14 +129,14 @@ Custom Resource, you can make your first backup.
 2. Apply the configuration. This instructs the Operator to start a backup. Specify your namespace instead of the `<namespace>` placeholder:
 
     ```bash
-	  kubectl apply -f deploy/backup/backup.yaml -n <namespace>
-	  ```
+    kubectl apply -f deploy/backup/backup.yaml -n <namespace>
+    ```
 
 3. Track the backup progress. 
 
     ```bash
-	  kubectl get ps-backup -n <namespace>
-	  ```
+    kubectl get ps-backup -n <namespace>
+    ```
 
 	??? example "Output"
 
