@@ -62,9 +62,9 @@ cd percona-server-mysql-operator
 
 3. Create the Secrets object from this yaml file. Specify your namespace instead of the `<namespace>` placeholder:
 
-	```bash
-  kubectl apply -f deploy/backup/backup-secret-s3.yaml -n <namespace>
-	```
+    ```bash
+    kubectl apply -f deploy/backup/backup-secret-s3.yaml -n <namespace>
+    ```
 
 4. Update your `deploy/cr.yaml` configuration. Specify the following parameters in the `backup` section:
 
