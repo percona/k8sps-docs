@@ -2300,6 +2300,22 @@ Enables or disables making backups.
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `backup.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that stores the key used to [encrypt backups](backups-encrypted.md) before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage .
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-encryption-key` |
+
+### `backup.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. This is a global setting and applies to all storages unless overridden for a sppecific storage. 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `encryptionKey` |
+
 ### `backup.pitr.enabled`
 
 Enables or disables point-in-time recovery functionality.
@@ -2708,6 +2724,23 @@ Enable or disable verification of the storage server TLS certificate. Disabling 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
+
+
+### `backup.storages.STORAGE-NAME.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that that contains the key used to [encrypt backups](backups-encrypted.md) for this storage location. When set, it takes precedence over [`backup.encryptionKeySecret.name`](#backupencryptionkeysecretname).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-encryption-key` |
+
+### `backup.storages.STORAGE-NAME.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. It takes precedence over the [`backup.encryptionKeySecret.key`](#backupencryptionkeysecretkey) setting.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `encryptionKey` |
 
 ### `backup.storages.STORAGE-NAME.nodeSelector`
 

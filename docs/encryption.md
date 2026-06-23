@@ -21,11 +21,15 @@ Read more about key rotation in the [Rotate the master key :octicons-link-extern
 
 ## Backups and encryption
 
-Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up encrypted data. The backups remain encrypted, ensuring your data is secure both on your live cluster and in your backup storage.
+Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up [encrypted](encryption-setup.md) tablespaces. When your database uses the `keyring_vault` plugin, backup files retain that encryption layer as part of the physical backup data.
+
+Starting with Operator 1.2.0, you can also [encrypt backup files in the object storage](backups-encrypted.md) independently of database encryption. This protects backup data even when live database encryption is not enabled.
 
 !!! warning "Keep your encryption keys safe"
 
-    To restore from an encrypted backup, you **must have the original master encryption key**. If the encryption key is lost, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up your master encryption keys separately from your database backups.
+    To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is the **the original Vault master encryption key**. For encrypted backups, this is the **backup encryption key** from the Kubernetes Secret.
+
+    If either key is lost or rotated, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.
 
 
 ## Next steps

@@ -35,6 +35,8 @@ Specifies the name of the Percona Server for MySQL cluster to restore.
 
 Specifies the name of a backup to be used for a restore. This backup should be from the same cluster.
 
+When the backup was [encrypted](backups-encrypted.md), the Operator uses the `encryptionKeySecret` from the cluster Custom Resource automatically. The key used for the restore must match the key used to encrypt the backup.
+
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `backup1` |
@@ -66,7 +68,7 @@ The exact GTID set for point-in-time recovery, specified in the format "aaaaaaaa
 
 #### `pitr.date`
 
-Timestamp string used when `pitr.type` is `date`. Specified in the format "yyyy-mm-dd hh:mm:ss" .
+Timestamp string used when `pitr.type` is `date`. Specified in the format `yyyy-mm-dd hh:mm:ss`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -84,7 +86,7 @@ Forces the `mysql` client to run with the `--force` flag and this silently ignor
 
 ## The `backupSource` subsection
 
-Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment. 
+Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment.
 
 ### `backupSource.destination`
 
@@ -93,6 +95,30 @@ Specifies the path to the backup on the storage
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `s3://bucket-name/backup-destination/` |
+
+### `backupSource.storage.encryptionKeySecret`
+
+References a Kubernetes Secret that contains the key used to decrypt an [encrypted backup](backups-encrypted.md). Required when restoring an encrypted backup from object storage on a cluster that does not have access to the source cluster's encryption key Secret. The key used for the restore must match the key used to encrypt the backup.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>name: my-encryption-key<br>key: encryptionKey</pre> |
+
+### `backupSource.storage.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that stores the backup encryption key.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-encryption-key` |
+
+### `backupSource.storage.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `encryptionKey` |
 
 ### `backupSource.storage.s3.bucket`
 
