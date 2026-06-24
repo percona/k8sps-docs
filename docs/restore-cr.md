@@ -41,7 +41,7 @@ Specifies the name of a backup to be used for a restore. This backup should be f
 
 ### `pitr` section
 
-This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a Binlog Server in the cluster; see [Point-in-time recovery](backups-pitr.md) for details.
+This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup (from `backupName` or `backupSource.destination`) and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a Binlog Server in the cluster; see [Point-in-time recovery](backups-pitr.md) for details.
 
 #### `pitr.type`
 
@@ -82,9 +82,9 @@ Forces the `mysql` client to run with the `--force` flag and this silently ignor
 | ----------- | ---------- |
 | :material-toggle-switch: boolean     | `false` |
 
-### The  `pitr.backupSource` subsection
+### The `pitr.backupSource` subsection
 
-This subsection contains the BinLog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](backups-restore-to-new-cluster.md#restore-with-point-in-time-recovery). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
+This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](backups-restore-to-new-cluster.md#restore-with-point-in-time-recovery). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
 
 #### `pitr.backupSource.binlogServer.size`
 
@@ -112,11 +112,11 @@ The unique server ID that Percona Binarylog Server uses when connecting to MySQL
 
 #### `pitr.backupSource.binlogServer.storage.s3.bucket`
 
-The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed. You can use the same values as defined in the `spec.backup.pitr.binlogServer` on the cluster Custom Resource. For the restore to the new cluster, you can copy the settings from the source cluster, but specify a different binlog `prefix`.
+The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed. You can use the same values as defined in `spec.backup.pitr.binlogServer` on the source cluster Custom Resource. For a restore to a new cluster, copy these settings from the source cluster, including the binlog `prefix` that points to the existing binlog folder.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `S3-BACKUP-BUCKET-NAME-HERE` |
+| :material-code-string: string     | `S3-BINLOG-BUCKET-NAME-HERE` |
 
 #### `pitr.backupSource.binlogServer.storage.s3.credentialsSecret`
 
@@ -126,7 +126,7 @@ The Kubernetes Secret for binlog storage. It should contain `AWS_ACCESS_KEY_ID` 
 | ----------- | ---------- |
 | :material-code-string: string     | `ps-cluster1-s3-credentials` |
 
-### `pitr.backupSource.binlogServer.storage.s3.endpointUrl`
+#### `pitr.backupSource.binlogServer.storage.s3.endpointUrl`
 
 The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.
 
@@ -134,7 +134,7 @@ The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.
 | ----------- | ---------- |
 | :material-code-string: string     | `https://s3.amazonaws.com` |
 
-### `pitr.backupSource.binlogServer.storage.s3.prefix`
+#### `pitr.backupSource.binlogServer.storage.s3.prefix`
 
 Specifies the path prefix (folder) in the bucket where binlogs are stored. After configuring the Binlog Server, this prefix cannot be changed. 
 
@@ -145,7 +145,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 | ----------- | ---------- |
 | :material-code-string: string     | `PREFIX_NAME` |
 
-### `pitr.backupSource.binlogServer.storage.s3.region`
+#### `pitr.backupSource.binlogServer.storage.s3.region`
 
 The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 
@@ -153,7 +153,7 @@ The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 | ----------- | ---------- |
 | :material-code-string: string     | `us-west-2` |
 
-### `pitr.backupSource.binlogServer.connectTimeout`
+#### `pitr.backupSource.binlogServer.connectTimeout`
 
 Timeout in seconds for establishing a connection to MySQL.
 
@@ -161,7 +161,7 @@ Timeout in seconds for establishing a connection to MySQL.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `pitr.backupSource.binlogServer.readTimeout`
+#### `pitr.backupSource.binlogServer.readTimeout`
 
 The maximum time in seconds the Binlog Server waits to read data from the MySQL instance.
 
@@ -169,7 +169,7 @@ The maximum time in seconds the Binlog Server waits to read data from the MySQL 
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `pitr.backupSource.binlogServer.writeTimeout`
+#### `pitr.backupSource.binlogServer.writeTimeout`
 
 The maximum time in seconds the Binlog Server waits to write data to a remote server.
 
@@ -177,7 +177,7 @@ The maximum time in seconds the Binlog Server waits to write data to a remote se
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `pitr.backupSource.binlogServer.idleTime`
+#### `pitr.backupSource.binlogServer.idleTime`
 
 The maximum time in seconds the Binlog Server stays in idle mode before trying to reconnect.
 
@@ -185,7 +185,7 @@ The maximum time in seconds the Binlog Server stays in idle mode before trying t
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `pitr.backupSource.binlogServer.logLevel`
+#### `pitr.backupSource.binlogServer.logLevel`
 
 The verbosity level for Binlog Server logs. Supported values are: `info` (default), `warning`, `error`, `debug`.
 

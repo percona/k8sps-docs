@@ -150,7 +150,7 @@ kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
 
 For point-in-time recovery to a new cluster, you need the following:
 
-* a binlog storage configured on the target cluster with a different path for binlog collection than on the source cluster. You can reuse the storage settings from the source cluster but specify a different `pfefix` value.
+* a binlog storage configured on the target cluster with a different path for binlog collection than on the source cluster. You can reuse the storage settings from the source cluster but specify a different `prefix` value.
 * a base backup that will be used for the restore
 * the GTID set to restore up to a specific transaction, or a timestamp to restore up to a specific time
 * the backup storage configured either on the target cluster or in the restore object 
@@ -180,7 +180,7 @@ Binlog storage currently supports only AWS S3 and S3-compatible services, even w
 
        * For the `type=date` option, set the `date` key in the datetime format.
        * For the `type=gtid` option, set the `gtid` to the GTID set to restore the database to. It has the format `source_id:transaction_id`
-       * `backupSource.binlogServer` - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster's `spec.backup.pitr.binlogServer`, including the `prefix` for the binlog folder.
+       * `pitr.backupSource.binlogServer` - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster's `spec.backup.pitr.binlogServer`, including the `prefix` for the binlog folder.
 
         === "Restore to a timestamp"
 
@@ -319,7 +319,7 @@ kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
 
 ### Approach 2. The storage is defined on the target
 
-Use this approach when the target cluster already has backup storage configured in its Custom Resource. The storage name must match the source environment — have the same bucket, prefix, and credentials.
+Use this approach when the target cluster already has backup storage configured in its Custom Resource. The storage name must match the source environment and use the same bucket, prefix, and credentials.
 
 However, you must provide the binlog storage configuration within the restore object using `spec.pitr.backupSource.binlogServer`. This ensures the Operator can locate and access the binlogs needed for point-in-time recovery.
 
@@ -339,7 +339,7 @@ However, you must provide the binlog storage configuration within the restore ob
        * For the `type=date` option, set the `date` key in the datetime format.
        * For the `type=gtid` option, set the `gtid` to the GTID set to restore the database to. It has the format `source_id:transaction_id`
 
-       * `backupSource.binlogServer` - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster's `spec.backup.pitr.binlogServer`, including the `prefix` for the binlog folder.
+       * `pitr.backupSource.binlogServer` - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster's `spec.backup.pitr.binlogServer`, including the `prefix` for the binlog folder.
 
         === "Restore to a timestamp"
 
@@ -356,15 +356,15 @@ However, you must provide the binlog storage configuration within the restore ob
                   backupSource:
                     destination: s3://S3-BUCKET-NAME/BACKUP-NAME
                   pitr:
-                  backupSource:
-                    binlogServer:
-                      storage:
-                        s3:
-                          bucket: S3-BINLOG-BUCKET-NAME
-                          credentialsSecret: ps-cluster1-s3-credentials
-                          region: us-west-2
-                          endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE #Optional for AWS S3
-                          prefix: binlogs
+                    backupSource:
+                      binlogServer:
+                        storage:
+                          s3:
+                            bucket: S3-BINLOG-BUCKET-NAME
+                            credentialsSecret: ps-cluster1-s3-credentials
+                            region: us-west-2
+                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE #Optional for AWS S3
+                            prefix: binlogs
                     type: date
                     date: "2026-03-20 09:15:00"
 
