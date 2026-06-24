@@ -27,29 +27,21 @@ For a restore on a new cluster or in a different Kubernetes environment, provide
 
 Create a Kubernetes Secret that holds the encryption key. The encryption key must be base64-encoded.
 
-To encode the key, use the following command:
+Generate the encryption key using the following command:
 
-=== ":material-linux: On Linux"
+```bash
+openssl rand -base64 24
+```
 
-    ```bash
-    echo -n 'key-string' | base64 --wrap=0 
-    ```
-
-=== ":material-apple: On Mac"
-
-    ```bash
-    echo -n 'key-string' | base64
-    ```
-
-Create a Secret configuration file and specify the encoded string within. Here's the example of the file `encryption-key.yaml`:
+Create a Secret configuration file and specify the generated string within. Here's the example of the file `encryption-key.yaml`:
 
 ```yaml title="encryption-key.yaml"
 apiVersion: v1
 kind: Secret
 metadata:
   name: my-encryption-key
-data:
-  encryptionKey: <base64-encoded-string>
+stringData:
+  encryptionKey: <encryption-key-string>
 ```
 
 Create the Secret object:
@@ -57,6 +49,8 @@ Create the Secret object:
 ```bash
 kubectl apply -f encryption-key.yaml -n <namespace>
 ```
+
+The Operator encodes the key when it creates the Secret.
 
 Store this Secret securely and back it up separately from your database backups. If you lose the key, encrypted backups cannot be restored.
 
