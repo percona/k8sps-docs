@@ -149,11 +149,11 @@
             
   <div class="md-banner" style="text-align: center;">
     Where the open source database community meets:
-    Use code <strong>PERCONA75</strong> and secure your spot for Percona Live.
+    Secure your spot for Percona Live.
 
     <a
       class="breakdance-link button-atom button-atom--primary bde-button__button"
-      href="https://perconalive.com/2026-usa/"
+      href="https://perconalive.com/2026-amsterdam/registration/"
       target="_blank"
       data-type="url"
       style="
@@ -6404,8 +6404,8 @@ option while cloning the code on this step. Please be careful.</p>
 </li>
 <li>
 <p>Create the Secrets object from this yaml file. Specify your namespace instead of the <code>&lt;namespace&gt;</code> placeholder:</p>
-<p><code>bash
-  kubectl apply -f deploy/backup/backup-secret-s3.yaml -n &lt;namespace&gt;</code></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/backup-secret-s3.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 </li>
 <li>
 <p>Update your <code>deploy/cr.yaml</code> configuration. Specify the following parameters in the <code>backup</code> section:</p>
@@ -6451,7 +6451,7 @@ Custom Resource, you can make your first backup.</p>
 <li><code>spec.clusterName</code> - specify the name of your cluster. This is the name you specified when deploying Percona Server for MySQL cluster.</li>
 <li><code>spec.storageName</code> - specify the name of your already configured storage.</li>
 </ul>
-<div class="highlight"><span class="filename">deploy/backup/backup.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
+<div class="highlight"><span class="filename">deploy/backup/backup.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>

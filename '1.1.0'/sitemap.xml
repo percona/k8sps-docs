@@ -2,362 +2,362 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/index.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/System-Requirements.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/TLS.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/annotations.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/architecture.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backup-cr.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backup-tutorial.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-compressed.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-delete.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-fine-tune.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-incremental.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-ondemand.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-pitr.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-restore-to-new-cluster.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-restore.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-scheduled.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups-storage.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/backups.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/change-replication-type.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/cluster-wide.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/connect.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/constraints.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/copyright.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/custom-install.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/data-insert.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/debug-backup-restore.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/debug-events.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/debug-logs.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/debug-shell.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/debug.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/delete.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/eks.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/encryption-setup.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/encryption.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/env-vars-custom.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/env-vars-operator.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/env-vars.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/expose.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/features.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/get-help.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/gke.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/haproxy-conf.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/helm.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/how-it-works.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/image-query.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/images.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/kubectl.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/kubernetes.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/minikube.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/monitor-kubernetes.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/monitoring-tutorial.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/monitoring.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/openshift.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/operator.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/options.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/pause.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/quickstart.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/restore-cr.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/router-conf.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/scaling.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/sidecar.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/telemetry.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/tls-cert-manager.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/tls-manual.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/tls-update.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/trademark-policy.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/update-crd-helm.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/update-crd-manual.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/update-db.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/update-openshift.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/update-operator.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/update.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/users.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/versions.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/what-next.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/index.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.1.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.11.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.html</loc>
-         <lastmod>2026-05-18</lastmod>
+         <lastmod>2026-06-25</lastmod>
     </url>
 </urlset>
