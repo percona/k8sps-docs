@@ -43,22 +43,33 @@ for more details about other components.
 
 ### Scale storage
 
-Kubernetes manages storage with a PersistentVolume (PV), a segment of
-storage supplied by the administrator, and a PersistentVolumeClaim
-(PVC), a request for storage from a user. 
+Kubernetes manages storage with the following components:
 
-Starting with Kubernetes v1.11, a user can increase the size of an existing
+* a PersistentVolume (PV) - a segment of
+storage supplied by the Kubernetes administrator,
+* a PersistentVolumeClaim
+(PVC) - a request for storage from a user.
+
+Starting with Kubernetes v1.11, you can increase the size of an existing
 PVC object (considered stable since Kubernetes v1.24).
-The user cannot shrink the size of an existing PVC object.
+Note that you **cannot shrink** the size of an existing PVC object.
 
-Starting from the Operator version 0.11.0, you can scale Percona Server for MySQL storage automatically by configuring the Custom Resource manifest. Alternatively, you can scale the storage manually. For either way, the volume type must support PVCs expansion.
+Use storage scaling to keep up with growing data while keeping the cluster online. The Operator supports the following scaling options:
+
+* automatic scaling - Starting with Operator version 1.2.0, the Operator monitors storage usage and scales the storage automatically
+* storage resizing with Volume Expansion capability - Starting with the Operator version 0.11.0, you can instruct the Operator to scale the storage by updating the Custom Resource manifest
+* manual scaling - scale the storage manually.
+
+You can also use an external autoscaler with the Operator. Enabling an external autoscaler disables the Operator's internal logic for automatic storage resizing. Choose one method based on your environment and requirements; using both simultaneously is not supported.
+
+For either option, the volume type must support PVCs expansion.
 
 #### Check expansion capability for your volume type
 
 Certain volume types support PVCs expansion by default.  You can run the following command to check if your storage supports the expansion capability:
 
-``` {.bash data-prompt="$" }
-$ kubectl describe sc <storage class name> | grep AllowVolumeExpansion
+```bash
+kubectl describe sc <storage class name> | grep AllowVolumeExpansion
 ```
 
 ??? example "Expected output"
@@ -71,13 +82,92 @@ Find exact details about
 PVCs and the supported volume types in [Kubernetes
 documentation  :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims).
 
+#### Automatic storage resizing
+
+Starting with version 1.2.0, the Operator can automatically resize Persistent Volume Claims (PVCs) for Percona Server for MySQL Pods based on your configured thresholds. The Operator monitors storage usage of MySQL PVCs. When the usage exceeds the defined threshold, the Operator triggers resizing until the storage size reaches the maximum limit.
+
+This feature gives you:
+
+* fewer outages from full disks because storage grows with demand
+* less guesswork on capacity planning and fewer last-minute fixes
+* lower operational effort for developers and platform engineers
+* cost control by expanding only when needed
+* a more predictable environment so teams can focus on delivery
+
+To enable automatic storage resizing, edit the `deploy/cr.yaml` Custom Resource manifest as follows:
+{.power-number}
+
+1. Make sure the MySQL component has a storage size set.
+
+    Example:
+
+    ```yaml
+    spec:
+      mysql:
+        volumeSpec:
+          persistentVolumeClaim:
+            resources:
+              requests:
+                storage: 6Gi
+    ```
+
+2. Configure autoscaling thresholds in the [`storageScaling`](operator.md#storage-scaling-section) subsection:
+
+    * `enableVolumeScaling` - set to `true`. 
+    * `autoscaling.enabled` - set to `true`
+    * `autoscaling.triggerThresholdPercent` - specify the usage percentage (50–95, default `80`). When usage exceeds this threshold, autoscaling is triggered
+    * `autoscaling.growthStep` - specify how much storage to add on each resize (default `2Gi`)
+    * `autoscaling.maxSize` - specify the upper limit for storage growth (minimum `1Gi`). When this limit is reached, scaling stops
+
+    Example configuration:
+
+    ```yaml
+    spec:
+      storageScaling:
+        enableVolumeScaling: true
+        autoscaling:
+          enabled: true
+          triggerThresholdPercent: 80
+          growthStep: 2Gi
+          maxSize: 10Gi
+    ```
+
+3. Apply the configuration:
+
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```
+
+When the Operator changes the storage size, it updates the Custom Resource status as follows:
+
+* adds the `pvc-resize-in-progress` annotation. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation
+* records the new size in the `currentSize` field
+* updates the `resizeCount` field
+* records any errors in the `lastError` field
+
+Run `kubectl get ps <cluster-name> -o yaml -n <namespace>` to check the current cluster state.
+
+??? example "Sample output"
+
+    ```{.text .no-copy}
+    storageAutoscaling:
+      datadir-ps-cluster1-mysql-0:
+        currentSize: 4194304Ki
+        lastResizeTime: "2026-01-23T15:08:59Z"
+        resizeCount: 2
+    ```
+
+The `storageAutoscaling` section appears under the `.status` in the Custom Resource.
+
+When the storage size reaches the limit, no further resizing is done and this event is recorded in the logs. You can either clean up the data or set a new limit based on your organization's policies and requirements. For help with common issues, see [Operator logs](debug-logs.md).
+
 #### Storage resizing with Volume Expansion capability
 
 In this document we're using the default Percona Server for MySQL cluster name `ps-cluster1`. If you have a different name, replace `ps-cluster1` with it in the commands.
 
 To enable storage resizing via volume expansion, do the following:
 
-1. Set the [enableVolumeExpansion](operator.md#enablevolumeexpansion) Custom Resource option to `true` (it is turned off by default). When enabled, the Operator will automatically expand the storage for you when you define a new size in the Custom Resource
+1. Set the [`storageScaling.enableVolumeScaling`](operator.md#storagescalingenablevolumescaling) Custom Resource option to `true` (it is turned off by default). When enabled, the Operator automatically expands storage when you increase the size in the Custom Resource
 2. Change the
 `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage` option in the `deploy/cr.yaml` file to the desired storage size.
 
@@ -86,8 +176,8 @@ To enable storage resizing via volume expansion, do the following:
     ```yaml
     spec:
       ...
-      enableVolumeExpansion: true
-        ...
+      storageScaling:
+        enableVolumeScaling: true
       mysql:
         ...
         volumeSpec:
@@ -100,8 +190,8 @@ To enable storage resizing via volume expansion, do the following:
 
 3. Apply the new configuration:
     
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f cr.yaml
+    ```bash
+    kubectl apply -f cr.yaml
     ```
 
 The storage size change takes some time. When it starts, the Operator automatically adds the `pvc-resize-in-progress` annotation to the `PerconaServerMySQL` Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation.

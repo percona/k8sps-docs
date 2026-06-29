@@ -65,11 +65,66 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 
 ### `enableVolumeExpansion`
 
-Enables or disables [automatic storage scaling / volume expansion](scaling.md#storage-resizing-with-volume-expansion-capability).
+Enables or disables [storage resizing with volume expansion](scaling.md#storage-resizing-with-volume-expansion-capability). 
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `false`  |
+
+This option is deprecated and will be removed in version 1.5.0. Use the [`storageScaling.enableVolumeScaling`](#storagescalingenablevolumescaling) option instead.
+
+## Storage scaling section
+
+The `storageScaling` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file controls volume expansion and automatic storage resizing for MySQL PVCs. See [Scale storage](scaling.md#scale-storage) for usage details.
+
+### `storageScaling.enableVolumeScaling`
+
+Enables or disables [storage scaling / volume expansion](scaling.md#storage-resizing-with-volume-expansion-capability) with Volume Expansion capability.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false`  |
+
+### `storageScaling.enableExternalAutoscaling`
+
+Enables or disables the use of external volume autoscaler. When disabled, the Operator uses its own expansion logic with Volume Expansion capability.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false`  |
+
+### `storageScaling.autoscaling.enabled`
+
+Enables automatic storage resizing based on user-defined thresholds. Read more about this feature in [Automatic storage resizing](scaling.md#automatic-storage-resizing).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false`  |
+
+### `storageScaling.autoscaling.triggerThresholdPercent`
+
+The percentage of the storage usage that triggers automatic resizing. Valid values are from 50 to 95. Default value is 80.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `80`  |
+
+### `storageScaling.autoscaling.growthStep`
+
+The amount to increase the storage during automatic resizing. Default value is `2Gi`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `2Gi`  |
+
+### `storageScaling.autoscaling.maxSize`
+
+The maximum size to which storage can be automatically resized.
+Autoscaling stops when storage reaches this limit. Must be at least `1Gi`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `10Gi`  |
 
 ### `initContainer.Image`
 
