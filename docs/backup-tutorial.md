@@ -98,11 +98,11 @@ cd percona-server-mysql-operator
   
 5. Apply the configuration. Specify your namespace instead of the `<namespace>` placeholder:
 
-	```bash
-	kubectl apply -f deploy/cr.yaml -n <namespace>
-	```
- 
-## Make a logical backup
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```
+
+## Make a backup
 
 Now that you have the [configured storage](#configure-backup-storage) in your
 Custom Resource, you can make your first backup.
@@ -113,6 +113,8 @@ Custom Resource, you can make your first backup.
     * `metadata.name` - specify the backup name. You will use this name to restore from this backup
     * `spec.clusterName` - specify the name of your cluster. This is the name you specified when deploying Percona Server for MySQL cluster.
     * `spec.storageName` - specify the name of your already configured storage.
+    
+    Here's the example configuration:
 
     ```yaml title="deploy/backup/backup.yaml"
     apiVersion: ps.percona.com/v1
@@ -129,23 +131,23 @@ Custom Resource, you can make your first backup.
 2. Apply the configuration. This instructs the Operator to start a backup. Specify your namespace instead of the `<namespace>` placeholder:
 
     ```bash
-	  kubectl apply -f deploy/backup/backup.yaml -n <namespace>
-	  ```
+    kubectl apply -f deploy/backup/backup.yaml -n <namespace>
+    ```
 
-3. Track the backup progress. 
+3. Track the backup progress.
 
     ```bash
-	  kubectl get ps-backup -n <namespace>
-	  ```
+    kubectl get ps-backup -n <namespace>
+    ```
 
-	??? example "Output"
+    ??? example "Output"
 
-	    ```{.text .no-copy}
-	    NAME      CLUSTER       STORAGE      DESTINATION                                      STATUS    COMPLETED   AGE
-	    backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s
-	    ```
+        ```{.text .no-copy}
+        NAME      CLUSTER       STORAGE      DESTINATION                                      STATUS    COMPLETED   AGE
+        backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s
+        ```
 
-	When the status changes to `Succeeded`, backup is made.
+    When the status changes to `Succeeded`, backup is made.
 
 ## Troubleshooting 
 
@@ -153,15 +155,15 @@ You may face issues with the backup. To identify the issue, you can do the follo
 
 1. View the information about the backup with the following command:
 
-   ```bash
-   kubectl get ps-backup <backup-name> -n <namespace> -o yaml
-   ```
+    ```bash
+    kubectl get ps-backup <backup-name> -n <namespace> -o yaml
+    ```
 
 2. [View the backup-agent logs](debug-logs.md). Use the command from step 1 to find the name of the pod where the backup was made. Check for the information in the `.status.backupSource` field to find the Pod where the backup process was run. To view the logs, run the following command:
   
-  ```bash
-  kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
-  ```
+    ```bash
+    kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
+    ```
 
 Congratulations! You have made the first backup manually. Want to learn more about backups? See the [Backup and restore](backups.md) section for how to [restore from a previously saved backup](backups-restore.md).
 
