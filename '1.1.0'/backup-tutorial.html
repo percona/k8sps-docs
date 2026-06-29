@@ -977,10 +977,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#make-a-logical-backup" class="md-nav__link">
+  <a href="#make-a-backup_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Make a logical backup
+        Make a backup
       
     </span>
   </a>
@@ -4366,10 +4366,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#make-a-logical-backup" class="md-nav__link">
+  <a href="#make-a-backup_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Make a logical backup
+        Make a backup
       
     </span>
   </a>
@@ -4522,7 +4522,7 @@ option while cloning the code on this step. Please be careful.</p>
 </code></pre></div>
 </li>
 </ol>
-<h2 id="make-a-logical-backup">Make a logical backup<a class="headerlink" href="#make-a-logical-backup" title="Permanent link">&para;</a></h2>
+<h2 id="make-a-backup_1">Make a backup<a class="headerlink" href="#make-a-backup_1" title="Permanent link">&para;</a></h2>
 <p class="power-number">Now that you have the <a href="#configure-backup-storage">configured storage</a> in your
 Custom Resource, you can make your first backup.</p>
 <ol>
@@ -4533,6 +4533,7 @@ Custom Resource, you can make your first backup.</p>
 <li><code>spec.clusterName</code> - specify the name of your cluster. This is the name you specified when deploying Percona Server for MySQL cluster.</li>
 <li><code>spec.storageName</code> - specify the name of your already configured storage.</li>
 </ul>
+<p>Here&rsquo;s the example configuration:</p>
 <div class="highlight"><span class="filename">deploy/backup/backup.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
 <span class="nt">metadata</span><span class="p">:</span>
@@ -4546,18 +4547,18 @@ Custom Resource, you can make your first backup.</p>
 </li>
 <li>
 <p>Apply the configuration. This instructs the Operator to start a backup. Specify your namespace instead of the <code>&lt;namespace&gt;</code> placeholder:</p>
-<p><code>bash
-  kubectl apply -f deploy/backup/backup.yaml -n &lt;namespace&gt;</code></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/backup.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 </li>
 <li>
-<p>Track the backup progress. </p>
-<p><code>bash
-  kubectl get ps-backup -n &lt;namespace&gt;</code></p>
+<p>Track the backup progress.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 <details class="example">
 <summary>Output</summary>
-<p><code>{.text .no-copy}
-NAME      CLUSTER       STORAGE      DESTINATION                                      STATUS    COMPLETED   AGE
-backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s</code></p>
+<div class="no-copy highlight"><pre><span></span><code>NAME      CLUSTER       STORAGE      DESTINATION                                      STATUS    COMPLETED   AGE
+backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s
+</code></pre></div>
 </details>
 <p>When the status changes to <code>Succeeded</code>, backup is made.</p>
 </li>
@@ -4565,15 +4566,17 @@ backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:3
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <p>You may face issues with the backup. To identify the issue, you can do the following:</p>
 <ol>
-<li>View the information about the backup with the following command:</li>
-</ol>
+<li>
+<p>View the information about the backup with the following command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml
 </code></pre></div>
-<ol>
-<li><a href="debug-logs.html">View the backup-agent logs</a>. Use the command from step 1 to find the name of the pod where the backup was made. Check for the information in the <code>.status.backupSource</code> field to find the Pod where the backup process was run. To view the logs, run the following command:</li>
-</ol>
+</li>
+<li>
+<p><a href="debug-logs.html">View the backup-agent logs</a>. Use the command from step 1 to find the name of the pod where the backup was made. Check for the information in the <code>.status.backupSource</code> field to find the Pod where the backup process was run. To view the logs, run the following command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>pod/&lt;pod-name&gt;<span class="w"> </span>-c<span class="w"> </span>xtrabackup<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
+</li>
+</ol>
 <p>Congratulations! You have made the first backup manually. Want to learn more about backups? See the <a href="backups.html">Backup and restore</a> section for how to <a href="backups-restore.html">restore from a previously saved backup</a>.</p>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p><a class="md-button" href="monitoring-tutorial.html">Monitor the database <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span></a></p>
@@ -4582,7 +4585,7 @@ backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:3
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 23, 2026 13:20:11 UTC">June 23, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 29, 2026 11:41:36 UTC">June 29, 2026</span>
       
         <br>
         Created:
