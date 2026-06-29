@@ -65,7 +65,7 @@ flowchart TB
 
 When a replica cluster joins the ClusterSet, it must receive the data from the source. This can be done in two ways:
 
-* Using the `clone` recovery method (default) — A replica cluster to join the ClusterSet must be without any data. The Operator makes a physical snapshot of the full dataset using the [`CLONE` plugin :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html) on the source cluster and transfers it to the replica.
+* Using the `clone` recovery method (default) — A replica cluster to join the ClusterSet must be without any data. MySQL  makes a physical snapshot of the full dataset using the [`CLONE` plugin :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html) on the source cluster and transfers it to the replica.
 * Using the `incremental` method — Restore the data from the source cluster on the replica before adding it to the ClusterSet. When it joins the ClusterSet, it catches up the binlog changes that have occurred on the source.
 
 ### When to use each recovery mode
@@ -111,7 +111,9 @@ For cross-region links, prefer `REQUIRED` or a stricter mode over the default `A
 Before you create a ClusterSet, ensure the following:
 
 * **Network connectivity** — ClusterSet members are linked by the network address, not Kubernetes references. Clusters can live in different Kubernetes clusters, on-premises or in another cloud but they must be reachable and managed by the Operator.
-* **Matching `clusterset` credentials** — The password in `spec.credentialsSecret` must match the `clusterset` key in each participating cluster's Secrets object. The primary's user table is cloned to replicas during `createReplicaCluster`, so credentials cannot differ per site.
+* **Matching system user credentials** — All system user credentials must be identical across every cluster in the ClusterSet. The primary's user table
+is cloned to replicas during `createReplicaCluster`, so
+credentials cannot differ per site.
 * **Unique endpoint hosts** — Each `host` value must be unique across all clusters in the ClusterSet (CEL-validated at admission). You can use Services or load balancers as endpoints.
 * **Group replication-compatible configuration** — Each cluster must be of group replication type and have the CLONE plugin loaded, `gtid_mode=ON`, `enforce_gtid_consistency=ON`, and other [InnoDB ClusterSet instance requirements :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-shell/8.4/en/innodb-clusterset-requirements.html#innodb-clusterset-requirements-mysql-instances). The group replication configuration of Percona Server for MySQL already includes these settings by default.
 * **Clean replicas** — Replica clusters must either be clean or have the dataset restored from the primary before joining the ClusterSet.
@@ -121,12 +123,11 @@ Before you create a ClusterSet, ensure the following:
 * **MySQL versioning** — Primary and replicas can have different but compatible MySQL versions. Replication is supported from one release series to the next higher series. For example, from the primary running Percona Server for MySQL 8.0.27+ to the replica running Percona Server for MySQL 8.4.x.
 * **Manual bootstrap for replicas** — When you deploy a replica site, specify `spec.mysql.bootstrap.mode: manual` to prevent the replica from starting as a Group Replication cluster. Instead, Pod-0 comes up and waits for the ClusterSet controller to create the group. Pod-1+ do not start until Pod-0 is Ready.
 * **Long operations as Jobs** — `createReplicaCluster`, switchover, and cluster removal run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.
-* **Single controller per ClusterSet** — One `PerconaServerMySQLClusterSet` CR per logical ClusterSet, typically in the namespace where you run the controller. Loss of that Kubernetes cluster does not destroy MySQL data; re-apply the CR to resume orchestration.
-* **Finalizer on delete** — `percona.com/clusterset-dissolve` runs `.dissolve()` before the CR is removed. Data in underlying clusters is preserved.
+* **Finalizer on delete** — The `percona.com/clusterset-dissolve` finalizer ensures that the ClusterSet dissolves when the `PerconaServerMySQLClusterSet` Custom Resource is removed. Data in underlying clusters is preserved.
+* **No automatic switchover** — All switchovers are user-initiated. You must edit the ClusterSet Custom Resource for a planned or a forced failover.
 
 ## Known limitations
 
-* **No automatic switchover** — All switchovers are user-initiated. You must edit the ClusterSet Custom Resource for a planned or a forced failover.
 * **No automatic rejoin to ClusterSet after replication stops** — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window and run the `dba.getCluster().getClusterSet().rejoinInstance(...)` command to rejoin the replica.
 * **No adopting existing ClusterSets** — The controller bootstraps a fresh ClusterSet or refuses if metadata is inconsistent. You cannot adopt a ClusterSet created manually with `mysqlsh`.
 * **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.

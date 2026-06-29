@@ -87,40 +87,48 @@ Before you start, read [Cross-site replication](replication.md) for architecture
     ??? example "Sample output"
 
         ```text
-
+        NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
+        source-cluster-haproxy         ClusterIP   34.118.234.124   <none>        3306/TCP,3307/TCP,3309/TCP,33060/TCP,33062/TCP    26m
+        source-cluster-mysql           ClusterIP   None             <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   26m
+        source-cluster-mysql-primary   ClusterIP   34.118.232.78    <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   26m
+        source-cluster-mysql-proxy     ClusterIP   None             <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   26m
+        source-cluster-mysql-unready   ClusterIP   None             <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   26m
         ```
 
-5. Export the Secrets object with the user credentials.
+5. All replica sites must have the same system user credentials as the primary site. To achieve this, export the Secrets object with the user credentials.
     
     * List the Secrets:
-       
-       ```bash
-       kubectl get secrets -n $SOURCE_NS
-       ```
 
-       ??? example "Sample output"
-           
-           ```text
+        ```bash
+        kubectl get secrets -n $SOURCE_NS
+        ```
 
-           ```
+        ??? example "Sample output"
 
-           The Secret with user credentials is `<cluster-name>-secrets`
+            ```{.text .no-copy}
+            internal-source-cluster      Opaque              8      25m
+            source-cluster-psuser-root   Opaque              11     25m
+            source-cluster-secrets       Opaque              8      25m
+            source-cluster-ssl           kubernetes.io/tls   3      25m
+            ```
+
+        The Secret with user credentials is `<cluster-name>-secrets`
 
     * Export the Secret:
-      
-       ```bash
-       kubectl get secret source-cluster-secrets -n $SOURCE_NS -o yaml > source-secret.yaml
-       ```
 
-    * Edit the file. Remove the `annotations`, `creationTimestamp`, `resourceVersion`, `selfLink`, and `uid` metadata fields from the resulting file to make it ready for the replica site. Also change the `namespace` to the namespace of your replica site. 
-       
-       Use the following scripts:
-      
-       ```bash
-       yq eval 'del(.metadata.ownerReferences, .metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid)' source-secret.yaml > replica-secret.yaml
-       yq eval '.metadata.namespace = "replica"' -i replica-secret.yaml
-       sed -i '' 's/source-cluster/replica-cluster/g' replica-secret.yaml
-       ```
+        ```bash
+        kubectl get secret source-cluster-secrets -n $SOURCE_NS -o yaml > source-secret.yaml
+        ```
+
+    * Edit the file. Remove the `annotations`, `creationTimestamp`, `resourceVersion`, `selfLink`, and `uid` metadata fields from the resulting file to make it ready for the replica site. Also change the `namespace` to the namespace of your replica site.
+
+        Use the following scripts:
+
+        ```bash
+        yq eval 'del(.metadata.ownerReferences, .metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid)' source-secret.yaml > replica-secret.yaml
+        yq eval '.metadata.namespace = "replica"' -i replica-secret.yaml
+        sed -i '' 's/source-cluster/replica-cluster/g' replica-secret.yaml
+        ```
 
 ## Step 2. Deploy the replica cluster
 
@@ -153,10 +161,6 @@ Before you start, read [Cross-site replication](replication.md) for architecture
         bootstrap:
           mode: manual
     ```
-
-    !!! important
-
-        The `clusterset` password in the replica Secrets must match the primary. The Operator generates a `clusterset` key on reconcile. For existing deployments, copy the `clusterset` value from the primary Secret into the replica Secret before creating the ClusterSet.
 
 4. Apply the configuration to create the replica cluster:
     
@@ -191,6 +195,13 @@ Before you start, read [Cross-site replication](replication.md) for architecture
     kubectl get service -n $REPLICA_NS
     ```
 
+    ??? example "Sample output"
+
+        ```text
+        NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
+        replica-cluster-mysql           ClusterIP   None             <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   5m31s
+        ```
+
 ## Step 3. Restore the data on the replica cluster from source (optional)
 
 By default, the replica cluster receives the data from source via the `clone` recovery method - the Operator uses `mysqlshell` to create a physical snapshot of the dataset from the source and transfer it to the replica. 
@@ -207,74 +218,75 @@ Now it's time to link clusters. To do this, configure a `PerconaServerMySQLClust
 
 1. Modify the  [deploy/clusterset.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/clusterset.yaml) template and specify the following:
 
-   * `name` - the name of the ClusterSet
-   * `primaryCluster` - the InnoDB name of the primary cluster
-   * `credentialsSecret.name` - the name of the Secret with the `clusterset` user credentials
-   * `createReplicaClusterOptions.recoveryMethod` — leave `clone` for clean replicas. Change to `incremental` if you [restored the data on the replica from the source](#step-3-restore-the-data-on-the-replica-cluster-from-source-optional).
-   * `mysqlshellRunner` — defines the helper Pod image used by the Operator to run MySQL Shell operations. The version must be compatible with the MySQL version you run in your clusters.
-   * `clusters` - the list of the ClusterSet members. For each cluster specify its InnoDBCluster name and the endpoint that the Operator will use to reach it. 
+    * `name` - the name of the ClusterSet
+    * `primaryCluster` - the InnoDB name of the primary cluster
+    * `credentialsSecret.name` - the name of the Secret with the `clusterset` user credentials
+    * `createReplicaClusterOptions.recoveryMethod` — leave `clone` for clean replicas. Change to `incremental` if you [restored the data on the replica from the source](#step-3-restore-the-data-on-the-replica-cluster-from-source-optional).
+    * `mysqlshellRunner` — defines the helper Pod image used by the Operator to run MySQL Shell operations. The version must be compatible with the MySQL version you run in your clusters.
+    * `clusters` - the list of the ClusterSet members. For each cluster specify its InnoDBCluster name and the endpoint that the Operator will use to reach it. 
 
-   Here's the example configuration:
+    Here's the example configuration:
 
-   === "Clone recovery"  
+    === "Clone recovery"  
 
-       ```yaml
-       apiVersion: ps.percona.com/v1
-       kind: PerconaServerMySQLClusterSet
-       metadata:
-         name: my-cluster-set
-         finalizers:
-           - percona.com/clusterset-dissolve
-       spec:
-         primaryCluster: sourcecluster
-         credentialsSecret:
-           name: source-cluster-secrets
-           key: clusterset
-         sslMode: AUTO
-         createReplicaClusterOptions:
-           recoveryMethod: clone
-         mysqlshellRunner:
-           image: percona/percona-server:{{ ps84recommended }}
-         clusters:
-           - innodbClusterName: sourcecluster
-             endpoints:
-               - host: source-cluster-mysql-primary.source.svc.cluster.local
-                 port: 3306
-           - innodbClusterName: replicacluster
-             endpoints:
-               - host: replica-cluster-mysql-0.replica-cluster-mysql.replica.svc.cluster.local
-                 port: 3306
-       ```
+        ```yaml
+        apiVersion: ps.percona.com/v1
+        kind: PerconaServerMySQLClusterSet
+        metadata:
+          name: my-cluster-set
+          finalizers:
+            - percona.com/clusterset-dissolve
+        spec:
+          primaryCluster: sourcecluster
+          credentialsSecret:
+            name: source-cluster-secrets
+            key: clusterset
+          sslMode: AUTO
+          createReplicaClusterOptions:
+            recoveryMethod: clone
+          mysqlshellRunner:
+            image: percona/percona-server:{{ ps84recommended }}
+          clusters:
+            - innodbClusterName: sourcecluster
+              endpoints:
+                - host: source-cluster-mysql-primary.source.svc.cluster.local
+                  port: 3306
+            - innodbClusterName: replicacluster
+              endpoints:
+                - host: replica-cluster-mysql-0.replica-cluster-mysql.replica.svc.cluster.local
+                  port: 3306
+        ```
 
-   === "Incremental recovery"  
+    === "Incremental recovery"  
 
-       ```yaml
-       apiVersion: ps.percona.com/v1
-       kind: PerconaServerMySQLClusterSet
-       metadata:
-         name: my-cluster-set
-         finalizers:
-           - percona.com/clusterset-dissolve
-       spec:
-         primaryCluster: sourcecluster
-         credentialsSecret:
-           name: source-cluster-secrets
-           key: clusterset
-         sslMode: AUTO
-         createReplicaClusterOptions:
-           recoveryMethod: incremental
-         mysqlshellRunner:
-           image: percona/percona-server:{{ ps84recommended }}
-         clusters:
-           - innodbClusterName: sourcecluster
-             endpoints:
-               - host: source-cluster-mysql-primary.source.svc.cluster.local
-                 port: 3306
-           - innodbClusterName: replicacluster
-             endpoints:
-               - host: replica-cluster-mysql-0.replica-cluster-mysql.replica.svc.cluster.local
-                 port: 3306
-       ```
+        ```yaml
+        apiVersion: ps.percona.com/v1
+        kind: PerconaServerMySQLClusterSet
+        metadata:
+          name: my-cluster-set
+          finalizers:
+            - percona.com/clusterset-dissolve
+        spec:
+          primaryCluster: sourcecluster
+          credentialsSecret:
+            name: source-cluster-secrets
+            key: clusterset
+          sslMode: AUTO
+          createReplicaClusterOptions:
+            recoveryMethod: incremental
+          mysqlshellRunner:
+            image: percona/percona-server:{{ ps84recommended }}
+          clusters:
+            - innodbClusterName: sourcecluster
+              endpoints:
+                - host: source-cluster-mysql-primary.source.svc.cluster.local
+                  port: 3306
+            - innodbClusterName: replicacluster
+              endpoints:
+                - host: replica-cluster-mysql-0.replica-cluster-mysql.replica.svc.cluster.local
+                  port: 3306
+        ```
+        
 2. Apply the manifest:
 
     ```bash
@@ -284,7 +296,7 @@ Now it's time to link clusters. To do this, configure a `PerconaServerMySQLClust
     After you apply the manifest, the controller:
 
     1. Creates the `mysqlshell-runner` Pod
-    2. Bootstraps the ClusterSet on the primary with `dba.createClusterSet()`
+    2. Bootstraps the ClusterSet on the primary with `dba.getCluster().createClusterSet()`
     3. Starts a Job to run `createReplicaCluster()` for the replica with the specified recovery mode
     4. Updates status as replication becomes healthy
 
@@ -414,7 +426,7 @@ After switchover, writes go to the new primary cluster. The former primary becom
 
 Use forced failover only when the current primary cluster is **unreachable** and you accept the risk of split-brain or lost transactions if the old primary is still alive.
 
-1. Confirm the primary is unreachable from the controller's perspective (`PrimaryClusterUnreachable` condition may be set).
+1. Confirm the primary is unreachable from the controller's perspective (the `ErrorReconcile: True` condition with the reason `PrimaryUnreachable` may be set).
 2. Enable forced failover and change the primary:
 
 ```bash
@@ -481,8 +493,7 @@ kubectl delete ps-clusterset my-cluster-set -n $SOURCE_NS
 The `percona.com/clusterset-dissolve` finalizer:
 
 1. Waits for any in-flight `createReplicaCluster` Job to finish
-2. Runs `.dissolve()` on the InnoDB ClusterSet
-3. Removes the Custom Resource
+2. Runs `.dissolve()` on the InnoDB ClusterSet Removes the Custom Resource
 
 Underlying `PerconaServerMySQL` clusters **continue running** as standalone InnoDB Clusters. The per-site Operator keeps managing them.
 
@@ -499,7 +510,10 @@ To delete replica and primary clusters themselves, delete their `PerconaServerMy
 | Replica Pod-0 stays NotReady | ClusterSet Job still running, or `createReplicaCluster` failed |
 | `Ready: False`, reason `ReplicaNotStandalone` | Target cluster is already in another InnoDB Cluster or ClusterSet |
 | Switchover stuck | Check `SwitchoverInProgress` condition and switchover Job status |
-| `PrimaryClusterUnreachable` during planned switchover | Fix primary connectivity or use forced failover with explicit opt-in |
+| `ErrorReconcile: True`, reason `AccessDenied` | Incorrect password configured on the replica site |
+| `ErrorReconcile: True`, reason `PrimaryUnreachable` | Primary cluster is not reachable |
+| `ReplicaManagementFailure` | One or more replicas could not be added or removed. See the condition message for exact details. Make sure that your replicas are reachable before removing them. |
+
 
 For status field reference, see [Custom resource statuses](cr-statuses.md).
 
