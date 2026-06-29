@@ -2007,7 +2007,9 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 ### `orchestrator.expose.type`
 
-The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for Orchestrator instances exposure.
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used to expose the Orchestrator HTTP API (port `3000`). The default `ClusterIP` keeps the API reachable only inside the cluster.
+
+When you change this option to `LoadBalancer` or `NodePort`, the Orchestrator API becomes reachable from outside the cluster. Satrting with Operator version 1.2.0, all API requests must authenticate. To learn more anout authentication, refer to [Orchestrator HTTP API authentication](users.md#orchestrator-http-api-authentication) section.
 
 | Value type  | Example    |
 | ----------- | ---------- |

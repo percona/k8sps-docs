@@ -42,6 +42,7 @@ Keep your data secure with built-in security features:
 - Data-at-rest encryption with key management integration
 - Role-based access control with fine-grained permissions
 - Secret management with Kubernetes-native secrets
+- Orchestrator API authentication for async replication clusters (Available starting with version 1.2.0)
 
 ### Monitoring and observability
 
