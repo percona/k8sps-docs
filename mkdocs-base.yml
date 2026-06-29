@@ -229,6 +229,9 @@ nav:
           - "Control Pod scheduling": constraints.md             
           - "Fine-tune MySQL options": options.md
           - "Multi-namespace deployment": cluster-wide.md
+          - Cross-site replication: 
+            - "About cross-site replication": replication.md
+            - "Cross-site replication: setup and use": replication-setup.md
           - Define environment variables:
               - Overview: env-vars.md
               - "Configure Operator environment variables": env-vars-operator.md
@@ -263,8 +266,10 @@ nav:
     - Reference:
         - Custom Resource reference:
             - "Custom Resource options": operator.md
+            - "ClusterSet Resource options": clusterset-cr.md
             - "Backup Resource options": backup-cr.md
             - "Restore Resource options": restore-cr.md
+            - "Custom resource statuses": cr-statuses.md
         - Certified images:
             - "Percona certified images": images.md
             - "Retrieve certified images": image-query.md

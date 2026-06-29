@@ -3,6 +3,7 @@
 Percona Operator for MySQL uses [Custom Resources :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) to manage options for the various components of the cluster.
 
 * `PerconaServerMySQL` Custom Resource with options for the cluster,
+* `PerconaServerMySQLClusterSet` Custom Resource with options for InnoDB ClusterSet — see [ClusterSet Resource options](clusterset-cr.md) and [cross-site replication](replication.md),
 * `PerconaServerMySQLBackup` Custom Resource contains options for Percona XtraBackup used to backup Percona Server for MySQL
 * `PerconaServerMySQLRestore` Custom Resource contains options for restoring Percona Server for MySQL from backups.
 
@@ -299,6 +300,21 @@ The cluster type: `async` for [Asynchronous replication :octicons-link-external-
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `group-replication` |
+
+### `mysql.bootstrap.mode`
+
+Controls whether the Operator forms a Group Replication cluster automatically on first start. Use `manual` for replica sites in [cross-site replication](replication.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `manual` |
+
+Supported values:
+
+| Value | Meaning |
+| ----- | ------- |
+| `auto` (default) | Pod-0 runs the `dba.createCluster()` function when no peers exist. The same behavior is when the value for `bootstrap` is not set. |
+| `manual` | Pod-0 configures MySQL for Group Replication but does not create a cluster. Pod-0 stays in the `NotReady` state until the ClusterSet controller runs `createReplicaCluster()`. Pod-1 and above do not start until Pod-0 is `Ready`. The Percona Server for MySQL cluster reports the `Initializing` state and the Operator sets the `AwaitingExternalBootstrap` status condition.|
 
 ### `mysql.autoRecovery`
 
@@ -3065,5 +3081,3 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `400m` |
-
-

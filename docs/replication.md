@@ -1,0 +1,138 @@
+# Cross-site replication
+
+Enterprises running MySQL at scale often need to span multiple regions, availability zones, or clouds, with a live copy of data in each location. Each site must be a live replica of the primary site, protected from accidental writes and ready to take over traffic during an outage or planned failover. Group Replication keeps nodes in sync within a single cluster, but it does not by itself connect separate clusters across sites.
+
+Cross-site replication closes that gap. It links multiple Group Replication clusters into a single [MySQL InnoDB ClusterSet :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-shell/8.4/en/innodb-clusterset.html) managed through a dedicated `PerconaServerMySQLClusterSet` Custom Resource (`ps-clusterset`). Each site keeps its own `PerconaServerMySQL` cluster of the Group Replication type. The ClusterSet Custom Resource coordinates replication and topology between them.
+
+## Why to use cross-site replication
+
+With cross-site replication, you can achieve the following scenarios:
+
+* **Disaster recovery** — Keep a live replica cluster in a second region that you can promote during an outage.
+* **Geo-redundancy** — Protect against regional outages by maintaining independent but synchronized clusters in separate geographic locations, ensuring high data availability and business continuity.
+* **Read distribution** — Serve regional read traffic from a local replica cluster while writes stay on the primary cluster.
+* **Deployment flexibility** — Run your replica cluster in the same Kubernetes cluster, a different cluster, or outside Kubernetes entirely.
+
+## Architecture
+
+Cross-site replication is implemented via a separate `PerconaServerMySQLClusterSet` Custom Resource.
+
+You declare which clusters participate, which one is the primary, and how replicas receive the data when they join the ClusterSet in the `PerconaServerMySQLClusterSet` Custom Resource manifest. The Operator automates the ClusterSet provisioning and lifecycle management in a similar way it does for a standalone Percona Server for MySQL cluster. It bootstraps the ClusterSet, adds or removes replica sites, refreshes status, and runs switchover when you change the primary.
+
+The Operator uses a dedicated `clusterset` [system user](users.md#system-users) with the grants required for ClusterSet AdminAPI operations. Each cluster must share this user's credentials.
+
+![image](assets/images/innodb_clusterset.png)
+
+* The **primary cluster** accepts writes and replicates changes asynchronously to replica clusters over a dedicated replication channel.
+* Each **replica cluster** is a full Group Replication cluster (read-only at the ClusterSet level) that receives async replication from the primary cluster's PRIMARY member.
+* The **ClusterSet controller** (in the Operator Pod) reconciles the `PerconaServerMySQLClusterSet` Custom Resource, manages the `mysqlshell-runner` Pod, and runs long operations (such as `createReplicaCluster`) as Kubernetes Jobs.
+
+The ClusterSet controller is a **pure orchestrator**: it does not manage Pods in remote clusters. It only needs network reachability to MySQL endpoints and the ClusterSet Custom Resource in one Kubernetes namespace.
+
+The communication in the ClusterSet is done through the MySQL protocol, which enables linking replica clusters deployed in the same or a different Kubernetes environment, or outside Kubernetes on-premises. All replicas must be reachable over the network.
+
+The Operator starts a separate `mysqlshell-runner` Pod with **MySQL Shell (`mysqlsh`)** and uses it to manage the ClusterSet. The `mysqlsh` version must be compatible with the Percona Server for MySQL version you run in your clusters.
+
+```mermaid
+flowchart TB
+    subgraph k8s_site_a["Kubernetes site A"]
+        CR1["PerconaServerMySQL<br/>cluster1 (GR)"]
+        CS["PerconaServerMySQLClusterSet CR"]
+        RUNNER["mysqlshell-runner Pod"]
+        CTRL["ClusterSet controller"]
+        CR1 --- CTRL
+        CS --- CTRL
+        CTRL --- RUNNER
+    end
+
+    subgraph k8s_site_b["Kubernetes site B (or remote)"]
+        CR2["PerconaServerMySQL<br/>cluster2 (GR, bootstrap: manual)"]
+    end
+
+    subgraph mysql_layer["MySQL InnoDB ClusterSet"]
+        P["Primary InnoDB Cluster<br/>(cluster1)"]
+        R["Replica InnoDB Cluster<br/>(cluster2)"]
+        P -->|"async replication"| R
+    end
+
+    RUNNER -->|"mysqlsh AdminAPI"| P
+    RUNNER -->|"mysqlsh AdminAPI"| R
+    CR1 --> P
+    CR2 --> R
+```
+
+## Data recovery modes
+
+When a replica cluster joins the ClusterSet, it must receive the data from the source. This can be done in two ways:
+
+* Using the `clone` recovery method (default) — A replica cluster to join the ClusterSet must be without any data. The Operator makes a physical snapshot of the full dataset using the [`CLONE` plugin :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html) on the source cluster and transfers it to the replica.
+* Using the `incremental` method — Restore the data from the source cluster on the replica before adding it to the ClusterSet. When it joins the ClusterSet, it catches up the binlog changes that have occurred on the source.
+
+### When to use each recovery mode
+
+| Recovery mode | Usage |
+| ------------- | ----- |
+| CLONE | For small datasets and low-latency networks |
+| Incremental | WAN links and multi-TB datasets where a full online clone can take a long time and is expensive to retry |
+
+## TLS for replication channels
+
+Cross-site replication data flows over asynchronous replication channels between the primary and replica clusters. To secure those channels, configure TLS as follows:
+
+1. **Enable TLS on each participating cluster** — Set up transport encryption on every `PerconaServerMySQL` cluster as described in [Transport Layer Security (TLS)](TLS.md). Each site uses its own certificates and Secrets.
+2. **Set `spec.sslMode` on the ClusterSet CR** — This tells MySQL Shell how to configure TLS on the ClusterSet replication channels.
+
+### Supported SSL modes
+
+* `Auto` (default) – use TLS when the cluster supports it
+* `DISABLED` - disable TLS encryption for the ClusterSet
+replication channels.
+* `REQUIRED` - enable TLS encryption for the ClusterSet
+replication channels.
+* `VERIFY_CA` - enable TLS encryption for the ClusterSet `REQUIRED`, and additionally verify the
+peer server TLS certificate against the configured Certificate
+Authority (CA) certificates. Server certificates do not need to be identical, but they must chain to a **mutually trusted CA** (in practice, often the same CA on both sides)
+* `VERIFY_IDENTITY` - same CA trust level as for `VERIFY_CA` mode, plus the **primary** server's certificate must list the endpoint hostname replicas connect to in its SAN.
+
+For cross-region links, prefer `REQUIRED` or a stricter mode over the default `AUTO`.
+
+## Availability
+
+| Requirement | Supported versions |
+| ----------- | ------------------ |
+| **Operator** | Percona Operator for MySQL **1.2.0** and later |
+| **Percona Server for MySQL** | **8.0.27** and later, **8.4** (tested with {{ ps80recommended }} and {{ ps84recommended }}) |
+| **MySQL Shell** | `mysqlsh` version must match MySQL endpoints it talks to |
+| **Cluster type** | `group-replication` only |
+| **Kubernetes** | Same platforms as the Operator — see [Versions compatibility](versions.md) |
+
+## Requirements
+
+Before you create a ClusterSet, ensure the following:
+
+* **Network connectivity** — ClusterSet members are linked by the network address, not Kubernetes references. Clusters can live in different Kubernetes clusters, on-premises or in another cloud but they must be reachable and managed by the Operator.
+* **Matching `clusterset` credentials** — The password in `spec.credentialsSecret` must match the `clusterset` key in each participating cluster's Secrets object. The primary's user table is cloned to replicas during `createReplicaCluster`, so credentials cannot differ per site.
+* **Unique endpoint hosts** — Each `host` value must be unique across all clusters in the ClusterSet (CEL-validated at admission). You can use Services or load balancers as endpoints.
+* **Group replication-compatible configuration** — Each cluster must be of group replication type and have the CLONE plugin loaded, `gtid_mode=ON`, `enforce_gtid_consistency=ON`, and other [InnoDB ClusterSet instance requirements :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-shell/8.4/en/innodb-clusterset-requirements.html#innodb-clusterset-requirements-mysql-instances). The group replication configuration of Percona Server for MySQL already includes these settings by default.
+* **Clean replicas** — Replica clusters must either be clean or have the dataset restored from the primary before joining the ClusterSet.
+
+## Implementation specifics
+
+* **MySQL versioning** — Primary and replicas can have different but compatible MySQL versions. Replication is supported from one release series to the next higher series. For example, from the primary running Percona Server for MySQL 8.0.27+ to the replica running Percona Server for MySQL 8.4.x.
+* **Manual bootstrap for replicas** — When you deploy a replica site, specify `spec.mysql.bootstrap.mode: manual` to prevent the replica from starting as a Group Replication cluster. Instead, Pod-0 comes up and waits for the ClusterSet controller to create the group. Pod-1+ do not start until Pod-0 is Ready.
+* **Long operations as Jobs** — `createReplicaCluster`, switchover, and cluster removal run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.
+* **Single controller per ClusterSet** — One `PerconaServerMySQLClusterSet` CR per logical ClusterSet, typically in the namespace where you run the controller. Loss of that Kubernetes cluster does not destroy MySQL data; re-apply the CR to resume orchestration.
+* **Finalizer on delete** — `percona.com/clusterset-dissolve` runs `.dissolve()` before the CR is removed. Data in underlying clusters is preserved.
+
+## Known limitations
+
+* **No automatic switchover** — All switchovers are user-initiated. You must edit the ClusterSet Custom Resource for a planned or a forced failover.
+* **No automatic rejoin to ClusterSet after replication stops** — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window and run the `dba.getCluster().getClusterSet().rejoinInstance(...)` command to rejoin the replica.
+* **No adopting existing ClusterSets** — The controller bootstraps a fresh ClusterSet or refuses if metadata is inconsistent. You cannot adopt a ClusterSet created manually with `mysqlsh`.
+* **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.
+* **Credential rotation on replicas** — The `clusterset` user password is replicated from the primary; you cannot rotate it independently on replica clusters while they are ClusterSet members.
+* **Minimum replica size** — A replica Group Replication cluster still needs enough members for local high availability (typically 3). Single-node replicas are supported for testing but not recommended for production.
+
+## Deployment
+
+For step-by-step instructions, see [Cross-site replication: setup and use](replication-setup.md).

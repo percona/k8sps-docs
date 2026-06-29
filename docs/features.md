@@ -17,6 +17,12 @@ Never lose sleep over database downtime again. The Operator provides robust high
 
 Choose between [group replication](architecture.md#group-replication) (GA) for stronger consistency or [asynchronous replication](architecture.md#asynchronous-replication-tech-preview) (tech preview) for lower latency—both with automatic failover capabilities.
 
+### Cross-site replication
+
+Link Group Replication clusters across regions, availability zones, or Kubernetes environments into the InnoDB ClusterSet managed by the Operator. Instead of building custom replication tooling between sites, you apply a `PerconaServerMySQLClusterSet` Custom Resource and let the Operator handle topology lifecycle.
+
+Cross-site replication requires Percona Operator for MySQL 1.2.0 or later and Group Replication clusters on Percona Server for MySQL 8.0.27+ or 8.4. Learn more in the [cross-site replication documentation](replication.md).
+
 ### Automated backup and restore flows
 
 Protect your data with Percona XtraBackup - an enterprise-grade backup solution for hot, non blocking backups. Run:
@@ -76,3 +82,4 @@ This declarative approach means you describe what you want, not how to achieve i
 - [Backup and restore](backups.md) - Protect your data with automated backups
 - [Monitoring setup](monitoring.md) - Gain visibility into your database performance
 - [Security configuration](TLS.md) - Secure your database communications
+- [Cross-site replication](replication.md) - Link Group Replication clusters across regions and sites

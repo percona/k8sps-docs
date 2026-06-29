@@ -80,6 +80,7 @@ The following table shows system users’ names and purposes.
 | Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
 | Operator Admin | operator     | operator            | Database administrative user, should be used only by the Operator      |
 | Replication    | replication  | replication         | Administrative user needed for replication                             |
+| ClusterSet     | clusterset   | clusterset          | Administrative user for InnoDB ClusterSet AdminAPI operations and [cross-site replication](replication.md); should be used only by the Operator's ClusterSet controller |
 | PMM Server token | | pmmservertoken | [The service token used to access PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html) |
 
 ### YAML Object Format
@@ -102,6 +103,7 @@ stringData:
   pmmserverkey: my_pmm_server_key
   operator: operator_password
   replication: replication_password
+  clusterset: clusterset_password
   orchestrator: orchestrator_password
   heartbeat: heartbeat_password
 ```
