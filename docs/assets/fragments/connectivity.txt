@@ -23,10 +23,10 @@ Here's how to connect:
 3. Retrieve the user credentials from the Secret:
    
     ```bash
-    kubectl get secret $SECRET_NAME -n $NAMESPACE \
-      -o jsonpath='{.data.user}' | base64 --decode)
-    kubectl get secret $SECRET_NAME -n $NAMESPACE \
-      -o jsonpath='{.data.password}' | base64 --decode)
+{{ commandName }} get secret "$SECRET_NAME" -n "$NAMESPACE" \
+  -o jsonpath='{.data.user}' | base64 --decode && echo
+{{ commandName }} get secret "$SECRET_NAME" -n "$NAMESPACE" \
+  -o jsonpath='{.data.password}' | base64 --decode && echo
     ```
 
 

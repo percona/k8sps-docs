@@ -37,10 +37,10 @@ Here's how to connect:
 3. Retrieve the user credentials from the Secret:
    
     ```bash
-    kubectl get secret $SECRET_NAME -n $NAMESPACE \
-      -o jsonpath='{.data.user}' | base64 --decode)
-    kubectl get secret $SECRET_NAME -n $NAMESPACE \
-      -o jsonpath='{.data.password}' | base64 --decode)
+kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" \
+  -o jsonpath='{.data.user}' | base64 --decode && echo
+kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" \
+  -o jsonpath='{.data.password}' | base64 --decode && echo
     ```
 
 4. Run a container with the `mysql` client and connect its console output to your terminal. The following command does this, naming the new Pod `percona-client`:
