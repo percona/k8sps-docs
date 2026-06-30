@@ -2116,7 +2116,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 
 ### `orchestrator.resources.limits.cpu`
 
-[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+[Kubernetes CPU limits :octicons-link-external-16:](ehttps://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -2129,6 +2129,14 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `1Gi` |
+
+### `orchestrator.configuration`
+
+Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration, used to tune failover behavior per cluster (for example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds`). The value must be a JSON object passed as a string. Keys that the Operator manages itself - such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths - cannot be overridden and are silently ignored. Updating this field triggers a rolling restart of the Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `'{"FailMasterPromotionOnLagMinutes": 10}'` |
 
 ## <a name="operator-pmm-section"></a>PMM section
 
