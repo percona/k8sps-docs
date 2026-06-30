@@ -63,10 +63,18 @@ flowchart TB
 
 ## Data recovery modes
 
-When a replica cluster joins the ClusterSet, it must receive the data from the source. This can be done in two ways:
+When a replica cluster joins the ClusterSet, it must receive the data from the primary. This can be done in two ways:
 
-* Using the `clone` recovery method (default) — A replica cluster to join the ClusterSet must be without any data. MySQL  makes a physical snapshot of the full dataset using the [`CLONE` plugin :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html) on the source cluster and transfers it to the replica.
-* Using the `incremental` method — Restore the data from the source cluster on the replica before adding it to the ClusterSet. When it joins the ClusterSet, it catches up the binlog changes that have occurred on the source.
+* Using the `clone` recovery method (default) — A replica cluster to join the ClusterSet must be without any data. MySQL  makes a physical snapshot of the full dataset using the [`CLONE` plugin :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html) on the primary cluster and transfers it to the replica.
+* Using the `incremental` method — Restore the data from the primary cluster on the replica before adding it to the ClusterSet. When it joins the ClusterSet, it catches up the binlog changes that have occurred on the primary.
+   
+   !!! important
+       
+       Binlogs must exist on the primary cluster for the incremental recovery mode to work.
+
+You can explicitly specify the recovery method for a replica cluster in the ClusterSet custom resource using `spec.createReplicaClusterOptions.recoveryMethod`. Set this field to `clone` or `incremental` to select the method directly.
+
+Alternatively, you can set the option value to `auto`. With `auto`, the MySQL Shell evaluates the transaction set of the replica cluster and the primary cluster: if an incremental recovery is possible and safe, it will use the `incremental` method. Otherwise, it will automatically fall back to the `clone` method. This makes joining a replica cluster both flexible and reliable.
 
 ### When to use each recovery mode
 
@@ -128,7 +136,7 @@ credentials cannot differ per site.
 
 ## Known limitations
 
-* **No automatic rejoin to ClusterSet after replication stops** — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window and run the `dba.getCluster().getClusterSet().rejoinInstance(...)` command to rejoin the replica.
+* **No automatic rejoin to ClusterSet after replication stops** — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window, connect to the replica cluster and run the `dba.rebootClusterFromCompleteOutage()` command to re-initialize the cluster metadata. Then connect to the primary cluster and run the `dba.getCluster().getClusterSet().rejoinCluster("<innodb_cluster_name>")` command to rejoin the replica.
 * **No adopting existing ClusterSets** — The controller bootstraps a fresh ClusterSet or refuses if metadata is inconsistent. You cannot adopt a ClusterSet created manually with `mysqlsh`.
 * **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.
 * **Credential rotation on replicas** — The `clusterset` user password is replicated from the primary; you cannot rotate it independently on replica clusters while they are ClusterSet members.

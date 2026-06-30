@@ -493,7 +493,9 @@ kubectl delete ps-clusterset my-cluster-set -n $SOURCE_NS
 The `percona.com/clusterset-dissolve` finalizer:
 
 1. Waits for any in-flight `createReplicaCluster` Job to finish
-2. Runs `.dissolve()` on the InnoDB ClusterSet Removes the Custom Resource
+2. Runs `.dissolve()` on the InnoDB ClusterSet 
+3. Removes the Custom Resource
+4. Updates the `spec.bootstrap.mode` on the replica cluster to `auto`. 
 
 Underlying `PerconaServerMySQL` clusters **continue running** as standalone InnoDB Clusters. The per-site Operator keeps managing them.
 
