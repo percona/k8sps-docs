@@ -44,6 +44,14 @@ mysql> SELECT * FROM database1.table1 LIMIT 1;
 You may also try executing any simple SQL statement to ensure the
 permissions have been successfully granted.
 
+## Connection secrets
+
+For the `root` user, the Operator creates a Secret named `<cluster_name>-psuser-root` that contains ready-to-use connection details: hostname, port, username, password, connection URIs, and proxy endpoints. The Operator updates this Secret automatically when the primary changes or when proxy configuration changes.
+
+For example, the `root` user on a cluster named `ps-cluster1` gets a Secret called `ps-cluster1-psuser-root`. Application Pods can mount this Secret directly instead of assembling connection parameters manually.
+
+See [Connection secrets](connection-secrets.md) for the full field reference, read-only connection guidance, and application integration examples.
+
 ## System Users
 
 To automate the deployment and management of the cluster components,

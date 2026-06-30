@@ -189,6 +189,8 @@ nav:
           - "Generic Kubernetes installation": kubernetes.md
     
     - Daily operations:  
+          - "Manage users": users.md
+          - "Connection secrets": connection-secrets.md
           - Backup and restore:
               - "About backups": backups.md
               - "Configure storage for backups": backups-storage.md
@@ -206,7 +208,7 @@ nav:
               - "Monitor your cluster with PMM": monitoring.md
               - "Monitor Kubernetes": monitor-kubernetes.md
           - "Scale your cluster": scaling.md
-          - "Manage users": users.md
+
 
     - Production configuration:
           - TLS/SSL encryption: 
