@@ -72,10 +72,6 @@ When a replica cluster joins the ClusterSet, it must receive the data from the p
        
        Binlogs must exist on the primary cluster for the incremental recovery mode to work.
 
-You can explicitly specify the recovery method for a replica cluster in the ClusterSet custom resource using `spec.createReplicaClusterOptions.recoveryMethod`. Set this field to `clone` or `incremental` to select the method directly.
-
-Alternatively, you can set the option value to `auto`. With `auto`, the MySQL Shell evaluates the transaction set of the replica cluster and the primary cluster: if an incremental recovery is possible and safe, it will use the `incremental` method. Otherwise, it will automatically fall back to the `clone` method. This makes joining a replica cluster both flexible and reliable.
-
 ### When to use each recovery mode
 
 | Recovery mode | Usage |
@@ -137,9 +133,10 @@ credentials cannot differ per site.
 ## Known limitations
 
 * **No automatic rejoin to ClusterSet after replication stops** — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window, connect to the replica cluster and run the `dba.rebootClusterFromCompleteOutage()` command to re-initialize the cluster metadata. Then connect to the primary cluster and run the `dba.getCluster().getClusterSet().rejoinCluster("<innodb_cluster_name>")` command to rejoin the replica.
-* **No adopting existing ClusterSets** — The controller bootstraps a fresh ClusterSet or refuses if metadata is inconsistent. You cannot adopt a ClusterSet created manually with `mysqlsh`.
+* **No adopting existing ClusterSets** — The controller only bootstraps a new ClusterSet or refuses if the metadata is inconsistent. You cannot adopt into management any ClusterSet that was created manually with `mysqlsh`.
+* **Restoring backups onto replica clusters in a ClusterSet are not supported** — While a replica is part of a ClusterSet, restoring a backup onto it is not supported. If you attempt to do so, the replica will fail to rejoin the ClusterSet afterward. In this case, you must manually reboot the cluster (using `dba.rebootClusterFromCompleteOutage()`) and rejoin it to the ClusterSet from the primary.
 * **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.
-* **Credential rotation on replicas** — The `clusterset` user password is replicated from the primary; you cannot rotate it independently on replica clusters while they are ClusterSet members.
+* **Credential rotation on replicas** — The `clusterset` user password is always replicated from the primary; you cannot rotate it independently on replica clusters while they are ClusterSet members.
 * **Minimum replica size** — A replica Group Replication cluster still needs enough members for local high availability (typically 3). Single-node replicas are supported for testing but not recommended for production.
 
 ## Deployment

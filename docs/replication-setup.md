@@ -397,7 +397,9 @@ kubectl get ps replica-cluster -n $REPLICA_NS -o jsonpath='{range .status.condit
 
     You should see the same data that you inserted.
 
-## Step 6. Planned switchover
+## Usage scenarios
+
+### Planned switchover
 
 To promote a replica cluster to primary, edit `spec.primaryCluster`:
 
@@ -422,7 +424,7 @@ kubectl get jobs -n $SOURCE_NS | grep switchover
 
 After switchover, writes go to the new primary cluster. The former primary becomes a replica.
 
-## Step 7. Forced failover
+### Forced failover
 
 Use forced failover only when the current primary cluster is **unreachable** and you accept the risk of split-brain or lost transactions if the old primary is still alive.
 
@@ -448,41 +450,77 @@ The controller runs `forcePrimaryCluster()`. The old primary cluster is marked *
 
 To recover an invalidated cluster later, either use MySQL Shell `rejoinCluster()` manually, or remove and recreate the cluster in the ClusterSet.
 
-## Step 8. Remove a replica cluster
+### Remove a replica cluster
 
 Remove a replica by deleting its entry from `spec.clusters[]`.
 
-Removal is **one-way**. You cannot add the same cluster back to the same ClusterSet after removal.
+!!! important
 
-Run the following command to remove a cluster
+    Removal is **one-way**. You cannot add the same cluster back to the same ClusterSet after removal.
 
-```bash
-kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=json \
-  -p='[{"op": "remove", "path": "/spec/clusters/1"}]'
-```
+Run the following command to remove a cluster:
 
-Adjust the index to match the cluster you remove.
+=== "Replica is running (reachable)"
 
-The controller:
+    Remove the replica by patching the ClusterSet:
 
-1. Runs `removeCluster()` for the removed member
-2. Dissolves Group Replication on that cluster
-3. Lets the per-site Operator re-bootstrap it as a standalone InnoDB Cluster
+    ```bash
+    kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=json \
+      -p='[{"op": "remove", "path": "/spec/clusters/1"}]'
+    ```
 
-If the replica is **unreachable**, the removal Job fails unless you opt in to forced removal:
+    Adjust the index in `"path": "/spec/clusters/1"` to match the cluster you want to remove.
 
-```yaml
-spec:
-  unsafeFlags:
-    forcedClusterRemoval: true
-```
+    The controller:
 
-!!! warning
+    1. Runs `removeCluster()` for the removed member
+    2. Dissolves Group Replication on that cluster
+    3. Lets the per-site Operator re-bootstrap it as a standalone InnoDB Cluster
 
-    Forced cluster removal abandons any unreplicated transactions on the removed cluster. The cluster may require manual cleanup or a full rebuild.
+=== "Replica is offline or unreachable"
+
+    If the replica cluster is **offline or unreachable**, simply deleting its entry from `spec.clusters[]` is not enough, as this will not remove it. You must enable forced removal by also setting the `spec.unsafeFlags.forcedClusterRemoval` option to `true`:
+
+    ```bash
+    kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=json -p='[
+      {"op": "remove", "path": "/spec/clusters/1"},
+      {"op": "add", "path": "/spec/unsafeFlags/forcedClusterRemoval", "value": true}
+    ]'
+    ```
+
+    !!! warning
+
+        Forced cluster removal abandons any unreplicated transactions on the removed cluster. The cluster may require manual cleanup or a full rebuild.
+
+    **If you deleted an unreachable replica without the `forcedClusterRemoval`**
+
+    If you try to remove an offline replica **without** the `forcedClusterRemoval` flag, the removal Job fails. Simply updating the ClusterSet resource to specify `unsafeFlags.forcedClusterRemoval: true` will **not** automatically resume or restart the failed job.
+
+    In this case, you must first **delete the failed Job** before retrying:
+
+    1. Find the removal job:
+    
+        ```bash
+        kubectl get jobs -n $SOURCE_NS | grep clusterset-remove
+        ```
+
+    2. Delete the failed removal job:
+        
+        ```bash
+        kubectl delete job <remove-job-name> -n $SOURCE_NS
+        ```
+        
+    3. Retry the patch command to remove the cluster:
+        
+        ```bash
+        kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=json \
+          -p='[{"op": "remove", "path": "/spec/clusters/1"}]'
+        ```
+
+    Only then the Operator recognizes the unsafe flag and retries forced removal.
 
 
-## Step 9. Delete the ClusterSet
+### Delete the ClusterSet
 
 Delete the ClusterSet Custom Resource to stop cross-site replication and dissolve ClusterSet metadata:
 
