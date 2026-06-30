@@ -22,17 +22,17 @@ The following example shows the fields the Operator populates in the connection 
 
 ```yaml
 stringData:
-  host: cluster1-mysql-primary.default.svc
+  host: ps-cluster1-mysql-primary.default.svc
   port: "3306"
   user: root
   password: "w3_3ijSd)wulc.b};xwvT?Rj"
-  uri: "mysql://root:w3_3ijSd%29wulc.b%7D%3BxwvT%3FRj@cluster1-mysql-primary.default.svc:3306"
-  proxy-host: cluster1-haproxy.default.svc
+  uri: "mysql://root:w3_3ijSd%29wulc.b%7D%3BxwvT%3FRj@ps-cluster1-mysql-primary.default.svc:3306"
+  proxy-host: ps-cluster1-haproxy.default.svc
   proxy-port: "3306"
-  proxy-uri: "mysql://root:w3_3ijSd%29wulc.b%7D%3BxwvT%3FRj@cluster1-haproxy.default.svc:3306"
-  proxy-readonly-host: cluster1-haproxy.default.svc
+  proxy-uri: "mysql://root:w3_3ijSd%29wulc.b%7D%3BxwvT%3FRj@ps-cluster1-haproxy.default.svc:3306"
+  proxy-readonly-host: ps-cluster1-haproxy.default.svc
   proxy-readonly-port: "3307"
-  proxy-readonly-uri: "mysql://root:w3_3ijSd%29wulc.b%7D%3BxwvT%3FRj@cluster1-haproxy.default.svc:3307"
+  proxy-readonly-uri: "mysql://root:w3_3ijSd%29wulc.b%7D%3BxwvT%3FRj@ps-cluster1-haproxy.default.svc:3307"
   proxy-external-host: 34.118.45.21
   proxy-external-port: "3306"
   proxy-external-uri: "mysql://root:w3_3ijSd%29wulc.b%7D%3BxwvT%3FRj@34.118.45.21:3306"
