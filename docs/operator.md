@@ -2132,7 +2132,9 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 
 ### `orchestrator.configuration`
 
-Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration, used to tune failover behavior per cluster (for example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds`). The value must be a JSON object passed as a string. Keys that the Operator manages itself - such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths - cannot be overridden and are silently ignored. Updating this field triggers a rolling restart of the Orchestrator Pods.
+Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration. For example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds` are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored. 
+
+Updating this field triggers a rolling restart of the Orchestrator Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
