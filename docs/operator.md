@@ -2116,7 +2116,7 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 
 ### `orchestrator.resources.limits.cpu`
 
-[Kubernetes CPU limits :octicons-link-external-16:](ehttps://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
 
 | Value type  | Example    |
 | ----------- | ---------- |
