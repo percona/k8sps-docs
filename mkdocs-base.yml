@@ -225,6 +225,7 @@ nav:
               - "Configure MySQL Router": router-conf.md
           - "Control Pod scheduling": constraints.md             
           - "Fine-tune MySQL options": options.md
+          - "Configure DNS suffix": dns-suffix.md
           - "Multi-namespace deployment": cluster-wide.md
     
     - Cluster lifecycle management:
@@ -241,6 +242,7 @@ nav:
           - "Add sidecar containers": sidecar.md
           - "Labels and annotations": annotations.md
           - "Configure telemetry": telemetry.md
+          - dns-suffix.md
 
     - Troubleshooting:
           - "Initial troubleshooting": debug.md

@@ -127,6 +127,14 @@ A name for [users secrets](users.md#users). When undefined, the Operator creates
 | ----------- | ---------- |
 | :material-code-string: string     | `ps-cluster1-secrets` |
 
+### `clusterServiceDNSSuffix`
+
+A custom cluster domain suffix the Operator uses when constructing internal service hostnames. Use this when the Operator runs in a vcluster or in a cluster with a custom DNS domain so it can correctly resolve services. See [Configure DNS suffix for service discovery](dns-suffix.md) for details.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cluster.local` |
+
 ### `sslSecretName`
 
 A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md) for details. When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets-ssl`. Otherwise, it uses the provided name.
