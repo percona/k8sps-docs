@@ -104,7 +104,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-        * **With BinlogServer**
+        * **With Binlog Server**
 
             ```bash
             kubectl patch ps ps-cluster1 --type=merge --patch '{
@@ -160,7 +160,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-        * **With BinlogServer**
+        * **With Binlog Server**
 
             ```bash
             kubectl patch ps ps-cluster1 --type=merge --patch '{
@@ -220,7 +220,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-        * **With BinlogServer**
+        * **With Binlog Server**
 
             ```bash
             kubectl patch ps ps-cluster1 --type=merge --patch '{
@@ -277,7 +277,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-        * **With BinlogServer**
+        * **With Binlog Server**
 
             ```bash
             kubectl patch ps ps-cluster1 --type=merge --patch '{
@@ -333,7 +333,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-        * **With BinlogServer**
+        * **With Binlog Server**
 
             ```bash
             kubectl patch ps ps-cluster1 --type=merge --patch '{
