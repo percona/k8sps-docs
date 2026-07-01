@@ -20,14 +20,14 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "orchestrator":{ "image": "docker.io/percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" },
-                   "pmm": { "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
                }}'
             ```
 
@@ -37,13 +37,13 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "orchestrator":{ "image": "docker.io/percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -53,16 +53,16 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "orchestrator":{ "image": "docker.io/percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
                    "backup":{
-                      "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}",
-                      "pitr": { "binlogServer": { "image": "docker.io/perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "image": "percona/percona-xtrabackup:{{ pxb84recommended }}",
+                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
                    },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -79,13 +79,13 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" },
-                   "pmm": { "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
                }}'
             ```
 
@@ -95,12 +95,12 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -110,15 +110,15 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
                    "backup":{
-                      "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}",
-                      "pitr": { "binlogServer": { "image": "docker.io/perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "image": "percona/percona-xtrabackup:{{ pxb84recommended }}",
+                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
                    },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -135,13 +135,13 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "router":{ "image": "docker.io/percona/percona-mysql-router:{{ router84recommended }}" }
+                      "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" },
-                   "pmm": { "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
                }}'
             ```
 
@@ -151,12 +151,12 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "router":{ "image": "docker.io/percona/percona-mysql-router:{{ router84recommended }}" }
+                      "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb84recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -166,15 +166,15 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps84recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps84recommended }}" },
                    "proxy":{
-                      "router":{ "image": "docker.io/percona/percona-mysql-router:{{ router84recommended }}" }
+                      "router":{ "image": "percona/percona-mysql-router:{{ router84recommended }}" }
                    },
                    "backup":{
-                      "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}",
-                      "pitr": { "binlogServer": { "image": "docker.io/perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "image": "percona/percona-xtrabackup:{{ pxb84recommended }}",
+                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
                    },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -193,14 +193,14 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "orchestrator":{ "image": "docker.io/percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" },
-                   "pmm": { "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
                }}'
             ```
 
@@ -210,13 +210,13 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "orchestrator":{ "image": "docker.io/percona/percona-orchestrator:{{ orchestratorrecommended }}" },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -226,16 +226,16 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "orchestrator":{ "image": "docker.io/percona/percona-orchestrator:{{ orchestratorrecommended }}" },
+                   "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
                    "backup":{
-                      "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}",
-                      "pitr": { "binlogServer": { "image": "docker.io/perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "image": "percona/percona-xtrabackup:{{ pxb80recommended }}",
+                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
                    },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -252,13 +252,13 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" },
-                   "pmm": { "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
                }}'
             ```
 
@@ -268,12 +268,12 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -283,15 +283,15 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "haproxy":{ "image": "docker.io/percona/haproxy:{{ haproxyrecommended }}" }
+                      "haproxy":{ "image": "percona/haproxy:{{ haproxyrecommended }}" }
                    },
                    "backup":{
-                      "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}",
-                      "pitr": { "binlogServer": { "image": "docker.io/perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "image": "percona/percona-xtrabackup:{{ pxb80recommended }}",
+                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
                    },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -308,13 +308,13 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "router":{ "image": "docker.io/percona/percona-mysql-router:{{ routerrecommended }}" }
+                      "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" },
-                   "pmm": { "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" },
+                   "pmm": { "image": "percona/pmm-client:{{ pmm3recommended }}" }
                }}'
             ```
 
@@ -324,12 +324,12 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "router":{ "image": "docker.io/percona/percona-mysql-router:{{ routerrecommended }}" }
+                      "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
                    },
-                   "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}" },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "backup":{ "image": "percona/percona-xtrabackup:{{ pxb80recommended }}" },
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
@@ -339,15 +339,15 @@ Select the command that matches your setup from the sections below.
             kubectl patch ps ps-cluster1 --type=merge --patch '{
                "spec": {
                    "crVersion":"{{ release }}",
-                   "mysql":{ "image": "docker.io/percona/percona-server:{{ ps80recommended }}" },
+                   "mysql":{ "image": "percona/percona-server:{{ ps80recommended }}" },
                    "proxy":{
-                      "router":{ "image": "docker.io/percona/percona-mysql-router:{{ routerrecommended }}" }
+                      "router":{ "image": "percona/percona-mysql-router:{{ routerrecommended }}" }
                    },
                    "backup":{
-                      "image": "docker.io/percona/percona-xtrabackup:{{ pxb80recommended }}",
-                      "pitr": { "binlogServer": { "image": "docker.io/perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "image": "percona/percona-xtrabackup:{{ pxb80recommended }}",
+                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
                    },
-                   "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ ptrecommended }}" }
+                   "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
