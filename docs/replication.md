@@ -33,33 +33,6 @@ The communication in the ClusterSet is done through the MySQL protocol, which en
 
 The Operator starts a separate `mysqlshell-runner` Pod with **MySQL Shell (`mysqlsh`)** and uses it to manage the ClusterSet. The `mysqlsh` version must be compatible with the Percona Server for MySQL version you run in your clusters.
 
-```mermaid
-flowchart TB
-    subgraph k8s_site_a["Kubernetes site A"]
-        CR1["PerconaServerMySQL<br/>cluster1 (GR)"]
-        CS["PerconaServerMySQLClusterSet CR"]
-        RUNNER["mysqlshell-runner Pod"]
-        CTRL["ClusterSet controller"]
-        CR1 --- CTRL
-        CS --- CTRL
-        CTRL --- RUNNER
-    end
-
-    subgraph k8s_site_b["Kubernetes site B (or remote)"]
-        CR2["PerconaServerMySQL<br/>cluster2 (GR, bootstrap: manual)"]
-    end
-
-    subgraph mysql_layer["MySQL InnoDB ClusterSet"]
-        P["Primary InnoDB Cluster<br/>(cluster1)"]
-        R["Replica InnoDB Cluster<br/>(cluster2)"]
-        P -->|"async replication"| R
-    end
-
-    RUNNER -->|"mysqlsh AdminAPI"| P
-    RUNNER -->|"mysqlsh AdminAPI"| R
-    CR1 --> P
-    CR2 --> R
-```
 
 ## Data recovery modes
 
@@ -77,7 +50,7 @@ When a replica cluster joins the ClusterSet, it must receive the data from the p
 | Recovery mode | Usage |
 | ------------- | ----- |
 | CLONE | For small datasets and low-latency networks |
-| Incremental | WAN links and multi-TB datasets where a full online clone can take a long time and is expensive to retry |
+| Incremental | WAN links and multi-TB datasets where a full online clone can take a long time and is expensive to retry. Requires restoring the backup from the primary on the replica before adding it to the ClusterSet |
 
 ## TLS for replication channels
 
@@ -135,6 +108,7 @@ credentials cannot differ per site.
 * **No automatic rejoin to ClusterSet after replication stops** — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window, connect to the replica cluster and run the `dba.rebootClusterFromCompleteOutage()` command to re-initialize the cluster metadata. Then connect to the primary cluster and run the `dba.getCluster().getClusterSet().rejoinCluster("<innodb_cluster_name>")` command to rejoin the replica.
 * **No adopting existing ClusterSets** — The controller only bootstraps a new ClusterSet or refuses if the metadata is inconsistent. You cannot adopt into management any ClusterSet that was created manually with `mysqlsh`.
 * **Restoring backups onto replica clusters in a ClusterSet are not supported** — While a replica is part of a ClusterSet, restoring a backup onto it is not supported. If you attempt to do so, the replica will fail to rejoin the ClusterSet afterward. In this case, you must manually reboot the cluster (using `dba.rebootClusterFromCompleteOutage()`) and rejoin it to the ClusterSet from the primary.
+* **Backups taken on a ClusterSet cannot be restored on a fresh cluster** — Backups include the ClusterSet metadata that is tied to the specific topology and identities of the clusters within that ClusterSet. Restoring such a backup onto a new, unrelated cluster will lead to inconsistencies or errors, since the metadata will not match the new environment or cluster configuration.
 * **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.
 * **Credential rotation on replicas** — The `clusterset` user password is always replicated from the primary; you cannot rotate it independently on replica clusters while they are ClusterSet members.
 * **Minimum replica size** — A replica Group Replication cluster still needs enough members for local high availability (typically 3). Single-node replicas are supported for testing but not recommended for production.
