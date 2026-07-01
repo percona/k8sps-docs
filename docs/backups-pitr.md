@@ -43,7 +43,7 @@ flowchart LR
 
 To enable binlog collection, configure the `spec.backup.pitr` section in your Custom Resource:
 
-```
+```yaml
 spec:
   backup:
     pitr:

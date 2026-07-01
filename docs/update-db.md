@@ -53,6 +53,15 @@ Before updating the database, complete the following preparation steps:
 
 4. We recommend to [update PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html) before upgrading PMM Client.
 
+#### If you use Binlog Server
+
+The new Binlog Server image 0.3.0 is incompatible with the previous version. To upgrade the Binlog Server you must start a fresh binlog collection. Here's how to do it:
+
+1. Stop point-in-time recovery binlog collection
+2. Make a new full backup
+3. Change the binlog storage settings in your cluster configuration to point to a new location. It can be a new bucket or a new prefix for the existing bucket
+
+
 ### Update commands
 
 {% include 'assets/fragments/update-db-commands.txt' %}
@@ -75,6 +84,8 @@ For the procedures in this tutorial, we assume that you have set up the `Smart U
 
 We recommend to [update PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html)  before upgrading PMM Client.
 
+If you use Binlog Server for point-in-time recovery, complete the [pre-upgrade steps](#if-you-use-binlog-server).
+
 ### Procedure
 
 1. Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the [Operator upgrade guide](update-operator.md)
@@ -92,7 +103,7 @@ We recommend to [update PMM Server :octicons-link-external-16:](https://docs.per
     
     !!! note
 
-        If you don't update crVersion, minor version upgrade is the only one to
+        If you don't update `crVersion`, minor version upgrade is the only one to
         occur. For example, the image `percona-server:8.0.30-22` can
         be upgraded to `percona-server:8.0.32-24`.
 
