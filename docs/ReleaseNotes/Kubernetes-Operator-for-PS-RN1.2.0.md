@@ -323,18 +323,18 @@ To upgrade the Binlog Server you must start a fresh binlog collection. Here's ho
 
 The Operator was developed and tested with the following software:
 
-* Percona Server for MySQL 8.4.8-8.1
-* Percona Server for MySQL 8.0.45-36.1
-* XtraBackup 8.4.0-5.1
-* XtraBackup 8.0.35-35.1
-* MySQL Router 8.4.8
-* MySQL Router 8.0.45
+* Percona Server for MySQL 8.4.10-10.1
+* Percona Server for MySQL 8.0.46-37.1
+* XtraBackup 8.4.0-6.1
+* XtraBackup 8.0.35-36.1
+* MySQL Router 8.4.10-10.1
+* MySQL Router 8.0.46-37.1
 * HAProxy 2.8.18-1
-* Orchestrator 3.2.6-20
-* Percona Toolkit 3.7.1
-* PMM Client 3.7.0
+* Orchestrator 3.2.6-22
+* Percona Toolkit 3.7.1-3
+* PMM Client 3.8.1
 * Cert Manager 1.19.1
-* Percona Binlog Server 0.2.1
+* Percona Binlog Server 0.3.1
 
 Other options may also work but have not been tested.
 
@@ -364,30 +364,30 @@ Find Percona's certified Docker images that you can use with Percona Operator fo
 
 Image                                                    | Digest                                                           |
 |:---------------------------------------------------------|:-----------------------------------------------------------------|
-| percona/percona-server-mysql-operator:1.1.0             | c44447339098998367dcc84028ad065a3872c9b8b1239d5b338e90f28f984107 |
-| percona/percona-server-mysql-operator:1.1.0 (ARM64)     | 55ffe11625f6453c67e394c5cc757746d8a5c58022cd6285af5a5072f850ff4e |
-| percona/percona-server:8.4.8-8.1                         | 5203959150b5afe769f04f17453ae22d63ea889dfbbdef6acc013e999cc31552 |
-| percona/percona-server:8.4.8-8.1 (ARM64)                 | 831ac32171d0b794826e276745cf3e7526b63c62447fdb266b9e308e7028319e |
-| percona/percona-server:8.0.45-36.1                       | 27845b5451a1b707df70e832d51bcd3c384e6cb3cc02799a7bc01ec6cd578c2d |
-| percona/percona-server:8.0.45-36.1 (ARM64)               | 1dae69344a18d21800fd65752a1450ddaac31b50d733d3eb1507f28ec824172d |
-| percona/percona-xtrabackup:8.4.0-5.1                     | 1c7e20fac192f70de2233e471a9243ba9a65399e9667cf954f5fc5afba1b9aa4 |
-| percona/percona-xtrabackup:8.4.0-5.1 (ARM64)             | dd6089277586865a7debfbe2e8b3a894632f9240fd1aec8c77c4f71cb9750b90 |
-| percona/percona-xtrabackup:8.0.35-35.1                   | f44162b0bede26d74f23c1cd3ab58efb0f43529f7fe09d221e3ad7b473463f0b |
-| percona/percona-xtrabackup:8.0.35-35.1 (ARM64)           | 68908749139e3904d81a21a0cbb7ff85b08dc7a65d9d063b17dfff278ad81107 |
-| percona/percona-mysql-router:8.4.8                       | c087433f2824a0d53e297d13eb8db995b3b6cb6c90491d894a0494bb1ccbf6bd |
-| percona/percona-mysql-router:8.4.8 (ARM64)               | c087433f2824a0d53e297d13eb8db995b3b6cb6c90491d894a0494bb1ccbf6bd |
-| percona/percona-mysql-router:8.0.45                      | 0b1a1ba2005eb7be254d2e7b851802c33081f428d4f8524ed5f62a354499fa2e |
-| percona/percona-mysql-router:8.0.45 (ARM64)              | 0b1a1ba2005eb7be254d2e7b851802c33081f428d4f8524ed5f62a354499fa2e |
-| percona/percona-orchestrator:3.2.6-20                    | 13ae84e75279201da09ed8cd1936a5306fa2f29b2cc74478974f16a5d1e05e6c |
-| percona/percona-orchestrator:3.2.6-20 (ARM64)            | 1d0f9b414fcadebe6d3c2e6778e58e0f17b42c64a4293f03efc744b1d27bef99 |
-| percona/haproxy:2.8.18-1                                 | fa668cec0a541ce862ecd8fd781df4631e837e085dde6b5ae2a4bb678cc84024 |
-| percona/haproxy:2.8.18-1 (ARM64)                         | 8271dafc8db4d1a4e5a446b3618ec8bed95837c7e9066cce0898ffefdf6b36f1 |
+| percona/percona-server-mysql-operator:1.2.0             | a9ab659068574c247151427178dd05ea9cf11a3789acc0b84a3cb6713a7916eb |
+| percona/percona-server-mysql-operator:1.2.0 (ARM64)     | 482d6757d2d7697889e2538c5b229aa4253a936cc08257860ed18357a05b82af |
+| percona/percona-server:8.4.10-10.1                       | d24391a363426239220c35b9707d6b26ce7522ac27abe55689baebfb48bd9fb3 |
+| percona/percona-server:8.4.10-10.1 (ARM64)               | 70f6c4d01b5807737cdd423ab32af1feb1d00513b5420a84361773b167aeca87 |
+| percona/percona-server:8.0.46-37.1                       | a9bca94cb483502b03a54866d15c597b5043ee95d95370e8dcc7253c202e096b |
+| percona/percona-server:8.0.46-37.1 (ARM64)               | c3cf8d599e1e8fdcf4f9a178e0d65efd2e3d07ea61f127a109e928917e155542 |
+| percona/percona-xtrabackup:8.4.0-6.1                     | d135aadaae9e2f947cb2002f982f7b4c6e177b1c7e3d543ef7795aea999feedd |
+| percona/percona-xtrabackup:8.4.0-6.1 (ARM64)             | fcf2b3fc20cfbfa6d47ec60cecd881f915beacdae838f994dda984baea825293 |
+| percona/percona-xtrabackup:8.0.35-36.1                   | dbe8749e015dd363c530660fd9b7c01b2d5feddc30709dbc84a26714dc162423 |
+| percona/percona-xtrabackup:8.0.35-36.1 (ARM64)           | fad27bd8e9bc4840653999d67401af63504b29af1038edbb023b276ac0688bab |
+| percona/percona-mysql-router:8.4.10-10.1                 | 7edd16793022a518842aa6e709582af9175ee9ab145faf11e930f8175f16c588 |
+| percona/percona-mysql-router:8.4.10-10.1 (ARM64)         | e3be4405858a4198ecb1265365763de33dc6991bdb811bbc10803a92d06606a0 |
+| percona/percona-mysql-router:8.0.46-37.1                 | 7ee5b442c19b3bd8cbfd0177a3bfcb93071ad0016d0df7ded35ca06296656613 |
+| percona/percona-mysql-router:8.0.46-37.1 (ARM64)         | c47751f9f436f0239145b1c369d6c5eaf33695036dfcea2621da1eae30191eaa |
+| percona/percona-orchestrator:3.2.6-22                    | 384bcf3121f50e9536fc911532386b9b485a52701e1e99ada51a5faf91d667c3 |
+| percona/percona-orchestrator:3.2.6-22 (ARM64)            | 7ed29d0cde9396687fa42e1640ac2554125fd3a1e2a9f8d70667bbd00b386703 |
+| percona/haproxy:2.8.18-1                                 | 09e4d2ce9e65dc4aec9195e818e6da2041aea1a2bdb04f868d8c42ee81090dbf |
+| percona/haproxy:2.8.18-1 (ARM64)                         | 563d84d64e1668cb4f6b2202fbe15a18e0733b48fe963383bb877c9e3a8a0abd |
 | percona/percona-toolkit:3.7.1-3                          | 7fd2092b0ac8addf44163a5a7e1999acf5ae34ccffe77aeb005aa6ea8a8cfc5d |
 | percona/percona-toolkit:3.7.1-3 (ARM64)                  | afa0a0c7826433071da8f16077830977522240f03959e0b57db14ecad2357cca |
-| percona/pmm-client:3.7.0                                 | 3ddfd925a9f6bb0daee88021e0310f8375f550afd70b7f2d0980509b7f3fb777 |
-| percona/pmm-client:3.7.0 (ARM64)                         | 2701042087701c70666fd88383bfac22368c339a033b15e364bd6dd417ad1922 |
-| percona/percona-server-mysql-operator:1.1.0-binlog-server-0.2.1 | 9ffb7db0094dc0c39f6ec794b70a33db6e4cd19aa4ca38cd6a9b05bc5bbea63c |
-| percona/percona-server-mysql-operator:1.1.0-binlog-server-0.2.1 (ARM64) | 97ad1244d08773eb6e6121c4b45424d88d2a624fbd26eb40ab907d054999e154 |
+| percona/pmm-client:3.8.1                                 | a92cfb7f912bd85d8245575c3ee5c423664ad2baedb674d159a87b113dbd4de2 |
+| percona/pmm-client:3.8.1 (ARM64)                         | 3fe427c0666337df7613824da5f3b5fb7397e849f70402ac557c1324c5d996e6 |
+| perconalab/percona-binlog-server:0.3.1                   | 53336b6ccbe463c255f7ca9caaf9390ceba2b9c7672b91998cbe5f44d84dc4e4 |
+| perconalab/percona-binlog-server:0.3.1 (ARM64)           | 361695d2b77443e67aa7f2858e9345cff08967afa3e2a8820d4c5981963fa858 |
 
 
 --8<-- [end:images]
