@@ -327,13 +327,13 @@ The Operator was developed and tested with the following software:
 * Percona Server for MySQL 8.0.46-37.1
 * XtraBackup 8.4.0-6.1
 * XtraBackup 8.0.35-36.1
-* MySQL Router 8.4.10-10.1
-* MySQL Router 8.0.46-37.1
+* MySQL Router 8.4.10
+* MySQL Router 8.0.46
 * HAProxy 2.8.18-1
 * Orchestrator 3.2.6-22
-* Percona Toolkit 3.7.1-3
+* Percona Toolkit 3.7.1-4
 * PMM Client 3.8.1
-* Cert Manager 1.19.1
+* Cert Manager 1.20.2
 * Percona Binlog Server 0.3.1
 
 Other options may also work but have not been tested.
@@ -346,11 +346,10 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [start:platforms]
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.32 - 1.35
-* [Amazon Elastic Kubernetes Service (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/) 1.33 - 1.35
-* [Azure Kubernetes Service (AKS) :octicons-link-external-16:](https://azure.microsoft.com/en-us/products/kubernetes-service) 1.33 - 1.35
-* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.18.36 - 4.21.8
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.38.1 based on Kubernetes v1.35.1
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.33 - 1.35
+* [Amazon Elastic Kubernetes Service (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/) 1.33 - 1.36
+* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.18 - 4.22
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.38.1 with Kubernetes v1.35.1
 
 --8<-- [end:platforms]
 
