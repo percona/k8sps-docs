@@ -21,7 +21,7 @@ You declare which clusters participate, which one is the primary, and how replic
 
 The Operator uses a dedicated `clusterset` [system user](users.md#system-users) with the grants required for ClusterSet AdminAPI operations. Each cluster must share this user's credentials.
 
-![image](assets/images/innodb_clusterset.png)
+![Cross-site replication architecture](assets/images/innodb_clusterset_redesigned.svg)
 
 * The **primary cluster** accepts writes and replicates changes asynchronously to replica clusters over a dedicated replication channel.
 * Each **replica cluster** is a full Group Replication cluster (read-only at the ClusterSet level) that receives async replication from the primary cluster's PRIMARY member.
@@ -33,7 +33,6 @@ The communication in the ClusterSet is done through the MySQL protocol, which en
 
 The Operator starts a separate `mysqlshell-runner` Pod with **MySQL Shell (`mysqlsh`)** and uses it to manage the ClusterSet. The `mysqlsh` version must be compatible with the Percona Server for MySQL version you run in your clusters.
 
-
 ## Data recovery modes
 
 When a replica cluster joins the ClusterSet, it must receive the data from the primary. This can be done in two ways:
@@ -41,9 +40,9 @@ When a replica cluster joins the ClusterSet, it must receive the data from the p
 * Using the `clone` recovery method (default) — A replica cluster to join the ClusterSet must be without any data. MySQL  makes a physical snapshot of the full dataset using the [`CLONE` plugin :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/clone-plugin.html) on the primary cluster and transfers it to the replica.
 * Using the `incremental` method — Restore the data from the primary cluster on the replica before adding it to the ClusterSet. When it joins the ClusterSet, it catches up the binlog changes that have occurred on the primary.
    
-   !!! important
+    !!! important
        
-       Binlogs must exist on the primary cluster for the incremental recovery mode to work.
+        Binlogs must exist on the primary cluster for the incremental recovery mode to work.
 
 ### When to use each recovery mode
 

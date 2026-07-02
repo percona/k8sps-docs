@@ -188,7 +188,7 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | `ClusterSetBootstrapped` | The primary cluster is configured as a ClusterSet. |
 | `MySQLShellRunnerReady` | The `mysqlshell-runner` Pod is running and ready. |
 | `SwitchoverInProgress` | `spec.primaryCluster` differs from the observed primary and a switchover Job is running or pending. |
-| `PrimaryClusterUnreachable` | The current primary cluster is not reachable from the controller. |
+| `ErrorReconcile | An error occurred during reconciliation |  
 | `ReplicaManagementFailure` | A replica add/remove Job failed; see the Job logs. |
 | `ClusterSetDissolving` | The Custom Resource is being deleted and the dissolve finalizer is running. |
 
@@ -198,6 +198,8 @@ Common `Ready` condition reasons:
 | ------ | ------- |
 | `ClusterSetHealthy` | MySQL Shell reports overall ClusterSet status as healthy. |
 | `ClusterSetNotHealthy` | One or more members are not healthy; see `status.clusters` and condition message. |
+| `PrimaryUnreachable` | Primary cluster is not reachable |
+| `AccessDenied` | Incorrect password configured on the replica site |
 
 ### Events
 

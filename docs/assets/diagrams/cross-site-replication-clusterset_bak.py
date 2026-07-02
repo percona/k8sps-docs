@@ -34,7 +34,7 @@ with Diagram(
     filename=str(OUTPUT.with_suffix("")),
     outformat="png",
     show=False,
-    direction="TB",
+    direction="LR",
     graph_attr=graph_attr,
 ):
     app = Client("Application")
@@ -55,9 +55,9 @@ with Diagram(
             with Cluster("Kubernetes cluster — primary"):
                 op_primary = Pod("PS Operator")
                 with Cluster("MySQL Cluster primary"):
-                    mysql_primary1 = MySQL("Primary")
-                    mysql_primary2 = MySQL("Secondary")
-                    mysql_primary3 = MySQL("MySQL Pod")
+                    mysql_primary1 = Pod("Primary")
+                    mysql_primary2 = Pod("Secondary")
+                    mysql_primary3 = Pod("MySQL Pod")
                     mysql_primary1 - mysql_primary2 - mysql_primary3 - mysql_primary1 << grouprepl
                 haproxy_primary = HAProxy("HAProxy")
                 op_primary >> mysql_primary1 >> haproxy_primary
@@ -65,9 +65,9 @@ with Diagram(
             with Cluster("Kubernetes cluster — replica"):
                 op_replica = Pod("PS Operator")
                 with Cluster("MySQL Cluster primary"):
-                    mysql_replica1 = MySQL("Primary")
-                    mysql_replica2 = MySQL("Secondary")
-                    mysql_replica3 = MySQL("Secondary")
+                    mysql_replica1 = Pod("Primary")
+                    mysql_replica2 = Pod("Secondary")
+                    mysql_replica3 = Pod("Secondary")
                     mysql_replica1 - mysql_replica2 - mysql_replica3 - mysql_replica1 << grouprepl
                 haproxy_replica = HAProxy("HAProxy")
                 op_replica >> mysql_replica1 >> haproxy_replica
