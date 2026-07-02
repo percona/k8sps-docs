@@ -55,7 +55,7 @@ Before updating the database, complete the following preparation steps:
 
 #### If you use Binlog Server
 
-The new Binlog Server image 0.3.0 is incompatible with the previous version. To upgrade the Binlog Server you must start a fresh binlog collection. Here's how to do it:
+The new Binlog Server image 0.3.1 is incompatible with the previous version. To upgrade the Binlog Server you must start a fresh binlog collection. Here's how to do it:
 
 1. Stop point-in-time recovery binlog collection
 2. Make a new full backup
