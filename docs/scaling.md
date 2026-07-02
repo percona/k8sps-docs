@@ -94,6 +94,10 @@ This feature gives you:
 * cost control by expanding only when needed
 * a more predictable environment so teams can focus on delivery
 
+!!! important
+
+    Keep in mind that some storage providers may have specific limitations when it comes to expanding storage. Review your provider's documentation and sett thresholds that work well for your environment to get the best results.
+
 To enable automatic storage resizing, edit the `deploy/cr.yaml` Custom Resource manifest as follows:
 {.power-number}
 
@@ -117,6 +121,7 @@ To enable automatic storage resizing, edit the `deploy/cr.yaml` Custom Resource 
     * `autoscaling.enabled` - set to `true`
     * `autoscaling.triggerThresholdPercent` - specify the usage percentage (50–95, default `80`). When usage exceeds this threshold, autoscaling is triggered
     * `autoscaling.growthStep` - specify how much storage to add on each resize (default `2Gi`)
+
     * `autoscaling.maxSize` - specify the upper limit for storage growth (minimum `1Gi`). When this limit is reached, scaling stops
 
     Example configuration:
@@ -145,17 +150,21 @@ When the Operator changes the storage size, it updates the Custom Resource statu
 * updates the `resizeCount` field
 * records any errors in the `lastError` field
 
-Run `kubectl get ps <cluster-name> -o yaml -n <namespace>` to check the current cluster state.
-
-??? example "Sample output"
-
-    ```{.text .no-copy}
-    storageAutoscaling:
-      datadir-ps-cluster1-mysql-0:
-        currentSize: 4194304Ki
-        lastResizeTime: "2026-01-23T15:08:59Z"
-        resizeCount: 2
+1. Check the current cluster state:
+  
     ```
+    kubectl get ps <cluster-name> -o yaml -n <namespace>
+    ```
+
+    ??? example "Sample output"
+
+        ```{.text .no-copy}
+        storageAutoscaling:
+          datadir-ps-cluster1-mysql-0:
+            currentSize: 4194304Ki
+            lastResizeTime: "2026-01-23T15:08:59Z"
+            resizeCount: 2
+        ```
 
 The `storageAutoscaling` section appears under the `.status` in the Custom Resource.
 
