@@ -18,10 +18,10 @@
         <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/'1.1.0'/users.html">
       
       
-        <link rel="prev" href="scaling.html">
+        <link rel="prev" href="kubernetes.html">
       
       
-        <link rel="next" href="TLS.html">
+        <link rel="next" href="connection-secrets.html">
       
       
         
@@ -1224,6 +1224,203 @@
                 
   
   
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manage users
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="users.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manage users
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#unprivileged-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unprivileged users
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection secrets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Users
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="System Users">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#orchestrator-http-api-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orchestrator HTTP API authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yaml-object-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        YAML Object Format
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#password-rotation-policies-and-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Password rotation policies and timing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passwords-with-special-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passwords with special characters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marking-system-users-in-mysql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Marking System Users In MySQL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="connection-secrets.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connection secrets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
   
   
     
@@ -1235,10 +1432,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
         
           
-          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
             
   
   
@@ -1256,8 +1453,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1506,10 +1703,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_9" >
         
           
-          <label class="md-nav__link" for="__nav_6_1_9" id="__nav_6_1_9_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_3_9" id="__nav_6_3_9_label" tabindex="0">
             
   
   
@@ -1527,8 +1724,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1_9">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1681,10 +1878,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4" >
         
           
-          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
             
   
   
@@ -1702,8 +1899,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1800,153 +1997,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Manage users
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="users.html" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Manage users
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#unprivileged-users" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Unprivileged users
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#system-users" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        System Users
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="System Users">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#yaml-object-format" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        YAML Object Format
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#password-rotation-policies-and-timing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Password rotation policies and timing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#passwords-with-special-characters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Passwords with special characters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#marking-system-users-in-mysql" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Marking System Users In MySQL
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2486,6 +2536,34 @@
   
   
     <li class="md-nav__item">
+      <a href="dns-suffix.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure DNS suffix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="cluster-wide.html" class="md-nav__link">
         
   
@@ -2964,6 +3042,34 @@
     
   
     Configure telemetry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dns-suffix.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure DNS suffix
   
 
     
@@ -4428,6 +4534,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
+  <a href="#connection-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection secrets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#system-users" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4438,6 +4555,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
     <nav class="md-nav" aria-label="System Users">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#orchestrator-http-api-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Orchestrator HTTP API authentication
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#yaml-object-format" class="md-nav__link">
@@ -4550,6 +4678,10 @@ mysql&gt;<span class="w"> </span>SELECT<span class="w"> </span>*<span class="w">
 </code></pre></div>
 <p>You may also try executing any simple SQL statement to ensure the
 permissions have been successfully granted.</p>
+<h2 id="connection-secrets">Connection secrets<a class="headerlink" href="#connection-secrets" title="Permanent link">&para;</a></h2>
+<p>For the <code>root</code> user, the Operator creates a Secret named <code>&lt;cluster_name&gt;-psuser-root</code> that contains ready-to-use connection details: hostname, port, username, password, connection URIs, and proxy endpoints. The Operator updates this Secret automatically when the primary changes or when proxy configuration changes.</p>
+<p>For example, the <code>root</code> user on a cluster named <code>ps-cluster1</code> gets a Secret called <code>ps-cluster1-psuser-root</code>. Application Pods can mount this Secret directly instead of assembling connection parameters manually.</p>
+<p>See <a href="connection-secrets.html">Connection secrets</a> for the full field reference, read-only connection guidance, and application integration examples.</p>
 <h2 id="system-users">System Users<a class="headerlink" href="#system-users" title="Permanent link">&para;</a></h2>
 <p>To automate the deployment and management of the cluster components,
 the Operator requires system-level Percona Server for MySQL users.</p>
@@ -4592,7 +4724,7 @@ configuration file.</p>
 <td>Orchestrator</td>
 <td>orchestrator</td>
 <td>orchestrator</td>
-<td>Orchestrator administrative user</td>
+<td>Orchestrator administrative user and credentials for read/write access to the Orchestrator HTTP API (from Operator version 1.2.0 when <code>spec.crVersion</code> is <code>1.2.0</code> or higher)</td>
 </tr>
 <tr>
 <td>Backup</td>
@@ -4632,6 +4764,15 @@ configuration file.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="orchestrator-http-api-authentication">Orchestrator HTTP API authentication<a class="headerlink" href="#orchestrator-http-api-authentication" title="Permanent link">&para;</a></h3>
+<p>Starting with Operator version 1.2.0, the Orchestrator HTTP API on port <code>3000</code> requires authentication when <code>spec.crVersion</code> is <code>1.2.0</code> or higher. This applies to asynchronous replication clusters where Orchestrator manages failover and topology.</p>
+<p>The Operator authenticates its own API calls automatically using the <code>orchestrator</code> system user from the cluster Secret. You do not need to configure anything for normal cluster operation.</p>
+<p>If you call the Orchestrator API yourself (for example from a custom script or when <a href="operator.html#orchestratorexposetype">Orchestrator is exposed</a> outside the cluster), use one of the following:</p>
+<ul>
+<li><strong><code>orchestrator</code> user</strong> — read and write access. Use the password stored under the <code>orchestrator</code> key in the cluster Secret (<code>spec.secretsName</code>).</li>
+<li><strong><code>readonly</code> user</strong> — read-only access. Orchestrator accepts any password for this built-in user.</li>
+</ul>
+<p>Unauthenticated requests receive HTTP <code>401</code>. Upgrading the Operator alone does not enable API authentication on existing clusters; set <code>spec.crVersion</code> to <code>1.2.0</code> or higher to activate it.</p>
 <h3 id="yaml-object-format">YAML Object Format<a class="headerlink" href="#yaml-object-format" title="Permanent link">&para;</a></h3>
 <p>The default name of the Secrets object for these users is
 <code>ps-cluster1-secrets</code> and can be set in the CR for your cluster in
@@ -4705,7 +4846,7 @@ for more details.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="December 23, 2025 11:07:43 UTC">December 23, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:07:08 UTC">July 3, 2026</span>
       
         <br>
         Created:

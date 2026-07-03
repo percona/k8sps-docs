@@ -89,6 +89,10 @@
          <lastmod>2026-07-03</lastmod>
     </url>
     <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/connection-secrets.html</loc>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/constraints.html</loc>
          <lastmod>2026-07-03</lastmod>
     </url>
@@ -126,6 +130,10 @@
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/delete.html</loc>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/dns-suffix.html</loc>
          <lastmod>2026-07-03</lastmod>
     </url>
     <url>
