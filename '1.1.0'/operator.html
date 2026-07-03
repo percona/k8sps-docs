@@ -1467,6 +1467,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="backups-encrypted.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Encrypted backups
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1476,10 +1504,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_9" >
         
           
-          <label class="md-nav__link" for="__nav_6_1_8" id="__nav_6_1_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_1_9" id="__nav_6_1_9_label" tabindex="0">
             
   
   
@@ -1497,8 +1525,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1_8">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -6384,6 +6412,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#backupencryptionkeysecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.encryptionKeySecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupencryptionkeysecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.encryptionKeySecret.key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#backuppitrenabled" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6938,6 +6988,28 @@
     <span class="md-ellipsis">
       
         backup.storages.STORAGE-NAME.verifyTLS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupstoragesstorage-nameencryptionkeysecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.storages.STORAGE-NAME.encryptionKeySecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupstoragesstorage-nameencryptionkeysecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.storages.STORAGE-NAME.encryptionKeySecret.key
       
     </span>
   </a>
@@ -11738,6 +11810,28 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#backupencryptionkeysecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.encryptionKeySecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupencryptionkeysecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.encryptionKeySecret.key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#backuppitrenabled" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12292,6 +12386,28 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         backup.storages.STORAGE-NAME.verifyTLS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupstoragesstorage-nameencryptionkeysecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.storages.STORAGE-NAME.encryptionKeySecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupstoragesstorage-nameencryptionkeysecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.storages.STORAGE-NAME.encryptionKeySecret.key
       
     </span>
   </a>
@@ -17287,6 +17403,38 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="backupencryptionkeysecretname"><code>backup.encryptionKeySecret.name</code><a class="headerlink" href="#backupencryptionkeysecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that stores the key used to <a href="backups-encrypted.html">encrypt backups</a> before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>my-encryption-key</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backupencryptionkeysecretkey"><code>backup.encryptionKeySecret.key</code><a class="headerlink" href="#backupencryptionkeysecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the encryption key value. Defaults to <code>encryptionKey</code>. This is a global setting and applies to all storages unless overridden for a specific storage.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>encryptionKey</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="backuppitrenabled"><code>backup.pitr.enabled</code><a class="headerlink" href="#backuppitrenabled" title="Permanent link">&para;</a></h3>
 <p>Enables or disables point-in-time recovery functionality.</p>
 <table>
@@ -18092,6 +18240,38 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="backupstoragesstorage-nameencryptionkeysecretname"><code>backup.storages.STORAGE-NAME.encryptionKeySecret.name</code><a class="headerlink" href="#backupstoragesstorage-nameencryptionkeysecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that contains the key used to <a href="backups-encrypted.html">encrypt backups</a> for this storage location. When set, it takes precedence over <a href="#backupencryptionkeysecretname"><code>backup.encryptionKeySecret.name</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>my-encryption-key</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backupstoragesstorage-nameencryptionkeysecretkey"><code>backup.storages.STORAGE-NAME.encryptionKeySecret.key</code><a class="headerlink" href="#backupstoragesstorage-nameencryptionkeysecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the encryption key value. Defaults to <code>encryptionKey</code>. It takes precedence over the <a href="#backupencryptionkeysecretkey"><code>backup.encryptionKeySecret.key</code></a> setting.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>encryptionKey</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="backupstoragesstorage-namenodeselector"><code>backup.storages.STORAGE-NAME.nodeSelector</code><a class="headerlink" href="#backupstoragesstorage-namenodeselector" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector">Kubernetes nodeSelector <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <table>
@@ -18804,7 +18984,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 14:39:51 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
       
         <br>
         Created:

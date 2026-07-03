@@ -1467,6 +1467,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="backups-encrypted.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Encrypted backups
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1476,10 +1504,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_9" >
         
           
-          <label class="md-nav__link" for="__nav_6_1_8" id="__nav_6_1_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_1_9" id="__nav_6_1_9_label" tabindex="0">
             
   
   
@@ -1497,8 +1525,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1_8">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3406,6 +3434,39 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#backupsourcestorageencryptionkeysecret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backupSource.storage.encryptionKeySecret
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupsourcestorageencryptionkeysecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backupSource.storage.encryptionKeySecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupsourcestorageencryptionkeysecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backupSource.storage.encryptionKeySecret.key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#backupsourcestorages3bucket" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4702,6 +4763,39 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#backupsourcestorageencryptionkeysecret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backupSource.storage.encryptionKeySecret
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupsourcestorageencryptionkeysecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backupSource.storage.encryptionKeySecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupsourcestorageencryptionkeysecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backupSource.storage.encryptionKeySecret.key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#backupsourcestorages3bucket" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4863,6 +4957,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </table>
 <h3 id="backupname"><code>backupName</code><a class="headerlink" href="#backupname" title="Permanent link">&para;</a></h3>
 <p>Specifies the name of a backup to be used for a restore. This backup should be from the same cluster.</p>
+<p>When the backup was <a href="backups-encrypted.html">encrypted</a>, the Operator uses the <code>encryptionKeySecret</code> from the cluster Custom Resource automatically. The key used for the restore must match the key used to encrypt the backup.</p>
 <table>
 <thead>
 <tr>
@@ -4930,7 +5025,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tbody>
 </table>
 <h4 id="pitrdate"><code>pitr.date</code><a class="headerlink" href="#pitrdate" title="Permanent link">&para;</a></h4>
-<p>Timestamp string used when <code>pitr.type</code> is <code>date</code>. Specified in the format &ldquo;yyyy-mm-dd hh<img alt="🇲🇲" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f1f2-1f1f2.svg" title=":mm:" />ss&rdquo; .</p>
+<p>Timestamp string used when <code>pitr.type</code> is <code>date</code>. Specified in the format <code>yyyy-mm-dd hh:mm:ss</code>.</p>
 <table>
 <thead>
 <tr>
@@ -4963,7 +5058,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tbody>
 </table>
 <h2 id="the-backupsource-subsection">The <code>backupSource</code> subsection<a class="headerlink" href="#the-backupsource-subsection" title="Permanent link">&para;</a></h2>
-<p>Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment. </p>
+<p>Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment.</p>
 <h3 id="backupsourcedestination"><code>backupSource.destination</code><a class="headerlink" href="#backupsourcedestination" title="Permanent link">&para;</a></h3>
 <p>Specifies the path to the backup on the storage</p>
 <table>
@@ -4977,6 +5072,54 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>s3://bucket-name/backup-destination/</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backupsourcestorageencryptionkeysecret"><code>backupSource.storage.encryptionKeySecret</code><a class="headerlink" href="#backupsourcestorageencryptionkeysecret" title="Permanent link">&para;</a></h3>
+<p>References a Kubernetes Secret that contains the key used to decrypt an <a href="backups-encrypted.html">encrypted backup</a>. Required when restoring an encrypted backup from object storage on a cluster that does not have access to the source cluster&rsquo;s encryption key Secret. The key used for the restore must match the key used to encrypt the backup.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span> subdoc</td>
+<td><pre>name: my-encryption-key<br>key: encryptionKey</pre></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backupsourcestorageencryptionkeysecretname"><code>backupSource.storage.encryptionKeySecret.name</code><a class="headerlink" href="#backupsourcestorageencryptionkeysecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that stores the backup encryption key.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>my-encryption-key</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backupsourcestorageencryptionkeysecretkey"><code>backupSource.storage.encryptionKeySecret.key</code><a class="headerlink" href="#backupsourcestorageencryptionkeysecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the encryption key value. Defaults to <code>encryptionKey</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>encryptionKey</code></td>
 </tr>
 </tbody>
 </table>
@@ -5113,7 +5256,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 14:39:51 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
       
         <br>
         Created:

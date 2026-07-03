@@ -1475,6 +1475,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="backups-encrypted.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Encrypted backups
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1484,10 +1512,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_9" >
         
           
-          <label class="md-nav__link" for="__nav_6_1_8" id="__nav_6_1_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_1_9" id="__nav_6_1_9_label" tabindex="0">
             
   
   
@@ -1505,8 +1533,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1_8">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4635,7 +4663,18 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
-  <a href="#section-6-1-8" class="md-nav__link">
+  <a href="#backups-encrypted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encrypted backups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-6-1-9" class="md-nav__link">
     <span class="md-ellipsis">
       
         Restore from a backup
@@ -5662,6 +5701,7 @@ and manage your entire MySQL cluster. </p>
 <ul>
 <li>Scheduled backups with configurable retention policies</li>
 <li>On-demand backups for critical operations</li>
+<li><a href="#backups-encrypted">Encrypted backups</a> for compliance-ready protection in cloud object storage</li>
 </ul>
 <h3 id="features-automated-scaling-and-resource-management">Automated scaling and resource management<a class="headerlink" href="#features-automated-scaling-and-resource-management" title="Permanent link">&para;</a></h3>
 <p>Scale your database infrastructure effortlessly:</p>
@@ -5677,6 +5717,7 @@ and manage your entire MySQL cluster. </p>
 <ul>
 <li>Transport encryption with TLS/SSL support</li>
 <li>Data-at-rest encryption with key management integration</li>
+<li>Encrypted backups for object storage</li>
 <li>Role-based access control with fine-grained permissions</li>
 <li>Secret management with Kubernetes-native secrets</li>
 </ul>
@@ -6621,6 +6662,7 @@ kubectl<span class="w"> </span>logs<span class="w">  </span>&lt;cluster-name&gt;
 <ul>
 <li><a href="#tls">Enable TLS/SSL encryption</a> - Secure connections between your applications and the database</li>
 <li><a href="#encryption">Configure data-at-rest encryption</a> - Protect your data at rest with encryption keys</li>
+<li><a href="#backups-encrypted">Configure encrypted backups</a> - Protect backup files stored in cloud object storage</li>
 </ul>
 <h3 id="what-next-configure-access-to-your-cluster-for-external-applications">Configure access to your cluster for external applications<a class="headerlink" href="#what-next-configure-access-to-your-cluster-for-external-applications" title="Permanent link">&para;</a></h3>
 <ul>
@@ -7824,6 +7866,7 @@ file. This section includes:</p>
 <li>The <a href="#operator-backupscheduletype">backup.schedule.type</a> key to set the type for scheduled backups.</li>
 <li>The <a href="#backup-cr-type">PerconaServerMySQLBackup.spec.type</a> field to set the type for on-demand backups.</li>
 <li>The <code>storages</code> subsection, where you <a href="#backups-storage">configure access to your cloud storage</a></li>
+<li>Optional <a href="#backups-encrypted">backup encryption</a> settings to protect backup files in the object storage</li>
 </ul>
 <h2 id="backups-backup-runs">Backup runs<a class="headerlink" href="#backups-backup-runs" title="Permanent link">&para;</a></h2>
 <p>You can create backups in two ways:</p>
@@ -7839,6 +7882,7 @@ file. This section includes:</p>
 <p>Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to <a href="#backups-pitr">restore to a specific GTID or timestamp</a>. That flow uses a binlog server and object storage alongside your normal backup configuration.</p></section><section class="print-page" id="backups-storage" heading-number="6.1.2"><h1 id="backups-storage-configure-storage-for-backups">Configure storage for backups<a class="headerlink" href="#backups-storage-configure-storage-for-backups" title="Permanent link">&para;</a></h1>
 <p>You configure backup storage in the <code>backup.storages</code> subsection of your Custom Resource using the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.1.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file.</p>
 <p>Before configuring storage, you need to create a <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> object that contains the credentials needed to access your storage.</p>
+<p>To <a href="#backups-encrypted">encrypt backups</a> in object storage, create a separate Secret with your encryption key and reference it in <code>spec.backup.encryptionKeySecret</code> or under the storage entry.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="backups-storage-__tabbed_1_1" name="backups-storage-__tabbed_1" type="radio" /><input id="backups-storage-__tabbed_1_2" name="backups-storage-__tabbed_1" type="radio" /><input id="backups-storage-__tabbed_1_3" name="backups-storage-__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="backups-storage-__tabbed_1_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M257.7 162.7C209 164.5 88.2 178.2 88.2 280.2c0 109.5 138.3 114 183.5 43.2 6.5 10.2 35.4 37.5 45.3 46.8l56.8-56s-32.3-25.3-32.3-52.8V114.3C341.5 89 317 32 229.2 32c-88 0-134.7 55-134.7 104.3l73.5 6.8c16.3-49.5 54.2-49.5 54.2-49.5 40.7-.1 35.5 29.8 35.5 69.1m0 86.8c0 80-84.2 68-84.2 17.2 0-47.2 50.5-56.7 84.2-57.8zm136 163.5c-7.7 10-70 67-174.5 67s-184.5-71.5-209-101c-6.8-7.7 1-11.3 5.5-8.3C89 415.2 203.5 488.5 388.2 401c7.5-3.7 13.3 2 5.5 12m39.8 2.2c-6.5 15.8-16 26.8-21.2 31-5.5 4.5-9.5 2.7-6.5-3.8s19.3-46.5 12.7-55c-6.5-8.3-37-4.3-48-3.2-10.8 1-13 2-14-.3-2.3-5.7 21.7-15.5 37.5-17.5 15.7-1.8 41-.8 46 5.7 3.7 5.1 0 27.1-6.5 43.1"/></svg></span> Amazon S3 or S3-compatible storage</label><label for="backups-storage-__tabbed_1_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.05 4.24 6.56 18.05 2 18l5.09-8.76zm.7 1.09L22 19.76H6.74l9.3-1.66-4.87-5.79z"/></svg></span> Microsoft Azure Blob storage</label><label for="backups-storage-__tabbed_1_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23 14.75C23 18.2 20.2 21 16.75 21h-9.5C3.8 21 1 18.2 1 14.75c0-2.14 1.08-4.03 2.71-5.15C4.58 5.82 7.96 3 12 3s7.42 2.82 8.29 6.6A6.22 6.22 0 0 1 23 14.75M16.63 17c1.31 0 2.37-1.06 2.37-2.37 0-1.28-1-2.33-2.28-2.38l.03-.5a4.754 4.754 0 0 0-8.32-3.14c1.5.29 2.8 1.11 3.71 2.25L9.5 13.5c-.42-.73-1.21-1.25-2.12-1.25-1.32 0-2.38 1.06-2.38 2.38 0 1.27 1 2.3 2.25 2.37z"/></svg></span> Google Cloud Storage</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -8546,11 +8590,118 @@ Percona XtraBackup supports multiple compression algorithms with different trade
 |-----------|----------|------|------|---------------|
 | **ZSTD** | Most production environments | Excellent compression ratio, modern algorithm, good balance of speed and size | Slightly higher CPU usage compared to LZ4 | When you want strong compression without significantly impacting backup time |
 | **LZ4** | High‑throughput environments, frequent backups, or CPU‑constrained nodes | Very fast compression and decompression, low CPU overhead | Larger backup size compared to ZSTD | When speed matters more than maximum compression |
---></section>
-                    <section class='print-page md-section' id='section-6-1-8' heading-number='6.1.8'>
-                        <h1>Restore from a backup<a class='headerlink' href='#section-6-1-8' title='Permanent link'></a>
+--></section><section class="print-page" id="backups-encrypted" heading-number="6.1.8"><h1 id="backups-encrypted-encrypted-backups">Encrypted backups<a class="headerlink" href="#backups-encrypted-encrypted-backups" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.2.0.md">1.2.0</a></p>
+</div>
+<p>Percona Operator for MySQL uses <a href="https://docs.percona.com/percona-xtrabackup/latest/">Percona XtraBackup <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> to create physical backups. By default, backups are unencrypted. To add an extra security layer, you can encrypt backup files before they are stored in your cloud object storage. Encryption is applied inline during the backup stream, so files in the storage stay protected at rest even if the storage account is shared or accessed without authorization. This helps you meet compliance requirements without adding external encryption tools or changing how you run scheduled and on-demand backups.</p>
+<p>Encryption is available for the Group Replication and asynchronous replication cluster types.</p>
+<h2 id="backups-encrypted-backup-flow">Backup flow<a class="headerlink" href="#backups-encrypted-backup-flow" title="Permanent link">&para;</a></h2>
+<p>You can encrypt both full and <a href="#backups-incremental">incremental</a> backups, whether they are <a href="#backups-scheduled">scheduled</a> or <a href="#backups-ondemand">on-demand</a>. When encrypting incremental backups, the key must be the same for every backup in an incremental chain.</p>
+<p>You can enable encryption globally for all backups, or set different encryption options for each storage. The setting you configure for a specific storage overrides the global setting. This flexibility lets
+you tailor backup security to your unique requirements.</p>
+<h2 id="backups-encrypted-restore-flow">Restore flow<a class="headerlink" href="#backups-encrypted-restore-flow" title="Permanent link">&para;</a></h2>
+<p>During the in-place restore to the same cluster, the Operator recognizes the encrypted backup and uses the same encryption key Secret to decrypt the data. </p>
+<p>For a restore on a new cluster or in a different Kubernetes environment, provide the same encryption key in the Restore resource. This is required because the Operator has no access to the encryption key Secrets from the source cluster.</p>
+<p><strong>The key used for the restore must match the key used to encrypt the backup</strong>. If the key is lost or rotated, the backup cannot be recovered.</p>
+<h2 id="backups-encrypted-configuration">Configuration<a class="headerlink" href="#backups-encrypted-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="backups-encrypted-create-an-encryption-key-secret">Create an encryption key Secret<a class="headerlink" href="#backups-encrypted-create-an-encryption-key-secret" title="Permanent link">&para;</a></h3>
+<p>Create a Kubernetes Secret that holds the encryption key. The encryption key must be base64-encoded.</p>
+<p>Generate the encryption key using the following command:</p>
+<div class="highlight"><pre><span></span><code>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">24</span>
+</code></pre></div>
+<p>Create a Secret configuration file and specify the generated string within. Here&rsquo;s the example of the file <code>encryption-key.yaml</code>:</p>
+<div class="highlight"><span class="filename">encryption-key.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="nt">stringData</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">encryptionKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;encryption-key-string&gt;</span>
+</code></pre></div>
+<p>Create the Secret object:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>encryption-key.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>The Operator encodes the key when it creates the Secret.</p>
+<p>Store this Secret securely and back it up separately from your database backups. If you lose the key, encrypted backups cannot be restored.</p>
+<h3 id="backups-encrypted-enable-encryption-for-all-backups">Enable encryption for all backups<a class="headerlink" href="#backups-encrypted-enable-encryption-for-all-backups" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Edit the <code>deploy/cr.yaml</code> cluster Custom Resource and reference the Secret under <code>spec.backup.encryptionKeySecret</code>. Specify the name. The <code>key</code> field is optional and defaults to <code>encryptionKey</code>. The Operator never stores the key value, it only references it via the Secret.</li>
+</ol>
+<p>Here&rsquo;s the sample configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">        </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BACKUP-BUCKET-NAME-HERE</span>
+<span class="w">          </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">          </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Apply the new configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>This configuration applies to all backup storages unless a storage entry defines its own key.</p>
+<h3 id="backups-encrypted-enable-encryption-for-a-specific-storage">Enable encryption for a specific storage<a class="headerlink" href="#backups-encrypted-enable-encryption-for-a-specific-storage" title="Permanent link">&para;</a></h3>
+<p>To use a different key for a particular storage location, create a new Secret that stores this key. </p>
+<p>Next, configure the <code>encryptionKeySecret</code> subsection in the Custom Resource under that storage entry. </p>
+<p>This example configuration shows how to override encryption settings for the S3 storage. The new encryption key is stored within the Secret named <code>my-encryption-key-s3</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key-s3</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">        </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BACKUP-BUCKET-NAME-HERE</span>
+<span class="w">          </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">          </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+</code></pre></div>
+<p>After you apply the configuration, the storage-level encryption settings take precedence over the global settings.</p>
+<h3 id="backups-encrypted-tune-the-encryption-algorithm-and-performance">Tune the encryption algorithm and performance<a class="headerlink" href="#backups-encrypted-tune-the-encryption-algorithm-and-performance" title="Permanent link">&para;</a></h3>
+<p>The Operator uses <strong>AES256</strong> by default. To use a different cipher or adjust encryption performance, pass Percona XtraBackup options through <code>containerOptions.args.xtrabackup</code> in the cluster Custom Resource or in a specific backup or restore manifest. See <a href="#backups-fine-tune">Fine-tuning backup and restore operations</a> for how global and per-job settings interact.</p>
+<p>The example configuration shows how to tune Percona XtraBackup globally on the cluster level.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">containerOptions</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">xtrabackup</span><span class="p">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--encrypt=AES192&quot;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--encrypt-threads=3&quot;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--encrypt-chunk-size=64K&quot;</span>
+</code></pre></div>
+<h2 id="backups-encrypted-make-an-encrypted-backup">Make an encrypted backup<a class="headerlink" href="#backups-encrypted-make-an-encrypted-backup" title="Permanent link">&para;</a></h2>
+<p>You don&rsquo;t need any additional configuration to make an encrypted backup. The Operator uses the encryption settings from the Custom Resource for both <a href="#backups-ondemand">on-demand</a> and <a href="#backups-scheduled">scheduled</a> backups.</p>
+<h2 id="backups-encrypted-restore-from-an-encrypted-backup-on-the-same-cluster">Restore from an encrypted backup on the same cluster<a class="headerlink" href="#backups-encrypted-restore-from-an-encrypted-backup-on-the-same-cluster" title="Permanent link">&para;</a></h2>
+<p>When you restore using <a href="#restore-cr-backupname"><code>backupName</code></a> on the same cluster where the backup was created, the Operator reads the encryption key from the cluster Custom Resource automatically. No extra configuration is required as long as the same <code>encryptionKeySecret</code> is still defined in the cluster.</p>
+<p>See <a href="#backups-restore">Restore the cluster from a previously saved backup</a>.</p>
+<h2 id="backups-encrypted-restore-from-an-encrypted-backup-on-a-new-cluster">Restore from an encrypted backup on a new cluster<a class="headerlink" href="#backups-encrypted-restore-from-an-encrypted-backup-on-a-new-cluster" title="Permanent link">&para;</a></h2>
+<p>When you restore from a backup on a different cluster or in a different Kubernetes environment, you must provide the encryption key in the restore resource. The Operator has no access to Secrets from the source cluster.</p>
+<p>The key used for restore <strong>must match</strong> the key that was used to encrypt the backup.</p>
+<p>See <a href="#backups-restore-to-new-cluster-restore-from-an-encrypted-backup">Restore from a backup to a new Kubernetes-based environment</a> for the full cross-cluster restore workflow.</p>
+<div class="admonition warning">
+<p class="admonition-title">Keep your backup encryption keys safe</p>
+<p>To restore from an encrypted backup, you <strong>must have the original encryption key</strong>. If the key is lost or rotated, your backups are irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
+</div></section>
+                    <section class='print-page md-section' id='section-6-1-9' heading-number='6.1.9'>
+                        <h1>Restore from a backup<a class='headerlink' href='#section-6-1-9' title='Permanent link'></a>
                         </h1>
-                    <section class="print-page" id="backups-restore" heading-number="6.1.8.1"><h1 id="backups-restore-restore-the-cluster-from-a-previously-saved-backup">Restore the cluster from a previously saved backup<a class="headerlink" href="#backups-restore-restore-the-cluster-from-a-previously-saved-backup" title="Permanent link">&para;</a></h1>
+                    <section class="print-page" id="backups-restore" heading-number="6.1.9.1"><h1 id="backups-restore-restore-the-cluster-from-a-previously-saved-backup">Restore the cluster from a previously saved backup<a class="headerlink" href="#backups-restore-restore-the-cluster-from-a-previously-saved-backup" title="Permanent link">&para;</a></h1>
 <p>You can restore from a backup as follows:</p>
 <ul>
 <li>On the same Kubernetes cluster and in the same namespace where you made the backup</li>
@@ -8719,7 +8870,7 @@ xb-restore-restore2                                Complete             1/1     
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <h2 id="backups-restore-troubleshooting">Troubleshooting<a class="headerlink" href="#backups-restore-troubleshooting" title="Permanent link">&para;</a></h2>
-<p>If you face issues with restore, refer to our <a href="#debug-backup-restore-restores">Restore troubleshooting guide</a> for help.</p></section><section class="print-page" id="backups-restore-to-new-cluster" heading-number="6.1.8.2"><h1 id="backups-restore-to-new-cluster-restore-from-a-backup-to-a-new-kubernetes-based-environment">Restore from a backup to a new Kubernetes-based environment<a class="headerlink" href="#backups-restore-to-new-cluster-restore-from-a-backup-to-a-new-kubernetes-based-environment" title="Permanent link">&para;</a></h1>
+<p>If you face issues with restore, refer to our <a href="#debug-backup-restore-restores">Restore troubleshooting guide</a> for help.</p></section><section class="print-page" id="backups-restore-to-new-cluster" heading-number="6.1.9.2"><h1 id="backups-restore-to-new-cluster-restore-from-a-backup-to-a-new-kubernetes-based-environment">Restore from a backup to a new Kubernetes-based environment<a class="headerlink" href="#backups-restore-to-new-cluster-restore-from-a-backup-to-a-new-kubernetes-based-environment" title="Permanent link">&para;</a></h1>
 <p>You can restore from a backup as follows:</p>
 <ul>
 <li>On <a href="#backups-restore">the same Kubernetes cluster where you made the backup</a></li>
@@ -8731,11 +8882,13 @@ xb-restore-restore2                                Complete             1/1     
 <ul>
 <li><a href="#backups-restore-to-new-cluster-restore-from-a-backup-without-point-in-time-recovery">Without point-in-time recovery</a></li>
 <li><a href="#backups-restore-to-new-cluster-restore-with-point-in-time-recovery">Make a point-in-time recovery</a></li>
+<li><a href="#backups-restore-to-new-cluster-restore-from-an-encrypted-backup">Restore from an encrypted backup</a></li>
 </ul>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.1.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <p>You can check available options in the <a href="#restore-cr">restore options reference</a>.</p>
 <h2 id="backups-restore-to-new-cluster-preconditions">Preconditions<a class="headerlink" href="#backups-restore-to-new-cluster-preconditions" title="Permanent link">&para;</a></h2>
 <p>When restoring to a new Kubernetes-based environment, make sure it has a Secrets object with the same user passwords as in the source cluster.</p>
+<p>If the backup was <a href="#backups-encrypted">encrypted</a>, the Operator requires the Secret with the same encryption key that was used for the backup. Reference this Secret in the restore resource under <code>spec.backupSource.storage.encryptionKeySecret</code>.</p>
 <p>You can export the user Secret from the source cluster and create a Secrets object on the target one. Here&rsquo;s how to do it:</p>
 <ol>
 <li>
@@ -8820,13 +8973,14 @@ type: Opaque
 <span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
 <span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
-<span class="w">    </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
-<span class="w">      </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">      </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">      </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
-<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -9104,6 +9258,77 @@ type: Opaque
 <p>Start the restore:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
+<h2 id="backups-restore-to-new-cluster-restore-from-an-encrypted-backup">Restore from an encrypted backup<a class="headerlink" href="#backups-restore-to-new-cluster-restore-from-an-encrypted-backup" title="Permanent link">&para;</a></h2>
+<p>Configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
+<ul>
+<li>set <code>spec.clusterName</code> key to the name of the target cluster to restore the backup on</li>
+<li>
+<p>configure the <code>spec.backupSource</code> subsection to point to the cloud storage where the backup is stored. This subsection should include:</p>
+</li>
+<li>
+<p>a destination key. Take it from the output of the <code>kubectl get ps-backup</code> command on the source cluster</p>
+</li>
+<li>the necessary <a href="#backups-storage-configure-storage-for-backups">storage configuration keys</a>, just like in the <code>deploy/cr.yaml</code> file of the source cluster.</li>
+<li>
+<p><code>encryptionKeySecret</code> referencing the Secret with the encryption key. The encryption key must be the same that was used to encrypt the backup.</p>
+</li>
+<li>
+<p>If you need point-in-time recovery, define the <code>pitr</code> subsection in your restore configuration. Refer to the <a href="#backups-restore-to-new-cluster-restore-with-point-in-time-recovery">Restore with point-in-time recovery</a> section for supported keys and detailed guidance.</p>
+</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="backups-restore-to-new-cluster-__tabbed_8_1" name="backups-restore-to-new-cluster-__tabbed_8" type="radio" /><input id="backups-restore-to-new-cluster-__tabbed_8_2" name="backups-restore-to-new-cluster-__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="backups-restore-to-new-cluster-__tabbed_8_1">Without point-in-time recovery</label><label for="backups-restore-to-new-cluster-__tabbed_8_2">With point-in-time recovery</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>This configuration restores an encrypted backup <strong>without</strong> point-in-time recovery. </p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>This configuration shows how to restore an encrypted backup <strong>up to a specific timestamp</strong>. </p>
+<p>See the <a href="#backups-restore-to-new-cluster-restore-with-point-in-time-recovery">Point-in-time recovery options</a> section for all point-in-time recovery configuration possibilities.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1-pitr</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-05-01T15:30:00Z&quot;</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Start the restore:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 <h2 id="backups-restore-to-new-cluster-view-restore-details">View restore details<a class="headerlink" href="#backups-restore-to-new-cluster-view-restore-details" title="Permanent link">&para;</a></h2>
 <p>When you start the restore, the restore job is created. You can check the job details using these commands:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job
@@ -9118,7 +9343,7 @@ xb-restore-restore2                                Complete             1/1     
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <h2 id="backups-restore-to-new-cluster-troubleshooting">Troubleshooting<a class="headerlink" href="#backups-restore-to-new-cluster-troubleshooting" title="Permanent link">&para;</a></h2>
-<p>If you face issues with restore, refer to our <a href="#debug-backup-restore-restores">Restore troubleshooting guide</a> for help.</p></section></section><section class="print-page" id="backups-fine-tune" heading-number="6.1.9"><h1 id="backups-fine-tune-fine-tuning-backup-and-restore-operations">Fine-tuning backup and restore operations<a class="headerlink" href="#backups-fine-tune-fine-tuning-backup-and-restore-operations" title="Permanent link">&para;</a></h1>
+<p>If you face issues with restore, refer to our <a href="#debug-backup-restore-restores">Restore troubleshooting guide</a> for help.</p></section></section><section class="print-page" id="backups-fine-tune" heading-number="6.1.10"><h1 id="backups-fine-tune-fine-tuning-backup-and-restore-operations">Fine-tuning backup and restore operations<a class="headerlink" href="#backups-fine-tune-fine-tuning-backup-and-restore-operations" title="Permanent link">&para;</a></h1>
 <p>When you run Percona Server for MySQL on Kubernetes, the Operator uses <a href="https://docs.percona.com/percona-xtrabackup/8.0/index.html">Percona XtraBackup <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> to handle all backup and restore tasks. This process involves a few key binaries: <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code>. The Operator sets sensible defaults for these tools, ensuring the smooth flow for backups and restores. However, you might want to customize their behavior for specific scenarios, such as performance optimization.</p>
 <p>You can configure <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code> tools in two main ways:</p>
 <ul>
@@ -9148,7 +9373,7 @@ xb-restore-restore2                                Complete             1/1     
 <span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;some-value&quot;</span>
 </code></pre></div>
 <ul>
-<li><strong><code>xtrabackup</code></strong>: This tool handles the core backup process, interacting directly with the database. You can pass arguments like <code>--compress</code> to override the default compression mechanism. Read more about xtrabackup options in <a href="https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-option-reference.html">The xtrabackup command-line options reference <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+<li><strong><code>xtrabackup</code></strong>: This tool handles the core backup process, interacting directly with the database. You can pass arguments like <code>--compress</code> to override the default compression mechanism, or <code>--encrypt</code>, <code>--encrypt-threads</code>, and <code>--encrypt-chunk-size</code> to tune <a href="#backups-encrypted">encrypted backups</a>. Read more about xtrabackup options in <a href="https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-option-reference.html">The xtrabackup command-line options reference <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
 <li><strong><code>xbcloud</code></strong>: This binary is used for transferring backup data to and from cloud storage. An example configuration is to define the number of retries after the failure. Read more about available options in <a href="https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-options.html">The xbcloud command-line options reference <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
 <li><strong><code>xbstream</code></strong>: This binary is for streaming and decompressing backup data during restore. Arguments here, like <code>--parallel</code>, can help accelerate the process. Read more about available options in <a href="https://docs.percona.com/percona-xtrabackup/8.0/xbstream-options.html">The xbstream command-line options reference <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</li>
 </ul>
@@ -9202,7 +9427,7 @@ xb-restore-restore2                                Complete             1/1     
 <li>Environment variables for a restore job are set for the <code>xtrabackup</code> container in the restore Pod.</li>
 <li>The <code>VERIFY_TLS</code> environment variable currently applies only to restore operations and is ignored for backups. </li>
 <li>If the same binary is configured globally and individually for backups or restores, individual settings take precedence. </li>
-</ol></section><section class="print-page" id="backups-delete" heading-number="6.1.10"><h1 id="backups-delete-delete-unneeded-backups">Delete unneeded backups<a class="headerlink" href="#backups-delete-delete-unneeded-backups" title="Permanent link">&para;</a></h1>
+</ol></section><section class="print-page" id="backups-delete" heading-number="6.1.11"><h1 id="backups-delete-delete-unneeded-backups">Delete unneeded backups<a class="headerlink" href="#backups-delete-delete-unneeded-backups" title="Permanent link">&para;</a></h1>
 <p>You can delete backups in the following ways:</p>
 <ul>
 <li>Configure the retention policy for full backups and have the Operator delete them according to this policy rules.</li>
@@ -10292,10 +10517,12 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret/ps-cluster1-ssl
 <p>Key rotation is replacing the old master encryption key with the new one. When a new master encryption key is created, it is stored in Vault and tablespace keys are re-encrypted with it. The entire dataset is not re-encrypted and this makes the key rotation a fast and lightweight operation.</p>
 <p>Read more about key rotation in the <a href="https://docs.percona.com/percona-server/8.0/rotating-master-key.html">Rotate the master key <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <h2 id="encryption-backups-and-encryption">Backups and encryption<a class="headerlink" href="#encryption-backups-and-encryption" title="Permanent link">&para;</a></h2>
-<p>Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up encrypted data. The backups remain encrypted, ensuring your data is secure both on your live cluster and in your backup storage.</p>
+<p>Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up <a href="#encryption-setup">encrypted</a> tablespaces. When your database uses the <code>keyring_vault</code> plugin, backup files retain that encryption layer as part of the physical backup data.</p>
+<p>Starting with Operator 1.2.0, you can also <a href="#backups-encrypted">encrypt backup files in the object storage</a> independently of database encryption. This protects backup data even when live database encryption is not enabled.</p>
 <div class="admonition warning">
 <p class="admonition-title">Keep your encryption keys safe</p>
-<p>To restore from an encrypted backup, you <strong>must have the original master encryption key</strong>. If the encryption key is lost, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up your master encryption keys separately from your database backups.</p>
+<p>To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is the <strong>the original Vault master encryption key</strong>. For encrypted backups, this is the <strong>backup encryption key</strong> from the Kubernetes Secret.</p>
+<p>If either key is lost or rotated, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
 </div>
 <h2 id="encryption-next-steps">Next steps<a class="headerlink" href="#encryption-next-steps" title="Permanent link">&para;</a></h2>
 <p><a class="md-button" href="#encryption-setup">Configure data-at-rest encryption</a></p></section><section class="print-page" id="encryption-setup" heading-number="7.2.2"><h1 id="encryption-setup-configure-data-at-rest-encryption-with-hashicorp-vault">Configure data-at-rest encryption with HashiCorp Vault<a class="headerlink" href="#encryption-setup-configure-data-at-rest-encryption-with-hashicorp-vault" title="Permanent link">&para;</a></h1>
@@ -17758,6 +17985,38 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="operator-backupencryptionkeysecretname"><code>backup.encryptionKeySecret.name</code><a class="headerlink" href="#operator-backupencryptionkeysecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that stores the key used to <a href="#backups-encrypted">encrypt backups</a> before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>my-encryption-key</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backupencryptionkeysecretkey"><code>backup.encryptionKeySecret.key</code><a class="headerlink" href="#operator-backupencryptionkeysecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the encryption key value. Defaults to <code>encryptionKey</code>. This is a global setting and applies to all storages unless overridden for a specific storage.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>encryptionKey</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="operator-backuppitrenabled"><code>backup.pitr.enabled</code><a class="headerlink" href="#operator-backuppitrenabled" title="Permanent link">&para;</a></h3>
 <p>Enables or disables point-in-time recovery functionality.</p>
 <table>
@@ -18563,6 +18822,38 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="operator-backupstoragesstorage-nameencryptionkeysecretname"><code>backup.storages.STORAGE-NAME.encryptionKeySecret.name</code><a class="headerlink" href="#operator-backupstoragesstorage-nameencryptionkeysecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that contains the key used to <a href="#backups-encrypted">encrypt backups</a> for this storage location. When set, it takes precedence over <a href="#operator-backupencryptionkeysecretname"><code>backup.encryptionKeySecret.name</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>my-encryption-key</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backupstoragesstorage-nameencryptionkeysecretkey"><code>backup.storages.STORAGE-NAME.encryptionKeySecret.key</code><a class="headerlink" href="#operator-backupstoragesstorage-nameencryptionkeysecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the encryption key value. Defaults to <code>encryptionKey</code>. It takes precedence over the <a href="#operator-backupencryptionkeysecretkey"><code>backup.encryptionKeySecret.key</code></a> setting.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>encryptionKey</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="operator-backupstoragesstorage-namenodeselector"><code>backup.storages.STORAGE-NAME.nodeSelector</code><a class="headerlink" href="#operator-backupstoragesstorage-namenodeselector" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector">Kubernetes nodeSelector <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <table>
@@ -19326,6 +19617,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 </table>
 <h3 id="backup-cr-storagename"><code>storageName</code><a class="headerlink" href="#backup-cr-storagename" title="Permanent link">&para;</a></h3>
 <p>Specifies the name of the storage where to save a backup. It must match the name you specified in the <code>spec.backup.storages</code> subsection of the <code>deploy/cr.yaml</code> file.</p>
+<p>If the cluster or the matching storage entry defines <a href="#operator-backupencryptionkeysecretname"><code>encryptionKeySecret</code></a>, the Operator encrypts this backup automatically. See <a href="#backups-encrypted">Encrypted backups</a>.</p>
 <table>
 <thead>
 <tr>
@@ -19468,6 +19760,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 </table>
 <h3 id="restore-cr-backupname"><code>backupName</code><a class="headerlink" href="#restore-cr-backupname" title="Permanent link">&para;</a></h3>
 <p>Specifies the name of a backup to be used for a restore. This backup should be from the same cluster.</p>
+<p>When the backup was <a href="#backups-encrypted">encrypted</a>, the Operator uses the <code>encryptionKeySecret</code> from the cluster Custom Resource automatically. The key used for the restore must match the key used to encrypt the backup.</p>
 <table>
 <thead>
 <tr>
@@ -19535,7 +19828,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 </tbody>
 </table>
 <h4 id="restore-cr-pitrdate"><code>pitr.date</code><a class="headerlink" href="#restore-cr-pitrdate" title="Permanent link">&para;</a></h4>
-<p>Timestamp string used when <code>pitr.type</code> is <code>date</code>. Specified in the format &ldquo;yyyy-mm-dd hh<img alt="🇲🇲" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f1f2-1f1f2.svg" title=":mm:" />ss&rdquo; .</p>
+<p>Timestamp string used when <code>pitr.type</code> is <code>date</code>. Specified in the format <code>yyyy-mm-dd hh:mm:ss</code>.</p>
 <table>
 <thead>
 <tr>
@@ -19568,7 +19861,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 </tbody>
 </table>
 <h2 id="restore-cr-the-backupsource-subsection">The <code>backupSource</code> subsection<a class="headerlink" href="#restore-cr-the-backupsource-subsection" title="Permanent link">&para;</a></h2>
-<p>Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment. </p>
+<p>Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment.</p>
 <h3 id="restore-cr-backupsourcedestination"><code>backupSource.destination</code><a class="headerlink" href="#restore-cr-backupsourcedestination" title="Permanent link">&para;</a></h3>
 <p>Specifies the path to the backup on the storage</p>
 <table>
@@ -19582,6 +19875,54 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>s3://bucket-name/backup-destination/</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="restore-cr-backupsourcestorageencryptionkeysecret"><code>backupSource.storage.encryptionKeySecret</code><a class="headerlink" href="#restore-cr-backupsourcestorageencryptionkeysecret" title="Permanent link">&para;</a></h3>
+<p>References a Kubernetes Secret that contains the key used to decrypt an <a href="#backups-encrypted">encrypted backup</a>. Required when restoring an encrypted backup from object storage on a cluster that does not have access to the source cluster&rsquo;s encryption key Secret. The key used for the restore must match the key used to encrypt the backup.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span> subdoc</td>
+<td><pre>name: my-encryption-key<br>key: encryptionKey</pre></td>
+</tr>
+</tbody>
+</table>
+<h3 id="restore-cr-backupsourcestorageencryptionkeysecretname"><code>backupSource.storage.encryptionKeySecret.name</code><a class="headerlink" href="#restore-cr-backupsourcestorageencryptionkeysecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that stores the backup encryption key.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>my-encryption-key</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="restore-cr-backupsourcestorageencryptionkeysecretkey"><code>backupSource.storage.encryptionKeySecret.key</code><a class="headerlink" href="#restore-cr-backupsourcestorageencryptionkeysecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the encryption key value. Defaults to <code>encryptionKey</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>encryptionKey</code></td>
 </tr>
 </tbody>
 </table>
@@ -21859,14 +22200,16 @@ and <a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji">
 
 .print-site-enumerate-headings #backups-compressed > h1:before { content: '6.1.7 ' }
 
-.print-site-enumerate-headings #section-6-1-8 > h1:before { content: '6.1.8 ' }
-.print-site-enumerate-headings #backups-restore > h1:before { content: '6.1.8.1 ' }
+.print-site-enumerate-headings #backups-encrypted > h1:before { content: '6.1.8 ' }
 
-.print-site-enumerate-headings #backups-restore-to-new-cluster > h1:before { content: '6.1.8.2 ' }
+.print-site-enumerate-headings #section-6-1-9 > h1:before { content: '6.1.9 ' }
+.print-site-enumerate-headings #backups-restore > h1:before { content: '6.1.9.1 ' }
 
-.print-site-enumerate-headings #backups-fine-tune > h1:before { content: '6.1.9 ' }
+.print-site-enumerate-headings #backups-restore-to-new-cluster > h1:before { content: '6.1.9.2 ' }
 
-.print-site-enumerate-headings #backups-delete > h1:before { content: '6.1.10 ' }
+.print-site-enumerate-headings #backups-fine-tune > h1:before { content: '6.1.10 ' }
+
+.print-site-enumerate-headings #backups-delete > h1:before { content: '6.1.11 ' }
 
 .print-site-enumerate-headings #section-6-2 > h1:before { content: '6.2 ' }
 .print-site-enumerate-headings #monitoring > h1:before { content: '6.2.1 ' }

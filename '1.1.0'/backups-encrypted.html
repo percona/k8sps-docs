@@ -9,37 +9,37 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Date">
+        <meta name="description" content="Percona Operator for MySQL uses Percona XtraBackup  to create physical backups. By default, backups are unencrypted. To add an extra security layer, you can encrypt backup files before they are stored in your cloud object storage. Encryption is applied inline during the backup stream, so files in the storage stay protected at rest even if the storage account is shared or accessed without authorization. This helps you meet compliance requirements without adding external encryption tools or changing how you run scheduled and on-demand backups.">
       
       
         <meta name="author" content="Percona LLC">
       
       
-        <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/'1.1.0'/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.html">
+        <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/'1.1.0'/backups-encrypted.html">
       
       
-        <link rel="prev" href="Kubernetes-Operator-for-PS-RN0.9.0.html">
+        <link rel="prev" href="backups-compressed.html">
       
       
-        <link rel="next" href="Kubernetes-Operator-for-PS-RN0.7.0.html">
+        <link rel="next" href="backups-restore.html">
       
       
         
       
       
-      <link rel="icon" href="../assets/operators_fav.svg">
+      <link rel="icon" href="assets/operators_fav.svg">
       <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.6">
     
     
       
-        <title>Percona Operator for MySQL 0.8.0 (2024-07-16) - Percona Operator for MySQL based on Percona Server for MySQL</title>
+        <title>Encrypted backups - Percona Operator for MySQL based on Percona Server for MySQL</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -58,27 +58,27 @@
       
     
     
-      <link rel="stylesheet" href="../css/print-site.css">
+      <link rel="stylesheet" href="css/print-site.css">
     
-      <link rel="stylesheet" href="../css/print-site-material.css">
+      <link rel="stylesheet" href="css/print-site-material.css">
     
       <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.3/css/line.css">
     
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
     
-      <link rel="stylesheet" href="../css/nocopy.css">
+      <link rel="stylesheet" href="css/nocopy.css">
     
-      <link rel="stylesheet" href="../css/design.css">
+      <link rel="stylesheet" href="css/design.css">
     
-      <link rel="stylesheet" href="../css/osano.css">
+      <link rel="stylesheet" href="css/osano.css">
     
-      <link rel="stylesheet" href="../css/operators.css">
+      <link rel="stylesheet" href="css/operators.css">
     
-      <link rel="stylesheet" href="../css/extra.css">
+      <link rel="stylesheet" href="css/extra.css">
     
-      <link rel="stylesheet" href="../css/rating.css">
+      <link rel="stylesheet" href="css/rating.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -100,7 +100,7 @@
                  
                  
                  <meta property="og:type" content="website" />
-                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Percona Operator for MySQL 0.8.0 (2024-07-16)" />
+                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Encrypted backups" />
                     <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/assets/images/kubernetes-operators.png">
                     <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/">
                 </head>
@@ -128,7 +128,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#percona-operator-for-mysql-080" class="md-skip">
+        <a href="#encrypted-backups" class="md-skip">
           Skip to content
         </a>
       
@@ -207,14 +207,14 @@
 
     <!-- Link to home -->
     <a
-      href="../index.html"
+      href="index.html"
       title="Percona Operator for MySQL based on Percona Server for MySQL"
       class="md-header__button md-logo"
       aria-label="Percona Operator for MySQL based on Percona Server for MySQL"
       data-md-component="logo"
     >
       
-  <img src="../assets/operators-logo.svg" alt="logo">
+  <img src="assets/operators-logo.svg" alt="logo">
 
     </a>
 
@@ -229,7 +229,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            <a href="../index.html">
+            <a href="index.html">
               Percona Operator for MySQL based on Percona Server for MySQL
             </a>
           </span>
@@ -237,7 +237,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Percona Operator for MySQL 0.8.0 (2024-07-16)
+              Encrypted backups
             
           </span>
         </div>
@@ -374,9 +374,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../index.html" title="Percona Operator for MySQL based on Percona Server for MySQL" class="md-nav__button md-logo" aria-label="Percona Operator for MySQL based on Percona Server for MySQL" data-md-component="logo">
+    <a href="index.html" title="Percona Operator for MySQL based on Percona Server for MySQL" class="md-nav__button md-logo" aria-label="Percona Operator for MySQL based on Percona Server for MySQL" data-md-component="logo">
       
-  <img src="../assets/operators-logo.svg" alt="logo">
+  <img src="assets/operators-logo.svg" alt="logo">
 
     </a>
     Percona Operator for MySQL based on Percona Server for MySQL
@@ -403,7 +403,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../index.html" class="md-nav__link">
+      <a href="index.html" class="md-nav__link">
         
   
   
@@ -430,7 +430,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../get-help.html" class="md-nav__link">
+      <a href="get-help.html" class="md-nav__link">
         
   
   
@@ -504,7 +504,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../features.html" class="md-nav__link">
+      <a href="features.html" class="md-nav__link">
         
   
   
@@ -532,7 +532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../how-it-works.html" class="md-nav__link">
+      <a href="how-it-works.html" class="md-nav__link">
         
   
   
@@ -560,7 +560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture.html" class="md-nav__link">
+      <a href="architecture.html" class="md-nav__link">
         
   
   
@@ -642,7 +642,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../quickstart.html" class="md-nav__link">
+      <a href="quickstart.html" class="md-nav__link">
         
   
   
@@ -670,7 +670,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../System-Requirements.html" class="md-nav__link">
+      <a href="System-Requirements.html" class="md-nav__link">
         
   
   
@@ -745,7 +745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../helm.html" class="md-nav__link">
+      <a href="helm.html" class="md-nav__link">
         
   
   
@@ -773,7 +773,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../kubectl.html" class="md-nav__link">
+      <a href="kubectl.html" class="md-nav__link">
         
   
   
@@ -801,7 +801,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../custom-install.html" class="md-nav__link">
+      <a href="custom-install.html" class="md-nav__link">
         
   
   
@@ -837,7 +837,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../connect.html" class="md-nav__link">
+      <a href="connect.html" class="md-nav__link">
         
   
   
@@ -865,7 +865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../data-insert.html" class="md-nav__link">
+      <a href="data-insert.html" class="md-nav__link">
         
   
   
@@ -893,7 +893,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backup-tutorial.html" class="md-nav__link">
+      <a href="backup-tutorial.html" class="md-nav__link">
         
   
   
@@ -921,7 +921,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../monitoring-tutorial.html" class="md-nav__link">
+      <a href="monitoring-tutorial.html" class="md-nav__link">
         
   
   
@@ -949,7 +949,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../what-next.html" class="md-nav__link">
+      <a href="what-next.html" class="md-nav__link">
         
   
   
@@ -1031,7 +1031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gke.html" class="md-nav__link">
+      <a href="gke.html" class="md-nav__link">
         
   
   
@@ -1059,7 +1059,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../eks.html" class="md-nav__link">
+      <a href="eks.html" class="md-nav__link">
         
   
   
@@ -1087,7 +1087,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../openshift.html" class="md-nav__link">
+      <a href="openshift.html" class="md-nav__link">
         
   
   
@@ -1115,7 +1115,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../minikube.html" class="md-nav__link">
+      <a href="minikube.html" class="md-nav__link">
         
   
   
@@ -1143,7 +1143,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../kubernetes.html" class="md-nav__link">
+      <a href="kubernetes.html" class="md-nav__link">
         
   
   
@@ -1175,18 +1175,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1207,7 +1209,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1222,18 +1224,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" checked>
         
           
           <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
@@ -1254,7 +1258,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1272,7 +1276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups.html" class="md-nav__link">
+      <a href="backups.html" class="md-nav__link">
         
   
   
@@ -1300,7 +1304,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-storage.html" class="md-nav__link">
+      <a href="backups-storage.html" class="md-nav__link">
         
   
   
@@ -1328,7 +1332,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-incremental.html" class="md-nav__link">
+      <a href="backups-incremental.html" class="md-nav__link">
         
   
   
@@ -1356,7 +1360,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-scheduled.html" class="md-nav__link">
+      <a href="backups-scheduled.html" class="md-nav__link">
         
   
   
@@ -1384,7 +1388,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-ondemand.html" class="md-nav__link">
+      <a href="backups-ondemand.html" class="md-nav__link">
         
   
   
@@ -1412,7 +1416,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-pitr.html" class="md-nav__link">
+      <a href="backups-pitr.html" class="md-nav__link">
         
   
   
@@ -1440,7 +1444,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-compressed.html" class="md-nav__link">
+      <a href="backups-compressed.html" class="md-nav__link">
         
   
   
@@ -1465,10 +1469,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../backups-encrypted.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Encrypted backups
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="backups-encrypted.html" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1484,6 +1515,142 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#backup-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backup flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-an-encryption-key-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create an encryption key Secret
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-encryption-for-all-backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable encryption for all backups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-encryption-for-a-specific-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable encryption for a specific storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tune-the-encryption-algorithm-and-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tune the encryption algorithm and performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#make-an-encrypted-backup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Make an encrypted backup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-from-an-encrypted-backup-on-the-same-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore from an encrypted backup on the same cluster
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-from-an-encrypted-backup-on-a-new-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore from an encrypted backup on a new cluster
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1543,7 +1710,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-restore.html" class="md-nav__link">
+      <a href="backups-restore.html" class="md-nav__link">
         
   
   
@@ -1571,7 +1738,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-restore-to-new-cluster.html" class="md-nav__link">
+      <a href="backups-restore-to-new-cluster.html" class="md-nav__link">
         
   
   
@@ -1607,7 +1774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-fine-tune.html" class="md-nav__link">
+      <a href="backups-fine-tune.html" class="md-nav__link">
         
   
   
@@ -1635,7 +1802,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-delete.html" class="md-nav__link">
+      <a href="backups-delete.html" class="md-nav__link">
         
   
   
@@ -1718,7 +1885,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../monitoring.html" class="md-nav__link">
+      <a href="monitoring.html" class="md-nav__link">
         
   
   
@@ -1746,7 +1913,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../monitor-kubernetes.html" class="md-nav__link">
+      <a href="monitor-kubernetes.html" class="md-nav__link">
         
   
   
@@ -1782,7 +1949,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../scaling.html" class="md-nav__link">
+      <a href="scaling.html" class="md-nav__link">
         
   
   
@@ -1810,7 +1977,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../users.html" class="md-nav__link">
+      <a href="users.html" class="md-nav__link">
         
   
   
@@ -1939,7 +2106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../TLS.html" class="md-nav__link">
+      <a href="TLS.html" class="md-nav__link">
         
   
   
@@ -1967,7 +2134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tls-cert-manager.html" class="md-nav__link">
+      <a href="tls-cert-manager.html" class="md-nav__link">
         
   
   
@@ -1995,7 +2162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tls-manual.html" class="md-nav__link">
+      <a href="tls-manual.html" class="md-nav__link">
         
   
   
@@ -2023,7 +2190,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tls-update.html" class="md-nav__link">
+      <a href="tls-update.html" class="md-nav__link">
         
   
   
@@ -2106,7 +2273,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../encryption.html" class="md-nav__link">
+      <a href="encryption.html" class="md-nav__link">
         
   
   
@@ -2134,7 +2301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../encryption-setup.html" class="md-nav__link">
+      <a href="encryption-setup.html" class="md-nav__link">
         
   
   
@@ -2217,7 +2384,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../expose.html" class="md-nav__link">
+      <a href="expose.html" class="md-nav__link">
         
   
   
@@ -2245,7 +2412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../haproxy-conf.html" class="md-nav__link">
+      <a href="haproxy-conf.html" class="md-nav__link">
         
   
   
@@ -2273,7 +2440,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../router-conf.html" class="md-nav__link">
+      <a href="router-conf.html" class="md-nav__link">
         
   
   
@@ -2309,7 +2476,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../constraints.html" class="md-nav__link">
+      <a href="constraints.html" class="md-nav__link">
         
   
   
@@ -2337,7 +2504,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../options.html" class="md-nav__link">
+      <a href="options.html" class="md-nav__link">
         
   
   
@@ -2365,7 +2532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../cluster-wide.html" class="md-nav__link">
+      <a href="cluster-wide.html" class="md-nav__link">
         
   
   
@@ -2494,7 +2661,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../update.html" class="md-nav__link">
+      <a href="update.html" class="md-nav__link">
         
   
   
@@ -2522,7 +2689,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../update-operator.html" class="md-nav__link">
+      <a href="update-operator.html" class="md-nav__link">
         
   
   
@@ -2550,7 +2717,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../update-db.html" class="md-nav__link">
+      <a href="update-db.html" class="md-nav__link">
         
   
   
@@ -2586,7 +2753,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pause.html" class="md-nav__link">
+      <a href="pause.html" class="md-nav__link">
         
   
   
@@ -2661,7 +2828,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../delete.html" class="md-nav__link">
+      <a href="delete.html" class="md-nav__link">
         
   
   
@@ -2751,7 +2918,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../change-replication-type.html" class="md-nav__link">
+      <a href="change-replication-type.html" class="md-nav__link">
         
   
   
@@ -2779,7 +2946,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../sidecar.html" class="md-nav__link">
+      <a href="sidecar.html" class="md-nav__link">
         
   
   
@@ -2807,7 +2974,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../annotations.html" class="md-nav__link">
+      <a href="annotations.html" class="md-nav__link">
         
   
   
@@ -2835,7 +3002,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../telemetry.html" class="md-nav__link">
+      <a href="telemetry.html" class="md-nav__link">
         
   
   
@@ -2917,7 +3084,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debug.html" class="md-nav__link">
+      <a href="debug.html" class="md-nav__link">
         
   
   
@@ -2945,7 +3112,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debug-shell.html" class="md-nav__link">
+      <a href="debug-shell.html" class="md-nav__link">
         
   
   
@@ -2973,7 +3140,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debug-events.html" class="md-nav__link">
+      <a href="debug-events.html" class="md-nav__link">
         
   
   
@@ -3001,7 +3168,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debug-logs.html" class="md-nav__link">
+      <a href="debug-logs.html" class="md-nav__link">
         
   
   
@@ -3029,7 +3196,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../debug-backup-restore.html" class="md-nav__link">
+      <a href="debug-backup-restore.html" class="md-nav__link">
         
   
   
@@ -3158,7 +3325,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operator.html" class="md-nav__link">
+      <a href="operator.html" class="md-nav__link">
         
   
   
@@ -3186,7 +3353,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backup-cr.html" class="md-nav__link">
+      <a href="backup-cr.html" class="md-nav__link">
         
   
   
@@ -3214,7 +3381,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../restore-cr.html" class="md-nav__link">
+      <a href="restore-cr.html" class="md-nav__link">
         
   
   
@@ -3297,7 +3464,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../images.html" class="md-nav__link">
+      <a href="images.html" class="md-nav__link">
         
   
   
@@ -3325,7 +3492,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../image-query.html" class="md-nav__link">
+      <a href="image-query.html" class="md-nav__link">
         
   
   
@@ -3361,7 +3528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../versions.html" class="md-nav__link">
+      <a href="versions.html" class="md-nav__link">
         
   
   
@@ -3436,7 +3603,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../copyright.html" class="md-nav__link">
+      <a href="copyright.html" class="md-nav__link">
         
   
   
@@ -3464,7 +3631,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../trademark-policy.html" class="md-nav__link">
+      <a href="trademark-policy.html" class="md-nav__link">
         
   
   
@@ -3504,20 +3671,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
         
           
           <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
@@ -3538,7 +3703,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_12">
             <span class="md-nav__icon md-icon"></span>
             
@@ -3556,7 +3721,7 @@
   
   
     <li class="md-nav__item">
-      <a href="index.html" class="md-nav__link">
+      <a href="ReleaseNotes/index.html" class="md-nav__link">
         
   
   
@@ -3584,7 +3749,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN1.1.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.html" class="md-nav__link">
         
   
   
@@ -3612,7 +3777,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN1.0.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.html" class="md-nav__link">
         
   
   
@@ -3640,7 +3805,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.12.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.html" class="md-nav__link">
         
   
   
@@ -3668,7 +3833,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.11.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.11.0.html" class="md-nav__link">
         
   
   
@@ -3696,7 +3861,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.10.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.html" class="md-nav__link">
         
   
   
@@ -3724,7 +3889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.9.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.html" class="md-nav__link">
         
   
   
@@ -3749,37 +3914,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Percona Operator for MySQL 0.8.0 (2024-07-16)
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="Kubernetes-Operator-for-PS-RN0.8.0.html" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.html" class="md-nav__link">
         
   
   
@@ -3795,120 +3933,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#highlights" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Highlights
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Highlights">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#supporting-cluster-wide-operator-installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supporting cluster-wide Operator installation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#fixing-the-overloaded-allowunsafeconfigurations-flag" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fixing the overloaded allowUnsafeConfigurations flag
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#new-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        New features
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#improvements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Improvements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#bugs-fixed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Bugs Fixed
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#deprecation-and-removal" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Deprecation and removal
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#supported-platforms" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supported Platforms
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -3921,7 +3945,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.7.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.html" class="md-nav__link">
         
   
   
@@ -3949,7 +3973,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.6.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.html" class="md-nav__link">
         
   
   
@@ -3977,7 +4001,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.5.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.html" class="md-nav__link">
         
   
   
@@ -4005,7 +4029,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.4.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.html" class="md-nav__link">
         
   
   
@@ -4033,7 +4057,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.3.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.html" class="md-nav__link">
         
   
   
@@ -4061,7 +4085,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.2.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.html" class="md-nav__link">
         
   
   
@@ -4089,7 +4113,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Kubernetes-Operator-for-PS-RN0.1.0.html" class="md-nav__link">
+      <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN0.1.0.html" class="md-nav__link">
         
   
   
@@ -4361,7 +4385,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
                     <div data-banner="data-banner" class="edit-contrib-banner">
     <div class="banner-content">
       <!-- Edit link centered -->
-      <a href="https://github.com/percona/k8sps-docs/edit/main/docs/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md" title="Edit this page on GitHub" class="edit-page-link">
+      <a href="https://github.com/percona/k8sps-docs/edit/main/docs/backups-encrypted.md" title="Edit this page on GitHub" class="edit-page-link">
         <span class="edit-page-icon">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
@@ -4411,22 +4435,44 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#highlights" class="md-nav__link">
+  <a href="#backup-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Highlights
+        Backup flow
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Highlights">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#supporting-cluster-wide-operator-installation" class="md-nav__link">
+  <a href="#create-an-encryption-key-secret" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Supporting cluster-wide Operator installation
+        Create an encryption key Secret
       
     </span>
   </a>
@@ -4434,10 +4480,32 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixing-the-overloaded-allowunsafeconfigurations-flag" class="md-nav__link">
+  <a href="#enable-encryption-for-all-backups" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fixing the overloaded allowUnsafeConfigurations flag
+        Enable encryption for all backups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-encryption-for-a-specific-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable encryption for a specific storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tune-the-encryption-algorithm-and-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tune the encryption algorithm and performance
       
     </span>
   </a>
@@ -4450,10 +4518,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#new-features" class="md-nav__link">
+  <a href="#make-an-encrypted-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        New features
+        Make an encrypted backup
       
     </span>
   </a>
@@ -4461,10 +4529,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#improvements" class="md-nav__link">
+  <a href="#restore-from-an-encrypted-backup-on-the-same-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Improvements
+        Restore from an encrypted backup on the same cluster
       
     </span>
   </a>
@@ -4472,32 +4540,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#bugs-fixed" class="md-nav__link">
+  <a href="#restore-from-an-encrypted-backup-on-a-new-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bugs Fixed
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#deprecation-and-removal" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Deprecation and removal
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#supported-platforms" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Supported Platforms
+        Restore from an encrypted backup on a new cluster
       
     </span>
   </a>
@@ -4527,101 +4573,131 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     
       
     
-    <a href="https://github.com/percona/k8sps-docs/raw/main/docs/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/percona/k8sps-docs/raw/main/docs/backups-encrypted.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="percona-operator-for-mysql-080"><em>Percona Operator for MySQL</em> 0.8.0<a class="headerlink" href="#percona-operator-for-mysql-080" title="Permanent link">&para;</a></h1>
-<ul>
-<li>
-<p><strong>Date</strong></p>
-<p>July 16, 2024</p>
-</li>
-<li>
-<p><strong>Installation</strong></p>
-<p><a href="../System-Requirements.html#installation-guidelines">Installing Percona Operator for MySQL</a></p>
-</li>
-</ul>
-<p>Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.8.0 of the Percona Operator for MySQL is still <strong>a tech preview release</strong> and it is <strong>not recommended for production environments</strong>. <strong>As of today, we recommend using</strong> <a href="https://docs.percona.com/percona-operator-for-mysql/pxc/index.html">Percona Operator for MySQL based on Percona XtraDB Cluster</a>, which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.</p>
-<h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">&para;</a></h2>
-<h3 id="supporting-cluster-wide-operator-installation">Supporting cluster-wide Operator installation<a class="headerlink" href="#supporting-cluster-wide-operator-installation" title="Permanent link">&para;</a></h3>
-<p>Starting from now, the Operator <a href="../cluster-wide.html">can be installed</a> in multi-namespace (so-called “cluster-wide”) mode, enabling management of Percona Server for MySQL clusters across multiple namespaces from a single Operator. This functionality, already available for other Percona Operators, brings greater flexibility and efficiency to managing MySQL databases on Kubernetes.</p>
-<h3 id="fixing-the-overloaded-allowunsafeconfigurations-flag">Fixing the overloaded allowUnsafeConfigurations flag<a class="headerlink" href="#fixing-the-overloaded-allowunsafeconfigurations-flag" title="Permanent link">&para;</a></h3>
-<p>In the previous Operator versions <code>allowUnsafeConfigurations</code> Custom Resource option was used to allow configuring a cluster with unsafe parameters, such as starting it with unsafe number of MySQL or proxy instances. In fact, setting this option to <code>true</code> resulted in a wide range of reduced safety features without the user&rsquo;s explicit intent.</p>
-<p>With this release, a separate <code>unsafeFlags</code> Custom Resource section is introduced for the fine-grained control of the safety loosening features:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">unsafeFlags</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">mysqlSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">proxy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">proxySize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">  </span><span class="nt">orchestratorSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<h1 id="encrypted-backups">Encrypted backups<a class="headerlink" href="#encrypted-backups" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md">1.2.0</a></p>
+</div>
+<p>Percona Operator for MySQL uses <a href="https://docs.percona.com/percona-xtrabackup/latest/">Percona XtraBackup <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> to create physical backups. By default, backups are unencrypted. To add an extra security layer, you can encrypt backup files before they are stored in your cloud object storage. Encryption is applied inline during the backup stream, so files in the storage stay protected at rest even if the storage account is shared or accessed without authorization. This helps you meet compliance requirements without adding external encryption tools or changing how you run scheduled and on-demand backups.</p>
+<p>Encryption is available for the Group Replication and asynchronous replication cluster types.</p>
+<h2 id="backup-flow">Backup flow<a class="headerlink" href="#backup-flow" title="Permanent link">&para;</a></h2>
+<p>You can encrypt both full and <a href="backups-incremental.html">incremental</a> backups, whether they are <a href="backups-scheduled.html">scheduled</a> or <a href="backups-ondemand.html">on-demand</a>. When encrypting incremental backups, the key must be the same for every backup in an incremental chain.</p>
+<p>You can enable encryption globally for all backups, or set different encryption options for each storage. The setting you configure for a specific storage overrides the global setting. This flexibility lets
+you tailor backup security to your unique requirements.</p>
+<h2 id="restore-flow">Restore flow<a class="headerlink" href="#restore-flow" title="Permanent link">&para;</a></h2>
+<p>During the in-place restore to the same cluster, the Operator recognizes the encrypted backup and uses the same encryption key Secret to decrypt the data. </p>
+<p>For a restore on a new cluster or in a different Kubernetes environment, provide the same encryption key in the Restore resource. This is required because the Operator has no access to the encryption key Secrets from the source cluster.</p>
+<p><strong>The key used for the restore must match the key used to encrypt the backup</strong>. If the key is lost or rotated, the backup cannot be recovered.</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="create-an-encryption-key-secret">Create an encryption key Secret<a class="headerlink" href="#create-an-encryption-key-secret" title="Permanent link">&para;</a></h3>
+<p>Create a Kubernetes Secret that holds the encryption key. The encryption key must be base64-encoded.</p>
+<p>Generate the encryption key using the following command:</p>
+<div class="highlight"><pre><span></span><code>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">24</span>
 </code></pre></div>
-<h2 id="new-features">New features<a class="headerlink" href="#new-features" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://jira.percona.com/browse/K8SPS-149">K8SPS-149</a>: Custom Resource options now include <a href="../operator.html#proxyhaproxylivenessprobetimeoutseconds">customizable health checks and timeouts</a> for HAProxy</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-186">K8SPS-186</a> and <a href="https://jira.percona.com/browse/K8SPS-370">K8SPS-370</a>: Removing <code>allowUnsafeConfigurations</code> Custom Resource option in favor of fine-grained safety control in the <code>unsafeFlags</code> subsection</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-241">K8SPS-241</a>: Support for the <a href="../cluster-wide.html">cluster-wide Operator mode</a> allowing one Operator to watch for Percona Server for MySQL Custom Resources in several namespaces</li>
-</ul>
-<h2 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://jira.percona.com/browse/K8SPS-334">K8SPS-334</a>: Finalizers were renamed to contain fully qualified domain names (FQDNs), avoiding potential conflicts with other finalizer names in the same Kubernetes environment</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-333">K8SPS-333</a>: improve <code>delete-mysql-pods-in-order</code> finalizer to take into account possible change of the primary instance in group replication</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-340">K8SPS-340</a>: A <code>securityContext</code> of the <code>xtrabackup</code> container <a href="../operator.html#backupcontainersecuritycontext">can now be configured</a> allowing administrators to define security profiles for the container </li>
-<li><a href="https://jira.percona.com/browse/K8SPS-43">K8SPS-43</a>: Custom Resource status obtained with the <code>kubectl get ps</code> command now takes into account both group and asynchronous replication, and doesn’t report the cluster as ready if the replication is broken</li>
-</ul>
-<h2 id="bugs-fixed">Bugs Fixed<a class="headerlink" href="#bugs-fixed" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://jira.percona.com/browse/K8SPS-366">K8SPS-366</a>: Fix a bug where cluster deletion caused the Operator panic due to querying a non-existing Custom Resource</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-346">K8SPS-346</a>: Fix a bug where the cluster started with 1 node and dataset bigger than 100 GB was unable to scale up because of too short bootstrap timeout</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-341">K8SPS-341</a>: Fix a bug where failed backup deletion got stuck because of being blocked by the <code>delete-backup</code> finalizer</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-310">K8SPS-310</a>: TLS certificate and issuer names generated by the Operator are now aligned with other Percona Operators to streamline coherent user experience</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-301">K8SPS-301</a>: Fix a bug that caused multiple error messages to appear in logs on MySQL Pod deletion</li>
-<li><a href="https://jira.percona.com/browse/K8SPS-307">K8SPS-307</a>:  Fix a bug where updating database with SmartUpdate strategy didn’t produce log messages about updated primary Pod and about finishing the update process</li>
-</ul>
-<h2 id="deprecation-and-removal">Deprecation and removal<a class="headerlink" href="#deprecation-and-removal" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Starting from now, <code>allowUnsafeConfigurations</code> Custom Resource option is deprecated in favor of a number of options under the <code>unsafeFlags</code> subsection. Setting <code>allowUnsafeConfigurations</code> won&rsquo;t have any effect; upgrading existing clusters with <code>allowUnsafeConfigurations=true</code> will cause everything under <a href="../operator.html#operator-unsafeflags-section">unsafeFlags</a> set to true</li>
+<p>Create a Secret configuration file and specify the generated string within. Here&rsquo;s the example of the file <code>encryption-key.yaml</code>:</p>
+<div class="highlight"><span class="filename">encryption-key.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="nt">stringData</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">encryptionKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;encryption-key-string&gt;</span>
+</code></pre></div>
+<p>Create the Secret object:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>encryption-key.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>The Operator encodes the key when it creates the Secret.</p>
+<p>Store this Secret securely and back it up separately from your database backups. If you lose the key, encrypted backups cannot be restored.</p>
+<h3 id="enable-encryption-for-all-backups">Enable encryption for all backups<a class="headerlink" href="#enable-encryption-for-all-backups" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Edit the <code>deploy/cr.yaml</code> cluster Custom Resource and reference the Secret under <code>spec.backup.encryptionKeySecret</code>. Specify the name. The <code>key</code> field is optional and defaults to <code>encryptionKey</code>. The Operator never stores the key value, it only references it via the Secret.</li>
+</ol>
+<p>Here&rsquo;s the sample configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">        </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BACKUP-BUCKET-NAME-HERE</span>
+<span class="w">          </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">          </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+</code></pre></div>
+<ol>
 <li>
-<p>Finalizers were renamed to contain fully qualified domain names:</p>
-<ul>
-<li><code>delete-mysql-pods-in-order</code> renamed to <code>percona.com/delete-mysql-pods-in-order</code></li>
-<li><code>delete-ssl</code> renamed to <code>percona.com/delete-ssl</code></li>
-<li><code>delete-backup</code> renamed to <code>percona.com/delete-backup</code></li>
-</ul>
+<p>Apply the new configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 </li>
-</ul>
-<h2 id="supported-platforms">Supported Platforms<a class="headerlink" href="#supported-platforms" title="Permanent link">&para;</a></h2>
-<p>The Operator was developed and tested with Percona Server for MySQL 8.0.36-28.
-Other options may also work but have not been tested. Other software components include:</p>
-<ul>
-<li>Orchestrator 3.2.6-12</li>
-<li>MySQL Router 8.0.36</li>
-<li>XtraBackup 8.0.35-31</li>
-<li>Percona Toolkit 3.6.0</li>
-<li>HAProxy 2.8.5</li>
-<li>PMM Client 2.42.0</li>
-</ul>
-<p>The following platforms were tested and are officially supported by the Operator
-0.8.0:</p>
-<ul>
-<li><a href="https://cloud.google.com/kubernetes-engine">Google Kubernetes Engine (GKE) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> 1.27 - 1.29</li>
-<li><a href="https://aws.amazon.com">Amazon Elastic Container Service for Kubernetes (EKS) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> 1.27 - 1.30</li>
-<li><a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> 1.33.1 (based on Kubernetes 1.30.0)</li>
-</ul>
-<p>This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.</p>
+</ol>
+<p>This configuration applies to all backup storages unless a storage entry defines its own key.</p>
+<h3 id="enable-encryption-for-a-specific-storage">Enable encryption for a specific storage<a class="headerlink" href="#enable-encryption-for-a-specific-storage" title="Permanent link">&para;</a></h3>
+<p>To use a different key for a particular storage location, create a new Secret that stores this key. </p>
+<p>Next, configure the <code>encryptionKeySecret</code> subsection in the Custom Resource under that storage entry. </p>
+<p>This example configuration shows how to override encryption settings for the S3 storage. The new encryption key is stored within the Secret named <code>my-encryption-key-s3</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key-s3</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">        </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BACKUP-BUCKET-NAME-HERE</span>
+<span class="w">          </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">          </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+</code></pre></div>
+<p>After you apply the configuration, the storage-level encryption settings take precedence over the global settings.</p>
+<h3 id="tune-the-encryption-algorithm-and-performance">Tune the encryption algorithm and performance<a class="headerlink" href="#tune-the-encryption-algorithm-and-performance" title="Permanent link">&para;</a></h3>
+<p>The Operator uses <strong>AES256</strong> by default. To use a different cipher or adjust encryption performance, pass Percona XtraBackup options through <code>containerOptions.args.xtrabackup</code> in the cluster Custom Resource or in a specific backup or restore manifest. See <a href="backups-fine-tune.html">Fine-tuning backup and restore operations</a> for how global and per-job settings interact.</p>
+<p>The example configuration shows how to tune Percona XtraBackup globally on the cluster level.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">containerOptions</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">xtrabackup</span><span class="p">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--encrypt=AES192&quot;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--encrypt-threads=3&quot;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--encrypt-chunk-size=64K&quot;</span>
+</code></pre></div>
+<h2 id="make-an-encrypted-backup">Make an encrypted backup<a class="headerlink" href="#make-an-encrypted-backup" title="Permanent link">&para;</a></h2>
+<p>You don&rsquo;t need any additional configuration to make an encrypted backup. The Operator uses the encryption settings from the Custom Resource for both <a href="backups-ondemand.html">on-demand</a> and <a href="backups-scheduled.html">scheduled</a> backups.</p>
+<h2 id="restore-from-an-encrypted-backup-on-the-same-cluster">Restore from an encrypted backup on the same cluster<a class="headerlink" href="#restore-from-an-encrypted-backup-on-the-same-cluster" title="Permanent link">&para;</a></h2>
+<p>When you restore using <a href="restore-cr.html#backupname"><code>backupName</code></a> on the same cluster where the backup was created, the Operator reads the encryption key from the cluster Custom Resource automatically. No extra configuration is required as long as the same <code>encryptionKeySecret</code> is still defined in the cluster.</p>
+<p>See <a href="backups-restore.html">Restore the cluster from a previously saved backup</a>.</p>
+<h2 id="restore-from-an-encrypted-backup-on-a-new-cluster">Restore from an encrypted backup on a new cluster<a class="headerlink" href="#restore-from-an-encrypted-backup-on-a-new-cluster" title="Permanent link">&para;</a></h2>
+<p>When you restore from a backup on a different cluster or in a different Kubernetes environment, you must provide the encryption key in the restore resource. The Operator has no access to Secrets from the source cluster.</p>
+<p>The key used for restore <strong>must match</strong> the key that was used to encrypt the backup.</p>
+<p>See <a href="backups-restore-to-new-cluster.html#restore-from-an-encrypted-backup">Restore from a backup to a new Kubernetes-based environment</a> for the full cross-cluster restore workflow.</p>
+<div class="admonition warning">
+<p class="admonition-title">Keep your backup encryption keys safe</p>
+<p>To restore from an encrypted backup, you <strong>must have the original encryption key</strong>. If the key is lost or rotated, your backups are irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
+</div>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 17, 2025 15:21:54 UTC">November 17, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 16, 2024 13:12:31 UTC">July 16, 2024</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
       
     
   </small>
@@ -4706,24 +4782,24 @@ Other options may also work but have not been tested. Other software components 
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.highlight", "navigation.top", "navigation.tracking", "content.tabs.link", "content.action.view", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["search.highlight", "navigation.top", "navigation.tracking", "content.tabs.link", "content.action.view", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
               <script src="https://cmp.osano.com/Azqe5vTyLOSbN3OuT/49ad85b5-0418-4794-ab81-7599dddd534c/osano.js"></script>
               
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../js/print-site.js"></script>
+        <script src="js/print-site.js"></script>
       
-        <script src="../js/promptremover.js"></script>
+        <script src="js/promptremover.js"></script>
       
-        <script src="../js/consent.js"></script>
+        <script src="js/consent.js"></script>
       
-        <script src="../js/percona-select.js"></script>
+        <script src="js/percona-select.js"></script>
       
-        <script src="../js/rating.js"></script>
+        <script src="js/rating.js"></script>
       
-        <script src="../js/open_in_new_tab.js"></script>
+        <script src="js/open_in_new_tab.js"></script>
       
     
               

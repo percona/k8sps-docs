@@ -1467,6 +1467,34 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="backups-encrypted.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Encrypted backups
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -1476,10 +1504,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1_9" >
         
           
-          <label class="md-nav__link" for="__nav_6_1_8" id="__nav_6_1_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_1_9" id="__nav_6_1_9_label" tabindex="0">
             
   
   
@@ -1497,8 +1525,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1_8">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4422,10 +4450,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Key rotation is replacing the old master encryption key with the new one. When a new master encryption key is created, it is stored in Vault and tablespace keys are re-encrypted with it. The entire dataset is not re-encrypted and this makes the key rotation a fast and lightweight operation.</p>
 <p>Read more about key rotation in the <a href="https://docs.percona.com/percona-server/8.0/rotating-master-key.html">Rotate the master key <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <h2 id="backups-and-encryption">Backups and encryption<a class="headerlink" href="#backups-and-encryption" title="Permanent link">&para;</a></h2>
-<p>Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up encrypted data. The backups remain encrypted, ensuring your data is secure both on your live cluster and in your backup storage.</p>
+<p>Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up <a href="encryption-setup.html">encrypted</a> tablespaces. When your database uses the <code>keyring_vault</code> plugin, backup files retain that encryption layer as part of the physical backup data.</p>
+<p>Starting with Operator 1.2.0, you can also <a href="backups-encrypted.html">encrypt backup files in the object storage</a> independently of database encryption. This protects backup data even when live database encryption is not enabled.</p>
 <div class="admonition warning">
 <p class="admonition-title">Keep your encryption keys safe</p>
-<p>To restore from an encrypted backup, you <strong>must have the original master encryption key</strong>. If the encryption key is lost, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up your master encryption keys separately from your database backups.</p>
+<p>To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is the <strong>the original Vault master encryption key</strong>. For encrypted backups, this is the <strong>backup encryption key</strong> from the Kubernetes Secret.</p>
+<p>If either key is lost or rotated, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
 </div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p><a class="md-button" href="encryption-setup.html">Configure data-at-rest encryption</a></p>
@@ -4434,7 +4464,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 23, 2025 13:19:52 UTC">September 23, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
       
         <br>
         Created:
