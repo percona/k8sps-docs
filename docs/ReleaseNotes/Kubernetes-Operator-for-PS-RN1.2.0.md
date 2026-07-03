@@ -67,7 +67,7 @@ spec:
       maxSize: "10Gi"
 ```
 
-Learn more about the workflow and troubleshooting tips in our [documentation](../scaling.md#scale-storage).
+Learn more about the workflow and troubleshooting tips in our [documentation](../scaling.md#automatic-storage-resizing).
 
 ### Delegate PVC resizing to an external autoscaler
 
@@ -275,7 +275,7 @@ For manual installation or update, follow the instructions below:
     oc create -f deploy/cr.yaml
     ```
 
-For the upgrade steps, follow the [Update documentation](#update-via-the-command-line-interface).
+For the upgrade steps, follow the [Update documentation](../update-openshift.md#update-via-the-command-line-interface).
 
 
 ## CRD changes
