@@ -1,0 +1,81 @@
+%% Cross-site replication / InnoDB ClusterSet architecture
+%% Source for the diagram in docs/replication.md
+%% Percona docs palette: fill #D4EDFB, stroke #789CD6
+
+flowchart TB
+    classDef clusterBox fill:#D4EDFB,stroke:#789CD6,stroke-width:2px,color:#1a1a1a
+    classDef innerBox fill:#ffffff,stroke:#789CD6,stroke-width:1px,color:#1a1a1a
+    classDef mgmtBox fill:#E8F4FC,stroke:#326690,stroke-width:2px,color:#1a1a1a
+    classDef appBox fill:#ffffff,stroke:#326690,stroke-width:2px,color:#1a1a1a
+    classDef dashedBox fill:#ffffff,stroke:#789CD6,stroke-width:1px,stroke-dasharray:5 5,color:#1a1a1a
+
+    APP["Application"]:::appBox
+
+    subgraph CS["ClusterSet"]
+        direction TB
+
+        subgraph MGMT["ClusterSet management"]
+            direction LR
+            CR["PerconaServerMySQLClusterSet CR<br/>(ps-clusterset)"]:::mgmtBox
+            CTRL["ClusterSet controller"]:::mgmtBox
+            RUNNER["mysqlshell-runner Pod"]:::mgmtBox
+            CR --- CTRL
+            CTRL --- RUNNER
+        end
+
+        subgraph PRIMARY["Kubernetes cluster — primary"]
+            direction TB
+            OP1["PS Operator"]:::innerBox
+            subgraph GR1["Group Replication"]
+                direction LR
+                M1["MySQL Pod<br/>+ PVC"]:::innerBox
+                M2["MySQL Pod<br/>+ PVC"]:::innerBox
+                M3["MySQL Pod<br/>+ PVC"]:::innerBox
+            end
+            HA1["HAProxy"]:::innerBox
+            OP1 --> GR1
+            GR1 --> HA1
+        end
+
+        subgraph REPLICA["Kubernetes cluster — replica"]
+            direction TB
+            OP2["PS Operator"]:::innerBox
+            subgraph GR2["Group Replication"]
+                direction LR
+                R1["MySQL Pod<br/>+ PVC"]:::innerBox
+                R2["MySQL Pod<br/>+ PVC"]:::innerBox
+                R3["MySQL Pod<br/>+ PVC"]:::innerBox
+            end
+            HA2["HAProxy"]:::dashedBox
+            OP2 --> GR2
+            GR2 --> HA2
+        end
+
+        subgraph ONPREM["On-premises MySQL"]
+            direction TB
+            subgraph NODES["MySQL nodes"]
+                direction LR
+                N1["MySQL node"]:::innerBox
+                N2["MySQL node"]:::innerBox
+                N3["MySQL node"]:::innerBox
+            end
+            HA3["HAProxy"]:::innerBox
+            NODES --> HA3
+        end
+
+        RUNNER -->|"mysqlsh AdminAPI"| PRIMARY
+        RUNNER -->|"mysqlsh AdminAPI"| REPLICA
+        RUNNER -->|"mysqlsh AdminAPI"| ONPREM
+
+        PRIMARY ==>|"Async replication"| REPLICA
+        PRIMARY ==>|"Async replication"| ONPREM
+        OP1 -.->|"Async replication"| OP2
+    end
+
+    APP -->|"Writes and reads"| HA1
+    APP -->|"Reads"| HA2
+    APP -->|"Reads"| HA3
+
+    class CS clusterBox
+    class PRIMARY,REPLICA,ONPREM clusterBox
+    class MGMT clusterBox
