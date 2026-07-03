@@ -182,8 +182,8 @@ Edit the [deploy/backup/restore.yaml](https://github.com/percona/percona-server-
     * Configure the `spec.backupSource` subsection to point to the cloud storage where the backup is stored. This subsection should include:
 
        * A destination key. Take it from the output of the `kubectl get ps-backup` command on the source cluster
-       * The necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster. Make sure to set the `prefix` in the restore object to the exact same value used for the backup, so the Operator can find the correct backup location.  
-  
+       * The necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster. Make sure to set the `prefix` in the restore object to the exact same value used for the backup, so the Operator can find the correct backup location.
+
     * Configure the `pitr` subsection:
 
        * `type` - specify one of the following:
