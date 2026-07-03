@@ -11,9 +11,16 @@ This document focuses on the restore on a new cluster deployed in a different Ku
 
 Select how you wish to restore:
 
-- [Without point-in-time recovery](#restore-from-a-backup-without-point-in-time-recovery)
-- [Make a point-in-time recovery](#restore-with-point-in-time-recovery)
-- [Restore from an encrypted backup](#restore-from-an-encrypted-backup)
+- [Restore from a backup to a new Kubernetes-based environment](#restore-from-a-backup-to-a-new-kubernetes-based-environment)
+  - [Restore scenarios](#restore-scenarios)
+  - [Preconditions](#preconditions)
+  - [Before you begin](#before-you-begin)
+  - [Restore from a backup without point-in-time recovery](#restore-from-a-backup-without-point-in-time-recovery)
+  - [Restore with point-in-time recovery](#restore-with-point-in-time-recovery)
+  - [Restore from an encrypted backup](#restore-from-an-encrypted-backup)
+  - [View restore details](#view-restore-details)
+  - [Post-restore steps](#post-restore-steps)
+  - [Troubleshooting](#troubleshooting)
 
 To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml).
 
@@ -123,6 +130,7 @@ Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following
                     credentialsSecret: ps-cluster1-s3-credentials
                     region: us-west-2
                     endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
+                    prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
                     ...
             ```
 
@@ -141,6 +149,7 @@ Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following
                   gcs:
                     bucket: operator-testing
                     credentialsSecret: ps-cluster1-gcp-credentials
+                    prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
                   type: gcs
             ```
 
@@ -165,7 +174,7 @@ When restoring to a new cluster, the Operator starts a temporary Binlog Server P
 
 Binlog storage currently supports only AWS S3 and S3-compatible services, even when the base backup is stored elsewhere. Read more in the [Point-in-time recovery](backups-pitr.md) documentation.
 
-### Approach 1. Define the storage configuration within the Restore object
+Edit the [deploy/backup/restore.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml) manifest.
 
 1. Specify the following keys:
 
@@ -173,8 +182,8 @@ Binlog storage currently supports only AWS S3 and S3-compatible services, even w
     * Configure the `spec.backupSource` subsection to point to the cloud storage where the backup is stored. This subsection should include:
 
        * A destination key. Take it from the output of the `kubectl get ps-backup` command on the source cluster
-       * The necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster.
-  
+       * The necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster. Make sure to set the `prefix` in the restore object to the exact same value used for the backup, so the Operator can find the correct backup location.
+
     * Configure the `pitr` subsection:
 
        * `type` - specify one of the following:
@@ -199,12 +208,14 @@ Binlog storage currently supports only AWS S3 and S3-compatible services, even w
                   clusterName: ps-cluster1
                   backupSource:
                     destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-                    s3:
-                      bucket: S3-BUCKET-NAME
-                      credentialsSecret: ps-cluster1-s3-credentials
-                      region: us-west-2
-                      endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                      ...
+                    storage:
+                      s3:
+                        bucket: S3-BUCKET-NAME
+                        credentialsSecret: ps-cluster1-s3-credentials
+                        region: us-west-2
+                        endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
+                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
+                        ...
                     type: s3
                   pitr:
                     backupSource:
@@ -235,6 +246,7 @@ Binlog storage currently supports only AWS S3 and S3-compatible services, even w
                       gcs:
                         bucket: operator-testing
                         credentialsSecret: ps-cluster1-gcp-credentials
+                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
                       type: gcs
                   pitr:
                     backupSource:
@@ -263,12 +275,14 @@ Binlog storage currently supports only AWS S3 and S3-compatible services, even w
                   clusterName: ps-cluster1
                   backupSource:
                     destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-                    s3:
-                      bucket: S3-BUCKET-NAME
-                      credentialsSecret: ps-cluster1-s3-credentials
-                      region: us-west-2
-                      endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                      ...
+                    storage:
+                      s3:
+                        bucket: S3-BUCKET-NAME
+                        credentialsSecret: ps-cluster1-s3-credentials
+                        region: us-west-2
+                        endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
+                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
+                        ...
                     type: s3
                   pitr:
                     backupSource:
@@ -299,6 +313,7 @@ Binlog storage currently supports only AWS S3 and S3-compatible services, even w
                       gcs:
                         bucket: operator-testing
                         credentialsSecret: ps-cluster1-gcp-credentials
+                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
                       type: gcs
                   pitr:
                     backupSource:
@@ -314,145 +329,6 @@ Binlog storage currently supports only AWS S3 and S3-compatible services, even w
                     gtid: "cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"
                 ```
        
-
-Start the restore:
-
-```bash
-kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
-```
-
-### Approach 2. The storage is defined on the target
-
-Use this approach when the target cluster already has backup storage configured in its Custom Resource. The storage name must match the source environment and use the same bucket, prefix, and credentials.
-
-However, you must provide the binlog storage configuration within the restore object using `spec.pitr.backupSource.binlogServer`. This ensures the Operator can locate and access the binlogs needed for point-in-time recovery.
-
-1. Specify the following keys:
-
-    * Set `spec.clusterName` key to the name of the target cluster to restore the backup to
-    * Set the `spec.storageName` to the storage name. It must match the name you defined in the target cluster's configuration.
-    * Configure the `spec.backupSource` subsection with the backup destination. Take it from the output of the `kubectl get ps-backup` command on the source cluster.
-
-    * Configure the `pitr` subsection:
-
-       * `type` - specify one of the following:
-
-          * `date` - to restore up to a specific time
-          * `gtid` - to restore up to a specific transaction
-
-       * For the `type=date` option, set the `date` key in the datetime format.
-       * For the `type=gtid` option, set the `gtid` to the GTID set to restore the database to. It has the format `source_id:transaction_id`
-
-       * `pitr.backupSource.binlogServer` - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster's `spec.backup.pitr.binlogServer`, including the `prefix` for the binlog folder.
-
-        === "Restore to a timestamp"
-
-            === "S3-compatible storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-timestamp
-                spec:
-                  clusterName: ps-cluster1
-                  storageName: s3-us-west
-                  backupSource:
-                    destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE #Optional for AWS S3
-                            prefix: binlogs
-                    type: date
-                    date: "2026-03-20 09:15:00"
-
-                ```
-
-            === "Google Cloud Storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-timestamp
-                spec:
-                  clusterName: ps-cluster1
-                  storageName: gcs
-                  backupSource:
-                    destination: gs://BUCKET-NAME/BACKUP-NAME
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                            prefix: binlogs
-                    type: date
-                    date: "2026-03-20 09:15:00"
-                ```
-
-        === "Restore to a transaction"
-
-            === "S3-compatible storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-transaction
-                spec:
-                  clusterName: ps-cluster1
-                  storageName: s3-us-west
-                  backupSource:
-                    destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                            prefix: binlogs
-                    type: gtid
-                    gtid: "cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"
-                ```
-
-            === "Google Cloud Storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-transaction
-                spec:
-                  clusterName: ps-cluster1
-                  storageName: gcs
-                  backupSource:
-                    destination: gs://BUCKET-NAME/BACKUP-NAME
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                            prefix: binlogs
-                    type: gtid
-                    gtid: "cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"
-                ```
 
 Start the restore:
 
@@ -522,6 +398,15 @@ Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following
             credentialsSecret: ps-cluster1-s3-credentials
             region: us-west-2
       pitr:
+        backupSource:
+          binlogServer:
+            storage:
+              s3:
+                bucket: S3-BINLOG-BUCKET-NAME
+                credentialsSecret: ps-cluster1-s3-credentials
+                region: us-west-2
+                endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
+                prefix: binlogs
         type: date
         date: "{{year}}-05-01T15:30:00Z"
     ```
