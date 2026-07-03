@@ -85,6 +85,10 @@
          <lastmod>2026-07-03</lastmod>
     </url>
     <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/clusterset-cr.html</loc>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/connect.html</loc>
          <lastmod>2026-07-03</lastmod>
     </url>
@@ -98,6 +102,10 @@
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/copyright.html</loc>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/cr-statuses.html</loc>
          <lastmod>2026-07-03</lastmod>
     </url>
     <url>
@@ -242,6 +250,14 @@
     </url>
     <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/reconciliation-concurrency.html</loc>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/replication-setup.html</loc>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/replication.html</loc>
          <lastmod>2026-07-03</lastmod>
     </url>
     <url>
