@@ -33,6 +33,7 @@ Once you've covered the basics, prepare your cluster for production workloads:
 
 - [Enable TLS/SSL encryption](TLS.md) - Secure connections between your applications and the database
 - [Configure data-at-rest encryption](encryption.md) - Protect your data at rest with encryption keys
+- [Configure encrypted backups](backups-encrypted.md) - Protect backup files stored in cloud object storage
 
 ### Configure access to your cluster for external applications
 

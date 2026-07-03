@@ -82,13 +82,26 @@ The following table shows system users’ names and purposes.
 | User Purpose   | Username     | Password Secret Key | Description                                                            |
 | -------------- | ------------ | ------------------- | ---------------------------------------------------------------------- |
 | Admin          | root         | root                | Database administrative user, can be used by the application if needed |
-| Orchestrator   | orchestrator | orchestrator        | Orchestrator administrative user                                       |
+| Orchestrator   | orchestrator | orchestrator        | Orchestrator administrative user and credentials for read/write access to the Orchestrator HTTP API (from Operator version 1.2.0 when `spec.crVersion` is `1.2.0` or higher) |
 | Backup         | xtrabackup   | xtrabackup          | [User to run backups :octicons-link-external-16:](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)     |
 | Cluster Check  | clustercheck | clustercheck        | [User for liveness checks and readiness checks :octicons-link-external-16:](http://galeracluster.com/library/documentation/monitoring-cluster.html) |
 | Monitoring     | monitor      | monitor             | User for internal monitoring purposes and [PMM agent :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html) |
 | Operator Admin | operator     | operator            | Database administrative user, should be used only by the Operator      |
 | Replication    | replication  | replication         | Administrative user needed for replication                             |
 | PMM Server token | | pmmservertoken | [The service token used to access PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html) |
+
+### Orchestrator HTTP API authentication
+
+Starting with Operator version 1.2.0, the Orchestrator HTTP API on port `3000` requires authentication when `spec.crVersion` is `1.2.0` or higher. This applies to asynchronous replication clusters where Orchestrator manages failover and topology.
+
+The Operator authenticates its own API calls automatically using the `orchestrator` system user from the cluster Secret. You do not need to configure anything for normal cluster operation.
+
+If you call the Orchestrator API yourself (for example from a custom script or when [Orchestrator is exposed](operator.md#orchestratorexposetype) outside the cluster), use one of the following:
+
+* **`orchestrator` user** — read and write access. Use the password stored under the `orchestrator` key in the cluster Secret (`spec.secretsName`).
+* **`readonly` user** — read-only access. Orchestrator accepts any password for this built-in user.
+
+Unauthenticated requests receive HTTP `401`. Upgrading the Operator alone does not enable API authentication on existing clusters; set `spec.crVersion` to `1.2.0` or higher to activate it.
 
 ### YAML Object Format
 

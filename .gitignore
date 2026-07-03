@@ -3,3 +3,4 @@ mkdocs/
 site/
 *.md~
 .vscode
+.idea

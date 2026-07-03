@@ -199,6 +199,7 @@ nav:
               - "Make on-demand backup": backups-ondemand.md
               - "Point-in-time recovery": backups-pitr.md
               - "Compressed backups": backups-compressed.md
+              - "Encrypted backups": backups-encrypted.md
               - Restore from a backup:
                 - "On the same cluster": backups-restore.md
                 - "On a new cluster": backups-restore-to-new-cluster.md
@@ -243,6 +244,7 @@ nav:
           - "Labels and annotations": annotations.md
           - "Configure telemetry": telemetry.md
           - dns-suffix.md
+          - "Configure concurrent reconciliation": reconciliation-concurrency.md
 
     - Troubleshooting:
           - "Initial troubleshooting": debug.md

@@ -718,6 +718,13 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
 
+### `mysql.exposePrimary.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `mysql.exposePrimary.annotations`
 
@@ -775,6 +782,14 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `mysql.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `mysql.expose.annotations`
 
@@ -1090,6 +1105,38 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `700m` |
 
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `64Mi` |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `50m` |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `128Mi` |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
 ### `proxy.haproxy.env.name`
 
 Name of an environment variable for HAProxy.
@@ -1289,6 +1336,14 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `proxy.haproxy.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `proxy.haproxy.expose.annotations`
 
@@ -1637,6 +1692,14 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `proxy.router.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `proxy.router.expose.annotations`
 
@@ -2015,11 +2078,21 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 ### `orchestrator.expose.type`
 
-The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for Orchestrator instances exposure.
+The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used to expose the Orchestrator HTTP API (port `3000`). The default `ClusterIP` keeps the API reachable only inside the cluster.
+
+When you change this option to `LoadBalancer` or `NodePort`, the Orchestrator API becomes reachable from outside the cluster. Starting with Operator version 1.2.0, when `spec.crVersion` is `1.2.0` or higher, all API requests must authenticate. To learn more about authentication, refer to the [Orchestrator HTTP API authentication](users.md#orchestrator-http-api-authentication) section.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `orchestrator.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `orchestrator.expose.annotations`
 
@@ -2295,6 +2368,14 @@ Address of the PMM Server to collect data from the cluster.
 | ----------- | ---------- |
 | :material-code-string: string     | `monitoring-service` |
 
+### `pmm.customClusterName`
+
+A custom name to define for a cluster. PMM Server uses this name to properly parse the metrics and display them on dashboards. Using a custom name is useful for clusters deployed in different data centers - PMM Server connects them and monitors them as one deployment. Another use case is for clusters deployed with the same name in different namespaces - PMM treats each cluster separately.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `cluster1-custom` |
+
 ## <a name="operator-backup-section"></a>Backup section
 
 The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
@@ -2307,6 +2388,22 @@ Enables or disables making backups.
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
+
+### `backup.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that stores the key used to [encrypt backups](backups-encrypted.md) before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-encryption-key` |
+
+### `backup.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. This is a global setting and applies to all storages unless overridden for a specific storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `encryptionKey` |
 
 ### `backup.pitr.enabled`
 
@@ -2716,6 +2813,23 @@ Enable or disable verification of the storage server TLS certificate. Disabling 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
+
+
+### `backup.storages.STORAGE-NAME.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that contains the key used to [encrypt backups](backups-encrypted.md) for this storage location. When set, it takes precedence over [`backup.encryptionKeySecret.name`](#backupencryptionkeysecretname).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-encryption-key` |
+
+### `backup.storages.STORAGE-NAME.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. It takes precedence over the [`backup.encryptionKeySecret.key`](#backupencryptionkeysecretkey) setting.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `encryptionKey` |
 
 ### `backup.storages.STORAGE-NAME.nodeSelector`
 
