@@ -1,5 +1,13 @@
 # Upgrade the Operator and CRD via Operator Lifecycle Manager (OLM)
 
+## Considerations for using OpenShift 4.22
+
+Starting with OpenShift 4.22, the way images with not fully qualified names are pulled has changed for repositories that share the same repository name on DockerHub and Red Hat Marketplace. By default the tags are pulled from Red Hat Marketplace. Specifying not fully qualified image names may result in the `ImagePullBackOff` error.
+
+* **OLM installation:** Images are provided with the fully qualified names and are pulled from the Red Hat Marketplace/DockerHub registry.
+* **Manual install/update with default manifests:** Images must use the `docker.io` registry prefix to guarantee successful download from the DockerHub `percona-server-mysql-operator` repository. See the [Update via the command-line interface](#update-via-the-command-line-interface) section for the exact steps.
+
+
 The upgrade on OpenShift consists of two steps:
 
 * Upgrade the Operator Deployment
@@ -70,3 +78,53 @@ These overrides are applied on top of the CSV and persist across upgrades. All o
 
 2. Click the "Upgrade available" link to review details, click "Preview InstallPlan," and then click "Approve" to upgrade the Operator.
 
+### Update via the command-line interface
+
+The following steps apply if you plan to use OpenShift 4.22. See the [Considerations for using OpenShift 4.22](#considerations-for-using-openshift-422).
+
+1. Check all clusters managed by the Operator to see if `initContainer.image` is set.
+
+    * If defined: skip the next step.
+    * If undefined: proceed to step 2.
+
+2. Apply a patch to the clusters with undefined `initContainer.image` to define this image with the `docker.io` registry in the image path:
+
+    ```bash
+    kubectl patch ps ps-cluster1 --type=merge --patch '{
+      "spec": {
+        "initcontainer": {
+              "image": "docker.io/percona-server-mysql-operator:1.1.0"
+        }
+      }
+    }'
+    ```
+
+    **Important!** This command triggers the restart of your clusters. Wait till they restart and report the `Ready` status.
+
+3. Update the Operator deployment and specify the `docker.io` registry name in the image path:
+
+    ```bash
+    kubectl patch deployment percona-server-mysql-operator \
+    -p'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"docker.io/percona/percona-server-mysql-operator:{{release}}"}]}}}}'
+    ```
+
+4. Update the Custom Resource version and the database cluster. Specify the `initContainer` image with the `docker.io` registry name in the path.
+   
+    The following example shows how to update Percona Server for MySQL cluster 8.4 with Group Replication and HAProxy:
+
+    ```bash
+    kubectl patch ps ps-cluster1 --type=merge --patch '{
+      "spec": {
+        "crVersion": "{{release}}",
+        "initContainer": "docker.io/percona/percona-server-mysql-operator:{{release}}",
+        "mysql":{ "image": "docker.io/percona/percona/percona-server:{{ ps84recommended }}" },
+        "proxy":{
+            "haproxy":{ "image": "docker.io/percona/haproxy:{{haproxyrecommended}}" }
+        },
+        "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
+        "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ptrecommended}}" },
+        "pmm":{ "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
+      }
+    }'
+    ```
+   
