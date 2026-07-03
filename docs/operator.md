@@ -1097,6 +1097,38 @@ The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.
 | ----------- | ---------- |
 | :material-code-string: string     | `700m` |
 
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.requests.memory`
+
+The [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `64Mi` |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `50m` |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `128Mi` |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `100m` |
+
 ### `proxy.haproxy.env.name`
 
 Name of an environment variable for HAProxy.
