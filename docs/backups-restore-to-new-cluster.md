@@ -13,6 +13,7 @@ Select how you wish to restore:
 
 - [Without point-in-time recovery](#restore-from-a-backup-without-point-in-time-recovery)
 - [Make a point-in-time recovery](#restore-with-point-in-time-recovery)
+- [Restore from an encrypted backup](#restore-from-an-encrypted-backup)
 
 To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml).
 
@@ -21,6 +22,8 @@ You can check available options in the [restore options reference](restore-cr.md
 ## Preconditions
 
 When restoring to a new Kubernetes-based environment, make sure it has a Secrets object with the same user passwords as in the source cluster.
+
+If the backup was [encrypted](backups-encrypted.md), the Operator requires the Secret with the same encryption key that was used for the backup. Reference this Secret in the restore resource under `spec.backupSource.storage.encryptionKeySecret`.
 
 You can export the user Secret from the source cluster and create a Secrets object on the target one. Here's how to do it:
 
@@ -113,13 +116,14 @@ Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following
               clusterName: ps-cluster1
               backupSource:
                 destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-                s3:
-                  bucket: S3-BUCKET-NAME
-                  credentialsSecret: ps-cluster1-s3-credentials
-                  region: us-west-2
-                  endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                  ...
-                type: s3
+                storage:
+                  type: s3
+                  s3:
+                    bucket: S3-BUCKET-NAME
+                    credentialsSecret: ps-cluster1-s3-credentials
+                    region: us-west-2
+                    endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
+                    ...
             ```
 
         === "Google Cloud Storage"
@@ -369,6 +373,78 @@ Start the restore:
 
 ```bash
 kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
+```
+
+## Restore from an encrypted backup
+
+Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following keys:
+
+* set `spec.clusterName` key to the name of the target cluster to restore the backup on
+* configure the `spec.backupSource` subsection to point to the cloud storage where the backup is stored. This subsection should include:
+
+  * a destination key. Take it from the output of the `kubectl get ps-backup` command on the source cluster
+  * the necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster.
+  * `encryptionKeySecret` referencing the Secret with the encryption key. The encryption key must be the same that was used to encrypt the backup.
+  
+* If you need point-in-time recovery, define the `pitr` subsection in your restore configuration. Refer to the [Restore with point-in-time recovery](#restore-with-point-in-time-recovery) section for supported keys and detailed guidance.
+
+=== "Without point-in-time recovery"
+
+    This configuration restores an encrypted backup **without** point-in-time recovery. 
+
+    ```yaml
+    apiVersion: ps.percona.com/v1
+    kind: PerconaServerMySQLRestore
+    metadata:
+      name: restore1
+    spec:
+      clusterName: ps-cluster1
+      backupSource:
+        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+        storage:
+          encryptionKeySecret:
+            name: my-encryption-key
+            key: encryptionKey
+          type: s3
+          s3:
+            bucket: S3-BUCKET-NAME
+            credentialsSecret: ps-cluster1-s3-credentials
+            region: us-west-2
+    ```
+
+=== "With point-in-time recovery"
+
+    This configuration shows how to restore an encrypted backup **up to a specific timestamp**. 
+
+    See the [Point-in-time recovery options](#restore-with-point-in-time-recovery) section for all point-in-time recovery configuration possibilities.
+
+    ```yaml
+    apiVersion: ps.percona.com/v1
+    kind: PerconaServerMySQLRestore
+    metadata:
+      name: restore1-pitr
+    spec:
+      clusterName: ps-cluster1
+      backupSource:
+        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+        storage:
+          encryptionKeySecret:
+            name: my-encryption-key
+            key: encryptionKey
+          type: s3
+          s3:
+            bucket: S3-BUCKET-NAME
+            credentialsSecret: ps-cluster1-s3-credentials
+            region: us-west-2
+      pitr:
+        type: date
+        date: "{{year}}-05-01T15:30:00Z"
+    ```
+
+Start the restore:
+
+```bash
+kubectl apply -f deploy/backup/restore.yaml -n <namespace>
 ```
 
 ## View restore details

@@ -35,7 +35,7 @@ spec:
               value: "some-value"
 ```
 
-- **`xtrabackup`**: This tool handles the core backup process, interacting directly with the database. You can pass arguments like `--compress` to override the default compression mechanism. Read more about xtrabackup options in [The xtrabackup command-line options reference :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-option-reference.html)
+- **`xtrabackup`**: This tool handles the core backup process, interacting directly with the database. You can pass arguments like `--compress` to override the default compression mechanism, or `--encrypt`, `--encrypt-threads`, and `--encrypt-chunk-size` to tune [encrypted backups](backups-encrypted.md). Read more about xtrabackup options in [The xtrabackup command-line options reference :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-option-reference.html)
 - **`xbcloud`**: This binary is used for transferring backup data to and from cloud storage. An example configuration is to define the number of retries after the failure. Read more about available options in [The xbcloud command-line options reference :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-options.html)
 - **`xbstream`**: This binary is for streaming and decompressing backup data during restore. Arguments here, like `--parallel`, can help accelerate the process. Read more about available options in [The xbstream command-line options reference :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-options.html).
 

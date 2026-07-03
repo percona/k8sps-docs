@@ -40,6 +40,7 @@ file. This section includes:
 * The [backup.schedule.type](operator.md#backupscheduletype) key to set the type for scheduled backups.
 * The [PerconaServerMySQLBackup.spec.type](backup-cr.md#type) field to set the type for on-demand backups.
 * The `storages` subsection, where you [configure access to your cloud storage](backups-storage.md)
+* Optional [backup encryption](backups-encrypted.md) settings to protect backup files in the object storage
 
 ## Backup runs
 
