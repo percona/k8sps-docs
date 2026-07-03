@@ -2864,6 +2864,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reconciliation-concurrency.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure concurrent reconciliation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -5161,6 +5189,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         Configure telemetry
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reconciliation-concurrency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure concurrent reconciliation
       
     </span>
   </a>
@@ -12940,7 +12979,49 @@ Open the <code>operator.yaml</code> file with your text editor, find the value o
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">value</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
-<p>For all supported Operator environment variables and how to change them after installation, see <a href="#env-vars-operator">Configure Operator environment variables</a>.</p></section></section>
+<p>For all supported Operator environment variables and how to change them after installation, see <a href="#env-vars-operator">Configure Operator environment variables</a>.</p></section><section class="print-page" id="reconciliation-concurrency" heading-number="9.5"><h1 id="reconciliation-concurrency-configure-concurrency-for-a-cluster-reconciliation">Configure concurrency for a cluster reconciliation<a class="headerlink" href="#reconciliation-concurrency-configure-concurrency-for-a-cluster-reconciliation" title="Permanent link">&para;</a></h1>
+<p>Reconciliation is the process by which the Operator continuously compares the desired state with the actual state of the cluster. The desired state is defined in a Kubernetes custom resource, like PerconaServerMySQL.</p>
+<p>If the actual state does not match the desired state, the Operator takes actions to bring the system into alignment. This means creating, updating, or deleting Kubernetes resources (Pods, Services, ConfigMaps, etc.) or performing database-specific operations like scaling, backups, or failover.</p>
+<p>Reconciliation is triggered by a variety of events, including:</p>
+<ul>
+<li>Changes to the cluster configuration</li>
+<li>Changes to the cluster state</li>
+<li>Changes to the cluster resources</li>
+</ul>
+<p>By default, the Operator has one reconciliation worker. This means that if you deploy or update 2 clusters at the same time, the Operator will reconcile them sequentially.</p>
+<p>The <code>MAX_CONCURRENT_RECONCILES</code> environment variable in the <code>percona-server-mysql-operator</code> deployment controls the number of concurrent workers that can reconcile resources in Percona Server for MySQL clusters in parallel.</p>
+<p>Thus, to extend the previous example, if you set the number of reconciliation workers to <code>2</code>, the Operator will reconcile both clusters in parallel. This also helps you with benchmarking the Operator performance.</p>
+<p>The general recommendation is to set the number of concurrent workers equal to the number of Percona Server for MySQL clusters. When the number of workers is greater, the excessive workers will remain idle.</p>
+<h2 id="reconciliation-concurrency-set-the-number-of-reconciliation-workers">Set the number of reconciliation workers<a class="headerlink" href="#reconciliation-concurrency-set-the-number-of-reconciliation-workers" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Check the current value of the <code>MAX_CONCURRENT_RECONCILES</code> environment variable:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec.template.spec.containers[0].env[?(@.name==&quot;MAX_CONCURRENT_RECONCILES&quot;)].value}&#39;</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample output</summary>
+<div class="no-copy highlight"><pre><span></span><code>1
+</code></pre></div>
+</details>
+</li>
+<li>
+<p>Set a new value with <code>kubectl set env</code>. The following command sets the number of workers to <code>2</code>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">set</span><span class="w"> </span>env<span class="w"> </span>deployment/percona-server-mysql-operator<span class="w"> </span><span class="nv">MAX_CONCURRENT_RECONCILES</span><span class="o">=</span><span class="m">2</span>
+</code></pre></div>
+<p>You can set the value to any positive integer.</p>
+</li>
+<li>
+<p>Verify the change by re-running the command from step 1:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec.template.spec.containers[0].env[?(@.name==&quot;MAX_CONCURRENT_RECONCILES&quot;)].value}&#39;</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample output</summary>
+<div class="no-copy highlight"><pre><span></span><code>2
+</code></pre></div>
+</details>
+</li>
+</ol>
+<p>After the environment variable is updated, Kubernetes rolls out a new Operator Pod with the new setting.</p></section></section>
                     <section class='print-page md-section' id='section-10' heading-number='10'>
                         <h1>Troubleshooting<a class='headerlink' href='#section-10' title='Permanent link'></a>
                         </h1>
@@ -22269,6 +22350,8 @@ and <a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji">
 .print-site-enumerate-headings #annotations > h1:before { content: '9.3 ' }
 
 .print-site-enumerate-headings #telemetry > h1:before { content: '9.4 ' }
+
+.print-site-enumerate-headings #reconciliation-concurrency > h1:before { content: '9.5 ' }
 
 .print-site-enumerate-headings #section-10 > h1:before { content: '10 ' }
 .print-site-enumerate-headings #debug > h1:before { content: '10.1 ' }

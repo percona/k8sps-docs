@@ -2852,6 +2852,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reconciliation-concurrency.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure concurrent reconciliation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -4309,6 +4337,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#max_concurrent_reconciles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MAX_CONCURRENT_RECONCILES
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#disable_telemetry" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4492,6 +4531,30 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WATCH_NAMESPACE</span>
 <span class="w">   </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mysql,mysql-dev,mysql-prod&quot;</span>
 </code></pre></div>
+<h3 id="max_concurrent_reconciles"><code>MAX_CONCURRENT_RECONCILES</code><a class="headerlink" href="#max_concurrent_reconciles" title="Permanent link">&para;</a></h3>
+<p>Sets the number of concurrent workers that reconcile <code>PerconaServerMySQL</code> and related custom resources in parallel. Useful when you manage multiple clusters with a single Operator. See <a href="reconciliation-concurrency.html">Configure concurrency for a cluster reconciliation</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Default</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td><code>"1"</code></td>
+<td><code>"2"</code></td>
+</tr>
+</tbody>
+</table>
+<p>The value must be a positive integer. The Operator fails to start if the value is not a valid integer or is less than or equal to 0.</p>
+<p><strong>Example configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MAX_CONCURRENT_RECONCILES</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span>
+</code></pre></div>
 <h3 id="disable_telemetry"><code>DISABLE_TELEMETRY</code><a class="headerlink" href="#disable_telemetry" title="Permanent link">&para;</a></h3>
 <p>Disables anonymous telemetry data collection by the Operator. For what is collected when telemetry is enabled, see <a href="telemetry.html">Telemetry</a>.</p>
 <table>
@@ -4533,6 +4596,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="s1">    {&quot;name&quot;: &quot;LOG_STRUCTURED&quot;, &quot;value&quot;: &quot;false&quot;},</span>
 <span class="s1">    {&quot;name&quot;: &quot;LOG_LEVEL&quot;, &quot;value&quot;: &quot;DEBUG&quot;},</span>
 <span class="s1">    {&quot;name&quot;: &quot;WATCH_NAMESPACE&quot;, &quot;valueFrom&quot;: {&quot;fieldRef&quot;: {&quot;apiVersion&quot;: &quot;v1&quot;,     &quot;fieldPath&quot;: &quot;metadata.namespace&quot;}}},</span>
+<span class="s1">    {&quot;name&quot;: &quot;MAX_CONCURRENT_RECONCILES&quot;, &quot;value&quot;: &quot;1&quot;},</span>
 <span class="s1">    {&quot;name&quot;: &quot;DISABLE_TELEMETRY&quot;, &quot;value&quot;: &quot;false&quot;}</span>
 <span class="s1">  ]}]&#39;</span>
 </code></pre></div>
@@ -4550,7 +4614,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 14, 2026 06:47:42 UTC">April 14, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:03:14 UTC">July 3, 2026</span>
       
         <br>
         Created:

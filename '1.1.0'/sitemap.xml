@@ -233,6 +233,10 @@
          <lastmod>2026-07-03</lastmod>
     </url>
     <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/reconciliation-concurrency.html</loc>
+         <lastmod>2026-07-03</lastmod>
+    </url>
+    <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/&#39;1.1.0&#39;/restore-cr.html</loc>
          <lastmod>2026-07-03</lastmod>
     </url>
