@@ -5,7 +5,7 @@
 Starting with OpenShift 4.22, the way images with not fully qualified names are pulled has changed for repositories that share the same repository name on DockerHub and Red Hat Marketplace. By default the tags are pulled from Red Hat Marketplace. Specifying not fully qualified image names may result in the `ImagePullBackOff` error.
 
 * **OLM installation:** Images are provided with the fully qualified names and are pulled from the Red Hat Marketplace/DockerHub registry.
-* **Manual install/update with default manifests:** Images must use the `docker.io` registry prefix to guarantee successful download from the DockerHub `percona-xtradb-cluster` repository. See the [Update via the command-line interface](#update-via-the-command-line-interface) section for the exact steps.
+* **Manual install/update with default manifests:** Images must use the `docker.io` registry prefix to guarantee successful download from the DockerHub `percona-server-mysql-operator` repository. See the [Update via the command-line interface](#update-via-the-command-line-interface) section for the exact steps.
 
 
 The upgrade on OpenShift consists of two steps:
@@ -93,7 +93,7 @@ The following steps apply if you plan to use OpenShift 4.22. See the [Considerat
     kubectl patch ps ps-cluster1 --type=merge --patch '{
       "spec": {
         "initcontainer": {
-              "image": "docker.io/perconpercona-server-mysql-operator:{{release}}"
+              "image": "docker.io/percona-server-mysql-operator:1.1.0"
         }
       }
     }'
@@ -119,10 +119,10 @@ The following steps apply if you plan to use OpenShift 4.22. See the [Considerat
         "initContainer": "docker.io/percona/percona-server-mysql-operator:{{release}}",
         "mysql":{ "image": "docker.io/percona/percona/percona-server:{{ ps84recommended }}" },
         "proxy":{
-            "haproxy":{ "image": "percona/haproxy:{{haproxyrecommended}}" }
+            "haproxy":{ "image": "docker.io/percona/haproxy:{{haproxyrecommended}}" }
         },
         "backup":{ "image": "docker.io/percona/percona-xtrabackup:{{ pxb84recommended }}" },
-        "toolkit":{ "image": "percona/percona-toolkit:{{ptrecommended}}" },
+        "toolkit":{ "image": "docker.io/percona/percona-toolkit:{{ptrecommended}}" },
         "pmm":{ "image": "docker.io/percona/pmm-client:{{ pmm3recommended }}" }
       }
     }'
