@@ -240,6 +240,7 @@ nav:
           - "Add sidecar containers": sidecar.md
           - "Labels and annotations": annotations.md
           - "Configure telemetry": telemetry.md
+          - "Configure concurrent reconciliation": reconciliation-concurrency.md
 
     - Troubleshooting:
           - "Initial troubleshooting": debug.md

@@ -85,6 +85,24 @@ env:
    value: "mysql,mysql-dev,mysql-prod"
 ```
 
+### `MAX_CONCURRENT_RECONCILES`
+
+Sets the number of concurrent workers that reconcile `PerconaServerMySQL` and related custom resources in parallel. Useful when you manage multiple clusters with a single Operator. See [Configure concurrency for a cluster reconciliation](reconciliation-concurrency.md).
+
+| Value type | Default | Example |
+| ---------- | ------- | ------- |
+| string     | `"1"`   | `"2"`   |
+
+The value must be a positive integer. The Operator fails to start if the value is not a valid integer or is less than or equal to 0.
+
+**Example configuration:**
+
+```yaml
+env:
+  - name: MAX_CONCURRENT_RECONCILES
+    value: "2"
+```
+
 ### `DISABLE_TELEMETRY`
 
 Disables anonymous telemetry data collection by the Operator. For what is collected when telemetry is enabled, see [Telemetry](telemetry.md).
@@ -124,6 +142,7 @@ Here’s how to do it:
         {"name": "LOG_STRUCTURED", "value": "false"},
         {"name": "LOG_LEVEL", "value": "DEBUG"},
         {"name": "WATCH_NAMESPACE", "valueFrom": {"fieldRef": {"apiVersion": "v1",     "fieldPath": "metadata.namespace"}}},
+        {"name": "MAX_CONCURRENT_RECONCILES", "value": "1"},
         {"name": "DISABLE_TELEMETRY", "value": "false"}
       ]}]'
     ```
