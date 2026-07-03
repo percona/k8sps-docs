@@ -10571,16 +10571,27 @@ following section in the Custom Resource:</p>
 <p>Use our reference documentation for the <a href="#operator">Custom Resource options</a> 
 for more details about other components.</p>
 <h3 id="scaling-scale-storage">Scale storage<a class="headerlink" href="#scaling-scale-storage" title="Permanent link">&para;</a></h3>
-<p>Kubernetes manages storage with a PersistentVolume (PV), a segment of
-storage supplied by the administrator, and a PersistentVolumeClaim
-(PVC), a request for storage from a user. </p>
-<p>Starting with Kubernetes v1.11, a user can increase the size of an existing
+<p>Kubernetes manages storage with the following components:</p>
+<ul>
+<li>a PersistentVolume (PV) - a segment of
+storage supplied by the Kubernetes administrator,</li>
+<li>a PersistentVolumeClaim
+(PVC) - a request for storage from a user.</li>
+</ul>
+<p>Starting with Kubernetes v1.11, you can increase the size of an existing
 PVC object (considered stable since Kubernetes v1.24).
-The user cannot shrink the size of an existing PVC object.</p>
-<p>Starting from the Operator version 0.11.0, you can scale Percona Server for MySQL storage automatically by configuring the Custom Resource manifest. Alternatively, you can scale the storage manually. For either way, the volume type must support PVCs expansion.</p>
+Note that you <strong>cannot shrink</strong> the size of an existing PVC object.</p>
+<p>Use storage scaling to keep up with growing data while keeping the cluster online. The Operator supports the following scaling options:</p>
+<ul>
+<li>automatic scaling - Starting with Operator version 1.2.0, the Operator monitors storage usage and scales the storage automatically</li>
+<li>storage resizing with Volume Expansion capability - Starting with the Operator version 0.11.0, you can instruct the Operator to scale the storage by updating the Custom Resource manifest</li>
+<li>manual scaling - scale the storage manually.</li>
+</ul>
+<p>You can also use an external autoscaler with the Operator. Enabling an external autoscaler disables the Operator&rsquo;s internal logic for automatic storage resizing. Choose one method based on your environment and requirements; using both simultaneously is not supported.</p>
+<p>For either option, the volume type must support PVCs expansion.</p>
 <h4 id="scaling-check-expansion-capability-for-your-volume-type">Check expansion capability for your volume type<a class="headerlink" href="#scaling-check-expansion-capability-for-your-volume-type" title="Permanent link">&para;</a></h4>
 <p>Certain volume types support PVCs expansion by default.  You can run the following command to check if your storage supports the expansion capability:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>describe<span class="w"> </span>sc<span class="w"> </span>&lt;storage<span class="w"> </span>class<span class="w"> </span>name&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>AllowVolumeExpansion
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>sc<span class="w"> </span>&lt;storage<span class="w"> </span>class<span class="w"> </span>name&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>AllowVolumeExpansion
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
@@ -10590,19 +10601,102 @@ The user cannot shrink the size of an existing PVC object.</p>
 <p>Find exact details about
 PVCs and the supported volume types in <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims">Kubernetes
 documentation  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<h4 id="scaling-automatic-storage-resizing">Automatic storage resizing<a class="headerlink" href="#scaling-automatic-storage-resizing" title="Permanent link">&para;</a></h4>
+<p>Starting with version 1.2.0, the Operator can automatically resize Persistent Volume Claims (PVCs) for Percona Server for MySQL Pods based on your configured thresholds. The Operator monitors storage usage of MySQL PVCs. When the usage exceeds the defined threshold, the Operator triggers resizing until the storage size reaches the maximum limit.</p>
+<p>This feature gives you:</p>
+<ul>
+<li>fewer outages from full disks because storage grows with demand</li>
+<li>less guesswork on capacity planning and fewer last-minute fixes</li>
+<li>lower operational effort for developers and platform engineers</li>
+<li>cost control by expanding only when needed</li>
+<li>a more predictable environment so teams can focus on delivery</li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Keep in mind that some storage providers may have specific limitations when it comes to expanding storage. Review your provider&rsquo;s documentation and sett thresholds that work well for your environment to get the best results.</p>
+</div>
+<p class="power-number">To enable automatic storage resizing, edit the <code>deploy/cr.yaml</code> Custom Resource manifest as follows:</p>
+<ol>
+<li>
+<p>Make sure the MySQL component has a storage size set.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">volumeSpec</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6Gi</span>
+</code></pre></div>
+</li>
+<li>
+<p>Configure autoscaling thresholds in the <a href="#operator-storage-scaling-section"><code>storageScaling</code></a> subsection:</p>
+<ul>
+<li><code>enableVolumeScaling</code> - set to <code>true</code>. </li>
+<li><code>autoscaling.enabled</code> - set to <code>true</code></li>
+<li><code>autoscaling.triggerThresholdPercent</code> - specify the usage percentage (50–95, default <code>80</code>). When usage exceeds this threshold, autoscaling is triggered</li>
+<li>
+<p><code>autoscaling.growthStep</code> - specify how much storage to add on each resize (default <code>2Gi</code>)</p>
+</li>
+<li>
+<p><code>autoscaling.maxSize</code> - specify the upper limit for storage growth (minimum <code>1Gi</code>). When this limit is reached, scaling stops</p>
+</li>
+</ul>
+<p>Example configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">storageScaling</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enableVolumeScaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">autoscaling</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">triggerThresholdPercent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="w">      </span><span class="nt">growthStep</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
+<span class="w">      </span><span class="nt">maxSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10Gi</span>
+</code></pre></div>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>When the Operator changes the storage size, it updates the Custom Resource status as follows:</p>
+<ul>
+<li>adds the <code>pvc-resize-in-progress</code> annotation. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation</li>
+<li>records the new size in the <code>currentSize</code> field</li>
+<li>updates the <code>resizeCount</code> field</li>
+<li>
+<p>records any errors in the <code>lastError</code> field</p>
+</li>
+<li>
+<p>Check the current cluster state:</p>
+<div class="highlight"><pre><span></span><code>kubectl get ps &lt;cluster-name&gt; -o yaml -n &lt;namespace&gt;
+</code></pre></div>
+<details class="example">
+<summary>Sample output</summary>
+<div class="no-copy highlight"><pre><span></span><code>storageAutoscaling:
+  datadir-ps-cluster1-mysql-0:
+    currentSize: 4194304Ki
+    lastResizeTime: &quot;2026-01-23T15:08:59Z&quot;
+    resizeCount: 2
+</code></pre></div>
+</details>
+</li>
+</ul>
+<p>The <code>storageAutoscaling</code> section appears under the <code>.status</code> in the Custom Resource.</p>
+<p>When the storage size reaches the limit, no further resizing is done and this event is recorded in the logs. You can either clean up the data or set a new limit based on your organization&rsquo;s policies and requirements. For help with common issues, see <a href="#debug-logs">Operator logs</a>.</p>
 <h4 id="scaling-storage-resizing-with-volume-expansion-capability">Storage resizing with Volume Expansion capability<a class="headerlink" href="#scaling-storage-resizing-with-volume-expansion-capability" title="Permanent link">&para;</a></h4>
 <p>In this document we&rsquo;re using the default Percona Server for MySQL cluster name <code>ps-cluster1</code>. If you have a different name, replace <code>ps-cluster1</code> with it in the commands.</p>
 <p>To enable storage resizing via volume expansion, do the following:</p>
 <ol>
-<li>Set the <a href="#operator-enablevolumeexpansion">enableVolumeExpansion</a> Custom Resource option to <code>true</code> (it is turned off by default). When enabled, the Operator will automatically expand the storage for you when you define a new size in the Custom Resource</li>
+<li>Set the <a href="#operator-storagescalingenablevolumescaling"><code>storageScaling.enableVolumeScaling</code></a> Custom Resource option to <code>true</code> (it is turned off by default). When enabled, the Operator automatically expands storage when you increase the size in the Custom Resource</li>
 <li>
 <p>Change the
 <code>mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage</code> option in the <code>deploy/cr.yaml</code> file to the desired storage size.</p>
 <p>Here&rsquo;s the example configuration:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">enableVolumeExpansion</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">storageScaling</span><span class="p p-Indicator">:</span>
+<span class="w">    </span><span class="nt">enableVolumeScaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">volumeSpec</span><span class="p p-Indicator">:</span>
@@ -10615,7 +10709,7 @@ documentation  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" vie
 </li>
 <li>
 <p>Apply the new configuration:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>cr.yaml
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>cr.yaml
 </code></pre></div>
 </li>
 </ol>
@@ -14169,7 +14263,7 @@ alphanumeric character;</p>
 </tbody>
 </table>
 <h3 id="operator-enablevolumeexpansion"><code>enableVolumeExpansion</code><a class="headerlink" href="#operator-enablevolumeexpansion" title="Permanent link">&para;</a></h3>
-<p>Enables or disables <a href="#scaling-storage-resizing-with-volume-expansion-capability">automatic storage scaling / volume expansion</a>.</p>
+<p>Enables or disables <a href="#scaling-storage-resizing-with-volume-expansion-capability">storage resizing with volume expansion</a>. </p>
 <table>
 <thead>
 <tr>
@@ -14181,6 +14275,106 @@ alphanumeric character;</p>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
 <td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>This option is deprecated and will be removed in version 1.5.0. Use the <a href="#operator-storagescalingenablevolumescaling"><code>storageScaling.enableVolumeScaling</code></a> option instead.</p>
+<h2 id="operator-storage-scaling-section">Storage scaling section<a class="headerlink" href="#operator-storage-scaling-section" title="Permanent link">&para;</a></h2>
+<p>The <code>storageScaling</code> section in the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.1.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file controls volume expansion and automatic storage resizing for MySQL PVCs. See <a href="#scaling-scale-storage">Scale storage</a> for usage details.</p>
+<h3 id="operator-storagescalingenablevolumescaling"><code>storageScaling.enableVolumeScaling</code><a class="headerlink" href="#operator-storagescalingenablevolumescaling" title="Permanent link">&para;</a></h3>
+<p>Enables or disables <a href="#scaling-storage-resizing-with-volume-expansion-capability">storage scaling / volume expansion</a> with Volume Expansion capability.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-storagescalingenableexternalautoscaling"><code>storageScaling.enableExternalAutoscaling</code><a class="headerlink" href="#operator-storagescalingenableexternalautoscaling" title="Permanent link">&para;</a></h3>
+<p>Enables or disables the use of external volume autoscaler. When disabled, the Operator uses its own expansion logic with Volume Expansion capability.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-storagescalingautoscalingenabled"><code>storageScaling.autoscaling.enabled</code><a class="headerlink" href="#operator-storagescalingautoscalingenabled" title="Permanent link">&para;</a></h3>
+<p>Enables automatic storage resizing based on user-defined thresholds. Read more about this feature in <a href="#scaling-automatic-storage-resizing">Automatic storage resizing</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-storagescalingautoscalingtriggerthresholdpercent"><code>storageScaling.autoscaling.triggerThresholdPercent</code><a class="headerlink" href="#operator-storagescalingautoscalingtriggerthresholdpercent" title="Permanent link">&para;</a></h3>
+<p>The percentage of the storage usage that triggers automatic resizing. Valid values are from 50 to 95. Default value is 80.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>80</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-storagescalingautoscalinggrowthstep"><code>storageScaling.autoscaling.growthStep</code><a class="headerlink" href="#operator-storagescalingautoscalinggrowthstep" title="Permanent link">&para;</a></h3>
+<p>The amount to increase the storage during automatic resizing. Default value is <code>2Gi</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>2Gi</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-storagescalingautoscalingmaxsize"><code>storageScaling.autoscaling.maxSize</code><a class="headerlink" href="#operator-storagescalingautoscalingmaxsize" title="Permanent link">&para;</a></h3>
+<p>The maximum size to which storage can be automatically resized.
+Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>10Gi</code></td>
 </tr>
 </tbody>
 </table>
@@ -18359,6 +18553,23 @@ configuration options for the Orchestrator - a replication topology manager, use
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>1Gi</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-orchestratorconfiguration"><code>orchestrator.configuration</code><a class="headerlink" href="#operator-orchestratorconfiguration" title="Permanent link">&para;</a></h3>
+<p>Custom <a href="https://github.com/openark/orchestrator">Orchestrator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> options to merge into the Orchestrator configuration. For example, <code>FailMasterPromotionOnLagMinutes</code> or <code>RecoveryPeriodBlockSeconds</code> are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored. </p>
+<p>Updating this field triggers a rolling restart of the Orchestrator Pods.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>'{"FailMasterPromotionOnLagMinutes": 10}'</code></td>
 </tr>
 </tbody>
 </table>
