@@ -44,6 +44,7 @@ Keep your data secure with built-in security features:
 - Encrypted backups for object storage
 - Role-based access control with fine-grained permissions
 - Secret management with Kubernetes-native secrets
+- Orchestrator API authentication for async replication clusters (available starting with Operator version 1.2.0)
 
 ### Monitoring and observability
 
