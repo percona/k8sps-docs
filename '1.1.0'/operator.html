@@ -4232,6 +4232,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#mysqlexposeprimaryallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mysql.exposePrimary.allocateLoadBalancerNodePorts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#mysqlexposeprimaryannotations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4302,6 +4313,17 @@
     <span class="md-ellipsis">
       
         mysql.expose.type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mysqlexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mysql.expose.allocateLoadBalancerNodePorts
       
     </span>
   </a>
@@ -5019,6 +5041,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#proxyhaproxyexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        proxy.haproxy.expose.allocateLoadBalancerNodePorts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#proxyhaproxyexposeannotations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5491,6 +5524,17 @@
     <span class="md-ellipsis">
       
         proxy.router.expose.type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proxyrouterexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        proxy.router.expose.allocateLoadBalancerNodePorts
       
     </span>
   </a>
@@ -6025,6 +6069,17 @@
     <span class="md-ellipsis">
       
         orchestrator.expose.type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orchestratorexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        orchestrator.expose.allocateLoadBalancerNodePorts
       
     </span>
   </a>
@@ -9630,6 +9685,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#mysqlexposeprimaryallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mysql.exposePrimary.allocateLoadBalancerNodePorts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#mysqlexposeprimaryannotations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -9700,6 +9766,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         mysql.expose.type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mysqlexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mysql.expose.allocateLoadBalancerNodePorts
       
     </span>
   </a>
@@ -10417,6 +10494,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#proxyhaproxyexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        proxy.haproxy.expose.allocateLoadBalancerNodePorts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#proxyhaproxyexposeannotations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -10889,6 +10977,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         proxy.router.expose.type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proxyrouterexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        proxy.router.expose.allocateLoadBalancerNodePorts
       
     </span>
   </a>
@@ -11423,6 +11522,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         orchestrator.expose.type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orchestratorexposeallocateloadbalancernodeports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        orchestrator.expose.allocateLoadBalancerNodePorts
       
     </span>
   </a>
@@ -14320,6 +14430,22 @@ configuration options for the Percona Server for MySQL.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="mysqlexposeprimaryallocateloadbalancernodeports"><code>mysql.exposePrimary.allocateLoadBalancerNodePorts</code><a class="headerlink" href="#mysqlexposeprimaryallocateloadbalancernodeports" title="Permanent link">&para;</a></h3>
+<p>Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to <code>LoadBalancer</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="mysqlexposeprimaryannotations"><code>mysql.exposePrimary.annotations</code><a class="headerlink" href="#mysqlexposeprimaryannotations" title="Permanent link">&para;</a></h3>
 <p>The <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <table>
@@ -14429,6 +14555,22 @@ configuration options for the Percona Server for MySQL.</p>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>ClusterIP</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="mysqlexposeallocateloadbalancernodeports"><code>mysql.expose.allocateLoadBalancerNodePorts</code><a class="headerlink" href="#mysqlexposeallocateloadbalancernodeports" title="Permanent link">&para;</a></h3>
+<p>Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to <code>LoadBalancer</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
 </tr>
 </tbody>
 </table>
@@ -15445,6 +15587,22 @@ file contains configuration options for the HAProxy service.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="proxyhaproxyexposeallocateloadbalancernodeports"><code>proxy.haproxy.expose.allocateLoadBalancerNodePorts</code><a class="headerlink" href="#proxyhaproxyexposeallocateloadbalancernodeports" title="Permanent link">&para;</a></h3>
+<p>Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to <code>LoadBalancer</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="proxyhaproxyexposeannotations"><code>proxy.haproxy.expose.annotations</code><a class="headerlink" href="#proxyhaproxyexposeannotations" title="Permanent link">&para;</a></h3>
 <p>The <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for HAProxy.</p>
 <table>
@@ -16121,6 +16279,22 @@ of any complexity to be used.</p>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>ClusterIP</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="proxyrouterexposeallocateloadbalancernodeports"><code>proxy.router.expose.allocateLoadBalancerNodePorts</code><a class="headerlink" href="#proxyrouterexposeallocateloadbalancernodeports" title="Permanent link">&para;</a></h3>
+<p>Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to <code>LoadBalancer</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
 </tr>
 </tbody>
 </table>
@@ -16876,6 +17050,22 @@ configuration options for the Orchestrator - a replication topology manager, use
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>ClusterIP</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="orchestratorexposeallocateloadbalancernodeports"><code>orchestrator.expose.allocateLoadBalancerNodePorts</code><a class="headerlink" href="#orchestratorexposeallocateloadbalancernodeports" title="Permanent link">&para;</a></h3>
+<p>Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to <code>LoadBalancer</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
 </tr>
 </tbody>
 </table>
@@ -19012,7 +19202,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:03:57 UTC">July 3, 2026</span>
       
         <br>
         Created:

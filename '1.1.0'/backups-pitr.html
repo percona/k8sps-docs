@@ -4557,18 +4557,18 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         PS --&gt;|"binary logs"| BS
         BS --&gt;|"archived binlogs"| S3</code></pre>
 <p>To enable binlog collection, configure the <code>spec.backup.pitr</code> section in your Custom Resource:</p>
-<div class="highlight"><pre><span></span><code>spec:
-  backup:
-    pitr:
-      enabled: true
-      binlogServer:
-        storage:
-          s3:
-            bucket: my-binlogs
-            credentialsSecret: my-s3-secret
-            region: us-east-1
-            prefix: binlogs
-            endpointURL: https://s3.amazonaws.com
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-binlogs</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-s3-secret</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+<span class="w">            </span><span class="nt">endpointURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://s3.amazonaws.com</span>
 </code></pre></div>
 <p>After you apply the changes, the Operator starts the Percona Binary log Server Pod, which continuously collects binlogs and stores them in the configured location.</p>
 <h2 id="point-in-time-recovery-workflow">Point-in-time recovery workflow<a class="headerlink" href="#point-in-time-recovery-workflow" title="Permanent link">&para;</a></h2>
@@ -4599,7 +4599,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Enabling the Binlog Server requires the GTID mode to be enabled on the cluster for replaying binary logs. This mode is enabled by default.</li>
 <li>The cluster is paused during point-in-time recovery. The Operator starts a temporary <code>mysqld</code> pod to perform the restore operation using the data PVC.</li>
 <li>The Binlog Server must be running before the restore begins. The reconciler locates the required binlogs before pausing the cluster.</li>
-<li>The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the folder name (<code>prefix</code>) when configuring the storage for the Binlog Server.</li>
+<li>The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the folder name (<code>prefix</code>) when configuring storage for the Binlog Server.</li>
 </ol>
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4631,6 +4631,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The <code>force: true</code> option enables the <code>--force</code> flag with the MySQL client and will silently ignore all SQL errors during binlog replay. <strong>Warning:</strong> This might result in data loss if underlying replication or data integrity errors are ignored.</p>
 <ul>
 <li>
+<p>Binlog storage for point-in-time recovery is configured separately from base backup storage. The Operator uses the settings under <code>spec.backup.pitr.binlogServer</code> of the cluster Custom Resource during the in-place restore on the same cluster. For cross-cluster restore, specify the Binlog storage settings under <code>spec.pitr.backupSource.binlogServer</code> in the restore object.</p>
+</li>
+<li>
 <p>Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting <code>spec.backup.backoffLimit=0</code> in your <code>cr.yaml</code> to prevent automatic job retries.</p>
 </li>
 <li>
@@ -4643,10 +4646,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>You cannot change the prefix for the Binlog Server.</p>
 </li>
 <li>
-<p>For point-in-time recovery you cannot use the backupSource.storage as the location for the binlogs. You must have the Binlog Server configured in the cluster&rsquo;s configuration.</p>
-</li>
-<li>
-<p>The Binlog Server may encounter issues if the number of objects in the point-in-time recovery bucket becomes too high. In such situations, the binlog server can get stuck and enter a CrashLoopBackOff state, unable to proceed with point-in-time recovery operations. This is due to how the Binlog Server processes or lists these objects internally. To recover from this state you need to delete old objects from the bucket manually. If the issue isn&rsquo;t caught within the binlog&rsquo;s expiration period, restoring the database becomes significantly more difficult. To reduce the risk of getting into this situation, monitor point-in-time recovery your bucket object count and clean up binlogs regularly.</p>
+<p>The Binlog Server may encounter issues if the number of objects in the point-in-time recovery bucket becomes too high. In such situations, the Binlog Server can get stuck and enter a CrashLoopBackOff state, unable to proceed with point-in-time recovery operations. This is due to how the Binlog Server processes or lists these objects internally. To recover from this state, you need to delete old objects from the bucket manually. If the issue isn&rsquo;t caught within the binlog&rsquo;s expiration period, restoring the database becomes significantly more difficult. To reduce the risk of getting into this situation, monitor the object count in your point-in-time recovery bucket and clean up binlogs regularly.</p>
 </li>
 </ul>
 <hr>
@@ -4654,7 +4654,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 17:28:22 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:03:38 UTC">July 3, 2026</span>
       
         <br>
         Created:
