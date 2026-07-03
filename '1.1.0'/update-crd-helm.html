@@ -4498,6 +4498,25 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.8-8.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-20&quot; },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-5.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -4532,6 +4551,24 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.8-8.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-5.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -4565,6 +4602,24 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
+</li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.8-8.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.4.8&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-5.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
 </ul>
 </div>
@@ -4608,6 +4663,25 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.45-36.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-20&quot; },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-35.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -4642,6 +4716,24 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.45-36.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-35.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -4675,6 +4767,24 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
+</li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.45-36.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.0.45&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-35.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
 </ul>
 </div>

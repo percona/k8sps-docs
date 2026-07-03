@@ -12462,6 +12462,13 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <p>We recommend to <a href="https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html">update PMM Server <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> before upgrading PMM Client.</p>
 </li>
 </ol>
+<h4 id="update-db-if-you-use-binlog-server">If you use Binlog Server<a class="headerlink" href="#update-db-if-you-use-binlog-server" title="Permanent link">&para;</a></h4>
+<p>The new Binlog Server image 0.3.1 is incompatible with the previous version. To upgrade the Binlog Server you must start a fresh binlog collection. Here&rsquo;s how to do it:</p>
+<ol>
+<li>Stop point-in-time recovery binlog collection</li>
+<li>Make a new full backup</li>
+<li>Change the binlog storage settings in your cluster configuration to point to a new location. It can be a new bucket or a new prefix for the existing bucket</li>
+</ol>
 <h3 id="update-db-update-commands">Update commands<a class="headerlink" href="#update-db-update-commands" title="Permanent link">&para;</a></h3>
 <p>Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.</p>
 <p>Find the image names <a href="#images">in the list of certified images</a>.</p>
@@ -12507,6 +12514,25 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.8-8.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-20&quot; },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-5.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="#backups-pitr-binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -12541,6 +12567,24 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.8-8.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-5.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="#backups-pitr-binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -12574,6 +12618,24 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
+</li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.8-8.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.4.8&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-5.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="#backups-pitr-binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
 </ul>
 </div>
@@ -12617,6 +12679,25 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.45-36.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-20&quot; },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-35.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="#backups-pitr-binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 <div class="tabbed-block">
@@ -12650,6 +12731,24 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
+</li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.45-36.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-35.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="#backups-pitr-binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
 </ul>
 </div>
@@ -12685,6 +12784,24 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <span class="s1">   }}&#39;</span>
 </code></pre></div>
 </li>
+<li>
+<p><strong>With Binlog Server</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">   &quot;spec&quot;: {</span>
+<span class="s1">       &quot;crVersion&quot;:&quot;1.1.0&quot;,</span>
+<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.45-36.1&quot; },</span>
+<span class="s1">       &quot;proxy&quot;:{</span>
+<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.0.45&quot; }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;backup&quot;:{</span>
+<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-35.1&quot;,</span>
+<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.2.1&quot; } }</span>
+<span class="s1">       },</span>
+<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1&quot; }</span>
+<span class="s1">   }}&#39;</span>
+</code></pre></div>
+<p>After the upgrade, <a href="#backups-pitr-binary-log-collection">enable point-in-time binlog collection</a>.</p>
+</li>
 </ul>
 </div>
 </div>
@@ -12701,6 +12818,7 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <p>For the procedures in this tutorial, we assume that you have set up the <code>Smart Update</code> strategy to update the objects in your database cluster.</p>
 <h3 id="update-db-before-you-start_1">Before you start<a class="headerlink" href="#update-db-before-you-start_1" title="Permanent link">&para;</a></h3>
 <p>We recommend to <a href="https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html">update PMM Server <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>  before upgrading PMM Client.</p>
+<p>If you use Binlog Server for point-in-time recovery, complete the <a href="#update-db-if-you-use-binlog-server">pre-upgrade steps</a>.</p>
 <h3 id="update-db-procedure">Procedure<a class="headerlink" href="#update-db-procedure" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
@@ -12717,7 +12835,7 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you don&rsquo;t update crVersion, minor version upgrade is the only one to
+<p>If you don&rsquo;t update <code>crVersion</code>, minor version upgrade is the only one to
 occur. For example, the image <code>percona-server:8.0.30-22</code> can
 be upgraded to <code>percona-server:8.0.32-24</code>.</p>
 </div>
