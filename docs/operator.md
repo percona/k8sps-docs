@@ -710,6 +710,13 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
 
+### `mysql.exposePrimary.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `mysql.exposePrimary.annotations`
 
@@ -767,6 +774,14 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `mysql.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `mysql.expose.annotations`
 
@@ -1282,6 +1297,14 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
 
+### `proxy.haproxy.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
+
 ### `proxy.haproxy.expose.annotations`
 
 The [Kubernetes annotations :octicons-link-external-16:](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy.
@@ -1629,6 +1652,14 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `proxy.router.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `proxy.router.expose.annotations`
 
@@ -2012,6 +2043,14 @@ The [Kubernetes Service Type :octicons-link-external-16:](https://kubernetes.io/
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `ClusterIP` |
+
+### `orchestrator.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `false` |
 
 ### `orchestrator.expose.annotations`
 
