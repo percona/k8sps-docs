@@ -9,7 +9,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The upgrade on OpenShift consists of two steps:">
+        <meta name="description" content="Documentation">
       
       
         <meta name="author" content="Percona LLC">
@@ -4682,6 +4682,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#considerations-for-using-openshift-422" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Considerations for using OpenShift 4.22
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#upgrade-the-operator-via-operator-lifecycle-manager-olm" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4732,6 +4743,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#update-via-the-command-line-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update via the command-line interface
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -4768,6 +4790,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 
 
 <h1 id="upgrade-the-operator-and-crd-via-operator-lifecycle-manager-olm">Upgrade the Operator and CRD via Operator Lifecycle Manager (OLM)<a class="headerlink" href="#upgrade-the-operator-and-crd-via-operator-lifecycle-manager-olm" title="Permanent link">&para;</a></h1>
+<h2 id="considerations-for-using-openshift-422">Considerations for using OpenShift 4.22<a class="headerlink" href="#considerations-for-using-openshift-422" title="Permanent link">&para;</a></h2>
+<p>Starting with OpenShift 4.22, the way images with not fully qualified names are pulled has changed for repositories that share the same repository name on DockerHub and Red Hat Marketplace. By default the tags are pulled from Red Hat Marketplace. Specifying not fully qualified image names may result in the <code>ImagePullBackOff</code> error.</p>
+<ul>
+<li><strong>OLM installation:</strong> Images are provided with the fully qualified names and are pulled from the Red Hat Marketplace/DockerHub registry.</li>
+<li><strong>Manual install/update with default manifests:</strong> Images must use the <code>docker.io</code> registry prefix to guarantee successful download from the DockerHub <code>percona-server-mysql-operator</code> repository. See the <a href="#update-via-the-command-line-interface">Update via the command-line interface</a> section for the exact steps.</li>
+</ul>
 <p>The upgrade on OpenShift consists of two steps:</p>
 <ul>
 <li>Upgrade the Operator Deployment</li>
@@ -4827,12 +4855,59 @@ However, OLM doesn&rsquo;t modify the <code>PerconaServerMySQL</code> Custom Res
 <p>Click the &ldquo;Upgrade available&rdquo; link to review details, click &ldquo;Preview InstallPlan,&rdquo; and then click &ldquo;Approve&rdquo; to upgrade the Operator.</p>
 </li>
 </ol>
+<h3 id="update-via-the-command-line-interface">Update via the command-line interface<a class="headerlink" href="#update-via-the-command-line-interface" title="Permanent link">&para;</a></h3>
+<p>The following steps apply if you plan to use OpenShift 4.22. See the <a href="#considerations-for-using-openshift-422">Considerations for using OpenShift 4.22</a>.</p>
+<ol>
+<li>
+<p>Check all clusters managed by the Operator to see if <code>initContainer.image</code> is set.</p>
+<ul>
+<li>If defined: skip the next step.</li>
+<li>If undefined: proceed to step 2.</li>
+</ul>
+</li>
+<li>
+<p>Apply a patch to the clusters with undefined <code>initContainer.image</code> to define this image with the <code>docker.io</code> registry in the image path:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">  &quot;spec&quot;: {</span>
+<span class="s1">    &quot;initcontainer&quot;: {</span>
+<span class="s1">          &quot;image&quot;: &quot;docker.io/percona-server-mysql-operator:1.1.0&quot;</span>
+<span class="s1">    }</span>
+<span class="s1">  }</span>
+<span class="s1">}&#39;</span>
+</code></pre></div>
+<p><strong>Important!</strong> This command triggers the restart of your clusters. Wait till they restart and report the <code>Ready</code> status.</p>
+</li>
+<li>
+<p>Update the Operator deployment and specify the <code>docker.io</code> registry name in the image path:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span><span class="se">\</span>
+-p<span class="s1">&#39;{&quot;spec&quot;:{&quot;template&quot;:{&quot;spec&quot;:{&quot;containers&quot;:[{&quot;name&quot;:&quot;percona-server-mysql-operator&quot;,&quot;image&quot;:&quot;docker.io/percona/percona-server-mysql-operator:1.1.0&quot;}]}}}}&#39;</span>
+</code></pre></div>
+</li>
+<li>
+<p>Update the Custom Resource version and the database cluster. Specify the <code>initContainer</code> image with the <code>docker.io</code> registry name in the path.</p>
+<p>The following example shows how to update Percona Server for MySQL cluster 8.4 with Group Replication and HAProxy:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">  &quot;spec&quot;: {</span>
+<span class="s1">    &quot;crVersion&quot;: &quot;1.1.0&quot;,</span>
+<span class="s1">    &quot;initContainer&quot;: &quot;docker.io/percona/percona-server-mysql-operator:1.1.0&quot;,</span>
+<span class="s1">    &quot;mysql&quot;:{ &quot;image&quot;: &quot;docker.io/percona/percona/percona-server:8.4.8-8.1&quot; },</span>
+<span class="s1">    &quot;proxy&quot;:{</span>
+<span class="s1">        &quot;haproxy&quot;:{ &quot;image&quot;: &quot;docker.io/percona/haproxy:2.8.18-1&quot; }</span>
+<span class="s1">    },</span>
+<span class="s1">    &quot;backup&quot;:{ &quot;image&quot;: &quot;docker.io/percona/percona-xtrabackup:8.4.0-5.1&quot; },</span>
+<span class="s1">    &quot;toolkit&quot;:{ &quot;image&quot;: &quot;docker.io/percona/percona-toolkit:3.7.1&quot; },</span>
+<span class="s1">    &quot;pmm&quot;:{ &quot;image&quot;: &quot;docker.io/percona/pmm-client:3.7.0&quot; }</span>
+<span class="s1">  }</span>
+<span class="s1">}&#39;</span>
+</code></pre></div>
+</li>
+</ol>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 17:28:22 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 17:42:36 UTC">July 3, 2026</span>
       
         <br>
         Created:
