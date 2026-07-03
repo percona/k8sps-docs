@@ -253,6 +253,10 @@ nav:
           - "Change replication type": change-replication-type.md
           - "Add sidecar containers": sidecar.md
           - "Labels and annotations": annotations.md
+          - Configure environment variables: 
+            - "Overview": env-vars.md
+            - env-vars-operator.md
+            - env-vars-custom.md
           - "Configure telemetry": telemetry.md
           - dns-suffix.md
           - "Configure concurrent reconciliation": reconciliation-concurrency.md
