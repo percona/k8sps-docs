@@ -21,7 +21,8 @@ You declare which clusters participate, which one is the primary, and how replic
 
 The Operator uses a dedicated `clusterset` [system user](users.md#system-users) with the grants required for ClusterSet AdminAPI operations. Each cluster must share this user's credentials.
 
-![Cross-site replication architecture](assets/images/innodb_clusterset_redesigned.svg)
+![Cross-site replication architecture](assets/images/innodb-
+clusterset.svg)
 
 * The **primary cluster** accepts writes and replicates changes asynchronously to replica clusters over a dedicated replication channel.
 * Each **replica cluster** is a full Group Replication cluster (read-only at the ClusterSet level) that receives async replication from the primary cluster's PRIMARY member.
@@ -109,7 +110,7 @@ credentials cannot differ per site.
 * **Restoring backups onto replica clusters in a ClusterSet is not supported** — While a replica is part of a ClusterSet, restoring a backup onto it is not supported. If you attempt to do so, the replica will fail to rejoin the ClusterSet afterward. In this case, you must manually reboot the cluster (using `dba.rebootClusterFromCompleteOutage()`) and rejoin it to the ClusterSet from the primary.
 * **Backups taken on a ClusterSet cannot be restored on a fresh cluster** — Backups include the ClusterSet metadata that is tied to the specific topology and identities of the clusters within that ClusterSet. Restoring such a backup onto a new, unrelated cluster will lead to inconsistencies or errors, since the metadata will not match the new environment or cluster configuration.
 * **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.
-* **Deletion of ClusterSet object is stuck if the cluster is deleted before hand** - Ensure your ClusterSet members are running before you delete the ClusterSet object.
+* **Deletion of ClusterSet object is stuck if the cluster is deleted beforehand** - Ensure your ClusterSet members are running before you delete the ClusterSet object. If the deletion is stuck, edit the ClusterSet object and remove the `percona.com/clusterset-dissolve` finalizer to proceed.
 * **Credential rotation on replicas** — The `clusterset` user password is always replicated from the primary; you cannot rotate it independently on replica clusters while they are ClusterSet members.
 * **Minimum replica size** — A replica Group Replication cluster still needs enough members for local high availability (typically 3). Single-node replicas are supported for testing but not recommended for production.
 
