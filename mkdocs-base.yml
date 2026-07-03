@@ -239,7 +239,11 @@ nav:
     - Cluster lifecycle management:
         - Upgrade:
             - "About upgrades": update.md
-            - "Upgrade the Operator": update-operator.md
+            - Upgrade the Operator: 
+              - Considerations: update-operator.md
+              - Manually: update-crd-manual.md
+              - With Helm: update-crd-helm.md
+              - Via OLM: update-openshift.md
             - "Upgrade the database": update-db.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:
@@ -277,6 +281,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md

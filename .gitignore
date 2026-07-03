@@ -4,3 +4,4 @@ site/
 *.md~
 .vscode
 .idea
+.cursor
