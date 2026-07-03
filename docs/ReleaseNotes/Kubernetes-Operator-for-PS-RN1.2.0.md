@@ -238,6 +238,45 @@ To upgrade the Binlog Server you must start a fresh binlog collection. Here's ho
 4. Update the Binlog Server image
 5. Re-enable point-in-time recovery
 
+### Considerations for using OpenShift 4.22
+
+Starting with OpenShift 4.22, the way images with not fully qualified names are pulled has changed for repositories that share the same repository name on DockerHub and Red Hat Marketplace. By default the tags are pulled from Red Hat Marketplace. Specifying not fully qualified image names may result in the `ImagePullBackOff` error.
+
+* **OLM installation:** Images are provided with the fully qualified names and are pulled from the Red Hat Marketplace/DockerHub registry.
+* **Manual install/update with default manifests:** Images must use the `docker.io` registry prefix to guarantee successful download from the DockerHub `percona-server-mysql-operator` repository. 
+  
+For manual installation or update, follow the instructions below:
+
+1. Clone the Operator repository:
+    
+    ```bash
+    git clone -b v1.2.0 https://github.com/percona/percona-server-mysql-operator
+    cd percona-server-mysql-operator
+    ```
+
+2. Edit the `deploy/bundle.yaml` file.
+    
+    * Locate the Deployment custom resource for the Operator.
+    * Update the `spec.image` field to
+
+      ```
+      docker.io/percona/percona-server-mysql-operator:1.2.0
+      ```
+
+3. Apply the updated `deploy/bundle.yaml` file:
+    
+    ```bash
+    oc apply --server-side -f deploy/bundle.yaml
+    ```
+
+4. Install Percona Server for MySQL:
+    
+    ```bash
+    oc create -f deploy/cr.yaml
+    ```
+
+For the upgrade steps, follow the [Update documentation](#update-via-the-command-line-interface).
+
 
 ## CRD changes
 
