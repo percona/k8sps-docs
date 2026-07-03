@@ -201,12 +201,12 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
             vault_url = https://vault.vault.svc.cluster.local:8200
             secret_mount_point = ps-secret
             vault_ca = /etc/mysql/vault-keyring-secret/ca.cert
-        ca.cert: |-
-          -----BEGIN CERTIFICATE-----
-          MIIEczCCA1ugAwIBAgIBADANBgkqhkiG9w0BAQQFAD..AkGA1UEBhMCR0Ix
-          EzARBgNVBAgTClNvbWUtU3RhdGUxFDASBgNVBAoTC0..0EgTHRkMTcwNQYD
-          7vQMfXdGsRrXNGRGnX+vWDZ3/zWI0joDtCkNnqEpVn..HoX
-          -----END CERTIFICATE-----
+          ca.cert: |-
+            -----BEGIN CERTIFICATE-----
+            MIIEczCCA1ugAwIBAgIBADANBgkqhkiG9w0BAQQFAD..AkGA1UEBhMCR0Ix
+            EzARBgNVBAgTClNvbWUtU3RhdGUxFDASBgNVBAoTC0..0EgTHRkMTcwNQYD
+            7vQMfXdGsRrXNGRGnX+vWDZ3/zWI0joDtCkNnqEpVn..HoX
+            -----END CERTIFICATE-----
         ```
 
 === "Percona Server for MySQL 8.4"
@@ -244,12 +244,12 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
               "secret_mount_point": "ps-secret",
               "vault_ca": "/etc/mysql/vault-keyring-secret/ca.cert"
             }
-        ca.cert: |-
-          -----BEGIN CERTIFICATE-----
-          MIIEczCCA1ugAwIBAgIBADANBgkqhkiG9w0BAQQFAD..AkGA1UEBhMCR0Ix
-          EzARBgNVBAgTClNvbWUtU3RhdGUxFDASBgNVBAoTC0..0EgTHRkMTcwNQYD
-          7vQMfXdGsRrXNGRGnX+vWDZ3/zWI0joDtCkNnqEpVn..HoX
-          -----END CERTIFICATE-----
+          ca.cert: |-
+            -----BEGIN CERTIFICATE-----
+            MIIEczCCA1ugAwIBAgIBADANBgkqhkiG9w0BAQQFAD..AkGA1UEBhMCR0Ix
+            EzARBgNVBAgTClNvbWUtU3RhdGUxFDASBgNVBAoTC0..0EgTHRkMTcwNQYD
+            7vQMfXdGsRrXNGRGnX+vWDZ3/zWI0joDtCkNnqEpVn..HoX
+            -----END CERTIFICATE-----
         ```
 
   Note that you must either specify the certificate value or don't declare it at all. Having a commented `#ca.cert` field in the Secret configuration file is not allowed.

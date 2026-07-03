@@ -1,6 +1,6 @@
 # MkDocs configuration
 # Used as base - look for .yml files with INHERIT
-site_name: Percona Operator for MySQL
+site_name: Percona Operator for MySQL based on Percona Server for MySQL
 site_description: Documentation
 site_author: Percona LLC
 site_url: ""
@@ -130,11 +130,6 @@ plugins:
   # Check links - but extends build time significantly
   # https://pypi.org/project/mkdocs-htmlproofer-plugin/
   #    htmlproofer: {}
-  mike:
-    version_selector: false
-    css_dir: css
-    javascript_dir: js
-    canonical_version: null
     
   open-in-new-tab: {}
   print-site: 
@@ -194,6 +189,8 @@ nav:
           - "Generic Kubernetes installation": kubernetes.md
     
     - Daily operations:  
+          - "Manage users": users.md
+          - "Connection secrets": connection-secrets.md
           - Backup and restore:
               - "About backups": backups.md
               - "Configure storage for backups": backups-storage.md
@@ -202,6 +199,7 @@ nav:
               - "Make on-demand backup": backups-ondemand.md
               - "Point-in-time recovery": backups-pitr.md
               - "Compressed backups": backups-compressed.md
+              - "Encrypted backups": backups-encrypted.md
               - Restore from a backup:
                 - "On the same cluster": backups-restore.md
                 - "On a new cluster": backups-restore-to-new-cluster.md
@@ -211,7 +209,7 @@ nav:
               - "Monitor your cluster with PMM": monitoring.md
               - "Monitor Kubernetes": monitor-kubernetes.md
           - "Scale your cluster": scaling.md
-          - "Manage users": users.md
+
 
     - Production configuration:
           - TLS/SSL encryption: 
@@ -228,6 +226,7 @@ nav:
               - "Configure MySQL Router": router-conf.md
           - "Control Pod scheduling": constraints.md             
           - "Fine-tune MySQL options": options.md
+          - "Configure DNS suffix": dns-suffix.md
           - "Multi-namespace deployment": cluster-wide.md
           - Cross-site replication: 
             - "About cross-site replication": replication.md
@@ -240,11 +239,7 @@ nav:
     - Cluster lifecycle management:
         - Upgrade:
             - "About upgrades": update.md
-            - Upgrade the Operator and CRD:
-              - Considerations for upgrades: update-operator.md
-              - Manual upgrade: update-crd-manual.md
-              - With Helm: update-crd-helm.md
-              - Via OLM: update-openshift.md
+            - "Upgrade the Operator": update-operator.md
             - "Upgrade the database": update-db.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:
@@ -255,6 +250,8 @@ nav:
           - "Add sidecar containers": sidecar.md
           - "Labels and annotations": annotations.md
           - "Configure telemetry": telemetry.md
+          - dns-suffix.md
+          - "Configure concurrent reconciliation": reconciliation-concurrency.md
 
     - Troubleshooting:
           - "Initial troubleshooting": debug.md

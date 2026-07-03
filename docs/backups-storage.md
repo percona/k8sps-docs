@@ -4,6 +4,8 @@ You configure backup storage in the `backup.storages` subsection of your Custom 
 
 Before configuring storage, you need to create a [Kubernetes Secret :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/secret/) object that contains the credentials needed to access your storage.
 
+To [encrypt backups](backups-encrypted.md) in object storage, create a separate Secret with your encryption key and reference it in `spec.backup.encryptionKeySecret` or under the storage entry.
+
 === ":fontawesome-brands-amazon: Amazon S3 or S3-compatible storage"
 
     To use Amazon S3 or S3-compatible storage for backups, create a Secret object with your access credentials. Use the [deploy/backup/backup-secret-s3.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup-secret-s3.yaml) file as an example. You must specify the following information:

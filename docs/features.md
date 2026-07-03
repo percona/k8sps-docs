@@ -29,6 +29,7 @@ Protect your data with Percona XtraBackup - an enterprise-grade backup solution 
 
 - Scheduled backups with configurable retention policies
 - On-demand backups for critical operations
+- [Encrypted backups](backups-encrypted.md) for compliance-ready protection in cloud object storage
 
 ### Automated scaling and resource management
 
@@ -46,8 +47,10 @@ Keep your data secure with built-in security features:
 
 - Transport encryption with TLS/SSL support
 - Data-at-rest encryption with key management integration
+- Encrypted backups for object storage
 - Role-based access control with fine-grained permissions
 - Secret management with Kubernetes-native secrets
+- Orchestrator API authentication for async replication clusters (available starting with Operator version 1.2.0)
 
 ### Monitoring and observability
 

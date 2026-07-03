@@ -35,13 +35,15 @@ Specifies the name of the Percona Server for MySQL cluster to restore.
 
 Specifies the name of a backup to be used for a restore. This backup should be from the same cluster.
 
+When the backup was [encrypted](backups-encrypted.md), the Operator uses the `encryptionKeySecret` from the cluster Custom Resource automatically. The key used for the restore must match the key used to encrypt the backup.
+
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `backup1` |
 
-## `pitr` section
+### `pitr` section
 
-This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup from `backupName` and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a Binlog Servr in the cluster; see [Point-in-time recovery](backups-pitr.md) for details.
+This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup (from `backupName` or `backupSource.destination`) and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a Binlog Server in the cluster; see [Point-in-time recovery](backups-pitr.md) for details.
 
 #### `pitr.type`
 
@@ -66,7 +68,7 @@ The exact GTID set for point-in-time recovery, specified in the format "aaaaaaaa
 
 #### `pitr.date`
 
-Timestamp string used when `pitr.type` is `date`. Specified in the format "yyyy-mm-dd hh:mm:ss" .
+Timestamp string used when `pitr.type` is `date`. Specified in the format `yyyy-mm-dd hh:mm:ss`.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -82,9 +84,120 @@ Forces the `mysql` client to run with the `--force` flag and this silently ignor
 | ----------- | ---------- |
 | :material-toggle-switch: boolean     | `false` |
 
+### The `pitr.backupSource` subsection
+
+This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](backups-restore-to-new-cluster.md#restore-with-point-in-time-recovery). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
+
+#### `pitr.backupSource.binlogServer.size`
+
+Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. This is the only allowed number. All greater values will be rejected. To learn more, see [Point-in-time recovery](backups-pitr.md).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `1` |
+
+#### `pitr.backupSource.binlogServer.image`
+
+The Docker image to use to deploy Percona Binarylog Server.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/percona-binlog-server:0.2.1` |
+
+#### `pitr.backupSource.binlogServer.serverId`
+
+The unique server ID that Percona Binarylog Server uses when connecting to MySQL as a replication client for binlog collection.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `101` |
+
+#### `pitr.backupSource.binlogServer.storage.s3.bucket`
+
+The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed. You can use the same values as defined in `spec.backup.pitr.binlogServer` on the source cluster Custom Resource. For a restore to a new cluster, copy these settings from the source cluster, including the binlog `prefix` that points to the existing binlog folder.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `S3-BINLOG-BUCKET-NAME-HERE` |
+
+#### `pitr.backupSource.binlogServer.storage.s3.credentialsSecret`
+
+The Kubernetes Secret for binlog storage. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-s3-credentials` |
+
+#### `pitr.backupSource.binlogServer.storage.s3.endpointUrl`
+
+The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `https://s3.amazonaws.com` |
+
+#### `pitr.backupSource.binlogServer.storage.s3.prefix`
+
+Specifies the path prefix (folder) in the bucket where binlogs are stored. After configuring the Binlog Server, this prefix cannot be changed. 
+
+**Important:**  
+If you are restoring to a new cluster and both the source and target clusters use the same binlog storage, be sure to specify a different prefix for the target cluster to avoid conflicts.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `PREFIX_NAME` |
+
+#### `pitr.backupSource.binlogServer.storage.s3.region`
+
+The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `us-west-2` |
+
+#### `pitr.backupSource.binlogServer.connectTimeout`
+
+Timeout in seconds for establishing a connection to MySQL.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+#### `pitr.backupSource.binlogServer.readTimeout`
+
+The maximum time in seconds the Binlog Server waits to read data from the MySQL instance.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+#### `pitr.backupSource.binlogServer.writeTimeout`
+
+The maximum time in seconds the Binlog Server waits to write data to a remote server.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+#### `pitr.backupSource.binlogServer.idleTime`
+
+The maximum time in seconds the Binlog Server stays in idle mode before trying to reconnect.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+#### `pitr.backupSource.binlogServer.logLevel`
+
+The verbosity level for Binlog Server logs. Supported values are: `info` (default), `warning`, `error`, `debug`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `info` |
+
 ## The `backupSource` subsection
 
-Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment. 
+Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment.
 
 ### `backupSource.destination`
 
@@ -93,6 +206,30 @@ Specifies the path to the backup on the storage
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `s3://bucket-name/backup-destination/` |
+
+### `backupSource.storage.encryptionKeySecret`
+
+References a Kubernetes Secret that contains the key used to decrypt an [encrypted backup](backups-encrypted.md). Required when restoring an encrypted backup from object storage on a cluster that does not have access to the source cluster's encryption key Secret. The key used for the restore must match the key used to encrypt the backup.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>name: my-encryption-key<br>key: encryptionKey</pre> |
+
+### `backupSource.storage.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that stores the backup encryption key.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-encryption-key` |
+
+### `backupSource.storage.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `encryptionKey` |
 
 ### `backupSource.storage.s3.bucket`
 
