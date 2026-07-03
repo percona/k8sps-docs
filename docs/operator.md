@@ -2211,6 +2211,16 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 | ----------- | ---------- |
 | :material-code-string: string     | `1Gi` |
 
+### `orchestrator.configuration`
+
+Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration. For example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds` are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored. 
+
+Updating this field triggers a rolling restart of the Orchestrator Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `'{"FailMasterPromotionOnLagMinutes": 10}'` |
+
 ## <a name="operator-pmm-section"></a>PMM section
 
 The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration
