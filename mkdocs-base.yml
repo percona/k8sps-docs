@@ -55,12 +55,14 @@ extra_css:
   - css/operators.css
   - css/extra.css
   - css/rating.css
+  - css/kapa.css
 
 extra_javascript:
    - js/promptremover.js
    - js/consent.js
    - js/percona-select.js
    - js/rating.js
+   - js/kapa.js
 
 markdown_extensions:
   attr_list: {}
