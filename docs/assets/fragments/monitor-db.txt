@@ -13,6 +13,7 @@ PMM Server and PMM Client are installed separately.
 1. Starting with the version 0.10.0, the Operator supports only PMM 3.x versions. The support for PMM 2.x is dropped.
 2. You must run the Operator version 0.10.0 and later to monitor your database with PMM 3.x. Check the [Upgrade the Operator](update-operator.md) tutorial for the update steps.
 3. To use PMM3, PMM Server version must be equal to or newer than the PMM Client.
+4. Query Analytics (QAN) reads MySQL queries from Performance Schema, which the Operator configures for each node. If your applications use server-side prepared statements (common with drivers such as JDBC), expect QAN to show query examples as placeholders (`?`) rather than literal values, and EXPLAIN to be unavailable for them. This is how upstream MySQL exposes prepared statements to Performance Schema. This is expected behavior, not a limitation of PMM or the Operator.
 
 ## Install PMM Server
 
