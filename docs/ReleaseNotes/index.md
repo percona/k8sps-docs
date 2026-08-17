@@ -1,5 +1,8 @@
 # Percona Operator for MySQL Release Notes
 
+Use the [public roadmap :octicons-link-external-16:](https://github.com/orgs/percona/projects/10/views/4) to see what the team is working on next. For planned release windows, see the [release timeline :octicons-link-external-16:](https://github.com/orgs/percona/projects/10/views/8).
+
+
 * [Percona Operator for MySQL 1.2.0 ({{date.1_2_0}})](Kubernetes-Operator-for-PS-RN1.2.0.md)
   
 * [Percona Operator for MySQL 1.1.0 ({{date.1_1_0}})](Kubernetes-Operator-for-PS-RN1.1.0.md)

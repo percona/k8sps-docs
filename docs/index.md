@@ -35,6 +35,11 @@ Set up Percona Operator for MySQL in just a few minutes. Start with our simple g
 
 <div data-grid markdown><div data-banner markdown>
 
+## Stay updated
+
+Explore planned features on the [public roadmap :octicons-link-external-16:](https://github.com/orgs/percona/projects/10/views/4).
+Check upcoming releases on the [release timeline :octicons-link-external-16:](https://github.com/orgs/percona/projects/10/views/8).
+
 ## :fontawesome-solid-magnifying-glass: Discover the Operator { .title }
 
 Learn about all the features Percona Operator for MySQL offers, how it works, and how it can help you.
@@ -64,3 +69,6 @@ Learn how to keep your MySQL databases backed up and ready for a quick restore w
 Need assistance? Our troubleshooting guides cover common questions and step-by-step solutions.
 
 [Diagnostics :material-arrow-right:](debug.md){.md-button}
+
+</div>
+</div>
