@@ -7,6 +7,8 @@ Percona Operator for MySQL uses [Custom Resources :octicons-link-external-16:](h
 * `PerconaServerMySQLBackup` Custom Resource contains options for Percona XtraBackup used to backup Percona Server for MySQL
 * `PerconaServerMySQLRestore` Custom Resource contains options for restoring Percona Server for MySQL from backups.
 
+For status fields and conditions, see [Custom resource statuses](cr-statuses.md).
+
 ## PerconaServerMySQL Custom Resource options
 
 Percona Server for MySQL managed by the Operator is configured via the spec section
