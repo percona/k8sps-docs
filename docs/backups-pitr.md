@@ -92,6 +92,8 @@ With point-in-time recovery, you get finer control over when you come back onlin
 
 ## Known limitations
 
+Also see [Known limitations](limitations.md#point-in-time-recovery) for a summary of Operator-wide constraints that affect this feature.
+
 - The Binlog Server currently supports only AWS S3 and S3-compatible storage services for streaming binlogs. Use the same practices as backups: provide credentials via Kubernetes Secrets, set the endpoint URL (including scheme if required), region, and TLS options to match your environment.
 
 * If the Operator user password is different from the password saved in the base backup, point-in-time recovery will fail. You must take a new full backup after changing the Operator user password to ensure point-in-time recovery works.

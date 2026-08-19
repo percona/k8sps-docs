@@ -80,7 +80,7 @@ The proxy you use depends on your replication type and requirements:
 
 **Tip:** Choose Group Replication for stronger consistency and read scaling; choose asynchronous replication for lower write latency and simpler topology when it reaches GA status.
 
-You can change the replication type if needed. Refer to the [Change replication type](change-replication-type.md) guide for step-by-step instructions. Note that replication type change is not supported on a running cluster.
+You can change the replication type if needed. Refer to the [Change replication type](change-replication-type.md) guide for step-by-step instructions. Note that replication type change is not supported on a running cluster. See [Known limitations](limitations.md) for other topology constraints.
 
 ## High availability
 
