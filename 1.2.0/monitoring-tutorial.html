@@ -5111,6 +5111,7 @@ a number of dashboards.</p>
 <li>Starting with the version 0.10.0, the Operator supports only PMM 3.x versions. The support for PMM 2.x is dropped.</li>
 <li>You must run the Operator version 0.10.0 and later to monitor your database with PMM 3.x. Check the <a href="update-operator.html">Upgrade the Operator</a> tutorial for the update steps.</li>
 <li>To use PMM3, PMM Server version must be equal to or newer than the PMM Client.</li>
+<li>Query Analytics (QAN) reads MySQL queries from Performance Schema, which the Operator configures for each node. If your applications use server-side prepared statements (common with drivers such as JDBC), expect QAN to show query examples as placeholders (<code>?</code>) rather than literal values, and EXPLAIN to be unavailable for them. This is how upstream MySQL exposes prepared statements to Performance Schema. This is expected behavior, not a limitation of PMM or the Operator.</li>
 </ol>
 <h2 id="install-pmm-server">Install PMM Server<a class="headerlink" href="#install-pmm-server" title="Permanent link">&para;</a></h2>
 <p>You must have PMM Server up and running. You can run PMM Server as a <em>Docker container</em>, a <em>virtual appliance</em>, or on an <em>AWS instance</em>.
