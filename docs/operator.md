@@ -2294,6 +2294,66 @@ Updating this field triggers a rolling restart of the Orchestrator Pods.
 | ----------- | ---------- |
 | :material-code-string: string     | `'{"FailMasterPromotionOnLagMinutes": 10}'` |
 
+## <a name="operator-users-section"></a>Users section
+
+The `users` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration options [to create custom MySQL users via the Custom Resource](users.md#create-users-in-the-custom-resource).
+
+### `users.name`
+
+The username of the MySQL user. This field is required.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `my-user` |
+
+### `users.dbs`
+
+Databases that the user can access. If a specified database does not exist, the Operator creates it. When you omit this field and set `grants`, privileges apply to all databases (`*.*`). Omit this field when you set administrative (global) grants such as `SHUTDOWN`, because those privileges apply at the global level.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["db1", "db2"]` |
+
+### `users.hosts`
+
+Hosts that the user can connect from. If not specified, defaults to `'%'`enabling the user to connect from any host.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["localhost"]` |
+
+### `users.passwordSecretRef.name`
+
+Name of the Secret that contains the user's password. If not provided, the Operator generates a password and stores it in a Secret named `<cluster-name>-user-<username>` (for example, `ps-cluster1-user-my-user`).
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `my-user-pwd` |
+
+### `users.passwordSecretRef.key`
+
+Key in the Secret that holds the user's password (`password` by default).
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `password` |
+
+### `users.withGrantOption`
+
+When `true`, the user can grant their own privileges to other users. The default is `false`.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-toggle-switch-outline: boolean | `false` |
+
+### `users.grants`
+
+Privileges granted to the user. If omitted, the Operator creates the user without additional `GRANT` statements.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["SELECT", "DELETE", "INSERT"]` |
+
 ## <a name="operator-pmm-section"></a>PMM section
 
 The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration
