@@ -20,7 +20,7 @@ kubectl get ps
     ps-cluster1   group-replication   ps-cluster1-haproxy.default   ready   3                                3        20m
     ```
 
-The Custom Resource should have `ready` state.
+The Custom Resource should have the `ready` state. See [Custom resource statuses](cr-statuses.md) for other possible values.
 
 !!! note
 

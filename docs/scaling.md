@@ -166,7 +166,7 @@ When the Operator changes the storage size, it updates the Custom Resource statu
             resizeCount: 2
         ```
 
-The `storageAutoscaling` section appears under the `.status` in the Custom Resource.
+The `storageAutoscaling` section appears under the `.status` in the Custom Resource. See [Custom resource statuses](cr-statuses.md#storage-autoscaling-status) for field meanings.
 
 When the storage size reaches the limit, no further resizing is done and this event is recorded in the logs. You can either clean up the data or set a new limit based on your organization's policies and requirements. For help with common issues, see [Operator logs](debug-logs.md).
 
