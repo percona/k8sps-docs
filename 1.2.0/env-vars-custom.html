@@ -5328,7 +5328,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">    </span><span class="nt">haproxy</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">env</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HA_CONNECTION_TIMEOUT</span>
-<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30&quot;</span>
+<span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"30"</span>
 </code></pre></div>
 </li>
 <li>
@@ -5352,7 +5352,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-haproxy-env</span>
 <span class="nt">data</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">HA_CONNECTION_TIMEOUT</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;30&quot;</span>
+<span class="w">  </span><span class="nt">HA_CONNECTION_TIMEOUT</span><span class="p">:</span><span class="w"> </span><span class="s">"30"</span>
 </code></pre></div>
 </li>
 <li>
@@ -5382,7 +5382,7 @@ kubectl apply -f haproxy-configmap.yaml -n $NAMESPACE</p>
 <li>
 <p>Encode your sensitive values before adding them to a Secret, as Kubernetes stores Secret data in base64-encoded form. This helps prevent accidental exposure of sensitive information in plaintext, even though it is not a secure encryption method.</p>
 <p>To encode an API token, run:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;your-token&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"your-token"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64
 </code></pre></div>
 <p>Copy the encoded string for use in your Secret manifest</p>
 </li>
@@ -5399,7 +5399,7 @@ kubectl apply -f haproxy-configmap.yaml -n $NAMESPACE</p>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-app-env</span>
 <span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
 <span class="nt">data</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">MY_INTEGRATION_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;your-base64-encoded-token&quot;</span>
+<span class="w">  </span><span class="nt">MY_INTEGRATION_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="s">"your-base64-encoded-token"</span>
 </code></pre></div>
 </li>
 <li>

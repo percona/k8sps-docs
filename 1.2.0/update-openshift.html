@@ -5163,7 +5163,7 @@ However, OLM doesn&rsquo;t modify the <code>PerconaServerMySQL</code> Custom Res
 <p>Here&rsquo;s how you can customize the Operator Deployment. This example command sets an environment variable for the Operator:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>subscription<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="w"> </span>merge<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-p<span class="w"> </span><span class="s1">&#39;{&quot;spec&quot;:{&quot;config&quot;:{&quot;env&quot;:[{&quot;name&quot;:&quot;LOG_LEVEL&quot;,&quot;value&quot;:&quot;DEBUG&quot;}]}}}&#39;</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="s1">'{"spec":{"config":{"env":[{"name":"LOG_LEVEL","value":"DEBUG"}]}}}'</span>
 </code></pre></div>
 <p>OLM supports overriding only the following fields through the Subscription:</p>
 <ul>
@@ -5199,38 +5199,38 @@ However, OLM doesn&rsquo;t modify the <code>PerconaServerMySQL</code> Custom Res
 </li>
 <li>
 <p>Apply a patch to the clusters with undefined <code>initContainer.image</code> to define this image with the <code>docker.io</code> registry in the image path:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">  &quot;spec&quot;: {</span>
-<span class="s1">    &quot;initcontainer&quot;: {</span>
-<span class="s1">          &quot;image&quot;: &quot;docker.io/percona-server-mysql-operator:1.1.0&quot;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">  "spec": {</span>
+<span class="s1">    "initcontainer": {</span>
+<span class="s1">          "image": "docker.io/percona-server-mysql-operator:1.1.0"</span>
 <span class="s1">    }</span>
 <span class="s1">  }</span>
-<span class="s1">}&#39;</span>
+<span class="s1">}'</span>
 </code></pre></div>
 <p><strong>Important!</strong> This command triggers the restart of your clusters. Wait till they restart and report the <code>Ready</code> status.</p>
 </li>
 <li>
 <p>Update the Operator deployment and specify the <code>docker.io</code> registry name in the image path:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span><span class="se">\</span>
--p<span class="s1">&#39;{&quot;spec&quot;:{&quot;template&quot;:{&quot;spec&quot;:{&quot;containers&quot;:[{&quot;name&quot;:&quot;percona-server-mysql-operator&quot;,&quot;image&quot;:&quot;docker.io/percona/percona-server-mysql-operator:1.2.0&quot;}]}}}}&#39;</span>
+-p<span class="s1">'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"docker.io/percona/percona-server-mysql-operator:1.2.0"}]}}}}'</span>
 </code></pre></div>
 </li>
 <li>
 <p>Update the Custom Resource version and the database cluster. Specify the <code>initContainer</code> image with the <code>docker.io</code> registry name in the path.</p>
 <p>The following example shows how to update Percona Server for MySQL cluster 8.4 with Group Replication and HAProxy:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">  &quot;spec&quot;: {</span>
-<span class="s1">    &quot;crVersion&quot;: &quot;1.2.0&quot;,</span>
-<span class="s1">    &quot;initContainer&quot;: &quot;docker.io/percona/percona-server-mysql-operator:1.2.0&quot;,</span>
-<span class="s1">    &quot;mysql&quot;:{ &quot;image&quot;: &quot;docker.io/percona/percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">    &quot;proxy&quot;:{</span>
-<span class="s1">        &quot;haproxy&quot;:{ &quot;image&quot;: &quot;docker.io/percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">  "spec": {</span>
+<span class="s1">    "crVersion": "1.2.0",</span>
+<span class="s1">    "initContainer": "docker.io/percona/percona-server-mysql-operator:1.2.0",</span>
+<span class="s1">    "mysql":{ "image": "docker.io/percona/percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">    "proxy":{</span>
+<span class="s1">        "haproxy":{ "image": "docker.io/percona/haproxy:2.8.18-1" }</span>
 <span class="s1">    },</span>
-<span class="s1">    &quot;backup&quot;:{ &quot;image&quot;: &quot;docker.io/percona/percona-xtrabackup:8.4.0-6.1&quot; },</span>
-<span class="s1">    &quot;toolkit&quot;:{ &quot;image&quot;: &quot;docker.io/percona/percona-toolkit:3.7.1-4&quot; },</span>
-<span class="s1">    &quot;pmm&quot;:{ &quot;image&quot;: &quot;docker.io/percona/pmm-client:3.8.1&quot; }</span>
+<span class="s1">    "backup":{ "image": "docker.io/percona/percona-xtrabackup:8.4.0-6.1" },</span>
+<span class="s1">    "toolkit":{ "image": "docker.io/percona/percona-toolkit:3.7.1-4" },</span>
+<span class="s1">    "pmm":{ "image": "docker.io/percona/pmm-client:3.8.1" }</span>
 <span class="s1">  }</span>
-<span class="s1">}&#39;</span>
+<span class="s1">}'</span>
 </code></pre></div>
 </li>
 </ol>

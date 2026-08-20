@@ -4977,22 +4977,22 @@ logs with the <code>kubectl logs</code> command:</p>
 </li>
 <li>
 <p>Check logs of the <code>mysql</code> container for <code>ERROR</code> messages:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;ERROR&#39;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'ERROR'</span>
 </code></pre></div>
 </li>
 <li>
 <p>Check logs of the Operator:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;app.kubernetes.io/name=percona-server-mysql-operator&quot;</span><span class="w"> </span>--tail<span class="o">=</span>-1
+<div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </span><span class="s2">"app.kubernetes.io/name=percona-server-mysql-operator"</span><span class="w"> </span>--tail<span class="o">=</span>-1
 </code></pre></div>
 </li>
 <li>
 <p>Check logs of the operator, parsing the output with <a href="https://stedolan.github.io/jq/">jq JSON processor <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> (requires <code>LOG_STRUCTURED</code> to be <code>true</code>):</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;app.kubernetes.io/name=percona-server-mysql-operator&quot;</span><span class="w"> </span>--tail<span class="o">=</span>-1<span class="w"> </span>-f<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-R<span class="w"> </span><span class="s1">&#39;fromjson?&#39;</span>
+<div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </span><span class="s2">"app.kubernetes.io/name=percona-server-mysql-operator"</span><span class="w"> </span>--tail<span class="o">=</span>-1<span class="w"> </span>-f<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-R<span class="w"> </span><span class="s1">'fromjson?'</span>
 </code></pre></div>
 </li>
 <li>
 <p>Check logs of the HAProxy pod for configuration issues:
-    <div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>ps-cluster1-haproxy-0<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;The custom config /etc/haproxy-custom/haproxy.cfg is not valid and will be ignored.&#39;</span>
+    <div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>ps-cluster1-haproxy-0<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'The custom config /etc/haproxy-custom/haproxy.cfg is not valid and will be ignored.'</span>
 </code></pre></div></p>
 </li>
 </ul>

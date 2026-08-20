@@ -5615,7 +5615,7 @@ deployment.apps/percona-server-mysql-operator serverside-applied
 </div>
 <h4 id="step-3-optional-set-up-user-permissions">Step 3: (optional) Set up user permissions<a class="headerlink" href="#step-3-optional-set-up-user-permissions" title="Permanent link">&para;</a></h4>
 <p>If you&rsquo;re using a non-privileged user, grant the required permissions by applying the following clusterrole:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>ps-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="w"> </span>--resource<span class="o">=</span>perconaservermysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
+<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>ps-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>perconaservermysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
 oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </span>add-cluster-role-to-user<span class="w"> </span>ps-admin<span class="w"> </span>&lt;some-user&gt;
 </code></pre></div>
 <p>If you have a <a href="https://
@@ -5624,7 +5624,7 @@ oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </sp
     html">cert-manager<br />
 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> installed, add these permissions to manage certificates with a 
     non-privileged user:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>cert-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="w"> </span>--resource<span class="o">=</span>issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
+<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>cert-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
 oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </span>add-cluster-role-to-user<span class="w"> </span>cert-admin<span class="w"> </span>&lt;some-user&gt;
 </code></pre></div>
 <h4 id="step-4-create-a-project">Step 4: Create a project<a class="headerlink" href="#step-4-create-a-project" title="Permanent link">&para;</a></h4>
@@ -5725,10 +5725,10 @@ ps-cluster1   group-replication   ps-cluster1-haproxy.nastena1   ready   3      
 </li>
 <li>
 <p>Retrieve the user credentials from the Secret:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SECRET_NAME</span><span class="s2">&quot;</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$NAMESPACE</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
--o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.user}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
-oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SECRET_NAME</span><span class="s2">&quot;</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$NAMESPACE</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
--o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.password}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
+<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.user}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
+oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
 </code></pre></div>
 </li>
 <li>
@@ -5769,14 +5769,14 @@ Oracle is a registered trademark of Oracle Corporation and/or its
 affiliates. Other names may be trademarks of their respective
 owners.
 
-Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 mysql&gt;
 </code></pre></div>
 </details>
 <p>The following example uses the MySQL prompt to check the
 <code>max_connections</code> variable:</p>
-<div class="highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">&quot;max_connections&quot;</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>

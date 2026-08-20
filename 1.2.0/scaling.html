@@ -5303,13 +5303,13 @@ documentation  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" vie
 <div class="no-copy highlight"><pre><span></span><code>storageAutoscaling:
   datadir-ps-cluster1-mysql-0:
     currentSize: 4194304Ki
-    lastResizeTime: &quot;2026-01-23T15:08:59Z&quot;
+    lastResizeTime: "2026-01-23T15:08:59Z"
     resizeCount: 2
 </code></pre></div>
 </details>
 </li>
 </ul>
-<p>The <code>storageAutoscaling</code> section appears under the <code>.status</code> in the Custom Resource.</p>
+<p>The <code>storageAutoscaling</code> section appears under the <code>.status</code> in the Custom Resource. See <a href="cr-statuses.html#storage-autoscaling-status">Custom resource statuses</a> for field meanings.</p>
 <p>When the storage size reaches the limit, no further resizing is done and this event is recorded in the logs. You can either clean up the data or set a new limit based on your organization&rsquo;s policies and requirements. For help with common issues, see <a href="debug-logs.html">Operator logs</a>.</p>
 <h4 id="storage-resizing-with-volume-expansion-capability">Storage resizing with Volume Expansion capability<a class="headerlink" href="#storage-resizing-with-volume-expansion-capability" title="Permanent link">&para;</a></h4>
 <p>In this document we&rsquo;re using the default Percona Server for MySQL cluster name <code>ps-cluster1</code>. If you have a different name, replace <code>ps-cluster1</code> with it in the commands.</p>
@@ -5406,7 +5406,7 @@ kubectl<span class="w"> </span>edit<span class="w"> </span>pvc<span class="w"> <
 configuration. That’s why scaling the cluster needs nothing more but changing
 this option and applying the updated configuration file. This may be done in a
 specifically saved config, or on the fly, using the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="w"> </span>-p<span class="o">=</span><span class="s1">&#39;[{&quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/spec/mysql/size&quot;, &quot;value&quot;: 5 }]&#39;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span><span class="s1">'json'</span><span class="w"> </span>-p<span class="o">=</span><span class="s1">'[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'</span>
 </code></pre></div>
 <p>In this example we have changed the size of the Percona Server for MySQL
 Cluster to <code>5</code> instances.</p>
@@ -5415,7 +5415,7 @@ Cluster to <code>5</code> instances.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 10:50:46 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 20, 2026 08:22:37 UTC">August 20, 2026</span>
       
         <br>
         Created:

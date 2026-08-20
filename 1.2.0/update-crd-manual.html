@@ -5048,51 +5048,51 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-22&quot; },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; },</span>
-<span class="s1">       &quot;pmm&quot;: { &quot;image&quot;: &quot;percona/pmm-client:3.8.1&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "orchestrator":{ "image": "percona/percona-orchestrator:3.2.6-22" },</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.4.0-6.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" },</span>
+<span class="s1">       "pmm": { "image": "percona/pmm-client:3.8.1" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-22&quot; },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "orchestrator":{ "image": "percona/percona-orchestrator:3.2.6-22" },</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.4.0-6.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-22&quot; },</span>
-<span class="s1">       &quot;backup&quot;:{</span>
-<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot;,</span>
-<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.3.1&quot; } }</span>
+<span class="s1">       "orchestrator":{ "image": "percona/percona-orchestrator:3.2.6-22" },</span>
+<span class="s1">       "backup":{</span>
+<span class="s1">          "image": "percona/percona-xtrabackup:8.4.0-6.1",</span>
+<span class="s1">          "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:0.3.1" } }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 <p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
@@ -5103,48 +5103,48 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; },</span>
-<span class="s1">       &quot;pmm&quot;: { &quot;image&quot;: &quot;percona/pmm-client:3.8.1&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.4.0-6.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" },</span>
+<span class="s1">       "pmm": { "image": "percona/pmm-client:3.8.1" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.4.0-6.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{</span>
-<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot;,</span>
-<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.3.1&quot; } }</span>
+<span class="s1">       "backup":{</span>
+<span class="s1">          "image": "percona/percona-xtrabackup:8.4.0-6.1",</span>
+<span class="s1">          "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:0.3.1" } }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 <p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
@@ -5155,48 +5155,48 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.4.10-10.1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "router":{ "image": "percona/percona-mysql-router:8.4.10-10.1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; },</span>
-<span class="s1">       &quot;pmm&quot;: { &quot;image&quot;: &quot;percona/pmm-client:3.8.1&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.4.0-6.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" },</span>
+<span class="s1">       "pmm": { "image": "percona/pmm-client:3.8.1" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.4.10-10.1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "router":{ "image": "percona/percona-mysql-router:8.4.10-10.1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.4.0-6.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.4.10-10.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.4.10-10.1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.10-10.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "router":{ "image": "percona/percona-mysql-router:8.4.10-10.1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{</span>
-<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.4.0-6.1&quot;,</span>
-<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.3.1&quot; } }</span>
+<span class="s1">       "backup":{</span>
+<span class="s1">          "image": "percona/percona-xtrabackup:8.4.0-6.1",</span>
+<span class="s1">          "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:0.3.1" } }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 <p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
@@ -5213,51 +5213,51 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-22&quot; },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; },</span>
-<span class="s1">       &quot;pmm&quot;: { &quot;image&quot;: &quot;percona/pmm-client:3.8.1&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "orchestrator":{ "image": "percona/percona-orchestrator:3.2.6-22" },</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.0.35-36.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" },</span>
+<span class="s1">       "pmm": { "image": "percona/pmm-client:3.8.1" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-22&quot; },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "orchestrator":{ "image": "percona/percona-orchestrator:3.2.6-22" },</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.0.35-36.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;orchestrator&quot;:{ &quot;image&quot;: &quot;percona/percona-orchestrator:3.2.6-22&quot; },</span>
-<span class="s1">       &quot;backup&quot;:{</span>
-<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot;,</span>
-<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.3.1&quot; } }</span>
+<span class="s1">       "orchestrator":{ "image": "percona/percona-orchestrator:3.2.6-22" },</span>
+<span class="s1">       "backup":{</span>
+<span class="s1">          "image": "percona/percona-xtrabackup:8.0.35-36.1",</span>
+<span class="s1">          "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:0.3.1" } }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 <p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
@@ -5268,48 +5268,48 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; },</span>
-<span class="s1">       &quot;pmm&quot;: { &quot;image&quot;: &quot;percona/pmm-client:3.8.1&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.0.35-36.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" },</span>
+<span class="s1">       "pmm": { "image": "percona/pmm-client:3.8.1" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.0.35-36.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;haproxy&quot;:{ &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "haproxy":{ "image": "percona/haproxy:2.8.18-1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{</span>
-<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot;,</span>
-<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.3.1&quot; } }</span>
+<span class="s1">       "backup":{</span>
+<span class="s1">          "image": "percona/percona-xtrabackup:8.0.35-36.1",</span>
+<span class="s1">          "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:0.3.1" } }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 <p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>
@@ -5320,48 +5320,48 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.0.46-37.1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "router":{ "image": "percona/percona-mysql-router:8.0.46-37.1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; },</span>
-<span class="s1">       &quot;pmm&quot;: { &quot;image&quot;: &quot;percona/pmm-client:3.8.1&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.0.35-36.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" },</span>
+<span class="s1">       "pmm": { "image": "percona/pmm-client:3.8.1" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.0.46-37.1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "router":{ "image": "percona/percona-mysql-router:8.0.46-37.1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{ &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot; },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "backup":{ "image": "percona/percona-xtrabackup:8.0.35-36.1" },</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">   &quot;spec&quot;: {</span>
-<span class="s1">       &quot;crVersion&quot;:&quot;1.2.0&quot;,</span>
-<span class="s1">       &quot;mysql&quot;:{ &quot;image&quot;: &quot;percona/percona-server:8.0.46-37.1&quot; },</span>
-<span class="s1">       &quot;proxy&quot;:{</span>
-<span class="s1">          &quot;router&quot;:{ &quot;image&quot;: &quot;percona/percona-mysql-router:8.0.46-37.1&quot; }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">   "spec": {</span>
+<span class="s1">       "crVersion":"1.2.0",</span>
+<span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
+<span class="s1">       "proxy":{</span>
+<span class="s1">          "router":{ "image": "percona/percona-mysql-router:8.0.46-37.1" }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;backup&quot;:{</span>
-<span class="s1">          &quot;image&quot;: &quot;percona/percona-xtrabackup:8.0.35-36.1&quot;,</span>
-<span class="s1">          &quot;pitr&quot;: { &quot;binlogServer&quot;: { &quot;image&quot;: &quot;perconalab/percona-binlog-server:0.3.1&quot; } }</span>
+<span class="s1">       "backup":{</span>
+<span class="s1">          "image": "percona/percona-xtrabackup:8.0.35-36.1",</span>
+<span class="s1">          "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:0.3.1" } }</span>
 <span class="s1">       },</span>
-<span class="s1">       &quot;toolkit&quot;:{ &quot;image&quot;: &quot;percona/percona-toolkit:3.7.1-4&quot; }</span>
-<span class="s1">   }}&#39;</span>
+<span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.1-4" }</span>
+<span class="s1">   }}'</span>
 </code></pre></div>
 <p>After the upgrade, <a href="backups-pitr.html#binary-log-collection">enable point-in-time binlog collection</a>.</p>
 </li>

@@ -5151,7 +5151,7 @@ follows:</p>
 <p class="admonition-title">Note</p>
 <p>Similarly, you can read the list of options from a Base64 encoded
 string:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;bWF4X2Nvbm5lY3Rpb25zPTI1MAo&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">"bWF4X2Nvbm5lY3Rpb25zPTI1MAo"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode
 </code></pre></div>
 </div>
 <p>Finally, use a yaml file to create the Secret object. For example, you can
@@ -5161,7 +5161,7 @@ create a <code>deploy/mysql-secret.yaml</code> file with the following contents:
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-mysql</span>
 <span class="nt">data</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">my.cnf</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bWF4X2Nvbm5lY3Rpb25zPTI1MAo&quot;</span>
+<span class="w">  </span><span class="nt">my.cnf</span><span class="p">:</span><span class="w"> </span><span class="s">"bWF4X2Nvbm5lY3Rpb25zPTI1MAo"</span>
 </code></pre></div>
 <p>When ready, apply it with the following command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>deploy/mysql-secret.yaml

@@ -5000,7 +5000,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 example, trying to run the <code>time</code> command, which is not present in the
 container, by executing <code>kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- time</code>
 would show the following result:</p>
-<div class="no-copy highlight"><pre><span></span><code>OCI runtime exec failed: exec failed: unable to start container process: exec: &quot;time&quot;: executable file not found in $PATH: unknown command terminated with exit code 126
+<div class="no-copy highlight"><pre><span></span><code>OCI runtime exec failed: exec failed: unable to start container process: exec: "time": executable file not found in $PATH: unknown command terminated with exit code 126
 </code></pre></div>
 </li>
 <li>
@@ -5042,7 +5042,7 @@ of the container entry point is triggered by the presence of the
 <code>/var/lib/mysql/sleep-forever</code> file.</p>
 <p>For example, you can do it for the <code>mysql</code> container of an appropriate Percona
 Server for MySQL instance as follows:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;touch /var/lib/mysql/sleep-forever&#39;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'touch /var/lib/mysql/sleep-forever'</span>
 </code></pre></div>
 <p>The instance will restart automatically and run in its usual way as soon as you
 remove this file (you can do it with a command similar to the one you have used

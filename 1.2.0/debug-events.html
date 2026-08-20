@@ -4924,53 +4924,53 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <details class="example" open="open">
 <summary>Expected output</summary>
 <div class="no-copy highlight"><pre><span></span><code>LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
-3s          Normal    Provisioning             persistentvolumeclaim/datadir-ps-cluster1-mysql-2        External provisioner is provisioning volume for claim &quot;default/datadir-ps-cluster1-mysql-2&quot;
+3s          Normal    Provisioning             persistentvolumeclaim/datadir-ps-cluster1-mysql-2        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-2"
 3s          Normal    ProvisioningSucceeded    persistentvolumeclaim/datadir-ps-cluster1-mysql-2        Successfully provisioned volume pvc-fbd347c2-adf7-413b-86bb-b5e381313cc0
 ...
 </code></pre></div>
 </details>
 <p>Events capture many information happening at Kubernetes level and provide valuable information. By default, the ordering of events cannot be guaranteed.
 Use the following command to sort the output in a reverse chronological fashion.</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>--sort-by<span class="o">=</span><span class="s2">&quot;.lastTimestamp&quot;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>--sort-by<span class="o">=</span><span class="s2">".lastTimestamp"</span>
 </code></pre></div>
 <details class="example" open="open">
 <summary>Expected output</summary>
 <div class="no-copy highlight"><pre><span></span><code>LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
 33m         Warning   FailedScheduling           pod/ps-cluster1-mysql-0                                  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
-33m         Normal    Provisioning               persistentvolumeclaim/datadir-ps-cluster1-mysql-0        External provisioner is provisioning volume for claim &quot;default/datadir-ps-cluster1-mysql-0&quot;
+33m         Normal    Provisioning               persistentvolumeclaim/datadir-ps-cluster1-mysql-0        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-0"
 33m         Normal    ProvisioningSucceeded      persistentvolumeclaim/datadir-ps-cluster1-mysql-0        Successfully provisioned volume pvc-aad3d7cf-2bd4-4823-8e6f-38b9a8528aaa
 ...
 </code></pre></div>
 </details>
 <p>When there are too many events and there is a need of filtering output, tools like <a href="https://github.com/mikefarah/yq">yq <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, <a href="https://github.com/jqlang/jq">jq <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> can be used to filter specific items or know the structure of the events.</p>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>yq<span class="w"> </span><span class="s1">&#39;.items[11]&#39;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>yq<span class="w"> </span><span class="s1">'.items[11]'</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
 <div class="no-copy highlight"><pre><span></span><code>apiVersion: v1
 count: 1
 eventTime: null
-firstTimestamp: &quot;2024-07-16T08:57:32Z&quot;
+firstTimestamp: "2024-07-16T08:57:32Z"
 involvedObject:
   apiVersion: v1
   kind: Pod
   name: ps-cluster1-mysql-0
   namespace: default
-  resourceVersion: &quot;623&quot;
+  resourceVersion: "623"
   uid: 689338c7-d5f7-4bfb-9f7e-ca1d13e782a3
 kind: Event
-lastTimestamp: &quot;2024-07-16T08:57:32Z&quot;
-message: &#39;0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.&#39;
+lastTimestamp: "2024-07-16T08:57:32Z"
+message: '0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.'
 metadata:
-  creationTimestamp: &quot;2024-07-16T08:57:32Z&quot;
+  creationTimestamp: "2024-07-16T08:57:32Z"
   name: ps-cluster1-mysql-0.17e2a5c04f66588f
   namespace: default
-  resourceVersion: &quot;625&quot;
+  resourceVersion: "625"
   uid: 6d4a0eeb-8eea-4e1d-91f5-91fb795bd743
 reason: FailedScheduling
 reportingComponent: default-scheduler
-reportingInstance: &quot;&quot;
+reportingInstance: ""
 source:
   component: default-scheduler
 type: Warning
@@ -4989,7 +4989,7 @@ For example, the following command provides events of Pod only:</p>
 <div class="no-copy highlight"><pre><span></span><code>LAST SEEN   TYPE      REASON            OBJECT                 MESSAGE
 53m         Normal    Created           pod/ps-cluster1-mysql-0   Created container mysql
 53m         Normal    Started           pod/ps-cluster1-mysql-0   Started container mysql
-53m         Normal    Pulling           pod/ps-cluster1-mysql-0   Pulling image &quot;percona/percona-server-mysql-operator:0.8.0-backup&quot;
+53m         Normal    Pulling           pod/ps-cluster1-mysql-0   Pulling image "percona/percona-server-mysql-operator:0.8.0-backup"
 ...
 </code></pre></div>
 </details>

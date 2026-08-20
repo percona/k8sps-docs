@@ -5064,7 +5064,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ul>
 <li>Check that the <code>backup.enabled</code> key is set to <code>true</code>. Use the following command:</li>
 </ul>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec.backup.enabled}&#39;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.backup.enabled}'</span>
 </code></pre></div>
 <ul>
 <li>Verify that you have <a href="backups-storage.html">configured backup storage</a> and specified its configuration in the <code>backup.storages</code> subsection of the Custom Resource.</li>

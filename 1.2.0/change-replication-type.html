@@ -4924,7 +4924,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p><a href="pause.html">Pause</a> the cluster. Since the cluster is running, run the <code>kubectl patch</code> command to update the cluster configuration. Replace the <code>&lt;namespace&gt;</code> placeholder with your namespace. For example, for the cluster with the name <code>ps-cluster1</code>, the command is:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">&#39;[{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/spec/pause&quot;,&quot;value&quot;:true}]&#39;</span><span class="w">    </span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">'[{"op":"add","path":"/spec/pause","value":true}]'</span><span class="w">    </span>
 </code></pre></div>
 </li>
 <li>
@@ -4945,7 +4945,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 <li>
 <p>Unpause the cluster.</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">&#39;[{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/spec/pause&quot;,&quot;value&quot;:false}]&#39;</span><span class="w">    </span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">'[{"op":"add","path":"/spec/pause","value":false}]'</span><span class="w">    </span>
 </code></pre></div>
 </li>
 <li>

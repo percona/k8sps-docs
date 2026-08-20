@@ -5107,12 +5107,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">      </span><span class="nt">&lt;storage-name&gt;</span><span class="p">:</span>
 <span class="w">        </span><span class="nt">containerOptions</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">xtrabackup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--compress&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">            </span><span class="nt">xbcloud</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--max-retries=5&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">            </span><span class="nt">xbstream</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--parallel=4&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">            </span><span class="nt">xtrabackup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--compress"</span><span class="p p-Indicator">]</span>
+<span class="w">            </span><span class="nt">xbcloud</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--max-retries=5"</span><span class="p p-Indicator">]</span>
+<span class="w">            </span><span class="nt">xbstream</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--parallel=4"</span><span class="p p-Indicator">]</span>
 <span class="w">          </span><span class="nt">env</span><span class="p">:</span>
 <span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MY_CUSTOM_VAR</span>
-<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;some-value&quot;</span>
+<span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"some-value"</span>
 </code></pre></div>
 <ul>
 <li><strong><code>xtrabackup</code></strong>: This tool handles the core backup process, interacting directly with the database. You can pass arguments like <code>--compress</code> to override the default compression mechanism, or <code>--encrypt</code>, <code>--encrypt-threads</code>, and <code>--encrypt-chunk-size</code> to tune <a href="backups-encrypted.html">encrypted backups</a>. Read more about xtrabackup options in <a href="https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-option-reference.html">The xtrabackup command-line options reference <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
@@ -5133,11 +5133,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="nt">storageName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3-us-west</span>
 <span class="w">  </span><span class="nt">containerOptions</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">xtrabackup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--binlog-info=off&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">xbcloud</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--retries=10&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">xtrabackup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--binlog-info=off"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">xbcloud</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--retries=10"</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="nt">env</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CUSTOM_BACKUP_ENV</span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;extra-value&quot;</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"extra-value"</span>
 </code></pre></div>
 <p>You can see here that only <code>xtrabackup</code> and <code>xbcloud</code> arguments are specified. The <code>xbstream</code> binary is not used for backups and its configuration will be ignored, even if you specify it. </p>
 <p>Note that the settings you specify here are used, overriding any global configuration from the <code>deploy/cr.yaml</code> file.</p>
@@ -5152,12 +5152,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
 <span class="w">  </span><span class="nt">containerOptions</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">xtrabackup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--apply-log-only&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">xbcloud</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--retries=5&quot;</span><span class="p p-Indicator">]</span>
-<span class="w">      </span><span class="nt">xbstream</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;--parallel=8&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">xtrabackup</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--apply-log-only"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">xbcloud</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--retries=5"</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">xbstream</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"--parallel=8"</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="nt">env</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CUSTOM_RESTORE_ENV</span>
-<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;restore-value&quot;</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"restore-value"</span>
 </code></pre></div>
 <p>When this restore job runs, it will use the <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code> arguments defined here, ignoring any settings in the main <code>cr.yaml</code>.</p>
 <p>The Percona Operator for MySQL provides a flexible and powerful way to manage backup and restore operations using <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code>. By leveraging the layered configuration system, you can set general policies in <code>deploy/cr.yaml</code> while retaining the ability to use specialized options for individual jobs. This ensures your operations remain efficient, reliable, and tailored to your specific needs.</p>

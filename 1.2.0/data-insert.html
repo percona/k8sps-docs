@@ -5018,10 +5018,10 @@ Database changed
 <p>Adding data to the newly created table will look as follows:</p>
 <div class="highlight"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">extraordinary_gentlemen</span><span class="w"> </span><span class="p">(</span><span class="k">name</span><span class="p">,</span><span class="w"> </span><span class="n">occupation</span><span class="p">)</span>
 <span class="w">  </span><span class="k">VALUES</span>
-<span class="w">  </span><span class="p">(</span><span class="s2">&quot;Allan Quartermain&quot;</span><span class="p">,</span><span class="s2">&quot;hunter&quot;</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="s2">&quot;Nemo&quot;</span><span class="p">,</span><span class="s2">&quot;fish&quot;</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="s2">&quot;Dorian Gray&quot;</span><span class="p">,</span><span class="w"> </span><span class="no">NULL</span><span class="p">),</span>
-<span class="w">  </span><span class="p">(</span><span class="s2">&quot;Tom Sawyer&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;secret service agent&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">(</span><span class="s2">"Allan Quartermain"</span><span class="p">,</span><span class="s2">"hunter"</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="s2">"Nemo"</span><span class="p">,</span><span class="s2">"fish"</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="s2">"Dorian Gray"</span><span class="p">,</span><span class="w"> </span><span class="no">NULL</span><span class="p">),</span>
+<span class="w">  </span><span class="p">(</span><span class="s2">"Tom Sawyer"</span><span class="p">,</span><span class="w"> </span><span class="s2">"secret service agent"</span><span class="p">);</span>
 </code></pre></div>
 <details class="example">
 <summary>Output</summary>
@@ -5051,8 +5051,8 @@ Records: 4  Duplicates: 0  Warnings: 0
 <li>
 <p>To update data in the database, execute the following statement:</p>
 <div class="highlight"><pre><span></span><code><span class="k">UPDATE</span><span class="w">  </span><span class="n">extraordinary_gentlemen</span>
-<span class="w">   </span><span class="k">SET</span><span class="w"> </span><span class="n">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;submariner&quot;</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;Nemo&quot;</span><span class="p">;</span>
+<span class="w">   </span><span class="k">SET</span><span class="w"> </span><span class="n">occupation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">"submariner"</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">"Nemo"</span><span class="p">;</span>
 </code></pre></div>
 <details class="example">
 <summary>Output</summary>

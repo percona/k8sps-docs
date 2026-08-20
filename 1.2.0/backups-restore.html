@@ -5219,13 +5219,13 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <div class="tabbed-block">
 <p>Instead of storing restore settings in a separate file, you can pass them directly to the <code>kubectl apply</code> command as follows:</p>
 <div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -n $NAMESPACE  -f-</span>
-<span class="s">apiVersion: &quot;ps.percona.com/v1&quot;</span>
-<span class="s">kind: &quot;PerconaServerMySQLRestore&quot;</span>
+<span class="s">apiVersion: "ps.percona.com/v1"</span>
+<span class="s">kind: "PerconaServerMySQLRestore"</span>
 <span class="s">metadata:</span>
-<span class="s">  name: &quot;restore1&quot;</span>
+<span class="s">  name: "restore1"</span>
 <span class="s">spec:</span>
-<span class="s">  clusterName: &quot;ps-cluster1&quot;</span>
-<span class="s">  backupName: &quot;backup1&quot;</span>
+<span class="s">  clusterName: "ps-cluster1"</span>
+<span class="s">  backupName: "backup1"</span>
 <span class="s">EOF</span>
 </code></pre></div>
 </div>
@@ -5265,7 +5265,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
 <span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-20</span><span class="nv"> </span><span class="s">09:15:00&quot;</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
 </code></pre></div>
 </li>
 <li>
@@ -5299,7 +5299,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
 <span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
-<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cc5e06e7-241e-11f1-a165-522d36bd0c5e:225&quot;</span>
+<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
 </code></pre></div>
 </li>
 <li>

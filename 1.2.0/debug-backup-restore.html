@@ -5281,7 +5281,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Check source pod logs. For backups, review logs from the <code>xtrabackup</code> container in the source pod. For restores, view logs of the Pod created by the restore Job.</li>
 <li>Verify configuration. Ensure storage configurations, credentials, and cluster settings are correct.</li>
 </ol>
-<p>Refer to the following sections for details.</p>
+<p>Refer to the following sections for details. For status field reference, see <a href="cr-statuses.html">Custom resource statuses</a>.</p>
 <h2 id="backups">Backups<a class="headerlink" href="#backups" title="Permanent link">&para;</a></h2>
 <h3 id="check-backup-status">Check backup status<a class="headerlink" href="#check-backup-status" title="Permanent link">&para;</a></h3>
 <p>Start by checking the status of your backup objects:</p>
@@ -5352,7 +5352,7 @@ xb-cron-ps-cluster1-aws-s3-20251107211029-45srk-aws-s3   Complete   1/1         
 <p>These logs show the backup process execution, including Percona XtraBackup operations and any errors that occurred.</p>
 <details class="example">
 <summary>Example output</summary>
-<div class="no-copy highlight"><pre><span></span><code>Defaulted container &quot;xtrabackup&quot; out of: xtrabackup, xtrabackup-init (init)
+<div class="no-copy highlight"><pre><span></span><code>Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
 Trying to run backup backup1 on ps-cluster1-mysql-1.ps-cluster1-mysql.default
 2025-11-07T20:59:33.889841-00:00 0 [Note] [MY-011825] [Xtrabackup] recognized server arguments: --datadir=/var/lib/mysql 
 2025-11-07T20:59:33.890011-00:00 0 [Note] [MY-011825] [Xtrabackup] recognized client arguments: --backup=1 --stream=xbstream --safe-slave-backup=1 --slave-info=1 --target-dir=/backup/ --user=xtrabackup --password=* 
@@ -5373,10 +5373,10 @@ xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision 
 </code></pre></div>
 <h3 id="find-the-backup-source-pod">Find the backup source Pod<a class="headerlink" href="#find-the-backup-source-pod" title="Permanent link">&para;</a></h3>
 <p>Each backup object contains information about which MySQL Pod was used as the backup source. You can retrieve this information using:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.backupSource}&#39;</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.backupSource}'</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <p>For example:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>backup1<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.backupSource}&#39;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>backup1<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.backupSource}'</span>
 </code></pre></div>
 <p>This returns the fully qualified domain name (FQDN) of the source pod, such as <code>ps-cluster1-mysql-1.ps-cluster1-mysql.default</code>.</p>
 <h3 id="view-backup-logs-from-the-source-pod">View backup logs from the source pod<a class="headerlink" href="#view-backup-logs-from-the-source-pod" title="Permanent link">&para;</a></h3>
@@ -5390,8 +5390,8 @@ xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision 
 <details class="example">
 <summary>Example output</summary>
 <div class="no-copy highlight"><pre><span></span><code>2025-11-07T20:44:11Z    INFO    startServer     starting http server
-2025-11-07T20:59:33Z    INFO    sidecar.create backup   Checking if backup exists       {&quot;namespace&quot;: &quot;default&quot;, &quot;name&quot;: &quot;backup1&quot;}
-2025-11-07T20:59:33Z    INFO    sidecar.create backup   Backup starting {&quot;namespace&quot;: &quot;default&quot;, &quot;name&quot;: &quot;backup1&quot;, &quot;destination&quot;: &quot;ps-cluster1-2025-11-07-20:59:28-full&quot;, &quot;storage&quot;: &quot;s3&quot;, &quot;xtrabackupCmd&quot;: &quot;/usr/bin/xtrabackup --backup --stream=xbstream --safe-slave-backup --slave-info --target-dir=/backup/ --user=xtrabackup &quot;, &quot;xbcloudCmd&quot;: &quot;/usr/bin/xbcloud put --parallel=10 --curl-retriable-errors=7 --md5 --storage=s3 --s3-bucket=operator-testing --s3-region=us-east-1   ps-cluster1-2025-11-07-20:59:28-full&quot;}
+2025-11-07T20:59:33Z    INFO    sidecar.create backup   Checking if backup exists       {"namespace": "default", "name": "backup1"}
+2025-11-07T20:59:33Z    INFO    sidecar.create backup   Backup starting {"namespace": "default", "name": "backup1", "destination": "ps-cluster1-2025-11-07-20:59:28-full", "storage": "s3", "xtrabackupCmd": "/usr/bin/xtrabackup --backup --stream=xbstream --safe-slave-backup --slave-info --target-dir=/backup/ --user=xtrabackup ", "xbcloudCmd": "/usr/bin/xbcloud put --parallel=10 --curl-retriable-errors=7 --md5 --storage=s3 --s3-bucket=operator-testing --s3-region=us-east-1   ps-cluster1-2025-11-07-20:59:28-full"}
 2025-11-07T20:59:33.889841-00:00 0 [Note] [MY-011825] [Xtrabackup] recognized server arguments: --datadir=/var/lib/mysql 
 2025-11-07T20:59:33.890011-00:00 0 [Note] [MY-011825] [Xtrabackup] recognized client arguments: --backup=1 --stream=xbstream --safe-slave-backup=1 --slave-info=1 --target-dir=/backup/ --user=xtrabackup --password=* 
 xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision id: c584cb20)
@@ -5467,16 +5467,16 @@ xb-restore-restore2                                      Complete   1/1         
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>Defaulted container &quot;xtrabackup&quot; out of: xtrabackup, xtrabackup-init (init)
-++ awk &#39;/^xtrabackup version/{print $3}&#39;
-++ awk -F. &#39;{print $1&quot;.&quot;$2}&#39;
+<div class="no-copy highlight"><pre><span></span><code>Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
+++ awk '/^xtrabackup version/{print $3}'
+++ awk -F. '{print $1"."$2}'
 ++ xtrabackup --version
 * XTRABACKUP_VERSION=8.4
 * DATADIR=/var/lib/mysql
 ++ grep -c processor /proc/cpuinfo
 * PARALLEL=4
-* XBCLOUD_ARGS=&#39;--curl-retriable-errors=7 --parallel=4 &#39;
-* &#39;[&#39; -n true &#39;]&#39;
+* XBCLOUD_ARGS='--curl-retriable-errors=7 --parallel=4 '
+* '[' -n true ']'
 * [[ true == \f\a\l\s\e ]]
 </code></pre></div>
 </details>
@@ -5489,16 +5489,16 @@ xb-restore-restore2                                      Complete   1/1         
 </code></pre></div>
 <details class="example">
 <summary>Example output</summary>
-<div class="no-copy highlight"><pre><span></span><code>Defaulted container &quot;xtrabackup&quot; out of: xtrabackup, xtrabackup-init (init)
-++ awk &#39;/^xtrabackup version/{print $3}&#39;
-++ awk -F. &#39;{print $1&quot;.&quot;$2}&#39;
+<div class="no-copy highlight"><pre><span></span><code>Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
+++ awk '/^xtrabackup version/{print $3}'
+++ awk -F. '{print $1"."$2}'
 ++ xtrabackup --version
 + XTRABACKUP_VERSION=8.4
 + DATADIR=/var/lib/mysql
 ++ grep -c processor /proc/cpuinfo
 + PARALLEL=4
-+ XBCLOUD_ARGS=&#39;--curl-retriable-errors=7 --parallel=4 &#39;
-+ &#39;[&#39; -n true &#39;]&#39;
++ XBCLOUD_ARGS='--curl-retriable-errors=7 --parallel=4 '
++ '[' -n true ']'
 + [[ true == \f\a\l\s\e ]]
 </code></pre></div>
 </details>
@@ -5507,7 +5507,7 @@ xb-restore-restore2                                      Complete   1/1         
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 14:39:51 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 20, 2026 08:22:37 UTC">August 20, 2026</span>
       
         <br>
         Created:

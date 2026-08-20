@@ -5193,7 +5193,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Find the secret name. Run this command on the <strong>cluster where you made the backup</strong>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec.secretsName}&#39;</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.secretsName}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
@@ -5208,7 +5208,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 <li>
 <p>Remove the <code>annotations</code>, <code>labels</code>, <code>creationTimestamp</code>, <code>resourceVersion</code>, <code>selfLink</code>, <code>uid</code> and <code>namespace</code> metadata fields from the resulting file to make it ready for the source cluster. Use the following script to do it:</p>
-<div class="highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">&#39;del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)&#39;</span><span class="w"> </span>ps-cluster1-secrets.yaml<span class="w"> </span>&gt;<span class="w"> </span>ps-cluster1-secrets-target.yaml
+<div class="highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)'</span><span class="w"> </span>ps-cluster1-secrets.yaml<span class="w"> </span>&gt;<span class="w"> </span>ps-cluster1-secrets-target.yaml
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
@@ -5387,7 +5387,7 @@ type: Opaque
 <span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span><span class="w"> </span><span class="c1">#Optional for AWS S3</span>
 <span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-20</span><span class="nv"> </span><span class="s">09:15:00&quot;</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -5416,7 +5416,7 @@ type: Opaque
 <span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span><span class="w"> </span><span class="c1">#Optional for AWS S3</span>
 <span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-03-20</span><span class="nv"> </span><span class="s">09:15:00&quot;</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
 </code></pre></div>
 </div>
 </div>
@@ -5454,7 +5454,7 @@ type: Opaque
 <span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
 <span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
-<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cc5e06e7-241e-11f1-a165-522d36bd0c5e:225&quot;</span>
+<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -5483,7 +5483,7 @@ type: Opaque
 <span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
 <span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
-<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cc5e06e7-241e-11f1-a165-522d36bd0c5e:225&quot;</span>
+<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
 </code></pre></div>
 </div>
 </div>
@@ -5570,7 +5570,7 @@ type: Opaque
 <span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
 <span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-05-01T15:30:00Z&quot;</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-05-01T15:30:00Z"</span>
 </code></pre></div>
 </div>
 </div>

@@ -5004,17 +5004,17 @@ the <code>haproxy.enabled</code> option in the <code>deploy/cr.yaml</code> confi
 </div>
 <p>For example, you can use the following command to enable HAProxy for existing
 cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">  &quot;spec&quot;: {</span>
-<span class="s1">     &quot;proxy&quot;: {</span>
-<span class="s1">       &quot;haproxy&quot;: {</span>
-<span class="s1">          &quot;enabled&quot;: true,</span>
-<span class="s1">          &quot;size&quot;: 3,</span>
-<span class="s1">          &quot;image&quot;: &quot;percona/haproxy:2.8.18-1&quot; }</span>
-<span class="s1">       &quot;router&quot;: {</span>
-<span class="s1">          &quot;enabled&quot;: false }</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">  "spec": {</span>
+<span class="s1">     "proxy": {</span>
+<span class="s1">       "haproxy": {</span>
+<span class="s1">          "enabled": true,</span>
+<span class="s1">          "size": 3,</span>
+<span class="s1">          "image": "percona/haproxy:2.8.18-1" }</span>
+<span class="s1">       "router": {</span>
+<span class="s1">          "enabled": false }</span>
 <span class="s1">       }</span>
-<span class="s1">  }}&#39;</span>
+<span class="s1">  }}'</span>
 </code></pre></div>
 <p>The resulting HAPproxy setup will contain the <code>ps-cluster1-haproxy</code> service
 listening on ports 3306 (MySQL cluster zero member) and 3307 (other members).</p>

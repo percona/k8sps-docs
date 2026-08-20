@@ -5215,7 +5215,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><strong>Example configuration:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOG_STRUCTURED</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
 </code></pre></div>
 <p>Structured logs work well with tools such as <a href="https://stedolan.github.io/jq/">jq <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. See also <a href="debug-logs.html">Check the logs</a>.</p>
 <h3 id="log_level"><code>LOG_LEVEL</code><a class="headerlink" href="#log_level" title="Permanent link">&para;</a></h3>
@@ -5282,7 +5282,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><strong>Example configuration:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
 <span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WATCH_NAMESPACE</span>
-<span class="w">   </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mysql,mysql-dev,mysql-prod&quot;</span>
+<span class="w">   </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"mysql,mysql-dev,mysql-prod"</span>
 </code></pre></div>
 <h3 id="max_concurrent_reconciles"><code>MAX_CONCURRENT_RECONCILES</code><a class="headerlink" href="#max_concurrent_reconciles" title="Permanent link">&para;</a></h3>
 <p>Sets the number of concurrent workers that reconcile <code>PerconaServerMySQL</code> and related custom resources in parallel. Useful when you manage multiple clusters with a single Operator. See <a href="reconciliation-concurrency.html">Configure concurrency for a cluster reconciliation</a>.</p>
@@ -5306,7 +5306,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><strong>Example configuration:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MAX_CONCURRENT_RECONCILES</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"2"</span>
 </code></pre></div>
 <h3 id="disable_telemetry"><code>DISABLE_TELEMETRY</code><a class="headerlink" href="#disable_telemetry" title="Permanent link">&para;</a></h3>
 <p>Disables anonymous telemetry data collection by the Operator. For what is collected when telemetry is enabled, see <a href="telemetry.html">Telemetry</a>.</p>
@@ -5329,7 +5329,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><strong>Example configuration:</strong></p>
 <div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_TELEMETRY</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
 </code></pre></div>
 <h2 id="update-environment-variables">Update environment variables<a class="headerlink" href="#update-environment-variables" title="Permanent link">&para;</a></h2>
 <h3 id="using-kubectl-patch">Using <code>kubectl patch</code><a class="headerlink" href="#using-kubectl-patch" title="Permanent link">&para;</a></h3>
@@ -5338,20 +5338,20 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Get the current environment variables:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;operator-namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec.template.spec.containers[0].env}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;operator-namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.template.spec.containers[0].env}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
 </li>
 <li>
 <p>Update the deployment. This example command keeps downward API for <code>WATCH_NAMESPACE</code> and sets <code>LOG_LEVEL</code> to <code>DEBUG</code>:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;operator-namespace&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--type<span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-p<span class="o">=</span><span class="s1">&#39;[{&quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/spec/template/spec/containers/0/env&quot;, &quot;value&quot;: [</span>
-<span class="s1">    {&quot;name&quot;: &quot;LOG_STRUCTURED&quot;, &quot;value&quot;: &quot;false&quot;},</span>
-<span class="s1">    {&quot;name&quot;: &quot;LOG_LEVEL&quot;, &quot;value&quot;: &quot;DEBUG&quot;},</span>
-<span class="s1">    {&quot;name&quot;: &quot;WATCH_NAMESPACE&quot;, &quot;valueFrom&quot;: {&quot;fieldRef&quot;: {&quot;apiVersion&quot;: &quot;v1&quot;,     &quot;fieldPath&quot;: &quot;metadata.namespace&quot;}}},</span>
-<span class="s1">    {&quot;name&quot;: &quot;MAX_CONCURRENT_RECONCILES&quot;, &quot;value&quot;: &quot;1&quot;},</span>
-<span class="s1">    {&quot;name&quot;: &quot;DISABLE_TELEMETRY&quot;, &quot;value&quot;: &quot;false&quot;}</span>
-<span class="s1">  ]}]&#39;</span>
+<span class="w">  </span>--type<span class="o">=</span><span class="s1">'json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="o">=</span><span class="s1">'[{"op": "replace", "path": "/spec/template/spec/containers/0/env", "value": [</span>
+<span class="s1">    {"name": "LOG_STRUCTURED", "value": "false"},</span>
+<span class="s1">    {"name": "LOG_LEVEL", "value": "DEBUG"},</span>
+<span class="s1">    {"name": "WATCH_NAMESPACE", "valueFrom": {"fieldRef": {"apiVersion": "v1",     "fieldPath": "metadata.namespace"}}},</span>
+<span class="s1">    {"name": "MAX_CONCURRENT_RECONCILES", "value": "1"},</span>
+<span class="s1">    {"name": "DISABLE_TELEMETRY", "value": "false"}</span>
+<span class="s1">  ]}]'</span>
 </code></pre></div>
 </li>
 </ol>

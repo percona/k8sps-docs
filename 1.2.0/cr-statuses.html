@@ -9,7 +9,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Status fields show the current state of a Custom Resource. The Operator sets these fields in the .status section of a Custom Resource. You do not edit the status.">
+        <meta name="description" content="Status fields show the current state of a Custom Resource (CR). The Operator sets these fields in the .status section of a Custom Resource. You do not edit the status.">
       
       
         <meta name="author" content="Percona LLC">
@@ -3840,12 +3840,12 @@
   <a href="#how-to-view-custom-resource-statuses" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How to view custom resource statuses
+        How to view Custom Resource statuses
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="How to view custom resource statuses">
+    <nav class="md-nav" aria-label="How to view Custom Resource statuses">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3920,6 +3920,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#storage-autoscaling-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage autoscaling status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3960,7 +3982,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#events" class="md-nav__link">
+  <a href="#events_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Events
@@ -3999,10 +4021,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#conditions_2" class="md-nav__link">
+  <a href="#backup-conditions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Conditions
+        Backup conditions
       
     </span>
   </a>
@@ -4031,6 +4053,17 @@
     <span class="md-ellipsis">
       
         Restore state values
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-vs-failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error vs Failed
       
     </span>
   </a>
@@ -5143,12 +5176,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <a href="#how-to-view-custom-resource-statuses" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How to view custom resource statuses
+        How to view Custom Resource statuses
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="How to view custom resource statuses">
+    <nav class="md-nav" aria-label="How to view Custom Resource statuses">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -5223,6 +5256,28 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#storage-autoscaling-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage autoscaling status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Events
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5263,7 +5318,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
-  <a href="#events" class="md-nav__link">
+  <a href="#events_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Events
@@ -5302,10 +5357,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
-  <a href="#conditions_2" class="md-nav__link">
+  <a href="#backup-conditions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Conditions
+        Backup conditions
       
     </span>
   </a>
@@ -5334,6 +5389,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         Restore state values
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-vs-failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error vs Failed
       
     </span>
   </a>
@@ -5376,21 +5442,21 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 
 
 <h1 id="custom-resource-statuses">Custom resource statuses<a class="headerlink" href="#custom-resource-statuses" title="Permanent link">&para;</a></h1>
-<p>Status fields show the current state of a Custom Resource. The Operator sets these fields in the <code>.status</code> section of a Custom Resource. You do not edit the status.</p>
-<p>Use status values to confirm progress, detect failures, and decide when it is safe to run the next action (for example, start a restore after a backup succeeds, or perform switchover after the ClusterSet is <code>Ready</code>).</p>
-<h2 id="how-to-view-custom-resource-statuses">How to view custom resource statuses<a class="headerlink" href="#how-to-view-custom-resource-statuses" title="Permanent link">&para;</a></h2>
-<p>To check the status of custom resources, use the <code>kubectl get</code> or <code>kubectl describe</code> commands. See how to use them to get the quick overview, in-depth details, and targeted queries.</p>
+<p>Status fields show the current state of a Custom Resource (CR). The Operator sets these fields in the <code>.status</code> section of a Custom Resource. You do not edit the status.</p>
+<p>Use <code>.status</code> values to confirm progress, detect failures, and decide when it is safe to run the next action. For example, start a restore after a backup succeeds, or perform switchover after the ClusterSet is <code>Ready</code>.</p>
+<h2 id="how-to-view-custom-resource-statuses">How to view Custom Resource statuses<a class="headerlink" href="#how-to-view-custom-resource-statuses" title="Permanent link">&para;</a></h2>
+<p>To check the status of your Percona Custom Resources, use the <code>kubectl get &lt;resource-type&gt;</code> or <code>kubectl describe &lt;resource-type&gt;</code> commands. See how to use them to get the quick overview, in-depth details, and targeted queries.</p>
 <h3 id="get-a-quick-overview">Get a quick overview<a class="headerlink" href="#get-a-quick-overview" title="Permanent link">&para;</a></h3>
 <p>List your resources and check their high-level status:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>&lt;restore-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
-<summary>Sample output for <code>PerconaServerMySQL</code></summary>
-<div class="highlight"><pre><span></span><code>NAME          REPLICATION          ENDPOINT                              STATE   MYSQL   HAPROXY   AGE
-ps-cluster1   group-replication    ps-cluster1-haproxy.default:3306      ready   3       1         27m
+<summary>Sample output for PerconaServerMySQL</summary>
+<div class="no-copy highlight"><pre><span></span><code>NAME          REPLICATION          ENDPOINT                              STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+ps-cluster1   group-replication    ps-cluster1-haproxy.default           ready   3                      3                 27m
 </code></pre></div>
 </details>
 <h3 id="view-full-details">View full details<a class="headerlink" href="#view-full-details" title="Permanent link">&para;</a></h3>
@@ -5409,40 +5475,50 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <p>You can extract specific status fields using <code>jsonpath</code>.</p>
 <p><strong>Example 1. Get the InnoDB cluster name (for ClusterSet configuration):</strong></p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.innodbClusterName}{&quot;\n&quot;}&#39;</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.innodbClusterName}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>pscluster1
+<div class="no-copy highlight"><pre><span></span><code>pscluster1
 </code></pre></div>
 </details>
 <p><strong>Example 2. Check whether the ClusterSet is ready:</strong></p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{range .status.conditions[?(@.type==&quot;Ready&quot;)]}{.status}{&quot;: &quot;}{.reason}{&quot;\n&quot;}{end}&#39;</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[?(@.type=="Ready")]}{.status}{": "}{.reason}{"\n"}{end}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>True: ClusterSetHealthy
+<div class="no-copy highlight"><pre><span></span><code>True: ClusterSetHealthy
 </code></pre></div>
 </details>
 <p><strong>Example 3. Get the backup destination path:</strong></p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.status.destination}{&quot;\n&quot;}&#39;</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.destination}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>s3://&lt;my-bucket&gt;/ps-cluster1-2026-06-29-08:06:10-full
+<div class="no-copy highlight"><pre><span></span><code>s3://&lt;my-bucket&gt;/ps-cluster1-2026-06-29-08:06:10-full
 </code></pre></div>
 </details>
 <h2 id="perconaservermysql-status">PerconaServerMySQL status<a class="headerlink" href="#perconaservermysql-status" title="Permanent link">&para;</a></h2>
-<p>The main cluster state is recorded in the <code>status.state</code> field. Component-level states are recorded in the <code>status.mysql</code>, <code>status.haproxy</code>, <code>status.router</code>, <code>status.orchestrator</code>, and <code>status.binlogserver</code> sections.</p>
+<p>The main cluster state is recorded in <code>status.state</code>. Component-level states are recorded in the <code>status.mysql</code>, <code>status.haproxy</code>, <code>status.router</code>, <code>status.orchestrator</code>, and <code>status.binlogserver</code> sections. A component subsection is populated only when that component is enabled.</p>
 <p>Common fields:</p>
 <ul>
 <li><code>status.state</code> — overall cluster state</li>
-<li><code>status.host</code> — connection endpoint</li>
-<li><code>status.innodbClusterName</code> — InnoDB cluster name reported by MySQL Shell</li>
-<li><code>status.mysql.ready</code> / <code>status.mysql.size</code> — number of ready MySQL Pods and the desired size of the database cluster</li>
-<li><code>status.conditions</code> — detailed condition list with reason and message</li>
+<li><code>status.host</code> — connection endpoint (proxy Service, LoadBalancer address, or MySQL Service)</li>
+<li><code>status.innodbClusterName</code> — InnoDB cluster name derived from the Custom Resource name (non-alphanumeric characters stripped). Use this value in the <a href="clusterset-cr.html#specclustersinnodbclustername">ClusterSet Custom Resource</a></li>
+<li><code>status.mysql.ready</code> / <code>status.mysql.size</code> — number of ready MySQL Pods and the desired size</li>
+<li><code>status.mysql.state</code> — MySQL component state</li>
+<li><code>status.haproxy</code> / <code>status.router</code> / <code>status.orchestrator</code> / <code>status.binlogserver</code> — the same <code>ready</code>, <code>size</code>, <code>state</code>, and <code>version</code> fields for each component</li>
+<li><code>status.storageAutoscaling</code> — per-PVC autoscaling progress when <a href="scaling.html#scale-storage">automatic storage scaling</a> is enabled</li>
+<li><code>status.conditions</code> — detailed condition list with reason and message. See <a href="#conditions">Conditions</a></li>
+</ul>
+<p>The overall <code>status.state</code> stays <code>initializing</code> until:</p>
+<ul>
+<li>every enabled component is ready, </li>
+<li>Group Replication members are <code>ONLINE</code> (for <code>group-replication</code> clusters) or asynchronous replication has no Orchestrator problems (for <code>async</code> clusters), </li>
+<li>point-in-time recovery&rsquo;s binlog server is ready when enabled, </li>
+<li>any LoadBalancer Services have an assigned address.</li>
 </ul>
 <h3 id="cluster-state-values">Cluster state values<a class="headerlink" href="#cluster-state-values" title="Permanent link">&para;</a></h3>
 <p><code>status.state</code> values are:</p>
@@ -5464,11 +5540,11 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>stopping</code></td>
-<td>The Operator is stopping or scaling down cluster components.</td>
+<td>The Operator is stopping or scaling down cluster components (<code>spec.pause: true</code> and some Pods are still ready).</td>
 </tr>
 <tr>
 <td><code>paused</code></td>
-<td>The cluster is paused.</td>
+<td>The cluster is paused and no component Pods are ready.</td>
 </tr>
 <tr>
 <td><code>ready</code></td>
@@ -5480,13 +5556,13 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 </tbody>
 </table>
-<p>The same state values apply to each component subsection (<code>status.mysql.state</code>, <code>status.haproxy.state</code>, etc.).</p>
+<p>The same state values apply to each component subsection (<code>status.mysql.state</code>, <code>status.haproxy.state</code>, and so on).</p>
 <h3 id="conditions">Conditions<a class="headerlink" href="#conditions" title="Permanent link">&para;</a></h3>
 <p>Conditions show more detail about cluster state changes. You can see them in <code>status.conditions[]</code>.</p>
 <p>Common condition fields:</p>
 <ul>
 <li><code>type</code> — condition type</li>
-<li><code>status</code> — condition status (<code>True</code>, <code>False</code>, or <code>Unknown</code>)</li>
+<li><code>status</code> — condition status</li>
 <li><code>reason</code> — short reason string</li>
 <li><code>message</code> — human-readable details</li>
 </ul>
@@ -5509,7 +5585,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>Error</code></td>
-<td>The Operator detected an error (for example, full cluster crash).</td>
+<td>The Operator detected an error (for example, a reconcile failure or a full cluster crash).</td>
 </tr>
 <tr>
 <td><code>InnoDBClusterBootstrapped</code></td>
@@ -5521,7 +5597,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>ClusterSetReplicationRunning</code></td>
-<td>The cluster is a REPLICA member of an InnoDB ClusterSet and async replication from the primary cluster is active.</td>
+<td>The cluster is a <code>REPLICA</code> member of an InnoDB ClusterSet and async replication from the primary cluster is active.</td>
 </tr>
 </tbody>
 </table>
@@ -5548,13 +5624,81 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 </tbody>
 </table>
-<p>The Operator sets <code>reason</code> and <code>message</code> as free-form strings. Common reasons include <code>ManualBootstrapRequested</code>, <code>ClusterSetReplicationRunning</code>, <code>FullClusterCrashDetected</code>, and state names such as <code>Initializing</code> and <code>Ready</code>.</p>
+<p>The Operator sets <code>reason</code> and <code>message</code> as free-form strings. Common reasons include:</p>
+<ul>
+<li><code>Initializing</code>, <code>Ready</code> (matching the cluster state)</li>
+<li><code>ErrorReconcile</code> — cluster reconciliation failed; see the condition message</li>
+<li><code>FullClusterCrashDetected</code> — all Group Replication members have crash recovery files</li>
+<li><code>ManualBootstrapRequested</code> — the cluster is waiting for external bootstrap</li>
+<li><code>ClusterSetReplicationRunning</code> — ClusterSet replica replication is active</li>
+<li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
+</ul>
+<h3 id="storage-autoscaling-status">Storage autoscaling status<a class="headerlink" href="#storage-autoscaling-status" title="Permanent link">&para;</a></h3>
+<p>When you enable <a href="scaling.html#scale-storage">storage autoscaling</a>, the Operator records per-PVC progress in <code>status.storageAutoscaling.&lt;pvc-name&gt;</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>currentSize</code></td>
+<td>Observed PVC size</td>
+</tr>
+<tr>
+<td><code>lastResizeTime</code></td>
+<td>Timestamp of the last expansion</td>
+</tr>
+<tr>
+<td><code>resizeCount</code></td>
+<td>Number of expansions</td>
+</tr>
+<tr>
+<td><code>lastError</code></td>
+<td>Last autoscaling error, if any</td>
+</tr>
+</tbody>
+</table>
+<h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
+<p>The cluster controller emits Kubernetes events you can view with <code>kubectl describe ps</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Event reason</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ClusterStateChanged</code></td>
+<td><code>status.state</code> changed (for example, <code>initializing</code> → <code>ready</code>).</td>
+</tr>
+<tr>
+<td><code>ReconcileError</code></td>
+<td>Cluster reconciliation failed.</td>
+</tr>
+<tr>
+<td><code>FullClusterCrashDetected</code></td>
+<td>A full Group Replication cluster crash was detected.</td>
+</tr>
+<tr>
+<td><code>AsyncReplicationNotReady</code></td>
+<td>Orchestrator reported replication problems on one or more instances.</td>
+</tr>
+<tr>
+<td><code>StorageAutoscalingTriggered</code></td>
+<td>Storage autoscaling started a PVC resize.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="perconaservermysqlclusterset-status">PerconaServerMySQLClusterSet status<a class="headerlink" href="#perconaservermysqlclusterset-status" title="Permanent link">&para;</a></h2>
-<p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>.</p>
-<p>Common fields are:</p>
+<p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>. For configuration options, see <a href="clusterset-cr.html">ClusterSet Resource options</a>. For setup, see <a href="replication-setup.html">Set up cross-site replication</a>.</p>
+<p>Common fields:</p>
 <ul>
 <li><code>status.primaryCluster</code> — the cluster currently serving as the ClusterSet primary (observed; may lag <code>spec.primaryCluster</code> briefly during switchover)</li>
-<li><code>status.primaryClusterEndpoint</code> — host:port of the global primary instance</li>
+<li><code>status.primaryClusterEndpoint</code> — <code>host:port</code> of the global primary instance</li>
 <li><code>status.clusters</code> — map of member clusters keyed by <code>innodbClusterName</code>, mirroring MySQL Shell <code>.status()</code> output</li>
 <li><code>status.conditions</code> — ClusterSet-level conditions</li>
 <li><code>status.lastObservedAt</code> — timestamp of the last successful status refresh</li>
@@ -5580,7 +5724,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>primary</code></td>
-<td>Host:port of the cluster&rsquo;s local group replication primary</td>
+<td>Host:port of the cluster&rsquo;s local Group Replication primary</td>
 </tr>
 </tbody>
 </table>
@@ -5607,11 +5751,11 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>INVALIDATED</code></td>
-<td>Cluster was fenced off after forced failover; may have divergent GTIDs. Requires running <code>rejoinCluster()</code> manually if GTIDs are compatible. Otherwise, the INVALIDATED cluster must be removed and recreated to rejoin the ClusterSet.</td>
+<td>Cluster was fenced off after forced failover; it may have divergent GTIDs. Rejoin it with <code>rejoinCluster()</code> if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet.</td>
 </tr>
 <tr>
 <td><code>UNKNOWN</code></td>
-<td>Status could not be determined.</td>
+<td>Status could not be determined (for example, the primary is unreachable).</td>
 </tr>
 </tbody>
 </table>
@@ -5639,15 +5783,15 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>SwitchoverInProgress</code></td>
-<td><code>spec.primaryCluster</code> differs from the observed primary and a switchover Job is running or pending.</td>
+<td><code>spec.primaryCluster</code> differs from the observed primary and a switchover Job is running, pending, or failed.</td>
 </tr>
 <tr>
-<td>`ErrorReconcile</td>
-<td>An error occurred during reconciliation</td>
+<td><code>ErrorReconcile</code></td>
+<td>An error occurred during reconciliation.</td>
 </tr>
 <tr>
 <td><code>ReplicaManagementFailure</code></td>
-<td>A replica add/remove Job failed; see the Job logs.</td>
+<td>A replica add or remove Job failed; see the Job logs.</td>
 </tr>
 <tr>
 <td><code>ClusterSetDissolving</code></td>
@@ -5670,19 +5814,66 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>ClusterSetNotHealthy</code></td>
-<td>One or more members are not healthy; see <code>status.clusters</code> and condition message.</td>
+<td>One or more members are not healthy; see <code>status.clusters</code> and the condition message.</td>
 </tr>
 <tr>
 <td><code>PrimaryUnreachable</code></td>
-<td>Primary cluster is not reachable</td>
+<td>Primary cluster is not reachable. <code>Ready</code> is <code>Unknown</code>.</td>
 </tr>
 <tr>
 <td><code>AccessDenied</code></td>
-<td>Incorrect password configured on the replica site</td>
+<td>Incorrect password configured on the replica site. <code>Ready</code> is <code>Unknown</code>.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
+<p>Common <code>MySQLShellRunnerReady</code> reasons:</p>
+<table>
+<thead>
+<tr>
+<th>Reason</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DeploymentReady</code></td>
+<td>The <code>mysqlshell-runner</code> Deployment is current and ready.</td>
+</tr>
+<tr>
+<td><code>DeploymentNotReady</code></td>
+<td>The Deployment is still rolling out.</td>
+</tr>
+<tr>
+<td><code>DeploymentFailed</code></td>
+<td>The Deployment failed.</td>
+</tr>
+<tr>
+<td><code>DeploymentNotObserved</code></td>
+<td>The Operator has not observed Deployment status yet.</td>
+</tr>
+</tbody>
+</table>
+<p>Common <code>SwitchoverInProgress</code> reasons:</p>
+<table>
+<thead>
+<tr>
+<th>Reason</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SwitchoverInProgress</code></td>
+<td>A switchover Job is running. Condition status is <code>True</code>.</td>
+</tr>
+<tr>
+<td><code>SwitchoverFailed</code></td>
+<td>The switchover Job failed. Condition status is <code>False</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>ErrorReconcile</code> uses the reason <code>ErrorReconcile</code> for general failures, or <code>AccessDenied</code> / <code>PrimaryUnreachable</code> when the ClusterSet manager cannot reach or authenticate to the primary.</p>
+<h3 id="events_1">Events<a class="headerlink" href="#events_1" title="Permanent link">&para;</a></h3>
 <p>The ClusterSet controller emits Kubernetes events you can view with <code>kubectl describe ps-clusterset</code>:</p>
 <table>
 <thead>
@@ -5724,10 +5915,13 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <ul>
 <li><code>status.state</code> — backup job state</li>
 <li><code>status.type</code> — backup type (<code>full</code> or <code>incremental</code>)</li>
-<li><code>status.destination</code> — backup path or URL</li>
+<li><code>status.destination</code> — backup path or URL (<code>s3://</code>, <code>gs://</code>, or Azure container path)</li>
 <li><code>status.completed</code> — completion timestamp</li>
 <li><code>status.stateDescription</code> — error details when the backup fails</li>
-<li><code>status.backupSource</code> — source pod or path used for the backup</li>
+<li><code>status.backupSource</code> — source Pod used for the backup</li>
+<li><code>status.storage</code> — copy of the storage configuration used for this backup</li>
+<li><code>status.image</code> — Percona XtraBackup image used for the Job</li>
+<li><code>status.compressed</code> — whether the backup was compressed</li>
 <li><code>status.conditions</code> — additional conditions</li>
 </ul>
 <h3 id="backup-state-values">Backup state values<a class="headerlink" href="#backup-state-values" title="Permanent link">&para;</a></h3>
@@ -5758,15 +5952,17 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>Error</code></td>
-<td>Backup failed to start.</td>
+<td>Backup failed to start (for example, the cluster is not ready, backups are disabled, or the storage name is missing). Check <code>status.stateDescription</code>. This state is terminal; fix the cause and create a new backup.</td>
 </tr>
 <tr>
 <td><code>Failed</code></td>
-<td>Backup started but failed during execution.</td>
+<td>Backup started but failed during execution. Check <code>status.stateDescription</code> and the backup Job logs.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="conditions_2">Conditions<a class="headerlink" href="#conditions_2" title="Permanent link">&para;</a></h3>
+<p>For troubleshooting steps, see <a href="debug-backup-restore.html">Troubleshoot backups and restores</a>.</p>
+<h3 id="backup-conditions">Backup conditions<a class="headerlink" href="#backup-conditions" title="Permanent link">&para;</a></h3>
+<p><code>PerconaServerMySQLBackup</code> may include the following condition:</p>
 <table>
 <thead>
 <tr>
@@ -5777,7 +5973,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <tbody>
 <tr>
 <td><code>BackupLeaseAcquired</code></td>
-<td>The backup job holds the cluster backup lease and is authorized to run.</td>
+<td>The backup Job holds the cluster backup lease and is authorized to run. When <code>False</code> with reason <code>LeaseAlreadyHeld</code>, another backup still holds the lease.</td>
 </tr>
 </tbody>
 </table>
@@ -5786,9 +5982,8 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <p>Common fields:</p>
 <ul>
 <li><code>status.state</code> — restore job state</li>
-<li><code>status.stateDescription</code> — error details when the restore fails</li>
+<li><code>status.stateDescription</code> — error details when the restore cannot proceed or fails</li>
 <li><code>status.completed</code> — completion timestamp</li>
-<li><code>status.backupSource</code> — backup metadata used for the restore (when restoring from an existing backup object)</li>
 </ul>
 <h3 id="restore-state-values">Restore state values<a class="headerlink" href="#restore-state-values" title="Permanent link">&para;</a></h3>
 <p><code>status.state</code> values are:</p>
@@ -5810,7 +6005,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>Running</code></td>
-<td>Restore is in progress.</td>
+<td>Restore is in progress, including waiting for the cluster to become ready after the restore Job completes.</td>
 </tr>
 <tr>
 <td><code>Succeeded</code></td>
@@ -5818,20 +6013,30 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>Error</code></td>
-<td>Restore failed to start.</td>
+<td>Restore cannot start yet. Typical causes: the cluster is not found, <code>backupName</code> and <code>backupSource</code> are empty, <code>backupSource</code> is incomplete, the storage name is missing from the cluster Custom Resource, or point-in-time recovery is requested but the binlog server is not enabled. Check <code>status.stateDescription</code>. The Operator retries on the next reconcile.</td>
 </tr>
 <tr>
 <td><code>Failed</code></td>
-<td>Restore started but failed during execution.</td>
+<td>The restore Job, prepare Job, or point-in-time recovery Job failed. Check the Job logs.</td>
 </tr>
 </tbody>
 </table>
+<p>If another restore holds the cluster lease, or a backup is still running, <code>status.state</code> stays empty (<code>""</code>) and <code>status.stateDescription</code> explains the wait. That is not the <code>Error</code> state.</p>
+<h3 id="error-vs-failed"><code>Error</code> vs <code>Failed</code><a class="headerlink" href="#error-vs-failed" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>Error</code></strong> — Recoverable. The Operator sets this state when validation fails or a prerequisite is missing. It resets the state on the next reconcile, so you can fix the Restore object configuration and unblock the restore process without creating a new Restore object.</li>
+<li><strong><code>Failed</code></strong> — Terminal. The restore, prepare, or point-in-time recovery Job failed. Inspect the Job logs, fix the cause, and create a new Restore Custom Resource.</li>
+</ul>
+<p>When a restore is in <code>Error</code>, inspect the message:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>&lt;restore-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.state}{"\n"}{.status.stateDescription}{"\n"}'</span>
+</code></pre></div>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 17:33:09 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 20, 2026 08:22:37 UTC">August 20, 2026</span>
       
         <br>
         Created:

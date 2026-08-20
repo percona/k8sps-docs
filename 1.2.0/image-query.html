@@ -5013,7 +5013,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The <strong>Version Service</strong> is a centralized repository that the Percona Operator for MySQL connects to at scheduled times to get the latest information on compatible versions and valid image paths. This service is a crucial part of the automatic upgrade process, and it is enabled by default. Its landing page, <code>check.percona.com</code>, provides more details about the service itself.</p>
 <h3 id="how-to-query-the-version-service">How to query the Version Service<a class="headerlink" href="#how-to-query-the-version-service" title="Permanent link">&para;</a></h3>
 <p>You can manually query the Version Service using the <code>curl</code> command. The basic syntax is:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/&lt;operator-version&gt;/&lt;ps-version&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.versions[].matrix&#39;</span>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/&lt;operator-version&gt;/&lt;ps-version&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[].matrix'</span>
 </code></pre></div>
 <p>where:</p>
 <ul>
@@ -5021,86 +5021,86 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><strong><code>&lt;ps-version&gt;</code></strong> is the version of Percona Server for MySQL you want to get images for. This part is optional and helps filter the results. It can be a specific Percona Server for MySQL version (e.g. 8.4), a recommended version (e.g. 8.4-recommended), or the latest available version (e.g. 8.4-latest).</li>
 </ul>
 <p>For example, to retrieve the list of images for the Operator version <code>0.11.0</code> and the latest version of Percona Server for MySQL 8.4, use the following command:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0/8.4-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.versions[].matrix&#39;</span>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0/8.4-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[].matrix'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>&quot;pmm&quot;: {
-    &quot;3.3.1&quot;: {
-      &quot;imagePath&quot;: &quot;percona/pmm-client:3.3.1&quot;,
-      &quot;imageHash&quot;: &quot;29a9bb1c69fef8bedc4d4a9ed0ae8224a8623fd3eb8676ef40b13fd044188cb4&quot;,
-      &quot;imageHashArm64&quot;: &quot;50bccba4cb2c33bd3f6c5e37553bb70345de3f328b23a64ecfa63893f9025c83&quot;,
-      &quot;status&quot;: &quot;recommended&quot;,
-      &quot;critical&quot;: true
+<div class="no-copy highlight"><pre><span></span><code>"pmm": {
+    "3.3.1": {
+      "imagePath": "percona/pmm-client:3.3.1",
+      "imageHash": "29a9bb1c69fef8bedc4d4a9ed0ae8224a8623fd3eb8676ef40b13fd044188cb4",
+      "imageHashArm64": "50bccba4cb2c33bd3f6c5e37553bb70345de3f328b23a64ecfa63893f9025c83",
+      "status": "recommended",
+      "critical": true
     }
   },
-  &quot;haproxy&quot;: {
-    &quot;2.8.15&quot;: {
-      &quot;imagePath&quot;: &quot;percona/haproxy:2.8.15&quot;,
-      &quot;imageHash&quot;: &quot;49e6987a1c8b27e9111ae1f1168dd51f2840eb6d939ffc157358f0f259819006&quot;,
-      &quot;imageHashArm64&quot;: &quot;&quot;,
-      &quot;status&quot;: &quot;recommended&quot;,
-      &quot;critical&quot;: false
+  "haproxy": {
+    "2.8.15": {
+      "imagePath": "percona/haproxy:2.8.15",
+      "imageHash": "49e6987a1c8b27e9111ae1f1168dd51f2840eb6d939ffc157358f0f259819006",
+      "imageHashArm64": "",
+      "status": "recommended",
+      "critical": false
     }
   },
-  &quot;backup&quot;: {
-    &quot;8.4.0-3&quot;: {
-      &quot;imagePath&quot;: &quot;percona/percona-xtrabackup:8.4.0-3&quot;,
-      &quot;imageHash&quot;: &quot;01071522753ad94e11a897859bba4713316d08e493e23555c0094d68da223730&quot;,
-      &quot;imageHashArm64&quot;: &quot;&quot;,
-      &quot;status&quot;: &quot;available&quot;,
-      &quot;critical&quot;: false
+  "backup": {
+    "8.4.0-3": {
+      "imagePath": "percona/percona-xtrabackup:8.4.0-3",
+      "imageHash": "01071522753ad94e11a897859bba4713316d08e493e23555c0094d68da223730",
+      "imageHashArm64": "",
+      "status": "available",
+      "critical": false
     }
   },
-  &quot;operator&quot;: {
-    &quot;0.11.0&quot;: {
-      &quot;imagePath&quot;: &quot;percona/percona-server-mysql-operator:0.11.0&quot;,
-      &quot;imageHash&quot;: &quot;3068b1a4d81b5da7676e071040d3b44ff9fec5532cbfabb17f9c7612e8c9d35d&quot;,
-      &quot;imageHashArm64&quot;: &quot;b50f215869ca3d9f6a52561171851e8ffa033ca30d0276556e220ad448418b61&quot;,
-      &quot;status&quot;: &quot;recommended&quot;,
-      &quot;critical&quot;: false
+  "operator": {
+    "0.11.0": {
+      "imagePath": "percona/percona-server-mysql-operator:0.11.0",
+      "imageHash": "3068b1a4d81b5da7676e071040d3b44ff9fec5532cbfabb17f9c7612e8c9d35d",
+      "imageHashArm64": "b50f215869ca3d9f6a52561171851e8ffa033ca30d0276556e220ad448418b61",
+      "status": "recommended",
+      "critical": false
     }
   },
-  &quot;mysql&quot;: {
-    &quot;8.4.5-5&quot;: {
-      &quot;imagePath&quot;: &quot;percona/percona-server:8.4.5-5&quot;,
-      &quot;imageHash&quot;: &quot;9628b1e598c0ec13c2a6b834caa1642bf77f2b4a2d7620b1ba2d8aaf2b708133&quot;,
-      &quot;imageHashArm64&quot;: &quot;&quot;,
-      &quot;status&quot;: &quot;available&quot;,
-      &quot;critical&quot;: false
+  "mysql": {
+    "8.4.5-5": {
+      "imagePath": "percona/percona-server:8.4.5-5",
+      "imageHash": "9628b1e598c0ec13c2a6b834caa1642bf77f2b4a2d7620b1ba2d8aaf2b708133",
+      "imageHashArm64": "",
+      "status": "available",
+      "critical": false
     }
   },
-  &quot;router&quot;: {
-    &quot;8.4.5&quot;: {
-      &quot;imagePath&quot;: &quot;percona/percona-mysql-router:8.4.5&quot;,
-      &quot;imageHash&quot;: &quot;e890ecc49c297cc8882b54ba457ff4d25da896cb11269989fa072aa338d620c1&quot;,
-      &quot;imageHashArm64&quot;: &quot;&quot;,
-      &quot;status&quot;: &quot;available&quot;,
-      &quot;critical&quot;: false
+  "router": {
+    "8.4.5": {
+      "imagePath": "percona/percona-mysql-router:8.4.5",
+      "imageHash": "e890ecc49c297cc8882b54ba457ff4d25da896cb11269989fa072aa338d620c1",
+      "imageHashArm64": "",
+      "status": "available",
+      "critical": false
     }
   },
-  &quot;orchestrator&quot;: {
-    &quot;3.2.6-17&quot;: {
-      &quot;imagePath&quot;: &quot;percona/percona-orchestrator:3.2.6-17&quot;,
-      &quot;imageHash&quot;: &quot;c1871ddc6ff3eaca7bb03c3aa11db880ae02d623db1203d0858f8566f56ea5f7&quot;,
-      &quot;imageHashArm64&quot;: &quot;&quot;,
-      &quot;status&quot;: &quot;recommended&quot;,
-      &quot;critical&quot;: false
+  "orchestrator": {
+    "3.2.6-17": {
+      "imagePath": "percona/percona-orchestrator:3.2.6-17",
+      "imageHash": "c1871ddc6ff3eaca7bb03c3aa11db880ae02d623db1203d0858f8566f56ea5f7",
+      "imageHashArm64": "",
+      "status": "recommended",
+      "critical": false
     }
   },
-  &quot;toolkit&quot;: {
-    &quot;3.7.0&quot;: {
-      &quot;imagePath&quot;: &quot;percona/percona-toolkit:3.7.0&quot;,
-      &quot;imageHash&quot;: &quot;17ef2b69a97fa546d1f925c74ca09587ac215085c392761bb4d51f188baa6c0e&quot;,
-      &quot;imageHashArm64&quot;: &quot;&quot;,
-      &quot;status&quot;: &quot;recommended&quot;,
-      &quot;critical&quot;: false
+  "toolkit": {
+    "3.7.0": {
+      "imagePath": "percona/percona-toolkit:3.7.0",
+      "imageHash": "17ef2b69a97fa546d1f925c74ca09587ac215085c392761bb4d51f188baa6c0e",
+      "imageHashArm64": "",
+      "status": "recommended",
+      "critical": false
     }
   }
 </code></pre></div>
 </details>
 <p>To narrow down the search and check the Percona Server for MySQL images available for a specific Operator version (<code>0.11.0</code> in the following example), use the following command:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.versions[0].matrix.mysql | to_entries[] | &quot;\(.key)\t\(.value.imagePath)\t\(.value.status)&quot;&#39;</span>
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[0].matrix.mysql | to_entries[] | "\(.key)\t\(.value.imagePath)\t\(.value.status)"'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>

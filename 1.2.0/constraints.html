@@ -5171,7 +5171,7 @@ equipped machine or for cost optimization by choosing the nodes in the same avai
 <p><strong>Example</strong> </p>
 <p>This configuration forces Percona Server for MySQL Pods to avoid reside on the same node:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">affinity</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">antiAffinityTopologyKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;kubernetes.io/hostname&quot;</span>
+<span class="w">  </span><span class="nt">antiAffinityTopologyKey</span><span class="p">:</span><span class="w"> </span><span class="s">"kubernetes.io/hostname"</span>
 </code></pre></div>
 <h3 id="advanced-anti-affinity-via-kubernetes-constraints">Advanced anti-affinity via Kubernetes constraints<a class="headerlink" href="#advanced-anti-affinity-via-kubernetes-constraints" title="Permanent link">&para;</a></h3>
 <p>For complex scheduling requirements, use the <code>advanced</code> option. This disables the <code>antiAffinityTopologyKey</code> effect and allows the use of standard Kubernetes affinity constraints:</p>
@@ -5235,9 +5235,9 @@ equipped machine or for cost optimization by choosing the nodes in the same avai
 </ul>
 <p>This is the example configuration of a toleration:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">tolerations</span><span class="p">:</span>
-<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;node.alpha.kubernetes.io/unreachable&quot;</span>
-<span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Exists&quot;</span>
-<span class="w">  </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NoExecute&quot;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">"node.alpha.kubernetes.io/unreachable"</span>
+<span class="w">  </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="s">"Exists"</span>
+<span class="w">  </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="s">"NoExecute"</span>
 <span class="w">  </span><span class="nt">tolerationSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6000</span>
 </code></pre></div>
 <h3 id="common-use-cases">Common use cases<a class="headerlink" href="#common-use-cases" title="Permanent link">&para;</a></h3>

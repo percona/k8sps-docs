@@ -5200,7 +5200,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>During point-in-time recovery, updates made by <code>mysql-shell</code> can result in replication errors such as:</p>
 </li>
 </ul>
-<div class="highlight"><pre><span></span><code>2026-04-15T10:58:08.911878Z 11 [ERROR] [MY-010584] [Repl] Replica SQL: Could not execute Update_rows event on table mysql_innodb_cluster_metadata.instances; Can&#39;t find record in &#39;instances&#39;, Error_code: 1032; handler error HA_ERR_KEY_NOT_FOUND; the event&#39;s source log FIRST, end_log_pos 162397, Error_code: MY-001032
+<div class="highlight"><pre><span></span><code>2026-04-15T10:58:08.911878Z 11 [ERROR] [MY-010584] [Repl] Replica SQL: Could not execute Update_rows event on table mysql_innodb_cluster_metadata.instances; Can't find record in 'instances', Error_code: 1032; handler error HA_ERR_KEY_NOT_FOUND; the event's source log FIRST, end_log_pos 162397, Error_code: MY-001032
 </code></pre></div>
 <p>If you want to ignore such errors, add <code>force: true</code> to the PITR section of your restore spec:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
@@ -5213,7 +5213,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2026-04-16</span><span class="nv"> </span><span class="s">21:12:00&quot;</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-04-16</span><span class="nv"> </span><span class="s">21:12:00"</span>
 </code></pre></div>
 <p>The <code>force: true</code> option enables the <code>--force</code> flag with the MySQL client and will silently ignore all SQL errors during binlog replay. <strong>Warning:</strong> This might result in data loss if underlying replication or data integrity errors are ignored.</p>
 <ul>

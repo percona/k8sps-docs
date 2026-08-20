@@ -5076,7 +5076,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">        </span><span class="nt">containerOptions</span><span class="p">:</span>
 <span class="w">          </span><span class="nt">args</span><span class="p">:</span>
 <span class="w">            </span><span class="nt">xtrabackup</span><span class="p">:</span><span class="w"> </span>
-<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--compress&quot;</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--compress"</span>
 </code></pre></div>
 <h2 id="configure-compression-for-ondemand-backups">Configure compression for on‑demand backups<a class="headerlink" href="#configure-compression-for-ondemand-backups" title="Permanent link">&para;</a></h2>
 <p>For on‑demand backups, define the compression settings directly in the configuration file for the <code>PerconaServerMySQLBackup</code> object:</p>
@@ -5092,7 +5092,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="nt">containerOptions</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">args</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">xtrabackup</span><span class="p">:</span>
-<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--compress&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--compress"</span>
 </code></pre></div>
 <p>It&rsquo;s important to understand how the Operator prioritizes compression and other backup tool settings when they&rsquo;re defined both globally in your cluster&rsquo;s Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see <a href="backups-fine-tune.html">Fine-tuning backup and restore operations</a>.</p>
 <h2 id="restore-from-a-compressed-backup">Restore from a compressed backup<a class="headerlink" href="#restore-from-a-compressed-backup" title="Permanent link">&para;</a></h2>

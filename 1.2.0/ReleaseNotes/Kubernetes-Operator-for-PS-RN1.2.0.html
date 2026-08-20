@@ -5714,7 +5714,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">      </span><span class="nt">triggerThresholdPercent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
 <span class="w">      </span><span class="nt">growthStep</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2Gi</span>
-<span class="w">      </span><span class="nt">maxSize</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10Gi&quot;</span>
+<span class="w">      </span><span class="nt">maxSize</span><span class="p">:</span><span class="w"> </span><span class="s">"10Gi"</span>
 </code></pre></div>
 <p>Learn more about the workflow and troubleshooting tips in our <a href="../scaling.html#automatic-storage-resizing">documentation</a>.</p>
 <h3 id="delegate-pvc-resizing-to-an-external-autoscaler">Delegate PVC resizing to an external autoscaler<a class="headerlink" href="#delegate-pvc-resizing-to-an-external-autoscaler" title="Permanent link">&para;</a></h3>
@@ -5786,7 +5786,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{&quot;FailMasterPromotionOnLagMinutes&quot;:</span><span class="nv"> </span><span class="s">30,</span><span class="nv"> </span><span class="s">&quot;RecoveryPeriodBlockSeconds&quot;:</span><span class="nv"> </span><span class="s">300}&#39;</span>
+<span class="w">    </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="s">'{"FailMasterPromotionOnLagMinutes":</span><span class="nv"> </span><span class="s">30,</span><span class="nv"> </span><span class="s">"RecoveryPeriodBlockSeconds":</span><span class="nv"> </span><span class="s">300}'</span>
 </code></pre></div>
 <p>The Operator merges your settings into the Orchestrator configuration. When you change the <code>spec.orchestrator.configuration</code> field, Orchestrator Pods restart in a rolling fashion to apply the new settings.</p>
 <p>Options that the Operator manages itself such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths are reserved and ignored if you set them, so cluster automation continues to work reliably.</p>

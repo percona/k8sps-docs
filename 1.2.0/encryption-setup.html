@@ -5124,7 +5124,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>vault
 </code></pre></div>
 <p>Export the namespace as an environment variable to simplify further configuration and management</p>
-<div class="highlight"><pre><span></span><code><span class="nv">NAMESPACE</span><span class="o">=</span><span class="s2">&quot;vault&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nv">NAMESPACE</span><span class="o">=</span><span class="s2">"vault"</span>
 </code></pre></div>
 <h2 id="install-vault">Install Vault<a class="headerlink" href="#install-vault" title="Permanent link">&para;</a></h2>
 <p>For this setup, we install Vault in Kubernetes using the <a href="https://helm.sh/">Helm 3 package manager <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. However, Helm is not required — any supported Vault deployment (on-premises, in the cloud, or a managed Vault service) works as long as the Operator can reach it.</p>
@@ -5158,7 +5158,7 @@ https://developer.hashicorp.com/vault/docs
 </li>
 <li>
 <p>Retrieve the Pod name where Vault is running:</p>
-<div class="highlight"><pre><span></span><code><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/name<span class="o">=</span>vault<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.items[0].metadata.name}&#39;</span><span class="k">)</span>
+<div class="highlight"><pre><span></span><code><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/name<span class="o">=</span>vault<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.items[0].metadata.name}'</span><span class="k">)</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
@@ -5181,10 +5181,10 @@ https://developer.hashicorp.com/vault/docs
 <li>
 <p>Vault is started in a sealed state. In this state Vault can access the storage but it cannot decrypt data. In order to use Vault, you need to unseal it.</p>
 <p>Retrieve the unseal key from the file:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code><span class="nv">unsealKey</span><span class="o">=</span><span class="k">$(</span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;.unseal_keys_b64[]&quot;</span><span class="w"> </span>&lt;<span class="w"> </span>/tmp/vault-init<span class="k">)</span>
+<div class="highlight" data-prompt="$"><pre><span></span><code><span class="nv">unsealKey</span><span class="o">=</span><span class="k">$(</span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s2">".unseal_keys_b64[]"</span><span class="w"> </span>&lt;<span class="w"> </span>/tmp/vault-init<span class="k">)</span>
 </code></pre></div>
 <p>Now, unseal Vault. Run the following command on every Pod where Vault is running:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>pod/vault-0<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--<span class="w"> </span>vault<span class="w"> </span>operator<span class="w"> </span>unseal<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$unsealKey</span><span class="s2">&quot;</span>
+<div class="highlight" data-prompt="$"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>pod/vault-0<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--<span class="w"> </span>vault<span class="w"> </span>operator<span class="w"> </span>unseal<span class="w"> </span><span class="s2">"</span><span class="nv">$unsealKey</span><span class="s2">"</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
@@ -5215,7 +5215,7 @@ HA Enabled      false
 <ol>
 <li>
 <p>Extract the Vault root token from the file where you saved the init response output:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>cat<span class="w"> </span>/tmp/vault-init<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;.root_token&quot;</span>
+<div class="highlight" data-prompt="$"><pre><span></span><code>cat<span class="w"> </span>/tmp/vault-init<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s2">".root_token"</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
@@ -5312,9 +5312,9 @@ HA Enabled      false
 <span class="nt">stringData</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">keyring_vault.cnf</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
 <span class="w">    </span><span class="no">{</span>
-<span class="w">      </span><span class="no">&quot;token&quot;: &quot;hvs.CvmS4c0DPTvHv5eJgXWMJg9r&quot;,</span>
-<span class="w">      </span><span class="no">&quot;vault_url&quot;: &quot;http://vault.vault.svc.cluster.local:8200&quot;,</span>
-<span class="w">      </span><span class="no">&quot;secret_mount_point&quot;: &quot;ps-secret&quot;</span>
+<span class="w">      </span><span class="no">"token": "hvs.CvmS4c0DPTvHv5eJgXWMJg9r",</span>
+<span class="w">      </span><span class="no">"vault_url": "http://vault.vault.svc.cluster.local:8200",</span>
+<span class="w">      </span><span class="no">"secret_mount_point": "ps-secret"</span>
 <span class="w">    </span><span class="no">}</span>
 </code></pre></div>
 </div>
@@ -5327,10 +5327,10 @@ HA Enabled      false
 <span class="nt">stringData</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">keyring_vault.cnf</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
 <span class="w">    </span><span class="no">{</span>
-<span class="w">      </span><span class="no">&quot;token&quot;: &quot;hvs.CvmS4c0DPTvHv5eJgXWMJg9r&quot;,</span>
-<span class="w">      </span><span class="no">&quot;vault_url&quot;: &quot;https://vault.vault.svc.cluster.local:8200&quot;,</span>
-<span class="w">      </span><span class="no">&quot;secret_mount_point&quot;: &quot;ps-secret&quot;,</span>
-<span class="w">      </span><span class="no">&quot;vault_ca&quot;: &quot;/etc/mysql/vault-keyring-secret/ca.cert&quot;</span>
+<span class="w">      </span><span class="no">"token": "hvs.CvmS4c0DPTvHv5eJgXWMJg9r",</span>
+<span class="w">      </span><span class="no">"vault_url": "https://vault.vault.svc.cluster.local:8200",</span>
+<span class="w">      </span><span class="no">"secret_mount_point": "ps-secret",</span>
+<span class="w">      </span><span class="no">"vault_ca": "/etc/mysql/vault-keyring-secret/ca.cert"</span>
 <span class="w">    </span><span class="no">}</span>
 <span class="w">  </span><span class="nt">ca.cert</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
 <span class="w">    </span><span class="no">-----BEGIN CERTIFICATE-----</span>
@@ -5372,7 +5372,7 @@ HA Enabled      false
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--namespace<span class="w"> </span>$&lt;ps-cluster-namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="o">=</span>merge<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--patch<span class="w"> </span><span class="s1">&#39;{&quot;spec&quot;: {&quot;pause&quot;: true}}&#39;</span>
+<span class="w">  </span>--patch<span class="w"> </span><span class="s1">'{"spec": {"pause": true}}'</span>
 </code></pre></div>
 </li>
 <li>
@@ -5380,7 +5380,7 @@ HA Enabled      false
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--namespace<span class="w"> </span>$&lt;ps-cluster-namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="o">=</span>merge<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--patch<span class="w"> </span><span class="s1">&#39;{&quot;spec&quot;:{&quot;mysql&quot;:{&quot;vaultSecretName&quot;:&quot;ps-cluster1-vault&quot;}}}&#39;</span>
+<span class="w">  </span>--patch<span class="w"> </span><span class="s1">'{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'</span>
 </code></pre></div>
 </li>
 <li>
@@ -5388,7 +5388,7 @@ HA Enabled      false
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--namespace<span class="w"> </span>$&lt;ps-cluster-namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="o">=</span>merge<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--patch<span class="w"> </span><span class="s1">&#39;{&quot;spec&quot;: {&quot;pause&quot;: false}}&#39;</span>
+<span class="w">  </span>--patch<span class="w"> </span><span class="s1">'{"spec": {"pause": false}}'</span>
 </code></pre></div>
 </li>
 </ol>
@@ -5398,7 +5398,7 @@ HA Enabled      false
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--namespace<span class="w"> </span>$&lt;ps-cluster-namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="o">=</span>merge<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--patch<span class="w"> </span><span class="s1">&#39;{&quot;spec&quot;:{&quot;mysql&quot;:{&quot;vaultSecretName&quot;:&quot;ps-cluster1-vault&quot;}}}&#39;</span>
+<span class="w">  </span>--patch<span class="w"> </span><span class="s1">'{"spec":{"mysql":{"vaultSecretName":"ps-cluster1-vault"}}}'</span>
 </code></pre></div>
 </div>
 </div>
@@ -5411,8 +5411,8 @@ HA Enabled      false
 <li>turn it on for every table you create with the `ENCRYPTION=&rsquo;Y&rsquo;
 clause in your SQL statement. For example, </li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">pk</span><span class="p">(</span><span class="n">c1</span><span class="p">))</span><span class="w"> </span><span class="n">ENCRYPTION</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">;</span>
-<span class="k">CREATE</span><span class="w"> </span><span class="n">TABLESPACE</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">DATAFILE</span><span class="w"> </span><span class="s1">&#39;foo.ibd&#39;</span><span class="w"> </span><span class="n">ENCRYPTION</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="p">(</span><span class="n">c1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">pk</span><span class="p">(</span><span class="n">c1</span><span class="p">))</span><span class="w"> </span><span class="n">ENCRYPTION</span><span class="o">=</span><span class="s1">'Y'</span><span class="p">;</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="n">TABLESPACE</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="n">DATAFILE</span><span class="w"> </span><span class="s1">'foo.ibd'</span><span class="w"> </span><span class="n">ENCRYPTION</span><span class="o">=</span><span class="s1">'Y'</span><span class="p">;</span>
 </code></pre></div>
 <ul>
 <li>turn on default encryption of a schema or a general tablespace. Then all tables you create will have encryption enabled. To turn on default encryption, use the following SQL statement:</li>

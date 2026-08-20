@@ -5103,10 +5103,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Generate a Certificate Authority (CA). You will use it to sign your server certificates.</p>
 <div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | cfssl gencert -initca - | cfssljson -bare ca</span>
 <span class="s">{</span>
-<span class="s">  &quot;CN&quot;: &quot;Root CA&quot;,</span>
-<span class="s">  &quot;key&quot;: {</span>
-<span class="s">    &quot;algo&quot;: &quot;rsa&quot;,</span>
-<span class="s">    &quot;size&quot;: 2048</span>
+<span class="s">  "CN": "Root CA",</span>
+<span class="s">  "key": {</span>
+<span class="s">    "algo": "rsa",</span>
+<span class="s">    "size": 2048</span>
 <span class="s">  }</span>
 <span class="s">}</span>
 <span class="s">EOF</span>
@@ -5117,21 +5117,21 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Generate the Server Certificate using the CA. This command generates a server certificate and key, signed by your newly-created CA. The certificate will be valid for all hosts required by your cluster components.</p>
 <div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server</span>
 <span class="s">{</span>
-<span class="s">  &quot;hosts&quot;: [</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-mysql&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-mysql.${NAMESPACE}&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-mysql.${NAMESPACE}.svc&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-orchestrator&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}.svc&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-router&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-router.${NAMESPACE}&quot;,</span>
-<span class="s">    &quot;*.${CLUSTER_NAME}-router.${NAMESPACE}.svc&quot;</span>
+<span class="s">  "hosts": [</span>
+<span class="s">    "*.${CLUSTER_NAME}-mysql",</span>
+<span class="s">    "*.${CLUSTER_NAME}-mysql.${NAMESPACE}",</span>
+<span class="s">    "*.${CLUSTER_NAME}-mysql.${NAMESPACE}.svc",</span>
+<span class="s">    "*.${CLUSTER_NAME}-orchestrator",</span>
+<span class="s">    "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}",</span>
+<span class="s">    "*.${CLUSTER_NAME}-orchestrator.${NAMESPACE}.svc",</span>
+<span class="s">    "*.${CLUSTER_NAME}-router",</span>
+<span class="s">    "*.${CLUSTER_NAME}-router.${NAMESPACE}",</span>
+<span class="s">    "*.${CLUSTER_NAME}-router.${NAMESPACE}.svc"</span>
 <span class="s">  ],</span>
-<span class="s">  &quot;CN&quot;: &quot;${CLUSTER_NAME}-mysql&quot;,</span>
-<span class="s">  &quot;key&quot;: {</span>
-<span class="s">    &quot;algo&quot;: &quot;rsa&quot;,</span>
-<span class="s">    &quot;size&quot;: 2048</span>
+<span class="s">  "CN": "${CLUSTER_NAME}-mysql",</span>
+<span class="s">  "key": {</span>
+<span class="s">    "algo": "rsa",</span>
+<span class="s">    "size": 2048</span>
 <span class="s">  }</span>
 <span class="s">}</span>
 <span class="s">EOF</span>
