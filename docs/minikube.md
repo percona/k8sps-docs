@@ -40,7 +40,7 @@ This command downloads the necessary virtualized images, then initializes and st
 2. Deploy the Operator to your Minikube cluster
 
     ```bash
-    kubectl apply--server-side -f deploy/bundle.yaml
+    kubectl apply --server-side -f deploy/bundle.yaml
     ```
 
     ??? example "Expected output"
