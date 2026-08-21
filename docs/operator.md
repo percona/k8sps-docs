@@ -2316,7 +2316,7 @@ Databases that the user can access. If a specified database does not exist, the 
 
 ### `users.hosts`
 
-Hosts that the user can connect from. If not specified, defaults to `'%'`enabling the user to connect from any host.
+Hosts that the user can connect from. If not specified, defaults to `'%'`, enabling the user to connect from any host.
 
 | Value type | Example |
 | ---------- | ------- |
