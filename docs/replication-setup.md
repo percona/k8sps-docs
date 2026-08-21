@@ -448,7 +448,66 @@ The controller runs `forcePrimaryCluster()`. The old primary cluster is marked *
 
     Set `unsafeFlags.forcedFailover` to `true` only when you are certain the old primary cannot recover or accept writes.
 
-To recover an invalidated cluster later, either use MySQL Shell `rejoinCluster()` manually, or remove and recreate the cluster in the ClusterSet.
+To recover an invalidated cluster later, [rejoin it](#rejoin-a-replica-cluster) if GTIDs are compatible, or remove and recreate the cluster in the ClusterSet.
+
+### Rejoin a replica cluster
+
+The Operator does not rejoin a replica automatically after you pause or stop it, or after the ClusterSet replication channel stops. It cannot tell when rejoin is safe, so you trigger it.
+
+Rejoin when the replica is reachable but not replicating — for example `globalStatus` is `OK_NOT_REPLICATING`, or `ClusterSetReplicationRunning` is `False`. You can also rejoin an `INVALIDATED` former primary after [forced failover](#forced-failover) if its GTIDs are still compatible with the current primary.
+
+!!! important
+
+    Do not rejoin while a switchover or failover is running, and do not target the current primary.
+
+    * If `SwitchoverInProgress` is `True`, or `spec.primaryCluster` differs from `status.primaryCluster`, wait until switchover finishes. If you trigger the rejoin operation during switchover, the Operator defers the rejoin until it completes.
+    * Set the annotation to the replica's InnoDB cluster name (`status.innodbClusterName`), not the Kubernetes Custom Resource name and not the current primary. The Operator ignores a rejoin annotation that names the primary.
+
+1. If the replica's Group Replication group is down, restore the local InnoDB Cluster first. The rejoin annotation only restarts ClusterSet asynchronous replication. It cannot form the group again.
+
+    Run this step after a pause, stop, or crash when every replica member is `OFFLINE` in Group Replication. MySQL Pods must already be running and reachable. If the replica cluster is already `ONLINE` and only ClusterSet replication is stopped, skip to step 2.
+
+    Connect with MySQL Shell in JavaScript mode to a replica member. Prefer the instance that applied the most transactions before the outage (the GTID superset):
+
+    ```bash
+    kubectl exec -it replica-cluster-mysql-0 -n $REPLICA_NS -c mysql -- \
+      mysqlsh --js -uroot -p$(kubectl get secret replica-cluster-secrets -n $REPLICA_NS -o jsonpath='{.data.root}' | base64 -d)
+    ```
+
+    Then run:
+
+    ```javascript
+    var cluster = dba.rebootClusterFromCompleteOutage();
+    ```
+
+    This call reads InnoDB Cluster metadata from the connected instance, uses the member with the GTID superset as the seed, brings the Group Replication group back `ONLINE`, and rejoins the other members. See [Rebooting a cluster from a major outage :octicons-link-external-16:](https://dev.mysql.com/doc/mysql-shell/8.4/en/reboot-outage.html).
+
+    !!! note
+
+        If the replica was not marked `INVALIDATED`, MySQL Shell may also restore the ClusterSet replication channel during this reboot. If the cluster was `INVALIDATED`, or `globalStatus` is still not `OK`, continue with step 2.
+
+2. Annotate the ClusterSet. Use the replica's InnoDB cluster name — in this tutorial, `replicacluster`:
+
+    ```bash
+    kubectl annotate ps-clusterset my-cluster-set -n $SOURCE_NS \
+      percona.com/clusterset-rejoin-cluster=replicacluster
+    ```
+
+    The Operator then:
+
+    1. Creates a Job that runs `dba.getCluster().getClusterSet().rejoinCluster('replicacluster')`
+    2. Sets the `RejoinClusterInProgress` condition while the Job runs
+    3. On success, removes the annotation and the condition, and emits a `ClusterSetMemberRejoined` event
+    4. On failure, keeps the annotation, sets `RejoinClusterInProgress` to `False` with reason `RejoinFailed`, and deletes the failed Job so you can retry
+
+3. Monitor progress:
+
+    ```bash
+    kubectl describe ps-clusterset my-cluster-set -n $SOURCE_NS
+    kubectl get jobs -n $SOURCE_NS | grep rejoin
+    ```
+
+    Confirm that the replica's `globalStatus` is `OK` and that `ClusterSetReplicationRunning` is `True` on the replica cluster. If the Job failed, inspect its logs, fix the cause, then annotate again. Use `--overwrite` if the annotation is still present.
 
 ### Remove a replica cluster
 
@@ -550,6 +609,7 @@ To delete replica and primary clusters themselves, delete their `PerconaServerMy
 | Replica Pod-0 stays NotReady | ClusterSet Job still running, or `createReplicaCluster` failed |
 | `Ready: False`, reason `ReplicaNotStandalone` | Target cluster is already in another InnoDB Cluster or ClusterSet |
 | Switchover stuck | Check `SwitchoverInProgress` condition and switchover Job status |
+| Replica `globalStatus: OK_NOT_REPLICATING` or `RejoinFailed` | ClusterSet replication on the replica is stopped. Inspect the rejoin Job logs, then [rejoin the replica](#rejoin-a-replica-cluster). |
 | `ErrorReconcile: True`, reason `AccessDenied` | Incorrect password configured on the replica site |
 | `ErrorReconcile: True`, reason `PrimaryUnreachable` | Primary cluster is not reachable |
 | `ReplicaManagementFailure` | One or more replicas could not be added or removed. See the condition message for exact details. Make sure that your replicas are reachable before removing them. |

@@ -80,6 +80,7 @@ Use **Annotations** when:
 | `percona.com/configuration-hash` | Services | Used to track and validate configuration changes in the MySQL cluster components |
 | `percona.com/last-config-hash` | Services | Stores the hash of the most recent configuration |
 | `percona.com/passwords-updated`| Secrets | Indicates when passwords were last updated in the Secret |
+| `percona.com/clusterset-rejoin-cluster` | `PerconaServerMySQLClusterSet` | Triggers a rejoin of the named replica to the ClusterSet. Value is the replica's InnoDB cluster name (`status.innodbClusterName`). The Operator removes the annotation after a successful rejoin. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster). | `replicacluster` |
 
 ## Setting labels and annotations in the Custom Resource
 
