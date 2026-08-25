@@ -36,8 +36,8 @@ To [encrypt backups](backups-encrypted.md) in object storage, create a separate 
       name: ps-cluster1-s3-credentials
     type: Opaque
     data:
-      AWS_ACCESS_KEY_ID: UkVQTEFDRS1XSVRILUFXUy1BQ0NFU1MtS0VZ
-      AWS_SECRET_ACCESS_KEY: UkVQTEFDRS1XSVRILUFXUy1TRUNSRVQtS0VZ
+      AWS_ACCESS_KEY_ID: <base64-encoded-access-key-string>
+      AWS_SECRET_ACCESS_KEY: <base64-encoded-secret-string>
     ```
 
     1. Create the Secret object with this file:
@@ -117,8 +117,8 @@ To [encrypt backups](backups-encrypted.md) in object storage, create a separate 
       name: ps-cluster1-azure-credentials
     type: Opaque
     data:
-      AZURE_STORAGE_ACCOUNT_NAME: UkVQTEFDRS1XSVRILUFXUy1BQ0NFU1MtS0VZ
-      AZURE_STORAGE_ACCOUNT_KEY: UkVQTEFDRS1XSVRILUFXUy1TRUNSRVQtS0VZ
+      AZURE_STORAGE_ACCOUNT_NAME: <base64-encoded-account-name-string>
+      AZURE_STORAGE_ACCOUNT_KEY: <base64-encoded-account-key-string>
     ```
 
     1. Create the Secret object with this file:
@@ -184,8 +184,8 @@ To [encrypt backups](backups-encrypted.md) in object storage, create a separate 
       name: ps-cluster1-gcp-credentials
     type: Opaque
     data:
-      ACCESS_KEY_ID: Z2NwLWFjY2Vzcy1rZXkK
-      SECRET_ACCESS_KEY: Z2NwLXNlY3JldC1rZXkK
+      ACCESS_KEY_ID: <base64-encoded-access-key-string>
+      SECRET_ACCESS_KEY: <base64-encoded-secret-key-string>
     ```
 
     1. Create the Secret object with this file:
