@@ -360,7 +360,9 @@ configuration options for the Percona Server for MySQL.
 
 ### `mysql.clusterType`
 
-The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/group-replication.html).
+
+Starting with Operator version 1.3.0, you can change this value on a running cluster. The Operator converts the topology in place. The switch causes downtime. See [Change replication type](change-replication-type.md) to learn more.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1830,6 +1832,8 @@ configuration options for the Orchestrator - a replication topology manager, use
 ### `orchestrator.enabled`
 
 Enables or disables the Orchestrator.
+
+Orchestrator is used with asynchronous replication. Disable it when you [switch from async to group replication](change-replication-type.md#switch-from-async-to-group-replication). Enable it when you [switch from group replication to async](change-replication-type.md#switch-from-group-replication-to-async).
 
 | Value type  | Example    |
 | ----------- | ---------- |
