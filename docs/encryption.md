@@ -25,9 +25,11 @@ Percona Operator for MySQL uses Percona XtraBackup for backups and fully support
 
 Starting with Operator 1.2.0, you can also [encrypt backup files in the object storage](backups-encrypted.md) independently of database encryption. This protects backup data even when live database encryption is not enabled.
 
+Data-at-rest encryption on the server does not encrypt the binlog files required for point-in-time recovery. To protect those files, enable [binlog encryption](backups-pitr.md#binlog-encryption). 
+
 !!! warning "Keep your encryption keys safe"
 
-    To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is the **the original Vault master encryption key**. For encrypted backups, this is the **backup encryption key** from the Kubernetes Secret.
+    To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is **the original Vault master encryption key**. For encrypted backups, this is the **backup encryption key** from the Kubernetes Secret.
 
     If either key is lost or rotated, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.
 
