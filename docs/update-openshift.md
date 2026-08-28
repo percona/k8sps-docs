@@ -92,7 +92,7 @@ The following steps apply if you plan to use OpenShift 4.22. See the [Considerat
     ```bash
     kubectl patch ps ps-cluster1 --type=merge --patch '{
       "spec": {
-        "initcontainer": {
+        "initContainer": {
               "image": "docker.io/percona-server-mysql-operator:1.1.0"
         }
       }
