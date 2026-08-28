@@ -5229,7 +5229,7 @@ However, OLM doesn&rsquo;t modify the <code>PerconaServerMySQL</code> Custom Res
 <p>Apply a patch to the clusters with undefined <code>initContainer.image</code> to define this image with the <code>docker.io</code> registry in the image path:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">  "spec": {</span>
-<span class="s1">    "initcontainer": {</span>
+<span class="s1">    "initContainer": {</span>
 <span class="s1">          "image": "docker.io/percona-server-mysql-operator:1.1.0"</span>
 <span class="s1">    }</span>
 <span class="s1">  }</span>
@@ -5267,7 +5267,7 @@ However, OLM doesn&rsquo;t modify the <code>PerconaServerMySQL</code> Custom Res
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 17:42:36 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 28, 2026 09:41:30 UTC">August 28, 2026</span>
       
         <br>
         Created:
