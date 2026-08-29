@@ -319,3 +319,41 @@ kubectl logs <restore-pod-name> -n <namespace>
     + [[ true == \f\a\l\s\e ]]
     ```
 
+## Point-in-time recovery
+
+Point-in-time recovery adds a Binlog Server Pod and a PITR Job (`pitr-restore-<restore-name>`) on top of the base restore Job (`xb-restore-<restore-name>`). Check both Jobs and the Binlog Server Pod, not only `xb-restore-*`.
+
+### Binlog Server is in CrashLoopBackOff
+
+If the binlog bucket contains too many objects, Binlog Server can get stuck listing them and enter the CrashLoopBackOff state. Point-in-time recovery cannot proceed until the Pod is healthy.
+
+Delete old binlog objects from the bucket so the object count drops. If you miss the binlog expiration window, restore becomes much harder. Monitor object count in the point-in-time recovery bucket and clean up regularly.
+
+### Restore fails after the base backup is already restored
+
+Point-in-time recovery retries are not idempotent. If the PITR Job fails after the base backup is on disk, a retry does not restore that backup again to reset the state.
+
+Set `spec.backup.backoffLimit=0` in the cluster Custom Resource so the Job does not retry automatically. Fix the cause, then start a new restore from a known-good base backup.
+
+### Replication errors during binlog replay
+
+Updates made by `mysql-shell` can produce errors such as `Error_code: 1032` / `HA_ERR_KEY_NOT_FOUND` on `mysql_innodb_cluster_metadata.instances`.
+
+If you choose to ignore SQL errors, add `force: true` under `spec.pitr` in the restore object. This passes `--force` to the MySQL client and silently ignores **all** SQL errors during replay, which can hide data loss. See [Ignore SQL errors during binlog replay](backups-restore-pitr.md#ignore-sql-errors-during-binlog-replay).
+
+### Encrypted binlogs fail to decrypt
+
+The PITR Job cannot unwrap a binlog if the mounted keyring does not contain the KEK recorded in that file.
+
+Typical causes:
+
+* Restore to a new cluster without `spec.pitr.keyringSecret`
+* Keys rotated into another Secret, but the restore still uses the cluster keyring
+* A KEK removed from `keyring.json`
+
+Check the PITR Job logs (`pitr-restore-<restore-name>`) for KEK / keyring errors. To copy the Secret and set `keyringSecret`, see [Restore with encrypted binlogs](backups-restore-pitr.md#restore-with-encrypted-binlogs). Lost keys cannot be recovered.
+
+### Operator user password changed after the backup
+
+If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.
+
