@@ -213,7 +213,7 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | Value | Meaning |
 | --- | --- |
 | `OK` | Cluster is healthy and replicating as expected. |
-| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists, [rejoin the replica](replication-setup.md#rejoin-a-replica-cluster). |
+| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists after the replica is `Ready`, [rejoin the replica](replication-setup.md#rejoin-a-replica-cluster). |
 | `NOT_OK` | Cluster has a problem; check MySQL Shell status and events. |
 | `INVALIDATED` | Cluster was fenced off after forced failover; it may have divergent GTIDs. [Rejoin it](replication-setup.md#rejoin-a-replica-cluster) if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
 | `UNKNOWN` | Status could not be determined (for example, the primary is unreachable). |
