@@ -167,9 +167,9 @@ kubectl create -f deploy/mysql-secret.yaml
 
 !!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
 
-Some MySQL system
-are [dynamic :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/dynamic-system-variables.html) and you can change them at runtime while
-the server is running. 
+Some MySQL system variables
+are [dynamic :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/dynamic-system-variables.html), and you can change them at runtime while
+the server is running.
 
 Use dynamic updates when you need to tune a live cluster without a rolling
 restart. Typical cases include raising `max_connections` during peak traffic,
