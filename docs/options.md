@@ -16,7 +16,7 @@ following ways:
 The Operator applies your configuration to all MySQL Pods as follows:
 
 * **Dynamic variables** — These variables are applied at runtime with the `SET GLOBAL` command. The Operator doesn't restart the MySQL StatefulSet. See [Dynamic configuration](#dynamic-configuration) for details.
-* **Static variables** are variables that MySQL cannot change while the server is running. Applying them requires the rolling restarts of the MySQL StatefulSet.
+* **Static variables** are variables that MySQL cannot change while the server is running. Applying them requires a rolling restart of the MySQL StatefulSet.
 * If any variable is **removed**, the Operator applies the changes with a rolling restart of
   the MySQL StatefulSet.
 
