@@ -41,7 +41,6 @@ Group replication is generally available and is the recommended topology for pro
 Point-in-time recovery is in tech preview. Additional constraints:
 
 * The Binlog Server supports only AWS S3 and S3-compatible storage.
-* Data-at-rest encryption is not supported with point-in-time recovery.
 * After you change the Operator user password, take a new full backup. Otherwise point-in-time recovery fails because the password in the base backup no longer matches.
 * Point-in-time recovery Job retries are not idempotent. If recovery fails after the base backup is restored, a retry does not restore the full backup again. Set `spec.backup.backoffLimit: 0` in the cluster Custom Resource to disable automatic Job retries.
 * Binlog storage for point-in-time recovery is separate from base backup storage. Configure it under `spec.backup.pitr.binlogServer` for in-place restore, or under `spec.pitr.backupSource.binlogServer` on the Restore object for a cross-cluster restore.
