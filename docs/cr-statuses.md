@@ -213,9 +213,9 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | Value | Meaning |
 | --- | --- |
 | `OK` | Cluster is healthy and replicating as expected. |
-| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). |
+| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists after the replica is `Ready`, [rejoin the replica](replication-setup.md#rejoin-a-replica-cluster). |
 | `NOT_OK` | Cluster has a problem; check MySQL Shell status and events. |
-| `INVALIDATED` | Cluster was fenced off after forced failover; it may have divergent GTIDs. Rejoin it with `rejoinCluster()` if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
+| `INVALIDATED` | Cluster was fenced off after forced failover; it may have divergent GTIDs. [Rejoin it](replication-setup.md#rejoin-a-replica-cluster) if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
 | `UNKNOWN` | Status could not be determined (for example, the primary is unreachable). |
 
 ### Conditions
@@ -228,6 +228,7 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | `ClusterSetBootstrapped` | The primary cluster is configured as a ClusterSet. |
 | `MySQLShellRunnerReady` | The `mysqlshell-runner` Pod is running and ready. |
 | `SwitchoverInProgress` | `spec.primaryCluster` differs from the observed primary and a switchover Job is running, pending, or failed. |
+| `RejoinClusterInProgress` | A rejoin Job is running or has failed. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster). |
 | `ErrorReconcile` | An error occurred during reconciliation. |
 | `ReplicaManagementFailure` | A replica add or remove Job failed; see the Job logs. |
 | `ClusterSetDissolving` | The Custom Resource is being deleted and the dissolve finalizer is running. |
@@ -257,6 +258,13 @@ Common `SwitchoverInProgress` reasons:
 | `SwitchoverInProgress` | A switchover Job is running. Condition status is `True`. |
 | `SwitchoverFailed` | The switchover Job failed. Condition status is `False`. |
 
+Common `RejoinClusterInProgress` reasons:
+
+| Reason | Meaning |
+| --- | --- |
+| `RejoinInProgress` | A rejoin Job is running. Condition status is `True`. |
+| `RejoinFailed` | The rejoin Job failed. Condition status is `False`. The annotation is still present so you can retry. |
+
 `ErrorReconcile` uses the reason `ErrorReconcile` for general failures, or `AccessDenied` / `PrimaryUnreachable` when the ClusterSet manager cannot reach or authenticate to the primary.
 
 ### Events
@@ -270,6 +278,7 @@ The ClusterSet controller emits Kubernetes events you can view with `kubectl des
 | `ClusterSetPrimaryForcedSwitched` | Forced failover completed. |
 | `ClusterSetMemberAdded` | A cluster was added to the ClusterSet. |
 | `ClusterSetMemberRemoved` | A cluster was removed from the ClusterSet. |
+| `ClusterSetMemberRejoined` | A replica cluster rejoined the ClusterSet. |
 | `ClusterSetHealthDegraded` | Overall ClusterSet health dropped from healthy to unhealthy. |
 
 ## PerconaServerMySQLBackup status
