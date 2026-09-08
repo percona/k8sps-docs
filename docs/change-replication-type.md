@@ -40,4 +40,4 @@ You can also change the replication type for your cluster from group replication
 
 5. Wait for the cluster to be resumed. Check the status with the `kubectl get ps` command.
 
-Changing replication type on a running cluster is not supported.
+Changing replication type on a running cluster is not supported. See [Known limitations](limitations.md#replication-and-topology).

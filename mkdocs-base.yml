@@ -169,6 +169,7 @@ nav:
           - "Features and capabilities": features.md
           - "How the Operator works": how-it-works.md
           - "Design and architecture": architecture.md
+          - "Known limitations": limitations.md
     
     - Quick start:
           - Overview: quickstart.md
