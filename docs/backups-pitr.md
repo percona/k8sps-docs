@@ -124,9 +124,7 @@ With point-in-time recovery, you get finer control over when you come back onlin
 
 * Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting `spec.backup.backoffLimit=0` in your `cr.yaml` to prevent automatic job retries.
 
-- If something fails mid-restore, use the same discipline as with any restore: inspect **`PerconaServerMySQLRestore` status**, the **restore and PITR jobs**, and refer to our [Restore troubleshooting guide](debug-backup-restore.md).\
-  
-- Data at rest encryption is not supported with point-in-time recovery.
+- If something fails mid-restore, use the same discipline as with any restore: inspect **`PerconaServerMySQLRestore` status**, the **restore and PITR jobs**, and refer to our [Restore troubleshooting guide](debug-backup-restore.md).
   
 - You cannot change the prefix for the Binlog Server.
 
