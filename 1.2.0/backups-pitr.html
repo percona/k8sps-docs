@@ -583,6 +583,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="limitations.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -5217,6 +5245,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>The Binlog Server stores binlogs in a dedicated folder. Therefore, you must specify the folder name (<code>prefix</code>) when configuring storage for the Binlog Server.</li>
 </ol>
 <h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h2>
+<p>Also see <a href="limitations.html#point-in-time-recovery">Known limitations</a> for a summary of Operator-wide constraints that affect this feature.</p>
 <ul>
 <li>
 <p>The Binlog Server currently supports only AWS S3 and S3-compatible storage services for streaming binlogs. Use the same practices as backups: provide credentials via Kubernetes Secrets, set the endpoint URL (including scheme if required), region, and TLS options to match your environment.</p>
@@ -5269,7 +5298,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:03:38 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 8, 2026 15:16:19 UTC">September 8, 2026</span>
       
         <br>
         Created:

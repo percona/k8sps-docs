@@ -9,19 +9,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="You can restore from a backup as follows:">
+        <meta name="description" content="This page describes known limitations of Percona Operator for MySQL based on Percona Server for MySQL. Understanding these constraints helps you plan deployments and avoid unexpected behavior.">
       
       
         <meta name="author" content="Percona LLC">
       
       
-        <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/1.2.0/backups-restore.html">
+        <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/1.2.0/limitations.html">
       
       
-        <link rel="prev" href="backups-encrypted.html">
+        <link rel="prev" href="architecture.html">
       
       
-        <link rel="next" href="backups-restore-to-new-cluster.html">
+        <link rel="next" href="quickstart.html">
       
       
         
@@ -32,7 +32,7 @@
     
     
       
-        <title>On the same cluster - Percona Operator for MySQL based on Percona Server for MySQL</title>
+        <title>Known limitations - Percona Operator for MySQL based on Percona Server for MySQL</title>
       
     
     
@@ -102,7 +102,7 @@
                  
                  
                  <meta property="og:type" content="website" />
-                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - On the same cluster" />
+                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Known limitations" />
                     <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/assets/images/kubernetes-operators.png">
                     <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/">
                 </head>
@@ -130,7 +130,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#restore-the-cluster-from-a-previously-saved-backup" class="md-skip">
+        <a href="#known-limitations" class="md-skip">
           Skip to content
         </a>
       
@@ -239,7 +239,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              On the same cluster
+              Known limitations
             
           </span>
         </div>
@@ -456,18 +456,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -488,7 +490,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -587,10 +589,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="limitations.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known limitations
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="limitations.html" class="md-nav__link md-nav__link--active">
         
   
   
@@ -606,6 +635,142 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tech-preview-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tech preview features
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replication-and-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replication and topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups-and-restores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups and restores
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#point-in-time-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Point-in-time recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-site-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-site replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scaling-and-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaling and storage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sidecars-labels-and-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sidecars, labels, and annotations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrades
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#binlog-server-image-in-operator-120" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Binlog Server image in Operator 1.2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openshift-422-image-pull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenShift 4.22 image pull
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1205,20 +1370,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1239,7 +1402,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1310,20 +1473,18 @@
                 
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
         
           
           <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
@@ -1344,7 +1505,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1583,20 +1744,18 @@
                 
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_9" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_9" >
         
           
           <label class="md-nav__link" for="__nav_6_3_9" id="__nav_6_3_9_label" tabindex="0">
@@ -1617,7 +1776,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_9_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_3_9">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1632,37 +1791,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    On the same cluster
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="backups-restore.html" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="backups-restore.html" class="md-nav__link">
         
   
   
@@ -1678,120 +1810,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#restore-scenarios" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restore scenarios
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#before-you-begin" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Before you begin
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#restore-from-a-backup-without-point-in-time-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restore from a backup without point-in-time recovery
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#restore-with-point-in-time-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restore with point-in-time recovery
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Restore with point-in-time recovery">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-1-restore-to-a-specific-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example 1. Restore to a specific time
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-2-restore-to-a-specific-transaction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example 2. Restore to a specific transaction
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#view-restore-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        View restore details
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshooting
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -5036,7 +5054,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
                     <div data-banner="data-banner" class="edit-contrib-banner">
     <div class="banner-content">
       <!-- Edit link centered -->
-      <a href="https://github.com/percona/k8sps-docs/edit/main/docs/backups-restore.md" title="Edit this page on GitHub" class="edit-page-link">
+      <a href="https://github.com/percona/k8sps-docs/edit/main/docs/limitations.md" title="Edit this page on GitHub" class="edit-page-link">
         <span class="edit-page-icon">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
@@ -5086,10 +5104,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#restore-scenarios" class="md-nav__link">
+  <a href="#tech-preview-features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restore scenarios
+        Tech preview features
       
     </span>
   </a>
@@ -5097,10 +5115,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#before-you-begin" class="md-nav__link">
+  <a href="#replication-and-topology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Before you begin
+        Replication and topology
       
     </span>
   </a>
@@ -5108,10 +5126,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#restore-from-a-backup-without-point-in-time-recovery" class="md-nav__link">
+  <a href="#backups-and-restores" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restore from a backup without point-in-time recovery
+        Backups and restores
       
     </span>
   </a>
@@ -5119,22 +5137,66 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#restore-with-point-in-time-recovery" class="md-nav__link">
+  <a href="#point-in-time-recovery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restore with point-in-time recovery
+        Point-in-time recovery
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Restore with point-in-time recovery">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-site-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cross-site replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scaling-and-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scaling and storage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sidecars-labels-and-annotations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sidecars, labels, and annotations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrades
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrades">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example-1-restore-to-a-specific-time" class="md-nav__link">
+  <a href="#binlog-server-image-in-operator-120" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Example 1. Restore to a specific time
+        Binlog Server image in Operator 1.2.0
       
     </span>
   </a>
@@ -5142,10 +5204,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
-  <a href="#example-2-restore-to-a-specific-transaction" class="md-nav__link">
+  <a href="#openshift-422-image-pull" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Example 2. Restore to a specific transaction
+        OpenShift 4.22 image pull
       
     </span>
   </a>
@@ -5154,28 +5216,6 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#view-restore-details" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        View restore details
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshooting
-      
-    </span>
-  </a>
   
 </li>
       
@@ -5202,193 +5242,91 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     
       
     
-    <a href="https://github.com/percona/k8sps-docs/raw/main/docs/backups-restore.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/percona/k8sps-docs/raw/main/docs/limitations.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="restore-the-cluster-from-a-previously-saved-backup">Restore the cluster from a previously saved backup<a class="headerlink" href="#restore-the-cluster-from-a-previously-saved-backup" title="Permanent link">&para;</a></h1>
-<p>You can restore from a backup as follows:</p>
+<h1 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">&para;</a></h1>
+<p>This page describes known limitations of Percona Operator for MySQL based on Percona Server for MySQL. Understanding these constraints helps you plan deployments and avoid unexpected behavior.</p>
+<h2 id="tech-preview-features">Tech preview features<a class="headerlink" href="#tech-preview-features" title="Permanent link">&para;</a></h2>
+<p>The following features are in tech preview. Behavior can change in future releases. Do not use them in production yet. We encourage you to try them in test or staging clusters and share feedback.</p>
 <ul>
-<li>On the same Kubernetes cluster and in the same namespace where you made the backup</li>
-<li>On a <a href="backups-restore-to-new-cluster.html">new cluster deployed in a different Kubernetes-based environment</a>.</li>
+<li><a href="architecture.html#asynchronous-replication-tech-preview">Asynchronous replication</a> (<code>spec.mysql.clusterType: async</code>)</li>
+<li><a href="backups-pitr.html">Point-in-time recovery</a></li>
+<li><a href="backups-incremental.html">Incremental backups</a></li>
 </ul>
-<p>This document focuses on the restore to the same cluster.</p>
-<h2 id="restore-scenarios">Restore scenarios<a class="headerlink" href="#restore-scenarios" title="Permanent link">&para;</a></h2>
-<p>Select how you wish to restore:</p>
+<p>Group replication is generally available and is the recommended topology for production.</p>
+<h2 id="replication-and-topology">Replication and topology<a class="headerlink" href="#replication-and-topology" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="#restore-from-a-backup-without-point-in-time-recovery">Without point-in-time recovery</a></li>
-<li><a href="#restore-with-point-in-time-recovery">Make a point-in-time recovery</a></li>
+<li>Changing the replication type on a <strong>running</strong> cluster is not supported. Pause the cluster, change <code>spec.mysql.clusterType</code>, then resume it. See <a href="change-replication-type.html">Change replication type</a>.</li>
+<li>Semi-synchronous replication is not supported. Use group replication or asynchronous replication.</li>
+<li>Group replication supports a maximum of <strong>9</strong> MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See <a href="architecture.html#group-replication">Architecture</a>.</li>
+<li>Safe defaults require at least <strong>3</strong> MySQL instances for group replication, an <strong>odd</strong> replica count, and (for asynchronous replication) Orchestrator size of <strong>3 or greater and odd</strong>. You must set the matching <a href="operator.html#operator-unsafeflags-section"><code>unsafeFlags</code></a> option to go below those limits.</li>
+<li>HAProxy and MySQL Router cannot be enabled at the same time. MySQL Router is available only with group replication. Asynchronous replication requires HAProxy (unless you set <code>unsafeFlags.proxy</code>).</li>
+<li>The cluster Custom Resource <code>metadata.name</code> must include only URL-compatible characters, must not exceed 22 characters, must start with an alphabetic character, and must end with an alphanumeric character.</li>
 </ul>
-<p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. </p>
-<p>You can check available options in the <a href="restore-cr.html">restore options reference</a>.</p>
-<h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">&para;</a></h2>
-<p>To restore from a backup on the same cluster and namespace, do the following:</p>
-<ol>
-<li>
-<p>Export the namespace as an environment variable. Replace the <code>&lt;namespace&gt;</code> placeholder with your value:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;namespace&gt;
-</code></pre></div>
-</li>
-<li>
-<p>Make sure that the cluster is running. Use this command to check it:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
-</code></pre></div>
-</li>
-<li>
-<p>List backups with the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
-</code></pre></div>
-</li>
-</ol>
-<h2 id="restore-from-a-backup-without-point-in-time-recovery">Restore from a backup without point-in-time recovery<a class="headerlink" href="#restore-from-a-backup-without-point-in-time-recovery" title="Permanent link">&para;</a></h2>
-<p>When the correct names for the backup and the cluster are known,configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
+<h2 id="backups-and-restores">Backups and restores<a class="headerlink" href="#backups-and-restores" title="Permanent link">&para;</a></h2>
 <ul>
-<li>set <code>spec.clusterName</code> key to the name of the target cluster to restore the backup on</li>
-<li>set <code>spec.backupName</code> key to the name of your backup. This is the value from the output of the <code>kubectl get ps-backup</code> command.</li>
+<li>The Operator stores backups in cloud object storage only. These object storages are supported: AWS S3 and S3-compatible storages, Microsoft Azure Blob Storage, Google Cloud Storage. Local filesystem backups are not supported.</li>
+<li>Backup compression supports only the <code>zstd</code> algorithm. <code>lz4</code> is not supported yet.</li>
+<li>
+<p>When several <a href="backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage">scheduled backups</a> use the <strong>same storage location</strong>:</p>
+<ul>
+<li>Retention (<code>keep</code>) applies only to the first schedule in the list, not independently per schedule.</li>
+<li>Overlapping runs that write to the same path can overwrite each other. Use a separate storage name (different bucket or prefix) for each schedule.</li>
 </ul>
-<p>Pass this information to the Operator</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">via the YAML manifest</label><label for="__tabbed_1_2">via the command line</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<ol>
-<li>
-<p>Edit the <code>deploy/backup/restore.yaml</code> file:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
-<span class="nt">spec</span><span class="p">:</span><span class="w"> </span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
-</code></pre></div>
 </li>
 <li>
-<p>Start the restore process:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
-</code></pre></div>
-</li>
-</ol>
-</div>
-<div class="tabbed-block">
-<p>Instead of storing restore settings in a separate file, you can pass them directly to the <code>kubectl apply</code> command as follows:</p>
-<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -n $NAMESPACE  -f-</span>
-<span class="s">apiVersion: "ps.percona.com/v1"</span>
-<span class="s">kind: "PerconaServerMySQLRestore"</span>
-<span class="s">metadata:</span>
-<span class="s">  name: "restore1"</span>
-<span class="s">spec:</span>
-<span class="s">  clusterName: "ps-cluster1"</span>
-<span class="s">  backupName: "backup1"</span>
-<span class="s">EOF</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="restore-with-point-in-time-recovery">Restore with point-in-time recovery<a class="headerlink" href="#restore-with-point-in-time-recovery" title="Permanent link">&para;</a></h2>
-<p>Before performing a point-in-time recovery, ensure you have:</p>
+<p>For <a href="backups-incremental.html">incremental backups</a>:</p>
 <ul>
-<li>Enabled binlog collection in your cluster configuration</li>
-<li>Identified a base backup to restore from</li>
-<li>Determined either the GTID set (for restoring up to a specific transaction) or the exact timestamp (for restoring up to a specific time)</li>
-<li>Configured the backup storage appropriately</li>
-</ul>
-<p>Also check the <a href="backups-pitr.html#implementation-specifics">implementation specifics</a> and <a href="backups-pitr.html#known-limitations">known limitations</a></p>
-<h3 id="example-1-restore-to-a-specific-time">Example 1. Restore to a specific time<a class="headerlink" href="#example-1-restore-to-a-specific-time" title="Permanent link">&para;</a></h3>
-<ol>
-<li>
-<p>Edit the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> and specify the following options:</p>
-<ul>
-<li><code>spec.clusterName</code> - the name of your cluster</li>
-<li><code>spec.backupName</code> - the name of a backup </li>
-<li>
-<p>configure point-in-time recovery in the <code>spec.pitr</code> subsection:</p>
-<ul>
-<li><code>type</code> - specify <code>time</code></li>
-<li><code>date</code> - specify the timestamp to restore the database to</li>
+<li>Retention applies to the whole chain. You cannot set a separate retention policy for increments. Deleting the base full backup deletes the entire chain.</li>
+<li>You cannot delete an increment in the middle of a chain. Delete only the last increment, or delete the base backup to remove the chain.</li>
+<li>If a backup in the chain fails after some data was already uploaded, start a new chain. A missing checkpoint file can also hang the next incremental backup.</li>
 </ul>
 </li>
 </ul>
-<p>Here&rsquo;s the example configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-date</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
-</code></pre></div>
-</li>
-<li>
-<p>Apply the configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-</code></pre></div>
-</li>
-</ol>
-<h3 id="example-2-restore-to-a-specific-transaction">Example 2. Restore to a specific transaction<a class="headerlink" href="#example-2-restore-to-a-specific-transaction" title="Permanent link">&para;</a></h3>
-<ol>
-<li>
-<p>Edit the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> and specify the following options:</p>
+<h2 id="point-in-time-recovery">Point-in-time recovery<a class="headerlink" href="#point-in-time-recovery" title="Permanent link">&para;</a></h2>
+<p>Point-in-time recovery is in tech preview. Additional constraints:</p>
 <ul>
-<li><code>spec.clusterName</code> - the name of your cluster</li>
-<li><code>spec.backupName</code> - the name of a backup</li>
-<li>
-<p>configure point-in-time recovery in the <code>spec.pitr</code> subsection:</p>
+<li>The Binlog Server supports only AWS S3 and S3-compatible storage.</li>
+<li>After you change the Operator user password, take a new full backup. Otherwise point-in-time recovery fails because the password in the base backup no longer matches.</li>
+<li>Point-in-time recovery Job retries are not idempotent. If recovery fails after the base backup is restored, a retry does not restore the full backup again. Set <code>spec.backup.backoffLimit: 0</code> in the cluster Custom Resource to disable automatic Job retries.</li>
+<li>Binlog storage for point-in-time recovery is separate from base backup storage. Configure it under <code>spec.backup.pitr.binlogServer</code> for in-place restore, or under <code>spec.pitr.backupSource.binlogServer</code> on the Restore object for a cross-cluster restore.</li>
+</ul>
+<p>See <a href="backups-pitr.html#known-limitations">Point-in-time recovery</a> for details, including <code>force: true</code> behavior during binlog replay.</p>
+<h2 id="cross-site-replication">Cross-site replication<a class="headerlink" href="#cross-site-replication" title="Permanent link">&para;</a></h2>
+<p>Cross-site replication (InnoDB ClusterSet) requires Operator 1.2.0 or later and <strong>group replication</strong> clusters only. Mixing asynchronous and group replication in a ClusterSet is not supported. Switchover is always user-initiated.</p>
+<p>Additional constraints include: no automatic rejoin after replication stops, no support of ClusterSets created outside the Operator, no restore onto a ClusterSet replica, backups from a ClusterSet cannot be restored onto a fresh unrelated cluster, and a removed member cannot rejoin the same ClusterSet.</p>
+<p>See <a href="replication.html#known-limitations">Cross-site replication</a> for the full list and recovery steps.</p>
+<h2 id="scaling-and-storage">Scaling and storage<a class="headerlink" href="#scaling-and-storage" title="Permanent link">&para;</a></h2>
 <ul>
-<li><code>type</code> - specify <code>gtid</code></li>
-<li><code>gtid</code> - specify the GTID set to restore the database to. It has the format <code>source_id:transaction_id</code></li>
+<li>You cannot shrink an existing Persistent Volume Claim. You can only increase storage size. See <a href="scaling.html#scale-storage">Scale storage</a>.</li>
+<li>Using the Operator&rsquo;s storage autoscaling together with an external PVC autoscaler is not supported. Choose one method.</li>
+<li>Some storage providers limit volume expansion. Check your provider&rsquo;s documentation before you rely on resize.</li>
 </ul>
-</li>
+<h2 id="sidecars-labels-and-annotations">Sidecars, labels, and annotations<a class="headerlink" href="#sidecars-labels-and-annotations" title="Permanent link">&para;</a></h2>
+<ul>
+<li>You can attach PVCs to <a href="sidecar.html">sidecar containers</a> only when you deploy a new cluster. Updating sidecar volume claims on a running cluster is not supported.</li>
+<li>The Operator can add custom <a href="annotations.html">labels and annotations</a> to objects it manages. It cannot delete them. Remove unused labels and annotations manually.</li>
 </ul>
-<p>Here&rsquo;s the example configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-gtid</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
-<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
-</code></pre></div>
-</li>
-<li>
-<p>Apply the configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-</code></pre></div>
-</li>
-</ol>
-<h2 id="view-restore-details">View restore details<a class="headerlink" href="#view-restore-details" title="Permanent link">&para;</a></h2>
-<p>When you start the restore, the restore job is created. You can check the job details using these commands:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-</code></pre></div>
-<details class="example">
-<summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>xb-restore-restore2                                Running    0/1                      0s
-xb-restore-restore2                                Complete             1/1           25s        25s
-</code></pre></div>
-</details>
-<p>You can check the restore progress with this command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
-</code></pre></div>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<p>If you face issues with restore, refer to our <a href="debug-backup-restore.html#restores">Restore troubleshooting guide</a> for help.</p>
+<h2 id="upgrades">Upgrades<a class="headerlink" href="#upgrades" title="Permanent link">&para;</a></h2>
+<h3 id="binlog-server-image-in-operator-120">Binlog Server image in Operator 1.2.0<a class="headerlink" href="#binlog-server-image-in-operator-120" title="Permanent link">&para;</a></h3>
+<p>The Binlog Server image in Operator 1.2.0 is not compatible with the previous image. To upgrade it, start a fresh binlog collection: stop point-in-time recovery, take a new full backup, change the binlog bucket or prefix, update the image, then re-enable point-in-time recovery. See the <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.html#binlog-server-image-incompatibility-notice">1.2.0 release notes</a>.</p>
+<h3 id="openshift-422-image-pull">OpenShift 4.22 image pull<a class="headerlink" href="#openshift-422-image-pull" title="Permanent link">&para;</a></h3>
+<p>Starting with OpenShift 4.22, unqualified image names can resolve to Red Hat Marketplace instead of Docker Hub and fail with <code>ImagePullBackOff</code>. For a manual install or update, prefix Operator images with <code>docker.io</code>. OLM installs already use fully qualified names. See <a href="update-openshift.html">Update on OpenShift</a> and the <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.html#considerations-for-using-openshift-422">1.2.0 release notes</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 14:39:51 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 8, 2026 15:16:19 UTC">September 8, 2026</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 4, 2023 15:17:41 UTC">September 4, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 8, 2026 15:16:19 UTC">September 8, 2026</span>
       
     
   </small>
