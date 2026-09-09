@@ -2331,6 +2331,20 @@ Enables to pass MySQL parameters to PMM. For example, to change the number of ta
 | ----------- | ---------- |
 | :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
 
+### `pmm.haproxyParams`
+
+Additional parameters passed to the `pmm-admin add haproxy` command for HAProxy Pods. Use this to add custom labels, skip the connection check, or change the metrics listen port.
+
+See the [PMM documentation :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-client/connect-database/haproxy.html) for the list of available flags.
+
+Note the following: 
+
+The Operator registers HAProxy with `--listen-port=8404` by default. If you pass the `--listen-port` with your value, it replaces the default `8404`. All other flags you pass are appended to the `--listen-port`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"--custom-labels=env=prod --skip-connection-check"` |
+
 ### `pmm.readinessProbe.initialDelaySeconds`
 
 The number of seconds to wait before performing the first [readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
