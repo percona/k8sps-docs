@@ -25,18 +25,26 @@ If you [use cert-manager](tls-cert-manager.md):
         ps-cluster1-ssl       True    ps-cluster1-ssl       43m
         ```
 
-2. Optionally you can also check that the certificates issuer is up and running:
+2. Optionally you can also check that the certificates issuer is up and running.
     
+    If the Operator manages issuers in the database namespace:
+
     ```bash
     kubectl get issuer -n $NAMESPACE
     ```
 
-    The response should be as follows:
+    ??? example "Sample output"
 
-    ``` {.text .no-copy}
-    NAME                              READY   AGE
-    ps-cluster1-ps-ca-issuer   True    40m
-    ps-cluster1-ps-issuer      True    38m
+        ``` {.text .no-copy}
+        NAME                       READY   AGE
+        ps-cluster1-ps-ca-issuer   True    40m
+        ps-cluster1-ps-issuer      True    38m
+        ```
+
+    If you [use an existing ClusterIssuer](tls-cert-manager.md#use-an-existing-clusterissuer):
+
+    ```bash
+    kubectl get clusterissuer
     ```
 
     !!! note
