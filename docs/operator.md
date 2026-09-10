@@ -259,7 +259,10 @@ Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is
 
 ### `unsafeFlags.mysqlSize`
 
-Allows users to start the cluster with less than 3 MySQL instances or with more than 9 (the maximum safe size).
+Allows a cluster size that is outside the safe defaults for the replication type:
+
+* **Asynchronous (`async`):** a single MySQL instance (`mysql.size: 1`). Size 2 or greater is allowed without this flag starting with Operator 1.3.0, including even counts.
+* **Group Replication (`group-replication`):** an even instance count, or more than 9 instances.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -401,6 +404,8 @@ Specifies the secret for the [HashiCorp Vault :octicons-link-external-16:](https
 ### `mysql.size`
 
 The number of the Percona Server for MySQL instances. This setting is required.
+
+The safe range depends on `mysql.clusterType`. For `async`, use 2 or more instances (even counts are allowed). Size `1` requires [`unsafeFlags.mysqlSize`](#unsafeflagsmysqlsize). For `group-replication`, use an odd count between 3 and 9 unless you set that flag.
 
 | Value type  | Example    |
 | ----------- | ---------- |
