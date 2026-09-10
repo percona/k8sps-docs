@@ -6,9 +6,10 @@ After a backup succeeds, the Operator records its size on the Backup object.
 
 The Backup object has two fields:
 
-* `status.size` is the stored size in IEC units (`KiB`, `MiB`, `GiB`). `status.* `status.uncompressedSize` is the size before compression. The two values differ only for [compressed backups](backups-compressed.md).
+* `status.size` is the stored size in IEC units (`KiB`, `MiB`, `GiB`).
+* `status.uncompressedSize` is the size before compression. The two values differ only for [compressed backups](backups-compressed.md).
 
-To view the backup size, run: 
+To view the backup size, run:
 
 ```bash
 kubectl get ps-backup <backup-name> -n $NAMESPACE \

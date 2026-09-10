@@ -98,8 +98,8 @@ kubectl get ps-backup <backup-name> -n <namespace> \
     ```{.text .no-copy}
     4.2MiB
     4.2MiB
-    false
     ```
+
 
 ??? example "Sample output for a compressed backup"
 
