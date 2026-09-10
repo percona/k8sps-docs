@@ -261,7 +261,7 @@ Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is
 
 Allows a cluster size that is outside the safe defaults for the replication type:
 
-* **Asynchronous (`async`):** a single MySQL instance (`mysql.size: 1`). Size 2 or greater is allowed without this flag starting with Operator 1.3.0, including even counts.
+* **Asynchronous (`async`):** a single MySQL instance (`mysql.size: 1`). Size 2 or greater is allowed without this flag starting with Operator version 1.3.0, including even counts.
 * **Group Replication (`group-replication`):** an even instance count, or more than 9 instances.
 
 | Value type  | Example    |
