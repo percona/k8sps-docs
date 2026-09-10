@@ -86,6 +86,29 @@ kubectl get ps-backup <backup-name> -n <namespace> \
     s3://<my-bucket>/ps-cluster1-2026-06-29-08:06:10-full
     ```
 
+**Example 4. Get the backup size:**
+
+```bash
+kubectl get ps-backup <backup-name> -n <namespace> \
+  -o jsonpath='{.status.size}{"\n"}{.status.uncompressedSize}{"\n"}{.status.compressed}{"\n"}'
+```
+
+??? example "Sample output for an uncompressed backup"
+
+    ```{.text .no-copy}
+    4.2MiB
+    4.2MiB
+    ```
+
+
+??? example "Sample output for a compressed backup"
+
+    ```{.text .no-copy}
+    1.1MiB
+    4.2MiB
+    true
+    ```
+
 ## PerconaServerMySQL status
 
 The main cluster state is recorded in `status.state`. Component-level states are recorded in the `status.mysql`, `status.haproxy`, `status.router`, `status.orchestrator`, and `status.binlogserver` sections. A component subsection is populated only when that component is enabled.
@@ -287,6 +310,8 @@ Common fields:
 * `status.storage` — copy of the storage configuration used for this backup
 * `status.image` — Percona XtraBackup image used for the Job
 * `status.compressed` — whether the backup was compressed
+* `status.size` — backup size in IEC units (`KiB`, `MiB`, `GiB`). Displayed only after the backup succeeds. Empty while the backup is running or if it failed. Available with Operator version 1.3.0
+* `status.uncompressedSize` — uncompressed size of the backup. Equal to `status.size` unless the backup is compressed (`status.compressed: true`). Available with Operator version 1.3.0
 * `status.conditions` — additional conditions
 
 ### Backup state values

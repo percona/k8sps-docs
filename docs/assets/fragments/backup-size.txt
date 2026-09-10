@@ -1,0 +1,19 @@
+## View backup size
+
+!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+
+After a backup succeeds, the Operator records its size on the Backup object.
+
+The Backup object has two fields:
+
+* `status.size` is the stored size in IEC units (`KiB`, `MiB`, `GiB`).
+* `status.uncompressedSize` is the size before compression. The two values differ only for [compressed backups](backups-compressed.md).
+
+To view the backup size, run:
+
+```bash
+kubectl get ps-backup <backup-name> -n $NAMESPACE \
+  -o jsonpath='{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'
+```
+
+These fields stay empty while the backup is running or if it failed. Size reporting requires the Operator and the Custom Resource (`spec.crVersion`) version 1.3.0 or higher. For the full field list, see [Backup status](cr-statuses.md#perconaservermysqlbackup-status).
