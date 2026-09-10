@@ -15,7 +15,7 @@ Each MySQL node in your cluster contains a complete copy of your data, synchroni
 
 ![image](assets/images/replication.svg)
 
-The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally. Asynchronous clusters can also run with even number of instances (minimum for high availability). Read more about [high availability](architecture.md#high-availability) and [cluster size limits](limitations.md#replication-and-topology). 
+The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally. Asynchronous clusters can also run with 2 instances (the minimum for high availability). Read more about [high availability](architecture.md#high-availability) and [cluster size limits](limitations.md#replication-and-topology).
 
 To keep your data safe and persistent, the Operator uses Kubernetes storage systems called Persistent Volumes (PVs) and PersistentVolumeClaims (PVCs). When you request storage for your database, a PVC automatically finds and attaches available storage for you. If a node fails, the Kubernetes storage system can move your data to another node, making sure your database remains available and your data stays protected.
 
