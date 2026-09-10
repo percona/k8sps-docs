@@ -295,6 +295,6 @@ kubectl patch ps ps-cluster1 --type='json' -p='[{"op": "replace", "path": "/spec
 In this example we have changed the size of the Percona Server for MySQL
 Cluster to `5` instances.
 
-The Operator validates `mysql.size` against the cluster type. For **asynchronous** replication, you can scale to 2, 4, 6, or any larger count without extra flags. Scaling to **1** requires [`unsafeFlags.mysqlSize: true`](operator.md#unsafeflagsmysqlsize). 
+The Operator validates `mysql.size` against the cluster type. For **asynchronous** replication, you can scale to 2 or more instances (including even counts) without extra flags. Scaling to **1** requires [`unsafeFlags.mysqlSize: true`](operator.md#unsafeflagsmysqlsize).
 For **group replication**, keep an odd count between 3 and 9. ,Setting an even count or for more than 9 instances is not recommended and requires setting [`unsafeFlags.mysqlSize: true`](operator.md#unsafeflagsmysqlsize).
 
