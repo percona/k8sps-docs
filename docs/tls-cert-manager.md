@@ -150,7 +150,7 @@ Replace `my-org-issuer` with the name of your existing `ClusterIssuer`.
 
 When you deploy the cluster, the Operator creates a `Certificate` resource that references your `ClusterIssuer`. cert-manager signs the resulting Secret. The Operator does not create a parallel CA or overwrite your issuer.
 
-If the `ClusterIssuer` does not exist, the `Certificate` stays not ready and the Operator reports a timeout while waiting for the TLS certificate.
+If the `ClusterIssuer` does not exist, the Operator fails reconciliation and logs an error asking you to check `.spec.tls.issuerConf`. If you point an already-working cluster at a `ClusterIssuer` that doesn't exist, the Operator leaves the existing `Certificate` untouched.
 
 You can also add `tls.issuerConf` to a running cluster. The Operator updates the existing `Certificate` to use your `ClusterIssuer`.
 
@@ -218,6 +218,8 @@ After the cluster is created, inspect the cert-manager resources:
 
     Only your `ClusterIssuer` appears among cluster issuers. The Operator creates the `Certificate` in the database namespace and sets `issuerRef` to your `ClusterIssuer`.
 
+    If the cluster previously used the default Operator-managed issuers (`<cluster-name>-ps-ca-issuer`, `<cluster-name>-ps-issuer`, and `<cluster-name>-ca-cert`), they remain in the namespace. The Operator does not delete them when you switch to an external issuer.
+
 === "Existing Issuer"
 
     ```bash
@@ -229,6 +231,8 @@ After the cluster is created, inspect the cert-manager resources:
     ```
 
     Your `Issuer` remains in the database namespace. The Operator creates the `<cluster-name>-ssl` `Certificate` and points it at that issuer.
+
+    If the cluster previously used the default Operator-managed issuers, `<cluster-name>-ps-ca-issuer`, `<cluster-name>-ps-issuer`, and `<cluster-name>-ca-cert` remain in the namespace. The Operator does not delete them when you switch to an external issuer.
 
 You can also [check certificates for expiration](tls-update.md#check-your-certificates-for-expiration) at any time.
 
