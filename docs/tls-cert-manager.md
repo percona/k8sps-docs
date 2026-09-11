@@ -91,7 +91,7 @@ You do not set `tls.issuerConf` for this mode.
 
 !!! note "Version added: 1.3.0"
 
-If your cluster already runs cert-manager with a cluster-wide issuer, such as Let's Encrypt, Smallstep, or an internal CA, you can configure the Operator to request Percona Server for MySQL certificates from that issuer instead of creating its own CA chain.
+If your cluster already runs cert-manager with a cluster-wide issuer, such as Smallstep or an internal CA, you can configure the Operator to request Percona Server for MySQL certificates from that issuer instead of creating its own CA chain. Public ACME issuers such as Let's Encrypt generally cannot issue the default certificate because it includes Kubernetes-internal Service DNS names.
 
 The Operator does not create or manage `ClusterIssuer` resources. You must create the `ClusterIssuer` first, then reference it in the Custom Resource.
 

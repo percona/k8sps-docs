@@ -20,7 +20,7 @@ You can configure TLS in these ways:
 
 ## TLS configuration
 
-The following sections provide guidelines how to:
+The following sections provide guidelines on how to:
 
 * [Configure TLS using cert-manager](tls-cert-manager.md)
 * [Generate certificates manually](tls-manual.md)
