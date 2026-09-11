@@ -341,6 +341,27 @@ When the Job completes, Pod-0 on the replica cluster becomes Ready and Pod-1, Po
     * `status.clusters` shows each member with `clusterRole` (`PRIMARY` or `REPLICA`) and `globalStatus` (`OK` for healthy members)
     * `status.primaryCluster` matches your desired primary
 
+### Check replication lag
+
+Replica cluster may lag behind the primary. In this case, the ClusterSet status includes the `replicationLagSeconds` field. The field is omitted on the primary and when there is no lag.
+  
+To see how far a replica cluster is behind the primary, run:
+
+```bash
+kubectl get ps-clusterset my-cluster-set -n $SOURCE_NS \
+  -o jsonpath='{.status.clusters.replicacluster.replicationLagSeconds}{"\n"}'
+```
+
+??? example "Sample output"
+
+    ```text
+    121
+    ```
+
+An empty result means either this cluster is the primary, or the replica is caught up (or lag could not be determined). A growing value means the replica is falling behind. Wait for the lag to drop before you promote the replica or rely on it for reads.
+
+For field details, see [Custom resource statuses](cr-statuses.md#per-member-cluster-status).
+
 ### Check per-cluster status
 
 Run on the replica cluster:
