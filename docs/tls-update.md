@@ -62,9 +62,7 @@ If you [use cert-manager](tls-cert-manager.md):
 
     ```bash
     {
-    kubectl get secret/ps-cluster1-ca-cert -n ps -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -noout -dates
-    kubectl get secret/ps-cluster1-ssl -o jsonpath='{.data.ca\.crt}' | base64 --decode | openssl x509 -noout -dates
-    }
+    kubectl get secret/ps-cluster1-ca-cert -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -noout -dates
     ```
 
     ??? example "Sample output"
@@ -72,6 +70,18 @@ If you [use cert-manager](tls-cert-manager.md):
         ```{.text .no-copy}
         notBefore=Nov  7 10:54:00 2025 GMT
         notAfter=Nov  7 10:54:00 2026 GMT
+        ```
+
+    ```bash
+    kubectl get secret/ps-cluster1-ssl -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -noout -dates
+    }
+    ```
+
+    ??? example "Sample output"
+
+        ```{.text .no-copy}
+        notBefore=Nov  7 10:54:00 2025 GMT
+        notAfter=Feb  5 10:54:00 2026 GMT
         ```
 
 ## Update certificates without downtime
@@ -132,7 +142,7 @@ as follows:
    TLS certificate to join. A joiner node also has a combined CA certificate, so
    it can authenticate against older TLS certificate.
 
-8. Create a final Secrets object: use the new TLS certificate (`server.pmm`) and
+8. Create a final Secrets object: use the new TLS certificate (`server.pem`) and
    its key (`server-key.pem`), and only the new CA certificate (`ca.pem`):
 
     ``` bash
