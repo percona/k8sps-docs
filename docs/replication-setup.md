@@ -343,7 +343,7 @@ When the Job completes, Pod-0 on the replica cluster becomes Ready and Pod-1, Po
 
 ### Check replication lag
 
-Replica cluster may lag behind the primary. In this case, the ClusterSet status includes the `replicationLagSeconds` field. The field is omitted on the primary and when there is no lag.
+A replica cluster may lag behind the primary.
   
 To see how far a replica cluster is behind the primary, run:
 
