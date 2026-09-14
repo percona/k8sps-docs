@@ -9,10 +9,9 @@ This document focuses on the restore to the same cluster.
 
 ## Restore scenarios
 
-Select how you wish to restore:
+To restore a backup on this cluster, follow the steps below.
 
-* [Without point-in-time recovery](#restore-from-a-backup-without-point-in-time-recovery)
-* [Make a point-in-time recovery](#restore-with-point-in-time-recovery)
+To restore to a timestamp or GTID, use [Restore with point-in-time recovery](backups-restore-pitr.md#restore-on-the-same-cluster).
 
 To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml). 
 
@@ -40,7 +39,7 @@ To restore from a backup on the same cluster and namespace, do the following:
     kubectl get ps-backup -n $NAMESPACE
     ```
 
-## Restore from a backup without point-in-time recovery
+## Restore from a backup
 
 When the correct names for the backup and the cluster are known,configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following keys:
 
@@ -85,87 +84,12 @@ Pass this information to the Operator
     EOF
     ```
 
-## Restore with point-in-time recovery
-
-Before performing a point-in-time recovery, ensure you have:
-
-* Enabled binlog collection in your cluster configuration
-* Identified a base backup to restore from
-* Determined either the GTID set (for restoring up to a specific transaction) or the exact timestamp (for restoring up to a specific time)
-* Configured the backup storage appropriately
-
-Also check the [implementation specifics](backups-pitr.md#implementation-specifics) and [known limitations](backups-pitr.md#known-limitations)
-
-### Example 1. Restore to a specific time
-
-1. Edit the [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml) and specify the following options:
-    
-    * `spec.clusterName` - the name of your cluster
-    * `spec.backupName` - the name of a backup 
-    * configure point-in-time recovery in the `spec.pitr` subsection:
-  
-        * `type` - specify `time`
-        * `date` - specify the timestamp to restore the database to
-  
-    Here's the example configuration:
-
-    ```yaml
-    apiVersion: ps.percona.com/v1
-    kind: PerconaServerMySQLRestore
-    metadata:
-      name: restore-pitr-date
-    spec:
-      clusterName: ps-cluster1
-      backupName: backup1
-      pitr:
-        type: date
-        date: "2026-03-20 09:15:00"
-    ```
-
-2. Apply the configuration:
-
-    ```bash
-    kubectl apply -f deploy/backup/restore.yaml -n <namespace>
-    ```
-
-### Example 2. Restore to a specific transaction
-
-1. Edit the [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml) and specify the following options:
-
-    * `spec.clusterName` - the name of your cluster
-    * `spec.backupName` - the name of a backup
-    * configure point-in-time recovery in the `spec.pitr` subsection:
-  
-        * `type` - specify `gtid`
-        * `gtid` - specify the GTID set to restore the database to. It has the format `source_id:transaction_id`
-  
-    Here's the example configuration:
-
-    ```yaml
-    apiVersion: ps.percona.com/v1
-    kind: PerconaServerMySQLRestore
-    metadata:
-      name: restore-pitr-gtid
-    spec:
-      clusterName: ps-cluster1
-      backupName: backup1
-      pitr:
-        type: gtid
-        gtid: "cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"
-    ```
-
-2. Apply the configuration:
-
-    ```bash
-    kubectl apply -f deploy/backup/restore.yaml -n <namespace>
-    ```
-
 ## View restore details 
 
-When you start the restore, the restore job is created. You can check the job details using these commands:
+When you start the restore, the Operator creates a Job. Check it with:
 
 ```bash
-kubectl get job -n <namespace>
+kubectl get job -n $NAMESPACE
 ```
 
 ??? example  "Sample output"
@@ -183,4 +107,4 @@ kubectl get ps-restore -n $NAMESPACE
 
 ## Troubleshooting
 
-If you face issues with restore, refer to our [Restore troubleshooting guide](debug-backup-restore.md#restores) for help.
+If you face issues with restore, refer to [Troubleshoot backups and restores](debug-backup-restore.md#restores).
