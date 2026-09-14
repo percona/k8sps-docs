@@ -152,3 +152,5 @@ See [Restore from a backup to a new Kubernetes-based environment](backups-restor
 !!! warning "Keep your backup encryption keys safe"
 
     To restore from an encrypted backup, you **must have the original encryption key**. If the key is lost or rotated, your backups are irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.
+
+Binlogs collected for point-in-time recovery are stored separately from these backups. To encrypt those files in object storage, see [Binlog encryption](backups-pitr.md#binlog-encryption).
