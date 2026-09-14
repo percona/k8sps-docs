@@ -50,8 +50,12 @@ up to a specific transaction. Specify the target in the `PerconaServerMySQLResto
 
 | Mode | What you specify | How it works | Typical use case |
 | ---- | ----------------- | ----------- | ---------------- |
-| **GTID** | A GTID set | The Operator restores the database up to that transaction. | Precise, replication-friendly recovery when you know the GTID to stop before |
-| **Date / time** | A timestamp | The Operator restores the database up to the specified timestamp | Use when wall-clock time is easier than GTIDs |
+| **GTID** | A GTID set | The Operator restores the database up
+to that transaction. | Precise, replication-friendly recovery
+when you know the GTID to stop before |
+| **Date / time** | A timestamp | The Operator restores the
+database up to the specified timestamp | Use when wall-clock
+time is easier than GTIDs |
 
 
 ## Enable binlog collection
