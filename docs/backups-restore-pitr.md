@@ -107,7 +107,7 @@ Edit [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com
 * `clusterName` - the name of the **target cluster** 
 * `backupSource` section:
   
-    * `destination` - where the backup is located. See [Retrieve the backup destination](#retrieve-the-backup-destination) to learn how to get the backup destination
+    * `destination` - where the backup is located. See [Retrieve the backup destination](#retrieve-the-backup-destination) how to get the backup destination 
     * `storage` - configure the storage where the backup is stored. Specify the bucket, region, credentials Secret for the Operator to access the storage. If you specified a separate folder for backups on the bucket, specify it for the `prefix` option.
 
 * `pitr` section:
