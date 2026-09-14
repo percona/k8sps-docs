@@ -89,6 +89,49 @@ Binlog collection needs its own S3 (or S3-compatible) location, separate from ba
 
 To restore, use [Restore with point-in-time recovery](backups-restore-pitr.md).
 
+## Verify TLS with a custom CA
+
+!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+
+You can use your organization's CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.
+
+This setting is independent from [configuring custom certificates for a backup storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage). Configuring a custom CA for backups does not apply it to Binlog Server.
+
+You must run the Operator 1.3.0 and have a Custom Resource version (`spec.crVersion`) set to `1.3.0` or later.
+
+The steps are:
+
+--8<-- "backups-storage.md:casecret"
+
+1. Modify the storage configuration for the Binlog Server in the Custom Resource and specify the following:
+  
+    * `backup.pitr.binlogServer.storage.s3.caBundle.name` is the name of the Secret you created
+    * `backup.pitr.binlogServer.storage.s3.caBundle.key` is the key in the Secret that holds the CA certificate. If you omit `key`, the Operator uses `ca.crt`.
+
+      ```yaml
+      spec:
+        backup:
+          pitr:
+            enabled: true
+            binlogServer:
+              storage:
+                s3:
+                  bucket: my-binlogs
+                  credentialsSecret: my-s3-secret
+                  region: us-east-1
+                  prefix: binlogs
+                  endpointUrl: https://minio-service:9000
+                  caBundle:
+                    name: minio-ca-bundle
+                    key: ca.crt
+      ```
+
+3. Apply the configuration:
+     
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```
+
 ## Implementation specifics
 
 1. Point-in-time recovery is supported for both asynchronous and group replication topologies.
@@ -102,7 +145,7 @@ To restore, use [Restore with point-in-time recovery](backups-restore-pitr.md).
 
 Also see [Known limitations](limitations.md#point-in-time-recovery) for a summary of Operator-wide constraints that affect this feature.
 
-* **AWS S3 and S3-compatible storage** are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and TLS options to match your environment.
+* **AWS S3 and S3-compatible storage** are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and [TLS options to match your environment](#verify-tls-with-a-custom-ca).
 
 * **You cannot change the `prefix` value for the binlog bucket** after you configure Binlog Server.
 * **Data-at-rest encryption is not supported** with point-in-time recovery.

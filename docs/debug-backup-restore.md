@@ -64,6 +64,7 @@ Common error scenarios include:
 * **Authentication failures**: Invalid credentials for accessing cloud storage
 * **Network issues**: Problems connecting to the storage service
 * **Insufficient permissions**: The backup job doesn't have permission to write to the storage location
+* **TLS certificate errors**: The storage endpoint uses a private CA and the Operator cannot verify it. Typical Job or sidecar log messages include `x509: certificate signed by unknown authority` or `certificate verify failed`. Keep `verifyTLS` enabled, confirm `crVersion` is `1.3.0` or later, and supply the CA with [`s3.caBundle`](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 ### Check backup Jobs
 
@@ -241,6 +242,7 @@ Common restore error scenarios include:
 * **Storage access issues**: Problems reading from the backup storage location
 * **Cluster state conflicts**: The cluster is not in a state that allows restore
 * **Insufficient resources**: Not enough disk space or memory to complete the restore
+* **TLS certificate errors**: The restore Job cannot verify the S3 endpoint certificate. See [Restore from S3 storage that uses a custom CA](#restore-from-s3-storage-that-uses-a-custom-ca).
 
 ### Check restore jobs
 
@@ -344,4 +346,45 @@ If you choose to ignore SQL errors, add `force: true` under `spec.pitr` in the r
 ### Operator user password changed after the backup
 
 If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.
+
+## Restore from S3 storage that uses a custom CA
+
+If restore Job logs show `x509: certificate signed by unknown authority`, `certificate verify failed`, or a similar TLS error, the S3-compatible endpoint is presenting a certificate your cluster does not trust.
+
+Do not set `verifyTLS: false` or `VERIFY_TLS=false` to work around this. Instead, supply the CA and keep verification enabled.
+
+1. Confirm the Operator version and Custom Resource version are `1.3.0` or later. If you upgraded the Operator but left `spec.crVersion` at `1.2.0`, the Operator ignores `caBundle`.
+2. Confirm `caBundle.name` and `caBundle.key` match the Secret that holds the CA.
+3. Set `caBundle` on the restore object. For point-in-time recovery, set it on the binlog storage as well.
+
+Here's an example restore that uses a custom CA:
+
+```yaml
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLRestore
+metadata:
+  name: restore1
+spec:
+  clusterName: ps-cluster1
+  backupSource:
+    destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+    storage:
+      type: s3
+      verifyTLS: true
+      s3:
+        bucket: S3-BUCKET-NAME
+        credentialsSecret: ps-cluster1-s3-credentials
+        region: us-west-2
+        endpointUrl: https://minio-service:9000
+        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
+        caBundle:
+          name: minio-ca-bundle
+          key: ca.crt
+```
+
+For a restore on the same cluster, you can keep `spec.backupName` and rely on `caBundle` already set in the cluster Custom Resource. For a restore on another cluster, copy the full `backupSource` as shown above.
+
+If point-in-time recovery also reads binlogs from that storage, add `caBundle` under `spec.pitr.backupSource.binlogServer.storage.s3`.
+
+See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage) and [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca).
 

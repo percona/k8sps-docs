@@ -9,9 +9,9 @@ This document focuses on the restore on a new cluster deployed in a different Ku
 
 ## Restore scenarios
 
-To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include `encryptionKeySecret` as shown in [Restore from an encrypted backup](#restore-from-an-encrypted-backup).
+To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include `encryptionKeySecret` as shown in [Restore from an encrypted backup](#restore-from-an-encrypted-backup). If the source used a custom CA, include `caBundle` as shown in [Restore from S3 storage that uses a custom CA](#restore-from-s3-storage-that-uses-a-custom-ca).
 
-To restore to a timestamp or GTID, use [Restore with point-in-time recovery](backups-restore-pitr.md#restore-on-a-new-cluster). 
+To restore to a timestamp or GTID, use [Restore with point-in-time recovery](backups-restore-pitr.md#restore-on-a-new-cluster).
 
 To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml).
 
@@ -22,6 +22,8 @@ You can check available options in the [restore options reference](restore-cr.md
 When restoring to a new Kubernetes-based environment, make sure it has a Secrets object with the same user passwords as in the source cluster.
 
 If the backup was [encrypted](backups-encrypted.md), the Operator requires the Secret with the same encryption key that was used for the backup. Reference this Secret in the restore resource under `spec.backupSource.storage.encryptionKeySecret`.
+
+If the source cluster verified TLS communication for the S3 storage with a [custom CA](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), set `caBundle` on `spec.backupSource.storage.s3` and, for point-in-time recovery, on `spec.pitr.backupSource.binlogServer.storage.s3`.
 
 You can export the user Secret from the source cluster and create a Secrets object on the target one. Here's how to do it:
 
@@ -177,6 +179,96 @@ spec:
         credentialsSecret: ps-cluster1-s3-credentials
         region: us-west-2
 ```
+
+Start the restore:
+
+```bash
+kubectl apply -f deploy/backup/restore.yaml -n <namespace>
+```
+
+## Restore from S3 storage that uses a custom CA
+
+If the source cluster verified S3-compatible storage with a [custom CA](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), keep `verifyTLS` enabled and set `caBundle` in the restore resource.
+
+Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following keys:
+
+* set `spec.clusterName` key to the name of the target cluster to restore the backup on
+* configure the `spec.backupSource` subsection to point to the cloud storage where the backup is stored. This subsection should include:
+
+    * a destination key. Take it from the output of the `kubectl get ps-backup` command on the source cluster
+    * the necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster
+    * `s3.caBundle` referencing the Secret that stores the CA certificate
+
+* If you need point-in-time recovery, also set `caBundle` under `pitr.backupSource.binlogServer.storage.s3`. Refer to [Restore with point-in-time recovery](backups-restore-pitr.md#restore-on-a-new-cluster) for supported keys.
+
+=== "Without point-in-time recovery"
+
+    This configuration restores a backup from S3-compatible storage that uses a custom CA.
+
+    ```yaml
+    apiVersion: ps.percona.com/v1
+    kind: PerconaServerMySQLRestore
+    metadata:
+      name: restore1
+    spec:
+      clusterName: ps-cluster1
+      backupSource:
+        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+        storage:
+          type: s3
+          verifyTLS: true
+          s3:
+            bucket: S3-BUCKET-NAME
+            credentialsSecret: ps-cluster1-s3-credentials
+            region: us-west-2
+            endpointUrl: https://minio-service:9000
+            prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
+            caBundle:
+              name: minio-ca-bundle
+              key: ca.crt
+    ```
+
+=== "With point-in-time recovery"
+
+    This configuration restores a backup and replays binlogs from S3-compatible storage that uses a custom CA.
+
+    ```yaml
+    apiVersion: ps.percona.com/v1
+    kind: PerconaServerMySQLRestore
+    metadata:
+      name: restore1-pitr
+    spec:
+      clusterName: ps-cluster1
+      backupSource:
+        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+        storage:
+          type: s3
+          verifyTLS: true
+          s3:
+            bucket: S3-BUCKET-NAME
+            credentialsSecret: ps-cluster1-s3-credentials
+            region: us-west-2
+            endpointUrl: https://minio-service:9000
+            prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
+            caBundle:
+              name: minio-ca-bundle
+              key: ca.crt
+      pitr:
+        backupSource:
+          binlogServer:
+            storage:
+              s3:
+                bucket: S3-BINLOG-BUCKET-NAME
+                credentialsSecret: ps-cluster1-s3-credentials
+                region: us-west-2
+                endpointUrl: https://minio-service:9000
+                prefix: binlogs
+                caBundle:
+                  name: minio-ca-bundle
+                  key: ca.crt
+        type: date
+        date: "{{year}}-09-01T15:30:00Z"
+    ```
 
 Start the restore:
 
