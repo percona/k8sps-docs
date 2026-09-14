@@ -81,6 +81,7 @@ The Operator starts a temporary Binlog Server from `spec.pitr.backupSource.binlo
 * Target cluster is running
 * User password Secret matches the source cluster. Copy it as described in [Preconditions](backups-restore-to-new-cluster.md#preconditions)
 * If the base backup was [encrypted](backups-encrypted.md), create the same encryption-key Secret on the target and set `spec.backupSource.storage.encryptionKeySecret`
+* If the source verified S3 with a [custom CA](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), set `caBundle` on `spec.backupSource.storage.s3` and on `spec.pitr.backupSource.binlogServer.storage.s3`. See [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca).
 
 Keep these three prefixes distinct:
 
