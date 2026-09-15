@@ -355,36 +355,10 @@ Do not set `verifyTLS: false` or `VERIFY_TLS=false` to work around this. Instead
 
 1. Confirm the Operator version and Custom Resource version are `1.3.0` or later. If you upgraded the Operator but left `spec.crVersion` at `1.2.0`, the Operator ignores `caBundle`.
 2. Confirm `caBundle.name` and `caBundle.key` match the Secret that holds the CA.
-3. Set `caBundle` on the restore object. For point-in-time recovery, set it on the binlog storage as well.
+3. Confirm the CA Secret exists in the namespace where the restore runs. Create it from the CA file if you are restoring on a new cluster. 
+4. Set `caBundle` on the restore object. For a backup-only restore, set it on `spec.backupSource.storage.s3`. For point-in-time recovery, also set it on `spec.pitr.backupSource.binlogServer.storage.s3`.
 
-Here's an example restore that uses a custom CA:
+On the same cluster with `backupName`, the Operator can use `caBundle` already set on the cluster Custom Resource.
 
-```yaml
-apiVersion: ps.percona.com/v1
-kind: PerconaServerMySQLRestore
-metadata:
-  name: restore1
-spec:
-  clusterName: ps-cluster1
-  backupSource:
-    destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-    storage:
-      type: s3
-      verifyTLS: true
-      s3:
-        bucket: S3-BUCKET-NAME
-        credentialsSecret: ps-cluster1-s3-credentials
-        region: us-west-2
-        endpointUrl: https://minio-service:9000
-        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
-        caBundle:
-          name: minio-ca-bundle
-          key: ca.crt
-```
-
-For a restore on the same cluster, you can keep `spec.backupName` and rely on `caBundle` already set in the cluster Custom Resource. For a restore on another cluster, copy the full `backupSource` as shown above.
-
-If point-in-time recovery also reads binlogs from that storage, add `caBundle` under `spec.pitr.backupSource.binlogServer.storage.s3`.
-
-See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage) and [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca).
+See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca), and [Use a custom CA](backups-restore-pitr.md#use-a-custom-ca) for point-in-time recovery.
 

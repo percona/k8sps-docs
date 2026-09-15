@@ -126,11 +126,13 @@ The steps are:
                     key: ca.crt
       ```
 
-3. Apply the configuration:
+2. Apply the configuration:
      
     ```bash
     kubectl apply -f deploy/cr.yaml -n <namespace>
     ```
+
+When you restore with `backupSource`, create the CA Secret on the target cluster and set `caBundle` on the restore object. See [Use a custom CA](backups-restore-pitr.md#use-a-custom-ca).
 
 ## Implementation specifics
 

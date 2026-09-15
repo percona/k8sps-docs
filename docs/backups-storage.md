@@ -302,5 +302,7 @@ If you configure several S3 storages, each can reference its own CA. The Operato
 
 `caBundle` on `backup.storages` does not apply to Binlog Server. To verify TLS communication for [point-in-time recovery](backups-pitr.md), supply your custom certificate within the Binlog Server configuration as well by setting `caBundle` on [`backup.pitr.binlogServer.storage.s3`](backups-pitr.md#verify-tls-with-a-custom-ca). See [Verify TLS with a custom CA](backups-pitr.md#verify-tls-with-a-custom-ca).
 
-When you restore with `backupSource`, such as on a new cluster, set `caBundle` on `backupSource.storage.s3`. See [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca).
+When you restore with `backupSource`, such as on a new cluster, create the CA Secret on the target and set `caBundle` on `backupSource.storage.s3`. See [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca). 
+
+For point-in-time recovery, also set `caBundle` on the binlog storage as shown in [Use a custom CA](backups-restore-pitr.md#use-a-custom-ca).
 
