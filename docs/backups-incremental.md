@@ -47,7 +47,7 @@ By default, the Operator uses the **latest full backup** as the base for both **
 
 The restore flow is unified for both full and incremental backups. The Operator identifies the backup type by name or destination. To identify the increments and reconstruct the chain, the backup destination has now the `.incr` path segment. The Operator downloads the full backup and all related increments and sorts them in the correct order. Then it restores the full backup first and applies each incremental backup. 
 
-If you make a [point-in-time recovery](backups-pitr.md), it also applies binlogs on top, after restoring all backups. To learn more how it works, check [the point-in-time recovery workflow](backups-pitr.md#how-the-operator-performs-pointintime-recovery).
+If you make a [point-in-time recovery](backups-pitr.md), it also applies binlogs on top, after restoring all backups. To learn more, see [How it works](backups-pitr.md#how-it-works).
 
 Here's how it works in detail:
 

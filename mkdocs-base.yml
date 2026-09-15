@@ -95,8 +95,7 @@ markdown_extensions:
         - docs/assets/fragments
         - docs/ReleaseNotes
         - docs/
-      auto_append:
-        - services-banner.md
+        
   pymdownx.highlight: 
     use_pygments: true
   pymdownx.emoji:
@@ -202,9 +201,11 @@ nav:
               - "Incremental backups": backups-incremental.md
               - "Make scheduled backups": backups-scheduled.md
               - "Make on-demand backup": backups-ondemand.md
-              - "Point-in-time recovery": backups-pitr.md
               - "Compressed backups": backups-compressed.md
               - "Encrypted backups": backups-encrypted.md
+              - Point-in-time recovery:
+                  - "About point-in-time recovery": backups-pitr.md
+                  - "Restore with point-in-time recovery": backups-restore-pitr.md
               - Restore from a backup:
                 - "On the same cluster": backups-restore.md
                 - "On a new cluster": backups-restore-to-new-cluster.md

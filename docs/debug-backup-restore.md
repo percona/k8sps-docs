@@ -64,6 +64,7 @@ Common error scenarios include:
 * **Authentication failures**: Invalid credentials for accessing cloud storage
 * **Network issues**: Problems connecting to the storage service
 * **Insufficient permissions**: The backup job doesn't have permission to write to the storage location
+* **TLS certificate errors**: The storage endpoint uses a private CA and the Operator cannot verify it. Typical Job or sidecar log messages include `x509: certificate signed by unknown authority` or `certificate verify failed`. Keep `verifyTLS` enabled, confirm `crVersion` is `1.3.0` or later, and supply the CA with [`s3.caBundle`](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 ### Check backup Jobs
 
@@ -241,6 +242,7 @@ Common restore error scenarios include:
 * **Storage access issues**: Problems reading from the backup storage location
 * **Cluster state conflicts**: The cluster is not in a state that allows restore
 * **Insufficient resources**: Not enough disk space or memory to complete the restore
+* **TLS certificate errors**: The restore Job cannot verify the S3 endpoint certificate. See [Restore from S3 storage that uses a custom CA](#restore-from-s3-storage-that-uses-a-custom-ca).
 
 ### Check restore jobs
 
@@ -318,4 +320,45 @@ kubectl logs <restore-pod-name> -n <namespace>
     + '[' -n true ']'
     + [[ true == \f\a\l\s\e ]]
     ```
+
+## Point-in-time recovery
+
+Point-in-time recovery adds a Binlog Server Pod and a PITR Job (`pitr-restore-<restore-name>`) on top of the base restore Job (`xb-restore-<restore-name>`). Check both Jobs and the Binlog Server Pod, not only `xb-restore-*`.
+
+### Binlog Server is in CrashLoopBackOff
+
+If the binlog bucket contains too many objects, Binlog Server can get stuck listing them and enter the CrashLoopBackOff state. Point-in-time recovery cannot proceed until the Pod is healthy.
+
+Delete old binlog objects from the bucket so the object count drops. If you miss the binlog expiration window, restore becomes much harder. Monitor object count in the point-in-time recovery bucket and clean up regularly.
+
+### Restore fails after the base backup is already restored
+
+Point-in-time recovery retries are not idempotent. If the PITR Job fails after the base backup is on disk, a retry does not restore that backup again to reset the state.
+
+Set `spec.backup.backoffLimit=0` in the cluster Custom Resource so the Job does not retry automatically. Fix the cause, then start a new restore from a known-good base backup.
+
+### Replication errors during binlog replay
+
+Updates made by `mysql-shell` can produce errors such as `Error_code: 1032` / `HA_ERR_KEY_NOT_FOUND` on `mysql_innodb_cluster_metadata.instances`.
+
+If you choose to ignore SQL errors, add `force: true` under `spec.pitr` in the restore object. This passes `--force` to the MySQL client and silently ignores **all** SQL errors during replay, which can hide data loss. See [Ignore SQL errors during binlog replay](backups-restore-pitr.md#ignore-sql-errors-during-binlog-replay).
+
+### Operator user password changed after the backup
+
+If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.
+
+## Restore from S3 storage that uses a custom CA
+
+If restore Job logs show `x509: certificate signed by unknown authority`, `certificate verify failed`, or a similar TLS error, the S3-compatible endpoint is presenting a certificate your cluster does not trust.
+
+Do not set `verifyTLS: false` or `VERIFY_TLS=false` to work around this. Instead, supply the CA and keep verification enabled.
+
+1. Confirm the Operator version and Custom Resource version are `1.3.0` or later. If you upgraded the Operator but left `spec.crVersion` at `1.2.0`, the Operator ignores `caBundle`.
+2. Confirm `caBundle.name` and `caBundle.key` match the Secret that holds the CA.
+3. Confirm the CA Secret exists in the namespace where the restore runs. Create it from the CA file if you are restoring on a new cluster. 
+4. Set `caBundle` on the restore object. For a backup-only restore, set it on `spec.backupSource.storage.s3`. For point-in-time recovery, also set it on `spec.pitr.backupSource.binlogServer.storage.s3`.
+
+On the same cluster with `backupName`, the Operator can use `caBundle` already set on the cluster Custom Resource.
+
+See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca), and [Use a custom CA](backups-restore-pitr.md#use-a-custom-ca) for point-in-time recovery.
 
