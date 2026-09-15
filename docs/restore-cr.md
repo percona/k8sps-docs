@@ -84,9 +84,33 @@ Forces the `mysql` client to run with the `--force` flag and this silently ignor
 | ----------- | ---------- |
 | :material-toggle-switch: boolean     | `false` |
 
+#### `pitr.keyringSecret`
+
+Optional reference to a Kubernetes Secret that contains the keyring to [decrypt encrypted binlogs](backups-pitr.md#binlog-encryption) during point-in-time recovery. By default the Operator uses the keyring configured on the cluster. Set this field when keys have been rotated into a different Secret, or when you restore to a cluster that does not have the source keyring.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>name: ps-cluster1-binlog-server-keyring<br>key: keyring.json</pre> |
+
+#### `pitr.keyringSecret.name`
+
+The name of the Kubernetes Secret that stores the binlog keyring.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-binlog-server-keyring` |
+
+#### `pitr.keyringSecret.key`
+
+The key within the Secret that holds the keyring JSON. Defaults to `keyring.json`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `keyring.json` |
+
 ### The `pitr.backupSource` subsection
 
-This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](backups-restore-to-new-cluster.md#restore-with-point-in-time-recovery). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
+This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](backups-restore-pitr.md#restore-on-a-new-cluster). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
 
 #### `pitr.backupSource.binlogServer.size`
 

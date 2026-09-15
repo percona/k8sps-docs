@@ -2576,6 +2576,40 @@ The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 | ----------- | ---------- |
 | :material-code-string: string     | `us-west-2` |
 
+### `backup.binlogServer.storage.encryption.cipher`
+
+The cipher used to [encrypt binlog data](backups-pitr.md#binlog-encryption) before Percona Binlog Server writes files to object storage. Only CTR mode is supported. 
+
+Allowed values: `AES-128-CTR`, `AES-192-CTR`, `AES-256-CTR`. Defaults to `AES-256-CTR`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `AES-256-CTR` |
+
+### `backup.binlogServer.storage.encryption.kekId`
+
+The `id` of the key encryption key (KEK) in the keyring Secret used to wrap the per-file data encryption key. If omitted, Percona Binlog Server uses the first key in the keyring. Changing this value affects only new binlogs. See [Binlog encryption](backups-pitr.md#binlog-encryption).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `alpha` |
+
+### `backup.binlogServer.keyringSecret.name`
+
+The name of the Kubernetes Secret that stores the binlog keyring file. Required when `storage.encryption` is set. Keep this Secret configured after you disable encryption if the bucket still contains encrypted binlogs. See [Binlog encryption](backups-pitr.md#disable-binlog-encryption).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ps-cluster1-binlog-server-keyring` |
+
+### `backup.binlogServer.keyringSecret.key`
+
+The key within the Secret that holds the keyring JSON. Defaults to `keyring.json`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `keyring.json` |
+
 ### `backup.binlogServer.connectTimeout`
 
 Timeout in seconds for establishing a connection to MySQL. 

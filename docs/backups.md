@@ -55,4 +55,7 @@ You can create backups in two ways:
 
 ## Point-in-time recovery
 
-Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to [restore to a specific GTID or timestamp](backups-pitr.md). That flow uses a binlog server and object storage alongside your normal backup configuration.
+Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to [restore to a specific GTID or timestamp](backups-restore-pitr.md). [Enable binlog collection](backups-pitr.md#enable-binlog-collection) to stream binlogs to the object
+storage alongside your normal backup configuration.
+
+You can also [encrypt binlogs](backups-pitr.md#binlog-encryption) for an additional security layer.
