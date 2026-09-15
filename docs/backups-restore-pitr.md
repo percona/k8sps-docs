@@ -16,6 +16,7 @@ To restore from a base backup without replaying binlogs, see [Restore on the sam
 * Make a base backup **before** the target time or transaction
 * Choose a target timestamp (`type: date`) or a GTID set (`type: gtid`)
 * Set the `spec.backup.backoffLimit=0` in the cluster Custom Resource so a failed PITR Job does not retry automatically ([known limitations](backups-pitr.md#known-limitations))
+* If the source verified S3 with a custom CA, follow [Use a custom CA](#use-a-custom-ca)
 
 ## Restore on the same cluster
 
@@ -81,7 +82,7 @@ The Operator starts a temporary Binlog Server from `spec.pitr.backupSource.binlo
 * Target cluster is running
 * User password Secret matches the source cluster. Copy it as described in [Preconditions](backups-restore-to-new-cluster.md#preconditions)
 * If the base backup was [encrypted](backups-encrypted.md), create the same encryption-key Secret on the target and set `spec.backupSource.storage.encryptionKeySecret`
-* If the source verified S3 with a [custom CA](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), set `caBundle` on `spec.backupSource.storage.s3` and on `spec.pitr.backupSource.binlogServer.storage.s3`. See [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca).
+* If the source verified S3 with a custom CA, follow [Use a custom CA](#use-a-custom-ca)
 
 Keep these three prefixes distinct:
 
@@ -155,6 +156,7 @@ spec:
 | Stop at a GTID | `pitr.type: gtid` and `pitr.gtid` instead of `date` |
 | Restore a GCS base backup | `backupSource.destination` (`gs://…`), `storage.type: gcs`, and the `gcs` keys. Binlogs stay under `pitr.backupSource.binlogServer.storage.s3` |
 | Decrypt an encrypted backup | Uncomment `encryptionKeySecret` |
+| Use a custom CA | Follow [Use a custom CA](#use-a-custom-ca) |
 
 
 Start the restore:
@@ -167,6 +169,71 @@ kubectl apply -f deploy/backup/restore.yaml -n <namespace>
 
 * [Enable binlog collection](backups-pitr.md#enable-binlog-collection) on the restored cluster with a **new** prefix if you share the source bucket.
 * Take a fresh base backup to start a new timeline.
+
+## Use a custom CA
+
+If the source used a [custom CA](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage) to verify TLS to S3, the restore Job must trust that CA. You do this on the cluster where the restore runs.
+
+On the **same cluster**, if `caBundle` is already set on backup storage and on [Binlog Server](backups-pitr.md#verify-tls-with-a-custom-ca), run the restore as in [Restore on the same cluster](#restore-on-the-same-cluster). The Operator reads the settings from the cluster's Custom resource.
+
+On a **new cluster**, or whenever you restore with `backupSource`, do the following:
+
+1. Create a CA Secret on the **target** cluster from the same CA file you used on the source. See [Create a CA Secret](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
+
+    ```bash
+    kubectl create secret generic minio-ca-bundle \
+      --from-file=ca.crt=/path/to/ca.crt -n <target-namespace>
+    ```
+
+2. Set `caBundle` on `spec.backupSource.storage.s3` so the Operator can download the base backup.
+
+3. Set `caBundle` on `spec.pitr.backupSource.binlogServer.storage.s3` so the temporary Binlog Server can download binlogs.
+
+    ```yaml
+    apiVersion: ps.percona.com/v1
+    kind: PerconaServerMySQLRestore
+    metadata:
+      name: restore-pitr-custom-ca
+    spec:
+      clusterName: ps-cluster1
+      backupSource:
+        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+        storage:
+          type: s3
+          verifyTLS: true
+          s3:
+            bucket: S3-BUCKET-NAME
+            credentialsSecret: ps-cluster1-s3-credentials
+            region: us-west-2
+            endpointUrl: https://minio-service:9000
+            prefix: <BACKUP-PREFIX>
+            caBundle:
+              name: minio-ca-bundle
+              key: ca.crt
+      pitr:
+        type: date
+        date: "2026-03-20 09:15:00"
+        backupSource:
+          binlogServer:
+            storage:
+              s3:
+                bucket: S3-BINLOG-BUCKET-NAME
+                credentialsSecret: ps-cluster1-s3-credentials
+                region: us-west-2
+                endpointUrl: https://minio-service:9000
+                prefix: binlogs
+                caBundle:
+                  name: minio-ca-bundle
+                  key: ca.crt
+    ```
+
+4. Start the restore:
+    
+    ```bash
+    kubectl apply -f deploy/backup/restore.yaml -n <target-namespace>
+    ```
+ 
+5. [Watch the restore](#view-restore-details). If TLS verification fails, see [Restore from S3 storage that uses a custom CA](debug-backup-restore.md#restore-from-s3-storage-that-uses-a-custom-ca).
 
 ## Ignore SQL errors during binlog replay
 
