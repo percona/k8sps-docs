@@ -17,7 +17,14 @@ Group replication is generally available and is the recommended topology for pro
 * Changing the replication type on a **running** cluster is not supported. Pause the cluster, change `spec.mysql.clusterType`, then resume it. See [Change replication type](change-replication-type.md).
 * Semi-synchronous replication is not supported. Use group replication or asynchronous replication.
 * Group replication supports a maximum of **9** MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See [Architecture](architecture.md#group-replication).
-* Safe defaults require at least **3** MySQL instances for group replication, an **odd** replica count, and (for asynchronous replication) Orchestrator size of **3 or greater and odd**. You must set the matching [`unsafeFlags`](operator.md#operator-unsafeflags-section) option to go below those limits.
+* Safe defaults for the cluster depend on the replication type. You must set the matching [`unsafeFlags`](operator.md#operator-unsafeflags-section) option to go outside these limits:
+    
+    * **Group replication:** at least **3** MySQL instances and an **odd** replica count with the maximum of **9** members. To exceed this number or to configure an even number of members requires setting the `unsafeFlags.mysqlSize` option.
+    * **Asynchronous replication:** at least **2** MySQL instances. Even counts are allowed starting with Operator version 1.3.0, because no quorum is required during asynchronous replication. The Orchestrator size must still be **3 or greater and odd**. 
+        
+        To deploy a single-instance cluster (`mysql.size: 1`) requires setting `unsafeFlags.mysqlSize`. 
+        To override the number of Orchestrator instances, set `unsafeFlags.orchestratorSize`.
+    
 * HAProxy and MySQL Router cannot be enabled at the same time. MySQL Router is available only with group replication. Asynchronous replication requires HAProxy (unless you set `unsafeFlags.proxy`).
 * The cluster Custom Resource `metadata.name` must include only URL-compatible characters, must not exceed 22 characters, must start with an alphabetic character, and must end with an alphanumeric character.
 

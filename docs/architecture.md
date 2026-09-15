@@ -38,6 +38,7 @@ With asynchronous replication, writes complete on the primary instance without w
 * **Consistency** - Eventual consistency: replicas may lag behind the primary instance, which can affect applications requiring real-time data. There is a risk that some transactions committed on the primary may be lost if it fails before replicas catch up.
 * **Write scaling** - Does not allow for horizontal write scaling; scaling writes relies on vertical scaling, which is increasing the resources (RAM, CPU) of the primary instance, rather than on adding more write nodes.
 * **Failover** - Orchestrator handles automatic primary election and replication topology recovery.
+* **Cluster size** - You can run 2 or more MySQL instances, including an even count. 
 * **Status** - Currently in tech preview and not recommended for production use.
 
 ### Group replication
