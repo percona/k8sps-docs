@@ -20,17 +20,20 @@ Group replication is generally available and is the recommended topology for pro
 * Safe defaults for the cluster depend on the replication type. You must set the matching [`unsafeFlags`](operator.md#operator-unsafeflags-section) option to go outside these limits:
     
     * **Group replication:** at least **3** MySQL instances and an **odd** replica count with the maximum of **9** members. To exceed this number or to configure an even number of members requires setting the `unsafeFlags.mysqlSize` option.
-    * **Asynchronous replication:** at least **2** MySQL instances. Even counts are allowed starting with Operator version 1.3.0, because no quorum is required during asynchronous replication. The Orchestrator size must still be **3 or greater and odd**. 
-        
-        To deploy a single-instance cluster (`mysql.size: 1`) requires setting `unsafeFlags.mysqlSize`. 
+    * **Asynchronous replication:** at least **2** MySQL instances. Even counts are allowed starting with Operator version 1.3.0, because no quorum is required during asynchronous replication. The Orchestrator size must still be **3 or greater and odd**.
+
+        With `mysql.size: 2`, the cluster has one primary and one replica. The Operator takes backups from the replica and stops replication for the duration of the backup. During that window the replica does not apply changes from the primary, so you have no up-to-date standby until replication resumes.
+
+        To deploy a single-instance cluster (`mysql.size: 1`) requires setting `unsafeFlags.mysqlSize`.
         To override the number of Orchestrator instances, set `unsafeFlags.orchestratorSize`.
-    
+
 * HAProxy and MySQL Router cannot be enabled at the same time. MySQL Router is available only with group replication. Asynchronous replication requires HAProxy (unless you set `unsafeFlags.proxy`).
 * The cluster Custom Resource `metadata.name` must include only URL-compatible characters, must not exceed 22 characters, must start with an alphabetic character, and must end with an alphanumeric character.
 
 ## Backups and restores
 
 * The Operator stores backups in cloud object storage only. These object storages are supported: AWS S3 and S3-compatible storages, Microsoft Azure Blob Storage, Google Cloud Storage. Local filesystem backups are not supported.
+* In clusters with [asynchronous replication](architecture.md#asynchronous-replication-tech-preview), the Operator takes backups from a replica and stops replication while the backup runs. With `mysql.size: 2`, that replica is the only standby. See [Replication and topology](#replication-and-topology).
 * Backup compression supports only the `zstd` algorithm. `lz4` is not supported yet.
 * When several [scheduled backups](backups-scheduled.md#managing-multiple-backup-schedules-in-the-same-storage) use the **same storage location**:
   
