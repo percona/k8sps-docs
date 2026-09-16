@@ -2881,6 +2881,32 @@ The number of retries to make a backup (by default, 6 retries are made).
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `6` |
 
+### `backup.allowParallel`
+
+Allows more than one backup for this cluster to run at the same time. When `false` (default), the Operator runs backups for the cluster sequentially. See [Run multiple backups](backups.md#run-multiple-backups).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `backup.startingDeadlineSeconds`
+
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as failed. The backup can wait if the cluster isn't ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](backup-cr.md#startingdeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
+
+### `backup.suspendedDeadlineSeconds`
+
+The maximum time, in seconds, a [suspended](cr-statuses.md#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline. 
+
+Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds`](backup-cr.md#suspendeddeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
+
 ### `backup.storages.STORAGE-NAME.type`
 
 The cloud storage type used for backups. The following types are supported: `s3`, `gcs` and `azure`.

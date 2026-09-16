@@ -298,9 +298,10 @@ Common fields:
 | `""` | Backup is created but not processed yet. |
 | `Starting` | Backup is starting. |
 | `Running` | Backup is in progress. |
+| `Suspended` | The cluster became unready while the backup was running. The Operator pauses the backup Job and resumes it automatically once the cluster is ready again. This restarts the backup from the beginning rather than continuing it. If the cluster doesn't become ready before `suspendedDeadlineSeconds` expires, the backup moves to `Failed`. |
 | `Succeeded` | Backup completed successfully. |
-| `Error` | Backup failed to start (for example, the cluster is not ready, backups are disabled, or the storage name is missing). Check `status.stateDescription`. This state is terminal; fix the cause and create a new backup. |
-| `Failed` | Backup started but failed during execution. Check `status.stateDescription` and the backup Job logs. |
+| `Error` | Backup failed to start (for example, backups are disabled, the storage name is missing, or `startingDeadlineSeconds` expired while waiting for the cluster to be ready or for another backup to complete). Check `status.stateDescription`. This state is terminal; fix the cause and create a new backup. |
+| `Failed` | Backup started but failed during execution — for example, a suspended backup did not resume before `suspendedDeadlineSeconds` expired (`stateDescription: backup did not resume before suspendedDeadlineSeconds expired`). Check `status.stateDescription` and the backup Job logs. |
 
 For troubleshooting steps, see [Troubleshoot backups and restores](debug-backup-restore.md).
 
