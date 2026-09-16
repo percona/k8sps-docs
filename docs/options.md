@@ -20,6 +20,14 @@ The Operator applies your configuration to all MySQL Pods as follows:
 * If any variable is **removed**, the Operator applies the changes with a rolling restart of
   the MySQL StatefulSet.
 
+## Configuration compatibility considerations
+
+The Operator passes configuration options you define to MySQL as-is. It does not check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.
+
+Before you apply a change, check the variable's requirements and restrictions for your topology in the [MySQL Group Replication requirements :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html), [CHANGE REPLICATION SOURCE TO :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html), and [Percona Server for MySQL :octicons-link-external-16:](https://docs.percona.com/percona-server/8.4/) documentation.
+
+For example, Group Replication requires `log_replica_updates=ON` so members record replicated transactions in their binary logs for distributed recovery. Setting it to `OFF` is incompatible with Group Replication.
+
 ## Edit the `deploy/cr.yaml` file
 
 You can add options from the
@@ -45,7 +53,7 @@ You can use a ConfigMap to pass configuration options. A ConfigMap allows
 Kubernetes to pass or update configuration data inside a containerized
 application.
 
-Use the `kubectl` command to create the configmap from external
+Use the `kubectl` command to create the ConfigMap from external
 resources, for more information see [Configure a Pod to use a
 ConfigMap :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-a-configmap).
 
@@ -175,6 +183,10 @@ Use dynamic updates when you need to tune a live cluster without a rolling
 restart. Typical cases include raising `max_connections` during peak traffic,
 adjusting I/O-related settings or enabling query logging to investigate an
 incident.
+
+!!! warning
+
+    The Operator does not validate options against your replication type. Dynamic updates skip a rolling restart, so an incompatible value takes effect on the running cluster. Review [Configuration compatibility considerations](#configuration-compatibility-considerations) before you apply a change.
 
 ### How the Operator treats dynamic options
 
