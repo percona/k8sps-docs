@@ -9,7 +9,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="A base backup captures your data at a single moment in time. Restoring from such a backup is enough in many cases. However, if you need to undo a bad migration, recover right before someone dropped the wrong table, or meet a tighter recovery point, a base backup alone won’t give you that level of precision.">
+        <meta name="description" content="A base backup captures your data at a single moment. That is enough in many cases. If you need to undo a bad migration, recover right before someone dropped the wrong table or meet a tighter recovery point, a base backup alone won’t give you that level of
+precision. You also need the binary logs generated after that backup. A binary
+log records all changes made to the database, such as updates,
+inserts, and deletes.">
       
       
         <meta name="author" content="Percona LLC">
@@ -18,10 +21,10 @@
         <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/1.2.0/backups-pitr.html">
       
       
-        <link rel="prev" href="backups-ondemand.html">
+        <link rel="prev" href="backups-encrypted.html">
       
       
-        <link rel="next" href="backups-compressed.html">
+        <link rel="next" href="backups-restore-pitr.html">
       
       
         
@@ -32,7 +35,7 @@
     
     
       
-        <title>Point-in-time recovery - Percona Operator for MySQL based on Percona Server for MySQL</title>
+        <title>About point-in-time recovery - Percona Operator for MySQL based on Percona Server for MySQL</title>
       
     
     
@@ -102,7 +105,7 @@
                  
                  
                  <meta property="og:type" content="website" />
-                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Point-in-time recovery" />
+                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - About point-in-time recovery" />
                     <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/assets/images/kubernetes-operators.png">
                     <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/">
                 </head>
@@ -130,7 +133,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#point-in-time-recovery" class="md-skip">
+        <a href="#point-in-time-recovery-pitr" class="md-skip">
           Skip to content
         </a>
       
@@ -239,7 +242,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Point-in-time recovery
+              About point-in-time recovery
             
           </span>
         </div>
@@ -1499,147 +1502,6 @@
                 
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Point-in-time recovery
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="backups-pitr.html" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Point-in-time recovery
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#how-the-operator-performs-pointintime-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How the Operator performs point‑in‑time recovery
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#recovery-modes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Recovery modes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#binary-log-collection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Binary log collection
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#point-in-time-recovery-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Point-in-time recovery workflow
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#implementation-specifics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Implementation specifics
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#known-limitations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Known limitations
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
   
   
     <li class="md-nav__item">
@@ -1687,6 +1549,221 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Point-in-time recovery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="backups-pitr.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recovery-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recovery modes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enable-binlog-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable binlog collection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-specifics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementation specifics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known limitations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-restore-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Restore with point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -5056,10 +5133,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#how-the-operator-performs-pointintime-recovery" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How the Operator performs point‑in‑time recovery
+        How it works
       
     </span>
   </a>
@@ -5078,21 +5155,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#binary-log-collection" class="md-nav__link">
+  <a href="#enable-binlog-collection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Binary log collection
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#point-in-time-recovery-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Point-in-time recovery workflow
+        Enable binlog collection
       
     </span>
   </a>
@@ -5151,22 +5217,48 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="point-in-time-recovery">Point-in-time recovery<a class="headerlink" href="#point-in-time-recovery" title="Permanent link">&para;</a></h1>
+<h1 id="point-in-time-recovery-pitr">Point-in-time recovery (PITR)<a class="headerlink" href="#point-in-time-recovery-pitr" title="Permanent link">&para;</a></h1>
 <div class="admonition admonition">
-<p>This feature is in the tech preview stage. The behavior can change in future releases.</p>
+<p>This feature is in the tech preview stage. The behavior can change in future releases. We don&rsquo;t recommend using it in production yet, but we encourage you to try it out and share your feedback.</p>
 </div>
-<p>A base backup captures your data at a single moment in time. Restoring from such a backup is enough in many cases. However, if you need to undo a bad migration, recover right before someone dropped the wrong table, or meet a tighter recovery point, a base backup alone won&rsquo;t give you that level of precision.</p>
-<p>To address these use cases, you must be able to restore the database to a specific point in time or to a specific transaction. To do that means to apply the binary logs generated after the backup up to that particular point/transaction target, as they contain all subsequent database changes leading to it. This process is called point-in-time recovery and is available in the Operator starting with version <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.html">1.1.0</a>.</p>
-<p>This feature is in the tech preview stage. We don&rsquo;t recommend using it in production yet, but we encourage you to try it out and share your feedback.</p>
-<h2 id="how-the-operator-performs-pointintime-recovery">How the Operator performs point‑in‑time recovery<a class="headerlink" href="#how-the-operator-performs-pointintime-recovery" title="Permanent link">&para;</a></h2>
-<p>The Operator implements point-in-time recovery in two stages:</p>
+<p>A base backup captures your data at a single moment. That is enough in many cases. If you need to undo a bad migration, recover right before someone dropped the wrong table or meet a tighter recovery point, a base backup alone won&rsquo;t give you that level of
+precision. You also need the binary logs generated after that backup. A binary
+log records all changes made to the database, such as updates,
+inserts, and deletes.</p>
+<p>Point-in-time recovery restores the closest base backup, then applies those binary logs up to a timestamp or a specific transaction target (GTID). It is available starting with Operator <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.html">1.1.0</a>.</p>
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<p>The Operator uses <a href="#enable-binlog-collection">Percona Binlog Server</a> to collect binary logs continuously. The Binlog Server connects to MySQL
+as a replication client and uploads binlogs to a dedicated S3-compatible
+object storage location. The Binlog Server can resume collection automatically
+after being interrupted or stopped.  </p>
+<p>When you start a restore with a point-in-time target, the Operator:</p>
 <ol>
-<li>Restores a base physical backup taken with <code>PerconaXtraBackup</code></li>
-<li>Replays binary logs on top of the base backup to bring the database to the desired point in time or transaction. A binary log records all changes made to the database, such as updates, inserts, and deletes.</li>
+<li>Finds the binlogs needed for that target</li>
+<li>Pauses the cluster</li>
+<li>Restores the closest base physical backup taken with Percona XtraBackup</li>
+<li>
+<p>Runs the point-in-time recovery Job that:</p>
+<ul>
+<li>Starts a temporary <code>mysqld</code> instance</li>
+<li>Retrieves binlogs from the storage and applies them to the
+<code>mysql</code> client</li>
+<li>Shuts down the temporary <code>mysqld</code> instance</li>
+</ul>
+</li>
+<li>
+<p>Re-bootstraps the cluster from the restored data</p>
+</li>
 </ol>
-<p>The Operator decodes binary logs using the <code>mysqlbinlog</code> client and applies them sequentially.</p>
+<pre class="mermaid"><code>flowchart LR
+        PS["Percona Server&lt;br/&gt;primary"]
+        BS["Binlog Server"]
+        S3["S3-compatible&lt;br/&gt;storage"]
+        PS --&gt;|"binary logs"| BS
+        BS --&gt;|"archived binlogs"| S3</code></pre>
+<p>Point-in-time recovery is supported for group replication and asynchronous replication. GTID mode must be on (it is on by default).</p>
 <h2 id="recovery-modes">Recovery modes<a class="headerlink" href="#recovery-modes" title="Permanent link">&para;</a></h2>
-<p>You can restore the database up to a specific moment in time or up to a specific transaction. You specify the desired mode in the <code>PerconaServerMySQLRestore</code> object:</p>
+<p>You can restore up to a specific moment in time or
+up to a specific transaction. Specify the target in the <code>PerconaServerMySQLRestore</code> object:</p>
 <table>
 <thead>
 <tr>
@@ -5191,15 +5283,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h2 id="binary-log-collection">Binary log collection<a class="headerlink" href="#binary-log-collection" title="Permanent link">&para;</a></h2>
-<p>The Operator requires binary logs (binlogs) for point-in-time recovery. The Operator collects them using the Percona Binlog Server command‑line utility. The Binlog Server connects to MySQL as a replication client and uploads binlogs to a dedicated object storage location. It can resume collection automatically after being interrupted or stopped.</p>
-<pre class="mermaid"><code>flowchart LR
-        PS["Percona Server&lt;br/&gt;primary"]
-        BS["Binlog Server &lt;br/&gt; replication client &lt;br/&gt; GTID mode"]
-        S3["S3-compatible&lt;br/&gt;storage"]
-        PS --&gt;|"binary logs"| BS
-        BS --&gt;|"archived binlogs"| S3</code></pre>
-<p>To enable binlog collection, configure the <code>spec.backup.pitr</code> section in your Custom Resource:</p>
+<h2 id="enable-binlog-collection">Enable binlog collection<a class="headerlink" href="#enable-binlog-collection" title="Permanent link">&para;</a></h2>
+<p>Binlog collection needs its own S3 (or S3-compatible) location, separate from base backup storage. You must set a folder on the bucket with the <code>prefix</code> option. You cannot change that prefix later. Only one Binlog Server Pod is allowed.</p>
+<ol>
+<li>
+<p>Configure the <code>spec.backup.pitr</code> section in your Custom Resource:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">pitr</span><span class="p">:</span>
@@ -5211,30 +5299,21 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-s3-secret</span>
 <span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
 <span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
-<span class="w">            </span><span class="nt">endpointURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://s3.amazonaws.com</span>
+<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://s3.amazonaws.com</span><span class="w"> </span><span class="c1"># Required for S3-compatible storage. Omit for AWS S3</span>
 </code></pre></div>
-<p>After you apply the changes, the Operator starts the Percona Binary log Server Pod, which continuously collects binlogs and stores them in the configured location.</p>
-<h2 id="point-in-time-recovery-workflow">Point-in-time recovery workflow<a class="headerlink" href="#point-in-time-recovery-workflow" title="Permanent link">&para;</a></h2>
-<p>Let&rsquo;s have a closer look at how point-in-time recovery works:</p>
-<p>When you trigger a restore with a point-in-time recovery target, the Operator does the following:</p>
-<ol>
-<li>Execs into the Binlog Server Pod and searches for the required binlogs</li>
-<li>Pauses the cluster</li>
-<li>Identifies the closest base backup leading to that point and restores it</li>
-<li>
-<p>Runs the point-in-time recovery Job that:</p>
-<ul>
-<li>Starts a temporary <code>mysqld</code> instance</li>
-<li>Retrieves binlogs from the storage and applies them to the <code>mysql</code> client</li>
-<li>Shuts down the temporary <code>mysqld</code> instance</li>
-</ul>
 </li>
 <li>
-<p>Rebootstraps the cluster based on the restored dataset.</p>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>The Operator starts the Binlog Server Pod. Confirm it is running:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>binlog
+</code></pre></div>
 </li>
 </ol>
-<p>For how to configure and start a point-in-time recovery, refer to the <a href="backups-restore.html#restore-with-point-in-time-recovery">Make a restore with point-in-time recovery on the same cluster</a> and <a href="backups-restore-to-new-cluster.html#restore-with-point-in-time-recovery">Make a restore with point-in-time recovery on the new cluster</a> tutorials.</p>
-<p>With point-in-time recovery, you get finer control over when you come back online, which improves recovery point objective (RPO)</p>
+<p>To restore, use <a href="backups-restore-pitr.html">Restore with point-in-time recovery</a>.</p>
 <h2 id="implementation-specifics">Implementation specifics<a class="headerlink" href="#implementation-specifics" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Point-in-time recovery is supported for both asynchronous and group replication topologies.</li>
@@ -5248,57 +5327,26 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Also see <a href="limitations.html#point-in-time-recovery">Known limitations</a> for a summary of Operator-wide constraints that affect this feature.</p>
 <ul>
 <li>
-<p>The Binlog Server currently supports only AWS S3 and S3-compatible storage services for streaming binlogs. Use the same practices as backups: provide credentials via Kubernetes Secrets, set the endpoint URL (including scheme if required), region, and TLS options to match your environment.</p>
+<p><strong>AWS S3 and S3-compatible storage</strong> are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and TLS options to match your environment.</p>
 </li>
 <li>
-<p>If the Operator user password is different from the password saved in the base backup, point-in-time recovery will fail. You must take a new full backup after changing the Operator user password to ensure point-in-time recovery works.</p>
+<p><strong>You cannot change the <code>prefix</code> value for the binlog bucket</strong> after you configure Binlog Server.</p>
 </li>
-<li>
-<p>During point-in-time recovery, updates made by <code>mysql-shell</code> can result in replication errors such as:</p>
-</li>
+<li><strong>Data-at-rest encryption is not supported</strong> with point-in-time recovery.</li>
+<li><strong>Password change.</strong> If the Operator user password differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password.</li>
+<li><strong>Restore retries are not idempotent.</strong> If recovery fails after the base backup is restored, a retry does not restore the full backup again. Set <code>spec.backup.backoffLimit=0</code> in <code>cr.yaml</code> to prevent automatic Job retries.</li>
+<li><strong>Binlog storage is separate</strong> from base backup storage. During the in-place restore on the same cluster, the Operator uses the settings defined in the <code>spec.backup.pitr.binlogServer</code> of the cluster&rsquo;s Custom Resource. For a cross-cluster restore, specify the Binlog storage settings
+under <code>spec.pitr.backupSource.binlogServer</code> in the restore
+object.</li>
+<li><strong>Large buckets.</strong> Too many objects in the binlog bucket can leave Binlog Server in CrashLoopBackOff. Monitor object count and delete old binlogs. See <a href="debug-backup-restore.html#point-in-time-recovery">Troubleshoot point-in-time recovery</a>.</li>
 </ul>
-<div class="highlight"><pre><span></span><code>2026-04-15T10:58:08.911878Z 11 [ERROR] [MY-010584] [Repl] Replica SQL: Could not execute Update_rows event on table mysql_innodb_cluster_metadata.instances; Can't find record in 'instances', Error_code: 1032; handler error HA_ERR_KEY_NOT_FOUND; the event's source log FIRST, end_log_pos 162397, Error_code: MY-001032
-</code></pre></div>
-<p>If you want to ignore such errors, add <code>force: true</code> to the PITR section of your restore spec:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster1</span>
-<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-04-16</span><span class="nv"> </span><span class="s">21:12:00"</span>
-</code></pre></div>
-<p>The <code>force: true</code> option enables the <code>--force</code> flag with the MySQL client and will silently ignore all SQL errors during binlog replay. <strong>Warning:</strong> This might result in data loss if underlying replication or data integrity errors are ignored.</p>
-<ul>
-<li>
-<p>Binlog storage for point-in-time recovery is configured separately from base backup storage. The Operator uses the settings under <code>spec.backup.pitr.binlogServer</code> of the cluster Custom Resource during the in-place restore on the same cluster. For cross-cluster restore, specify the Binlog storage settings under <code>spec.pitr.backupSource.binlogServer</code> in the restore object.</p>
-</li>
-<li>
-<p>Point-in-time recovery job retries are not idempotent. If recovery fails after the base backup is restored, a retry will not restore the full backup again to reset the state. We recommend setting <code>spec.backup.backoffLimit=0</code> in your <code>cr.yaml</code> to prevent automatic job retries.</p>
-</li>
-<li>
-<p>If something fails mid-restore, use the same discipline as with any restore: inspect <strong><code>PerconaServerMySQLRestore</code> status</strong>, the <strong>restore and PITR jobs</strong>, and refer to our <a href="debug-backup-restore.html">Restore troubleshooting guide</a>.\</p>
-</li>
-<li>
-<p>Data at rest encryption is not supported with point-in-time recovery.</p>
-</li>
-<li>
-<p>You cannot change the prefix for the Binlog Server.</p>
-</li>
-<li>
-<p>The Binlog Server may encounter issues if the number of objects in the point-in-time recovery bucket becomes too high. In such situations, the Binlog Server can get stuck and enter a CrashLoopBackOff state, unable to proceed with point-in-time recovery operations. This is due to how the Binlog Server processes or lists these objects internally. To recover from this state, you need to delete old objects from the bucket manually. If the issue isn&rsquo;t caught within the binlog&rsquo;s expiration period, restoring the database becomes significantly more difficult. To reduce the risk of getting into this situation, monitor the object count in your point-in-time recovery bucket and clean up binlogs regularly.</p>
-</li>
-</ul>
+<p>If a restore fails, inspect the <code>PerconaServerMySQLRestore</code> status and the restore and PITR Jobs. See <a href="debug-backup-restore.html">Troubleshoot backups and restores</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 8, 2026 15:16:19 UTC">September 8, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
         <br>
         Created:

@@ -9,19 +9,19 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Reconciliation is the process by which the Operator continuously compares the desired state with the actual state of the cluster. The desired state is defined in a Kubernetes custom resource, like PerconaServerMySQL.">
+        <meta name="description" content="Use this guide to restore your database up to a specific moment or a transaction target.">
       
       
         <meta name="author" content="Percona LLC">
       
       
-        <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/1.2.0/reconciliation-concurrency.html">
+        <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/1.2.0/backups-restore-pitr.html">
       
       
-        <link rel="prev" href="dns-suffix.html">
+        <link rel="prev" href="backups-pitr.html">
       
       
-        <link rel="next" href="debug.html">
+        <link rel="next" href="backups-restore.html">
       
       
         
@@ -32,7 +32,7 @@
     
     
       
-        <title>Configure concurrent reconciliation - Percona Operator for MySQL based on Percona Server for MySQL</title>
+        <title>Restore with point-in-time recovery - Percona Operator for MySQL based on Percona Server for MySQL</title>
       
     
     
@@ -102,7 +102,7 @@
                  
                  
                  <meta property="og:type" content="website" />
-                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Configure concurrent reconciliation" />
+                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Restore with point-in-time recovery" />
                     <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/assets/images/kubernetes-operators.png">
                     <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/">
                 </head>
@@ -130,7 +130,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configure-concurrency-for-a-cluster-reconciliation" class="md-skip">
+        <a href="#perform-a-point-in-time-recovery" class="md-skip">
           Skip to content
         </a>
       
@@ -239,7 +239,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Configure concurrent reconciliation
+              Restore with point-in-time recovery
             
           </span>
         </div>
@@ -1205,18 +1205,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1237,7 +1239,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1308,18 +1310,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" checked>
         
           
           <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
@@ -1340,7 +1344,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1551,18 +1555,20 @@
                 
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" checked>
         
           
           <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
@@ -1583,7 +1589,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6_3_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1626,10 +1632,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="backups-restore-pitr.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Restore with point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="backups-restore-pitr.html" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1645,6 +1678,142 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-begin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before you begin
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-on-the-same-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore on the same cluster
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-on-a-new-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore on a new cluster
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Restore on a new cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retrieve-the-backup-destination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retrieve the backup destination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-the-restore-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create the restore object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-the-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After the restore
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ignore-sql-errors-during-binlog-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ignore SQL errors during binlog replay
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#view-restore-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        View restore details
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -3259,20 +3428,18 @@
       
   
   
-    
   
   
-  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
         
           
           <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
@@ -3293,7 +3460,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             
@@ -3448,37 +3615,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Configure concurrent reconciliation
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="reconciliation-concurrency.html" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="reconciliation-concurrency.html" class="md-nav__link">
         
   
   
@@ -3494,37 +3634,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#set-the-number-of-reconciliation-workers" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Set the number of reconciliation workers
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -5032,7 +5141,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
                     <div data-banner="data-banner" class="edit-contrib-banner">
     <div class="banner-content">
       <!-- Edit link centered -->
-      <a href="https://github.com/percona/k8sps-docs/edit/main/docs/reconciliation-concurrency.md" title="Edit this page on GitHub" class="edit-page-link">
+      <a href="https://github.com/percona/k8sps-docs/edit/main/docs/backups-restore-pitr.md" title="Edit this page on GitHub" class="edit-page-link">
         <span class="edit-page-icon">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
@@ -5082,10 +5191,115 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-the-number-of-reconciliation-workers" class="md-nav__link">
+  <a href="#before-you-begin" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Set the number of reconciliation workers
+        Before you begin
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-on-the-same-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore on the same cluster
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-on-a-new-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore on a new cluster
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Restore on a new cluster">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retrieve-the-backup-destination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retrieve the backup destination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-the-restore-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create the restore object
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-the-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After the restore
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ignore-sql-errors-during-binlog-replay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ignore SQL errors during binlog replay
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#view-restore-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        View restore details
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
       
     </span>
   </a>
@@ -5115,66 +5329,230 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     
       
     
-    <a href="https://github.com/percona/k8sps-docs/raw/main/docs/reconciliation-concurrency.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/percona/k8sps-docs/raw/main/docs/backups-restore-pitr.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="configure-concurrency-for-a-cluster-reconciliation">Configure concurrency for a cluster reconciliation<a class="headerlink" href="#configure-concurrency-for-a-cluster-reconciliation" title="Permanent link">&para;</a></h1>
-<p>Reconciliation is the process by which the Operator continuously compares the desired state with the actual state of the cluster. The desired state is defined in a Kubernetes custom resource, like PerconaServerMySQL.</p>
-<p>If the actual state does not match the desired state, the Operator takes actions to bring the system into alignment. This means creating, updating, or deleting Kubernetes resources (Pods, Services, ConfigMaps, etc.) or performing database-specific operations like scaling, backups, or failover.</p>
-<p>Reconciliation is triggered by a variety of events, including:</p>
+<h1 id="perform-a-point-in-time-recovery">Perform a point-in-time recovery<a class="headerlink" href="#perform-a-point-in-time-recovery" title="Permanent link">&para;</a></h1>
+<p>Use this guide to restore your database up to a specific moment or a transaction target. </p>
+<p>You can restore in place on the <a href="#restore-on-the-same-cluster">same cluster</a> or onto a <a href="#restore-on-a-new-cluster">new cluster</a>. In both cases the Operator restores a base backup and then replays binary logs up to a timestamp or a GTID.</p>
+<p>To restore from a base backup without replaying binlogs, see <a href="backups-restore.html">Restore on the same cluster</a> or <a href="backups-restore-to-new-cluster.html">Restore on a new cluster</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>During point-in-time recovery, the Operator pauses the cluster, restores the base backup, applies binlogs up to your target, then brings the cluster back online. Binlog Server must be running so the Operator can find the required binlogs before it pauses. For more information about the workflow, see <a href="backups-pitr.html#how-it-works">How it works</a>.</p>
+</div>
+<h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Changes to the cluster configuration</li>
-<li>Changes to the cluster state</li>
-<li>Changes to the cluster resources</li>
+<li><a href="backups-pitr.html#enable-binlog-collection">Enable binlog collection</a> on the source cluster</li>
+<li>Make a base backup <strong>before</strong> the target time or transaction</li>
+<li>Choose a target timestamp (<code>type: date</code>) or a GTID set (<code>type: gtid</code>)</li>
+<li>Set the <code>spec.backup.backoffLimit=0</code> in the cluster Custom Resource so a failed PITR Job does not retry automatically (<a href="backups-pitr.html#known-limitations">known limitations</a>)</li>
 </ul>
-<p>By default, the Operator has one reconciliation worker. This means that if you deploy or update 2 clusters at the same time, the Operator will reconcile them sequentially.</p>
-<p>The <code>MAX_CONCURRENT_RECONCILES</code> environment variable in the <code>percona-server-mysql-operator</code> deployment controls the number of concurrent workers that can reconcile resources in Percona Server for MySQL clusters in parallel.</p>
-<p>Thus, to extend the previous example, if you set the number of reconciliation workers to <code>2</code>, the Operator will reconcile both clusters in parallel. This also helps you with benchmarking the Operator performance.</p>
-<p>The general recommendation is to set the number of concurrent workers equal to the number of Percona Server for MySQL clusters. When the number of workers is greater, the excessive workers will remain idle.</p>
-<h2 id="set-the-number-of-reconciliation-workers">Set the number of reconciliation workers<a class="headerlink" href="#set-the-number-of-reconciliation-workers" title="Permanent link">&para;</a></h2>
+<h2 id="restore-on-the-same-cluster">Restore on the same cluster<a class="headerlink" href="#restore-on-the-same-cluster" title="Permanent link">&para;</a></h2>
+<p>The Operator reads binlog storage from <code>spec.backup.pitr.binlogServer</code> on the cluster Custom Resource.</p>
 <ol>
 <li>
-<p>Check the current value of the <code>MAX_CONCURRENT_RECONCILES</code> environment variable:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.template.spec.containers[0].env[?(@.name=="MAX_CONCURRENT_RECONCILES")].value}'</span>
+<p>Confirm the cluster is running and list backups:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
-<details class="example">
-<summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>1
-</code></pre></div>
-</details>
 </li>
 <li>
-<p>Set a new value with <code>kubectl set env</code>. The following command sets the number of workers to <code>2</code>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">set</span><span class="w"> </span>env<span class="w"> </span>deployment/percona-server-mysql-operator<span class="w"> </span><span class="nv">MAX_CONCURRENT_RECONCILES</span><span class="o">=</span><span class="m">2</span>
+<p>Edit the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> manifest. Set <code>spec.clusterName</code>, <code>spec.backupName</code>, and the <code>spec.pitr</code> target.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Restore to a timestamp</label><label for="__tabbed_1_2">Restore to a transaction</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Use <code>type: date</code> when you know the wall-clock time to restore to.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-date</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
 </code></pre></div>
-<p>You can set the value to any positive integer.</p>
+</div>
+<div class="tabbed-block">
+<p>Use <code>type: gtid</code> when you know the GTID to stop before. The value has the format <code>source_id:transaction_id</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-gtid</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
+<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
+</code></pre></div>
+</div>
+</div>
+</div>
 </li>
 <li>
-<p>Verify the change by re-running the command from step 1:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.template.spec.containers[0].env[?(@.name=="MAX_CONCURRENT_RECONCILES")].value}'</span>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
-<details class="example">
-<summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>2
-</code></pre></div>
-</details>
 </li>
 </ol>
-<p>After the environment variable is updated, Kubernetes rolls out a new Operator Pod with the new setting.</p>
+<p>Then <a href="#view-restore-details">watch the restore</a>.</p>
+<h2 id="restore-on-a-new-cluster">Restore on a new cluster<a class="headerlink" href="#restore-on-a-new-cluster" title="Permanent link">&para;</a></h2>
+<p>The Operator starts a temporary Binlog Server from <code>spec.pitr.backupSource.binlogServer</code>, fetches binlogs from the <strong>source</strong> storage, then removes that Pod. Binlog storage is S3 or S3-compatible only, even when the base backup is on GCS or Azure.</p>
+<h3 id="checklist">Checklist<a class="headerlink" href="#checklist" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Target cluster is running</li>
+<li>User password Secret matches the source cluster. Copy it as described in <a href="backups-restore-to-new-cluster.html#preconditions">Preconditions</a></li>
+<li>If the base backup was <a href="backups-encrypted.html">encrypted</a>, create the same encryption-key Secret on the target and set <code>spec.backupSource.storage.encryptionKeySecret</code></li>
+</ul>
+<p>Keep these three prefixes distinct:</p>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Where you set it</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backup</td>
+<td><code>spec.backupSource.storage</code></td>
+<td>Same folder as when the backup was taken</td>
+</tr>
+<tr>
+<td>Source binlogs</td>
+<td><code>spec.pitr.backupSource.binlogServer.storage.s3.prefix</code></td>
+<td>Copy from the source cluster&rsquo;s Binlog Server</td>
+</tr>
+<tr>
+<td>Target collection</td>
+<td>cluster <code>spec.backup.pitr.binlogServer</code> <strong>after</strong> restore</td>
+<td>New folder for binlogs this cluster will collect. Must differ from the source prefix if they share a bucket</td>
+</tr>
+</tbody>
+</table>
+<h3 id="retrieve-the-backup-destination">Retrieve the backup destination<a class="headerlink" href="#retrieve-the-backup-destination" title="Permanent link">&para;</a></h3>
+<p>The Operator must know where to take the backup from. Run this command on the <strong>source cluster</strong>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span>&lt;source-namespace&gt;
+</code></pre></div>
+<p>Look for the <code>destination</code> value. You will use it for the restore configuration.</p>
+<h3 id="create-the-restore-object">Create the restore object<a class="headerlink" href="#create-the-restore-object" title="Permanent link">&para;</a></h3>
+<p>Edit <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. Set these keys:</p>
+<ul>
+<li><code>clusterName</code> - the name of the <strong>target cluster</strong> </li>
+<li>
+<p><code>backupSource</code> section:</p>
+<ul>
+<li><code>destination</code> - where the backup is located. See <a href="#retrieve-the-backup-destination">Retrieve the backup destination</a> to learn how to get the backup destination</li>
+<li><code>storage</code> - configure the storage where the backup is stored. Specify the bucket, region, credentials Secret for the Operator to access the storage. If you specified a separate folder for backups on the bucket, specify it for the <code>prefix</code> option.</li>
+</ul>
+</li>
+<li>
+<p><code>pitr</code> section:</p>
+<ul>
+<li><code>type</code> - Set <code>date</code> to restore to a time or <code>gtid</code> to restore to a transaction</li>
+<li><code>date</code> - Specify the time in the format <code>YYY-MM-DD hh:mm:ss</code>. Use if if <code>type=date</code></li>
+<li><code>gtid</code> - Specify the GTID set in the format <code>source_id:transaction_id</code></li>
+<li><code>backupSource.binlogServer</code> - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster’s <code>spec.backup.pitr.binlogServer</code>, including the <code>prefix</code> for the binlog folder.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;BACKUP-PREFIX&gt;</span>
+<span class="w">      </span><span class="c1"># encryptionKeySecret:           # if the base backup was encrypted</span>
+<span class="w">      </span><span class="c1">#   name: my-encryption-key</span>
+<span class="w">      </span><span class="c1">#   key: encryptionKey</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span><span class="w">                         </span><span class="c1"># or gtid</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span><span class="w">        </span><span class="c1"># or gtid: "uuid:1-100"</span>
+<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span><span class="w">            </span><span class="c1"># source binlog folder</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>If you need to…</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stop at a GTID</td>
+<td><code>pitr.type: gtid</code> and <code>pitr.gtid</code> instead of <code>date</code></td>
+</tr>
+<tr>
+<td>Restore a GCS base backup</td>
+<td><code>backupSource.destination</code> (<code>gs://…</code>), <code>storage.type: gcs</code>, and the <code>gcs</code> keys. Binlogs stay under <code>pitr.backupSource.binlogServer.storage.s3</code></td>
+</tr>
+<tr>
+<td>Decrypt an encrypted backup</td>
+<td>Uncomment <code>encryptionKeySecret</code></td>
+</tr>
+</tbody>
+</table>
+<p>Start the restore:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<h3 id="after-the-restore">After the restore<a class="headerlink" href="#after-the-restore" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="backups-pitr.html#enable-binlog-collection">Enable binlog collection</a> on the restored cluster with a <strong>new</strong> prefix if you share the source bucket.</li>
+<li>Take a fresh base backup to start a new timeline.</li>
+</ul>
+<h2 id="ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay<a class="headerlink" href="#ignore-sql-errors-during-binlog-replay" title="Permanent link">&para;</a></h2>
+<p>Updates made by <code>mysql-shell</code> can produce replication errors during replay, for example <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
+<p>To ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code>. This passes <code>--force</code> to the MySQL client.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-04-16</span><span class="nv"> </span><span class="s">21:12:00"</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title"><code>force: true</code> can hide data loss</p>
+<p>The client silently ignores <strong>all</strong> SQL errors during binlog replay, not only metadata errors. Use it only when you accept that risk.</p>
+</div>
+<h2 id="view-restore-details">View restore details<a class="headerlink" href="#view-restore-details" title="Permanent link">&para;</a></h2>
+<p>Point-in-time recovery creates a base restore Job (<code>xb-restore-&lt;name&gt;</code>) and a PITR Job (<code>pitr-restore-&lt;name&gt;</code>). Check both:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<p>If the restore fails, see <a href="debug-backup-restore.html#restores">Troubleshoot backups and restores</a> and <a href="debug-backup-restore.html#point-in-time-recovery">Point-in-time recovery</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:03:14 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:03:14 UTC">July 3, 2026</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
     
   </small>

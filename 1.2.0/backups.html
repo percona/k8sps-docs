@@ -1604,34 +1604,6 @@
   
   
     <li class="md-nav__item">
-      <a href="backups-pitr.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Point-in-time recovery
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="backups-compressed.html" class="md-nav__link">
         
   
@@ -1676,6 +1648,117 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Point-in-time recovery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-restore-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Restore with point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -5176,13 +5259,14 @@ file. This section includes:</p>
     file.</li>
 </ul>
 <h2 id="point-in-time-recovery">Point-in-time recovery<a class="headerlink" href="#point-in-time-recovery" title="Permanent link">&para;</a></h2>
-<p>Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to <a href="backups-pitr.html">restore to a specific GTID or timestamp</a>. That flow uses a binlog server and object storage alongside your normal backup configuration.</p>
+<p>Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to <a href="backups-restore-pitr.html">restore to a specific GTID or timestamp</a>. <a href="backups-pitr.html#enable-binlog-collection">Enable binlog collection</a> to stream binlogs to the object
+storage alongside your normal backup configuration.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
         <br>
         Created:

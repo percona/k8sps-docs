@@ -1498,34 +1498,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../backups-pitr.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Point-in-time recovery
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../backups-compressed.html" class="md-nav__link">
         
   
@@ -1570,6 +1542,117 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Point-in-time recovery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backups-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backups-restore-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Restore with point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -5791,7 +5874,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <p>When you trigger the restore, the Operator starts a temporary Binlog Server using those settings, uses it to locate and fetch the required binlogs from the object storage, and removes it when the restore completes. </p>
 <p>This improvement makes the restore path straightforward. By separating binlog collection on the source cluster from binlog access during restore on the target, the Operator makes disaster recovery and migration scenarios much easier to plan and execute.</p>
 <p>Point-in-time recovery remains a tech preview feature. We do not recommend using it in production environments yet, but we encourage you to try this workflow in staging or test clusters and share your feedback.</p>
-<p>Read more about point-in-time recovery and restore to a new cluster in our <a href="../backups-restore-to-new-cluster.html#restore-with-point-in-time-recovery">documentation</a>.</p>
+<p>Read more about point-in-time recovery and restore to a new cluster in our <a href="../backups-restore-pitr.html#restore-on-a-new-cluster">documentation</a>.</p>
 <h3 id="disable-nodeport-allocation-for-loadbalancer-services">Disable NodePort allocation for LoadBalancer Services<a class="headerlink" href="#disable-nodeport-allocation-for-loadbalancer-services" title="Permanent link">&para;</a></h3>
 <p>By default, Kubernetes assigns a <code>NodePort</code> behind every <code>LoadBalancer</code> Service, even when the underlying load balancer does not require it.</p>
 <p>With this release, you can now turn off <code>NodePort</code> allocation for the <code>LoadBalancer</code> Services created by the Operator. Update your cluster Custom Resource with the following configuration:</p>
@@ -6162,7 +6245,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 17:58:05 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
         <br>
         Created:

@@ -1498,34 +1498,6 @@
   
   
     <li class="md-nav__item">
-      <a href="backups-pitr.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Point-in-time recovery
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="backups-compressed.html" class="md-nav__link">
         
   
@@ -1570,6 +1542,117 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Point-in-time recovery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-restore-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Restore with point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -6049,7 +6132,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tbody>
 </table>
 <h3 id="the-pitrbackupsource-subsection">The <code>pitr.backupSource</code> subsection<a class="headerlink" href="#the-pitrbackupsource-subsection" title="Permanent link">&para;</a></h3>
-<p>This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when <a href="backups-restore-to-new-cluster.html#restore-with-point-in-time-recovery">restoring to a new Kubernetes environment</a>. When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.</p>
+<p>This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when <a href="backups-restore-pitr.html#restore-on-a-new-cluster">restoring to a new Kubernetes environment</a>. When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.</p>
 <h4 id="pitrbackupsourcebinlogserversize"><code>pitr.backupSource.binlogServer.size</code><a class="headerlink" href="#pitrbackupsourcebinlogserversize" title="Permanent link">&para;</a></h4>
 <p>Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. This is the only allowed number. All greater values will be rejected. To learn more, see <a href="backups-pitr.html">Point-in-time recovery</a>.</p>
 <table>
@@ -6459,7 +6542,7 @@ If you are restoring to a new cluster and both the source and target clusters us
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 20, 2026 08:22:37 UTC">August 20, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
         <br>
         Created:

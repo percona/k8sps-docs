@@ -18,7 +18,7 @@
         <link rel="canonical" href="https://docs.percona.com/percona-operator-for-mysql/1.2.0/backups-restore.html">
       
       
-        <link rel="prev" href="backups-encrypted.html">
+        <link rel="prev" href="backups-restore-pitr.html">
       
       
         <link rel="next" href="backups-restore-to-new-cluster.html">
@@ -1502,34 +1502,6 @@
   
   
     <li class="md-nav__item">
-      <a href="backups-pitr.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Point-in-time recovery
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="backups-compressed.html" class="md-nav__link">
         
   
@@ -1574,6 +1546,117 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Point-in-time recovery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-restore-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Restore with point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1717,52 +1800,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#restore-from-a-backup-without-point-in-time-recovery" class="md-nav__link">
+  <a href="#restore-from-a-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restore from a backup without point-in-time recovery
+        Restore from a backup
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#restore-with-point-in-time-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restore with point-in-time recovery
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Restore with point-in-time recovery">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-1-restore-to-a-specific-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example 1. Restore to a specific time
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-2-restore-to-a-specific-transaction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example 2. Restore to a specific transaction
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -5108,52 +5152,13 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#restore-from-a-backup-without-point-in-time-recovery" class="md-nav__link">
+  <a href="#restore-from-a-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restore from a backup without point-in-time recovery
+        Restore from a backup
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#restore-with-point-in-time-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restore with point-in-time recovery
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Restore with point-in-time recovery">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#example-1-restore-to-a-specific-time" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example 1. Restore to a specific time
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#example-2-restore-to-a-specific-transaction" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Example 2. Restore to a specific transaction
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -5217,11 +5222,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ul>
 <p>This document focuses on the restore to the same cluster.</p>
 <h2 id="restore-scenarios">Restore scenarios<a class="headerlink" href="#restore-scenarios" title="Permanent link">&para;</a></h2>
-<p>Select how you wish to restore:</p>
-<ul>
-<li><a href="#restore-from-a-backup-without-point-in-time-recovery">Without point-in-time recovery</a></li>
-<li><a href="#restore-with-point-in-time-recovery">Make a point-in-time recovery</a></li>
-</ul>
+<p>To restore a backup on this cluster, follow the steps below.</p>
+<p>To restore to a timestamp or GTID, use <a href="backups-restore-pitr.html#restore-on-the-same-cluster">Restore with point-in-time recovery</a>.</p>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. </p>
 <p>You can check available options in the <a href="restore-cr.html">restore options reference</a>.</p>
 <h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">&para;</a></h2>
@@ -5243,7 +5245,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 </li>
 </ol>
-<h2 id="restore-from-a-backup-without-point-in-time-recovery">Restore from a backup without point-in-time recovery<a class="headerlink" href="#restore-from-a-backup-without-point-in-time-recovery" title="Permanent link">&para;</a></h2>
+<h2 id="restore-from-a-backup">Restore from a backup<a class="headerlink" href="#restore-from-a-backup" title="Permanent link">&para;</a></h2>
 <p>When the correct names for the backup and the cluster are known,configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
 <ul>
 <li>set <code>spec.clusterName</code> key to the name of the target cluster to restore the backup on</li>
@@ -5287,86 +5289,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </div>
 </div>
 </div>
-<h2 id="restore-with-point-in-time-recovery">Restore with point-in-time recovery<a class="headerlink" href="#restore-with-point-in-time-recovery" title="Permanent link">&para;</a></h2>
-<p>Before performing a point-in-time recovery, ensure you have:</p>
-<ul>
-<li>Enabled binlog collection in your cluster configuration</li>
-<li>Identified a base backup to restore from</li>
-<li>Determined either the GTID set (for restoring up to a specific transaction) or the exact timestamp (for restoring up to a specific time)</li>
-<li>Configured the backup storage appropriately</li>
-</ul>
-<p>Also check the <a href="backups-pitr.html#implementation-specifics">implementation specifics</a> and <a href="backups-pitr.html#known-limitations">known limitations</a></p>
-<h3 id="example-1-restore-to-a-specific-time">Example 1. Restore to a specific time<a class="headerlink" href="#example-1-restore-to-a-specific-time" title="Permanent link">&para;</a></h3>
-<ol>
-<li>
-<p>Edit the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> and specify the following options:</p>
-<ul>
-<li><code>spec.clusterName</code> - the name of your cluster</li>
-<li><code>spec.backupName</code> - the name of a backup </li>
-<li>
-<p>configure point-in-time recovery in the <code>spec.pitr</code> subsection:</p>
-<ul>
-<li><code>type</code> - specify <code>time</code></li>
-<li><code>date</code> - specify the timestamp to restore the database to</li>
-</ul>
-</li>
-</ul>
-<p>Here&rsquo;s the example configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-date</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
-</code></pre></div>
-</li>
-<li>
-<p>Apply the configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-</code></pre></div>
-</li>
-</ol>
-<h3 id="example-2-restore-to-a-specific-transaction">Example 2. Restore to a specific transaction<a class="headerlink" href="#example-2-restore-to-a-specific-transaction" title="Permanent link">&para;</a></h3>
-<ol>
-<li>
-<p>Edit the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> and specify the following options:</p>
-<ul>
-<li><code>spec.clusterName</code> - the name of your cluster</li>
-<li><code>spec.backupName</code> - the name of a backup</li>
-<li>
-<p>configure point-in-time recovery in the <code>spec.pitr</code> subsection:</p>
-<ul>
-<li><code>type</code> - specify <code>gtid</code></li>
-<li><code>gtid</code> - specify the GTID set to restore the database to. It has the format <code>source_id:transaction_id</code></li>
-</ul>
-</li>
-</ul>
-<p>Here&rsquo;s the example configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-gtid</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
-<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
-</code></pre></div>
-</li>
-<li>
-<p>Apply the configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
-</code></pre></div>
-</li>
-</ol>
 <h2 id="view-restore-details">View restore details<a class="headerlink" href="#view-restore-details" title="Permanent link">&para;</a></h2>
-<p>When you start the restore, the restore job is created. You can check the job details using these commands:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<p>When you start the restore, the Operator creates a Job. Check it with:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
@@ -5378,13 +5303,13 @@ xb-restore-restore2                                Complete             1/1     
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<p>If you face issues with restore, refer to our <a href="debug-backup-restore.html#restores">Restore troubleshooting guide</a> for help.</p>
+<p>If you face issues with restore, refer to <a href="debug-backup-restore.html#restores">Troubleshoot backups and restores</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 14:39:51 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
         <br>
         Created:

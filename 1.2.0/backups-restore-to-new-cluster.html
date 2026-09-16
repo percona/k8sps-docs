@@ -1502,34 +1502,6 @@
   
   
     <li class="md-nav__item">
-      <a href="backups-pitr.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Point-in-time recovery
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="backups-compressed.html" class="md-nav__link">
         
   
@@ -1574,6 +1546,117 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Point-in-time recovery
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="backups-restore-pitr.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Restore with point-in-time recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1756,21 +1839,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#restore-from-a-backup-without-point-in-time-recovery" class="md-nav__link">
+  <a href="#restore-from-a-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restore from a backup without point-in-time recovery
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#restore-with-point-in-time-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restore with point-in-time recovery
+        Restore from a backup
       
     </span>
   </a>
@@ -5124,21 +5196,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
-  <a href="#restore-from-a-backup-without-point-in-time-recovery" class="md-nav__link">
+  <a href="#restore-from-a-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restore from a backup without point-in-time recovery
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#restore-with-point-in-time-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Restore with point-in-time recovery
+        Restore from a backup
       
     </span>
   </a>
@@ -5227,19 +5288,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ul>
 <p>This document focuses on the restore on a new cluster deployed in a different Kubernetes environment.</p>
 <h2 id="restore-scenarios">Restore scenarios<a class="headerlink" href="#restore-scenarios" title="Permanent link">&para;</a></h2>
-<p>Select how you wish to restore:</p>
-<ul>
-<li><a href="#restore-from-a-backup-to-a-new-kubernetes-based-environment">Restore from a backup to a new Kubernetes-based environment</a></li>
-<li><a href="#restore-scenarios">Restore scenarios</a></li>
-<li><a href="#preconditions">Preconditions</a></li>
-<li><a href="#before-you-begin">Before you begin</a></li>
-<li><a href="#restore-from-a-backup-without-point-in-time-recovery">Restore from a backup without point-in-time recovery</a></li>
-<li><a href="#restore-with-point-in-time-recovery">Restore with point-in-time recovery</a></li>
-<li><a href="#restore-from-an-encrypted-backup">Restore from an encrypted backup</a></li>
-<li><a href="#view-restore-details">View restore details</a></li>
-<li><a href="#post-restore-steps">Post-restore steps</a></li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-</ul>
+<p>To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include <code>encryptionKeySecret</code> as shown in <a href="#restore-from-an-encrypted-backup">Restore from an encrypted backup</a>.</p>
+<p>To restore to a timestamp or GTID, use <a href="backups-restore-pitr.html#restore-on-a-new-cluster">Restore with point-in-time recovery</a>. </p>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <p>You can check available options in the <a href="restore-cr.html">restore options reference</a>.</p>
 <h2 id="preconditions">Preconditions<a class="headerlink" href="#preconditions" title="Permanent link">&para;</a></h2>
@@ -5308,7 +5358,7 @@ type: Opaque
 </code></pre></div>
 </li>
 </ol>
-<h2 id="restore-from-a-backup-without-point-in-time-recovery">Restore from a backup without point-in-time recovery<a class="headerlink" href="#restore-from-a-backup-without-point-in-time-recovery" title="Permanent link">&para;</a></h2>
+<h2 id="restore-from-a-backup">Restore from a backup<a class="headerlink" href="#restore-from-a-backup" title="Permanent link">&para;</a></h2>
 <p>Configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
 <ul>
 <li>set <code>spec.clusterName</code> key to the name of the target cluster to restore the backup on</li>
@@ -5366,216 +5416,12 @@ type: Opaque
 <p>Start the restore: </p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
-<h2 id="restore-with-point-in-time-recovery">Restore with point-in-time recovery<a class="headerlink" href="#restore-with-point-in-time-recovery" title="Permanent link">&para;</a></h2>
-<p>For point-in-time recovery to a new cluster, you need the following:</p>
-<ul>
-<li>a binlog storage configured on the target cluster with a different path for binlog collection than on the source cluster. You can reuse the storage settings from the source cluster but specify a different <code>prefix</code> value.</li>
-<li>a base backup that will be used for the restore</li>
-<li>the GTID set to restore up to a specific transaction, or a timestamp to restore up to a specific time</li>
-<li>the backup storage configured either on the target cluster or in the restore object </li>
-<li>the binlog server storage from the source cluster configured in the restore object. The Operator uses it to apply binlogs on top of the backup</li>
-<li>the Secret with the user credentials. Refer to the <a href="#preconditions">Preconditions</a> for how to create it.</li>
-</ul>
-<p>When restoring to a new cluster, the Operator starts a temporary Binlog Server Pod using the settings you defined in the restore object, uses this server to locate and fetch the required binlogs, and removes it when the restore completes. Copy the binlog storage settings from the source cluster&rsquo;s <code>spec.backup.pitr.binlogServer</code> configuration, including the <code>prefix</code> that points at the binlog folder.</p>
-<p>Binlog storage currently supports only AWS S3 and S3-compatible services, even when the base backup is stored elsewhere. Read more in the <a href="backups-pitr.html">Point-in-time recovery</a> documentation.</p>
-<p>Edit the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml</a> manifest.</p>
-<ol>
-<li>
-<p>Specify the following keys:</p>
-<ul>
-<li>Set <code>spec.clusterName</code> key to the name of the target cluster to restore the backup on</li>
-<li>
-<p>Configure the <code>spec.backupSource</code> subsection to point to the cloud storage where the backup is stored. This subsection should include:</p>
-</li>
-<li>
-<p>A destination key. Take it from the output of the <code>kubectl get ps-backup</code> command on the source cluster</p>
-</li>
-<li>
-<p>The necessary <a href="backups-storage.html#configure-storage-for-backups">storage configuration keys</a>, just like in the <code>deploy/cr.yaml</code> file of the source cluster. Make sure to set the <code>prefix</code> in the restore object to the exact same value used for the backup, so the Operator can find the correct backup location.</p>
-</li>
-<li>
-<p>Configure the <code>pitr</code> subsection:</p>
-</li>
-<li>
-<p><code>type</code> - specify one of the following:</p>
-<ul>
-<li><code>date</code> - to restore up to a specific time</li>
-<li><code>gtid</code> - to restore up to a specific transaction</li>
-</ul>
-</li>
-<li>
-<p>For the <code>type=date</code> option, set the <code>date</code> key in the datetime format.</p>
-</li>
-<li>For the <code>type=gtid</code> option, set the <code>gtid</code> to the GTID set to restore the database to. It has the format <code>source_id:transaction_id</code></li>
-<li>
-<p><code>pitr.backupSource.binlogServer</code> - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster&rsquo;s <code>spec.backup.pitr.binlogServer</code>, including the <code>prefix</code> for the binlog folder.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Restore to a timestamp</label><label for="__tabbed_2_2">Restore to a transaction</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">S3-compatible storage</label><label for="__tabbed_3_2">Google Cloud Storage</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-timestamp</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
-<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
-<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
-<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;PREFIX-WHERE-BACKUP-IS-STORED&gt;</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
-<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span><span class="w"> </span><span class="c1">#Optional for AWS S3</span>
-<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-timestamp</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://BUCKET-NAME/BACKUP-NAME</span>
-<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">gcs</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operator-testing</span>
-<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-gcp-credentials</span>
-<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;PREFIX-WHERE-BACKUP-IS-STORED&gt;</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcs</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
-<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span><span class="w"> </span><span class="c1">#Optional for AWS S3</span>
-<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="tabbed-block">
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">S3-compatible storage</label><label for="__tabbed_4_2">Google Cloud Storage</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-transaction</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
-<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
-<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
-<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;PREFIX-WHERE-BACKUP-IS-STORED&gt;</span>
-<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
-<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
-<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
-<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-transaction</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://BUCKET-NAME/BACKUP-NAME</span>
-<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">gcs</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operator-testing</span>
-<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-gcp-credentials</span>
-<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;PREFIX-WHERE-BACKUP-IS-STORED&gt;</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcs</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
-<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
-<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtid</span>
-<span class="w">    </span><span class="nt">gtid</span><span class="p">:</span><span class="w"> </span><span class="s">"cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</li>
-</ul>
-</li>
-</ol>
-<p>Start the restore:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
-</code></pre></div>
 <h2 id="restore-from-an-encrypted-backup">Restore from an encrypted backup<a class="headerlink" href="#restore-from-an-encrypted-backup" title="Permanent link">&para;</a></h2>
 <p>Configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
 <ul>
-<li>set <code>spec.clusterName</code> key to the name of the target cluster to restore the backup on</li>
-<li>
-<p>configure the <code>spec.backupSource</code> subsection to point to the cloud storage where the backup is stored. This subsection should include:</p>
-</li>
-<li>
-<p>a destination key. Take it from the output of the <code>kubectl get ps-backup</code> command on the source cluster</p>
-</li>
-<li>the necessary <a href="backups-storage.html#configure-storage-for-backups">storage configuration keys</a>, just like in the <code>deploy/cr.yaml</code> file of the source cluster.</li>
-<li>
-<p><code>encryptionKeySecret</code> referencing the Secret with the encryption key. The encryption key must be the same that was used to encrypt the backup.</p>
-</li>
-<li>
-<p>If you need point-in-time recovery, define the <code>pitr</code> subsection in your restore configuration. Refer to the <a href="#restore-with-point-in-time-recovery">Restore with point-in-time recovery</a> section for supported keys and detailed guidance.</p>
-</li>
+<li><code>spec.clusterName</code> — the target cluster</li>
+<li><code>spec.backupSource</code> — destination and storage for the backup, including <code>encryptionKeySecret</code> with the same key that encrypted the backup</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Without point-in-time recovery</label><label for="__tabbed_5_2">With point-in-time recovery</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p>This configuration restores an encrypted backup <strong>without</strong> point-in-time recovery. </p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
 <span class="nt">metadata</span><span class="p">:</span>
@@ -5594,43 +5440,6 @@ type: Opaque
 <span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
 <span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
 </code></pre></div>
-</div>
-<div class="tabbed-block">
-<p>This configuration shows how to restore an encrypted backup <strong>up to a specific timestamp</strong>. </p>
-<p>See the <a href="#restore-with-point-in-time-recovery">Point-in-time recovery options</a> section for all point-in-time recovery configuration possibilities.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1-pitr</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
-<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
-<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
-<span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">encryptionKey</span>
-<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
-<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
-<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
-<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
-<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
-<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://URL-OF-THE-S3-COMPATIBLE-STORAGE</span>
-<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
-<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
-<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-05-01T15:30:00Z"</span>
-</code></pre></div>
-</div>
-</div>
-</div>
 <p>Start the restore:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -5648,25 +5457,15 @@ xb-restore-restore2                                Complete             1/1     
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <h2 id="post-restore-steps">Post-restore steps<a class="headerlink" href="#post-restore-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Enable point-in-time recovery to start binlog collection on the restored cluster:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">pitr</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</code></pre></div>
-<ul>
-<li>Make a fresh base backup to start a new timeline for subsequent restores.</li>
-</ul>
+<p>Make a fresh base backup to start a new timeline for subsequent restores.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<p>If you face issues with restore, refer to our <a href="debug-backup-restore.html#restores">Restore troubleshooting guide</a> for help.</p>
+<p>If you face issues with restore, refer to <a href="debug-backup-restore.html#restores">Troubleshoot backups and restores</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 17:42:57 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
       
         <br>
         Created:
