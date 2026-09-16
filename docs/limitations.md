@@ -20,7 +20,7 @@ Group replication is generally available and is the recommended topology for pro
 * Safe defaults for the cluster depend on the replication type. You must set the matching [`unsafeFlags`](operator.md#operator-unsafeflags-section) option to go outside these limits:
     
     * **Group replication:** at least **3** MySQL instances and an **odd** replica count with the maximum of **9** members. To exceed this number or to configure an even number of members requires setting the `unsafeFlags.mysqlSize` option.
-    * **Asynchronous replication:** at least **2** MySQL instances. Even counts are allowed starting with Operator version 1.3.0, because no quorum is required during asynchronous replication. The Orchestrator size must still be **3 or greater and odd**.
+    * **Asynchronous replication:** at least **2** MySQL instances, recommended number is 3. Even counts are allowed starting with Operator version 1.3.0, because no quorum is required during asynchronous replication. The Orchestrator size must still be **3 or greater and odd**.
 
         With `mysql.size: 2`, the cluster has one primary and one replica. The Operator takes backups from the replica and stops replication for the duration of the backup. During that window the replica does not apply changes from the primary, so you have no up-to-date standby until replication resumes.
 
