@@ -57,3 +57,5 @@ The steps to install the *cert-manager* are the following:
         ```
 
 Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you check certificates for expiration, you will find that they are valid and short-term.
+
+When a leaf is due for renewal, cert-manager reissues the server certificate signed by the same CA. Starting with version 1.3.0, MySQL Pods pick up that leaf without a restart. HAProxy, MySQL Router, and Orchestrator Pods still restart. See [Update certificates](tls-update.md).
