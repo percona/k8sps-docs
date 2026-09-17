@@ -32,6 +32,7 @@ The following environment variables are available to tune Percona Server for MyS
 | `BOOTSTRAP_CLONE_TIMEOUT` | Non-negative integer (seconds). Upper bound for clone operations during asynchronous bootstrap. |
 | `ASYNC_SOURCE_RETRY_COUNT` | Non-negative integer. Used when configuring asynchronous replication. |
 | `ASYNC_SOURCE_CONNECT_RETRY` | Non-negative integer. Used when configuring asynchronous replication. |
+| `POD_IP_EXCLUDE_REGEX` | Custom `grep -E` filter for Pod IP addresses that the MySQL entrypoint excludes when it picks the Pod IP to bind MySQL `admin-address`. Default: `^169\.254\.`. If every address matches the filter, the entrypoint uses the first unfiltered IP. Use this only if the default exclusion is too broad or too narrow for your CNI. Most clusters do not need to set it. |
 
 ### HAProxy environment variables
 
