@@ -87,7 +87,7 @@ kubectl get ps-clusterset <clusterset-name> -n <namespace> \
     REPLICA: 121
     ```
 
-The field is set only on replica clusters when the Operator can compute the lag. The primary cluster and caught-up replicas omit it.
+The field appears only on replica clusters when MySQL Shell reports the lag. The primary cluster and caught-up replicas omit it.
 
 **Example 4. Get the backup destination path:**
 
@@ -225,7 +225,7 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | `primary` | Host:port of the cluster's local Group Replication primary |
 | `replicationLagSeconds` | How many seconds the primary node of the replica cluster is behind the ClusterSet primary. Present only on `REPLICA` members when lag is greater than zero. Omitted on the `PRIMARY` cluster and when there is no lag or it is unavailable. |
 
-`replicationLagSeconds` comes from MySQL Shell's `replicationLagFromOriginalSource` value for the replica's primary member. The Operator converts that timediff to whole seconds. Use it to see whether a replica is catching up before you run switchover or send the regional read traffic there.
+`replicationLagSeconds` comes from MySQL Shell's `replicationLagFromOriginalSource` value for the replica's primary member, shown in whole seconds. Use it to see whether a replica is catching up before you run switchover or send the regional read traffic there.
 
 `globalStatus` values (from MySQL Shell):
 
