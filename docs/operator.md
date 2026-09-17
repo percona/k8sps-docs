@@ -964,6 +964,8 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 The `my.cnf` file options to be passed to Percona Server for MySQL instances.
 
+The Operator does not validate these options against your replication type. See [Check configuration compatibility](options.md#check-configuration-compatibility).
+
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | <pre>`[mysqld]`<br>`max_connections=250`</pre> |
