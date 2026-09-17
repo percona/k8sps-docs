@@ -78,7 +78,7 @@ For cross-region links, prefer `REQUIRED` or a stricter mode over the default `A
 | Requirement | Supported versions |
 | ----------- | ------------------ |
 | **Operator** | Percona Operator for MySQL **1.2.0** and later |
-| **Percona Server for MySQL** | **8.0.27** and later, **8.4** (tested with {{ ps80recommended }} and {{ ps84recommended }}) |
+| **Percona Server for MySQL** | **8.0.27** and later, **8.4** (tested with 8.0.46-37.1 and 8.4.10-10.1) |
 | **MySQL Shell** | `mysqlsh` version must match MySQL endpoints it talks to |
 | **Cluster type** | `group-replication` only |
 | **Kubernetes** | Same platforms as the Operator — see [Versions compatibility](versions.md) |
