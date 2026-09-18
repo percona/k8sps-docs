@@ -8,13 +8,17 @@ How your TLS certificates are updated depends on how they were created:
 
 * Certificates you generated yourself are not renewed automatically. It is your responsibility to timely update them. Use the steps in this document for how to do it.
 
-## Check your certificates for expiration
+## Before you start
 
-Export the namespace where your cluster is deployed:
+Export the namespace, cluster name, and TLS Secret name. Replace the placeholders with your values. If you set `spec.sslSecretName`, use that name for `SSL_SECRET_NAME`:
 
 ```bash
 export NAMESPACE=<namespace>
+export CLUSTER_NAME=<cluster-name>
+export SSL_SECRET_NAME=${CLUSTER_NAME}-ssl
 ```
+
+## Check your certificates for expiration
 
 If you [use cert-manager](tls-cert-manager.md):
 
@@ -60,8 +64,8 @@ If you [use cert-manager](tls-cert-manager.md):
 
     ```bash
     {
-    kubectl get secret/ps-cluster1-ca-cert -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -noout -dates
-    kubectl get secret/ps-cluster1-ssl -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode | openssl x509 -noout -dates
+    kubectl get secret/${CLUSTER_NAME}-ca-cert -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -noout -dates
+    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode | openssl x509 -noout -dates
     }
     ```
 
@@ -84,20 +88,28 @@ To force a renewal before expiry, refer to the [cert-manager renewal documentati
 
 ### Apply a new certificate yourself
 
-If you created the certificates yourself, replace only the leaf certificates in the existing Secret. Keep `ca.crt` unchanged.
+If you created the certificates yourself, replace only the leaf in the existing Secret. Keep `ca.crt` unchanged.
 
-1. Extract the current CA:
-    
+You need the current CA certificate **and** the CA private key to sign a new leaf. The TLS Secret stores the CA certificate as `ca.crt`. It does not store the CA private key. Use the `ca-key.pem` file you saved when you [generated the CA](tls-manual.md).
+
+1. Extract the current CA certificate from the Secret. You put this same file back in the Secret later so the CA does not change:
+
     ```bash
-    kubectl get secret/ps-cluster1-ssl -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode > ca.pem
+    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode > ca.pem
     ```
 
-2. Generate a new server certificate (`server.pem`) and key (`server-key.pem`) signed by the current CA. See [Generate certificates manually](tls-manual.md).
-
-3. Apply the new leaf to the TLS Secret. Substitute your Secret name if it differs from `ps-cluster1-ssl`:
+2. Copy your saved `ca-key.pem` into the same directory as `ca.pem`. Confirm both files are present:
 
     ```bash
-    kubectl create secret generic ps-cluster1-ssl \
+    ls ca.pem ca-key.pem
+    ```
+
+3. Generate a new server certificate (`server.pem`) and key (`server-key.pem`) signed by that CA. Do not create a new CA. Use the server certificate command in [Generate certificates manually](tls-manual.md).
+
+4. Apply the new leaf to the TLS Secret:
+
+    ```bash
+    kubectl create secret generic ${SSL_SECRET_NAME} \
     --from-file=tls.crt=server.pem \
     --from-file=tls.key=server-key.pem \
     --from-file=ca.crt=ca.pem \
@@ -113,14 +125,14 @@ To confirm the reload:
 
     ```bash
     kubectl get pods -n $NAMESPACE \
-      -l app.kubernetes.io/instance=ps-cluster1,app.kubernetes.io/name=mysql \
+      -l app.kubernetes.io/instance=${CLUSTER_NAME},app.kubernetes.io/name=mysql \
       -o custom-columns=NAME:.metadata.name,UID:.metadata.uid --sort-by=.metadata.name
     ```
 
 2. Check the certificate start date that `mysqld` currently serves. Repeat for each MySQL Pod. The date changes after the reload:
 
     ```bash
-    kubectl exec -n $NAMESPACE ps-cluster1-mysql-0 -c mysql -- \
+    kubectl exec -n $NAMESPACE ${CLUSTER_NAME}-mysql-0 -c mysql -- \
       bash -c 'mysql -uroot -p"$(cat /etc/mysql/mysql-users-secret/root)" -NB -e "SHOW GLOBAL STATUS LIKE \"Ssl_server_not_before\""'
     ```
 
@@ -138,9 +150,9 @@ If the current certificates are still valid, follow these steps. For already exp
    and the TLS certificate key (`tls.key.old`):
 
     ```bash
-    kubectl get secret/ps-cluster1-ssl -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode > ca.pem.old
-    kubectl get secret/ps-cluster1-ssl -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.pem.old
-    kubectl get secret/ps-cluster1-ssl -n $NAMESPACE -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key.old
+    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode > ca.pem.old
+    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.pem.old
+    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key.old
     ```
 
 3. Combine the new and current CA certificates into a `ca.pem.combined` file:
@@ -152,7 +164,7 @@ If the current certificates are still valid, follow these steps. For already exp
 4. Create a new Secrets object with the *old* TLS certificate (`tls.pem.old`) and key (`tls.key.old`), but a *new combined* CA (`ca.pem.combined`):
 
     ``` bash
-    kubectl create secret generic ps-cluster1-ssl \
+    kubectl create secret generic ${SSL_SECRET_NAME} \
     --from-file=tls.crt=tls.pem.old \
     --from-file=tls.key=tls.key.old \
     --from-file=ca.crt=ca.pem.combined \
@@ -164,7 +176,7 @@ If the current certificates are still valid, follow these steps. For already exp
 5. Create a new Secrets object again. This time use a new TLS certificate (`server.pem`) and a new TLS key (`server-key.pem`), and again the combined CA certificate (`ca.pem.combined`):
 
     ``` bash
-    kubectl create secret generic ps-cluster1-ssl \
+    kubectl create secret generic ${SSL_SECRET_NAME} \
     --from-file=tls.crt=server.pem \
     --from-file=tls.key=server-key.pem \
     --from-file=ca.crt=ca.pem.combined \
@@ -177,7 +189,7 @@ If the current certificates are still valid, follow these steps. For already exp
    its key (`server-key.pem`), and only the new CA certificate (`ca.pem`):
 
     ``` bash
-    kubectl create secret generic ps-cluster1-ssl \
+    kubectl create secret generic ${SSL_SECRET_NAME} \
     --from-file=tls.crt=server.pem \
     --from-file=tls.key=server-key.pem \
     --from-file=ca.crt=ca.pem \
@@ -195,17 +207,25 @@ If the certificates have already expired, nodes cannot verify each other. Do not
 2. If you use cert-manager, delete the issuer and certificates so they can be recreated:
 
     ```bash
-    kubectl delete issuer/ps-cluster1-ps-ca-issuer issuer/ps-cluster1-ps-issuer -n $NAMESPACE
-    kubectl delete certificate/ps-cluster1-ssl certificate/ps-cluster1-ca-cert -n $NAMESPACE
+    kubectl delete issuer/${CLUSTER_NAME}-ps-ca-issuer issuer/${CLUSTER_NAME}-ps-issuer -n $NAMESPACE
+    kubectl delete certificate/${CLUSTER_NAME}-ssl certificate/${CLUSTER_NAME}-ca-cert -n $NAMESPACE
     ```
 
 3. Delete the TLS Secrets to force reconciliation:
 
     ```bash
-    kubectl delete secret/ps-cluster1-ssl secret/ps-cluster1-ca-cert -n $NAMESPACE
+    kubectl delete secret/${SSL_SECRET_NAME} secret/${CLUSTER_NAME}-ca-cert -n $NAMESPACE
     ```
 
-    If you manage certificates yourself, apply a new Secret with a valid CA, server certificate, and key instead of deleting.
+    If you manage certificates yourself, apply a new Secret with a valid CA, server certificate, and key instead of deleting:
+
+    ```bash
+    kubectl create secret generic "${SSL_SECRET_NAME}" \
+      --from-file=tls.crt=server.pem \
+      --from-file=tls.key=server-key.pem \
+      --from-file=ca.crt=ca.pem \
+      --type=kubernetes.io/tls -n "${NAMESPACE}" -o yaml --dry-run=client | kubectl apply -f -
+    ```
 
 4. Check that new certificates exist and are valid. See [Check your certificates for expiration](#check-your-certificates-for-expiration).
 
