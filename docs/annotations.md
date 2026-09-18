@@ -76,6 +76,7 @@ Use **Annotations** when:
 | `service.beta.kubernetes.io/aws-load-balancer-backend`         | Services | Specifies the backend type for AWS load balancers | test-type                  |
 | `controller-gen.kubebuilder.io/version`     | CustomResourceDefinition          | Indicates the version of the Kubebuilder controller-gen tool used.             |
 | `percona.com/last-applied-tls` | Services   | Stores the hash of the last applied TLS configuration for the service |
+| `percona.com/last-reloaded-tls` | StatefulSets | Hash of the leaf certificate (`tls.crt` and `tls.key`) last reloaded into running `mysqld` processes. Used starting with version 1.3.0 so the same-CA leaf rotation does not restart MySQL Pods |
 | `percona.com/last-applied-secret` | Secrets | Stores the hash of the last applied user Secret configuration |
 | `percona.com/configuration-hash` | Services | Used to track and validate configuration changes in the MySQL cluster components |
 | `percona.com/last-config-hash` | Services | Stores the hash of the most recent configuration |
