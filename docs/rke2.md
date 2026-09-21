@@ -42,7 +42,7 @@ Copy it to your workstation and point `kubectl` at it:
 
 ```bash
 mkdir -p ~/.kube
-sudo cat /etc/rancher/rke2/rke2.yaml > ~/.kube/rke2.yaml
+sudo cat /etc/rancher/rke2/rke2.yaml > ~/.kube/rke2.yaml && chmod 600 ~/.kube/rke2.yaml
 export KUBECONFIG=~/.kube/rke2.yaml
 ```
 
