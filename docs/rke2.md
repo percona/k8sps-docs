@@ -187,7 +187,8 @@ To tear down a manually installed RKE2 cluster, run the uninstall script on each
 node (agent nodes first, then server nodes):
 
 ```bash
-/usr/local/bin/rke2-uninstall.sh
+/usr/local/bin/rke2-agent-uninstall.sh  # on each agent node first
+/usr/local/bin/rke2-uninstall.sh        # then on each server node
 ```
 
 If you provisioned the cluster with Rancher, delete the cluster from the Rancher
