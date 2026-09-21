@@ -58,12 +58,15 @@ kubectl get nodes
 ## Configure storage
 
 Percona Server for MySQL needs PersistentVolumes for database data. Confirm
-that your cluster has a default StorageClass (or note the StorageClass name to
-set in the Custom Resource):
+that your cluster has a default StorageClass:
 
 ```bash
 kubectl get storageclass
 ```
+
+A default StorageClass is marked `(default)` in the output. If none is marked,
+note the StorageClass name. You set it in the Custom Resource when you deploy
+the cluster.
 
 RKE2 does not always ship a default StorageClass. For testing, you can install
 the [Local Path Provisioner :octicons-link-external-16:](https://github.com/rancher/local-path-provisioner).
@@ -104,7 +107,35 @@ For production, use a CSI driver appropriate for your infrastructure, such as
         deployment.apps/percona-server-mysql-operator serverside-applied
         ```
 
-2. The Operator has been started, and you can deploy your MySQL cluster:
+2. The Operator has been started, and you can deploy your MySQL cluster.
+
+    If your cluster has no default StorageClass, clone the repository and set `storageClassName` in `deploy/cr.yaml` before you apply it:
+
+    ```bash
+    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    cd percona-server-mysql-operator
+    ```
+
+    Set the StorageClass name you noted when you configured storage:
+
+    ```yaml
+    mysql:
+      ...
+      volumeSpec:
+        persistentVolumeClaim:
+          storageClassName: local-path
+          resources:
+            requests:
+              storage: 20Gi
+    ```
+
+    Replace `local-path` with your StorageClass (for example, `longhorn` if you installed Longhorn). Then apply the modified file:
+
+    ```bash
+    kubectl apply -f deploy/cr.yaml
+    ```
+
+    If your cluster already has a default StorageClass, you can apply the default manifest without editing it:
 
     ```bash
     kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/cr.yaml
