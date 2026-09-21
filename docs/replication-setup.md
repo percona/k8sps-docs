@@ -13,6 +13,11 @@ Before you start, read [Cross-site replication](replication.md) for architecture
 * `mysqlsh` version for each cluster must match the MySQL major version it runs
 * `yq` utility for parsing YAML or JSON outputs from Kubernetes commands
 
+This guides uses the following software versions:
+
+* Operator 1.2.0
+* Percona Server for MySQL 8.4.10-10.1
+
 ## Prepare your environment
 
 1. Clone the repository with all manifests and source code by executing the following command:
