@@ -13,6 +13,11 @@ Before you start, read [Cross-site replication](replication.md) for architecture
 * `mysqlsh` version for each cluster must match the MySQL major version it runs
 * `yq` utility for parsing YAML or JSON outputs from Kubernetes commands
 
+This guides uses the following software versions:
+
+* Operator 1.2.0
+* Percona Server for MySQL 8.4.10-10.1
+
 ## Prepare your environment
 
 1. Clone the repository with all manifests and source code by executing the following command:
@@ -37,7 +42,7 @@ Before you start, read [Cross-site replication](replication.md) for architecture
 
 ## Step 1. Deploy the primary cluster
 
-1. Follow the [quickstart guide](kubectl.md) to install the Operator deployment, if you haven't done it, and deploy Percona Server for MySQL cluster with replication type `group replication`. Let's rename the cluster to `source-cluster` to differentiate them.
+1. Follow the [quickstart guide](kubectl.md) to install the Operator 1.2.0 deployment, if you haven't done it, and deploy Percona Server for MySQL cluster with replication type `group replication`. Let's rename the cluster to `source-cluster` to differentiate them.
 
     Here's the example configuration:
 
@@ -47,12 +52,12 @@ Before you start, read [Cross-site replication](replication.md) for architecture
     metadata:
       name: source-cluster
     spec:
-      crVersion: {{ release }}
+      crVersion: 1.2.0
       secretsName: source-cluster-secrets
       mysql:
         clusterType: group-replication
         size: 3
-        image: percona/percona-server:{{ ps84recommended }}
+        image: percona/percona-server:8.4.10-10.1
       proxy:
         haproxy:
           enabled: true
@@ -152,12 +157,12 @@ Before you start, read [Cross-site replication](replication.md) for architecture
     metadata:
       name: replica-cluster
     spec:
-      crVersion: {{ release }}
+      crVersion: 1.2.0
       secretsName: replica-cluster-secrets
       mysql:
         clusterType: group-replication
         size: 3
-        image: percona/percona-server:{{ ps84recommended }}
+        image: percona/percona-server:8.4.10-10.1
         bootstrap:
           mode: manual
     ```
@@ -245,7 +250,7 @@ Now it's time to link clusters. To do this, configure a `PerconaServerMySQLClust
           createReplicaClusterOptions:
             recoveryMethod: clone
           mysqlshellRunner:
-            image: percona/percona-server:{{ ps84recommended }}
+            image: percona/percona-server:8.4.10-10.1
           clusters:
             - innodbClusterName: sourcecluster
               endpoints:
@@ -275,7 +280,7 @@ Now it's time to link clusters. To do this, configure a `PerconaServerMySQLClust
           createReplicaClusterOptions:
             recoveryMethod: incremental
           mysqlshellRunner:
-            image: percona/percona-server:{{ ps84recommended }}
+            image: percona/percona-server:8.4.10-10.1
           clusters:
             - innodbClusterName: sourcecluster
               endpoints:
