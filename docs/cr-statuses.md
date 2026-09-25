@@ -263,7 +263,7 @@ Common `RejoinClusterInProgress` reasons:
 | Reason | Meaning |
 | --- | --- |
 | `RejoinInProgress` | A rejoin Job is running. Condition status is `True`. |
-| `RejoinFailed` | The rejoin Job failed. Condition status is `False`. The annotation is still present so you can retry. |
+| `RejoinFailed` | The rejoin Job failed or the Job completed but the replica's `globalStatus` is not `OK`. Condition status is `False`. The annotation is removed so you can retry. |
 
 `ErrorReconcile` uses the reason `ErrorReconcile` for general failures, or `AccessDenied` / `PrimaryUnreachable` when the ClusterSet manager cannot reach or authenticate to the primary.
 
@@ -279,6 +279,7 @@ The ClusterSet controller emits Kubernetes events you can view with `kubectl des
 | `ClusterSetMemberAdded` | A cluster was added to the ClusterSet. |
 | `ClusterSetMemberRemoved` | A cluster was removed from the ClusterSet. |
 | `ClusterSetMemberRejoined` | A replica cluster rejoined the ClusterSet. |
+| `ClusterSetMemberRejoinFailed` | Warning. Rejoin failed: the Job failed or the Job completed but the replica stayed unhealthy (for example `OK_NOT_REPLICATING`). |
 | `ClusterSetHealthDegraded` | Overall ClusterSet health dropped from healthy to unhealthy. |
 
 ## PerconaServerMySQLBackup status

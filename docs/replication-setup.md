@@ -454,7 +454,7 @@ To recover an invalidated cluster later, [rejoin it](#rejoin-a-replica-cluster) 
 
 If the replica's Group Replication channel is down (for example, you paused or stopped a ClusterSet replica or it crashed), the Operator recovers the local Group Replication group and rejoins it to the ClusterSet automatically. 
 
-However, when the replica itself is healthy but the ClusterSet replication is down, you may need to trigger the rejoin manually by annotating the ClusterSet. This happens typically after the primary was unreachable long enough to exhaust retries. 
+However, when the replica itself is healthy but the ClusterSet replication is down, you trigger the rejoin manually by annotating the ClusterSet. This happens typically after the primary was unreachable long enough to exhaust retries. 
 
 Rejoin when `globalStatus` stays `OK_NOT_REPLICATING`, or `ClusterSetReplicationRunning` is `False`, after the replica cluster is `Ready`. You can also rejoin an `INVALIDATED` former primary after [forced failover](#forced-failover) if its GTIDs are still compatible with the current primary.
 
@@ -464,6 +464,7 @@ Rejoin when `globalStatus` stays `OK_NOT_REPLICATING`, or `ClusterSetReplication
 
     * If `SwitchoverInProgress` is `True`, or `spec.primaryCluster` differs from `status.primaryCluster`, wait until switchover finishes. If you trigger the rejoin operation during switchover, the Operator defers the rejoin until it completes.
     * Set the annotation to the replica's InnoDB cluster name (`status.innodbClusterName`), not the Kubernetes Custom Resource name and not the current primary. The Operator ignores a rejoin annotation that names the primary.
+    * If the primary is unreachable, the Operator keeps the annotation and does not create a Job. Rejoin starts when the primary is available again.
 
 1. Annotate the ClusterSet. Use the replica's InnoDB cluster name — in this tutorial, `replicacluster`:
 
@@ -476,8 +477,8 @@ Rejoin when `globalStatus` stays `OK_NOT_REPLICATING`, or `ClusterSetReplication
 
     1. Creates a Job that runs `dba.getCluster().getClusterSet().rejoinCluster('replicacluster')`
     2. Sets the `RejoinClusterInProgress` condition while the Job runs
-    3. On success, removes the annotation and the condition, and emits a `ClusterSetMemberRejoined` event
-    4. On failure, keeps the annotation, sets `RejoinClusterInProgress` to `False` with reason `RejoinFailed`, and deletes the failed Job so you can retry
+    3. After the Job completes, checks that the replica's `globalStatus` is `OK`. Only then it removes the annotation and the condition, and emits a `ClusterSetMemberRejoined` event.
+    4. If the Job failed or it completed but `globalStatus` is not `OK`, the Operator treats the rejoin as failed. It removes the annotation, deletes a failed Job, sets `RejoinClusterInProgress` to `False` with reason `RejoinFailed`, and emits a `ClusterSetMemberRejoinFailed` warning. Fix the cause, then annotate again.
 
 2. Monitor progress:
 
@@ -486,7 +487,7 @@ Rejoin when `globalStatus` stays `OK_NOT_REPLICATING`, or `ClusterSetReplication
     kubectl get jobs -n $SOURCE_NS | grep rejoin
     ```
 
-    Confirm that the replica's `globalStatus` is `OK` and that `ClusterSetReplicationRunning` is `True` on the replica cluster. If the Job failed, inspect its logs, fix the cause, then annotate again. Use `--overwrite` if the annotation is still present.
+    Confirm that the replica's `globalStatus` is `OK` and that `ClusterSetReplicationRunning` is `True` on the replica cluster. If you see the `RejoinFailed` condition or a `ClusterSetMemberRejoinFailed` event, read the condition message and Job logs (the Job may have succeeded while the replica stayed `OK_NOT_REPLICATING`). Fix the cause, then annotate again.
 
 ### Remove a replica cluster
 
@@ -588,7 +589,7 @@ To delete replica and primary clusters themselves, delete their `PerconaServerMy
 | Replica Pod-0 stays NotReady | ClusterSet Job still running, or `createReplicaCluster` failed |
 | `Ready: False`, reason `ReplicaNotStandalone` | Target cluster is already in another InnoDB Cluster or ClusterSet |
 | Switchover stuck | Check `SwitchoverInProgress` condition and switchover Job status |
-| Replica `globalStatus: OK_NOT_REPLICATING` or `RejoinFailed` | The replica is healthy but ClusterSet replication is down (for example after a long primary outage). Inspect the rejoin Job logs, then [rejoin the replica](#rejoin-a-replica-cluster). |
+| Replica `globalStatus: OK_NOT_REPLICATING`, `RejoinFailed` or `ClusterSetMemberRejoinFailed` | The replica is healthy but ClusterSet replication is down (for example after a long primary outage). Or a rejoin attempt did not restore `globalStatus: OK`.Inspect the rejoin Job logs, then [rejoin the replica](#rejoin-a-replica-cluster). |
 | `ErrorReconcile: True`, reason `AccessDenied` | Incorrect password configured on the replica site |
 | `ErrorReconcile: True`, reason `PrimaryUnreachable` | Primary cluster is not reachable |
 | `ReplicaManagementFailure` | One or more replicas could not be added or removed. See the condition message for exact details. Make sure that your replicas are reachable before removing them. |
