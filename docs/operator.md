@@ -2891,7 +2891,7 @@ Allows more than one backup for this cluster to run at the same time. When `fals
 
 ### `backup.startingDeadlineSeconds`
 
-The maximum time, in seconds, a backup can wait to start before the Operator marks it as failed. The backup can wait if the cluster isn't ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](backup-cr.md#startingdeadlineseconds).
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. The backup can wait if the cluster isn't ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](backup-cr.md#startingdeadlineseconds).
 
 | Value type  | Example    |
 | ----------- | ---------- |
