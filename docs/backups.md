@@ -40,7 +40,7 @@ You configure backups in the `backup` section of the
 
 You can customize a backup type, scheduling and encryption. See [Making scheduled backups](backups-scheduled.md), [Creating a backup on demand](backups-ondemand.md), and [Encrypted backups](backups-encrypted.md) tutorials for the guidelines.
 
-To run parallel backups and fine-tune how long a backup waits to start, see [Run multiple backups](#run-multiple-backups). To suspend backups when the cluster is unhealthy, see [Suspend backups on an unhealthy cluster](#suspend-backups-on-an-unhealthy-cluster).
+To fine-tune how long a backup waits to start, see [Fine-tune the backup queue](#run-multiple-backups). To suspend backups when the cluster is unhealthy, see [Suspend backups on an unhealthy cluster](#suspend-backups-on-an-unhealthy-cluster).
 
 For the full set of backup-related fields, see the [Custom Resource reference](operator.md#operator-backup-section) and the [Backup Resource reference](backup-cr.md) for per-backup options.
 
@@ -55,28 +55,9 @@ You can create backups in two ways:
     [deploy/backup/backup.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/backup.yaml)
     file.
 
-## Run multiple backups
+## Set a waiting time for a backup to start 
 
 !!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
-
-You can run more than one backup for the same cluster at the same time. For example, schedule weekly backups on one storage and daily backups on another one. You can also run an on-demand backup to be on the safe side before you do some maintenance work.
-
-### Run parallel backups
-
-To run multiple backups in parallel, set the `backup.allowParallel` option in the `deploy/cr.yaml` Custom Resource manifest to `true`:
-
-```yaml
-backup:
-  allowParallel: true
-```
-
-If parallel backups start at the same time and share a storage location, they can overwrite each other. Use a separate storage name (different bucket or prefix) for backups that might run together. See [Managing multiple backup schedules in the same storage](backups-scheduled.md#managing-multiple-backup-schedules-in-the-same-storage). Incremental backups that belong to the same chain still run sequentially.
-
-### Run one backup at a time
-
-If you omit `allowParallel` or set it to `false`, the Operator runs one backup per cluster at a time. A second scheduled or on-demand backup waits until the first succeeds or fails.
-
-### Set a waiting time for a backup to start 
 
 You can fine-tune a backup queue by assigning a waiting time for a backup to start. 
 
@@ -89,7 +70,6 @@ This timer also covers a backup that is waiting because the cluster is not ready
 !!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
 
 Your database cluster can become unhealthy. For example, when one of the Pods crashes and restarts. The Operator monitors the database cluster state while a backup is running and suspends it for an unhealthy cluster to reduce the load on the cluster.
-
 
 When the cluster is ready again, the Operator resumes the backup Job. Resuming a Job creates a new Pod, so the backup starts over from the beginning rather than continuing from where it stopped.
 
