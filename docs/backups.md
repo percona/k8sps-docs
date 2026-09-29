@@ -97,7 +97,7 @@ To offload the database cluster even more, you can define how long a backup rema
 
 After this duration expires, the Operator automatically marks this backup as `Failed` with `stateDescription: backup did not resume before suspendedDeadlineSeconds expired`, and deletes the suspended Job.
 
-A backup that has not started yet does not move to `Suspended`. If the cluster is still unready when `startingDeadlineSeconds` expires, the backup state changes to `Error`. See [Set how long a backup waits to start](#set-how-long-a-backup-waits-to-start).
+A backup that has not started yet does not move to `Suspended`. If the cluster is still unready when `startingDeadlineSeconds` expires, the backup state changes to `Error`. See [Set a waiting time for a backup to start](#set-a-waiting-time-for-a-backup-to-start).
 
 For the full list of backup states, see [Backup state values](cr-statuses.md#backup-state-values).
 
