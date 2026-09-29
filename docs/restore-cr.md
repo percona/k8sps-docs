@@ -86,7 +86,7 @@ Forces the `mysql` client to run with the `--force` flag and this silently ignor
 
 ### The `pitr.backupSource` subsection
 
-This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](backups-restore-to-new-cluster.md#restore-with-point-in-time-recovery). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
+This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](backups-restore-pitr.md#restore-on-a-new-cluster). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
 
 #### `pitr.backupSource.binlogServer.size`
 
