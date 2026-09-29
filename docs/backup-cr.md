@@ -71,7 +71,7 @@ Specifies the **full backup** to serve as the base for the incremental chain. Th
 
 ### `startingDeadlineSeconds`
 
-The maximum time, in seconds, a backup can wait to start before the Operator marks it as failed. When defined, takes precedence over the cluster-level [`backup.startingDeadlineSeconds`](operator.md#backupstartingdeadlineseconds).
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. When defined, takes precedence over the cluster-level [`backup.startingDeadlineSeconds`](operator.md#backupstartingdeadlineseconds).
 
 | Value type  | Example    |
 | ----------- | ---------- |
