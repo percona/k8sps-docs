@@ -34,18 +34,21 @@ switch to `group-replication`.
 
 ### How it works
 
-When you change `mysql.clusterType` and apply the Custom Resource, the Operator:
+When you change `mysql.clusterType` and apply the Custom Resource, the Operator compares the new value with the current cluster type in the [`status.clusterType`](cr-statuses.md#perconaservermysql-status) field. 
 
-1. Detects that the desired type differs from the type on the MySQL StatefulSet.
-2. Tears down the current topology:
+If the cluster is paused or not `ready`, the Operator waits. `status.clusterType` stays on the current type, and proxies and Orchestrator keep the existing topology.
+
+When the cluster is `ready`, the Operator:
+
+1. Tears down the current topology:
 
     * **From Group Replication** — Dissolves the InnoDB Cluster and clears persisted `group_replication_*` variables so nodes do not rejoin the old group.
     * **From async** — Stops and resets replication channels. This step fails if Orchestrator is still enabled.
 
-3. Deletes the MySQL StatefulSet. If HAProxy StatefulSet and
-MySQL Router Deployment are enabled, the Operator deletes them
-too.
-4. Recreates those workloads and bootstraps the new replication type on the existing PVCs.
+2. Deletes the MySQL StatefulSet. If the HAProxy StatefulSet and the MySQL Router Deployment are enabled, the Operator deletes them too.
+3. Sets `status.clusterType` to the new type, recreates those workloads, and bootstraps the new replication type on the existing PVCs.
+
+The switch is finished when the `status.state` is `ready` and the `status.clusterType` matches the `spec.mysql.clusterType` value in the Custom Resource. While the switch is in progress, the Operator emits the `ClusterTypeSwitchInProgress` condition. The Operator removes that condition when the cluster is `ready` under the new type.
 
 During the switch, the cluster leaves `ready` and application connections drop until HAProxy (or Router) is ready. If you used MySQL Router and switch to async, update connection strings to the HAProxy Service.
 
@@ -128,11 +131,13 @@ Enable Orchestrator in the same change. Keep HAProxy enabled and disable MySQL R
         kubectl apply -f deploy/cr.yaml -n $NAMESPACE
         ```
 
-Wait until the cluster is `ready`. The `REPLICATION` column shows `async`. Orchestrator and HAProxy report ready replicas.
+Wait until the cluster is `ready` and the `status.clusterType` is `async`. Orchestrator and HAProxy report ready replicas. 
 
 ```bash
 kubectl get ps $CLUSTER_NAME -n $NAMESPACE
 ```
+
+See [Verify the switch](#verify-the-switch).
 
 ### Switch from async to group replication
 
@@ -171,13 +176,33 @@ Disable Orchestrator in the same change. The Operator refuses the switch while O
         kubectl apply -f deploy/cr.yaml -n $NAMESPACE
         ```
 
-Wait until the cluster is `ready`. The `REPLICATION` column shows `group-replication`. The Orchestrator column is empty.
-
-```bash
-kubectl get ps $CLUSTER_NAME -n $NAMESPACE
-```
+Wait until the cluster is `ready` and the `status.clusterType` is `group-replication`. The Orchestrator column is empty. See [Verify the switch](#verify-the-switch).
 
 ### Verify the switch
+
+Confirm the applied type and the cluster state:
+
+```bash
+kubectl get ps $CLUSTER_NAME -n $NAMESPACE \
+  -o jsonpath='{.status.state}{" "}{.status.clusterType}{"\n"}'
+```
+
+The output is `ready` and the type you switched to (`async` or `group-replication`).
+
+??? example "Sample output"
+
+    ```{.text .no-copy}
+    ready async
+    ```
+
+Check whether the switch is still in progress:
+
+```bash
+kubectl get ps $CLUSTER_NAME -n $NAMESPACE \
+  -o jsonpath='{range .status.conditions[?(@.type=="ClusterTypeSwitchInProgress")]}{.type}{": "}{.status}{"\n"}{end}'
+```
+
+A finished switch returns no output.
 
 Connect through HAProxy as described in [Connect to Percona Server for MySQL](connect.md) and query a known table.
 
@@ -216,6 +241,14 @@ PWD=$(kubectl -n $NAMESPACE get secret $CLUSTER_NAME-psuser-root -o jsonpath='{.
     ```
 
     On the primary, replica status is empty. On replicas, the IO and SQL threads should report `Yes`.
+
+## Known limitations
+
+If you switch from group replication to async and the cluster does not finish bootstrapping the new topology, you cannot switch it back.
+
+The Operator sets `status.clusterType` to `async` when it deletes the old workloads, before bootstrap finishes. A failed bootstrap leaves the MySQL Pods unable to accept the connections the Operator needs to tear the async setup down. Setting `mysql.clusterType` back to `group-replication` does not restore the previous topology, and the cluster stays out of `ready`.
+
+This limitation is known and will be fixed in a later release. [Restore the cluster](backups-restore.md) from the backup you took before the switch.
 
 ## Operator 1.2.0 and earlier
 
