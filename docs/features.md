@@ -41,6 +41,10 @@ Scale your database infrastructure effortlessly:
 - Load balancing through HAProxy or MySQL Router
 - Resource optimization with intelligent pod placement
 
+### Automatic MySQL configuration tuning
+
+Get your cluster production-ready without deep MySQL tuning expertise. Specify the CPU and memory you allocate to MySQL, your workload profile, and the MySQL version. The Operator [automatically calculates and applies the MySQL configuration](autoconfig.md) for you and recalculates it whenever those resources change, so you pay only for the resources you actually use.
+
 ### Security and compliance
 
 Keep your data secure with built-in security features:
