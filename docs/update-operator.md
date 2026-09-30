@@ -2,6 +2,8 @@
 
 To update the Operator, you need to update the Custom Resource Definition (CRD) and the Operator deployment. Also we recommend to update the Kubernetes database cluster configuration by updating the Custom Resource and the database components to the latest version. This step ensures that all new features that come with the Operator release work in your environment.
 
+This page covers how to upgrade to a new Operator version. If you wish to stay on your current version and only apply security fixes, see [Use Operator security builds](security-builds.md).
+
 ## Considerations for Kubernetes Cluster versions and upgrades
 
 1. Before upgrading the Kubernetes cluster, have a disaster recovery plan in place. Ensure that a backup is taken prior to the upgrade.
