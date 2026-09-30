@@ -970,7 +970,7 @@ The `my.cnf` file options to be passed to Percona Server for MySQL instances.
 
 ### `mysql.autoConfig.enabled`
 
-Enables [automatic configuration tuning](autoconfig.md). The Operator calculates a full MySQL configuration based on the Pod resourced, database workload profile and MySQL version. Requires `mysql.resources` (CPU and memory), `mysql.autoConfig.loadType` and `mysql.autoConfig.version` to be set.
+Enables [automatic configuration tuning](autoconfig.md). The Operator calculates a full MySQL configuration based on the Pod resources, database workload profile, and MySQL version. Requires `mysql.resources` (CPU and memory) and `mysql.autoConfig.version` to be set.
 
 | Value type  | Example    |
 | ----------- | ---------- |
