@@ -43,7 +43,7 @@ When the cluster is `ready`, the Operator:
 1. Tears down the current topology:
 
     * **From Group Replication** — Dissolves the InnoDB Cluster and clears persisted `group_replication_*` variables so nodes do not rejoin the old group.
-    * **From async** — Stops and resets replication channels. This step fails if Orchestrator is still enabled.
+    * **From async** — Stops and resets replication channels. This step fails if the Orchestrator is still enabled.
 
 2. Deletes the MySQL StatefulSet. If the HAProxy StatefulSet and the MySQL Router Deployment are enabled, the Operator deletes them too.
 3. Sets `status.clusterType` to the new type, recreates those workloads, and bootstraps the new replication type on the existing PVCs.
@@ -244,9 +244,9 @@ PWD=$(kubectl -n $NAMESPACE get secret $CLUSTER_NAME-psuser-root -o jsonpath='{.
 
 ## Known limitations
 
-If you switch from group replication to async and the cluster does not finish bootstrapping the new topology, you cannot switch it back.
+If you switch from group replication to async and the Operator fails to bootstrap the new topology, you cannot switch the cluster back to group replication.
 
-The Operator sets `status.clusterType` to `async` when it deletes the old workloads, before bootstrap finishes. A failed bootstrap leaves the MySQL Pods unable to accept the connections the Operator needs to tear the async setup down. Setting `mysql.clusterType` back to `group-replication` does not restore the previous topology, and the cluster stays out of `ready`.
+The Operator sets `status.clusterType` to `async` when it deletes the old workloads, before it finishes that bootstrap. If the bootstrap fails, the MySQL Pods cannot accept the connections the Operator needs to tear the async setup down. Setting `mysql.clusterType` back to `group-replication` does not restore the previous topology, and the cluster stays out of `ready`.
 
 This limitation is known and will be fixed in a later release. [Restore the cluster](backups-restore.md) from the backup you took before the switch.
 
