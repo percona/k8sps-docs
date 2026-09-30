@@ -143,7 +143,7 @@ Common condition fields:
 | `Error` | The Operator detected an error (for example, a reconcile failure or a full cluster crash). |
 | `InnoDBClusterBootstrapped` | The InnoDB Cluster metadata exists and Group Replication is formed. |
 | `AwaitingExternalBootstrap` | The cluster is configured with `spec.mysql.bootstrap.mode: manual` and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication. |
-| `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active. |
+| `ClusterSetMember` | The cluster is a primary or a replica in an InnoDB ClusterSet that has at least one replica. `reason` is `Primary` or `Replica`. A ClusterSet that contains only the primary has no `ClusterSetMember` condition. |
 
 `status.conditions[].status` values:
 
@@ -159,7 +159,7 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 * `ErrorReconcile` — cluster reconciliation failed; see the condition message
 * `FullClusterCrashDetected` — all Group Replication members have crash recovery files
 * `ManualBootstrapRequested` — the cluster is waiting for external bootstrap
-* `ClusterSetReplicationRunning` — ClusterSet replica replication is active
+* `ClusterSetMember` - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason `Primary` for the primary cluster and `Replica` for the replica cluster. A cluster created with the Operator 1.2.0 can still show `ClusterSetReplicationRunning: True` after the upgrade. Use the `ClusterSetMember` to see whether the cluster is the primary or a replica.
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
 
 ### Storage autoscaling status
@@ -187,7 +187,7 @@ The cluster controller emits Kubernetes events you can view with `kubectl descri
 
 ## PerconaServerMySQLClusterSet status
 
-ClusterSet progress and topology are reflected in `status.primaryCluster`, `status.clusters`, and `status.conditions`. For configuration options, see [ClusterSet Resource options](clusterset-cr.md). For setup, see [Set up cross-site replication](replication-setup.md).
+ClusterSet progress and topology are reflected in `status.primaryCluster`, `status.clusters`, and `status.conditions`. Each member `PerconaServerMySQL` cluster reports its own role with the `ClusterSetMember` condition. See [PerconaServerMySQL conditions](#conditions). For configuration options, see [ClusterSet Resource options](clusterset-cr.md). For setup, see [Set up cross-site replication](replication-setup.md).
 
 Common fields:
 

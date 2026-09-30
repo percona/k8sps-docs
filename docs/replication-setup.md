@@ -354,9 +354,11 @@ kubectl get ps replica-cluster -n $REPLICA_NS -o jsonpath='{range .status.condit
     ```text
     Initializing: False
     Ready: True
-    ClusterSetReplicationRunning: True
+    ClusterSetMember: True
     InnoDBClusterBootstrapped: True
     ```
+
+`ClusterSetMember` is `True` on each cluster that belongs to a ClusterSet with at least one replica. The reason is `Replica` on a replica cluster and `Primary` on the primary cluster. A ClusterSet that contains only the primary has no `ClusterSetMember` condition. Starting with Operator version 1.3.0, use `ClusterSetMember` for this check. A cluster created with Operator 1.2.0 can still show `ClusterSetReplicationRunning: True`.
 
 ### Verify data replication
 
@@ -539,8 +541,7 @@ Underlying `PerconaServerMySQL` clusters **continue running** as standalone Inno
 
 If dissolve fails (for example, because the primary is permanently unreachable), the Custom Resource stays with `deletionTimestamp` set. Fix connectivity or resolve the MySQL-side issue, then the finalizer retries automatically.
 
-To delete replica and primary clusters themselves, delete their `PerconaServerMySQL` Custom Resources separately after the ClusterSet is gone.
-
+To delete the primary and replica clusters, delete their `PerconaServerMySQL` Custom Resources after the ClusterSet is gone.
 ## Troubleshooting
 
 | Symptom | What to check |
@@ -553,6 +554,7 @@ To delete replica and primary clusters themselves, delete their `PerconaServerMy
 | `ErrorReconcile: True`, reason `AccessDenied` | Incorrect password configured on the replica site |
 | `ErrorReconcile: True`, reason `PrimaryUnreachable` | Primary cluster is not reachable |
 | `ReplicaManagementFailure` | One or more replicas could not be added or removed. See the condition message for exact details. Make sure that your replicas are reachable before removing them. |
+| Member cluster stays `Terminating` | The `percona.com/clusterset-protection` finalizer is still set. Remove the cluster from the ClusterSet. Or, delete the ClusterSet and then delete the cluster. |
 
 
 For status field reference, see [Custom resource statuses](cr-statuses.md).
