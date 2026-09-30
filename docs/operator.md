@@ -2881,13 +2881,6 @@ The number of retries to make a backup (by default, 6 retries are made).
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `6` |
 
-### `backup.allowParallel`
-
-Allows more than one backup for this cluster to run at the same time. When `false` (default), the Operator runs backups for the cluster sequentially. See [Run multiple backups](backups.md#run-multiple-backups).
-
-| Value type  | Example    |
-| ----------- | ---------- |
-| :material-toggle-switch-outline: boolean     | `true` |
 
 ### `backup.startingDeadlineSeconds`
 
