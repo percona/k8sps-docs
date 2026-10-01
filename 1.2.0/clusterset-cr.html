@@ -5508,6 +5508,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>
 <p><code>percona.com/clusterset-dissolve</code> — Runs <code>.dissolve()</code> on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.</p>
 </li>
+<li>
+<p><code>annotations</code> — Kubernetes annotations on the ClusterSet object. The Operator uses the following annotation:</p>
+</li>
+<li>
+<p><code>percona.com/clusterset-rejoin-cluster</code> — Set this to a replica&rsquo;s InnoDB cluster name (<code>spec.clusters[].innodbClusterName</code>) when the replica is healthy but ClusterSet replication is down. Do not set it to the current primary. The Operator removes the annotation after the rejoin attempt, whether it succeeds or fails. See <a href="replication-setup.html#rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</p>
+</li>
 </ul>
 <h2 id="spec"><code>spec</code><a class="headerlink" href="#spec" title="Permanent link">&para;</a></h2>
 <p>This section contains the ClusterSet configuration.</p>
@@ -5728,7 +5734,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 17:33:09 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:21:00 UTC">October 1, 2026</span>
       
         <br>
         Created:

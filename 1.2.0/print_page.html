@@ -13147,15 +13147,16 @@ credentials cannot differ per site.</li>
 <ul>
 <li><strong>MySQL versioning</strong> — Primary and replicas can have different but compatible MySQL versions. Replication is supported from one release series to the next higher series. For example, from the primary running Percona Server for MySQL 8.0.27+ to the replica running Percona Server for MySQL 8.4.x.</li>
 <li><strong>Manual bootstrap for replicas</strong> — When you deploy a replica site, specify <code>spec.mysql.bootstrap.mode: manual</code> to prevent the replica from starting as a Group Replication cluster. Instead, Pod-0 comes up and waits for the ClusterSet controller to create the group. Pod-1+ do not start until Pod-0 is Ready.</li>
-<li><strong>Long operations as Jobs</strong> — <code>createReplicaCluster</code>, switchover, and cluster removal run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.</li>
+<li><strong>Long operations as Jobs</strong> — <code>createReplicaCluster</code>, switchover, cluster removal, and rejoin run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.</li>
+<li><strong>Replica recovery after pause or crash</strong> — The Operator recovers a ClusterSet replica through full cluster crash recovery. It runs <code>dba.rebootClusterFromCompleteOutage()</code>, which restores the local Group Replication group and rejoins the replica to the ClusterSet. If only the ClusterSet channel is down, you trigger rejoin with an annotation. See <a href="#replication-setup-rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</li>
 <li><strong>Finalizer on delete</strong> — The <code>percona.com/clusterset-dissolve</code> finalizer ensures that the ClusterSet dissolves when the <code>PerconaServerMySQLClusterSet</code> Custom Resource is removed. Data in underlying clusters is preserved.</li>
 <li><strong>No automatic switchover</strong> — All switchovers are user-initiated. You must edit the ClusterSet Custom Resource for a planned or a forced failover.</li>
 </ul>
 <h2 id="replication-known-limitations">Known limitations<a class="headerlink" href="#replication-known-limitations" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>No automatic rejoin to ClusterSet after replication stops</strong> — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window, connect to the replica cluster and run the <code>dba.rebootClusterFromCompleteOutage()</code> command to re-initialize the cluster metadata. Then connect to the primary cluster and run the <code>dba.getCluster().getClusterSet().rejoinCluster("&lt;innodb_cluster_name&gt;")</code> command to rejoin the replica.</li>
+<li><strong>No automatic rejoin when only the ClusterSet channel is down</strong> — After a pause, stop, or crash, the Operator recovers the replica and rejoins it to the ClusterSet. If the replica is already healthy but ClusterSet replication is down (for example after a long primary outage), the Operator does not rejoin it automatically. You must choose a safe window and <a href="#replication-setup-rejoin-a-replica-cluster">trigger rejoin</a>.</li>
 <li><strong>No adopting existing ClusterSets</strong> — The controller only bootstraps a new ClusterSet or refuses if the metadata is inconsistent. You cannot adopt into management any ClusterSet that was created manually with <code>mysqlsh</code>.</li>
-<li><strong>Restoring backups onto replica clusters in a ClusterSet is not supported</strong> — While a replica is part of a ClusterSet, restoring a backup onto it is not supported. If you attempt to do so, the replica will fail to rejoin the ClusterSet afterward. In this case, you must manually reboot the cluster (using <code>dba.rebootClusterFromCompleteOutage()</code>) and rejoin it to the ClusterSet from the primary.</li>
+<li><strong>Restoring backups onto replica clusters in a ClusterSet is not supported</strong> — While a replica is part of a ClusterSet, restoring a backup onto it is not supported. If you attempt to do so, the replica will fail to rejoin the ClusterSet afterward. After the local cluster is healthy, <a href="#replication-setup-rejoin-a-replica-cluster">rejoin it</a>. If GTIDs diverged, remove and recreate the replica.</li>
 <li><strong>Backups taken on a ClusterSet cannot be restored on a fresh cluster</strong> — Backups include the ClusterSet metadata that is tied to the specific topology and identities of the clusters within that ClusterSet. Restoring such a backup onto a new, unrelated cluster will lead to inconsistencies or errors, since the metadata will not match the new environment or cluster configuration.</li>
 <li><strong>Removal is one-way</strong> — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.</li>
 <li><strong>Deletion of ClusterSet object is stuck if the cluster is deleted beforehand</strong> - Ensure your ClusterSet members are running before you delete the ClusterSet object. If the deletion is stuck, edit the ClusterSet object and remove the <code>percona.com/clusterset-dissolve</code> finalizer to proceed.</li>
@@ -13559,7 +13560,42 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <p class="admonition-title">Warning</p>
 <p>Set <code>unsafeFlags.forcedFailover</code> to <code>true</code> only when you are certain the old primary cannot recover or accept writes.</p>
 </div>
-<p>To recover an invalidated cluster later, either use MySQL Shell <code>rejoinCluster()</code> manually, or remove and recreate the cluster in the ClusterSet.</p>
+<p>To recover an invalidated cluster later, <a href="#replication-setup-rejoin-a-replica-cluster">rejoin it</a> if GTIDs are compatible, or remove and recreate the cluster in the ClusterSet.</p>
+<h3 id="replication-setup-rejoin-a-replica-cluster">Rejoin a replica cluster<a class="headerlink" href="#replication-setup-rejoin-a-replica-cluster" title="Permanent link">&para;</a></h3>
+<p>If the replica&rsquo;s Group Replication channel is down (for example, you paused or stopped a ClusterSet replica or it crashed), the Operator recovers the local Group Replication group and rejoins it to the ClusterSet automatically. </p>
+<p>However, when the replica itself is healthy but the ClusterSet replication is down, you trigger the rejoin manually by annotating the ClusterSet. This happens typically after the primary was unreachable long enough to exhaust retries. </p>
+<p>Rejoin when <code>globalStatus</code> stays <code>OK_NOT_REPLICATING</code>, or <code>ClusterSetReplicationRunning</code> is <code>False</code>, after the replica cluster is <code>Ready</code>. You can also rejoin an <code>INVALIDATED</code> former primary after <a href="#replication-setup-forced-failover">forced failover</a> if its GTIDs are still compatible with the current primary.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Do not rejoin while a switchover or failover is running, and do not target the current primary.</p>
+<ul>
+<li>If <code>SwitchoverInProgress</code> is <code>True</code>, or <code>spec.primaryCluster</code> differs from <code>status.primaryCluster</code>, wait until switchover finishes. If you trigger the rejoin operation during switchover, the Operator defers the rejoin until it completes.</li>
+<li>Set the annotation to the replica&rsquo;s InnoDB cluster name (<code>status.innodbClusterName</code>), not the Kubernetes Custom Resource name and not the current primary. The Operator ignores a rejoin annotation that names the primary.</li>
+<li>If the primary is unreachable, the Operator keeps the annotation and does not create a Job. Rejoin starts when the primary is available again.</li>
+</ul>
+</div>
+<ol>
+<li>
+<p>Annotate the ClusterSet. Use the replica&rsquo;s InnoDB cluster name — in this tutorial, <code>replicacluster</code>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>percona.com/clusterset-rejoin-cluster<span class="o">=</span>replicacluster
+</code></pre></div>
+<p>The Operator then:</p>
+<ol>
+<li>Creates a Job that runs <code>dba.getCluster().getClusterSet().rejoinCluster('replicacluster')</code></li>
+<li>Sets the <code>RejoinClusterInProgress</code> condition while the Job runs</li>
+<li>After the Job completes, checks that the replica&rsquo;s <code>globalStatus</code> is <code>OK</code>. Only then it removes the annotation and the condition, and emits a <code>ClusterSetMemberRejoined</code> event.</li>
+<li>If the Job failed or it completed but <code>globalStatus</code> is not <code>OK</code>, the Operator treats the rejoin as failed. It removes the annotation, deletes a failed Job, sets <code>RejoinClusterInProgress</code> to <code>False</code> with reason <code>RejoinFailed</code>, and emits a <code>ClusterSetMemberRejoinFailed</code> warning. Fix the cause, then annotate again.</li>
+</ol>
+</li>
+<li>
+<p>Monitor progress:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>rejoin
+</code></pre></div>
+<p>Confirm that the replica&rsquo;s <code>globalStatus</code> is <code>OK</code> and that <code>ClusterSetReplicationRunning</code> is <code>True</code> on the replica cluster. If you see the <code>RejoinFailed</code> condition or a <code>ClusterSetMemberRejoinFailed</code> event, read the condition message and Job logs (the Job may have succeeded while the replica stayed <code>OK_NOT_REPLICATING</code>). Fix the cause, then annotate again.</p>
+</li>
+</ol>
 <h3 id="replication-setup-remove-a-replica-cluster">Remove a replica cluster<a class="headerlink" href="#replication-setup-remove-a-replica-cluster" title="Permanent link">&para;</a></h3>
 <p>Remove a replica by deleting its entry from <code>spec.clusters[]</code>.</p>
 <div class="admonition important">
@@ -13660,6 +13696,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <tr>
 <td>Switchover stuck</td>
 <td>Check <code>SwitchoverInProgress</code> condition and switchover Job status</td>
+</tr>
+<tr>
+<td>Replica <code>globalStatus: OK_NOT_REPLICATING</code>, <code>RejoinFailed</code> or <code>ClusterSetMemberRejoinFailed</code></td>
+<td>The replica is healthy but ClusterSet replication is down (for example after a long primary outage). Or a rejoin attempt did not restore <code>globalStatus: OK</code>.Inspect the rejoin Job logs, then <a href="#replication-setup-rejoin-a-replica-cluster">rejoin the replica</a>.</td>
 </tr>
 <tr>
 <td><code>ErrorReconcile: True</code>, reason <code>AccessDenied</code></td>
@@ -15594,6 +15634,7 @@ percona-server-mysql-operator-7ff9cff46f-6dtgs   1/1     Running   0          13
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Clusters with Group Replication undergo crash recovery on each unpause. This is caused by the specifics of Group Replication, which supposes continuous availability of the database service by design. See <a href="https://dev.mysql.com/doc/refman/8.0/en/group-replication-restarting-group.html">upstream documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for more details.</p>
+<p>If this cluster is a replica in a ClusterSet, the Operator recovers the local group on unpause and rejoins it to the ClusterSet. If the primary was down long enough to break the replication channel, you must <a href="#replication-setup-rejoin-a-replica-cluster">rejoin the replica</a>.</p>
 </div></section>
                     <section class='print-page md-section' id='section-8-3' heading-number='8.3'>
                         <h1>Cleanup<a class='headerlink' href='#section-8-3' title='Permanent link'></a>
@@ -16148,6 +16189,12 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <td>Secrets</td>
 <td>Indicates when passwords were last updated in the Secret</td>
 <td></td>
+</tr>
+<tr>
+<td><code>percona.com/clusterset-rejoin-cluster</code></td>
+<td><code>PerconaServerMySQLClusterSet</code></td>
+<td>Triggers a rejoin when the replica is healthy but ClusterSet replication is down. Value is the replica&rsquo;s InnoDB cluster name (<code>status.innodbClusterName</code>). The Operator removes the annotation after the rejoin attempt, whether it succeeded or failed. See <a href="#replication-setup-rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</td>
+<td><code>replicacluster</code></td>
 </tr>
 </tbody>
 </table>
@@ -23348,6 +23395,12 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 <li>
 <p><code>percona.com/clusterset-dissolve</code> — Runs <code>.dissolve()</code> on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.</p>
 </li>
+<li>
+<p><code>annotations</code> — Kubernetes annotations on the ClusterSet object. The Operator uses the following annotation:</p>
+</li>
+<li>
+<p><code>percona.com/clusterset-rejoin-cluster</code> — Set this to a replica&rsquo;s InnoDB cluster name (<code>spec.clusters[].innodbClusterName</code>) when the replica is healthy but ClusterSet replication is down. Do not set it to the current primary. The Operator removes the annotation after the rejoin attempt, whether it succeeds or fails. See <a href="#replication-setup-rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</p>
+</li>
 </ul>
 <h2 id="clusterset-cr-spec"><code>spec</code><a class="headerlink" href="#clusterset-cr-spec" title="Permanent link">&para;</a></h2>
 <p>This section contains the ClusterSet configuration.</p>
@@ -24569,7 +24622,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>OK_NOT_REPLICATING</code></td>
-<td>Cluster is reachable but not currently replicating (transitional or misconfigured).</td>
+<td>Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists after the replica is <code>Ready</code>, <a href="#replication-setup-rejoin-a-replica-cluster">rejoin the replica</a>.</td>
 </tr>
 <tr>
 <td><code>NOT_OK</code></td>
@@ -24577,7 +24630,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 <tr>
 <td><code>INVALIDATED</code></td>
-<td>Cluster was fenced off after forced failover; it may have divergent GTIDs. Rejoin it with <code>rejoinCluster()</code> if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet.</td>
+<td>Cluster was fenced off after forced failover; it may have divergent GTIDs. <a href="#replication-setup-rejoin-a-replica-cluster">Rejoin it</a> if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet.</td>
 </tr>
 <tr>
 <td><code>UNKNOWN</code></td>
@@ -24610,6 +24663,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <tr>
 <td><code>SwitchoverInProgress</code></td>
 <td><code>spec.primaryCluster</code> differs from the observed primary and a switchover Job is running, pending, or failed.</td>
+</tr>
+<tr>
+<td><code>RejoinClusterInProgress</code></td>
+<td>A rejoin Job is running or has failed. See <a href="#replication-setup-rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</td>
 </tr>
 <tr>
 <td><code>ErrorReconcile</code></td>
@@ -24698,6 +24755,25 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 </tr>
 </tbody>
 </table>
+<p>Common <code>RejoinClusterInProgress</code> reasons:</p>
+<table>
+<thead>
+<tr>
+<th>Reason</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RejoinInProgress</code></td>
+<td>A rejoin Job is running. Condition status is <code>True</code>.</td>
+</tr>
+<tr>
+<td><code>RejoinFailed</code></td>
+<td>The rejoin Job failed or the Job completed but the replica&rsquo;s <code>globalStatus</code> is not <code>OK</code>. Condition status is <code>False</code>. The annotation is removed so you can retry.</td>
+</tr>
+</tbody>
+</table>
 <p><code>ErrorReconcile</code> uses the reason <code>ErrorReconcile</code> for general failures, or <code>AccessDenied</code> / <code>PrimaryUnreachable</code> when the ClusterSet manager cannot reach or authenticate to the primary.</p>
 <h3 id="cr-statuses-events_1">Events<a class="headerlink" href="#cr-statuses-events_1" title="Permanent link">&para;</a></h3>
 <p>The ClusterSet controller emits Kubernetes events you can view with <code>kubectl describe ps-clusterset</code>:</p>
@@ -24728,6 +24804,14 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <tr>
 <td><code>ClusterSetMemberRemoved</code></td>
 <td>A cluster was removed from the ClusterSet.</td>
+</tr>
+<tr>
+<td><code>ClusterSetMemberRejoined</code></td>
+<td>A replica cluster rejoined the ClusterSet.</td>
+</tr>
+<tr>
+<td><code>ClusterSetMemberRejoinFailed</code></td>
+<td>Warning. Rejoin failed: the Job failed or the Job completed but the replica stayed unhealthy (for example <code>OK_NOT_REPLICATING</code>).</td>
 </tr>
 <tr>
 <td><code>ClusterSetHealthDegraded</code></td>

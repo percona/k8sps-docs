@@ -2837,6 +2837,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#rejoin-a-replica-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rejoin a replica cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#remove-a-replica-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5397,6 +5408,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#rejoin-a-replica-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rejoin a replica cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#remove-a-replica-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5860,7 +5882,42 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <p class="admonition-title">Warning</p>
 <p>Set <code>unsafeFlags.forcedFailover</code> to <code>true</code> only when you are certain the old primary cannot recover or accept writes.</p>
 </div>
-<p>To recover an invalidated cluster later, either use MySQL Shell <code>rejoinCluster()</code> manually, or remove and recreate the cluster in the ClusterSet.</p>
+<p>To recover an invalidated cluster later, <a href="#rejoin-a-replica-cluster">rejoin it</a> if GTIDs are compatible, or remove and recreate the cluster in the ClusterSet.</p>
+<h3 id="rejoin-a-replica-cluster">Rejoin a replica cluster<a class="headerlink" href="#rejoin-a-replica-cluster" title="Permanent link">&para;</a></h3>
+<p>If the replica&rsquo;s Group Replication channel is down (for example, you paused or stopped a ClusterSet replica or it crashed), the Operator recovers the local Group Replication group and rejoins it to the ClusterSet automatically. </p>
+<p>However, when the replica itself is healthy but the ClusterSet replication is down, you trigger the rejoin manually by annotating the ClusterSet. This happens typically after the primary was unreachable long enough to exhaust retries. </p>
+<p>Rejoin when <code>globalStatus</code> stays <code>OK_NOT_REPLICATING</code>, or <code>ClusterSetReplicationRunning</code> is <code>False</code>, after the replica cluster is <code>Ready</code>. You can also rejoin an <code>INVALIDATED</code> former primary after <a href="#forced-failover">forced failover</a> if its GTIDs are still compatible with the current primary.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Do not rejoin while a switchover or failover is running, and do not target the current primary.</p>
+<ul>
+<li>If <code>SwitchoverInProgress</code> is <code>True</code>, or <code>spec.primaryCluster</code> differs from <code>status.primaryCluster</code>, wait until switchover finishes. If you trigger the rejoin operation during switchover, the Operator defers the rejoin until it completes.</li>
+<li>Set the annotation to the replica&rsquo;s InnoDB cluster name (<code>status.innodbClusterName</code>), not the Kubernetes Custom Resource name and not the current primary. The Operator ignores a rejoin annotation that names the primary.</li>
+<li>If the primary is unreachable, the Operator keeps the annotation and does not create a Job. Rejoin starts when the primary is available again.</li>
+</ul>
+</div>
+<ol>
+<li>
+<p>Annotate the ClusterSet. Use the replica&rsquo;s InnoDB cluster name — in this tutorial, <code>replicacluster</code>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>percona.com/clusterset-rejoin-cluster<span class="o">=</span>replicacluster
+</code></pre></div>
+<p>The Operator then:</p>
+<ol>
+<li>Creates a Job that runs <code>dba.getCluster().getClusterSet().rejoinCluster('replicacluster')</code></li>
+<li>Sets the <code>RejoinClusterInProgress</code> condition while the Job runs</li>
+<li>After the Job completes, checks that the replica&rsquo;s <code>globalStatus</code> is <code>OK</code>. Only then it removes the annotation and the condition, and emits a <code>ClusterSetMemberRejoined</code> event.</li>
+<li>If the Job failed or it completed but <code>globalStatus</code> is not <code>OK</code>, the Operator treats the rejoin as failed. It removes the annotation, deletes a failed Job, sets <code>RejoinClusterInProgress</code> to <code>False</code> with reason <code>RejoinFailed</code>, and emits a <code>ClusterSetMemberRejoinFailed</code> warning. Fix the cause, then annotate again.</li>
+</ol>
+</li>
+<li>
+<p>Monitor progress:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>rejoin
+</code></pre></div>
+<p>Confirm that the replica&rsquo;s <code>globalStatus</code> is <code>OK</code> and that <code>ClusterSetReplicationRunning</code> is <code>True</code> on the replica cluster. If you see the <code>RejoinFailed</code> condition or a <code>ClusterSetMemberRejoinFailed</code> event, read the condition message and Job logs (the Job may have succeeded while the replica stayed <code>OK_NOT_REPLICATING</code>). Fix the cause, then annotate again.</p>
+</li>
+</ol>
 <h3 id="remove-a-replica-cluster">Remove a replica cluster<a class="headerlink" href="#remove-a-replica-cluster" title="Permanent link">&para;</a></h3>
 <p>Remove a replica by deleting its entry from <code>spec.clusters[]</code>.</p>
 <div class="admonition important">
@@ -5963,6 +6020,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <td>Check <code>SwitchoverInProgress</code> condition and switchover Job status</td>
 </tr>
 <tr>
+<td>Replica <code>globalStatus: OK_NOT_REPLICATING</code>, <code>RejoinFailed</code> or <code>ClusterSetMemberRejoinFailed</code></td>
+<td>The replica is healthy but ClusterSet replication is down (for example after a long primary outage). Or a rejoin attempt did not restore <code>globalStatus: OK</code>.Inspect the rejoin Job logs, then <a href="#rejoin-a-replica-cluster">rejoin the replica</a>.</td>
+</tr>
+<tr>
 <td><code>ErrorReconcile: True</code>, reason <code>AccessDenied</code></td>
 <td>Incorrect password configured on the replica site</td>
 </tr>
@@ -5982,7 +6043,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 17:33:09 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:21:00 UTC">October 1, 2026</span>
       
         <br>
         Created:

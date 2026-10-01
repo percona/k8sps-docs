@@ -5535,6 +5535,12 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <td>Indicates when passwords were last updated in the Secret</td>
 <td></td>
 </tr>
+<tr>
+<td><code>percona.com/clusterset-rejoin-cluster</code></td>
+<td><code>PerconaServerMySQLClusterSet</code></td>
+<td>Triggers a rejoin when the replica is healthy but ClusterSet replication is down. Value is the replica&rsquo;s InnoDB cluster name (<code>status.innodbClusterName</code>). The Operator removes the annotation after the rejoin attempt, whether it succeeded or failed. See <a href="replication-setup.html#rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</td>
+<td><code>replicacluster</code></td>
+</tr>
 </tbody>
 </table>
 <h2 id="setting-labels-and-annotations-in-the-custom-resource">Setting labels and annotations in the Custom Resource<a class="headerlink" href="#setting-labels-and-annotations-in-the-custom-resource" title="Permanent link">&para;</a></h2>
@@ -5659,7 +5665,7 @@ nothing if a new label or an annotation is added to the Service object.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 7, 2025 14:35:00 UTC">November 7, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:21:00 UTC">October 1, 2026</span>
       
         <br>
         Created:
