@@ -140,8 +140,6 @@ kubectl get configmap auto-<cluster-name>-mysql -o jsonpath='{.data.my\.cnf}' -n
     * `loose_group_replication_autorejoin_tries` and `loose_group_replication_paxos_single_leader`
     * `loose_binlog_transaction_dependency_tracking`
 
-    Group Replication variables use the `loose_` prefix, so MySQL skips them when the Group Replication plugin is not loaded yet.
-
 ### How calculated settings are applied
 
 The Operator applies calculated values after all MySQL Pods are ready:
