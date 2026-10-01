@@ -93,6 +93,7 @@ The main cluster state is recorded in `status.state`. Component-level states are
 Common fields:
 
 * `status.state` — overall cluster state
+* `status.clusterType` — replication type the Operator has applied (`group-replication` or `async`). It stays on the current type while a [replication type switch](change-replication-type.md) is waiting to start, then changes after the Operator tears down the previous topology. It can differ from `spec.mysql.clusterType` until the switch finishes. The `REPLICATION` column of `kubectl get ps` shows `spec.mysql.clusterType`.
 * `status.host` — connection endpoint (proxy Service, LoadBalancer address, or MySQL Service)
 * `status.innodbClusterName` — InnoDB cluster name derived from the Custom Resource name (non-alphanumeric characters stripped). Use this value in the [ClusterSet Custom Resource](clusterset-cr.md#specclustersinnodbclustername)
 * `status.mysql.ready` / `status.mysql.size` — number of ready MySQL Pods and the desired size
@@ -144,6 +145,7 @@ Common condition fields:
 | `InnoDBClusterBootstrapped` | The InnoDB Cluster metadata exists and Group Replication is formed. |
 | `AwaitingExternalBootstrap` | The cluster is configured with `spec.mysql.bootstrap.mode: manual` and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication. |
 | `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active. |
+| `ClusterTypeSwitchInProgress` | A replication type switch is in progress. The Operator removes this condition only after `status.state` is `ready` under the new type. |
 
 `status.conditions[].status` values:
 
@@ -161,6 +163,7 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 * `ManualBootstrapRequested` — the cluster is waiting for external bootstrap
 * `ClusterSetReplicationRunning` — ClusterSet replica replication is active
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
+* `TeardownStarted` — the Operator started switching `mysql.clusterType`. The message names the previous type and the new type. Used with `ClusterTypeSwitchInProgress`.
 
 ### Storage autoscaling status
 
