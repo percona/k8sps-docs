@@ -251,6 +251,7 @@ nav:
               - Manually: update-crd-manual.md
               - With Helm: update-crd-helm.md
               - Via OLM: update-openshift.md
+            - Apply security builds: security-builds.md
             - "Upgrade the database": update-db.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:
