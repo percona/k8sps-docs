@@ -232,7 +232,9 @@ nav:
               - "Configure HAProxy": haproxy-conf.md
               - "Configure MySQL Router": router-conf.md
           - "Control Pod scheduling": constraints.md             
-          - "Fine-tune MySQL options": options.md
+          - MySQL configuration:
+              - "Fine-tune MySQL options": options.md
+              - "Automatic configuration tuning": autoconfig.md
           - "Configure DNS suffix": dns-suffix.md
           - "Multi-namespace deployment": cluster-wide.md
           - Cross-site replication: 
