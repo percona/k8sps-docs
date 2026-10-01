@@ -14828,7 +14828,8 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 <p>The <code>mysql</code> section in the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file contains general
 configuration options for the Percona Server for MySQL.</p>
 <h3 id="mysqlclustertype"><code>mysql.clusterType</code><a class="headerlink" href="#mysqlclustertype" title="Permanent link">&para;</a></h3>
-<p>The cluster type: <code>async</code> for <a href="https://dev.mysql.com/doc/refman/8.0/en/replication.html">Asynchronous replication <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, <code>group-replication</code> for <a href="https://dev.mysql.com/doc/refman/8.0/en/group-replication.html">Group Replication <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>The cluster type: <code>async</code> for <a href="https://dev.mysql.com/doc/refman/8.4/en/replication.html">Asynchronous replication <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, <code>group-replication</code> for <a href="https://dev.mysql.com/doc/refman/8.4/en/group-replication.html">Group Replication <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>Starting with Operator version 1.3.0, you can change this value on a running cluster. The Operator converts the topology in place. The switch causes downtime. See <a href="change-replication-type.html">Change replication type</a> to learn more.</p>
 <table>
 <thead>
 <tr>
@@ -17714,6 +17715,7 @@ of any complexity to be used.</p>
 configuration options for the Orchestrator - a replication topology manager, used if asynchronous replication is turned on.</p>
 <h3 id="orchestratorenabled"><code>orchestrator.enabled</code><a class="headerlink" href="#orchestratorenabled" title="Permanent link">&para;</a></h3>
 <p>Enables or disables the Orchestrator.</p>
+<p>Orchestrator is used with asynchronous replication. Disable it when you <a href="change-replication-type.html#switch-from-async-to-group-replication">switch from async to group replication</a>. Enable it when you <a href="change-replication-type.html#switch-from-group-replication-to-async">switch from group replication to async</a>.</p>
 <table>
 <thead>
 <tr>
@@ -20584,7 +20586,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:48:43 UTC">October 1, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:50:08 UTC">October 1, 2026</span>
       
         <br>
         Created:

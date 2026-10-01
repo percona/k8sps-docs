@@ -5630,6 +5630,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <p>Common fields:</p>
 <ul>
 <li><code>status.state</code> — overall cluster state</li>
+<li><code>status.clusterType</code> — replication type the Operator has applied (<code>group-replication</code> or <code>async</code>). It stays on the current type while a <a href="change-replication-type.html">replication type switch</a> is waiting to start, then changes after the Operator tears down the previous topology. It can differ from <code>spec.mysql.clusterType</code> until the switch finishes. The <code>REPLICATION</code> column of <code>kubectl get ps</code> shows <code>spec.mysql.clusterType</code>.</li>
 <li><code>status.host</code> — connection endpoint (proxy Service, LoadBalancer address, or MySQL Service)</li>
 <li><code>status.innodbClusterName</code> — InnoDB cluster name derived from the Custom Resource name (non-alphanumeric characters stripped). Use this value in the <a href="clusterset-cr.html#specclustersinnodbclustername">ClusterSet Custom Resource</a></li>
 <li><code>status.mysql.ready</code> / <code>status.mysql.size</code> — number of ready MySQL Pods and the desired size</li>
@@ -5724,6 +5725,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <td><code>ClusterSetReplicationRunning</code></td>
 <td>The cluster is a <code>REPLICA</code> member of an InnoDB ClusterSet and async replication from the primary cluster is active.</td>
 </tr>
+<tr>
+<td><code>ClusterTypeSwitchInProgress</code></td>
+<td>A replication type switch is in progress. The Operator removes this condition only after <code>status.state</code> is <code>ready</code> under the new type.</td>
+</tr>
 </tbody>
 </table>
 <p><code>status.conditions[].status</code> values:</p>
@@ -5757,6 +5762,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <li><code>ManualBootstrapRequested</code> — the cluster is waiting for external bootstrap</li>
 <li><code>ClusterSetReplicationRunning</code> — ClusterSet replica replication is active</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
+<li><code>TeardownStarted</code> — the Operator started switching <code>mysql.clusterType</code>. The message names the previous type and the new type. Used with <code>ClusterTypeSwitchInProgress</code>.</li>
 </ul>
 <h3 id="storage-autoscaling-status">Storage autoscaling status<a class="headerlink" href="#storage-autoscaling-status" title="Permanent link">&para;</a></h3>
 <p>When you enable <a href="scaling.html#scale-storage">storage autoscaling</a>, the Operator records per-PVC progress in <code>status.storageAutoscaling.&lt;pvc-name&gt;</code>:</p>
@@ -6196,7 +6202,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:48:43 UTC">October 1, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:50:08 UTC">October 1, 2026</span>
       
         <br>
         Created:

@@ -5140,11 +5140,11 @@ default name differs on how you installed the Operator:</p>
 </li>
 <li>
 <p>Retrieve the user credentials from the Secret:</p>
-<p><code>bash
-kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" \
-  -o jsonpath='{.data.user}' | base64 --decode &amp;&amp; echo
-kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" \
-  -o jsonpath='{.data.password}' | base64 --decode &amp;&amp; echo</code></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.user}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
+</code></pre></div>
 </li>
 <li>
 <p>Run a container with the <code>mysql</code> client and connect its console output to your terminal. The following command does this, naming the new Pod <code>percona-client</code>:</p>
@@ -5177,7 +5177,7 @@ kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" \
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:07:08 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:50:08 UTC">October 1, 2026</span>
       
         <br>
         Created:
