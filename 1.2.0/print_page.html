@@ -9382,16 +9382,15 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 <li>An incremental backup - contains only the changes that occurred since the previous backup. To learn more, read <a href="#backups-incremental">Incremental backups</a>. </li>
 </ul>
 <h2 id="backups-configuring-backups">Configuring backups<a class="headerlink" href="#backups-configuring-backups" title="Permanent link">&para;</a></h2>
-<p>You configure backups in the <code>backup</code> section of your
-<a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>
-file. This section includes:</p>
+<p>You configure backups in the <code>backup</code> section of the 
+<a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file. At minimum, you must:</p>
 <ul>
-<li>The <a href="#operator-backupenabled">backup.enabled</a> key, which you set to <code>true</code> to enable backups</li>
-<li>The <a href="#operator-backupscheduletype">backup.schedule.type</a> key to set the type for scheduled backups.</li>
-<li>The <a href="#backup-cr-type">PerconaServerMySQLBackup.spec.type</a> field to set the type for on-demand backups.</li>
-<li>The <code>storages</code> subsection, where you <a href="#backups-storage">configure access to your cloud storage</a></li>
-<li>Optional <a href="#backups-encrypted">backup encryption</a> settings to protect backup files in the object storage</li>
+<li>Set <a href="#operator-backupenabled">backup.enabled</a> to <code>true</code> to enable backups</li>
+<li>Configure at least one <a href="#backups-storage">storage location</a> in <code>backup.storages</code> subsection.</li>
 </ul>
+<p>You can customize a backup type, scheduling and encryption. See <a href="#backups-scheduled">Making scheduled backups</a>, <a href="#backups-ondemand">Creating a backup on demand</a>, and <a href="#backups-encrypted">Encrypted backups</a> tutorials for the guidelines.</p>
+<p>To fine-tune how long a backup waits to start, see <a href="#backups-run-multiple-backups">Fine-tune the backup queue</a>. To suspend backups when the cluster is unhealthy, see <a href="#backups-suspend-backups-on-an-unhealthy-cluster">Suspend backups on an unhealthy cluster</a>.</p>
+<p>For the full set of backup-related fields, see the <a href="#operator-operator-backup-section">Custom Resource reference</a> and the <a href="#backup-cr">Backup Resource reference</a> for per-backup options.</p>
 <h2 id="backups-backup-runs">Backup runs<a class="headerlink" href="#backups-backup-runs" title="Permanent link">&para;</a></h2>
 <p>You can create backups in two ways:</p>
 <ul>
@@ -9402,6 +9401,23 @@ file. This section includes:</p>
     <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/backup.yaml">deploy/backup/backup.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>
     file.</li>
 </ul>
+<h2 id="backups-set-a-waiting-time-for-a-backup-to-start">Set a waiting time for a backup to start<a class="headerlink" href="#backups-set-a-waiting-time-for-a-backup-to-start" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>You can fine-tune a backup queue by assigning a waiting time for a backup to start. </p>
+<p>Use the <a href="#operator-backupstartingdeadlineseconds"><code>backup.startingDeadlineSeconds</code></a> option in the <code>deploy/cr.yaml</code> file to set this time for all backups. Override it for an on-demand backup by setting the <a href="#backup-cr-startingdeadlineseconds"><code>startingDeadlineSeconds</code></a> option on the <code>PerconaServerMySQLBackup</code> object. If the Operator does not create the Job before this time expires, the backup state becomes <code>Error</code> with <code>stateDescription: backup did not start before startingDeadlineSeconds expired</code>.</p>
+<p>This timer also covers a backup that is waiting because the cluster is not ready. See <a href="#backups-suspend-backups-on-an-unhealthy-cluster">Suspend backups on an unhealthy cluster</a>.</p>
+<h2 id="backups-suspend-backups-on-an-unhealthy-cluster">Suspend backups on an unhealthy cluster<a class="headerlink" href="#backups-suspend-backups-on-an-unhealthy-cluster" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>Your database cluster can become unhealthy. For example, when one of the Pods crashes and restarts. The Operator monitors the database cluster state while a backup is running and suspends it for an unhealthy cluster to reduce the load on the cluster.</p>
+<p>When the cluster is ready again, the Operator resumes the backup Job. Resuming a Job creates a new Pod, so the backup starts over from the beginning rather than continuing from where it stopped.</p>
+<p>To offload the database cluster even more, you can define how long a backup remains suspended. Use the <a href="#operator-backupsuspendeddeadlineseconds"><code>backup.suspendedDeadlineSeconds</code></a> option in the <code>cr.yaml</code> file for all backups. Or override it with the <a href="#backup-cr-suspendeddeadlineseconds"><code>suspendedDeadlineSeconds</code></a> option in the <code>deploy/backup/backup.yaml</code> configuration files for a specific backup. The setting in the <code>backup.yaml</code> file has a higher priority.</p>
+<p>After this duration expires, the Operator automatically marks this backup as <code>Failed</code> with <code>stateDescription: backup did not resume before suspendedDeadlineSeconds expired</code>, and deletes the suspended Job.</p>
+<p>A backup that has not started yet does not move to <code>Suspended</code>. If the cluster is still unready when <code>startingDeadlineSeconds</code> expires, the backup state changes to <code>Error</code>. See <a href="#backups-set-a-waiting-time-for-a-backup-to-start">Set a waiting time for a backup to start</a>.</p>
+<p>For the full list of backup states, see <a href="#cr-statuses-backup-state-values">Backup state values</a>.</p>
 <h2 id="backups-point-in-time-recovery">Point-in-time recovery<a class="headerlink" href="#backups-point-in-time-recovery" title="Permanent link">&para;</a></h2>
 <p>Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to <a href="#backups-restore-pitr">restore to a specific GTID or timestamp</a>. <a href="#backups-pitr-enable-binlog-collection">Enable binlog collection</a> to stream binlogs to the object
 storage alongside your normal backup configuration.</p></section><section class="print-page" id="backups-storage" heading-number="6.3.2"><h1 id="backups-storage-configure-storage-for-backups">Configure storage for backups<a class="headerlink" href="#backups-storage-configure-storage-for-backups" title="Permanent link">&para;</a></h1>
@@ -22593,6 +22609,39 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="operator-backupstartingdeadlineseconds"><code>backup.startingDeadlineSeconds</code><a class="headerlink" href="#operator-backupstartingdeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a backup can wait to start before the Operator marks it as <code>Error</code>. The backup can wait if the cluster isn&rsquo;t ready yet or another backup for this cluster is still running. The default is <code>0</code>, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with <a href="#backup-cr-startingdeadlineseconds"><code>PerconaServerMySQLBackup.spec.startingDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backupsuspendeddeadlineseconds"><code>backup.suspendedDeadlineSeconds</code><a class="headerlink" href="#operator-backupsuspendeddeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a <a href="#cr-statuses-backup-state-values">suspended</a> backup can wait to resume before the Operator marks it as failed. The default is <code>0</code>, which means the Operator does not enforce a resume deadline. </p>
+<p>Applies to all backups for this cluster. Overridable per backup with <a href="#backup-cr-suspendeddeadlineseconds"><code>PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="operator-backupstoragesstorage-nametype"><code>backup.storages.STORAGE-NAME.type</code><a class="headerlink" href="#operator-backupstoragesstorage-nametype" title="Permanent link">&para;</a></h3>
 <p>The cloud storage type used for backups. The following types are supported: <code>s3</code>, <code>gcs</code> and <code>azure</code>.</p>
 <table>
@@ -23716,6 +23765,39 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>ps-backup</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backup-cr-startingdeadlineseconds"><code>startingDeadlineSeconds</code><a class="headerlink" href="#backup-cr-startingdeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a backup can wait to start before the Operator marks it as <code>Error</code>. When defined, takes precedence over the cluster-level <a href="#operator-backupstartingdeadlineseconds"><code>backup.startingDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backup-cr-suspendeddeadlineseconds"><code>suspendedDeadlineSeconds</code><a class="headerlink" href="#backup-cr-suspendeddeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a <a href="#cr-statuses-backup-state-values">suspended</a> backup can wait to resume before the Operator marks it as failed. The default is <code>0</code>, which means the Operator does not enforce a resume deadline. </p>
+<p>When defined, takes precedence over the cluster-level <a href="#operator-backupsuspendeddeadlineseconds"><code>backup.suspendedDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
 </tr>
 </tbody>
 </table>
@@ -24857,16 +24939,20 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <td>Backup is in progress.</td>
 </tr>
 <tr>
+<td><code>Suspended</code></td>
+<td>The cluster became unready while the backup was running. The Operator pauses the backup Job and resumes it automatically once the cluster is ready again. This restarts the backup from the beginning rather than continuing it. If the cluster doesn&rsquo;t become ready before <code>suspendedDeadlineSeconds</code> expires, the backup moves to <code>Failed</code>.</td>
+</tr>
+<tr>
 <td><code>Succeeded</code></td>
 <td>Backup completed successfully.</td>
 </tr>
 <tr>
 <td><code>Error</code></td>
-<td>Backup failed to start (for example, the cluster is not ready, backups are disabled, or the storage name is missing). Check <code>status.stateDescription</code>. This state is terminal; fix the cause and create a new backup.</td>
+<td>Backup failed to start (for example, backups are disabled, the storage name is missing, or <code>startingDeadlineSeconds</code> expired while waiting for the cluster to be ready or for another backup to complete). Check <code>status.stateDescription</code>. This state is terminal; fix the cause and create a new backup.</td>
 </tr>
 <tr>
 <td><code>Failed</code></td>
-<td>Backup started but failed during execution. Check <code>status.stateDescription</code> and the backup Job logs.</td>
+<td>Backup started but failed during execution — for example, a suspended backup did not resume before <code>suspendedDeadlineSeconds</code> expired (<code>stateDescription: backup did not resume before suspendedDeadlineSeconds expired</code>). Check <code>status.stateDescription</code> and the backup Job logs.</td>
 </tr>
 </tbody>
 </table>

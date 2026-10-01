@@ -7799,6 +7799,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#backupstartingdeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.startingDeadlineSeconds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupsuspendeddeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.suspendedDeadlineSeconds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#backupstoragesstorage-nametype" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -13556,6 +13578,28 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         backup.backoffLimit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupstartingdeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.startingDeadlineSeconds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backupsuspendeddeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.suspendedDeadlineSeconds
       
     </span>
   </a>
@@ -19731,6 +19775,39 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="backupstartingdeadlineseconds"><code>backup.startingDeadlineSeconds</code><a class="headerlink" href="#backupstartingdeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a backup can wait to start before the Operator marks it as <code>Error</code>. The backup can wait if the cluster isn&rsquo;t ready yet or another backup for this cluster is still running. The default is <code>0</code>, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with <a href="backup-cr.html#startingdeadlineseconds"><code>PerconaServerMySQLBackup.spec.startingDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backupsuspendeddeadlineseconds"><code>backup.suspendedDeadlineSeconds</code><a class="headerlink" href="#backupsuspendeddeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a <a href="cr-statuses.html#backup-state-values">suspended</a> backup can wait to resume before the Operator marks it as failed. The default is <code>0</code>, which means the Operator does not enforce a resume deadline. </p>
+<p>Applies to all backups for this cluster. Overridable per backup with <a href="backup-cr.html#suspendeddeadlineseconds"><code>PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="backupstoragesstorage-nametype"><code>backup.storages.STORAGE-NAME.type</code><a class="headerlink" href="#backupstoragesstorage-nametype" title="Permanent link">&para;</a></h3>
 <p>The cloud storage type used for backups. The following types are supported: <code>s3</code>, <code>gcs</code> and <code>azure</code>.</p>
 <table>
@@ -20507,7 +20584,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 20, 2026 08:22:37 UTC">August 20, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:48:43 UTC">October 1, 2026</span>
       
         <br>
         Created:

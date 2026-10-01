@@ -6103,16 +6103,20 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <td>Backup is in progress.</td>
 </tr>
 <tr>
+<td><code>Suspended</code></td>
+<td>The cluster became unready while the backup was running. The Operator pauses the backup Job and resumes it automatically once the cluster is ready again. This restarts the backup from the beginning rather than continuing it. If the cluster doesn&rsquo;t become ready before <code>suspendedDeadlineSeconds</code> expires, the backup moves to <code>Failed</code>.</td>
+</tr>
+<tr>
 <td><code>Succeeded</code></td>
 <td>Backup completed successfully.</td>
 </tr>
 <tr>
 <td><code>Error</code></td>
-<td>Backup failed to start (for example, the cluster is not ready, backups are disabled, or the storage name is missing). Check <code>status.stateDescription</code>. This state is terminal; fix the cause and create a new backup.</td>
+<td>Backup failed to start (for example, backups are disabled, the storage name is missing, or <code>startingDeadlineSeconds</code> expired while waiting for the cluster to be ready or for another backup to complete). Check <code>status.stateDescription</code>. This state is terminal; fix the cause and create a new backup.</td>
 </tr>
 <tr>
 <td><code>Failed</code></td>
-<td>Backup started but failed during execution. Check <code>status.stateDescription</code> and the backup Job logs.</td>
+<td>Backup started but failed during execution — for example, a suspended backup did not resume before <code>suspendedDeadlineSeconds</code> expired (<code>stateDescription: backup did not resume before suspendedDeadlineSeconds expired</code>). Check <code>status.stateDescription</code> and the backup Job logs.</td>
 </tr>
 </tbody>
 </table>
@@ -6192,7 +6196,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:21:00 UTC">October 1, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:48:43 UTC">October 1, 2026</span>
       
         <br>
         Created:

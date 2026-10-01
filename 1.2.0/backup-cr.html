@@ -3978,6 +3978,28 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#startingdeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        startingDeadlineSeconds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspendeddeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        suspendedDeadlineSeconds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#containeroptionsenv" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5308,6 +5330,28 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#startingdeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        startingDeadlineSeconds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspendeddeadlineseconds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        suspendedDeadlineSeconds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#containeroptionsenv" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5490,6 +5534,39 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
+<h3 id="startingdeadlineseconds"><code>startingDeadlineSeconds</code><a class="headerlink" href="#startingdeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a backup can wait to start before the Operator marks it as <code>Error</code>. When defined, takes precedence over the cluster-level <a href="operator.html#backupstartingdeadlineseconds"><code>backup.startingDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="suspendeddeadlineseconds"><code>suspendedDeadlineSeconds</code><a class="headerlink" href="#suspendeddeadlineseconds" title="Permanent link">&para;</a></h3>
+<p>The maximum time, in seconds, a <a href="cr-statuses.html#backup-state-values">suspended</a> backup can wait to resume before the Operator marks it as failed. The default is <code>0</code>, which means the Operator does not enforce a resume deadline. </p>
+<p>When defined, takes precedence over the cluster-level <a href="operator.html#backupsuspendeddeadlineseconds"><code>backup.suspendedDeadlineSeconds</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
+<td><code>900</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="containeroptionsenv"><code>containerOptions.env</code><a class="headerlink" href="#containeroptionsenv" title="Permanent link">&para;</a></h3>
 <p>The <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/">environment variables set as key-value pairs <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the backup job.</p>
 <table>
@@ -5559,7 +5636,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:48:43 UTC">October 1, 2026</span>
       
         <br>
         Created:
