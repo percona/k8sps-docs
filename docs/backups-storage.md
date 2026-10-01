@@ -75,6 +75,8 @@ To [encrypt backups](backups-encrypted.md) in object storage, create a separate 
             endpointUrl: https://minio-service:9000
             ```
 
+            You can use a certificate from your organization's PKI and verify TLS communication using those certificates. See the [Configure TLS verification with custom certificates](#configure-tls-verification-with-custom-certificates-for-s3-storage) section for configuration steps.
+
         !!! tip "Organizing backups"
 
             You can use the [prefix](operator.md#backupstoragesstorage-names3prefix) option to specify a path (sub-folder) inside the S3 bucket where backups will be stored. If you don't set a prefix, backups are stored in the root directory.
@@ -220,3 +222,87 @@ To [encrypt backups](backups-encrypted.md) in object storage, create a separate 
         ```
 
     For more configuration options, see the [Operator Custom Resource options](operator.md#operator-backup-section).
+
+## Configure TLS verification with custom certificates for S3 storage
+
+!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+
+You can use your organization's CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.
+
+You must run the Operator 1.3.0 and have a Custom Resource version (`spec.crVersion`) set to `1.3.0` or later.
+
+To configure TLS verification with custom certificates, do the following:
+
+--8<-- [start:casecret]
+
+1. Create a Secret that contains the CA certificate needed to verify the S3 endpoint. This Secret is separate from the storage credentials Secret.
+
+    You can create it from a file:
+
+    ```bash
+    kubectl create secret generic minio-ca-bundle --from-file=ca.crt=/path/to/ca.crt -n <namespace>
+    ```
+
+    Or define it in YAML. The `ca.crt` value must be base64-encoded:
+
+    ```yaml title="custom-ca-bundle.yaml"
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: minio-ca-bundle
+    type: Opaque
+    data:
+      ca.crt: <base64-encoded-ca>
+    ```
+
+    Apply the Secret:
+
+    ```bash
+    kubectl apply -f custom-ca-bundle.yaml -n <namespace>
+    ```
+
+--8<-- [end:casecret]
+
+2. Modify the S3 storage configuration in the Custom Resource and specify the following:
+
+    * `storages.<NAME>.s3.caBundle.name` is the name of the Secret you created
+    * `storages.<NAME>.s3.caBundle.key` is the key in the Secret that holds the CA certificate. If you omit `key`, the Operator uses `ca.crt`.
+    * Keep `storages.<NAME>.verifyTLS` set to `true`
+
+    Here's the example configuration:
+
+    ```yaml
+    backup:
+      enabled: true
+      storages:
+        minio:
+          type: s3
+          verifyTLS: true
+          s3:
+            bucket: S3-BACKUP-BUCKET-NAME-HERE
+            region: us-west-2
+            credentialsSecret: ps-cluster1-s3-credentials
+            endpointUrl: https://minio-service:9000
+            caBundle:
+              name: minio-ca-bundle
+              key: ca.crt
+    ```
+
+3. Apply the configuration:
+
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```
+
+The Operator uses this CA to verify TLS when it runs backups, restores, and backup deletion Jobs for that storage.
+
+If the CA lives in a cert-manager Secret that also contains `tls.crt` and `tls.key`, still set `caBundle.key` to `ca.crt` (or the key that holds the CA). The Operator mounts only that key.
+
+If you configure several S3 storages, each can reference its own CA. The Operator mounts all of those CAs on MySQL Pods. A backup or restore Job uses the CA of the storage you selected.
+
+`caBundle` on `backup.storages` does not apply to Binlog Server. To verify TLS communication for [point-in-time recovery](backups-pitr.md), supply your custom certificate within the Binlog Server configuration as well by setting `caBundle` on [`backup.pitr.binlogServer.storage.s3`](backups-pitr.md#verify-tls-with-a-custom-ca). See [Verify TLS with a custom CA](backups-pitr.md#verify-tls-with-a-custom-ca).
+
+When you restore with `backupSource`, such as on a new cluster, create the CA Secret on the target and set `caBundle` on `backupSource.storage.s3`. See [Restore from S3 storage that uses a custom CA](backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca). 
+
+For point-in-time recovery, also set `caBundle` on the binlog storage as shown in [Use a custom CA](backups-restore-pitr.md#use-a-custom-ca).
+
