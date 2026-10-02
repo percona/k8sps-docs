@@ -16,6 +16,9 @@ To restore from a base backup without replaying binlogs, see [Restore on the sam
 * Make a base backup **before** the target time or transaction
 * Choose a target timestamp (`type: date`) or a GTID set (`type: gtid`)
 * Set the `spec.backup.backoffLimit=0` in the cluster Custom Resource so a failed PITR Job does not retry automatically ([known limitations](backups-pitr.md#known-limitations))
+* If the source cluster encrypted binlogs, follow [Restore with encrypted binlogs](#restore-with-encrypted-binlogs)
+
+
 
 ## Restore on the same cluster
 
@@ -81,6 +84,7 @@ The Operator starts a temporary Binlog Server from `spec.pitr.backupSource.binlo
 * Target cluster is running
 * User password Secret matches the source cluster. Copy it as described in [Preconditions](backups-restore-to-new-cluster.md#preconditions)
 * If the base backup was [encrypted](backups-encrypted.md), create the same encryption-key Secret on the target and set `spec.backupSource.storage.encryptionKeySecret`
+* If source binlogs were encrypted, copy the keyring Secret and set `spec.pitr.keyringSecret`. See [Restore with encrypted binlogs](#restore-with-encrypted-binlogs)
 
 Keep these three prefixes distinct:
 
@@ -154,6 +158,7 @@ spec:
 | Stop at a GTID | `pitr.type: gtid` and `pitr.gtid` instead of `date` |
 | Restore a GCS base backup | `backupSource.destination` (`gs://…`), `storage.type: gcs`, and the `gcs` keys. Binlogs stay under `pitr.backupSource.binlogServer.storage.s3` |
 | Decrypt an encrypted backup | Uncomment `encryptionKeySecret` |
+| Decrypt encrypted binlogs | See [Restore with encrypted binlogs](#restore-with-encrypted-binlogs) |
 
 
 Start the restore:
@@ -166,6 +171,98 @@ kubectl apply -f deploy/backup/restore.yaml -n <namespace>
 
 * [Enable binlog collection](backups-pitr.md#enable-binlog-collection) on the restored cluster with a **new** prefix if you share the source bucket.
 * Take a fresh base backup to start a new timeline.
+
+## Restore with encrypted binlogs
+
+Use this section when the source cluster [encrypted binlogs](backups-pitr.md#binlog-encryption) in object storage. The restore Job decrypts each file with the key encryption key (KEK) recorded in that file's metadata. Unencrypted binlogs in the same bucket are applied as-is.
+
+You **must have every KEK** that wrapped the binlogs you are replaying. If a key is missing from the keyring, those files cannot be decrypted.
+
+### On the same cluster
+
+If `spec.backup.pitr.binlogServer.keyringSecret` is still set on the cluster and the Secret still holds every KEK, run the restore as in [Restore on the same cluster](#restore-on-the-same-cluster). The Operator mounts that keyring automatically. No extra fields are required.
+
+Set `spec.pitr.keyringSecret` on the restore object when the keys you need live in a **different** Secret than the one on the cluster (for example after you rotated keys into a new Secret):
+
+```yaml
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLRestore
+metadata:
+  name: restore-pitr-encrypted
+spec:
+  clusterName: ps-cluster1
+  backupName: backup1
+  pitr:
+    type: date
+    date: "2026-03-20 09:15:00"
+    keyringSecret:
+      name: ps-cluster1-binlog-server-keyring
+      key: keyring.json
+```
+
+The `key` field defaults to `keyring.json` if you omit it.
+
+### New cluster
+
+The target cluster has no access to Secrets from the source environment. Copy the keyring Secret, then point the restore at it.
+
+1. On the **source** cluster, export the keyring Secret. Use the name from `spec.backup.pitr.binlogServer.keyringSecret` on the source Custom Resource:
+
+    ```bash
+    kubectl get secret ps-cluster1-binlog-server-keyring -n <source-namespace> -o yaml > binlog-keyring.yaml
+    ```
+
+2. Strip cluster-specific metadata:
+
+    ```bash
+    yq eval 'del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)' binlog-keyring.yaml > binlog-keyring-target.yaml
+    ```
+
+3. Apply the Secret on the **target** cluster:
+
+    ```bash
+    kubectl apply -f binlog-keyring-target.yaml -n <target-namespace>
+    ```
+
+    Confirm the Secret's `keyring.json` still lists **every** KEK that encrypted the binlogs still in the source bucket (including retired `id` values after rotation).
+
+4. Create the restore as in [Restore on a new cluster](#restore-on-a-new-cluster) and add `spec.pitr.keyringSecret`:
+
+    ```yaml
+    spec:
+      clusterName: ps-cluster1
+      backupSource:
+        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+        storage:
+          type: s3
+          s3:
+            bucket: S3-BUCKET-NAME
+            credentialsSecret: ps-cluster1-s3-credentials
+            region: us-west-2
+            prefix: <BACKUP-PREFIX>
+      pitr:
+        type: date
+        date: "2026-03-20 09:15:00"
+        keyringSecret:
+          name: ps-cluster1-binlog-server-keyring
+          key: keyring.json
+        backupSource:
+          binlogServer:
+            storage:
+              s3:
+                bucket: S3-BINLOG-BUCKET-NAME
+                credentialsSecret: ps-cluster1-s3-credentials
+                region: us-west-2
+                prefix: binlogs
+    ```
+
+If the **base backup** was also encrypted, add `spec.backupSource.storage.encryptionKeySecret` as well. That key is separate from the binlog keyring. See [Encrypted backups](backups-encrypted.md).
+
+!!! warning "Keep your binlog encryption keys safe"
+
+    If a KEK is lost or removed from the keyring, binlogs wrapped with that key are irrecoverable. Store a backup of the keyring Secret separately from the binlog bucket.
+
+Apply the restore and [watch the restore](#view-restore-details). If decryption fails, see [Encrypted binlogs fail to decrypt](debug-backup-restore.md#encrypted-binlogs-fail-to-decrypt).
 
 ## Ignore SQL errors during binlog replay
 
