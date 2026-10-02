@@ -19,6 +19,10 @@ The Operator creates physical backups using [Percona XtraBackup :octicons-link-e
 3. The `xtrabackup` container receives the request and starts the backup process.
 4. Backups are streamed to storage; the Operator does not keep a separate local copy of the backup on disk.
 
+!!! important
+    
+    For [asynchronous replication](architecture.md#asynchronous-replication-tech-preview) clusters, the Operator uses a replica as the backup source and stops replication for the duration of the backup. If a cluster consists of only 2 members, that replica is the only standby. See [Known limitations](limitations.md#replication-and-topology).
+
 The following diagram outlines this workflow:
 
 ![image](assets/images/backup-job.svg)
