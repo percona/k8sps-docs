@@ -1,6 +1,7 @@
 # Variables used in the documentation
 
 commandName: 'kubectl'
+ps97recommended: '9.7.1-1'
 ps84recommended: '8.4.10-10.1'
 pxb84recommended: '8.4.0-6.1'
 router84recommended: '8.4.10-10.1'
