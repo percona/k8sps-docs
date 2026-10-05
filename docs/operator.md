@@ -709,7 +709,7 @@ The number of failed probes required to mark the container unhealthy.
 
 ### `mysql.env.name`
 
-Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster. The `BOOTSTRAP_CLONE_STALL_TIMEOUT` sets how long an asynchronous clone can go without progress before bootstrap stops it for clusters with `crVersion` set to 1.3.0 and higher. See [Set the clone stall timeout](env-vars-custom.md#set-the-clone-stall-timeout).
+Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster. The `BOOTSTRAP_CLONE_STALL_TIMEOUT` sets how long an asynchronous clone can go without progress before bootstrap stops it for clusters with `crVersion` set to 1.3.0 or higher. See [Set the clone stall timeout](env-vars-custom.md#set-the-clone-stall-timeout).
 
 Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
 
