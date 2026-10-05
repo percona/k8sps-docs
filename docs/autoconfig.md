@@ -135,10 +135,10 @@ kubectl get configmap auto-<cluster-name>-mysql -o jsonpath='{.data.my\.cnf}' -n
 
     **Group Replication, on Group Replication clusters:**
 
-    * `loose_group_replication_message_cache_size` and `loose_group_replication_communication_max_message_size`
-    * `loose_group_replication_flow_control_period` and `loose_group_replication_member_expel_timeout`
-    * `loose_group_replication_autorejoin_tries` and `loose_group_replication_paxos_single_leader`
-    * `loose_binlog_transaction_dependency_tracking`
+    * `group_replication_message_cache_size` and `group_replication_communication_max_message_size`
+    * `group_replication_flow_control_period` and `group_replication_member_expel_timeout`
+    * `group_replication_autorejoin_tries` and `group_replication_paxos_single_leader`
+    * `binlog_transaction_dependency_tracking`
 
 ### How calculated settings are applied
 
