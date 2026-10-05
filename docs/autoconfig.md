@@ -14,7 +14,7 @@ The Operator uses the [mysqloperatorcalculator :octicons-link-external-16:](http
 
 ## Availability
 
-* **New clusters**: on by default when you deploy with Operator 1.3.0+ and the `crVersion` is `1.3.0` or higher.
+* **New clusters**: enabled when you deploy with Operator 1.3.0+ and the `crVersion` is `1.3.0` or higher. 
 * **Existing clusters**: upgrading the Operator does not turn automatic configuration tuning on for you. [Turn it on](#turn-on-automatic-configuration-tuning) yourself once you've upgraded.
 
 ### Supported Percona Server for MySQL versions

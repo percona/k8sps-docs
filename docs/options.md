@@ -15,11 +15,11 @@ following ways:
 
 Before choosing an approach, note that these aren't independent settings you can freely combine. **Setting any configuration of your own disables the Operator's [automatic configuration tuning](autoconfig.md)**, even if you only set one unrelated option:
 
-| Approach | What controls the configuration | Automatic configuration tuning |
-| --- | --- | --- |
-| Nothing set | The Operator's basic auto-tuning (`innodb_buffer_pool_size` and `max_connections` only) | N/A — this is the default fallback either way |
-| `spec.mysql.autoConfig.enabled: true`, no manual config | The Operator calculates a full configuration from your resources and workload profile | Active |
-| `spec.mysql.configuration`, a ConfigMap, or a Secret (any of the methods below) | Your values | Disabled — falls back to basic auto-tuning |
+| Approach | What controls the configuration |
+| --- | --- |
+| Nothing set | The Operator's basic auto-tuning (`innodb_buffer_pool_size` and `max_connections` only) |
+| `spec.mysql.autoConfig.enabled: true`, no manual configuration | The Operator calculates a full configuration from your resources and workload profile |
+| `spec.mysql.configuration`, a ConfigMap, or a Secret (any of the methods below) | Your values only |
 
 If you want the Operator to fully tune MySQL for you, see [Automatic configuration tuning](autoconfig.md) instead of the manual methods on this page.
 
