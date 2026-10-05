@@ -59,4 +59,4 @@ The OpenShift Certified Operator and Operator Lifecycle Manager (OLM) bundles do
 
 Security builds continue until the next Operator release. For example, security builds for version 1.3.0 stop as soon as Operator 1.4.0 is released. They remain available and keep the same digest.
 
-With the release og Operator 1.4.0, new fixes land in security builds for 1.4.0.
+With the release of the Operator 1.4.0, new fixes land in security builds for 1.4.0.
