@@ -2463,6 +2463,252 @@ A custom name to define for a cluster. PMM Server uses this name to properly par
 | ----------- | ---------- |
 | :material-code-string: string     | `cluster1-custom` |
 
+## <a name="operator-logcollector-section"></a>Log collector section
+
+The `logcollector` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file configures the Fluent Bit and `logrotate` sidecars on MySQL Pods. Available starting with Operator version 1.3.0. See [Persistent logging](persistent-logging.md) and [Log rotation](logrotate.md).
+
+The Operator adds the sidecars only when `crVersion` is 1.3.0 or later and `logcollector.enabled` is `true`. `resources` and `containerSecurityContext` apply to both the `logs` and `logrotate` containers. `image` is required when the `logcollector` section is present.
+
+### `logcollector.enabled`
+
+Enables or disables [persistent logging](persistent-logging.md). 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `logcollector.image`
+
+Fluent Bit Docker image to use.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/fluentbit:{{fluentbitrecommended}}` |
+
+### `logcollector.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) for the `logs` and `logrotate` containers. Valid values are `Always`, `IfNotPresent`, and `Never`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `logcollector.configuration`
+
+Extra Fluent Bit configuration, merged with the built-in pipeline. Must be in [Fluent Bit YAML :octicons-link-external-16:](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/) format. The classic `.conf` format is not supported. An invalid snippet is ignored when the `logs` container starts. Changing this field restarts the MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `logcollector.env.name`
+
+Name of an environment variable for the `logs` container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `AWS_REGION` |
+
+### `logcollector.env.value`
+
+Value of an environment variable for the `logs` container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `us-east-1` |
+
+### `logcollector.envFrom.configMapRef.name`
+
+Name of a ConfigMap whose keys are loaded as environment variables for the `logs` container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-log-collector-config` |
+
+### `logcollector.envFrom.secretRef.name`
+
+Name of a Secret whose keys are loaded as environment variables for the `logs` container. Use this for credentials of a remote Fluent Bit output.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-log-collector-secret` |
+
+### `logcollector.resources.requests.memory`
+
+[Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `150M` |
+
+### `logcollector.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `300m` |
+
+### `logcollector.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `logcollector.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `350m` |
+
+### `logcollector.containerSecurityContext`
+
+A custom [Kubernetes Security Context :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `logcollector.livenessProbe`
+
+A custom [Kubernetes liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logs` container. When unset, the container has no liveness probe. The built-in Fluent Bit configuration listens on port `2020`, so a `tcpSocket` probe on that port works without extra configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `tcpSocket: { port: 2020 }` |
+
+### `logcollector.livenessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logs` container starts before the first liveness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `logcollector.livenessProbe.periodSeconds`
+
+How often to run the liveness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `logcollector.readinessProbe`
+
+A custom [Kubernetes readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logs` container. When unset, the container has no readiness probe. The built-in Fluent Bit configuration listens on port `2020`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `tcpSocket: { port: 2020 }` |
+
+### `logcollector.readinessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logs` container starts before the first readiness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `logcollector.readinessProbe.periodSeconds`
+
+How often to run the readiness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `logcollector.volumeMounts`
+
+Extra [volume mounts :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) for the `logs` and `logrotate` containers. Use these with `logcollector.volumes`. For example, to mount a CA bundle for an S3 output.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- name: s3-ca<br>  mountPath: /etc/fluentbit/tls<br>  readOnly: true</pre> |
+
+### `logcollector.volumes`
+
+Extra [volumes :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) on the MySQL Pod for the log collector sidecars.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- name: s3-ca<br>  secret:<br>    secretName: my-s3-ca</pre> |
+
+### `logcollector.logRotate.configuration`
+
+Replaces the default `logrotate` configuration. You must provide the full configuration. An invalid snippet is ignored and the sidecar uses the built-in rules. See [Override the default configuration](logrotate.md#override-the-default-configuration).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `logcollector.logRotate.extraConfig.name`
+
+Name of a ConfigMap in the same namespace that holds extra `logrotate` rules. Each key must end with `.conf`. Do not use  `mysql.conf` as the name. That name is reserved for the Operator-managed configuration. See [Add extra rules from a ConfigMap](logrotate.md#add-extra-rules-from-a-configmap).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-logrotate-extra` |
+
+### `logcollector.logRotate.schedule`
+
+Cron expression of five fields for the `logrotate` sidecar. The default is `0 0 * * *` (once a day at midnight). The Operator rejects a value that is not valid cron or that contains a newline.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `0 */6 * * *` |
+
+### `logcollector.logRotate.livenessProbe`
+
+A custom [Kubernetes liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logrotate` container. When unset, the container has no liveness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `exec: { command: [/bin/true] }` |
+
+### `logcollector.logRotate.livenessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logrotate` container starts before the first liveness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `logcollector.logRotate.livenessProbe.periodSeconds`
+
+How often to run the liveness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `logcollector.logRotate.readinessProbe`
+
+A custom [Kubernetes readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logrotate` container. When unset, the container has no readiness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `exec: { command: [/bin/true] }` |
+
+### `logcollector.logRotate.readinessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logrotate` container starts before the first readiness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `logcollector.logRotate.readinessProbe.periodSeconds`
+
+How often to run the readiness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
 ## <a name="operator-backup-section"></a>Backup section
 
 The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)

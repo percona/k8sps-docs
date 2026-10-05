@@ -12,6 +12,12 @@ logs with the `kubectl logs` command:
 | `--timestamps`                | Print timestamp in the logs (timezone is taken from the container)        |
 | `--previous`                  | Print previous instantiation of a container. This is extremely useful in case of container restart, where there is a need to check the logs on why the container restarted. Logs of previous instantiation might not be available in all the cases. |
 
+When [persistent logging](persistent-logging.md) is enabled, the MySQL error log is written to a file on the data volume and copied to the `logs` container. It does not appear in the `mysql` container output. Read it with:
+
+```bash
+kubectl logs ps-cluster1-mysql-0 -c logs
+```
+
 In the following examples we will access containers of the `ps-cluster1-mysql-0` Pod.
 
 * Check logs of the `mysql` container:
