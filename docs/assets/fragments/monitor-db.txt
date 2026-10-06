@@ -57,13 +57,13 @@ PMM Client is installed as a sidecar container in the database Pods in your Kube
 
     * Set `pmm.enabled`=`true`.
     * Specify your PMM Server hostname or an IP address for the `pmm.serverHost` option. The PMM Server IP address should be resolvable and reachable from within your cluster.
-
-     ```yaml
-     pmm:
+     
+    ```yaml
+    pmm:
        enabled: true
        image: percona/pmm-client:{{pmm3recommended}}
        serverHost: monitoring-service
-     ``` 
+    ``` 
 
 3. Apply the changes:
 

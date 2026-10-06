@@ -9,18 +9,9 @@ This document focuses on the restore on a new cluster deployed in a different Ku
 
 ## Restore scenarios
 
-Select how you wish to restore:
+To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include `encryptionKeySecret` as shown in [Restore from an encrypted backup](#restore-from-an-encrypted-backup).
 
-- [Restore from a backup to a new Kubernetes-based environment](#restore-from-a-backup-to-a-new-kubernetes-based-environment)
-  - [Restore scenarios](#restore-scenarios)
-  - [Preconditions](#preconditions)
-  - [Before you begin](#before-you-begin)
-  - [Restore from a backup without point-in-time recovery](#restore-from-a-backup-without-point-in-time-recovery)
-  - [Restore with point-in-time recovery](#restore-with-point-in-time-recovery)
-  - [Restore from an encrypted backup](#restore-from-an-encrypted-backup)
-  - [View restore details](#view-restore-details)
-  - [Post-restore steps](#post-restore-steps)
-  - [Troubleshooting](#troubleshooting)
+To restore to a timestamp or GTID, use [Restore with point-in-time recovery](backups-restore-pitr.md#restore-on-a-new-cluster). 
 
 To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml).
 
@@ -102,7 +93,7 @@ You can export the user Secret from the source cluster and create a Secrets obje
     kubectl get ps-backup -n $NAMESPACE
     ```
 
-## Restore from a backup without point-in-time recovery
+## Restore from a backup
 
 Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following keys:
 
@@ -159,257 +150,33 @@ Start the restore:
 kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
 ```
 
-## Restore with point-in-time recovery
-
-For point-in-time recovery to a new cluster, you need the following:
-
-* a binlog storage configured on the target cluster with a different path for binlog collection than on the source cluster. You can reuse the storage settings from the source cluster but specify a different `prefix` value.
-* a base backup that will be used for the restore
-* the GTID set to restore up to a specific transaction, or a timestamp to restore up to a specific time
-* the backup storage configured either on the target cluster or in the restore object 
-* the binlog server storage from the source cluster configured in the restore object. The Operator uses it to apply binlogs on top of the backup
-* the Secret with the user credentials. Refer to the [Preconditions](#preconditions) for how to create it.
-
-When restoring to a new cluster, the Operator starts a temporary Binlog Server Pod using the settings you defined in the restore object, uses this server to locate and fetch the required binlogs, and removes it when the restore completes. Copy the binlog storage settings from the source cluster's `spec.backup.pitr.binlogServer` configuration, including the `prefix` that points at the binlog folder.
-
-Binlog storage currently supports only AWS S3 and S3-compatible services, even when the base backup is stored elsewhere. Read more in the [Point-in-time recovery](backups-pitr.md) documentation.
-
-Edit the [deploy/backup/restore.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml) manifest.
-
-1. Specify the following keys:
-
-    * Set `spec.clusterName` key to the name of the target cluster to restore the backup on
-    * Configure the `spec.backupSource` subsection to point to the cloud storage where the backup is stored. This subsection should include:
-
-       * A destination key. Take it from the output of the `kubectl get ps-backup` command on the source cluster
-       * The necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster. Make sure to set the `prefix` in the restore object to the exact same value used for the backup, so the Operator can find the correct backup location.
-
-    * Configure the `pitr` subsection:
-
-       * `type` - specify one of the following:
-
-          * `date` - to restore up to a specific time
-          * `gtid` - to restore up to a specific transaction
-
-       * For the `type=date` option, set the `date` key in the datetime format.
-       * For the `type=gtid` option, set the `gtid` to the GTID set to restore the database to. It has the format `source_id:transaction_id`
-       * `pitr.backupSource.binlogServer` - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster's `spec.backup.pitr.binlogServer`, including the `prefix` for the binlog folder.
-
-        === "Restore to a timestamp"
-
-            === "S3-compatible storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-timestamp
-                spec:
-                  clusterName: ps-cluster1
-                  backupSource:
-                    destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-                    storage:
-                      s3:
-                        bucket: S3-BUCKET-NAME
-                        credentialsSecret: ps-cluster1-s3-credentials
-                        region: us-west-2
-                        endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
-                        ...
-                    type: s3
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE #Optional for AWS S3
-                            prefix: binlogs
-                    type: date
-                    date: "2026-03-20 09:15:00"
-                ```
-
-            === "Google Cloud Storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-timestamp
-                spec:
-                  clusterName: ps-cluster1
-                  backupSource:
-                    destination: gs://BUCKET-NAME/BACKUP-NAME
-                    storage:
-                      gcs:
-                        bucket: operator-testing
-                        credentialsSecret: ps-cluster1-gcp-credentials
-                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
-                      type: gcs
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE #Optional for AWS S3
-                            prefix: binlogs
-                    type: date
-                    date: "2026-03-20 09:15:00"
-                ```
-
-        === "Restore to a transaction"
-
-            === "S3-compatible storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-transaction
-                spec:
-                  clusterName: ps-cluster1
-                  backupSource:
-                    destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-                    storage:
-                      s3:
-                        bucket: S3-BUCKET-NAME
-                        credentialsSecret: ps-cluster1-s3-credentials
-                        region: us-west-2
-                        endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
-                        ...
-                    type: s3
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                            prefix: binlogs
-                    type: gtid
-                    gtid: "cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"
-                ```
-
-            === "Google Cloud Storage"
-
-                ```yaml
-                apiVersion: ps.percona.com/v1
-                kind: PerconaServerMySQLRestore
-                metadata:
-                  name: restore-transaction
-                spec:
-                  clusterName: ps-cluster1
-                  backupSource:
-                    destination: gs://BUCKET-NAME/BACKUP-NAME
-                    storage:
-                      gcs:
-                        bucket: operator-testing
-                        credentialsSecret: ps-cluster1-gcp-credentials
-                        prefix: <PREFIX-WHERE-BACKUP-IS-STORED>
-                      type: gcs
-                  pitr:
-                    backupSource:
-                      binlogServer:
-                        storage:
-                          s3:
-                            bucket: S3-BINLOG-BUCKET-NAME
-                            credentialsSecret: ps-cluster1-s3-credentials
-                            region: us-west-2
-                            endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                            prefix: binlogs
-                    type: gtid
-                    gtid: "cc5e06e7-241e-11f1-a165-522d36bd0c5e:225"
-                ```
-       
-
-Start the restore:
-
-```bash
-kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
-```
-
 ## Restore from an encrypted backup
 
 Configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following keys:
 
-* set `spec.clusterName` key to the name of the target cluster to restore the backup on
-* configure the `spec.backupSource` subsection to point to the cloud storage where the backup is stored. This subsection should include:
+* `spec.clusterName` — the target cluster
+* `spec.backupSource` — destination and storage for the backup, including `encryptionKeySecret` with the same key that encrypted the backup
 
-  * a destination key. Take it from the output of the `kubectl get ps-backup` command on the source cluster
-  * the necessary [storage configuration keys](backups-storage.md#configure-storage-for-backups), just like in the `deploy/cr.yaml` file of the source cluster.
-  * `encryptionKeySecret` referencing the Secret with the encryption key. The encryption key must be the same that was used to encrypt the backup.
-  
-* If you need point-in-time recovery, define the `pitr` subsection in your restore configuration. Refer to the [Restore with point-in-time recovery](#restore-with-point-in-time-recovery) section for supported keys and detailed guidance.
 
-=== "Without point-in-time recovery"
-
-    This configuration restores an encrypted backup **without** point-in-time recovery. 
-
-    ```yaml
-    apiVersion: ps.percona.com/v1
-    kind: PerconaServerMySQLRestore
-    metadata:
-      name: restore1
-    spec:
-      clusterName: ps-cluster1
-      backupSource:
-        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-        storage:
-          encryptionKeySecret:
-            name: my-encryption-key
-            key: encryptionKey
-          type: s3
-          s3:
-            bucket: S3-BUCKET-NAME
-            credentialsSecret: ps-cluster1-s3-credentials
-            region: us-west-2
-    ```
-
-=== "With point-in-time recovery"
-
-    This configuration shows how to restore an encrypted backup **up to a specific timestamp**. 
-
-    See the [Point-in-time recovery options](#restore-with-point-in-time-recovery) section for all point-in-time recovery configuration possibilities.
-
-    ```yaml
-    apiVersion: ps.percona.com/v1
-    kind: PerconaServerMySQLRestore
-    metadata:
-      name: restore1-pitr
-    spec:
-      clusterName: ps-cluster1
-      backupSource:
-        destination: s3://S3-BUCKET-NAME/BACKUP-NAME
-        storage:
-          encryptionKeySecret:
-            name: my-encryption-key
-            key: encryptionKey
-          type: s3
-          s3:
-            bucket: S3-BUCKET-NAME
-            credentialsSecret: ps-cluster1-s3-credentials
-            region: us-west-2
-      pitr:
-        backupSource:
-          binlogServer:
-            storage:
-              s3:
-                bucket: S3-BINLOG-BUCKET-NAME
-                credentialsSecret: ps-cluster1-s3-credentials
-                region: us-west-2
-                endpointUrl: https://URL-OF-THE-S3-COMPATIBLE-STORAGE
-                prefix: binlogs
-        type: date
-        date: "{{year}}-05-01T15:30:00Z"
-    ```
+```yaml
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLRestore
+metadata:
+  name: restore1
+spec:
+  clusterName: ps-cluster1
+  backupSource:
+    destination: s3://S3-BUCKET-NAME/BACKUP-NAME
+    storage:
+      encryptionKeySecret:
+        name: my-encryption-key
+        key: encryptionKey
+      type: s3
+      s3:
+        bucket: S3-BUCKET-NAME
+        credentialsSecret: ps-cluster1-s3-credentials
+        region: us-west-2
+```
 
 Start the restore:
 
@@ -440,17 +207,8 @@ kubectl get ps-restore -n $NAMESPACE
 
 ## Post-restore steps
 
-* Enable point-in-time recovery to start binlog collection on the restored cluster:
-
-   ```yaml
-   spec:
-     backup:
-       pitr:
-         enabled: true
-   ```
-
-* Make a fresh base backup to start a new timeline for subsequent restores.
+Make a fresh base backup to start a new timeline for subsequent restores.
 
 ## Troubleshooting
 
-If you face issues with restore, refer to our [Restore troubleshooting guide](debug-backup-restore.md#restores) for help.
+If you face issues with restore, refer to [Troubleshoot backups and restores](debug-backup-restore.md#restores).

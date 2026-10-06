@@ -63,6 +63,8 @@ extra_javascript:
    - js/percona-select.js
    - js/rating.js
    - js/kapa.js
+   - js/posthog-search.js
+   - js/posthog-version.js
 
 markdown_extensions:
   attr_list: {}
@@ -169,6 +171,7 @@ nav:
           - "Features and capabilities": features.md
           - "How the Operator works": how-it-works.md
           - "Design and architecture": architecture.md
+          - "Known limitations": limitations.md
     
     - Quick start:
           - Overview: quickstart.md
@@ -199,9 +202,11 @@ nav:
               - "Incremental backups": backups-incremental.md
               - "Make scheduled backups": backups-scheduled.md
               - "Make on-demand backup": backups-ondemand.md
-              - "Point-in-time recovery": backups-pitr.md
               - "Compressed backups": backups-compressed.md
               - "Encrypted backups": backups-encrypted.md
+              - Point-in-time recovery:
+                  - "About point-in-time recovery": backups-pitr.md
+                  - "Restore with point-in-time recovery": backups-restore-pitr.md
               - Restore from a backup:
                 - "On the same cluster": backups-restore.md
                 - "On a new cluster": backups-restore-to-new-cluster.md

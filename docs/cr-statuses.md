@@ -93,6 +93,7 @@ The main cluster state is recorded in `status.state`. Component-level states are
 Common fields:
 
 * `status.state` — overall cluster state
+* `status.clusterType` — replication type the Operator has applied (`group-replication` or `async`). It stays on the current type while a [replication type switch](change-replication-type.md) is waiting to start, then changes after the Operator tears down the previous topology. It can differ from `spec.mysql.clusterType` until the switch finishes. The `REPLICATION` column of `kubectl get ps` shows `spec.mysql.clusterType`.
 * `status.host` — connection endpoint (proxy Service, LoadBalancer address, or MySQL Service)
 * `status.innodbClusterName` — InnoDB cluster name derived from the Custom Resource name (non-alphanumeric characters stripped). Use this value in the [ClusterSet Custom Resource](clusterset-cr.md#specclustersinnodbclustername)
 * `status.mysql.ready` / `status.mysql.size` — number of ready MySQL Pods and the desired size
@@ -144,6 +145,7 @@ Common condition fields:
 | `InnoDBClusterBootstrapped` | The InnoDB Cluster metadata exists and Group Replication is formed. |
 | `AwaitingExternalBootstrap` | The cluster is configured with `spec.mysql.bootstrap.mode: manual` and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication. |
 | `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active. |
+| `ClusterTypeSwitchInProgress` | A replication type switch is in progress. The Operator removes this condition only after `status.state` is `ready` under the new type. |
 
 `status.conditions[].status` values:
 
@@ -161,6 +163,7 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 * `ManualBootstrapRequested` — the cluster is waiting for external bootstrap
 * `ClusterSetReplicationRunning` — ClusterSet replica replication is active
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
+* `TeardownStarted` — the Operator started switching `mysql.clusterType`. The message names the previous type and the new type. Used with `ClusterTypeSwitchInProgress`.
 
 ### Storage autoscaling status
 
@@ -213,9 +216,9 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | Value | Meaning |
 | --- | --- |
 | `OK` | Cluster is healthy and replicating as expected. |
-| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). |
+| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists after the replica is `Ready`, [rejoin the replica](replication-setup.md#rejoin-a-replica-cluster). |
 | `NOT_OK` | Cluster has a problem; check MySQL Shell status and events. |
-| `INVALIDATED` | Cluster was fenced off after forced failover; it may have divergent GTIDs. Rejoin it with `rejoinCluster()` if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
+| `INVALIDATED` | Cluster was fenced off after forced failover; it may have divergent GTIDs. [Rejoin it](replication-setup.md#rejoin-a-replica-cluster) if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
 | `UNKNOWN` | Status could not be determined (for example, the primary is unreachable). |
 
 ### Conditions
@@ -228,6 +231,7 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | `ClusterSetBootstrapped` | The primary cluster is configured as a ClusterSet. |
 | `MySQLShellRunnerReady` | The `mysqlshell-runner` Pod is running and ready. |
 | `SwitchoverInProgress` | `spec.primaryCluster` differs from the observed primary and a switchover Job is running, pending, or failed. |
+| `RejoinClusterInProgress` | A rejoin Job is running or has failed. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster). |
 | `ErrorReconcile` | An error occurred during reconciliation. |
 | `ReplicaManagementFailure` | A replica add or remove Job failed; see the Job logs. |
 | `ClusterSetDissolving` | The Custom Resource is being deleted and the dissolve finalizer is running. |
@@ -257,6 +261,13 @@ Common `SwitchoverInProgress` reasons:
 | `SwitchoverInProgress` | A switchover Job is running. Condition status is `True`. |
 | `SwitchoverFailed` | The switchover Job failed. Condition status is `False`. |
 
+Common `RejoinClusterInProgress` reasons:
+
+| Reason | Meaning |
+| --- | --- |
+| `RejoinInProgress` | A rejoin Job is running. Condition status is `True`. |
+| `RejoinFailed` | The rejoin Job failed or the Job completed but the replica's `globalStatus` is not `OK`. Condition status is `False`. The annotation is removed so you can retry. |
+
 `ErrorReconcile` uses the reason `ErrorReconcile` for general failures, or `AccessDenied` / `PrimaryUnreachable` when the ClusterSet manager cannot reach or authenticate to the primary.
 
 ### Events
@@ -270,6 +281,8 @@ The ClusterSet controller emits Kubernetes events you can view with `kubectl des
 | `ClusterSetPrimaryForcedSwitched` | Forced failover completed. |
 | `ClusterSetMemberAdded` | A cluster was added to the ClusterSet. |
 | `ClusterSetMemberRemoved` | A cluster was removed from the ClusterSet. |
+| `ClusterSetMemberRejoined` | A replica cluster rejoined the ClusterSet. |
+| `ClusterSetMemberRejoinFailed` | Warning. Rejoin failed: the Job failed or the Job completed but the replica stayed unhealthy (for example `OK_NOT_REPLICATING`). |
 | `ClusterSetHealthDegraded` | Overall ClusterSet health dropped from healthy to unhealthy. |
 
 ## PerconaServerMySQLBackup status
@@ -298,9 +311,10 @@ Common fields:
 | `""` | Backup is created but not processed yet. |
 | `Starting` | Backup is starting. |
 | `Running` | Backup is in progress. |
+| `Suspended` | The cluster became unready while the backup was running. The Operator pauses the backup Job and resumes it automatically once the cluster is ready again. This restarts the backup from the beginning rather than continuing it. If the cluster doesn't become ready before `suspendedDeadlineSeconds` expires, the backup moves to `Failed`. |
 | `Succeeded` | Backup completed successfully. |
-| `Error` | Backup failed to start (for example, the cluster is not ready, backups are disabled, or the storage name is missing). Check `status.stateDescription`. This state is terminal; fix the cause and create a new backup. |
-| `Failed` | Backup started but failed during execution. Check `status.stateDescription` and the backup Job logs. |
+| `Error` | Backup failed to start (for example, backups are disabled, the storage name is missing, or `startingDeadlineSeconds` expired while waiting for the cluster to be ready or for another backup to complete). Check `status.stateDescription`. This state is terminal; fix the cause and create a new backup. |
+| `Failed` | Backup started but failed during execution — for example, a suspended backup did not resume before `suspendedDeadlineSeconds` expired (`stateDescription: backup did not resume before suspendedDeadlineSeconds expired`). Check `status.stateDescription` and the backup Job logs. |
 
 For troubleshooting steps, see [Troubleshoot backups and restores](debug-backup-restore.md).
 

@@ -360,7 +360,9 @@ configuration options for the Percona Server for MySQL.
 
 ### `mysql.clusterType`
 
-The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/group-replication.html).
+
+Starting with Operator version 1.3.0, you can change this value on a running cluster. The Operator converts the topology in place. The switch causes downtime. See [Change replication type](change-replication-type.md) to learn more.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1831,6 +1833,8 @@ configuration options for the Orchestrator - a replication topology manager, use
 
 Enables or disables the Orchestrator.
 
+Orchestrator is used with asynchronous replication. Disable it when you [switch from async to group replication](change-replication-type.md#switch-from-async-to-group-replication). Enable it when you [switch from group replication to async](change-replication-type.md#switch-from-group-replication-to-async).
+
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
@@ -2294,6 +2298,66 @@ Updating this field triggers a rolling restart of the Orchestrator Pods.
 | ----------- | ---------- |
 | :material-code-string: string     | `'{"FailMasterPromotionOnLagMinutes": 10}'` |
 
+## <a name="operator-users-section"></a>Users section
+
+The `users` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration options [to create custom MySQL users via the Custom Resource](users.md#create-users-in-the-custom-resource).
+
+### `users.name`
+
+The username of the MySQL user. This field is required.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `my-user` |
+
+### `users.dbs`
+
+Databases that the user can access. If a specified database does not exist, the Operator creates it. When you omit this field and set `grants`, privileges apply to all databases (`*.*`). Omit this field when you set administrative (global) grants such as `SHUTDOWN`, because those privileges apply at the global level.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["db1", "db2"]` |
+
+### `users.hosts`
+
+Hosts that the user can connect from. If not specified, defaults to `'%'`, enabling the user to connect from any host.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["localhost"]` |
+
+### `users.passwordSecretRef.name`
+
+Name of the Secret that contains the user's password. If not provided, the Operator generates a password and stores it in a Secret named `<cluster-name>-user-<username>` (for example, `ps-cluster1-user-my-user`).
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `my-user-pwd` |
+
+### `users.passwordSecretRef.key`
+
+Key in the Secret that holds the user's password (`password` by default).
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `password` |
+
+### `users.withGrantOption`
+
+When `true`, the user can grant their own privileges to other users. The default is `false`.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-toggle-switch-outline: boolean | `false` |
+
+### `users.grants`
+
+Privileges granted to the user. If omitted, the Operator creates the user without additional `GRANT` statements.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["SELECT", "DELETE", "INSERT"]` |
+
 ## <a name="operator-pmm-section"></a>PMM section
 
 The `pmm` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration
@@ -2330,6 +2394,21 @@ Enables to pass MySQL parameters to PMM. For example, to change the number of ta
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
+
+### `pmm.haproxyParams`
+
+Additional parameters passed to the `pmm-admin add haproxy` command for HAProxy Pods. Use this to add custom labels, skip the connection check, or change the metrics listen port.
+
+See the [PMM documentation :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-client/connect-database/haproxy.html) for the list of available flags.
+
+Note the following:
+
+- The Operator registers HAProxy with `--listen-port=8404` by default. If you pass `--listen-port=<value>`, it replaces the default `8404`.
+- Any other flags you pass are appended to the `pmm-admin add haproxy` command.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"--custom-labels=env=prod --skip-connection-check"` |
 
 ### `pmm.readinessProbe.initialDelaySeconds`
 
@@ -2880,6 +2959,25 @@ The number of retries to make a backup (by default, 6 retries are made).
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `6` |
+
+
+### `backup.startingDeadlineSeconds`
+
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. The backup can wait if the cluster isn't ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](backup-cr.md#startingdeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
+
+### `backup.suspendedDeadlineSeconds`
+
+The maximum time, in seconds, a [suspended](cr-statuses.md#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline. 
+
+Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds`](backup-cr.md#suspendeddeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
 
 ### `backup.storages.STORAGE-NAME.type`
 
