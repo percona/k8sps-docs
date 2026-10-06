@@ -1581,6 +1581,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#compare-compressed-and-uncompressed-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compare compressed and uncompressed size
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#restore-from-a-compressed-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5136,6 +5147,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
+  <a href="#compare-compressed-and-uncompressed-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compare compressed and uncompressed size
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#restore-from-a-compressed-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5178,7 +5200,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 
 <h1 id="backup-compression-support-in-percona-operator-for-mysql">Backup compression support in Percona Operator for MySQL<a class="headerlink" href="#backup-compression-support-in-percona-operator-for-mysql" title="Permanent link">&para;</a></h1>
 <p>Percona Operator for MySQL uses Percona XtraBackup (PXB) to create backups.  The Operator exposes this capability too, supporting compression using the <code>zstd</code> compression algorithm. </p>
-<p>Compression works for both full and <a href="backups-incremental.html">incremental</a> backups, and you can configure it for <a href="backups-scheduled.html">scheduled</a> and <a href="backups-ondemand.html">on‑demand</a> backups.</p>
+<p>Compression works for both full and <a href="backups-incremental.html">incremental</a> backups. You can configure it for <a href="backups-scheduled.html">scheduled</a> and <a href="backups-ondemand.html">on‑demand</a> backups.</p>
 <p>With this ability to compress backups, you can reduce the size of your backups, and lower storage and data‑transfer costs.</p>
 <h2 id="configure-global-compression">Configure global compression<a class="headerlink" href="#configure-global-compression" title="Permanent link">&para;</a></h2>
 <p>You can configure compression using the MySQL configuration file. This setting applies to both scheduled and on-demand backups for all backup storages that you use. </p>
@@ -5220,6 +5242,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--compress"</span>
 </code></pre></div>
 <p>It&rsquo;s important to understand how the Operator prioritizes compression and other backup tool settings when they&rsquo;re defined both globally in your cluster&rsquo;s Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see <a href="backups-fine-tune.html">Fine-tuning backup and restore operations</a>.</p>
+<h2 id="compare-compressed-and-uncompressed-size">Compare compressed and uncompressed size<a class="headerlink" href="#compare-compressed-and-uncompressed-size" title="Permanent link">&para;</a></h2>
+<p>After a compressed backup succeeds, compare <code>status.size</code> and <code>status.uncompressedSize</code> on the Backup object. The gap between them is how much compression saved in object storage. </p>
+<ul>
+<li><code>status.size</code> is the compressed object in storage.</li>
+<li><code>status.uncompressedSize</code> is the size before compression. For uncompressed backups the two values are the same.</li>
+</ul>
+<p>Run this command to compare the sizes:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>backup1-compressed<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'</span>
+</code></pre></div>
+<p>See <a href="cr-statuses.html#perconaservermysqlbackup-status">Backup status</a> for the full field list.</p>
 <h2 id="restore-from-a-compressed-backup">Restore from a compressed backup<a class="headerlink" href="#restore-from-a-compressed-backup" title="Permanent link">&para;</a></h2>
 <p>You can make a restore either using the <a href="restore-cr.html#backupname"><code>backupName</code></a> or the <a href="restore-cr.html#the-backupsource-subsection"><code>backupSource</code></a> options. </p>
 <p>The Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.</p>
@@ -5239,7 +5272,7 @@ Percona XtraBackup supports multiple compression algorithms with different trade
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 17, 2026 14:15:26 UTC">April 17, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 6, 2026 07:40:37 UTC">October 6, 2026</span>
       
         <br>
         Created:

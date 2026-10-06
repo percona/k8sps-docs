@@ -9845,6 +9845,27 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 <span class="w">      </span><span class="nt">storageName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3-us-west</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
+<h2 id="backups-scheduled-view-backup-size">View backup size<a class="headerlink" href="#backups-scheduled-view-backup-size" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>After a backup succeeds, the Operator records its size on the Backup object.</p>
+<p>The Backup object has two fields:</p>
+<ul>
+<li><code>status.size</code> is the stored size in IEC units (<code>KiB</code>, <code>MiB</code>, <code>GiB</code>).</li>
+<li><code>status.uncompressedSize</code> is the size before compression. The two values differ only for <a href="#backups-compressed">compressed backups</a>.</li>
+</ul>
+<p>To view the backup size, run:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'</span>
+</code></pre></div>
+<p>These fields stay empty while the backup is running or if it failed. </p>
+<p>Size reporting requires:</p>
+<ul>
+<li>the Operator and the Custom Resource (<code>spec.crVersion</code>) version 1.3.0 or higher. </li>
+<li>Percona XtraBackup 8.4.0-6 and later</li>
+</ul>
+<p>For the full field list, see <a href="#cr-statuses-perconaservermysqlbackup-status">Backup status</a>.</p>
 <h2 id="backups-scheduled-managing-multiple-backup-schedules-in-the-same-storage">Managing multiple backup schedules in the same storage<a class="headerlink" href="#backups-scheduled-managing-multiple-backup-schedules-in-the-same-storage" title="Permanent link">&para;</a></h2>
 <p>You can define multiple backup schedules to meet different recovery and compliance needs. For example, you might want daily backups for quick recovery from recent changes and monthly backups for long-term retention or audit purposes.</p>
 <p>When you use the same storage location for multiple schedules, be aware of these important limitations:</p>
@@ -9994,6 +10015,27 @@ xb-cron-ps-cluster2-gcp-20251107152047-9mgo5-gcp         1/1           9s       
 <p>List backups with this command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
+<h2 id="backups-ondemand-view-backup-size">View backup size<a class="headerlink" href="#backups-ondemand-view-backup-size" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>After a backup succeeds, the Operator records its size on the Backup object.</p>
+<p>The Backup object has two fields:</p>
+<ul>
+<li><code>status.size</code> is the stored size in IEC units (<code>KiB</code>, <code>MiB</code>, <code>GiB</code>).</li>
+<li><code>status.uncompressedSize</code> is the size before compression. The two values differ only for <a href="#backups-compressed">compressed backups</a>.</li>
+</ul>
+<p>To view the backup size, run:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'</span>
+</code></pre></div>
+<p>These fields stay empty while the backup is running or if it failed. </p>
+<p>Size reporting requires:</p>
+<ul>
+<li>the Operator and the Custom Resource (<code>spec.crVersion</code>) version 1.3.0 or higher. </li>
+<li>Percona XtraBackup 8.4.0-6 and later</li>
+</ul>
+<p>For the full field list, see <a href="#cr-statuses-perconaservermysqlbackup-status">Backup status</a>.</p>
 <h2 id="backups-ondemand-specifying-the-backup-source">Specifying the backup source<a class="headerlink" href="#backups-ondemand-specifying-the-backup-source" title="Permanent link">&para;</a></h2>
 <p>When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object&rsquo;s status:</p>
 <div class="highlight"><pre><span></span><code>kubectl get ps-backup backup1 -o yaml
@@ -10025,7 +10067,7 @@ status:
 <h2 id="backups-ondemand-troubleshooting">Troubleshooting<a class="headerlink" href="#backups-ondemand-troubleshooting" title="Permanent link">&para;</a></h2>
 <p>If you face issues with backups, refer to our <a href="#debug-backup-restore">Backup troubleshooting guide</a> for help.</p></section><section class="print-page" id="backups-compressed" heading-number="6.3.6"><h1 id="backups-compressed-backup-compression-support-in-percona-operator-for-mysql">Backup compression support in Percona Operator for MySQL<a class="headerlink" href="#backups-compressed-backup-compression-support-in-percona-operator-for-mysql" title="Permanent link">&para;</a></h1>
 <p>Percona Operator for MySQL uses Percona XtraBackup (PXB) to create backups.  The Operator exposes this capability too, supporting compression using the <code>zstd</code> compression algorithm. </p>
-<p>Compression works for both full and <a href="#backups-incremental">incremental</a> backups, and you can configure it for <a href="#backups-scheduled">scheduled</a> and <a href="#backups-ondemand">on‑demand</a> backups.</p>
+<p>Compression works for both full and <a href="#backups-incremental">incremental</a> backups. You can configure it for <a href="#backups-scheduled">scheduled</a> and <a href="#backups-ondemand">on‑demand</a> backups.</p>
 <p>With this ability to compress backups, you can reduce the size of your backups, and lower storage and data‑transfer costs.</p>
 <h2 id="backups-compressed-configure-global-compression">Configure global compression<a class="headerlink" href="#backups-compressed-configure-global-compression" title="Permanent link">&para;</a></h2>
 <p>You can configure compression using the MySQL configuration file. This setting applies to both scheduled and on-demand backups for all backup storages that you use. </p>
@@ -10067,6 +10109,17 @@ status:
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--compress"</span>
 </code></pre></div>
 <p>It&rsquo;s important to understand how the Operator prioritizes compression and other backup tool settings when they&rsquo;re defined both globally in your cluster&rsquo;s Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see <a href="#backups-fine-tune">Fine-tuning backup and restore operations</a>.</p>
+<h2 id="backups-compressed-compare-compressed-and-uncompressed-size">Compare compressed and uncompressed size<a class="headerlink" href="#backups-compressed-compare-compressed-and-uncompressed-size" title="Permanent link">&para;</a></h2>
+<p>After a compressed backup succeeds, compare <code>status.size</code> and <code>status.uncompressedSize</code> on the Backup object. The gap between them is how much compression saved in object storage. </p>
+<ul>
+<li><code>status.size</code> is the compressed object in storage.</li>
+<li><code>status.uncompressedSize</code> is the size before compression. For uncompressed backups the two values are the same.</li>
+</ul>
+<p>Run this command to compare the sizes:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>backup1-compressed<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'</span>
+</code></pre></div>
+<p>See <a href="#cr-statuses-perconaservermysqlbackup-status">Backup status</a> for the full field list.</p>
 <h2 id="backups-compressed-restore-from-a-compressed-backup">Restore from a compressed backup<a class="headerlink" href="#backups-compressed-restore-from-a-compressed-backup" title="Permanent link">&para;</a></h2>
 <p>You can make a restore either using the <a href="#restore-cr-backupname"><code>backupName</code></a> or the <a href="#restore-cr-the-backupsource-subsection"><code>backupSource</code></a> options. </p>
 <p>The Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.</p>
@@ -25024,6 +25077,23 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <div class="no-copy highlight"><pre><span></span><code>s3://&lt;my-bucket&gt;/ps-cluster1-2026-06-29-08:06:10-full
 </code></pre></div>
 </details>
+<p><strong>Example 4. Get the backup size:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.size}{"\n"}{.status.uncompressedSize}{"\n"}{.status.compressed}{"\n"}'</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample output for an uncompressed backup</summary>
+<div class="no-copy highlight"><pre><span></span><code>4.2MiB
+4.2MiB
+</code></pre></div>
+</details>
+<details class="example">
+<summary>Sample output for a compressed backup</summary>
+<div class="no-copy highlight"><pre><span></span><code>1.1MiB
+4.2MiB
+true
+</code></pre></div>
+</details>
 <h2 id="cr-statuses-perconaservermysql-status">PerconaServerMySQL status<a class="headerlink" href="#cr-statuses-perconaservermysql-status" title="Permanent link">&para;</a></h2>
 <p>The main cluster state is recorded in <code>status.state</code>. Component-level states are recorded in the <code>status.mysql</code>, <code>status.haproxy</code>, <code>status.router</code>, <code>status.orchestrator</code>, and <code>status.binlogserver</code> sections. A component subsection is populated only when that component is enabled.</p>
 <p>Common fields:</p>
@@ -25483,6 +25553,8 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <li><code>status.storage</code> — copy of the storage configuration used for this backup</li>
 <li><code>status.image</code> — Percona XtraBackup image used for the Job</li>
 <li><code>status.compressed</code> — whether the backup was compressed</li>
+<li><code>status.size</code> — backup size in IEC units (<code>KiB</code>, <code>MiB</code>, <code>GiB</code>). Displayed only after the backup succeeds. Empty while the backup is running or if it failed. Available with Operator version 1.3.0</li>
+<li><code>status.uncompressedSize</code> — uncompressed size of the backup. Equal to <code>status.size</code> unless the backup is compressed (<code>status.compressed: true</code>). Available with Operator version 1.3.0</li>
 <li><code>status.conditions</code> — additional conditions</li>
 </ul>
 <h3 id="cr-statuses-backup-state-values">Backup state values<a class="headerlink" href="#cr-statuses-backup-state-values" title="Permanent link">&para;</a></h3>
