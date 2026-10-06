@@ -2,7 +2,7 @@
 
 Percona Operator for MySQL uses Percona XtraBackup (PXB) to create backups.  The Operator exposes this capability too, supporting compression using the `zstd` compression algorithm. 
 
-Compression works for both full and [incremental](backups-incremental.md) backups, and you can configure it for [scheduled](backups-scheduled.md) and [on‑demand](backups-ondemand.md) backups.
+Compression works for both full and [incremental](backups-incremental.md) backups. You can configure it for [scheduled](backups-scheduled.md) and [on‑demand](backups-ondemand.md) backups.
 
 With this ability to compress backups, you can reduce the size of your backups, and lower storage and data‑transfer costs.
 
@@ -60,11 +60,28 @@ spec:
 
 It's important to understand how the Operator prioritizes compression and other backup tool settings when they're defined both globally in your cluster's Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see [Fine-tuning backup and restore operations](backups-fine-tune.md).
 
+## Compare compressed and uncompressed size
+
+After a compressed backup succeeds, compare `status.size` and `status.uncompressedSize` on the Backup object. The gap between them is how much compression saved in object storage. 
+
+* `status.size` is the compressed object in storage.
+* `status.uncompressedSize` is the size before compression. For uncompressed backups the two values are the same.
+
+Run this command to compare the sizes:
+
+```bash
+kubectl get ps-backup backup1-compressed -n <namespace> \
+  -o jsonpath='{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'
+```
+
+See [Backup status](cr-statuses.md#perconaservermysqlbackup-status) for the full field list.
+
 ## Restore from a compressed backup
 
 You can make a restore either using the [`backupName`](restore-cr.md#backupname) or the [`backupSource`](restore-cr.md#the-backupsource-subsection) options. 
 
 The Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.
+
 
 <!--
 
