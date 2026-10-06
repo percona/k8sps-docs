@@ -61,6 +61,12 @@ See [Cross-site replication](replication.md#known-limitations) for the full list
 * Using the Operator's storage autoscaling together with an external PVC autoscaler is not supported. Choose one method.
 * Some storage providers limit volume expansion. Check your provider's documentation before you rely on resize.
 
+## TLS certificates
+
+* Starting with version 1.3.0, rotating a server certificate (leaf) signed by the same CA does not restart MySQL Pods. HAProxy, MySQL Router, and Orchestrator still restart because they read certificates once at startup.
+* Rotating the CA still restarts MySQL Pods. The Operator does not yet add a new CA to every trust store before it presents a leaf signed by that CA. Use the [Update certificates](tls-update.md#rotate-the-ca-certificate) guide to rotate the CA.
+* Deleting TLS Secrets so the Operator can recreate them issues a new CA and restarts MySQL Pods. Do not use Secret deletion to rotate a still-valid leaf.
+
 ## Sidecars, labels, and annotations
 
 * You can attach PVCs to [sidecar containers](sidecar.md) only when you deploy a new cluster. Updating sidecar volume claims on a running cluster is not supported.
