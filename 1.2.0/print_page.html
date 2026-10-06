@@ -9722,86 +9722,88 @@ storage alongside your normal backup configuration.</p></section><section class=
 <div class="admonition admonition">
 <p>This feature is in the tech preview stage. The behavior can change in future releases.</p>
 </div>
-<p>If your database grows quickly or sees heavy write traffic, you may want frequent backups. Taking a full backup every time costs more storage, takes longer to upload, and adds load to the cluster.</p>
-<p><strong>Incremental</strong> backups copy only what changed since the previous backup in the chain. They are usually smaller, faster to transfer, and cheaper to keep in the backup storage.</p>
-<h2 id="backups-incremental-what-you-need-first">What you need first<a class="headerlink" href="#backups-incremental-what-you-need-first" title="Permanent link">&para;</a></h2>
-<p>Every incremental backup belongs to a <strong>chain</strong> that starts with one <strong>full</strong> backup on the <strong>same</strong> storage. The Operator checks that a valid full backup exists before it starts an incremental one. Using the same storage for the whole chain enables the Operator to reuse the same credentials and paths, and simplifies restore.</p>
-<p>You can use any <a href="#backups-storage">supported storage type</a>.</p>
-<h2 id="backups-incremental-what-the-backup-chain-looks-like">What the backup chain looks like<a class="headerlink" href="#backups-incremental-what-the-backup-chain-looks-like" title="Permanent link">&para;</a></h2>
-<p>Incremental backups build on the full backup and on each other in order:</p>
+<p><strong>Incremental</strong> backups copy only what changed since the previous backup in the chain. They are smaller, faster to transfer, and cheaper to keep than taking a full backup every time.</p>
+<h2 id="backups-incremental-backup-chain">Backup chain<a class="headerlink" href="#backups-incremental-backup-chain" title="Permanent link">&para;</a></h2>
+<p>Every incremental backup belongs to a <strong>chain</strong> that starts with one <strong>full</strong> backup on the <strong>same</strong> storage. The Operator checks that a valid full backup exists before it starts an incremental one.</p>
 <pre class="mermaid"><code>flowchart LR
     F["Full backup"] --&gt; I1["Increment 1"]
     I1 --&gt; I2["Increment 2"]
     I2 --&gt; D["..."]
     D --&gt; IN["Increment N"]</code></pre>
-<p>By default, the Operator uses the <strong>latest full backup</strong> as the base for both <strong>scheduled</strong> and <strong>on-demand</strong> incremental backups. If you want more control, you can explicitly specify the base backup in the configuration for on-demand backups. The Operator validates the specified backup and derives the incremental chain from it.</p>
+<p>By default, the Operator uses the <strong>latest full backup</strong> as the base. For on-demand backups, you can set a different base with <code>spec.incrementalBaseBackupName</code>.</p>
+<p>You can use any <a href="#backups-storage">supported storage type</a>.</p>
 <h2 id="backups-incremental-how-an-incremental-backup-runs">How an incremental backup runs<a class="headerlink" href="#backups-incremental-how-an-incremental-backup-runs" title="Permanent link">&para;</a></h2>
 <ol>
-<li>You create a <code>PerconaServerMySQLBackup</code> object with type <strong>incremental</strong>. Or, you configure the <strong>backup schedule</strong> in the cluster Custom Resource that creates incremental backups.</li>
-<li>The Operator confirms that a <strong>full</strong> backup exists on the same storage and is valid. Unless you specify another backup, it uses the <strong>most recent</strong> full backup.</li>
-<li>If the backup is valid, the Operator sets the <code>percona.com/base-backup-name</code> annotation on it so that it serves as the base for the incremental backup chain.</li>
-<li>If there are already incremental backups derived from the base, the Operator takes the <code>to_lsn</code> value from the previous increment and sets it as the <code>from_lsn</code> value for the new increment so the chain stays continuous.</li>
-<li>The Operator streams the new incremental to the same storage.</li>
-<li>The Operator records the backup type on the backup object.</li>
+<li>You <a href="#backups-ondemand">make an on-demand backup</a> with type <strong>incremental</strong>, or you <a href="#backups-scheduled">configure a schedule</a> that creates incremental backups.</li>
+<li>The Operator confirms that a valid <strong>full</strong> backup exists on the same storage. Unless you specify another backup, it uses the most recent full backup.</li>
+<li>The Operator marks that full backup as the chain base and streams the increment to the same storage.</li>
+<li>Later increments use the previous increment’s <code>to_lsn</code> as <code>from_lsn</code> so the chain stays continuous.</li>
 </ol>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
+<p>The Operator sets the <code>percona.com/base-backup-name</code> annotation on the base backup to link the chain. Do not edit or remove it. Changing it can break the chain and lead to data corruption.</p>
 </div>
-<p>The <code>percona.com/base-backup-name</code> annotation is internal and serves to correctly link incremental backups to the base one. Removing or editing it will lead to unpredictable results and data corruption. Don&rsquo;t remove or edit this annotation.</p>
-<h2 id="backups-incremental-how-restore-from-an-incremental-backup-works">How restore from an incremental backup works<a class="headerlink" href="#backups-incremental-how-restore-from-an-incremental-backup-works" title="Permanent link">&para;</a></h2>
-<p>The restore flow is unified for both full and incremental backups. The Operator identifies the backup type by name or destination. To identify the increments and reconstruct the chain, the backup destination has now the <code>.incr</code> path segment. The Operator downloads the full backup and all related increments and sorts them in the correct order. Then it restores the full backup first and applies each incremental backup. </p>
-<p>If you make a <a href="#backups-pitr">point-in-time recovery</a>, it also applies binlogs on top, after restoring all backups. To learn more, see <a href="#backups-pitr-how-it-works">How it works</a>.</p>
-<p>Here&rsquo;s how it works in detail:</p>
-<ol>
-<li>You create a <code>PerconaServerMySQLRestore</code> object and reference the incremental backup with <code>backupName</code> (same cluster) or <code>backupSource</code> (remote path / another environment).</li>
-<li>The Operator detects that the target is incremental and resolves the chain.</li>
-<li>It connects to the storage and lists full backup plus all increments up to and including the one you chose, using paths that include the <code>.incr</code> segment so increments are unambiguous.</li>
-<li>The Operator sorts increments in the right order.</li>
-<li>The Operator pauses the cluster for the restore.</li>
-<li>The restore Job downloads and applies the full backup, then each incremental one in order.</li>
-<li>The cluster is unpaused when the restore completes.</li>
-</ol>
-<div class="admonition admonition">
-<p class="admonition-title">Path layout</p>
-<p>Incremental destinations use an <code>.incr</code> segment in the path so the Operator can tell full and incremental artifacts apart. A typical pattern resembles <code>prefix/&lt;cluster&gt;-&lt;timestamp&gt;-full.incr/&lt;cluster&gt;-&lt;timestamp&gt;-incr</code>; exact layout follows your <code>prefix</code> and storage settings.</p>
-<p>Here&rsquo;s the example:</p>
+<h2 id="backups-incremental-restore-from-an-incremental-backup">Restore from an incremental backup<a class="headerlink" href="#backups-incremental-restore-from-an-incremental-backup" title="Permanent link">&para;</a></h2>
+<p>The restore flow is the same for full and incremental backups. Follow <a href="#backups-restore">Restore the cluster from a previously saved backup</a> or <a href="#backups-restore-to-new-cluster">Restore from a backup to a new Kubernetes-based environment</a>.</p>
+<p>The Operator identifies the backup type by name or destination. Incremental destinations use an <code>.incr</code> path segment so the Operator can reconstruct the chain. It downloads the full backup and all related increments, restores the full backup first, then applies each increment.</p>
+<p>If you make a <a href="#backups-pitr">point-in-time recovery</a>, the Operator applies binlogs after the chain. See <a href="#backups-pitr-point-in-time-recovery-workflow">the point-in-time recovery workflow</a>.</p>
+<p>Incremental objects in storage use an <code>.incr</code> path segment so the Operator can tell them apart from full backups:</p>
 <div class="highlight"><pre><span></span><code>s3://bucket/prefix/
 my-cluster-2026-04-06-full/           # base full backup
-my-cluster-2026-04-06-full.incr/   # incremental chain directory
-    my-cluster-2026-04-07T000000-incr/  # Monday's incremental
-    my-cluster-2026-04-08T000000-incr/    # Tuesday's incremental
-    my-cluster-2026-04-09T000000-incr/    # Wednesday's incremental
+my-cluster-2026-04-06-full.incr/      # incremental chain directory
+    my-cluster-2026-04-07T000000-incr/
+    my-cluster-2026-04-08T000000-incr/
+    my-cluster-2026-04-09T000000-incr/
 </code></pre></div>
+<h2 id="backups-incremental-speed-up-incremental-backups-with-page-tracking">Speed up incremental backups with page tracking<a class="headerlink" href="#backups-incremental-speed-up-incremental-backups-with-page-tracking" title="Permanent link">&para;</a></h2>
+<div class="admonition admonition">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
 </div>
-<h2 id="backups-incremental-why-you-need-incremental-backups">Why you need incremental backups<a class="headerlink" href="#backups-incremental-why-you-need-incremental-backups" title="Permanent link">&para;</a></h2>
-<p>With incremental backups, you gain the following benefits:</p>
-<ul>
-<li>strengthen your backup strategy by creating multiple restore points</li>
-<li>increase storage efficiency by avoiding duplication of unchanged data</li>
-<li>lower system load, since smaller backups require fewer compute resources and reduce impact on your cluster</li>
-<li>reduce both storage and data‑transfer costs</li>
-</ul>
+<p>Page tracking lets Percona XtraBackup copy only the InnoDB pages that changed since the last backup, instead of scanning every data file. The Operator installs the <code>mysqlbackup</code> component that this feature needs. For details, see <a href="https://docs.percona.com/percona-xtrabackup/latest/page-tracking.html">Take an incremental backup using page tracking <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>Enable page tracking by passing the <code>--page-tracking</code> flag in the <code>xtrabackup</code> container options. Set it on the <strong>storage</strong> so the whole chain uses it:</p>
+<div class="highlight"><span class="filename">deploy/cr.yaml</span><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">containerOptions</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">xtrabackup</span><span class="p">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--page-tracking"</span>
+</code></pre></div>
+<p>Override it for a single on-demand backup:</p>
+<div class="highlight"><span class="filename">deploy/backup/backup.yaml</span><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">storageName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3-us-west</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">incremental</span>
+<span class="w">  </span><span class="nt">containerOptions</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">xtrabackup</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--page-tracking"</span>
+</code></pre></div>
+<p>Pass the <code>--page-tracking</code> flag on the <strong>base</strong> backup to start tracking for the whole chain. The next incremental backup then copies only changed pages. Keep the flag on later increments so tracking continues.</p>
+<p>If you set the <code>--page-tracking</code> flag only on an incremental job, that job still scans all pages because the previous full backup did not start tracking.</p>
+<p>For how cluster-level and per-job options interact, see <a href="#backups-fine-tune">Fine-tuning backup and restore operations</a>.</p>
 <h2 id="backups-incremental-implementation-specifics-and-rules">Implementation specifics and rules<a class="headerlink" href="#backups-incremental-implementation-specifics-and-rules" title="Permanent link">&para;</a></h2>
 <h3 id="backups-incremental-backup-chain-rules">Backup chain rules<a class="headerlink" href="#backups-incremental-backup-chain-rules" title="Permanent link">&para;</a></h3>
 <ol>
-<li>A full backup is required to start the incremental chain. If none exists,  the incremental backup fails.</li>
-<li>A base full backup and incremental backups derived from it must be <strong>on the same storage</strong>. </li>
-<li>By default, the Operator uses the most recent full backup to start the incremental chain. You can explicitly specify the base full backup in the <code>spec.incrementalBaseBackupName</code> option in the backup configuration file. If the specified full backup is valid, the Operator starts the incremental backup chain from it.</li>
-<li>If the base backup already has the incremental backup chain, the Operator uses the most recent increment to continue the chain.</li>
-<li>Retention applies to the chain as a unit: deleting the <strong>base</strong> full backup removes the <strong>entire</strong> incremental chain that depends on it, so you do not leave orphaned increments. Specifying the retention policy for increments is not supported.</li>
-<li>You cannot delete an increment in the middle of a chain as it would break its continuity. You can delete only the <strong>last</strong> increment in the chain or the base backup, which removes the whole chain.</li>
-<li>The Operator prevents to run two concurrent incremental backups against the <strong>same</strong> chain to avoid ambiguous ordering. The Operator runs increments one by one.</li>
+<li>A full backup is required to start the chain. If none exists, the incremental backup fails.</li>
+<li>The base full backup and its increments must be on the <strong>same</strong> storage.</li>
+<li>By default, the Operator uses the most recent full backup. You can set a different base with <code>spec.incrementalBaseBackupName</code>. If that backup is valid, the Operator starts the chain from it.</li>
+<li>If the base backup already has increments, the Operator continues from the most recent increment.</li>
+<li>Retention applies to the chain as a unit: deleting the <strong>base</strong> full backup removes the entire chain. You cannot set retention on increments alone.</li>
+<li>You cannot delete an increment in the middle of a chain. You can delete only the <strong>last</strong> increment, or the base backup, which removes the whole chain.</li>
+<li>The Operator does not run two incremental backups on the <strong>same</strong> chain at once. Increments run one by one.</li>
 </ol>
 <h3 id="backups-incremental-restore-rules">Restore rules<a class="headerlink" href="#backups-incremental-restore-rules" title="Permanent link">&para;</a></h3>
 <ol>
-<li>You can make either an in-place restore pointing at an incremental backup object in the <code>backupName</code> option, or make a cross-cluster restore specifying the incremental backup path for the <code>backupSource.destination</code> option.</li>
-<li>Restores that use <code>backupSource</code> work across clusters and namespaces when the storage destination is reachable; incremental paths remain discoverable because of the <code>.incr</code> layout.</li>
+<li><a href="#backups-restore">Restore in place</a> with <code>backupName</code>, or <a href="#backups-restore-to-new-cluster">restore across clusters</a> with <code>backupSource.destination</code>.</li>
+<li><code>backupSource</code> restores work across clusters and namespaces when the storage path is reachable. The <code>.incr</code> layout keeps incremental paths discoverable.</li>
 <li>Restore always needs the full chain: full backup first, then increments in order, up to the backup you selected.</li>
 </ol>
 <h2 id="backups-incremental-known-limitations">Known limitations<a class="headerlink" href="#backups-incremental-known-limitations" title="Permanent link">&para;</a></h2>
 <ul>
-<li>If a backup in your chain fails but some data was already uploaded to storage, your restore still includes that failed backup, so the restore fails. Whenever any backup in the chain fails, start a new chain.</li>
-<li>If the checkpoint file is missing from a backup directory, your next incremental backup can hang. Start a new chain.</li>
+<li>If a backup in your chain fails but some data was already uploaded, restore still includes that failed backup and fails. Start a new chain.</li>
+<li>If the checkpoint file is missing from a backup directory, the next incremental backup can hang. Start a new chain.</li>
 </ul></section><section class="print-page" id="backups-scheduled" heading-number="6.3.4"><h1 id="backups-scheduled-making-scheduled-backups">Making scheduled backups<a class="headerlink" href="#backups-scheduled-making-scheduled-backups" title="Permanent link">&para;</a></h1>
 <p>Scheduled backups run automatically at times you specify. You configure them in the <code>backup</code> section of your Custom Resource using the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file.</p>
 <p>Before setting up scheduled backups, make sure you have at least one <a href="#backups-storage">configured storage</a> in the <code>backup.storages</code> subsection.</p>
