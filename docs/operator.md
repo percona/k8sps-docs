@@ -2292,6 +2292,8 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 
 Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration. For example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds` are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored. 
 
+Starting with Custom Resource version 1.3.0, the Operator sets `ReasonableReplicationLagSeconds` to `60` by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the [`ReplicationLagging` condition](cr-statuses.md#conditions). You can override this value here.
+
 Updating this field triggers a rolling restart of the Orchestrator Pods.
 
 | Value type  | Example    |
