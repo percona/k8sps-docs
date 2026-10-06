@@ -5512,6 +5512,12 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <td></td>
 </tr>
 <tr>
+<td><code>percona.com/last-reloaded-tls</code></td>
+<td>StatefulSets</td>
+<td>Hash of the leaf certificate (<code>tls.crt</code> and <code>tls.key</code>) last reloaded into running <code>mysqld</code> processes. Used starting with version 1.3.0 so the same-CA leaf rotation does not restart MySQL Pods</td>
+<td></td>
+</tr>
+<tr>
 <td><code>percona.com/last-applied-secret</code></td>
 <td>Secrets</td>
 <td>Stores the hash of the last applied user Secret configuration</td>
@@ -5665,7 +5671,7 @@ nothing if a new label or an annotation is added to the Service object.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:21:00 UTC">October 1, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 6, 2026 07:37:37 UTC">October 6, 2026</span>
       
         <br>
         Created:

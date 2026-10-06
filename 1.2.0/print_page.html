@@ -7015,6 +7015,12 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <li>Using the Operator&rsquo;s storage autoscaling together with an external PVC autoscaler is not supported. Choose one method.</li>
 <li>Some storage providers limit volume expansion. Check your provider&rsquo;s documentation before you rely on resize.</li>
 </ul>
+<h2 id="limitations-tls-certificates">TLS certificates<a class="headerlink" href="#limitations-tls-certificates" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Starting with version 1.3.0, rotating a server certificate (leaf) signed by the same CA does not restart MySQL Pods. HAProxy, MySQL Router, and Orchestrator still restart because they read certificates once at startup.</li>
+<li>Rotating the CA still restarts MySQL Pods. The Operator does not yet add a new CA to every trust store before it presents a leaf signed by that CA. Use the <a href="#tls-update-rotate-the-ca-certificate">Update certificates</a> guide to rotate the CA.</li>
+<li>Deleting TLS Secrets so the Operator can recreate them issues a new CA and restarts MySQL Pods. Do not use Secret deletion to rotate a still-valid leaf.</li>
+</ul>
 <h2 id="limitations-sidecars-labels-and-annotations">Sidecars, labels, and annotations<a class="headerlink" href="#limitations-sidecars-labels-and-annotations" title="Permanent link">&para;</a></h2>
 <ul>
 <li>You can attach PVCs to <a href="#sidecar">sidecar containers</a> only when you deploy a new cluster. Updating sidecar volume claims on a running cluster is not supported.</li>
@@ -11534,7 +11540,61 @@ Security (TLS) cryptographic protocol for the communication between the client a
 <li>
 <p>You can generate TLS certificates manually or obtain them from some other issuer and provide to the Operator.</p>
 </li>
-</ul></section><section class="print-page" id="tls-cert-manager" heading-number="7.1.2"><h1 id="tls-cert-manager-configure-tlsssl-encryption-using-cert-manager">Configure TLS/SSL encryption using cert-manager<a class="headerlink" href="#tls-cert-manager-configure-tlsssl-encryption-using-cert-manager" title="Permanent link">&para;</a></h1>
+</ul>
+<h2 id="tls-rotate-certificates">Rotate certificates<a class="headerlink" href="#tls-rotate-certificates" title="Permanent link">&para;</a></h2>
+<p>The TLS Secret stores two kinds of material. The Operator treats them differently:</p>
+<ul>
+<li><strong>Certificate Authority (CA)</strong> (<code>ca.crt</code>) — the trust store every component uses to verify peers</li>
+<li><strong>Server certificate and key</strong> (the leaf: <code>tls.crt</code> and <code>tls.key</code>) — the certificate <code>mysqld</code> presents to clients and other nodes</li>
+</ul>
+<p>Rotating the leaf while the CA stays the same is the usual case. Rotating the CA is a separate procedure.</p>
+<h3 id="tls-identify-which-pods-restart">Identify which Pods restart<a class="headerlink" href="#tls-identify-which-pods-restart" title="Permanent link">&para;</a></h3>
+<p>Starting with version 1.3.0, the Operator reloads a new leaf into running <code>mysqld</code> processes. It still restarts MySQL Pods when the CA changes.</p>
+<table>
+<thead>
+<tr>
+<th>What changed in the TLS Secret</th>
+<th>MySQL Pods</th>
+<th>HAProxy, MySQL Router, and Orchestrator Pods</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New <code>tls.crt</code> and <code>tls.key</code>, same <code>ca.crt</code></td>
+<td>Stay running. The Operator reloads TLS in <code>mysqld</code>.</td>
+<td>Rolling restart</td>
+</tr>
+<tr>
+<td><code>ca.crt</code> changes, including a combined old+new CA</td>
+<td>Rolling restart</td>
+<td>Rolling restart</td>
+</tr>
+<tr>
+<td>Secret has no <code>ca.crt</code></td>
+<td>Rolling restart for any certificate change</td>
+<td>Rolling restart</td>
+</tr>
+</tbody>
+</table>
+<p>Keep the following in mind:</p>
+<ul>
+<li>The new leaf applies only to new connections. Existing connections keep the previous certificate until they reconnect.</li>
+<li>kubelet refreshes a mounted Secret on its own schedule. The Operator waits until the new files are on disk in every MySQL Pod, then reloads TLS.</li>
+<li>Deleting all TLS Secrets so the Operator can recreate them issues a new CA and restarts MySQL Pods.</li>
+<li>Versions older than 1.3.0 restart MySQL Pods for any TLS Secret change.</li>
+</ul>
+<details class="note">
+<summary>What happens under the hood for a leaf rotation</summary>
+<p>When the Operator sees a new leaf signed by the same CA, it does the following:</p>
+<ul>
+<li>Leaves the MySQL StatefulSet unchanged. The hash on the MySQL Pod template covers only <code>ca.crt</code>.</li>
+<li>Waits until kubelet has written the new <code>tls.crt</code> and <code>tls.key</code> into every MySQL Pod.</li>
+<li>Runs <code>ALTER INSTANCE RELOAD TLS</code> on each <code>mysqld</code>.</li>
+<li>Records the <code>percona.com/last-reloaded-tls</code> annotation on the MySQL StatefulSet.</li>
+</ul>
+<p>HAProxy, MySQL Router, and Orchestrator read certificates once at startup, so their Pod-template hash still covers the whole Secret. They restart.</p>
+</details>
+<p>See <a href="#tls-update">Update certificates</a> for how to rotate the leaf and how to rotate the CA.</p></section><section class="print-page" id="tls-cert-manager" heading-number="7.1.2"><h1 id="tls-cert-manager-configure-tlsssl-encryption-using-cert-manager">Configure TLS/SSL encryption using cert-manager<a class="headerlink" href="#tls-cert-manager-configure-tlsssl-encryption-using-cert-manager" title="Permanent link">&para;</a></h1>
 <h2 id="tls-cert-manager-about-the-cert-manager">About the <em>cert-manager</em><a class="headerlink" href="#tls-cert-manager-about-the-cert-manager" title="Permanent link">&para;</a></h2>
 <p>A <a href="https://cert-manager.io/docs/">cert-manager <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> is a Kubernetes certificate
 management controller which is widely used to automate the management and
@@ -11578,7 +11638,8 @@ cert-manager-webhook-58f4cff74d-th4pp      1/1     Running   0          65s
 </details>
 </li>
 </ol>
-<p>Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you check certificates for expiration, you will find that they are valid and short-term.</p></section><section class="print-page" id="tls-manual" heading-number="7.1.3"><h1 id="tls-manual-generate-certificates-manually">Generate certificates manually<a class="headerlink" href="#tls-manual-generate-certificates-manually" title="Permanent link">&para;</a></h1>
+<p>Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you check certificates for expiration, you will find that they are valid and short-term.</p>
+<p>When a leaf is due for renewal, cert-manager reissues the server certificate signed by the same CA. Starting with version 1.3.0, MySQL Pods pick up that leaf without a restart. HAProxy, MySQL Router, and Orchestrator Pods still restart. See <a href="#tls-update">Update certificates</a>.</p></section><section class="print-page" id="tls-manual" heading-number="7.1.3"><h1 id="tls-manual-generate-certificates-manually">Generate certificates manually<a class="headerlink" href="#tls-manual-generate-certificates-manually" title="Permanent link">&para;</a></h1>
 <p>You can generate TLS certificates manually instead of using the Operator&rsquo;s automatic certificate generation. This approach gives you full control over certificate properties and is useful for production environments with specific security requirements.</p>
 <h2 id="tls-manual-what-youll-create">What you&rsquo;ll create<a class="headerlink" href="#tls-manual-what-youll-create" title="Permanent link">&para;</a></h2>
 <p>When you follow the steps from this guide, you&rsquo;ll generate these certificate files:</p>
@@ -11667,17 +11728,23 @@ cert-manager-webhook-58f4cff74d-th4pp      1/1     Running   0          65s
 <p>Certificates generated by the Operator are long-term. If you need to rotate them, you must do it manually.</p>
 </li>
 <li>
-<p>Certificates issued by the cert-manager are short-term. They are valid for 3 months. The cert-manager automatically reissues the certificates on schedule and without downtime.</p>
+<p>Certificates issued by cert-manager are short-term. They are valid for 3 months. cert-manager reissues the <strong>server certificate</strong> (the leaf) on schedule. Starting with version 1.3.0, MySQL Pods pick up that new leaf without a restart.</p>
 </li>
 <li>
-<p>Certificates manually generated by you are not renewed automatically. It is your responsibility to timely update them. Use the steps in the following sections for how to do it.</p>
+<p>Certificates you generated yourself are not renewed automatically. It is your responsibility to timely update them. Use the steps in this document for how to do it.</p>
 </li>
 </ul>
+<h2 id="tls-update-before-you-start">Before you start<a class="headerlink" href="#tls-update-before-you-start" title="Permanent link">&para;</a></h2>
+<p>Export the namespace, cluster name, and TLS Secret name. Replace the placeholders with your values. If you set <code>spec.sslSecretName</code>, use that name for <code>SSL_SECRET_NAME</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>&lt;namespace&gt;
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=</span>&lt;cluster-name&gt;
+<span class="nb">export</span><span class="w"> </span><span class="nv">SSL_SECRET_NAME</span><span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-ssl
+</code></pre></div>
 <h2 id="tls-update-check-your-certificates-for-expiration">Check your certificates for expiration<a class="headerlink" href="#tls-update-check-your-certificates-for-expiration" title="Permanent link">&para;</a></h2>
 <p>If you <a href="#tls-cert-manager">use cert-manager</a>:</p>
 <ol>
 <li>
-<p>Check the necessary secrets names (<code>ps-cluster1-ssl</code> and <code>ps-cluster1-ca-cert</code> by default):</p>
+<p>Check the certificate and Secret names (<code>ps-cluster1-ssl</code> and <code>ps-cluster1-ca-cert</code> by default):</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>certificate<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <details class="example">
@@ -11701,15 +11768,15 @@ ps-cluster1-ps-issuer      True    38m
 <p>If you don&rsquo;t use cert-manager, list your secrets:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
-<p>Then either use the default ones or the one you created</p>
+<p>Then either use the default ones or the one you created.</p>
 </div>
 </li>
 <li>
 <p>Use the following command to find out the certificates validity dates,
-    substituting Secrets names if necessary:</p>
+    substituting Secret names if necessary:</p>
 <div class="highlight"><pre><span></span><code><span class="o">{</span>
-kubectl<span class="w"> </span>get<span class="w"> </span>secret/ps-cluster1-ca-cert<span class="w"> </span>-n<span class="w"> </span>ps<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.tls\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-dates
-kubectl<span class="w"> </span>get<span class="w"> </span>secret/ps-cluster1-ssl<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.ca\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-dates
+kubectl<span class="w"> </span>get<span class="w"> </span>secret/<span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-ca-cert<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.tls\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-dates
+kubectl<span class="w"> </span>get<span class="w"> </span>secret/<span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.ca\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-dates
 <span class="o">}</span>
 </code></pre></div>
 <details class="example">
@@ -11720,76 +11787,136 @@ notAfter=Nov  7 10:54:00 2026 GMT
 </details>
 </li>
 </ol>
-<h2 id="tls-update-update-certificates-without-downtime">Update certificates without downtime<a class="headerlink" href="#tls-update-update-certificates-without-downtime" title="Permanent link">&para;</a></h2>
-<p>If you don&rsquo;t use cert-manager and have <em>created certificates manually</em>,
-you can follow the next steps to perform a no-downtime update of these
-certificates <em>if they are still valid</em>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For already expired certificates, follow the alternative way.</p>
-</div>
-<p>Having non-expired certificates, you can roll out new certificates (both CA and TLS) with the Operator
-as follows: </p>
+<h2 id="tls-update-rotate-the-server-certificate">Rotate the server certificate<a class="headerlink" href="#tls-update-rotate-the-server-certificate" title="Permanent link">&para;</a></h2>
+<p>Use this procedure when the new server certificate is signed by the <strong>same CA</strong>. This is the usual case: cert-manager renewals, and most manual rotations.</p>
+<h3 id="tls-update-let-cert-manager-renew-the-certificate">Let cert-manager renew the certificate<a class="headerlink" href="#tls-update-let-cert-manager-renew-the-certificate" title="Permanent link">&para;</a></h3>
+<p>If you use cert-manager, you do not need to do anything for a scheduled leaf renewal. cert-manager writes a new <code>tls.crt</code> and <code>tls.key</code> into the TLS Secret. The Operator reloads that leaf into <code>mysqld</code>. HAProxy, MySQL Router, and Orchestrator Pods restart.</p>
+<p>To force a renewal before expiry, refer to the <a href="https://cert-manager.io/docs/usage/certificate/#reissuance-triggered-by-user-actions">cert-manager renewal documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<h3 id="tls-update-apply-a-new-certificate-yourself">Apply a new certificate yourself<a class="headerlink" href="#tls-update-apply-a-new-certificate-yourself" title="Permanent link">&para;</a></h3>
+<p>If you created the certificates yourself, replace only the leaf in the existing Secret. Keep <code>ca.crt</code> unchanged.</p>
+<p>You need the current CA certificate <strong>and</strong> the CA private key to sign a new leaf. The TLS Secret stores the CA certificate as <code>ca.crt</code>. It does not store the CA private key. Use the <code>ca-key.pem</code> file you saved when you <a href="#tls-manual">generated the CA</a>.</p>
 <ol>
 <li>
-<p>Generate a new CA certificate (<code>ca.pem</code>), a new TLS certificate (server.pem) and a key for it (server-key.pem).</p>
+<p>Extract the current CA certificate from the Secret. You put this same file back in the Secret later so the CA does not change:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret/<span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.ca\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>ca.pem
+</code></pre></div>
+</li>
+<li>
+<p>Copy your saved <code>ca-key.pem</code> into the same directory as <code>ca.pem</code>. Confirm both files are present:</p>
+<div class="highlight"><pre><span></span><code>ls<span class="w"> </span>ca.pem<span class="w"> </span>ca-key.pem
+</code></pre></div>
+</li>
+<li>
+<p>Generate a new server certificate (<code>server.pem</code>) and key (<code>server-key.pem</code>) signed by that CA. Do not create a new CA. Use the server certificate command in <a href="#tls-manual">Generate certificates manually</a>.</p>
+</li>
+<li>
+<p>Apply the new leaf to the TLS Secret:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span><span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+--from-file<span class="o">=</span>tls.crt<span class="o">=</span>server.pem<span class="w"> </span><span class="se">\</span>
+--from-file<span class="o">=</span>tls.key<span class="o">=</span>server-key.pem<span class="w"> </span><span class="se">\</span>
+--from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.pem<span class="w"> </span><span class="se">\</span>
+--type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+</code></pre></div>
+</li>
+</ol>
+<p>Starting with version 1.3.0, MySQL Pods stay running. HAProxy, MySQL Router, and Orchestrator Pods go through a rolling restart.</p>
+<p class="power-number">To confirm the reload:</p>
+<ol>
+<li>
+<p>List MySQL Pod unique identifiers (UIDs) before you apply the Secret and again after. The names and UIDs stay the same:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-l<span class="w"> </span>app.kubernetes.io/instance<span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>,app.kubernetes.io/name<span class="o">=</span>mysql<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span>custom-columns<span class="o">=</span>NAME:.metadata.name,UID:.metadata.uid<span class="w"> </span>--sort-by<span class="o">=</span>.metadata.name
+</code></pre></div>
+</li>
+<li>
+<p>Check the certificate start date that <code>mysqld</code> currently serves. Repeat for each MySQL Pod. The date changes after the reload:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'mysql -uroot -p"$(cat /etc/mysql/mysql-users-secret/root)" -NB -e "SHOW GLOBAL STATUS LIKE \"Ssl_server_not_before\""'</span>
+</code></pre></div>
+</li>
+</ol>
+<h2 id="tls-update-rotate-the-ca-certificate">Rotate the CA certificate<a class="headerlink" href="#tls-update-rotate-the-ca-certificate" title="Permanent link">&para;</a></h2>
+<p>Use this procedure when you replace the CA, not only the server certificate.</p>
+<p class="power-number">If the current certificates are still valid, follow these steps. For already expired certificates, see <a href="#tls-update-replace-expired-certificates">Replace expired certificates</a>.</p>
+<ol>
+<li>
+<p>Generate a new CA certificate (<code>ca.pem</code>), a new TLS certificate (<code>server.pem</code>), and a key for it (<code>server-key.pem</code>). See <a href="#tls-manual">Generate certificates manually</a>.</p>
 </li>
 <li>
 <p>Get the current CA (<code>ca.pem.old</code>) and TLS (<code>tls.pem.old</code>) certificates
    and the TLS certificate key (<code>tls.key.old</code>):</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret/ps-cluster1-ssl<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.ca\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>ca.pem.old
-kubectl<span class="w"> </span>get<span class="w"> </span>secret/ps-cluster1-ssl<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.tls\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>tls.pem.old
-kubectl<span class="w"> </span>get<span class="w"> </span>secret/ps-cluster1-ssl<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.tls\.key}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>tls.key.old
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret/<span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.ca\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>ca.pem.old
+kubectl<span class="w"> </span>get<span class="w"> </span>secret/<span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.tls\.crt}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>tls.pem.old
+kubectl<span class="w"> </span>get<span class="w"> </span>secret/<span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.tls\.key}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span>&gt;<span class="w"> </span>tls.key.old
 </code></pre></div>
 </li>
 <li>
-<p>Combine new and current <code>ca.pem</code> into a <code>ca.pem.combined</code> file:</p>
-<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>ca.pem<span class="w"> </span>ca.pem.old<span class="w"> </span>&gt;&gt;<span class="w"> </span>ca.pem.combined
+<p>Combine the new and current CA certificates into a <code>ca.pem.combined</code> file:</p>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>ca.pem<span class="w"> </span>ca.pem.old<span class="w"> </span>&gt;<span class="w"> </span>ca.pem.combined
 </code></pre></div>
 </li>
 <li>
-<p>Create a new Secrets object with the <em>old</em> TLS certificate (<code>tls.pem.old</code>) and key (<code>tls.key.old</code>), but a <em>new combined</em> <code>ca.pem</code> (<code>ca.pem.combined</code>):</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>ps-cluster1-ssl<span class="w"> </span><span class="se">\</span>
---from-file<span class="o">=</span>tls.crt<span class="o">=</span>server.pem.old<span class="w"> </span><span class="se">\</span>
---from-file<span class="o">=</span>tls.key<span class="o">=</span>server-key.pem.old<span class="w"> </span><span class="se">\</span>
+<p>Create a new Secrets object with the <em>old</em> TLS certificate (<code>tls.pem.old</code>) and key (<code>tls.key.old</code>), but a <em>new combined</em> CA (<code>ca.pem.combined</code>):</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span><span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+--from-file<span class="o">=</span>tls.crt<span class="o">=</span>tls.pem.old<span class="w"> </span><span class="se">\</span>
+--from-file<span class="o">=</span>tls.key<span class="o">=</span>tls.key.old<span class="w"> </span><span class="se">\</span>
 --from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.pem.combined<span class="w"> </span><span class="se">\</span>
---type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+--type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
 </code></pre></div>
+<p><code>ca.crt</code> changed, so MySQL, HAProxy, MySQL Router, and Orchestrator Pods go through a rolling restart. Every node still presents the old leaf and now trusts both CAs.</p>
 </li>
 <li>
-<p>The cluster will go through a rolling restart. This process will not cause issues, because every node has the old TLS certificate/key, and both new 
-   and old CA certificates.</p>
-</li>
-<li>
-<p>Create a new Secrets object again. This time use a new TLS certificate (<code>server.pem</code> in the example) and a new TLS key (<code>server-key.pem</code>), and again the combined CA certificate (<code>ca.pem.combined</code>):</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>ps-cluster1-ssl<span class="w"> </span><span class="se">\</span>
+<p>Create a new Secrets object again. This time use a new TLS certificate (<code>server.pem</code>) and a new TLS key (<code>server-key.pem</code>), and again the combined CA certificate (<code>ca.pem.combined</code>):</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span><span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
 --from-file<span class="o">=</span>tls.crt<span class="o">=</span>server.pem<span class="w"> </span><span class="se">\</span>
 --from-file<span class="o">=</span>tls.key<span class="o">=</span>server-key.pem<span class="w"> </span><span class="se">\</span>
 --from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.pem.combined<span class="w"> </span><span class="se">\</span>
---type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+--type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
 </code></pre></div>
+<p>The CA is unchanged in this step, so starting with version 1.3.0 MySQL Pods stay running and reload the new leaf. HAProxy, MySQL Router, and Orchestrator Pods restart. Every node already trusts the new CA, so a joiner with the new leaf can join. Joiners also have the combined CA, so they can still verify nodes that present the old leaf.</p>
 </li>
 <li>
-<p>The cluster will go through a rolling restart. This process will not cause issues, because every node already has a new CA certificate (as a part
-   of the combined CA certificate), and can successfully allow joiners with new
-   TLS certificate to join. A joiner node also has a combined CA certificate, so
-   it can authenticate against older TLS certificate.</p>
-</li>
-<li>
-<p>Create a final Secrets object: use the new TLS certificate (<code>server.pmm</code>) and
+<p>Create a final Secrets object: use the new TLS certificate (<code>server.pem</code>) and
    its key (<code>server-key.pem</code>), and only the new CA certificate (<code>ca.pem</code>):</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>ps-cluster1-ssl<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span><span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
 --from-file<span class="o">=</span>tls.crt<span class="o">=</span>server.pem<span class="w"> </span><span class="se">\</span>
 --from-file<span class="o">=</span>tls.key<span class="o">=</span>server-key.pem<span class="w"> </span><span class="se">\</span>
 --from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.pem<span class="w"> </span><span class="se">\</span>
---type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+--type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+</code></pre></div>
+<p><code>ca.crt</code> changed again, so Pods go through a rolling restart. The old CA is gone, and every node already uses the new leaf, so no node still depends on the old CA.</p>
+</li>
+</ol>
+<h2 id="tls-update-replace-expired-certificates">Replace expired certificates<a class="headerlink" href="#tls-update-replace-expired-certificates" title="Permanent link">&para;</a></h2>
+<p>If the certificates have already expired, nodes cannot verify each other. Do not use the CA rotation procedure. Pause the cluster, replace the Secret, then unpause.</p>
+<ol>
+<li>
+<p><a href="#pause">Pause the cluster</a> and wait until it reaches the paused state.</p>
+</li>
+<li>
+<p>If you use cert-manager, delete the issuer and certificates so they can be recreated:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>issuer/<span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-ps-ca-issuer<span class="w"> </span>issuer/<span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-ps-issuer<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+kubectl<span class="w"> </span>delete<span class="w"> </span>certificate/<span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-ssl<span class="w"> </span>certificate/<span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-ca-cert<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </li>
 <li>
-<p>The cluster will go through a rolling restart, but it will do it
-    without problems: the old CA certificate is removed, and every node is
-    already using new TLS certificate and no nodes rely on the old CA
-    certificate any more.</p>
+<p>Delete the TLS Secrets to force reconciliation:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>secret/<span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="w"> </span>secret/<span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-ca-cert<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+</code></pre></div>
+<p>If you manage certificates yourself, apply a new Secret with a valid CA, server certificate, and key instead of deleting:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">SSL_SECRET_NAME</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span>tls.crt<span class="o">=</span>server.pem<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span>tls.key<span class="o">=</span>server-key.pem<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.pem<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--type<span class="o">=</span>kubernetes.io/tls<span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">NAMESPACE</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>--dry-run<span class="o">=</span>client<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+</code></pre></div>
+</li>
+<li>
+<p>Check that new certificates exist and are valid. See <a href="#tls-update-check-your-certificates-for-expiration">Check your certificates for expiration</a>.</p>
+</li>
+<li>
+<p><a href="#pause">Unpause the cluster</a> and wait until it reaches the ready state. MySQL Pods start with the new CA and leaf.</p>
 </li>
 </ol></section></section>
                     <section class='print-page md-section' id='section-7-2' heading-number='7.2'>
@@ -16389,6 +16516,12 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <td><code>percona.com/last-applied-tls</code></td>
 <td>Services</td>
 <td>Stores the hash of the last applied TLS configuration for the service</td>
+<td></td>
+</tr>
+<tr>
+<td><code>percona.com/last-reloaded-tls</code></td>
+<td>StatefulSets</td>
+<td>Hash of the leaf certificate (<code>tls.crt</code> and <code>tls.key</code>) last reloaded into running <code>mysqld</code> processes. Used starting with version 1.3.0 so the same-CA leaf rotation does not restart MySQL Pods</td>
 <td></td>
 </tr>
 <tr>

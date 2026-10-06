@@ -5177,12 +5177,13 @@ cert-manager-webhook-58f4cff74d-th4pp      1/1     Running   0          65s
 </li>
 </ol>
 <p>Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you check certificates for expiration, you will find that they are valid and short-term.</p>
+<p>When a leaf is due for renewal, cert-manager reissues the server certificate signed by the same CA. Starting with version 1.3.0, MySQL Pods pick up that leaf without a restart. HAProxy, MySQL Router, and Orchestrator Pods still restart. See <a href="tls-update.html">Update certificates</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 14, 2025 10:39:57 UTC">November 14, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 6, 2026 07:37:37 UTC">October 6, 2026</span>
       
         <br>
         Created:
