@@ -188,6 +188,7 @@ Common condition fields:
 | `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active. |
 | `ClusterTypeSwitchInProgress` | A replication type switch is in progress. The Operator removes this condition only after `status.state` is `ready` under the new type. |
 | `ReplicationLagging` | For `async` clusters, this condition is `True` when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the `ReasonableReplicationLagSeconds` value). This threshold is defined via the [`orchestrator.configuration`](operator.md#orchestratorconfiguration) option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be `ready` while this condition is `True`. |
+| `AsyncFailoverBlocked` | Whether an async cluster currently has a writable primary. Not set for a single-Pod cluster, while Orchestrator can't be read, or while the primary is deliberately read-only for a graceful switchover. See reasons below. |
 
 `status.conditions[].status` values:
 
@@ -206,6 +207,8 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 * `ClusterSetReplicationRunning` — ClusterSet replica replication is active
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
 * `TeardownStarted` — the Operator started switching `mysql.clusterType`. The message names the previous type and the new type. Used with `ClusterTypeSwitchInProgress`.
+* `NoWritablePrimary` — the cluster's primary is read-only, or Orchestrator's last check of it failed. A failover may have aborted because the transactions stranded on the old primary couldn't be recovered. See the cluster's events. [Force a promotion](failover-async-configure.md#force-a-promotion) to promote a replica anyway.
+* `PrimaryWritable` — the primary is writable and Orchestrator's last check of it succeeded.
 * `ReplicationLagDetected` / `NoReplicationLag` — whether any `async` replica lags behind the primary (used by the `ReplicationLagging` condition)
 
 ### Storage autoscaling status
@@ -231,6 +234,12 @@ The cluster controller emits Kubernetes events you can view with `kubectl descri
 | `AsyncReplicationNotReady` | Orchestrator reported replication problems on one or more instances. |
 | `ReplicationLagging` | A Warning event emitted when replicas start lagging behind the primary. The `ReplicationLagging` condition becomes `True`. |
 | `StorageAutoscalingTriggered` | Storage autoscaling started a PVC resize. |
+| `FailoverWaiting` | The first recovery attempt for a failed primary. The cluster has no writable primary until recovery finishes or the failover timeout defined in `orchestrator.failover.timeout` expires. The message names the `onTimeout` policy that applies next. |
+| `FailoverBlocked` | `orchestrator.failover.timeout` expired with `onTimeout: Abort`. The cluster stays without a writable primary. See [Force a promotion](failover-async-configure.md#force-a-promotion). |
+| `FailoverForced` | A replica was promoted without full recovery of the data from the failed primary. The event is emitted when the `orchestrator.failover.timeout` expired and the `onTimeout` behavior is `ForceWithPossibleDataLoss`. The `percona.com/force-promote-with-possible-data-loss` annotation produces the same event when it promotes a replica, fails, or is refused. The message says what triggered the event and whether a replica was promoted. A successful promotion loses transactions the old primary committed and never replicated. |
+| `FailoverFailed` | Orchestrator gave up on recovering the transactions stranded on the failed primary. |
+
+Orchestrator retries a blocked recovery every few seconds, so `FailoverWaiting`, `FailoverBlocked`, and `FailoverFailed` are each deduplicated per source for five minutes rather than repeated on every retry. `FailoverForced` is recorded each time.
 
 ## PerconaServerMySQLClusterSet status
 

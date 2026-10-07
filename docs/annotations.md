@@ -82,6 +82,7 @@ Use **Annotations** when:
 | `percona.com/last-config-hash` | Services | Stores the hash of the most recent configuration |
 | `percona.com/passwords-updated`| Secrets | Indicates when passwords were last updated in the Secret |
 | `percona.com/clusterset-rejoin-cluster` | `PerconaServerMySQLClusterSet` | Triggers a rejoin when the replica is healthy but ClusterSet replication is down. Value is the replica's InnoDB cluster name (`status.innodbClusterName`). The Operator removes the annotation after the rejoin attempt, whether it succeeded or failed. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster). | `replicacluster` |
+| `percona.com/force-promote-with-possible-data-loss` | `PerconaServerMySQL` | Promotes a replica by hand when an async cluster has no writable primary. The annotation accepts 2 values: <br> - `true` lets the Operator pick the best candidate, using the same ranking as an automatic failover; <br> - a MySQL Pod's name promotes that Pod instead. <br>The Operator removes the annotation once it acts on it, whether the promotion succeeded, failed, or was refused. See [Force a promotion](failover-async-configure.md#force-a-promotion). | `true`, `cluster1-mysql-2` |
 
 ## Setting labels and annotations in the Custom Resource
 
