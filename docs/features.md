@@ -11,6 +11,7 @@ Here's what the Operator brings to your infrastructure:
 Never lose sleep over database downtime again. The Operator provides robust high availability through:
 
 - Automatic failover with intelligent primary election handled by the Orchestrator
+- Configurable recovery timeout and policy for async clusters, with zero-data-loss recovery by default and a manual override for emergencies
 - Multi-node deployments with anti-affinity rules to prevent single points of failure  
 - Health monitoring with automatic recovery from node failures
 - Zero-downtime upgrades with rolling update strategies
