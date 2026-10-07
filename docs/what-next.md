@@ -49,6 +49,7 @@ Once you've covered the basics, prepare your cluster for production workloads:
 ### Monitoring and observability
 
 - [Monitor with Percona Monitoring and Management (PMM)](monitoring.md) - Set up comprehensive monitoring, alerts, and performance insights beyond the basic setup
+- [Persistent logging](persistent-logging.md) - Retain and rotate logs for troubleshooting.
 
 ## Advanced operations
 
