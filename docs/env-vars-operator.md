@@ -119,6 +119,96 @@ env:
     value: "true"
 ```
 
+### `PSO_LEADER_ELECTION_ENABLED`
+
+Controls whether the Operator runs leader election. Leader election ensures only one Operator instance manages resources when multiple replicas run. Set this to `"false"` only when the Deployment has one replica.
+
+When this variable is set, it overrides the `--leader-elect` container argument. When this variable is unset, the Operator uses that argument.
+
+When you disable leader election, the Operator stops renewing the Lease. The existing Lease object stays in the namespace.
+
+| Value type | Default | Example |
+| ---------- | ------- | ------- |
+| string     | `"true"` | `"false"` |
+
+**Example configuration:**
+
+```yaml
+env:
+  - name: PSO_LEADER_ELECTION_ENABLED
+    value: "false"
+```
+
+### `PSO_LEADER_ELECTION_LEASE_NAME`
+
+Sets the name of the Lease object that stores the leader lock. The Operator creates this Lease in the Operator namespace. The name must be a valid DNS subdomain.  Leave empty to use the default `08db2feb.percona.com`.
+
+When you change the name, the Operator creates a new Lease. The previous Lease stays in the namespace.
+
+| Value type | Default | Example |
+| ---------- | ------- | ------- |
+| string     | `"08db2feb.percona.com"` | `"my-lease"` |
+
+**Example configuration:**
+
+```yaml
+env:
+  - name: PSO_LEADER_ELECTION_LEASE_NAME
+    value: "my-lease"
+```
+
+### `PSO_LEADER_ELECTION_LEASE_DURATION`
+
+Sets how long another Operator replica waits after the last successful renewal before it takes leadership. Use a duration such as `60s` or `2m`. Increase this value when leader election fails because of high latency or limited resources.
+
+The lease duration must be greater than the [renew deadline](#pso_leader_election_renew_deadline).
+
+| Value type | Default | Example |
+| ---------- | ------- | ------- |
+| string     | `"60s"` | `"90s"` |
+
+**Example configuration:**
+
+```yaml
+env:
+  - name: PSO_LEADER_ELECTION_LEASE_DURATION
+    value: "90s"
+```
+
+### `PSO_LEADER_ELECTION_RENEW_DEADLINE`
+
+Sets how long the current leader retries renewing the Lease before it gives up leadership. Use a duration such as `40s`.
+
+The renew deadline must be greater than the [retry period](#pso_leader_election_retry_period) multiplied by 1.2.
+
+| Value type | Default | Example |
+| ---------- | ------- | ------- |
+| string     | `"40s"` | `"60s"` |
+
+**Example configuration:**
+
+```yaml
+env:
+  - name: PSO_LEADER_ELECTION_RENEW_DEADLINE
+    value: "60s"
+```
+
+### `PSO_LEADER_ELECTION_RETRY_PERIOD`
+
+Sets how long the Operator waits between leader election attempts. Use a duration such as `10s`.
+
+| Value type | Default | Example |
+| ---------- | ------- | ------- |
+| string     | `"10s"` | `"15s"` |
+
+**Example configuration:**
+
+```yaml
+env:
+  - name: PSO_LEADER_ELECTION_RETRY_PERIOD
+    value: "15s"
+```
+
 ## Update environment variables
 
 ### Using `kubectl patch`
@@ -143,11 +233,16 @@ Here’s how to do it:
         {"name": "LOG_LEVEL", "value": "DEBUG"},
         {"name": "WATCH_NAMESPACE", "valueFrom": {"fieldRef": {"apiVersion": "v1",     "fieldPath": "metadata.namespace"}}},
         {"name": "MAX_CONCURRENT_RECONCILES", "value": "1"},
-        {"name": "DISABLE_TELEMETRY", "value": "false"}
+        {"name": "DISABLE_TELEMETRY", "value": "false"},
+        {"name": "PSO_LEADER_ELECTION_ENABLED", "value": "true"},
+        {"name": "PSO_LEADER_ELECTION_LEASE_NAME", "value": "08db2feb.percona.com"},
+        {"name": "PSO_LEADER_ELECTION_LEASE_DURATION", "value": "60s"},
+        {"name": "PSO_LEADER_ELECTION_RENEW_DEADLINE", "value": "40s"},
+        {"name": "PSO_LEADER_ELECTION_RETRY_PERIOD", "value": "10s"}
       ]}]'
     ```
 
-Adjust the list to match your current Deployment (for example cluster-wide `WATCH_NAMESPACE` with a string `value` instead of `valueFrom`).
+Adjust the list to match your current Deployment (for example cluster-wide `WATCH_NAMESPACE` with a string `value` instead of `valueFrom`). Starting with version 1.3.0, keep the `PSO_LEADER_ELECTION_*` entries in the list.
 
 ### Using `kubectl edit`
 
