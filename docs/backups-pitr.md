@@ -105,7 +105,6 @@ Also see [Known limitations](limitations.md#point-in-time-recovery) for a summar
 * **AWS S3 and S3-compatible storage** are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and TLS options to match your environment.
 
 * **You cannot change the `prefix` value for the binlog bucket** after you configure Binlog Server.
-* **Data-at-rest encryption is not supported** with point-in-time recovery.
 * **Password change.** If the Operator user password differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password.
 * **Restore retries are not idempotent.** If recovery fails after the base backup is restored, a retry does not restore the full backup again. Set `spec.backup.backoffLimit=0` in `cr.yaml` to prevent automatic Job retries.
 * **Binlog storage is separate** from base backup storage. During the in-place restore on the same cluster, the Operator uses the settings defined in the `spec.backup.pitr.binlogServer` of the cluster's Custom Resource. For a cross-cluster restore, specify the Binlog storage settings
