@@ -189,6 +189,7 @@ nav:
     - Platform-specific installation:
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
+          - "Install on Rancher Kubernetes Engine (RKE2)": rke2.md
           - "Install on OpenShift": openshift.md
           - "Install on Minikube": minikube.md
           - "Generic Kubernetes installation": kubernetes.md
