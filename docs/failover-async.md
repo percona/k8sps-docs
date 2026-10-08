@@ -46,7 +46,9 @@ The sidecar returns one tar stream that includes everything from the requested p
 
 To fetch binary logs, the old primary Pod needs to be reachable over the network. `mysqld` on that Pod can be down. The `xtrabackup` sidecar serves the binary logs over HTTP.
 
-When the Pod can't be scheduled, or the candidate can't reach it, the attempt fails. Orchestrator retries it within the [failover timeout](#understand-failover-timeout-and-recovery-policy). An attempt stops at either of these limits:
+When the Pod can't be scheduled, or the candidate can't reach it, a fetch attempt fails. Orchestrator retries repeatedly until the [failover timeout](#understand-failover-timeout-and-recovery-policy) is reached. 
+
+An attempt stops at either of these limits:
 
 * Orchestrator waits up to two minutes for the source Pod to exist and receive an IP address.
 * Streaming stops when the source sends no data for two minutes.
@@ -82,18 +84,18 @@ A planned switchover does not salvage binary logs. The primary is alive, so the 
 
 ### If the old primary comes back
 
-Orchestrator keeps checking whether the old primary is accepting writes again. The check runs before the candidate is changed, again while the candidate applies the recovered transactions, and once more just before promotion. A primary that comes back during that wait stops the promotion, even when applying has just finished.
+Orchestrator keeps checking whether the old primary is back. The check runs before the candidate is changed, again while the candidate applies the recovered transactions, and once more just before promotion. A primary that comes back during that wait stops the promotion, even when applying has just finished.
 
 The old primary counts as back when both of these are true:
 
-* Accepts connections and is writable
+* Accepts connections
 * Holds every transaction the candidate already has
 
 If the candidate has transactions the old primary no longer has, the check fails and promotion continues. That is what keeps those transactions.
 
-A Pod that has only restarted is still read-only, so this check does not treat it as back. Ending the failover there would leave the cluster with no primary that accepts writes. Orchestrator stops the failover only after two successful checks in a row, so one brief response does not cancel it.
+A Pod that has only restarted is still read-only. Orchestrator  counts it as back when it accepts connections and holds every transaction the candidate has. Orchestrator stops the failover only after two successful checks in a row, so one brief response does not cancel it.
 
-When the old primary is back, Orchestrator promotes nothing to prevent the cluster from having two Pods accepting writes. The candidate starts replicating from the old primary again. Events already added to its relay log stay there and keep being applied. The candidate also requests that same range from the primary, and MySQL skips transactions it has already applied.
+When the old primary is back, Orchestrator aborts the failover and promotes nothing. It then makes that primary writable. Promoting the candidate as well would leave two Pods accepting writes. The candidate starts replicating from the old primary again. Events already added to its relay log stay there and keep being applied. The candidate also requests that same range from the primary, and MySQL skips transactions it has already applied.
 
 Orchestrator ends the failover. 
 
@@ -103,7 +105,7 @@ When the old primary's Pod is gone, Orchestrator skips the check and the promoti
 
 * **`Abort`** (default) Orchestrator stops the recovery, and every Pod stays read-only. Orchestrator keeps retrying, and each retry stops immediately. The cluster stays read-only until you [force a promotion](failover-async-configure.md#force-a-promotion). See the event table in [See whether a failover is blocked](failover-async-configure.md#see-whether-a-failover-is-blocked) for what the cluster records.
 
-* **`ForceWithPossibleDataLoss`** makes Orchestrator pick a candidate and skip the binary log fetch. It still checks whether the old primary is back. When that primary is writable and holds every transaction the candidate has, nothing is promoted. Otherwise Orchestrator promotes the candidate. Transactions that never left the old primary are lost. When the primary has no replicas, nothing is promoted. See the event table in [See whether a failover is blocked](failover-async-configure.md#see-whether-a-failover-is-blocked) for what gets recorded.
+* **`ForceWithPossibleDataLoss`** makes Orchestrator pick a candidate and skip the binary log fetch. It still checks whether the old primary is back. When that primary accepts connections and holds every transaction the candidate has, nothing is promoted, and Orchestrator makes the primary writable. Otherwise Orchestrator promotes the candidate. Transactions that never left the old primary are lost. When the primary has no replicas, nothing is promoted. See the event table in [See whether a failover is blocked](failover-async-configure.md#see-whether-a-failover-is-blocked) for what gets recorded.
 
 ## Known limitations
 
@@ -116,5 +118,6 @@ Zero-data-loss recovery depends on durability that the Operator doesn't enforce:
 * **The old primary's binary logs must still exist.** If they were already purged or expired, every recovery attempt fails the same way until `orchestrator.failover.timeout` runs out and [`onTimeout`](#understand-failover-timeout-and-recovery-policy) applies. Nothing can recover those transactions.
 
 * **The old primary's data volume must still exist.** If it's gone, the transactions it alone held are gone too. The only way forward is [`onTimeout`](#understand-failover-timeout-and-recovery-policy) or the [force-promote annotation](failover-async-configure.md#force-a-promotion).
+* **Binlog encryption with [data-at-rest-encryption](encryption.md) is not supported**
 
 Starting at `crVersion` 1.3.0, the Operator also pins several Orchestrator settings that this mechanism depends on and silently ignores any conflicting value in [`orchestrator.configuration`](operator.md#orchestratorconfiguration) — see that field's reference entry for the current list.
