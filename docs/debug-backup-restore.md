@@ -341,6 +341,18 @@ Updates made by `mysql-shell` can produce errors such as `Error_code: 1032` / `H
 
 If you choose to ignore SQL errors, add `force: true` under `spec.pitr` in the restore object. This passes `--force` to the MySQL client and silently ignores **all** SQL errors during replay, which can hide data loss. See [Ignore SQL errors during binlog replay](backups-restore-pitr.md#ignore-sql-errors-during-binlog-replay).
 
+### Encrypted binlogs fail to decrypt
+
+The PITR Job cannot unwrap a binlog if the mounted keyring does not contain the KEK recorded in that file.
+
+Typical causes:
+
+* Restore to a new cluster without `spec.pitr.keyringSecret`
+* Keys rotated into another Secret, but the restore still uses the cluster keyring
+* A KEK removed from `keyring.json`
+
+Check the PITR Job logs (`pitr-restore-<restore-name>`) for KEK / keyring errors. To copy the Secret and set `keyringSecret`, see [Restore with encrypted binlogs](backups-restore-pitr.md#restore-with-encrypted-binlogs). Lost keys cannot be recovered.
+
 ### Operator user password changed after the backup
 
 If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.
