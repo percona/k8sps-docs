@@ -970,6 +970,32 @@ The `my.cnf` file options to be passed to Percona Server for MySQL instances.
 | ----------- | ---------- |
 | :material-code-string: string     | <pre>`[mysqld]`<br>`max_connections=250`</pre> |
 
+### `mysql.autoConfig.enabled`
+
+Enables [automatic configuration tuning](autoconfig.md). The Operator calculates a full MySQL configuration based on the Pod resources, database workload profile, and MySQL version. Requires `mysql.resources` (CPU and memory) and `mysql.autoConfig.version` to be set.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `mysql.autoConfig.loadType`
+
+The workload profile used to calculate the configuration. If not set, the Operator defaults to `someWrites`. 
+
+See [Choose a workload profile](autoconfig.md#choose-a-workload-profile) for what each value means.
+
+| Value type  | Allowed values | Example    |
+| ----------- | --------------- | ---------- |
+| :material-code-string: string     | `mostlyReads`, `someWrites`, `equalReadsWrites`, `heavyWrites` | `someWrites` |
+
+### `mysql.autoConfig.version`
+
+The MySQL version the configuration is calculated for, in the `<major>.<minor>.<patch>` format. This option controls the parameters set for the selected Percona Server for MySQL version. The [`mysql.image`](#mysqlimage) option controls the image version to be deployed. The Operator reads these two values separately. You must keep `mysql.autoConfig.version` and [`mysql.image`](#mysqlimage) values in sync yourself. Read more in the [Keep the MySQL version in sync](autoconfig.md#keep-the-mysql-version-in-sync).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `8.4.8` |
+
 ### `mysql.sidecars.image`
 
 Image for the [custom sidecar container](sidecar.md) for Percona Server for MySQL Pods.

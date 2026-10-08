@@ -41,6 +41,10 @@ spec:
 Use our reference documentation for the [Custom Resource options](operator.md) 
 for more details about other components.
 
+!!! note
+
+    Changing compute resources for MySQL Pods (`mysql.resources`) triggers a recalculation of the MySQL configuration, when the [automatic configuration tuning](autoconfig.md) is enabled (`mysql.autoConfig.enabled: true`). The settings that usually change because of that are buffer pool and redo log. Since they can only be set at startup, this causes a rolling restart of the MySQL StatefulSet. Plan a resize of `mysql.resources` as a change-management event.
+
 ### Scale storage
 
 Kubernetes manages storage with the following components:
