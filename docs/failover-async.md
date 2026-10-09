@@ -25,8 +25,11 @@ Orchestrator drives the failover stages through its failover hooks. The Operator
 
     * Uses asynchronous replication with Orchestrator
     * Uses `spec.crVersion` `1.3.0` or later
+    * Has backups enabled (`spec.backup.enabled: true`)
 
 On an older `crVersion`, the Operator accepts `spec.orchestrator.failover` but does not apply it. Setting that block on a group replication cluster fails validation. A cluster of one MySQL Pod has no replica to promote.
+
+The candidate reads the old primary's binary logs from the `xtrabackup` sidecar. That sidecar starts only when backups are enabled. On an asynchronous cluster, disabling backups requires an unsafe flag. If backups are disabled, Orchestrator falls back to its existing failover. It promotes a replica without fetching those binary logs, so transactions that never left the old primary are lost.
 
 The binary log and relay log settings a zero data loss failover depends on are described in [Known limitations](#known-limitations).
 
@@ -119,5 +122,6 @@ Zero-data-loss recovery depends on durability that the Operator doesn't enforce:
 
 * **The old primary's data volume must still exist.** If it's gone, the transactions it alone held are gone too. The only way forward is [`onTimeout`](#understand-failover-timeout-and-recovery-policy) or the [force-promote annotation](failover-async-configure.md#force-a-promotion).
 * **Binlog encryption with [data-at-rest-encryption](encryption.md) is not supported**
+* 
 
 Starting at `crVersion` 1.3.0, the Operator also pins several Orchestrator settings that this mechanism depends on and silently ignores any conflicting value in [`orchestrator.configuration`](operator.md#orchestratorconfiguration) — see that field's reference entry for the current list.
