@@ -122,6 +122,5 @@ Zero-data-loss recovery depends on durability that the Operator doesn't enforce:
 
 * **The old primary's data volume must still exist.** If it's gone, the transactions it alone held are gone too. The only way forward is [`onTimeout`](#understand-failover-timeout-and-recovery-policy) or the [force-promote annotation](failover-async-configure.md#force-a-promotion).
 * **Binlog encryption with [data-at-rest-encryption](encryption.md) is not supported**
-* 
 
 Starting at `crVersion` 1.3.0, the Operator also pins several Orchestrator settings that this mechanism depends on and silently ignores any conflicting value in [`orchestrator.configuration`](operator.md#orchestratorconfiguration) — see that field's reference entry for the current list.
