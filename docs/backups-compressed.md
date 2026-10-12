@@ -13,7 +13,7 @@ You can configure compression using the MySQL configuration file. This setting a
 ```yaml
 spec:
   mysql:
-    image: percona/percona-server:{{ps84recommended}}
+    image: percona/percona-server:{{ps97recommended}}
     configuration: |
       ...
       [xtrabackup]
