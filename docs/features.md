@@ -48,6 +48,7 @@ Keep your data secure with built-in security features:
 - Transport encryption with TLS/SSL support
 - Data-at-rest encryption with key management integration
 - Encrypted backups for object storage
+- [Encrypted binlogs](backups-pitr.md#binlog-encryption) for point-in-time recovery, without depending on S3 server-side encryption
 - Role-based access control with fine-grained permissions
 - Secret management with Kubernetes-native secrets
 - Orchestrator API authentication for async replication clusters (available starting with Operator version 1.2.0)
