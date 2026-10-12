@@ -1839,6 +1839,41 @@ Orchestrator is used with asynchronous replication. Disable it when you [switch 
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `orchestrator.failover.timeout`
+
+How long the cluster tries to recover the transactions from the failed primary's binlog. Default is `6h`.
+
+The timeout is measured from the moment Orchestrator first detects the failure and covers every retry, not a single attempt. If the Orchestrator Raft leader changes while a failover is running, the timeout restarts. This delays the decision what to do when the timeout expires.
+
+Only applies to [async](#mysqlclustertype) clusters, and only takes effect starting with `crVersion` 1.3.0. With an older `crVersion`, the Operator validates this field but ignores it. See [Understand failover timeout and recovery policy](failover-async-about.md#understand-failover-timeout-and-recovery-policy).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `6h` |
+
+### `orchestrator.failover.onTimeout`
+
+What the Operator does once [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) expires without recovering the transactions stranded on a failed primary:
+
+* `Abort` (default) — leaves the cluster without a writable primary until you intervene. No transactions are lost, but writes stay blocked. Promote a replica yourself with the [`percona.com/force-promote-with-possible-data-loss`](failover-async-configure.md#force-a-promotion) annotation.
+* `ForceWithPossibleDataLoss` — promotes the best available candidate anyway. Transactions the old primary committed and never replicated are lost.
+
+Only applies to async clusters, and only takes effect starting with `crVersion` 1.3.0. See [Understand failover timeout and recovery policy](failover-async-about.md#understand-failover-timeout-and-recovery-policy).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Abort` |
+
+### `orchestrator.failover.switchoverCatchUpTimeout`
+
+How long a graceful switchover waits for the candidate to catch up before promoting it.
+
+Only applies to async clusters, and only takes effect starting with `crVersion` 1.3.0. See [About switchoverCatchUpTimeout](failover-async-about.md#about-switchovercatchuptimeout).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `5m` |
+
 ### `orchestrator.size`
 
 The number of the Orchestrator Pods to provide load balancing. This setting is required.
@@ -2290,13 +2325,24 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 
 ### `orchestrator.configuration`
 
-Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration. For example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds` are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored. 
+Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.
+
+For an async cluster with `crVersion` 1.3.0 or later, the Operator also derives and pins the settings the [zero-data-loss failover](failover-async-about.md) mechanism depends on, and ignores any override of them here:
+
+| Orchestrator key | Derived from |
+| --- | --- |
+| `FailMasterPromotionOnLagMinutes` | Always `0` |
+| `DelayMasterPromotionIfSQLThreadNotUpToDate`, `FailMasterPromotionIfSQLThreadNotUpToDate` | Always `false` |
+| `PreFailoverProcesses`, `PostFailoverProcesses`, `PostUnsuccessfulFailoverProcesses` | The failover mechanism itself |
+| `RecoveryPeriodBlockSeconds` | [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) + 1 hour |
+| `UnseenInstanceForgetHours` | [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) + 1 hour, rounded up |
+| `ReasonableMaintenanceReplicationLagSeconds` | [`orchestrator.failover.switchoverCatchUpTimeout`](#orchestratorfailoverswitchovercatchuptimeout) |
 
 Updating this field triggers a rolling restart of the Orchestrator Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `'{"FailMasterPromotionOnLagMinutes": 10}'` |
+| :material-code-string: string     | `'{"ReplicationLagQuery": "..."}'` |
 
 ## <a name="operator-users-section"></a>Users section
 

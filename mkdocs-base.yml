@@ -217,7 +217,6 @@ nav:
               - "Monitor Kubernetes": monitor-kubernetes.md
           - "Scale your cluster": scaling.md
 
-
     - Production configuration:
           - TLS/SSL encryption: 
             - "About TLS/SSL security": TLS.md
@@ -238,6 +237,9 @@ nav:
           - Cross-site replication: 
             - "About cross-site replication": replication.md
             - "Cross-site replication: setup and use": replication-setup.md
+          - Zero-data-loss failover in async clusters:
+            - "About zero-data-loss failover": failover-async.md
+            - failover-async-setup.md
           - Define environment variables:
               - Overview: env-vars.md
               - "Configure Operator environment variables": env-vars-operator.md
