@@ -102,6 +102,6 @@ The Percona Operator for MySQL provides a flexible and powerful way to manage ba
 2. If you pass storage-specific parameters (like `--s3-region`) directly to the `xtrabackup`, `xbcloud`, and `xbstream` binaries, they will be overridden by the configuration in the storage section of the Custom Resource.
 3. If you define environment variables for a backup job, they are passed to both the `xtrabackup` and `xbcloud` processes running within the `xtrabackup` sidecar container. You can verify this by inspecting the process environment variables inside the container during a backup.
 4. Environment variables for a restore job are set for the `xtrabackup` container in the restore Pod.
-5. The `VERIFY_TLS` environment variable currently applies only to restore operations and is ignored for backups. 
+5. The `VERIFY_TLS` environment variable currently applies only to restore operations and is ignored for backups. To ensure TLS verification for backups, set the `backup.storages.*.verifyTLS` option in the Custom Resource. To use your custom certificates, supply the CA with [`s3.caBundle`](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage). To learn more, see [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 6. If the same binary is configured globally and individually for backups or restores, individual settings take precedence. 
  
