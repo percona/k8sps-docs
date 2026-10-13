@@ -22,6 +22,7 @@ To install Percona Server for MySQL cluster, you need the following:
         * [Set up Minikube](minikube.md)
         * [Create and configure the GKE cluster](gke.md)
         * [Set up Amazon Elastic Kubernetes Service](eks.md)
+        * [Install on Rancher Kubernetes Engine (RKE2)](rke2.md)
 
 ## Procedure
 
