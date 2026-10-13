@@ -29,9 +29,37 @@ The following environment variables are available to tune Percona Server for MyS
 | Variable | Description |
 | -------- | ----------- |
 | `BOOTSTRAP_READ_TIMEOUT` | Non-negative integer (seconds). Read/write timeout for bootstrap and related MySQL client operations. |
-| `BOOTSTRAP_CLONE_TIMEOUT` | Non-negative integer (seconds). Upper bound for clone operations during asynchronous bootstrap. |
+| `BOOTSTRAP_CLONE_STALL_TIMEOUT` | Non-negative integer (seconds). Starting with `crVersion` 1.3.0, how long an asynchronous clone can make no progress before bootstrap stops it. The default is 900. Set to `0` to turn the check off. See [Set the clone stall timeout](#set-the-clone-stall-timeout). |
+| `BOOTSTRAP_CLONE_TIMEOUT` | Non-negative integer (seconds). Upper bound for a clone during asynchronous bootstrap when `crVersion` is older than 1.3.0. Starting with `crVersion` 1.3.0, the Operator ignores this variable. |
 | `ASYNC_SOURCE_RETRY_COUNT` | Non-negative integer. Used when configuring asynchronous replication. |
 | `ASYNC_SOURCE_CONNECT_RETRY` | Non-negative integer. Used when configuring asynchronous replication. |
+
+### Set the clone stall timeout
+
+An asynchronous replica copies its data with the [MySQL clone plugin :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/clone-plugin.html) when it joins the cluster or rebuilds its data volume. Starting with `crVersion` 1.3.0, the clone keeps running while it makes progress.
+
+Bootstrap reads `performance_schema.clone_progress` and stops the clone when that view shows no change for `BOOTSTRAP_CLONE_STALL_TIMEOUT` seconds. No change means both of the following:
+
+* No additional bytes are transferred
+* No clone stage finishes
+
+The default is 900 seconds (15 minutes). A stage that transfers no bytes, such as file sync or recovery, can run longer than this window. Increase the value for a large database, or set it to `0` to turn the check off.
+
+If bootstrap cannot read clone progress for the whole window, it stops the clone. The MySQL container restarts, and the clone starts again.
+
+The MySQL startup probe is the hard limit on how long the clone can run. When you leave `spec.mysql.startupProbe.timeoutSeconds` unset and `spec.crVersion` is `1.3.0` or higher, the Operator sets that timeout to 604800 seconds (7 days). Set [`mysql.startupProbe.timeoutSeconds`](operator.md#mysqlstartupprobetimeoutseconds) when you want a shorter limit.
+
+When `spec.crVersion` is older than 1.3.0, `BOOTSTRAP_CLONE_TIMEOUT` is the upper bound for the clone. The Operator ignores `BOOTSTRAP_CLONE_TIMEOUT` when `crVersion` is 1.3.0 or higher.
+
+Set the stall timeout in `spec.mysql.env`. The value is a string:
+
+```yaml
+spec:
+  mysql:
+    env:
+      - name: BOOTSTRAP_CLONE_STALL_TIMEOUT
+        value: "1800"
+```
 
 ### HAProxy environment variables
 
