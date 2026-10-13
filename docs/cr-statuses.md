@@ -132,6 +132,8 @@ The overall `status.state` stays `initializing` until:
 * point-in-time recovery's binlog server is ready when enabled, 
 * any LoadBalancer Services have an assigned address.
 
+Replication lag on an `async` replica does not keep the cluster in the `initializing` state. A lagging replica is still replicating, so the Operator reports the lag in the separate [`ReplicationLagging`](#conditions) condition instead.
+
 ### Cluster state values
 
 `status.state` values are:
@@ -169,6 +171,7 @@ Common condition fields:
 | `AwaitingExternalBootstrap` | The cluster is configured with `spec.mysql.bootstrap.mode: manual` and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication. |
 | `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active. |
 | `ClusterTypeSwitchInProgress` | A replication type switch is in progress. The Operator removes this condition only after `status.state` is `ready` under the new type. |
+| `ReplicationLagging` | For `async` clusters, this condition is `True` when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the `ReasonableReplicationLagSeconds` value). This threshold is defined via the [`orchestrator.configuration`](operator.md#orchestratorconfiguration) option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be `ready` while this condition is `True`. |
 
 `status.conditions[].status` values:
 
@@ -187,6 +190,7 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 * `ClusterSetReplicationRunning` — ClusterSet replica replication is active
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
 * `TeardownStarted` — the Operator started switching `mysql.clusterType`. The message names the previous type and the new type. Used with `ClusterTypeSwitchInProgress`.
+* `ReplicationLagDetected` / `NoReplicationLag` — whether any `async` replica lags behind the primary (used by the `ReplicationLagging` condition)
 
 ### Storage autoscaling status
 
@@ -209,6 +213,7 @@ The cluster controller emits Kubernetes events you can view with `kubectl descri
 | `ReconcileError` | Cluster reconciliation failed. |
 | `FullClusterCrashDetected` | A full Group Replication cluster crash was detected. |
 | `AsyncReplicationNotReady` | Orchestrator reported replication problems on one or more instances. |
+| `ReplicationLagging` | A Warning event emitted when replicas start lagging behind the primary. The `ReplicationLagging` condition becomes `True`. |
 | `StorageAutoscalingTriggered` | Storage autoscaling started a PVC resize. |
 
 ## PerconaServerMySQLClusterSet status
