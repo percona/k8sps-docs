@@ -215,6 +215,9 @@ nav:
           - Monitoring:
               - "Monitor your cluster with PMM": monitoring.md
               - "Monitor Kubernetes": monitor-kubernetes.md
+          - Logging:
+              - "Persistent logging": persistent-logging.md
+              - "Log rotation": logrotate.md
           - "Scale your cluster": scaling.md
 
 

@@ -58,7 +58,7 @@ Gain deep insights into your database performance:
 
 - Percona Monitoring and Management (PMM) integration for comprehensive monitoring
 - Custom metrics and alerting capabilities
-- Log aggregation and centralized logging
+- Logging — Gain insights into MySQL logs even after Pod restarts with [persistent logging](persistent-logging.md). Configure [log rotation](logrotate.md) for optimized storage usage.
 - Performance insights with query analysis
 - Health dashboards for operational visibility
 
