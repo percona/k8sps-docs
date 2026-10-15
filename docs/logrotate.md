@@ -4,7 +4,7 @@
 
 `logrotate` limits how large log files grow. Without rotation, the MySQL error log can fill the data volume.
 
-`logrotate` runs in a `logrotate` sidecar on every MySQL Pod when [persistent logging](persistent-logging.md) is enabled. By default, it rotates MySQL logs under `/var/lib/mysql/log/*.log`, including `mysqld-error.log`. `mysqld` keeps the error log open, so the sidecar uses `copytruncate`: it copies the file and then empties the original in place. The server keeps writing to the same path.
+`logrotate` runs in a `logrotate` sidecar on every MySQL Pod when [persistent logging](persistent-logging.md) is enabled. By default, it rotates MySQL logs under `/var/lib/mysql/log/*.log`, including `mysqld-error.log`. The rule uses the `nocreate` directive, so `logrotate` does not create a new log file. The `postrotate` script flushes the logs, and MySQL creates the new file.
 
 The Operator does not rotate Percona XtraBackup logs. Those files do not survive a restart of the MySQL Pod. See [Collect MySQL and backup logs](persistent-logging.md#collect-mysql-and-backup-logs).
 
@@ -53,8 +53,11 @@ spec:
             missingok
             nocompress
             notifempty
-            copytruncate
+            nocreate
             sharedscripts
+            postrotate
+                /opt/percona/logcollector/logrotate/postrotate-mysql.sh
+            endscript
         }
 ```
 

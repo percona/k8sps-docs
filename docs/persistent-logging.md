@@ -8,7 +8,7 @@ Percona Operator for MySQL addresses this challenge with **persistent logging**.
 
 It can keep the MySQL error log on the data volume, so you can still read it after a Pod restart. A sidecar also streams a copy to standard output for `kubectl logs`.
 
-The Operator uses [Fluent Bit :octicons-link-external-16:](https://fluentbit.io/), a lightweight log processor with versatile output plugins and forwarding features, to collect logs. When you [enable persistent logging](#enable-persistent-logging), each MySQL Pod gets two sidecar containers:
+The Operator uses [Fluent Bit :octicons-link-external-16:](https://fluentbit.io/), a lightweight log processor with versatile output plugins and forwarding features, to collect logs. Each MySQL Pod gets two sidecar containers:
 
 * `logs` runs Fluent Bit. It tails the log files and writes each line as JSON to its own standard output.
 * `logrotate` rotates those files on a schedule. See [Log rotation](logrotate.md).
@@ -18,7 +18,7 @@ The Operator uses [Fluent Bit :octicons-link-external-16:](https://fluentbit.io/
 
 The collector tails files in two directories.
 
-**MySQL error log.** Fluent Bit tails every `*.log` and `*.err` file in `/var/lib/mysql/log`. The Operator points only the error log at that directory. To collect the slow query log or the general log as well, set `slow_query_log_file` or `general_log_file` to a path under `/var/lib/mysql/log` in your MySQL configuration.
+**MySQL error log.** Fluent Bit tails every `*.log` and `*.err` file in `/var/lib/mysql/log`. The Operator points only the error log at that directory. 
 
 **Percona XtraBackup logs.** During a backup, the `xtrabackup` container writes command output to `/var/log/xtrabackup/<backup-name>.log` and to its own standard error. Fluent Bit tails `*.log` in that directory. The Operator does not rotate these files. They are stored on an `emptyDir` volume and do not survive a restart of the MySQL Pod.
 
@@ -31,8 +31,7 @@ The collector tails files in two directories.
 
 ## Enable persistent logging
 
-Persistent logging is disabled by default. To enable it,
-set `logcollector.enabled` to `true` in the `deploy/cr.yaml` Custom Resource manifest: 
+Persistent logging is enabled by default. Set `logcollector.enabled` in the `deploy/cr.yaml` Custom Resource to `true` or `false` to turn it on or off: 
 
 ```yaml
 spec:
@@ -71,7 +70,7 @@ kubectl exec <cluster-name>-mysql-0 -c xtrabackup -- ls /var/log/xtrabackup
 
 ## Customize Fluent Bit
 
-Add filters or outputs in `logcollector.configuration`. Use the [Fluent Bit YAML configuration format :octicons-link-external-16:](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/). The classic `.conf` format is not supported. The Operator merges your snippet with the built-in pipeline.
+Add additional rules, such as filters or outputs in `logcollector.configuration`. You cannot override the default configuration. Use the [Fluent Bit YAML configuration format :octicons-link-external-16:](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/). The classic `.conf` format is not supported. The Operator includes your rules alongside the built-in pipeline.
 
 The built-in pipeline already turns on the Fluent Bit HTTP server on port `2020`. A `tcpSocket` or `httpGet` probe on that port works without extra configuration.
 

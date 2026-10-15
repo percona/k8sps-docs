@@ -2495,7 +2495,7 @@ The [policy used to update images :octicons-link-external-16:](https://kubernete
 
 ### `logcollector.configuration`
 
-Extra Fluent Bit configuration, merged with the built-in pipeline. Must be in [Fluent Bit YAML :octicons-link-external-16:](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/) format. The classic `.conf` format is not supported. An invalid snippet is ignored when the `logs` container starts. Changing this field restarts the MySQL Pods.
+Additional Fluent Bit rules. You cannot override the default configuration. Must be in [Fluent Bit YAML :octicons-link-external-16:](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/) format. The classic `.conf` format is not supported. An invalid snippet is ignored when the `logs` container starts. Changing this field restarts the MySQL Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
