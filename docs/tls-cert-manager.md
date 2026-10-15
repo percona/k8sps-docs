@@ -99,7 +99,7 @@ The Operator does not create or manage `ClusterIssuer` resources. You must creat
 
 The Operator's default RBAC covers namespace-scoped `Issuer` and `Certificate` objects only. It does not grant access to cluster-scoped `ClusterIssuer` resources. Grant the Operator ServiceAccount permission to get, list, and watch `ClusterIssuer` objects before you reference one.
 
-Create a `ClusterRole` and `ClusterRoleBinding`. Replace the placeholders with your `ClusterIssuer` name, the Operator ServiceAccount name and the namespace where the Operator is deployed. The following example uses the default ServiceAccount name `percona-server-mysql-operator`:
+Create a `ClusterRole` and `ClusterRoleBinding`. Replace the `<cluster-issuer-name>` and `<operator-namespace>`  placeholders with your `ClusterIssuer` name, and the namespace where the Operator is deployed. Specify the Operator ServiceAccount name. The following example uses the default ServiceAccount name `percona-server-mysql-operator`:
 
 ```yaml title="clusterissuer-rbac.yaml"
 apiVersion: rbac.authorization.k8s.io/v1
@@ -121,7 +121,7 @@ roleRef:
   name: <cluster-issuer-name>-reader
 subjects:
 - kind: ServiceAccount
-  name: <operator-service-account>
+  name: percona-server-mysql-operator
   namespace: <operator-namespace>
 ```
 
