@@ -103,5 +103,6 @@ The Percona Operator for MySQL provides a flexible and powerful way to manage ba
 3. If you define environment variables for a backup job, they are passed to both the `xtrabackup` and `xbcloud` processes running within the `xtrabackup` sidecar container. You can verify this by inspecting the process environment variables inside the container during a backup.
 4. Environment variables for a restore job are set for the `xtrabackup` container in the restore Pod.
 5. The `VERIFY_TLS` environment variable currently applies only to restore operations and is ignored for backups. 
-6. If the same binary is configured globally and individually for backups or restores, individual settings take precedence. 
+6. If the same binary is configured globally and individually for backups or restores, individual settings take precedence.
+7. You cannot pass the `--defaults-extra-file` option to `xtrabackup` in a `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` object. Use the `--defaults-file` option if you need to pass your custom settings.
  
