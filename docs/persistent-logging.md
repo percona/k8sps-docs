@@ -20,7 +20,7 @@ The collector tails files in two directories.
 
 **MySQL error log.** Fluent Bit tails every `*.log` and `*.err` file in `/var/lib/mysql/log`. The Operator points only the error log at that directory. To collect the slow query log or the general log as well, set `slow_query_log_file` or `general_log_file` to a path under `/var/lib/mysql/log` in your MySQL configuration.
 
-**Percona XtraBackup logs.** During a backup, the `xtrabackup` container writes command output to the `/var/log/xtrabackup/<backup-name>.log` file and to its own standard error. Fluent Bit tails `*.log` in that directory. The directory is an `emptyDir` volume. Kubernetes deletes it when the Pod is removed, so XtraBackup log files do not survive a Pod restart. After a restart, use the `xtrabackup` container's standard error from the previous container, if Kubernetes still has it (`kubectl logs <pod> -c xtrabackup --previous`).
+**Percona XtraBackup logs.** During a backup, the `xtrabackup` container writes command output to `/var/log/xtrabackup/<backup-name>.log` and to its own standard error. Fluent Bit tails `*.log` in that directory. The Operator does not rotate these files. They are stored on an `emptyDir` volume and do not survive a restart of the MySQL Pod.
 
 
 ## Availability and requirements

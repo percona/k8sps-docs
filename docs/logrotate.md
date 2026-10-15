@@ -2,15 +2,13 @@
 
 !!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
 
-`logrotate` limits how large log files grow. Without rotation, the MySQL error log can fill the data volume. Percona XtraBackup log files can fill the Pod's temporary log directory while the Pod is running.
+`logrotate` limits how large log files grow. Without rotation, the MySQL error log can fill the data volume.
 
-`logrotate` runs in a `logrotate` sidecar on every MySQL Pod when [persistent logging](persistent-logging.md) is enabled. 
-By default, `logrotate` handles two sets of files:
+`logrotate` runs in a `logrotate` sidecar on every MySQL Pod when [persistent logging](persistent-logging.md) is enabled. By default, it rotates MySQL logs under `/var/lib/mysql/log/*.log`, including `mysqld-error.log`. `mysqld` keeps the error log open, so the sidecar uses `copytruncate`: it copies the file and then empties the original in place. The server keeps writing to the same path.
 
-* **MySQL logs** under `/var/lib/mysql/log/*.log`, including `mysqld-error.log`. `mysqld` keeps the error log open, so the sidecar uses `copytruncate`: it copies the file and then empties the original in place. The server keeps writing to the same path.
-* **Percona XtraBackup logs** under `/var/log/xtrabackup/*.log`. These files are on an `emptyDir` volume. Rotation limits disk use while the Pod is running. Deleting the Pod deletes the files.
+The Operator does not rotate Percona XtraBackup logs. Those files do not survive a restart of the MySQL Pod. See [Collect MySQL and backup logs](persistent-logging.md#collect-mysql-and-backup-logs).
 
-For both sets, the default rules are:
+The default rules are:
 
 * Rotate once a day, or on the next run when a file is larger than 100 MB.
 * Keep up to seven rotated files.
@@ -37,9 +35,9 @@ If the snippet is invalid, the sidecar logs an error and falls back to the built
 
 The cron schedule controls when the sidecar runs. The directives in the file, such as `hourly`, are checked only on that run. Set them to the same interval.
 
-An override replaces the whole default file, including the XtraBackup rules. Include a block for `/var/log/xtrabackup/*.log` if you still want those files rotated.
+An override replaces the whole default file.
 
-This example runs every hour and keeps three copies of both default log sets:
+This example runs every hour and keeps three copies of the MySQL logs:
 
 ```yaml
 spec:
@@ -50,15 +48,6 @@ spec:
       schedule: "0 * * * *"
       configuration: |
         /var/lib/mysql/log/*.log {
-            hourly
-            rotate 3
-            missingok
-            nocompress
-            notifempty
-            copytruncate
-            sharedscripts
-        }
-        /var/log/xtrabackup/*.log {
             hourly
             rotate 3
             missingok
