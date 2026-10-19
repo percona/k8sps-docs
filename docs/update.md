@@ -9,6 +9,8 @@ The upgrade process consists of these steps:
 * upgrade the Operator
 * upgrade the database (Percona Server for MySQL)
 
+To apply a security build for the Operator version you already run, see [Use Operator security builds](security-builds.md).
+
 ## Update scenarios
 
 You can either upgrade both the Operator and the database, or you can upgrade only the database. To decide which scenario to choose, read on.

@@ -42,3 +42,5 @@ percona-server-mysql-operator-7ff9cff46f-6dtgs   1/1     Running   0          13
 !!! note
 
     Clusters with Group Replication undergo crash recovery on each unpause. This is caused by the specifics of Group Replication, which supposes continuous availability of the database service by design. See [upstream documentation :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication-restarting-group.html) for more details.
+
+    If this cluster is a replica in a ClusterSet, the Operator recovers the local group on unpause and rejoins it to the ClusterSet. If the primary was down long enough to break the replication channel, you must [rejoin the replica](replication-setup.md#rejoin-a-replica-cluster).
