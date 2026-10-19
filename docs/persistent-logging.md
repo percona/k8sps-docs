@@ -4,9 +4,7 @@
 
 In a distributed Kubernetes environment, it is often difficult to debug issues because container logs are tied to the lifecycle of individual Pods. If a Pod fails and restarts, its logs in stdout and stderr may be lost, making it hard to identify the root cause.
 
-Percona Operator for MySQL addresses this challenge with **persistent logging**. It stores logs independently of individual Pods so they remain accessible even after a Pod restarts.
-
-It can keep the MySQL error log on the data volume, so you can still read it after a Pod restart. A sidecar also streams a copy to standard output for `kubectl logs`.
+Percona Operator for MySQL addresses this challenge with **persistent logging**. It keeps the MySQL error log on the data volume of individual Pods so you can still read it after a Pod restarts. A sidecar streams a copy to standard output for `kubectl logs`.
 
 The Operator uses [Fluent Bit :octicons-link-external-16:](https://fluentbit.io/), a lightweight log processor with versatile output plugins and forwarding features, to collect logs. Each MySQL Pod gets two sidecar containers:
 
