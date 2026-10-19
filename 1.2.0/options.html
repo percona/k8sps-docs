@@ -2531,6 +2531,17 @@ following ways:">
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#configuration-compatibility-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration compatibility considerations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#edit-the-deploycryaml-file" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2560,6 +2571,34 @@ following ways:">
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-operator-treats-dynamic-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Operator treats dynamic options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -5134,6 +5173,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#configuration-compatibility-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration compatibility considerations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#edit-the-deploycryaml-file" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5163,6 +5213,34 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dynamic configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-operator-treats-dynamic-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Operator treats dynamic options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -5225,6 +5303,17 @@ following ways:</p>
 <p>use a Secret object.</p>
 </li>
 </ul>
+<p>The Operator applies your configuration to all MySQL Pods as follows:</p>
+<ul>
+<li><strong>Dynamic variables</strong> — These variables are applied at runtime with the <code>SET GLOBAL</code> command. The Operator doesn&rsquo;t restart the MySQL StatefulSet. See <a href="#dynamic-configuration">Dynamic configuration</a> for details.</li>
+<li><strong>Static variables</strong> are variables that MySQL cannot change while the server is running. Applying them requires the rolling restarts of the MySQL StatefulSet.</li>
+<li>If any variable is <strong>removed</strong>, the Operator applies the changes with a rolling restart of
+  the MySQL StatefulSet.</li>
+</ul>
+<h2 id="configuration-compatibility-considerations">Configuration compatibility considerations<a class="headerlink" href="#configuration-compatibility-considerations" title="Permanent link">&para;</a></h2>
+<p>The Operator passes configuration options you define to MySQL as-is. It does not check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.</p>
+<p>Before you apply a change, check the variable&rsquo;s requirements and restrictions for your topology in the <a href="https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html">MySQL Group Replication requirements <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, <a href="https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html">CHANGE REPLICATION SOURCE TO <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, and <a href="https://docs.percona.com/percona-server/8.4/">Percona Server for MySQL <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> documentation.</p>
+<p>For example, Group Replication requires <code>log_replica_updates=ON</code> so members record replicated transactions in their binary logs for distributed recovery. Setting it to <code>OFF</code> is incompatible with Group Replication.</p>
 <h2 id="edit-the-deploycryaml-file">Edit the <code>deploy/cr.yaml</code> file<a class="headerlink" href="#edit-the-deploycryaml-file" title="Permanent link">&para;</a></h2>
 <p>You can add options from the
 <a href="https://dev.mysql.com/doc/refman/8.0/en/option-files.html">my.cnf <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>
@@ -5240,10 +5329,10 @@ configuration file by editing the configuration section of the
 <p>See the <a href="operator.html#operator-mysql-section">Custom Resource options, MySQL section</a>
 for more details.</p>
 <h2 id="use-a-configmap">Use a ConfigMap<a class="headerlink" href="#use-a-configmap" title="Permanent link">&para;</a></h2>
-<p>You can use a configmap and the cluster restart to reset configuration
-options. A configmap allows Kubernetes to pass or update configuration
-data inside a containerized application.</p>
-<p>Use the <code>kubectl</code> command to create the configmap from external
+<p>You can use a ConfigMap to pass configuration options. A ConfigMap allows
+Kubernetes to pass or update configuration data inside a containerized
+application.</p>
+<p>Use the <code>kubectl</code> command to create the ConfigMap from external
 resources, for more information see <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#create-a-configmap">Configure a Pod to use a
 ConfigMap <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <p>For example, let’s suppose that your application requires more
@@ -5321,12 +5410,49 @@ create a <code>deploy/mysql-secret.yaml</code> file with the following contents:
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Do not forget to restart Percona Server for MySQL pods to ensure the
-cluster has updated the configuration. You can do it with the following
-command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>rollout<span class="w"> </span>restart<span class="w"> </span>statefulset<span class="w"> </span>ps-cluster1-mysql
-</code></pre></div>
+<p>The Operator applies Secret changes automatically. <a href="#dynamic-configuration">Dynamic variables</a> take
+effect without a restart. Static variables or variables you remove from
+the Secret trigger a rolling restart. </p>
 </div>
+<h2 id="dynamic-configuration">Dynamic configuration<a class="headerlink" href="#dynamic-configuration" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md">1.3.0</a></p>
+</div>
+<p>Some MySQL system
+are <a href="https://dev.mysql.com/doc/refman/8.4/en/dynamic-system-variables.html">dynamic <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> and you can change them at runtime while
+the server is running. </p>
+<p>Use dynamic updates when you need to tune a live cluster without a rolling
+restart. Typical cases include raising <code>max_connections</code> during peak traffic,
+adjusting I/O-related settings or enabling query logging to investigate an
+incident.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The Operator does not validate options against your replication type. Dynamic updates skip a rolling restart, so an incompatible value takes effect on the running cluster. Review <a href="#configuration-compatibility-considerations">Configuration compatibility considerations</a> before you apply a change.</p>
+</div>
+<h3 id="how-the-operator-treats-dynamic-options">How the Operator treats dynamic options<a class="headerlink" href="#how-the-operator-treats-dynamic-options" title="Permanent link">&para;</a></h3>
+<p>When you change the Custom Resource, ConfigMap, or Secret, the Operator
+compares the new configuration with the last configuration it applied.</p>
+<ul>
+<li>If the values already match, the Operator does nothing.</li>
+<li>If you add or change a dynamic variable, the Operator runs the <code>SET GLOBAL</code> command on
+  every ready MySQL Pod. Pods keep running.</li>
+<li>If MySQL rejects the change because the variable is read-only or cannot be
+  modified while Group Replication is running, the Operator rolls the MySQL
+  StatefulSet so Pods reload the configuration file.</li>
+<li>If you remove a variable, the Operator restarts Pods so MySQL falls back to
+  the server default.</li>
+</ul>
+<p>The Operator waits until all MySQL Pods are ready before it runs <code>SET GLOBAL</code>.
+If a variable name is unknown to MySQL, the Operator logs an error and does
+not restart Pods. Check the Operator logs and fix the configuration.</p>
+<p>The Operator does not watch live <code>GLOBAL</code> values on the server. If you connect
+to a Pod and define a dynamic variable by running the <code>SET GLOBAL</code> command yourself, the Operator leaves that change in
+place until you update the declared configuration. A later Pod restart reloads
+the configuration file, so a manual change that is not in the Custom Resource,
+ConfigMap, or a Secret is lost.</p>
+<p>To keep a value you already set with <code>SET GLOBAL</code>, add it to the Custom
+Resource, ConfigMap or a Secret. The Operator applies <code>SET GLOBAL</code> again and
+does not restart Pods.</p>
 <h2 id="auto-tuning-mysql-options">Auto-tuning MySQL options<a class="headerlink" href="#auto-tuning-mysql-options" title="Permanent link">&para;</a></h2>
 <p>Few configuration options for MySQL can be calculated and set by the Operator
 automatically based on the available Pod memory resource limits
@@ -5358,7 +5484,7 @@ as follows:</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 7, 2025 14:35:00 UTC">November 7, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 16:03:03 UTC">October 19, 2026</span>
       
         <br>
         Created:
