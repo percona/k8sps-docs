@@ -5320,7 +5320,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>If you pass storage-specific parameters (like <code>--s3-region</code>) directly to the <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code> binaries, they will be overridden by the configuration in the storage section of the Custom Resource.</li>
 <li>If you define environment variables for a backup job, they are passed to both the <code>xtrabackup</code> and <code>xbcloud</code> processes running within the <code>xtrabackup</code> sidecar container. You can verify this by inspecting the process environment variables inside the container during a backup.</li>
 <li>Environment variables for a restore job are set for the <code>xtrabackup</code> container in the restore Pod.</li>
-<li>The <code>VERIFY_TLS</code> environment variable currently applies only to restore operations and is ignored for backups. </li>
+<li>The <code>VERIFY_TLS</code> environment variable currently applies only to restore operations and is ignored for backups. To ensure TLS verification for backups, set the <code>backup.storages.*.verifyTLS</code> option in the Custom Resource. To use your custom certificates, supply the CA with <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage"><code>s3.caBundle</code></a>. To learn more, see <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>.</li>
 <li>If the same binary is configured globally and individually for backups or restores, individual settings take precedence.</li>
 <li>You cannot pass the <code>--defaults-extra-file</code> option to <code>xtrabackup</code> in a <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> object. Use the <code>--defaults-file</code> option if you need to pass your custom settings.</li>
 </ol>
@@ -5329,7 +5329,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 13:04:18 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
       
         <br>
         Created:

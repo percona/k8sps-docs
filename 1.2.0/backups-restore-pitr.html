@@ -1764,6 +1764,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#use-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ignore-sql-errors-during-binlog-replay" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5288,6 +5299,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
+  <a href="#use-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ignore-sql-errors-during-binlog-replay" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5364,6 +5386,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Make a base backup <strong>before</strong> the target time or transaction</li>
 <li>Choose a target timestamp (<code>type: date</code>) or a GTID set (<code>type: gtid</code>)</li>
 <li>Set the <code>spec.backup.backoffLimit=0</code> in the cluster Custom Resource so a failed PITR Job does not retry automatically (<a href="backups-pitr.html#known-limitations">known limitations</a>)</li>
+<li>If the source verified S3 with a custom CA, follow <a href="#use-a-custom-ca">Use a custom CA</a></li>
 </ul>
 <h2 id="restore-on-the-same-cluster">Restore on the same cluster<a class="headerlink" href="#restore-on-the-same-cluster" title="Permanent link">&para;</a></h2>
 <p>The Operator reads binlog storage from <code>spec.backup.pitr.binlogServer</code> on the cluster Custom Resource.</p>
@@ -5423,6 +5446,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li>Target cluster is running</li>
 <li>User password Secret matches the source cluster. Copy it as described in <a href="backups-restore-to-new-cluster.html#preconditions">Preconditions</a></li>
 <li>If the base backup was <a href="backups-encrypted.html">encrypted</a>, create the same encryption-key Secret on the target and set <code>spec.backupSource.storage.encryptionKeySecret</code></li>
+<li>If the source verified S3 with a custom CA, follow <a href="#use-a-custom-ca">Use a custom CA</a></li>
 </ul>
 <p>Keep these three prefixes distinct:</p>
 <table>
@@ -5463,7 +5487,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li>
 <p><code>backupSource</code> section:</p>
 <ul>
-<li><code>destination</code> - where the backup is located. See <a href="#retrieve-the-backup-destination">Retrieve the backup destination</a> to learn how to get the backup destination</li>
+<li><code>destination</code> - where the backup is located. See <a href="#retrieve-the-backup-destination">Retrieve the backup destination</a> how to get the backup destination </li>
 <li><code>storage</code> - configure the storage where the backup is stored. Specify the bucket, region, credentials Secret for the Operator to access the storage. If you specified a separate folder for backups on the bucket, specify it for the <code>prefix</code> option.</li>
 </ul>
 </li>
@@ -5527,6 +5551,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <td>Decrypt an encrypted backup</td>
 <td>Uncomment <code>encryptionKeySecret</code></td>
 </tr>
+<tr>
+<td>Use a custom CA</td>
+<td>Follow <a href="#use-a-custom-ca">Use a custom CA</a></td>
+</tr>
 </tbody>
 </table>
 <p>Start the restore:</p>
@@ -5537,6 +5565,68 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li><a href="backups-pitr.html#enable-binlog-collection">Enable binlog collection</a> on the restored cluster with a <strong>new</strong> prefix if you share the source bucket.</li>
 <li>Take a fresh base backup to start a new timeline.</li>
 </ul>
+<h2 id="use-a-custom-ca">Use a custom CA<a class="headerlink" href="#use-a-custom-ca" title="Permanent link">&para;</a></h2>
+<p>If the source used a <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a> to verify TLS to S3, the restore Job must trust that CA. You do this on the cluster where the restore runs.</p>
+<p>On the <strong>same cluster</strong>, if <code>caBundle</code> is already set on backup storage and on <a href="backups-pitr.html#verify-tls-with-a-custom-ca">Binlog Server</a>, run the restore as in <a href="#restore-on-the-same-cluster">Restore on the same cluster</a>. The Operator reads the settings from the cluster&rsquo;s Custom resource.</p>
+<p>On a <strong>new cluster</strong>, or whenever you restore with <code>backupSource</code>, do the following:</p>
+<ol>
+<li>
+<p>Create a CA Secret on the <strong>target</strong> cluster from the same CA file you used on the source. See <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">Create a CA Secret</a>.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code> so the Operator can download the base backup.</p>
+</li>
+<li>
+<p>Set <code>caBundle</code> on <code>spec.pitr.backupSource.binlogServer.storage.s3</code> so the temporary Binlog Server can download binlogs.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-custom-ca</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">verifyTLS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;BACKUP-PREFIX&gt;</span>
+<span class="w">        </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
+<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+<span class="w">            </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+</li>
+<li>
+<p>Start the restore:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p><a href="#view-restore-details">Watch the restore</a>. If TLS verification fails, see <a href="debug-backup-restore.html#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</p>
+</li>
+</ol>
 <h2 id="ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay<a class="headerlink" href="#ignore-sql-errors-during-binlog-replay" title="Permanent link">&para;</a></h2>
 <p>Updates made by <code>mysql-shell</code> can produce replication errors during replay, for example <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>To ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code>. This passes <code>--force</code> to the MySQL client.</p>
@@ -5562,7 +5652,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
       
         <br>
         Created:

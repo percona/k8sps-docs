@@ -1689,6 +1689,17 @@ inserts, and deletes.">
 </li>
       
         <li class="md-nav__item">
+  <a href="#verify-tls-with-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify TLS with a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#implementation-specifics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5180,6 +5191,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
+  <a href="#verify-tls-with-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify TLS with a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#implementation-specifics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5328,6 +5350,64 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 </li>
 </ol>
 <p>To restore, use <a href="backups-restore-pitr.html">Restore with point-in-time recovery</a>.</p>
+<h2 id="verify-tls-with-a-custom-ca">Verify TLS with a custom CA<a class="headerlink" href="#verify-tls-with-a-custom-ca" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md">1.3.0</a></p>
+</div>
+<p>You can use your organization&rsquo;s CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.</p>
+<p>This setting is independent from <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">configuring custom certificates for a backup storage</a>. Configuring a custom CA for backups does not apply it to Binlog Server.</p>
+<p>You must run the Operator 1.3.0 and have a Custom Resource version (<code>spec.crVersion</code>) set to <code>1.3.0</code> or later.</p>
+<p>The steps are:</p>
+<ol>
+<li>
+<p>Create a Secret that contains the CA certificate needed to verify the S3 endpoint. This Secret is separate from the storage credentials Secret.</p>
+<p>You can create it from a file:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>Or define it in YAML. The <code>ca.crt</code> value must be base64-encoded:</p>
+<div class="highlight"><span class="filename">custom-ca-bundle.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ca.crt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;base64-encoded-ca&gt;</span>
+</code></pre></div>
+<p>Apply the Secret:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>custom-ca-bundle.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Modify the storage configuration for the Binlog Server in the Custom Resource and specify the following:</p>
+<ul>
+<li><code>backup.pitr.binlogServer.storage.s3.caBundle.name</code> is the name of the Secret you created</li>
+<li><code>backup.pitr.binlogServer.storage.s3.caBundle.key</code> is the key in the Secret that holds the CA certificate. If you omit <code>key</code>, the Operator uses <code>ca.crt</code>.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-binlogs</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-s3-secret</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">            </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>When you restore with <code>backupSource</code>, create the CA Secret on the target cluster and set <code>caBundle</code> on the restore object. See <a href="backups-restore-pitr.html#use-a-custom-ca">Use a custom CA</a>.</p>
+<p>To add or rotate certificates in the bundle, create a new Secret and point <code>caBundle.name</code> at it. Editing the existing Secret is not enough. See <a href="backups-storage.html#update-the-ca-bundle">Update the CA bundle</a>.</p>
 <h2 id="implementation-specifics">Implementation specifics<a class="headerlink" href="#implementation-specifics" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Point-in-time recovery is supported for both asynchronous and group replication topologies.</li>
@@ -5341,7 +5421,7 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 <p>Also see <a href="limitations.html#point-in-time-recovery">Known limitations</a> for a summary of Operator-wide constraints that affect this feature.</p>
 <ul>
 <li>
-<p><strong>AWS S3 and S3-compatible storage</strong> are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and TLS options to match your environment.</p>
+<p><strong>AWS S3 and S3-compatible storage</strong> are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and <a href="#verify-tls-with-a-custom-ca">TLS options to match your environment</a>.</p>
 </li>
 <li>
 <p><strong>You cannot change the <code>prefix</code> value for the binlog bucket</strong> after you configure Binlog Server.</p>
@@ -5360,7 +5440,7 @@ object.</li>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
       
         <br>
         Created:

@@ -3934,6 +3934,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#restore-from-s3-storage-that-uses-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore from S3 storage that uses a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5516,6 +5527,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#restore-from-s3-storage-that-uses-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore from S3 storage that uses a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5596,6 +5618,7 @@ Events:               &lt;none&gt;
 <li><strong>Authentication failures</strong>: Invalid credentials for accessing cloud storage</li>
 <li><strong>Network issues</strong>: Problems connecting to the storage service</li>
 <li><strong>Insufficient permissions</strong>: The backup job doesn&rsquo;t have permission to write to the storage location</li>
+<li><strong>TLS certificate errors</strong>: The storage endpoint uses a private CA and the Operator cannot verify it. Typical Job or sidecar log messages include <code>x509: certificate signed by unknown authority</code> or <code>certificate verify failed</code>. Keep <code>verifyTLS</code> enabled, confirm <code>crVersion</code> is <code>1.3.0</code> or later, and supply the CA with <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage"><code>s3.caBundle</code></a>.</li>
 </ul>
 <h3 id="check-backup-jobs">Check backup Jobs<a class="headerlink" href="#check-backup-jobs" title="Permanent link">&para;</a></h3>
 <p>When a backup runs, the Operator creates a Kubernetes Job to execute it. You can view these Jobs to see which backups are running or have completed:</p>
@@ -5721,6 +5744,7 @@ Events:   &lt;none&gt;
 <li><strong>Storage access issues</strong>: Problems reading from the backup storage location</li>
 <li><strong>Cluster state conflicts</strong>: The cluster is not in a state that allows restore</li>
 <li><strong>Insufficient resources</strong>: Not enough disk space or memory to complete the restore</li>
+<li><strong>TLS certificate errors</strong>: The restore Job cannot verify the S3 endpoint certificate. See <a href="#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</li>
 </ul>
 <h3 id="check-restore-jobs">Check restore jobs<a class="headerlink" href="#check-restore-jobs" title="Permanent link">&para;</a></h3>
 <p>When a restore runs, the Operator creates a Kubernetes Job to execute it. View these Jobs:</p>
@@ -5790,12 +5814,23 @@ xb-restore-restore2                                      Complete   1/1         
 <p>If you choose to ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code> in the restore object. This passes <code>--force</code> to the MySQL client and silently ignores <strong>all</strong> SQL errors during replay, which can hide data loss. See <a href="backups-restore-pitr.html#ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay</a>.</p>
 <h3 id="operator-user-password-changed-after-the-backup">Operator user password changed after the backup<a class="headerlink" href="#operator-user-password-changed-after-the-backup" title="Permanent link">&para;</a></h3>
 <p>If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.</p>
+<h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">&para;</a></h2>
+<p>If restore Job logs show <code>x509: certificate signed by unknown authority</code>, <code>certificate verify failed</code>, or a similar TLS error, the S3-compatible endpoint is presenting a certificate your cluster does not trust.</p>
+<p>Do not set <code>verifyTLS: false</code> or <code>VERIFY_TLS=false</code> to work around this. Instead, supply the CA and keep verification enabled.</p>
+<ol>
+<li>Confirm the Operator version and Custom Resource version are <code>1.3.0</code> or later. If you upgraded the Operator but left <code>spec.crVersion</code> at <code>1.2.0</code>, the Operator ignores <code>caBundle</code>.</li>
+<li>Confirm <code>caBundle.name</code> and <code>caBundle.key</code> match the Secret that holds the CA.</li>
+<li>Confirm the CA Secret exists in the namespace where the restore runs. Create it from the CA file if you are restoring on a new cluster. </li>
+<li>Set <code>caBundle</code> on the restore object. For a backup-only restore, set it on <code>spec.backupSource.storage.s3</code>. For point-in-time recovery, also set it on <code>spec.pitr.backupSource.binlogServer.storage.s3</code>.</li>
+</ol>
+<p>On the same cluster with <code>backupName</code>, the Operator can use <code>caBundle</code> already set on the cluster Custom Resource.</p>
+<p>See <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>, <a href="backups-restore-to-new-cluster.html#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>, and <a href="backups-restore-pitr.html#use-a-custom-ca">Use a custom CA</a> for point-in-time recovery.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
       
         <br>
         Created:

@@ -5238,6 +5238,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h2 id="restore-scenarios">Restore scenarios<a class="headerlink" href="#restore-scenarios" title="Permanent link">&para;</a></h2>
 <p>To restore a backup on this cluster, follow the steps below.</p>
 <p>To restore to a timestamp or GTID, use <a href="backups-restore-pitr.html#restore-on-the-same-cluster">Restore with point-in-time recovery</a>.</p>
+<p>If this cluster already verifies S3 with a <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, the Operator reads the  <code>caBundle</code> defined on the cluster Custom Resource. You do not add <code>caBundle</code> to the restore object when you restore with <code>backupName</code>.</p>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. </p>
 <p>You can check available options in the <a href="restore-cr.html">restore options reference</a>.</p>
 <h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">&para;</a></h2>
@@ -5323,7 +5324,7 @@ xb-restore-restore2                                Complete             1/1     
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
       
         <br>
         Created:

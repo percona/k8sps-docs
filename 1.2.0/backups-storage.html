@@ -1385,6 +1385,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure storage for backups
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="backups-storage.html" class="md-nav__link md-nav__link--active">
         
   
@@ -1401,6 +1419,47 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configure-tls-verification-with-custom-certificates-for-s3-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure TLS verification with custom certificates for S3 storage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-the-ca-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update the CA bundle
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5043,6 +5102,36 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configure-tls-verification-with-custom-certificates-for-s3-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure TLS verification with custom certificates for S3 storage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-the-ca-bundle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update the CA bundle
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -5138,6 +5227,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>If you use S3-compatible storage instead of Amazon S3, add the <code>endpointUrl</code> option in the <code>s3</code> subsection. This points to your storage service and is specific to your cloud provider. For example, for MinIO:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
 </code></pre></div>
+<p>You can use a certificate from your organization&rsquo;s PKI and verify TLS communication using those certificates. See the <a href="#configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates</a> section for configuration steps.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Organizing backups</p>
@@ -5280,12 +5370,97 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </div>
 </div>
 </div>
+<h2 id="configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage<a class="headerlink" href="#configure-tls-verification-with-custom-certificates-for-s3-storage" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md">1.3.0</a></p>
+</div>
+<p>You can use your organization&rsquo;s CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.</p>
+<p>You must run the Operator 1.3.0 and have a Custom Resource version (<code>spec.crVersion</code>) set to <code>1.3.0</code> or later.</p>
+<p>To configure TLS verification with custom certificates, do the following:</p>
+<ol>
+<li>
+<p>Create a Secret that contains the CA certificate needed to verify the S3 endpoint. This Secret is separate from the storage credentials Secret.</p>
+<p>You can create it from a file:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>Or define it in YAML. The <code>ca.crt</code> value must be base64-encoded:</p>
+<div class="highlight"><span class="filename">custom-ca-bundle.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ca.crt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;base64-encoded-ca&gt;</span>
+</code></pre></div>
+<p>Apply the Secret:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>custom-ca-bundle.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Modify the S3 storage configuration in the Custom Resource and specify the following:</p>
+<ul>
+<li><code>storages.&lt;NAME&gt;.s3.caBundle.name</code> is the name of the Secret you created</li>
+<li><code>storages.&lt;NAME&gt;.s3.caBundle.key</code> is the key in the Secret that holds the CA certificate. If you omit <code>key</code>, the Operator uses <code>ca.crt</code>.</li>
+<li>Keep <code>storages.&lt;NAME&gt;.verifyTLS</code> set to <code>true</code></li>
+</ul>
+<p>Here&rsquo;s the example configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">backup</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">minio</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">verifyTLS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BACKUP-BUCKET-NAME-HERE</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">        </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>The Operator uses this CA to verify TLS when it runs backups, restores, and backup deletion Jobs for that storage.</p>
+<p>If the CA lives in a cert-manager Secret that also contains <code>tls.crt</code> and <code>tls.key</code>, still set <code>caBundle.key</code> to <code>ca.crt</code> (or the key that holds the CA). The Operator mounts only that key.</p>
+<h2 id="update-the-ca-bundle">Update the CA bundle<a class="headerlink" href="#update-the-ca-bundle" title="Permanent link">&para;</a></h2>
+<p>The Operator does not detect changes inside an existing CA Secret. To add, replace, or rotate certificates in the bundle, create a <strong>new</strong> Secret and point <code>caBundle</code> at it.</p>
+<ol>
+<li>
+<p>Create a new Secret with the updated CA. Use a different name than the Secret you already reference:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle-v2<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/updated-ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Update <code>caBundle.name</code> in the Custom Resource to the new Secret:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle-v2</span>
+<span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+<p>If Binlog Server also uses this CA, update <code>backup.pitr.binlogServer.storage.s3.caBundle.name</code> as well. See <a href="backups-pitr.html#verify-tls-with-a-custom-ca">Verify TLS with a custom CA</a>.</p>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>After backups and restores succeed with the new CA, you can delete the old Secret.</p>
+<p>If you configure several S3 storages, each can reference its own CA. The Operator mounts all of those CAs on MySQL Pods. A backup or restore Job uses the CA of the storage you selected.</p>
+<p><code>caBundle</code> on <code>backup.storages</code> does not apply to Binlog Server. To verify TLS communication for <a href="backups-pitr.html">point-in-time recovery</a>, supply your custom certificate within the Binlog Server configuration as well by setting <code>caBundle</code> on <a href="backups-pitr.html#verify-tls-with-a-custom-ca"><code>backup.pitr.binlogServer.storage.s3</code></a>. See <a href="backups-pitr.html#verify-tls-with-a-custom-ca">Verify TLS with a custom CA</a>.</p>
+<p>When you restore with <code>backupSource</code>, such as on a new cluster, create the CA Secret on the target and set <code>caBundle</code> on <code>backupSource.storage.s3</code>. See <a href="backups-restore-to-new-cluster.html#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>. </p>
+<p>For point-in-time recovery, also set <code>caBundle</code> on the binlog storage as shown in <a href="backups-restore-pitr.html#use-a-custom-ca">Use a custom CA</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
       
         <br>
         Created:

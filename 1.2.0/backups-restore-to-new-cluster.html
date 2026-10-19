@@ -1847,6 +1847,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#restore-from-s3-storage-that-uses-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore from S3 storage that uses a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#view-restore-details" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5232,6 +5243,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
+  <a href="#restore-from-s3-storage-that-uses-a-custom-ca" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore from S3 storage that uses a custom CA
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#view-restore-details" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5302,13 +5324,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ul>
 <p>This document focuses on the restore on a new cluster deployed in a different Kubernetes environment.</p>
 <h2 id="restore-scenarios">Restore scenarios<a class="headerlink" href="#restore-scenarios" title="Permanent link">&para;</a></h2>
-<p>To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include <code>encryptionKeySecret</code> as shown in <a href="#restore-from-an-encrypted-backup">Restore from an encrypted backup</a>.</p>
-<p>To restore to a timestamp or GTID, use <a href="backups-restore-pitr.html#restore-on-a-new-cluster">Restore with point-in-time recovery</a>. </p>
+<p>To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include <code>encryptionKeySecret</code> as shown in <a href="#restore-from-an-encrypted-backup">Restore from an encrypted backup</a>. If the source used a custom CA, include <code>caBundle</code> as shown in <a href="#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</p>
+<p>To restore to a timestamp or GTID, use <a href="backups-restore-pitr.html#restore-on-a-new-cluster">Restore with point-in-time recovery</a>.</p>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <p>You can check available options in the <a href="restore-cr.html">restore options reference</a>.</p>
 <h2 id="preconditions">Preconditions<a class="headerlink" href="#preconditions" title="Permanent link">&para;</a></h2>
 <p>When restoring to a new Kubernetes-based environment, make sure it has a Secrets object with the same user passwords as in the source cluster.</p>
 <p>If the backup was <a href="backups-encrypted.html">encrypted</a>, the Operator requires the Secret with the same encryption key that was used for the backup. Reference this Secret in the restore resource under <code>spec.backupSource.storage.encryptionKeySecret</code>.</p>
+<p>If the source cluster verified TLS with a <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, create the CA Secret on the target cluster and set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code>. For a point-in-time restore to a timestamp or GTID, see <a href="backups-restore-pitr.html#use-a-custom-ca">Use a custom CA</a>.</p>
 <p>You can export the user Secret from the source cluster and create a Secrets object on the target one. Here&rsquo;s how to do it:</p>
 <ol>
 <li>
@@ -5457,6 +5480,44 @@ type: Opaque
 <p>Start the restore:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
+<h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">&para;</a></h2>
+<p>If the source cluster verified S3-compatible storage with a <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, keep <code>verifyTLS</code> enabled and set <code>caBundle</code> in the restore resource.</p>
+<p>For a restore to a timestamp or GTID, follow <a href="backups-restore-pitr.html#use-a-custom-ca">Use a custom CA</a>.</p>
+<ol>
+<li>
+<p>Create a CA Secret on the <strong>target</strong> cluster from the same CA file you used on the source. See <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">Create a CA Secret</a>.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Edit the <code>deploy/backup/restore.yaml</code> manifest and set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code> to that Secret.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">verifyTLS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;PREFIX-WHERE-BACKUP-IS-STORED&gt;</span>
+<span class="w">        </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+<p>Start the restore:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 <h2 id="view-restore-details">View restore details<a class="headerlink" href="#view-restore-details" title="Permanent link">&para;</a></h2>
 <p>When you start the restore, the restore job is created. You can check the job details using these commands:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job
@@ -5479,7 +5540,7 @@ xb-restore-restore2                                Complete             1/1     
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 16, 2026 10:37:54 UTC">September 16, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
       
         <br>
         Created:

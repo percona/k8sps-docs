@@ -6802,6 +6802,7 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <li>Transport encryption with TLS/SSL support</li>
 <li>Data-at-rest encryption with key management integration</li>
 <li>Encrypted backups for object storage</li>
+<li>Additional trusted CA certificates from your PKI for TLS verification with S3-compatible backup storage (available starting with Operator version 1.3.0)</li>
 <li>Role-based access control with fine-grained permissions</li>
 <li>Secret management with Kubernetes-native secrets</li>
 <li>Orchestrator API authentication for async replication clusters (available starting with Operator version 1.2.0)</li>
@@ -9613,6 +9614,7 @@ storage alongside your normal backup configuration.</p></section><section class=
 <p>If you use S3-compatible storage instead of Amazon S3, add the <code>endpointUrl</code> option in the <code>s3</code> subsection. This points to your storage service and is specific to your cloud provider. For example, for MinIO:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
 </code></pre></div>
+<p>You can use a certificate from your organization&rsquo;s PKI and verify TLS communication using those certificates. See the <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates</a> section for configuration steps.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Organizing backups</p>
@@ -9754,7 +9756,92 @@ storage alongside your normal backup configuration.</p></section><section class=
 <p>For more configuration options, see the <a href="#operator-operator-backup-section">Operator Custom Resource options</a>.</p>
 </div>
 </div>
-</div></section><section class="print-page" id="backups-incremental" heading-number="6.3.3"><h1 id="backups-incremental-incremental-backups">Incremental backups<a class="headerlink" href="#backups-incremental-incremental-backups" title="Permanent link">&para;</a></h1>
+</div>
+<h2 id="backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage<a class="headerlink" href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>You can use your organization&rsquo;s CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.</p>
+<p>You must run the Operator 1.3.0 and have a Custom Resource version (<code>spec.crVersion</code>) set to <code>1.3.0</code> or later.</p>
+<p>To configure TLS verification with custom certificates, do the following:</p>
+<ol>
+<li>
+<p>Create a Secret that contains the CA certificate needed to verify the S3 endpoint. This Secret is separate from the storage credentials Secret.</p>
+<p>You can create it from a file:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>Or define it in YAML. The <code>ca.crt</code> value must be base64-encoded:</p>
+<div class="highlight"><span class="filename">custom-ca-bundle.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ca.crt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;base64-encoded-ca&gt;</span>
+</code></pre></div>
+<p>Apply the Secret:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>custom-ca-bundle.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Modify the S3 storage configuration in the Custom Resource and specify the following:</p>
+<ul>
+<li><code>storages.&lt;NAME&gt;.s3.caBundle.name</code> is the name of the Secret you created</li>
+<li><code>storages.&lt;NAME&gt;.s3.caBundle.key</code> is the key in the Secret that holds the CA certificate. If you omit <code>key</code>, the Operator uses <code>ca.crt</code>.</li>
+<li>Keep <code>storages.&lt;NAME&gt;.verifyTLS</code> set to <code>true</code></li>
+</ul>
+<p>Here&rsquo;s the example configuration:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">backup</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">storages</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">minio</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">verifyTLS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BACKUP-BUCKET-NAME-HERE</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">        </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>The Operator uses this CA to verify TLS when it runs backups, restores, and backup deletion Jobs for that storage.</p>
+<p>If the CA lives in a cert-manager Secret that also contains <code>tls.crt</code> and <code>tls.key</code>, still set <code>caBundle.key</code> to <code>ca.crt</code> (or the key that holds the CA). The Operator mounts only that key.</p>
+<h2 id="backups-storage-update-the-ca-bundle">Update the CA bundle<a class="headerlink" href="#backups-storage-update-the-ca-bundle" title="Permanent link">&para;</a></h2>
+<p>The Operator does not detect changes inside an existing CA Secret. To add, replace, or rotate certificates in the bundle, create a <strong>new</strong> Secret and point <code>caBundle</code> at it.</p>
+<ol>
+<li>
+<p>Create a new Secret with the updated CA. Use a different name than the Secret you already reference:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle-v2<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/updated-ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Update <code>caBundle.name</code> in the Custom Resource to the new Secret:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle-v2</span>
+<span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+<p>If Binlog Server also uses this CA, update <code>backup.pitr.binlogServer.storage.s3.caBundle.name</code> as well. See <a href="#backups-pitr-verify-tls-with-a-custom-ca">Verify TLS with a custom CA</a>.</p>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>After backups and restores succeed with the new CA, you can delete the old Secret.</p>
+<p>If you configure several S3 storages, each can reference its own CA. The Operator mounts all of those CAs on MySQL Pods. A backup or restore Job uses the CA of the storage you selected.</p>
+<p><code>caBundle</code> on <code>backup.storages</code> does not apply to Binlog Server. To verify TLS communication for <a href="#backups-pitr">point-in-time recovery</a>, supply your custom certificate within the Binlog Server configuration as well by setting <code>caBundle</code> on <a href="#backups-pitr-verify-tls-with-a-custom-ca"><code>backup.pitr.binlogServer.storage.s3</code></a>. See <a href="#backups-pitr-verify-tls-with-a-custom-ca">Verify TLS with a custom CA</a>.</p>
+<p>When you restore with <code>backupSource</code>, such as on a new cluster, create the CA Secret on the target and set <code>caBundle</code> on <code>backupSource.storage.s3</code>. See <a href="#backups-restore-to-new-cluster-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>. </p>
+<p>For point-in-time recovery, also set <code>caBundle</code> on the binlog storage as shown in <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a>.</p></section><section class="print-page" id="backups-incremental" heading-number="6.3.3"><h1 id="backups-incremental-incremental-backups">Incremental backups<a class="headerlink" href="#backups-incremental-incremental-backups" title="Permanent link">&para;</a></h1>
 <div class="admonition admonition">
 <p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.1.0">1.1.0</a></p>
 </div>
@@ -10380,6 +10467,64 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 </li>
 </ol>
 <p>To restore, use <a href="#backups-restore-pitr">Restore with point-in-time recovery</a>.</p>
+<h2 id="backups-pitr-verify-tls-with-a-custom-ca">Verify TLS with a custom CA<a class="headerlink" href="#backups-pitr-verify-tls-with-a-custom-ca" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>You can use your organization&rsquo;s CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.</p>
+<p>This setting is independent from <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">configuring custom certificates for a backup storage</a>. Configuring a custom CA for backups does not apply it to Binlog Server.</p>
+<p>You must run the Operator 1.3.0 and have a Custom Resource version (<code>spec.crVersion</code>) set to <code>1.3.0</code> or later.</p>
+<p>The steps are:</p>
+<ol>
+<li>
+<p>Create a Secret that contains the CA certificate needed to verify the S3 endpoint. This Secret is separate from the storage credentials Secret.</p>
+<p>You can create it from a file:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>Or define it in YAML. The <code>ca.crt</code> value must be base64-encoded:</p>
+<div class="highlight"><span class="filename">custom-ca-bundle.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Opaque</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ca.crt</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;base64-encoded-ca&gt;</span>
+</code></pre></div>
+<p>Apply the Secret:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>custom-ca-bundle.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Modify the storage configuration for the Binlog Server in the Custom Resource and specify the following:</p>
+<ul>
+<li><code>backup.pitr.binlogServer.storage.s3.caBundle.name</code> is the name of the Secret you created</li>
+<li><code>backup.pitr.binlogServer.storage.s3.caBundle.key</code> is the key in the Secret that holds the CA certificate. If you omit <code>key</code>, the Operator uses <code>ca.crt</code>.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-binlogs</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-s3-secret</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">            </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>When you restore with <code>backupSource</code>, create the CA Secret on the target cluster and set <code>caBundle</code> on the restore object. See <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a>.</p>
+<p>To add or rotate certificates in the bundle, create a new Secret and point <code>caBundle.name</code> at it. Editing the existing Secret is not enough. See <a href="#backups-storage-update-the-ca-bundle">Update the CA bundle</a>.</p>
 <h2 id="backups-pitr-implementation-specifics">Implementation specifics<a class="headerlink" href="#backups-pitr-implementation-specifics" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Point-in-time recovery is supported for both asynchronous and group replication topologies.</li>
@@ -10393,7 +10538,7 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 <p>Also see <a href="#limitations-point-in-time-recovery">Known limitations</a> for a summary of Operator-wide constraints that affect this feature.</p>
 <ul>
 <li>
-<p><strong>AWS S3 and S3-compatible storage</strong> are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and TLS options to match your environment.</p>
+<p><strong>AWS S3 and S3-compatible storage</strong> are currently supported for Binlog Server to stream binlogs, even if the base backup is on GCS or Azure. Provide credentials using a Secret. Set the endpoint URL, region, and <a href="#backups-pitr-verify-tls-with-a-custom-ca">TLS options to match your environment</a>.</p>
 </li>
 <li>
 <p><strong>You cannot change the <code>prefix</code> value for the binlog bucket</strong> after you configure Binlog Server.</p>
@@ -10420,6 +10565,7 @@ object.</li>
 <li>Make a base backup <strong>before</strong> the target time or transaction</li>
 <li>Choose a target timestamp (<code>type: date</code>) or a GTID set (<code>type: gtid</code>)</li>
 <li>Set the <code>spec.backup.backoffLimit=0</code> in the cluster Custom Resource so a failed PITR Job does not retry automatically (<a href="#backups-pitr-known-limitations">known limitations</a>)</li>
+<li>If the source verified S3 with a custom CA, follow <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a></li>
 </ul>
 <h2 id="backups-restore-pitr-restore-on-the-same-cluster">Restore on the same cluster<a class="headerlink" href="#backups-restore-pitr-restore-on-the-same-cluster" title="Permanent link">&para;</a></h2>
 <p>The Operator reads binlog storage from <code>spec.backup.pitr.binlogServer</code> on the cluster Custom Resource.</p>
@@ -10479,6 +10625,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li>Target cluster is running</li>
 <li>User password Secret matches the source cluster. Copy it as described in <a href="#backups-restore-to-new-cluster-preconditions">Preconditions</a></li>
 <li>If the base backup was <a href="#backups-encrypted">encrypted</a>, create the same encryption-key Secret on the target and set <code>spec.backupSource.storage.encryptionKeySecret</code></li>
+<li>If the source verified S3 with a custom CA, follow <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a></li>
 </ul>
 <p>Keep these three prefixes distinct:</p>
 <table>
@@ -10519,7 +10666,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li>
 <p><code>backupSource</code> section:</p>
 <ul>
-<li><code>destination</code> - where the backup is located. See <a href="#backups-restore-pitr-retrieve-the-backup-destination">Retrieve the backup destination</a> to learn how to get the backup destination</li>
+<li><code>destination</code> - where the backup is located. See <a href="#backups-restore-pitr-retrieve-the-backup-destination">Retrieve the backup destination</a> how to get the backup destination </li>
 <li><code>storage</code> - configure the storage where the backup is stored. Specify the bucket, region, credentials Secret for the Operator to access the storage. If you specified a separate folder for backups on the bucket, specify it for the <code>prefix</code> option.</li>
 </ul>
 </li>
@@ -10583,6 +10730,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <td>Decrypt an encrypted backup</td>
 <td>Uncomment <code>encryptionKeySecret</code></td>
 </tr>
+<tr>
+<td>Use a custom CA</td>
+<td>Follow <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a></td>
+</tr>
 </tbody>
 </table>
 <p>Start the restore:</p>
@@ -10593,6 +10744,68 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li><a href="#backups-pitr-enable-binlog-collection">Enable binlog collection</a> on the restored cluster with a <strong>new</strong> prefix if you share the source bucket.</li>
 <li>Take a fresh base backup to start a new timeline.</li>
 </ul>
+<h2 id="backups-restore-pitr-use-a-custom-ca">Use a custom CA<a class="headerlink" href="#backups-restore-pitr-use-a-custom-ca" title="Permanent link">&para;</a></h2>
+<p>If the source used a <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a> to verify TLS to S3, the restore Job must trust that CA. You do this on the cluster where the restore runs.</p>
+<p>On the <strong>same cluster</strong>, if <code>caBundle</code> is already set on backup storage and on <a href="#backups-pitr-verify-tls-with-a-custom-ca">Binlog Server</a>, run the restore as in <a href="#backups-restore-pitr-restore-on-the-same-cluster">Restore on the same cluster</a>. The Operator reads the settings from the cluster&rsquo;s Custom resource.</p>
+<p>On a <strong>new cluster</strong>, or whenever you restore with <code>backupSource</code>, do the following:</p>
+<ol>
+<li>
+<p>Create a CA Secret on the <strong>target</strong> cluster from the same CA file you used on the source. See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Create a CA Secret</a>.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code> so the Operator can download the base backup.</p>
+</li>
+<li>
+<p>Set <code>caBundle</code> on <code>spec.pitr.backupSource.binlogServer.storage.s3</code> so the temporary Binlog Server can download binlogs.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-custom-ca</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">verifyTLS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;BACKUP-PREFIX&gt;</span>
+<span class="w">        </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
+<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">            </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+<span class="w">            </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">              </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+</li>
+<li>
+<p>Start the restore:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p><a href="#backups-restore-pitr-view-restore-details">Watch the restore</a>. If TLS verification fails, see <a href="#debug-backup-restore-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</p>
+</li>
+</ol>
 <h2 id="backups-restore-pitr-ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay<a class="headerlink" href="#backups-restore-pitr-ignore-sql-errors-during-binlog-replay" title="Permanent link">&para;</a></h2>
 <p>Updates made by <code>mysql-shell</code> can produce replication errors during replay, for example <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>To ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code>. This passes <code>--force</code> to the MySQL client.</p>
@@ -10626,6 +10839,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <h2 id="backups-restore-restore-scenarios">Restore scenarios<a class="headerlink" href="#backups-restore-restore-scenarios" title="Permanent link">&para;</a></h2>
 <p>To restore a backup on this cluster, follow the steps below.</p>
 <p>To restore to a timestamp or GTID, use <a href="#backups-restore-pitr-restore-on-the-same-cluster">Restore with point-in-time recovery</a>.</p>
+<p>If this cluster already verifies S3 with a <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, the Operator reads the  <code>caBundle</code> defined on the cluster Custom Resource. You do not add <code>caBundle</code> to the restore object when you restore with <code>backupName</code>.</p>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. </p>
 <p>You can check available options in the <a href="#restore-cr">restore options reference</a>.</p>
 <h2 id="backups-restore-before-you-begin">Before you begin<a class="headerlink" href="#backups-restore-before-you-begin" title="Permanent link">&para;</a></h2>
@@ -10713,13 +10927,14 @@ xb-restore-restore2                                Complete             1/1     
 </ul>
 <p>This document focuses on the restore on a new cluster deployed in a different Kubernetes environment.</p>
 <h2 id="backups-restore-to-new-cluster-restore-scenarios">Restore scenarios<a class="headerlink" href="#backups-restore-to-new-cluster-restore-scenarios" title="Permanent link">&para;</a></h2>
-<p>To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include <code>encryptionKeySecret</code> as shown in <a href="#backups-restore-to-new-cluster-restore-from-an-encrypted-backup">Restore from an encrypted backup</a>.</p>
-<p>To restore to a timestamp or GTID, use <a href="#backups-restore-pitr-restore-on-a-new-cluster">Restore with point-in-time recovery</a>. </p>
+<p>To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include <code>encryptionKeySecret</code> as shown in <a href="#backups-restore-to-new-cluster-restore-from-an-encrypted-backup">Restore from an encrypted backup</a>. If the source used a custom CA, include <code>caBundle</code> as shown in <a href="#backups-restore-to-new-cluster-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</p>
+<p>To restore to a timestamp or GTID, use <a href="#backups-restore-pitr-restore-on-a-new-cluster">Restore with point-in-time recovery</a>.</p>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <p>You can check available options in the <a href="#restore-cr">restore options reference</a>.</p>
 <h2 id="backups-restore-to-new-cluster-preconditions">Preconditions<a class="headerlink" href="#backups-restore-to-new-cluster-preconditions" title="Permanent link">&para;</a></h2>
 <p>When restoring to a new Kubernetes-based environment, make sure it has a Secrets object with the same user passwords as in the source cluster.</p>
 <p>If the backup was <a href="#backups-encrypted">encrypted</a>, the Operator requires the Secret with the same encryption key that was used for the backup. Reference this Secret in the restore resource under <code>spec.backupSource.storage.encryptionKeySecret</code>.</p>
+<p>If the source cluster verified TLS with a <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, create the CA Secret on the target cluster and set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code>. For a point-in-time restore to a timestamp or GTID, see <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a>.</p>
 <p>You can export the user Secret from the source cluster and create a Secrets object on the target one. Here&rsquo;s how to do it:</p>
 <ol>
 <li>
@@ -10868,6 +11083,44 @@ type: Opaque
 <p>Start the restore:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
+<h2 id="backups-restore-to-new-cluster-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#backups-restore-to-new-cluster-restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">&para;</a></h2>
+<p>If the source cluster verified S3-compatible storage with a <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, keep <code>verifyTLS</code> enabled and set <code>caBundle</code> in the restore resource.</p>
+<p>For a restore to a timestamp or GTID, follow <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a>.</p>
+<ol>
+<li>
+<p>Create a CA Secret on the <strong>target</strong> cluster from the same CA file you used on the source. See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Create a CA Secret</a>.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Edit the <code>deploy/backup/restore.yaml</code> manifest and set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code> to that Secret.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">verifyTLS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">endpointUrl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://minio-service:9000</span>
+<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;PREFIX-WHERE-BACKUP-IS-STORED&gt;</span>
+<span class="w">        </span><span class="nt">caBundle</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minio-ca-bundle</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
+</code></pre></div>
+<p>Start the restore:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 <h2 id="backups-restore-to-new-cluster-view-restore-details">View restore details<a class="headerlink" href="#backups-restore-to-new-cluster-view-restore-details" title="Permanent link">&para;</a></h2>
 <p>When you start the restore, the restore job is created. You can check the job details using these commands:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job
@@ -10966,7 +11219,7 @@ xb-restore-restore2                                Complete             1/1     
 <li>If you pass storage-specific parameters (like <code>--s3-region</code>) directly to the <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code> binaries, they will be overridden by the configuration in the storage section of the Custom Resource.</li>
 <li>If you define environment variables for a backup job, they are passed to both the <code>xtrabackup</code> and <code>xbcloud</code> processes running within the <code>xtrabackup</code> sidecar container. You can verify this by inspecting the process environment variables inside the container during a backup.</li>
 <li>Environment variables for a restore job are set for the <code>xtrabackup</code> container in the restore Pod.</li>
-<li>The <code>VERIFY_TLS</code> environment variable currently applies only to restore operations and is ignored for backups. </li>
+<li>The <code>VERIFY_TLS</code> environment variable currently applies only to restore operations and is ignored for backups. To ensure TLS verification for backups, set the <code>backup.storages.*.verifyTLS</code> option in the Custom Resource. To use your custom certificates, supply the CA with <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage"><code>s3.caBundle</code></a>. To learn more, see <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>.</li>
 <li>If the same binary is configured globally and individually for backups or restores, individual settings take precedence.</li>
 <li>You cannot pass the <code>--defaults-extra-file</code> option to <code>xtrabackup</code> in a <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> object. Use the <code>--defaults-file</code> option if you need to pass your custom settings.</li>
 </ol></section><section class="print-page" id="backups-delete" heading-number="6.3.11"><h1 id="backups-delete-delete-unneeded-backups">Delete unneeded backups<a class="headerlink" href="#backups-delete-delete-unneeded-backups" title="Permanent link">&para;</a></h1>
@@ -17457,6 +17710,7 @@ Events:               &lt;none&gt;
 <li><strong>Authentication failures</strong>: Invalid credentials for accessing cloud storage</li>
 <li><strong>Network issues</strong>: Problems connecting to the storage service</li>
 <li><strong>Insufficient permissions</strong>: The backup job doesn&rsquo;t have permission to write to the storage location</li>
+<li><strong>TLS certificate errors</strong>: The storage endpoint uses a private CA and the Operator cannot verify it. Typical Job or sidecar log messages include <code>x509: certificate signed by unknown authority</code> or <code>certificate verify failed</code>. Keep <code>verifyTLS</code> enabled, confirm <code>crVersion</code> is <code>1.3.0</code> or later, and supply the CA with <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage"><code>s3.caBundle</code></a>.</li>
 </ul>
 <h3 id="debug-backup-restore-check-backup-jobs">Check backup Jobs<a class="headerlink" href="#debug-backup-restore-check-backup-jobs" title="Permanent link">&para;</a></h3>
 <p>When a backup runs, the Operator creates a Kubernetes Job to execute it. You can view these Jobs to see which backups are running or have completed:</p>
@@ -17582,6 +17836,7 @@ Events:   &lt;none&gt;
 <li><strong>Storage access issues</strong>: Problems reading from the backup storage location</li>
 <li><strong>Cluster state conflicts</strong>: The cluster is not in a state that allows restore</li>
 <li><strong>Insufficient resources</strong>: Not enough disk space or memory to complete the restore</li>
+<li><strong>TLS certificate errors</strong>: The restore Job cannot verify the S3 endpoint certificate. See <a href="#debug-backup-restore-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</li>
 </ul>
 <h3 id="debug-backup-restore-check-restore-jobs">Check restore jobs<a class="headerlink" href="#debug-backup-restore-check-restore-jobs" title="Permanent link">&para;</a></h3>
 <p>When a restore runs, the Operator creates a Kubernetes Job to execute it. View these Jobs:</p>
@@ -17650,7 +17905,18 @@ xb-restore-restore2                                      Complete   1/1         
 <p>Updates made by <code>mysql-shell</code> can produce errors such as <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>If you choose to ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code> in the restore object. This passes <code>--force</code> to the MySQL client and silently ignores <strong>all</strong> SQL errors during replay, which can hide data loss. See <a href="#backups-restore-pitr-ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay</a>.</p>
 <h3 id="debug-backup-restore-operator-user-password-changed-after-the-backup">Operator user password changed after the backup<a class="headerlink" href="#debug-backup-restore-operator-user-password-changed-after-the-backup" title="Permanent link">&para;</a></h3>
-<p>If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.</p></section></section>
+<p>If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.</p>
+<h2 id="debug-backup-restore-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#debug-backup-restore-restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">&para;</a></h2>
+<p>If restore Job logs show <code>x509: certificate signed by unknown authority</code>, <code>certificate verify failed</code>, or a similar TLS error, the S3-compatible endpoint is presenting a certificate your cluster does not trust.</p>
+<p>Do not set <code>verifyTLS: false</code> or <code>VERIFY_TLS=false</code> to work around this. Instead, supply the CA and keep verification enabled.</p>
+<ol>
+<li>Confirm the Operator version and Custom Resource version are <code>1.3.0</code> or later. If you upgraded the Operator but left <code>spec.crVersion</code> at <code>1.2.0</code>, the Operator ignores <code>caBundle</code>.</li>
+<li>Confirm <code>caBundle.name</code> and <code>caBundle.key</code> match the Secret that holds the CA.</li>
+<li>Confirm the CA Secret exists in the namespace where the restore runs. Create it from the CA file if you are restoring on a new cluster. </li>
+<li>Set <code>caBundle</code> on the restore object. For a backup-only restore, set it on <code>spec.backupSource.storage.s3</code>. For point-in-time recovery, also set it on <code>spec.pitr.backupSource.binlogServer.storage.s3</code>.</li>
+</ol>
+<p>On the same cluster with <code>backupName</code>, the Operator can use <code>caBundle</code> already set on the cluster Custom Resource.</p>
+<p>See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>, <a href="#backups-restore-to-new-cluster-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>, and <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a> for point-in-time recovery.</p></section></section>
                     <section class='print-page md-section' id='section-11' heading-number='11'>
                         <h1>Reference<a class='headerlink' href='#section-11' title='Permanent link'></a>
                         </h1>
@@ -22629,7 +22895,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserversize"><code>backup.binlogServer.size</code><a class="headerlink" href="#operator-backupbinlogserversize" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserversize"><code>backup.pitr.binlogServer.size</code><a class="headerlink" href="#operator-backuppitrbinlogserversize" title="Permanent link">&para;</a></h3>
 <p>Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. The Custom Resource allows only <code>1</code> (larger values are rejected). To learn more, see <a href="#backups-pitr">Point-in-time recovery</a>.</p>
 <table>
 <thead>
@@ -22645,7 +22911,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverimage"><code>backup.binlogServer.image</code><a class="headerlink" href="#operator-backupbinlogserverimage" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverimage"><code>backup.pitr.binlogServer.image</code><a class="headerlink" href="#operator-backuppitrbinlogserverimage" title="Permanent link">&para;</a></h3>
 <p>The Docker image to use to deploy Percona Binarylog Server.</p>
 <table>
 <thead>
@@ -22661,7 +22927,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverimagepullpolicy"><code>backup.binlogServer.imagePullPolicy</code><a class="headerlink" href="#operator-backupbinlogserverimagepullpolicy" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverimagepullpolicy"><code>backup.pitr.binlogServer.imagePullPolicy</code><a class="headerlink" href="#operator-backuppitrbinlogserverimagepullpolicy" title="Permanent link">&para;</a></h3>
 <p>The <a href="https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy">policy <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> the <code>kubelet</code> uses to pull the Percona Binarylog Server image.</p>
 <table>
 <thead>
@@ -22677,7 +22943,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverimagepullsecretsname"><code>backup.binlogServer.imagePullSecrets.name</code><a class="headerlink" href="#operator-backupbinlogserverimagepullsecretsname" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverimagepullsecretsname"><code>backup.pitr.binlogServer.imagePullSecrets.name</code><a class="headerlink" href="#operator-backuppitrbinlogserverimagepullsecretsname" title="Permanent link">&para;</a></h3>
 <p>The name of a Secret the <code>kubelet</code> uses to authenticate to a private image registry. You can list several Secrets as an array of objects with the <code>name</code> key.</p>
 <table>
 <thead>
@@ -22693,7 +22959,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverserverid"><code>backup.binlogServer.serverId</code><a class="headerlink" href="#operator-backupbinlogserverserverid" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverserverid"><code>backup.pitr.binlogServer.serverId</code><a class="headerlink" href="#operator-backuppitrbinlogserverserverid" title="Permanent link">&para;</a></h3>
 <p>The unique server ID that Percona Binarylog Server uses when connecting to MySQL as a replication client for binlog collection.</p>
 <table>
 <thead>
@@ -22709,7 +22975,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverstorages3bucket"><code>backup.binlogServer.storage.s3.bucket</code><a class="headerlink" href="#operator-backupbinlogserverstorages3bucket" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverstorages3bucket"><code>backup.pitr.binlogServer.storage.s3.bucket</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorages3bucket" title="Permanent link">&para;</a></h3>
 <p>The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed.</p>
 <table>
 <thead>
@@ -22725,7 +22991,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverstorages3credentialssecret"><code>backup.binlogServer.storage.s3.credentialsSecret</code><a class="headerlink" href="#operator-backupbinlogserverstorages3credentialssecret" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverstorages3credentialssecret"><code>backup.pitr.binlogServer.storage.s3.credentialsSecret</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorages3credentialssecret" title="Permanent link">&para;</a></h3>
 <p>The Kubernetes Secret for binlog storage. It should contain <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> keys.</p>
 <table>
 <thead>
@@ -22741,7 +23007,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverstorages3endpointurl"><code>backup.binlogServer.storage.s3.endpointUrl</code><a class="headerlink" href="#operator-backupbinlogserverstorages3endpointurl" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverstorages3endpointurl"><code>backup.pitr.binlogServer.storage.s3.endpointUrl</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorages3endpointurl" title="Permanent link">&para;</a></h3>
 <p>The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.</p>
 <table>
 <thead>
@@ -22757,7 +23023,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverstorages3prefix"><code>backup.binlogServer.storage.s3.prefix</code><a class="headerlink" href="#operator-backupbinlogserverstorages3prefix" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverstorages3prefix"><code>backup.pitr.binlogServer.storage.s3.prefix</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorages3prefix" title="Permanent link">&para;</a></h3>
 <p>The path prefix (folder) in the bucket where binlogs are stored. You cannot change the prefix after you configured the Binlog Server.</p>
 <table>
 <thead>
@@ -22773,7 +23039,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverstorages3region"><code>backup.binlogServer.storage.s3.region</code><a class="headerlink" href="#operator-backupbinlogserverstorages3region" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverstorages3region"><code>backup.pitr.binlogServer.storage.s3.region</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorages3region" title="Permanent link">&para;</a></h3>
 <p>The region of the bucket. Required for Amazon S3 and for S3-compatible storage.</p>
 <table>
 <thead>
@@ -22789,7 +23055,39 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverconnecttimeout"><code>backup.binlogServer.connectTimeout</code><a class="headerlink" href="#operator-backupbinlogserverconnecttimeout" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverstorages3cabundlename"><code>backup.pitr.binlogServer.storage.s3.caBundle.name</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorages3cabundlename" title="Permanent link">&para;</a></h3>
+<p>The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible binlog storage. This setting is independent from <a href="#operator-backupstoragesstorage-names3cabundlename"><code>backup.storages.STORAGE-NAME.s3.caBundle</code></a>. To change the bundle, create a new Secret and set this field to its name. See <a href="#backups-storage-update-the-ca-bundle">Update the CA bundle</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>minio-ca-bundle</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backuppitrbinlogserverstorages3cabundlekey"><code>backup.pitr.binlogServer.storage.s3.caBundle.key</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorages3cabundlekey" title="Permanent link">&para;</a></h3>
+<p>The key in the Secret that holds the CA certificate. If you omit this field, the Operator defaults to <code>ca.crt</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ca.crt</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backuppitrbinlogserverconnecttimeout"><code>backup.pitr.binlogServer.connectTimeout</code><a class="headerlink" href="#operator-backuppitrbinlogserverconnecttimeout" title="Permanent link">&para;</a></h3>
 <p>Timeout in seconds for establishing a connection to MySQL. </p>
 <table>
 <thead>
@@ -22805,7 +23103,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverreadtimeout"><code>backup.binlogServer.readTimeout</code><a class="headerlink" href="#operator-backupbinlogserverreadtimeout" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverreadtimeout"><code>backup.pitr.binlogServer.readTimeout</code><a class="headerlink" href="#operator-backuppitrbinlogserverreadtimeout" title="Permanent link">&para;</a></h3>
 <p>The maximum time in seconds the Binlog Server waits to read data from the MySQL instance.</p>
 <table>
 <thead>
@@ -22821,7 +23119,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverwritetimeout"><code>backup.binlogServer.writeTimeout</code><a class="headerlink" href="#operator-backupbinlogserverwritetimeout" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverwritetimeout"><code>backup.pitr.binlogServer.writeTimeout</code><a class="headerlink" href="#operator-backuppitrbinlogserverwritetimeout" title="Permanent link">&para;</a></h3>
 <p>The maximum time in seconds the Binlog Server waits to write data to a remote server.</p>
 <table>
 <thead>
@@ -22837,7 +23135,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserveridletime"><code>backup.binlogServer.idleTime</code><a class="headerlink" href="#operator-backupbinlogserveridletime" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserveridletime"><code>backup.pitr.binlogServer.idleTime</code><a class="headerlink" href="#operator-backuppitrbinlogserveridletime" title="Permanent link">&para;</a></h3>
 <p>The maximum time in seconds the Binlog Server stays in idle mode before trying to reconnect.</p>
 <table>
 <thead>
@@ -22853,7 +23151,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserveraffinityantiaffinitytopologykey"><code>backup.binlogServer.affinity.antiAffinityTopologyKey</code><a class="headerlink" href="#operator-backupbinlogserveraffinityantiaffinitytopologykey" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserveraffinityantiaffinitytopologykey"><code>backup.pitr.binlogServer.affinity.antiAffinityTopologyKey</code><a class="headerlink" href="#operator-backuppitrbinlogserveraffinityantiaffinitytopologykey" title="Permanent link">&para;</a></h3>
 <p>The Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity">topologyKey <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>  constraint for node anti-affinity on Percona Binarylog Server Pods.</p>
 <table>
 <thead>
@@ -22869,7 +23167,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserveraffinityadvanced"><code>backup.binlogServer.affinity.advanced</code><a class="headerlink" href="#operator-backupbinlogserveraffinityadvanced" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserveraffinityadvanced"><code>backup.pitr.binlogServer.affinity.advanced</code><a class="headerlink" href="#operator-backuppitrbinlogserveraffinityadvanced" title="Permanent link">&para;</a></h3>
 <p>In cases where the pods require complex tuning the advanced option turns off the topologykey effect. This setting allows the standard Kubernetes affinity constraints of any complexity to be used.</p>
 <table>
 <thead>
@@ -22885,7 +23183,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogservercheckpointinterval"><code>backup.binlogServer.checkpointInterval</code><a class="headerlink" href="#operator-backupbinlogservercheckpointinterval" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogservercheckpointinterval"><code>backup.pitr.binlogServer.checkpointInterval</code><a class="headerlink" href="#operator-backuppitrbinlogservercheckpointinterval" title="Permanent link">&para;</a></h3>
 <p>How often the Binlog Server writes checkpoints - the snapshot of its state. </p>
 <table>
 <thead>
@@ -22901,7 +23199,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogservercheckpointsize"><code>backup.binlogServer.checkpointSize</code><a class="headerlink" href="#operator-backupbinlogservercheckpointsize" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogservercheckpointsize"><code>backup.pitr.binlogServer.checkpointSize</code><a class="headerlink" href="#operator-backuppitrbinlogservercheckpointsize" title="Permanent link">&para;</a></h3>
 <p>Defines the size threshold for checkpoints. Default is 16M.</p>
 <table>
 <thead>
@@ -22917,7 +23215,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogservercontainersecuritycontext"><code>backup.binlogServer.containerSecurityContext</code><a class="headerlink" href="#operator-backupbinlogservercontainersecuritycontext" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogservercontainersecuritycontext"><code>backup.pitr.binlogServer.containerSecurityContext</code><a class="headerlink" href="#operator-backuppitrbinlogservercontainersecuritycontext" title="Permanent link">&para;</a></h3>
 <p>A custom <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">Kubernetes security context for a container <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Percona Binlog Server container.</p>
 <table>
 <thead>
@@ -22933,7 +23231,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverenv"><code>backup.binlogServer.env</code><a class="headerlink" href="#operator-backupbinlogserverenv" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverenv"><code>backup.pitr.binlogServer.env</code><a class="headerlink" href="#operator-backuppitrbinlogserverenv" title="Permanent link">&para;</a></h3>
 <p>Custom <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/">environment variables <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Percona Binarylog Server container.</p>
 <table>
 <thead>
@@ -22949,7 +23247,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverenvfrom"><code>backup.binlogServer.envFrom</code><a class="headerlink" href="#operator-backupbinlogserverenvfrom" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverenvfrom"><code>backup.pitr.binlogServer.envFrom</code><a class="headerlink" href="#operator-backuppitrbinlogserverenvfrom" title="Permanent link">&para;</a></h3>
 <p>The source for the bulk-import of all key-value pairs from a ConfigMap or Secret as environment variables for the Percona Binarylog Server container.</p>
 <table>
 <thead>
@@ -22965,7 +23263,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverinitcontainerimage"><code>backup.binlogServer.initContainer.image</code><a class="headerlink" href="#operator-backupbinlogserverinitcontainerimage" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverinitcontainerimage"><code>backup.pitr.binlogServer.initContainer.image</code><a class="headerlink" href="#operator-backuppitrbinlogserverinitcontainerimage" title="Permanent link">&para;</a></h3>
 <p>The container image for the Binlog Server init container.</p>
 <table>
 <thead>
@@ -22981,7 +23279,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverinitcontainercontainersecuritycontext"><code>backup.binlogServer.initContainer.containerSecurityContext</code><a class="headerlink" href="#operator-backupbinlogserverinitcontainercontainersecuritycontext" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverinitcontainercontainersecuritycontext"><code>backup.pitr.binlogServer.initContainer.containerSecurityContext</code><a class="headerlink" href="#operator-backuppitrbinlogserverinitcontainercontainersecuritycontext" title="Permanent link">&para;</a></h3>
 <p>A custom <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">Kubernetes security context for a container <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Binlog Server init container.</p>
 <table>
 <thead>
@@ -22997,7 +23295,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverinitcontainerresourcesrequestsmemory"><code>backup.binlogServer.initContainer.resources.requests.memory</code><a class="headerlink" href="#operator-backupbinlogserverinitcontainerresourcesrequestsmemory" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverinitcontainerresourcesrequestsmemory"><code>backup.pitr.binlogServer.initContainer.resources.requests.memory</code><a class="headerlink" href="#operator-backuppitrbinlogserverinitcontainerresourcesrequestsmemory" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes memory requests <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Binlog Server init container.</p>
 <table>
 <thead>
@@ -23013,7 +23311,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverinitcontainerresourcesrequestscpu"><code>backup.binlogServer.initContainer.resources.requests.cpu</code><a class="headerlink" href="#operator-backupbinlogserverinitcontainerresourcesrequestscpu" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverinitcontainerresourcesrequestscpu"><code>backup.pitr.binlogServer.initContainer.resources.requests.cpu</code><a class="headerlink" href="#operator-backuppitrbinlogserverinitcontainerresourcesrequestscpu" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes CPU requests <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Binlog Server init container.</p>
 <table>
 <thead>
@@ -23029,7 +23327,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverinitcontainerresourceslimitsmemory"><code>backup.binlogServer.initContainer.resources.limits.memory</code><a class="headerlink" href="#operator-backupbinlogserverinitcontainerresourceslimitsmemory" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverinitcontainerresourceslimitsmemory"><code>backup.pitr.binlogServer.initContainer.resources.limits.memory</code><a class="headerlink" href="#operator-backuppitrbinlogserverinitcontainerresourceslimitsmemory" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes memory limits <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Binlog Server init container.</p>
 <table>
 <thead>
@@ -23045,7 +23343,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverinitcontainerresourceslimitscpu"><code>backup.binlogServer.initContainer.resources.limits.cpu</code><a class="headerlink" href="#operator-backupbinlogserverinitcontainerresourceslimitscpu" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverinitcontainerresourceslimitscpu"><code>backup.pitr.binlogServer.initContainer.resources.limits.cpu</code><a class="headerlink" href="#operator-backuppitrbinlogserverinitcontainerresourceslimitscpu" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes CPU limits <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Binlog Server init container.</p>
 <table>
 <thead>
@@ -23061,7 +23359,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverinitimage"><code>backup.binlogServer.initImage</code><a class="headerlink" href="#operator-backupbinlogserverinitimage" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverinitimage"><code>backup.pitr.binlogServer.initImage</code><a class="headerlink" href="#operator-backuppitrbinlogserverinitimage" title="Permanent link">&para;</a></h3>
 <p>An alternative init image for the Percona Binarylog Server Pod. Leave empty to use the default one.</p>
 <table>
 <thead>
@@ -23077,7 +23375,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverloglevel"><code>backup.binlogServer.logLevel</code><a class="headerlink" href="#operator-backupbinlogserverloglevel" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverloglevel"><code>backup.pitr.binlogServer.logLevel</code><a class="headerlink" href="#operator-backuppitrbinlogserverloglevel" title="Permanent link">&para;</a></h3>
 <p>Log level for the Percona Binarylog Server. Defaults to <code>info</code>.</p>
 <table>
 <thead>
@@ -23093,7 +23391,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverpodsecuritycontext"><code>backup.binlogServer.podSecurityContext</code><a class="headerlink" href="#operator-backupbinlogserverpodsecuritycontext" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverpodsecuritycontext"><code>backup.pitr.binlogServer.podSecurityContext</code><a class="headerlink" href="#operator-backuppitrbinlogserverpodsecuritycontext" title="Permanent link">&para;</a></h3>
 <p>A custom <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">Kubernetes Pod security context <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for Percona Binarylog Server Pods.</p>
 <table>
 <thead>
@@ -23109,7 +23407,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverresourcesrequestsmemory"><code>backup.binlogServer.resources.requests.memory</code><a class="headerlink" href="#operator-backupbinlogserverresourcesrequestsmemory" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverresourcesrequestsmemory"><code>backup.pitr.binlogServer.resources.requests.memory</code><a class="headerlink" href="#operator-backuppitrbinlogserverresourcesrequestsmemory" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes memory requests <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Percona Binarylog Server container.</p>
 <table>
 <thead>
@@ -23125,7 +23423,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverresourcesrequestscpu"><code>backup.binlogServer.resources.requests.cpu</code><a class="headerlink" href="#operator-backupbinlogserverresourcesrequestscpu" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverresourcesrequestscpu"><code>backup.pitr.binlogServer.resources.requests.cpu</code><a class="headerlink" href="#operator-backuppitrbinlogserverresourcesrequestscpu" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes CPU requests <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Percona Binarylog Server container.</p>
 <table>
 <thead>
@@ -23141,7 +23439,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverresourceslimitsmemory"><code>backup.binlogServer.resources.limits.memory</code><a class="headerlink" href="#operator-backupbinlogserverresourceslimitsmemory" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverresourceslimitsmemory"><code>backup.pitr.binlogServer.resources.limits.memory</code><a class="headerlink" href="#operator-backuppitrbinlogserverresourceslimitsmemory" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes memory limits <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Percona Binarylog Server container.</p>
 <table>
 <thead>
@@ -23157,7 +23455,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverresourceslimitscpu"><code>backup.binlogServer.resources.limits.cpu</code><a class="headerlink" href="#operator-backupbinlogserverresourceslimitscpu" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverresourceslimitscpu"><code>backup.pitr.binlogServer.resources.limits.cpu</code><a class="headerlink" href="#operator-backuppitrbinlogserverresourceslimitscpu" title="Permanent link">&para;</a></h3>
 <p><a href="https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container">Kubernetes CPU limits <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the Percona Binarylog Server container.</p>
 <table>
 <thead>
@@ -23173,7 +23471,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserverrewritefilesize"><code>backup.binlogServer.rewriteFileSize</code><a class="headerlink" href="#operator-backupbinlogserverrewritefilesize" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserverrewritefilesize"><code>backup.pitr.binlogServer.rewriteFileSize</code><a class="headerlink" href="#operator-backuppitrbinlogserverrewritefilesize" title="Permanent link">&para;</a></h3>
 <p>Specifies the maximum binlog file size for rewrite. Defaults to <code>128M</code>. Set to an empty string to use the default.</p>
 <table>
 <thead>
@@ -23189,7 +23487,7 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
-<h3 id="operator-backupbinlogserversslmode"><code>backup.binlogServer.sslMode</code><a class="headerlink" href="#operator-backupbinlogserversslmode" title="Permanent link">&para;</a></h3>
+<h3 id="operator-backuppitrbinlogserversslmode"><code>backup.pitr.binlogServer.sslMode</code><a class="headerlink" href="#operator-backuppitrbinlogserversslmode" title="Permanent link">&para;</a></h3>
 <p>The TLS mode for the Binlog Server connection to MySQL. Defaults to <code>verify_identity</code>.</p>
 <table>
 <thead>
@@ -23436,7 +23734,8 @@ file contains the following configuration options for the regular Percona XtraDB
 </tbody>
 </table>
 <h3 id="operator-backupstoragesstorage-nameverifytls"><code>backup.storages.STORAGE-NAME.verifyTLS</code><a class="headerlink" href="#operator-backupstoragesstorage-nameverifytls" title="Permanent link">&para;</a></h3>
-<p>Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate.</p>
+<p>Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate. </p>
+<p>Starting with version 1.3.0, the Operator supports TLS verification with your organization&rsquo;s CA. Keep this option enabled and use the CA your company already trusts. See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>.</p>
 <table>
 <thead>
 <tr>
@@ -23880,6 +24179,38 @@ file contains the following configuration options for the regular Percona XtraDB
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backupstoragesstorage-names3cabundlename"><code>backup.storages.STORAGE-NAME.s3.caBundle.name</code><a class="headerlink" href="#operator-backupstoragesstorage-names3cabundlename" title="Permanent link">&para;</a></h3>
+<p>The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. To change the bundle, create a new Secret and set this field to its name. See <a href="#backups-storage-update-the-ca-bundle">Update the CA bundle</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>minio-ca-bundle</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backupstoragesstorage-names3cabundlekey"><code>backup.storages.STORAGE-NAME.s3.caBundle.key</code><a class="headerlink" href="#operator-backupstoragesstorage-names3cabundlekey" title="Permanent link">&para;</a></h3>
+<p>The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses <code>ca.crt</code>. The Operator mounts only this key from the Secret.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ca.crt</code></td>
 </tr>
 </tbody>
 </table>
@@ -24906,6 +25237,38 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
+<h4 id="restore-cr-pitrbackupsourcebinlogserverstorages3cabundlename"><code>pitr.backupSource.binlogServer.storage.s3.caBundle.name</code><a class="headerlink" href="#restore-cr-pitrbackupsourcebinlogserverstorages3cabundlename" title="Permanent link">&para;</a></h4>
+<p>The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage for Binlog Server. See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>minio-ca-bundle</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="restore-cr-pitrbackupsourcebinlogserverstorages3cabundlekey"><code>pitr.backupSource.binlogServer.storage.s3.caBundle.key</code><a class="headerlink" href="#restore-cr-pitrbackupsourcebinlogserverstorages3cabundlekey" title="Permanent link">&para;</a></h4>
+<p>The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses <code>ca.crt</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ca.crt</code></td>
+</tr>
+</tbody>
+</table>
 <h4 id="restore-cr-pitrbackupsourcebinlogserverconnecttimeout"><code>pitr.backupSource.binlogServer.connectTimeout</code><a class="headerlink" href="#restore-cr-pitrbackupsourcebinlogserverconnecttimeout" title="Permanent link">&para;</a></h4>
 <p>Timeout in seconds for establishing a connection to MySQL.</p>
 <table>
@@ -25097,6 +25460,70 @@ If you are restoring to a new cluster and both the source and target clusters us
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><code>us-west-2</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="restore-cr-backupsourcestorages3endpointurl"><code>backupSource.storage.s3.endpointUrl</code><a class="headerlink" href="#restore-cr-backupsourcestorages3endpointurl" title="Permanent link">&para;</a></h3>
+<p>The endpoint URL of the S3-compatible storage that holds the backup. Not needed for Amazon S3.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>https://minio-service:9000</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="restore-cr-backupsourcestorages3prefix"><code>backupSource.storage.s3.prefix</code><a class="headerlink" href="#restore-cr-backupsourcestorages3prefix" title="Permanent link">&para;</a></h3>
+<p>The path (sub-folder) inside the bucket where the backup is stored.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>PREFIX-WHERE-BACKUP-IS-STORED</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="restore-cr-backupsourcestorages3cabundlename"><code>backupSource.storage.s3.caBundle.name</code><a class="headerlink" href="#restore-cr-backupsourcestorages3cabundlename" title="Permanent link">&para;</a></h3>
+<p>The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>minio-ca-bundle</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="restore-cr-backupsourcestorages3cabundlekey"><code>backupSource.storage.s3.caBundle.key</code><a class="headerlink" href="#restore-cr-backupsourcestorages3cabundlekey" title="Permanent link">&para;</a></h3>
+<p>The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses <code>ca.crt</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ca.crt</code></td>
 </tr>
 </tbody>
 </table>
