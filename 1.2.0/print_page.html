@@ -7297,9 +7297,9 @@ ps-cluster1   group-replication   ps-cluster1-haproxy.&lt;namespace&gt;   ready 
 <p>You can provide custom parameters to Helm using either the <code>--set</code> flag or a <code>values.yaml</code> file. The <code>--set</code> flag is convenient for overriding a small number of parameters directly in the command line, while a <code>values.yaml</code> file is preferable when you want to manage many custom settings in one place. Both methods are fully supported by Helm and can be used as needed for your deployment.</p>
 <p><strong>Using <code>--set</code> flags</strong></p>
 <p>To pass a custom parameter to Helm, use the <code>--set key=value</code> flag with the <code>helm install</code> command.</p>
-<p>For example, to enable <a href="https://docs.percona.com/percona-monitoring-and-management/2/index.html">Percona Monitoring and Management (PMM) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the database cluster, run:</p>
+<p>For example, to enable <a href="https://docs.percona.com/percona-monitoring-and-management/3/index.html">Percona Monitoring and Management (PMM) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for the database cluster, run:</p>
 <div class="highlight"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>my-db<span class="w"> </span>percona/ps-db<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.2.0<span class="w"> </span>--namespace<span class="w"> </span>my-namespace<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>--set<span class="w"> </span>mysql.image.tag<span class="o">=</span><span class="m">8</span>.4.10-10.1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>mysql.image.tag<span class="o">=</span><span class="m">9</span>.7.1-1<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--set<span class="w"> </span>pmm.enabled<span class="o">=</span><span class="nb">true</span>
 </code></pre></div>
 <p><strong>Using a <code>values.yaml</code> file</strong></p>
@@ -7309,7 +7309,7 @@ ps-cluster1   group-replication   ps-cluster1-haproxy.&lt;namespace&gt;   ready 
 <p>Example <code>values.yaml</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">image</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.4.10-10.1</span>
+<span class="w">    </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.7.1-1</span>
 <span class="nt">pmm</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
@@ -10112,7 +10112,7 @@ status:
 <p>You can configure compression using the MySQL configuration file. This setting applies to both scheduled and on-demand backups for all backup storages that you use. </p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/percona-server:8.4.10-10.1</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona/percona-server:9.7.1-1</span>
 <span class="w">    </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">      </span><span class="no">...</span>
 <span class="w">      </span><span class="no">[xtrabackup]</span>
@@ -13494,6 +13494,11 @@ credentials cannot differ per site.</li>
 <li><code>mysqlsh</code> version for each cluster must match the MySQL major version it runs</li>
 <li><code>yq</code> utility for parsing YAML or JSON outputs from Kubernetes commands</li>
 </ul>
+<p>This guides uses the following software versions:</p>
+<ul>
+<li>Operator 1.2.0</li>
+<li>Percona Server for MySQL 8.4.10-10.1</li>
+</ul>
 <h2 id="replication-setup-prepare-your-environment">Prepare your environment<a class="headerlink" href="#replication-setup-prepare-your-environment" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
@@ -13517,7 +13522,7 @@ kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span clas
 <h2 id="replication-setup-step-1-deploy-the-primary-cluster">Step 1. Deploy the primary cluster<a class="headerlink" href="#replication-setup-step-1-deploy-the-primary-cluster" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
-<p>Follow the <a href="#kubectl">quickstart guide</a> to install the Operator deployment, if you haven&rsquo;t done it, and deploy Percona Server for MySQL cluster with replication type <code>group replication</code>. Let&rsquo;s rename the cluster to <code>source-cluster</code> to differentiate them.</p>
+<p>Follow the <a href="#kubectl">quickstart guide</a> to install the Operator 1.2.0 deployment, if you haven&rsquo;t done it, and deploy Percona Server for MySQL cluster with replication type <code>group replication</code>. Let&rsquo;s rename the cluster to <code>source-cluster</code> to differentiate them.</p>
 <p>Here&rsquo;s the example configuration:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQL</span>
