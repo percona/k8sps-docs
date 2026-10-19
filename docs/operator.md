@@ -195,7 +195,7 @@ A custom cluster domain suffix the Operator uses when constructing internal serv
 
 ### `sslSecretName`
 
-A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md) for details. When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets-ssl`. Otherwise, it uses the provided name.
+A secret with the TLS certificate used by the cluster, see [Transport Layer Security (TLS)](TLS.md) for details. When undefined, the Operator creates the Secrets object named `<cluster-name>-ssl`. Otherwise, it uses the provided name. If this Secret already exists and was created by you, the Operator uses it and does not request a certificate from cert-manager.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -299,19 +299,21 @@ Allows users to set [orchestrator.size](#orchestratorsize) option to a value les
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
-The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](tls-cert-manager.md).
+The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains options that control how the Operator requests TLS certificates from [cert-manager](tls-cert-manager.md).
 
 ### `tls.SANs`
 
-Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration.
+Additional DNS names (subject alternative names) to add to the TLS certificate that cert-manager issues.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-text-long: subdoc     | |
+| :material-text-long: subdoc     | `mysql-1.example.com` |
 
 ### `tls.issuerConf.name`
 
-A [cert-manager issuer name :octicons-link-external-16:](https://cert-manager.io/docs/concepts/issuer/).
+The name of the cert-manager issuer that signs the cluster TLS certificate.
+
+When set, the Operator creates a `Certificate` that references this issuer and does not create its own CA chain. Use this to integrate with an existing organizational PKI. See [Use an existing ClusterIssuer](tls-cert-manager.md#use-an-existing-clusterissuer) and [Use an existing namespace-scoped Issuer](tls-cert-manager.md#use-an-existing-namespace-scoped-issuer).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -319,7 +321,12 @@ A [cert-manager issuer name :octicons-link-external-16:](https://cert-manager.io
 
 ### `tls.issuerConf.kind`
 
-A [cert-manager issuer type :octicons-link-external-16:](https://cert-manager.io/docs/configuration/).
+The cert-manager issuer type referenced by the cluster `Certificate`.
+
+Supported values:
+
+* `Issuer` (default) — namespace-scoped issuer in the database namespace.
+* `ClusterIssuer` — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. You must [grant the Operator permission to read ClusterIssuers](tls-cert-manager.md#grant-the-operator-permission-to-read-clusterissuers).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -327,7 +334,7 @@ A [cert-manager issuer type :octicons-link-external-16:](https://cert-manager.io
 
 ### `tls.issuerConf.group`
 
-A [cert-manager issuer group :octicons-link-external-16:](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
+The cert-manager API group for the issuer referenced in `issuerConf`. Use `cert-manager.io` for built-in cert-manager issuers.
 
 | Value type  | Example    |
 | ----------- | ---------- |
