@@ -44,6 +44,7 @@ Once you've covered the basics, prepare your cluster for production workloads:
 
 - [Scale your cluster](scaling.md) - Add more nodes for better performance or increase resources for existing nodes
 - [Configure MySQL options](options.md) - Tune MySQL settings for your workload requirements
+- [Let the Operator tune MySQL automatically](autoconfig.md) - Calculate a full configuration from your cluster's resources and workload instead of tuning by hand
 - [Fine-tune backups and restores](backups-fine-tune.md) - Optimize backup performance and customize restore operations
 
 ### Monitoring and observability

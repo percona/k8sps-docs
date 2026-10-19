@@ -13,6 +13,16 @@ following ways:
 
 * use a Secret object.
 
+Before choosing an approach, note that these aren't independent settings you can freely combine. **Setting any configuration of your own disables the Operator's [automatic configuration tuning](autoconfig.md)**, even if you only set one unrelated option:
+
+| Approach | What controls the configuration |
+| --- | --- |
+| Nothing set | The Operator's basic auto-tuning (`innodb_buffer_pool_size` and `max_connections` only) |
+| `spec.mysql.autoConfig.enabled: true`, no manual configuration | The Operator calculates a full configuration from your resources and workload profile |
+| `spec.mysql.configuration`, a ConfigMap, or a Secret (any of the methods below) | Your values only |
+
+If you want the Operator to fully tune MySQL for you, see [Automatic configuration tuning](autoconfig.md) instead of the manual methods on this page.
+
 ## Edit the `deploy/cr.yaml` file
 
 You can add options from the
@@ -162,20 +172,22 @@ kubectl create -f deploy/mysql-secret.yaml
 
 ## Auto-tuning MySQL options
 
-Few configuration options for MySQL can be calculated and set by the Operator
-automatically based on the available Pod memory resource limits
-**if constant values for these options are not specified by the user** (either
-in cr.yaml or in ConfigMap).
+The Operator
+calculates a few MySQL options automatically based on the memory available to
+the MySQL container:
 
-Options which can be set automatically are the following ones:
+* `innodb_buffer_pool_size` — about 50% of the container memory,
+* `innodb_buffer_pool_chunk_size` — set together with `innodb_buffer_pool_size`,
+  so the buffer pool size is a valid multiple of the chunk size,
+* `max_connections` — one connection per ~12 MiB of container memory.
 
-* `innodb_buffer_pool_size`
+The Operator uses the memory limit from `mysql.resources.limits`. If no limit
+is set, it uses the memory request from `mysql.resources.requests`. If neither
+is set, auto-tuning is not done.
 
-* `max_connections`
-
-If Percona Server for MySQL container resource limits are defined, then limits
-values are used to calculate these options. If Percona Server for MySQL
-container resource limits are not defined, auto-tuning is not done.
+The Operator doesn't auto-tune an option you set yourself in
+`spec.mysql.configuration`. If you set an option in your own ConfigMap or
+Secret, your value takes precedence over the auto-tuned one.
 
 Also, starting from the Operator 0.4.0, there is another way of auto-tuning.
 You can use `"{{containerMemoryLimit}}"` as a value in `spec.mysql.configuration`
@@ -188,3 +200,11 @@ mysql:
     innodb_buffer_pool_size={{'{{'}}containerMemoryLimit * 3 / 4{{'}}'}}
     ...
 ```
+
+Starting with Operator 1.3.0, a more comprehensive form of automatic tuning is
+available. See [Automatic configuration tuning](autoconfig.md). 
+
+The tuning of the buffer pool and `max_connections` is what the Operator continues to use
+whenever that feature is disabled (`spec.mysql.autoConfig.enabled: false` or
+unset). This behavior remains and applies to any cluster that
+doesn't opt in.
