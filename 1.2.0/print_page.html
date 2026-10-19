@@ -12281,21 +12281,55 @@ Cluster to <code>5</code> instances.</p></section></section>
                     <section class="print-page" id="tls" heading-number="7.1.1"><h1 id="tls-transport-layer-security-tls">Transport Layer Security (TLS)<a class="headerlink" href="#tls-transport-layer-security-tls" title="Permanent link">&para;</a></h1>
 <p>The Percona Operator for MySQL uses Transport Layer
 Security (TLS) cryptographic protocol for the communication between the client application and the cluster.</p>
-<p>You can configure TLS security in several ways.</p>
+<p>You can configure TLS in these ways:</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Best for</th>
+<th>Renewal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Operator-generated certificates (default)</td>
+<td>Quick start, development</td>
+<td>Manual</td>
+</tr>
+<tr>
+<td>cert-manager with Operator-managed issuers</td>
+<td>Automated TLS without external PKI</td>
+<td>Automatic (cert-manager)</td>
+</tr>
+<tr>
+<td>cert-manager with your existing <code>Issuer</code> or <code>ClusterIssuer</code></td>
+<td>Production clusters that use the organization&rsquo;s PKI</td>
+<td>Automatic (cert-manager)</td>
+</tr>
+<tr>
+<td>Manual Secrets</td>
+<td>Full control, air-gapped or custom PKI workflows</td>
+<td>Manual</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li>
-<p>By default, the Operator <strong>generates long-term certificates</strong> automatically during the cluster creation if there are no certificate secrets available. The Operator&rsquo;s self-signed issuer is local to the Operator Namespace. This self-signed issuer is created because Percona Distribution for MySQL
-        requires all certificates issued by the same source.</p>
+<p>By default, the Operator <strong>generates long-term certificates</strong> automatically during cluster creation if there are no certificate secrets available and cert-manager is not installed. Percona Server for MySQL requires all certificates issued by the same CA.</p>
 </li>
 <li>
-<p>The Operator can use a <em>cert-manager</em>, which will
-    automatically <strong>generate and renew short-term TLS certificates</strong>. You must explicitly install cert-manager for this scenario.</p>
-<p>The <em>cert-manager</em> acts as a self-signed issuer and generates certificates allowing you to deploy and use the
-    Percona Operator without a separate certificate issuer.</p>
+<p>The Operator can use an installed <em>cert-manager</em> to automatically <strong>generate and renew short-term TLS certificates</strong>. By default it creates namespace-scoped issuers in the database namespace. You can also point it at an existing <code>Issuer</code> or cluster-wide <code>ClusterIssuer</code> so certificates are signed by your organization&rsquo;s CA.</p>
 </li>
 <li>
-<p>You can generate TLS certificates manually or obtain them from some other issuer and provide to the Operator.</p>
+<p>You can generate TLS certificates manually or obtain them from some other issuer and provide them to the Operator as a Kubernetes Secret.</p>
 </li>
+</ul>
+<h2 id="tls-tls-configuration">TLS configuration<a class="headerlink" href="#tls-tls-configuration" title="Permanent link">&para;</a></h2>
+<p>The following sections provide guidelines on how to:</p>
+<ul>
+<li><a href="#tls-cert-manager">Configure TLS using cert-manager</a></li>
+<li><a href="#tls-manual">Generate certificates manually</a></li>
+<li><a href="#tls-update">Update certificates</a></li>
 </ul>
 <h2 id="tls-rotate-certificates">Rotate certificates<a class="headerlink" href="#tls-rotate-certificates" title="Permanent link">&para;</a></h2>
 <p>The TLS Secret stores two kinds of material. The Operator treats them differently:</p>
@@ -12350,52 +12384,170 @@ Security (TLS) cryptographic protocol for the communication between the client a
 </ul>
 <p>HAProxy, MySQL Router, and Orchestrator read certificates once at startup, so their Pod-template hash still covers the whole Secret. They restart.</p>
 </details>
-<p>See <a href="#tls-update">Update certificates</a> for how to rotate the leaf and how to rotate the CA.</p></section><section class="print-page" id="tls-cert-manager" heading-number="7.1.2"><h1 id="tls-cert-manager-configure-tlsssl-encryption-using-cert-manager">Configure TLS/SSL encryption using cert-manager<a class="headerlink" href="#tls-cert-manager-configure-tlsssl-encryption-using-cert-manager" title="Permanent link">&para;</a></h1>
-<h2 id="tls-cert-manager-about-the-cert-manager">About the <em>cert-manager</em><a class="headerlink" href="#tls-cert-manager-about-the-cert-manager" title="Permanent link">&para;</a></h2>
-<p>A <a href="https://cert-manager.io/docs/">cert-manager <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> is a Kubernetes certificate
-management controller which is widely used to automate the management and
-issuance of TLS certificates. It is community-driven, and open source.</p>
-<p>When you have already installed <em>cert-manager</em>, nothing else is needed: just
-deploy the Operator, and the Operator will request a certificate from the
-<em>cert-manager</em>.</p>
-<p>The cert-manager generates short-term certificates valid for 3 months. </p>
+<p>See <a href="#tls-update">Update certificates</a> for how to rotate the leaf and how to rotate the CA.</p></section><section class="print-page" id="tls-cert-manager" heading-number="7.1.2"><h1 id="tls-cert-manager-configure-tls-using-cert-manager">Configure TLS using cert-manager<a class="headerlink" href="#tls-cert-manager-configure-tls-using-cert-manager" title="Permanent link">&para;</a></h1>
+<h2 id="tls-cert-manager-about-the-cert-manager">About the cert-manager<a class="headerlink" href="#tls-cert-manager-about-the-cert-manager" title="Permanent link">&para;</a></h2>
+<p>The <a href="https://cert-manager.io/">cert-manager <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> is a Kubernetes certificate management controller which is widely used to automate the management and issuance of TLS certificates. It is community-driven and open source.</p>
+<p>When the Operator creates a database cluster, it checks whether cert-manager is installed and whether you have already provided a TLS Secret. If cert-manager is available and you have not set a custom Secret, the Operator requests certificates from cert-manager, stores them in Kubernetes Secrets, and uses those Secrets for TLS. cert-manager then manages issuance and renewal.</p>
+<p>You can use cert-manager in these ways:</p>
+<ul>
+<li>
+<p><strong>Operator-managed issuers (default)</strong> — The Operator creates a namespace-scoped <code>Issuer</code> and a local self-signed CA in the database namespace. It then requests a leaf TLS certificate from that issuer. You do not need a separate certificate issuer to get started.</p>
+</li>
+<li>
+<p><strong>Your existing issuer</strong> — Point the Operator at a cert-manager <code>Issuer</code> or <code>ClusterIssuer</code> that your platform already manages (for example, a corporate CA). Certificates are then signed and renewed under your organization&rsquo;s PKI policies. Percona Server for MySQL requires all certificates in a cluster to come from the same CA.</p>
+</li>
+</ul>
+<p>If cert-manager is not installed or not ready and you have not set <code>tls.issuerConf</code>, the Operator falls back to its built-in certificate generation.</p>
 <p><img alt="image" src="assets/images/certificates.svg" /></p>
-<h2 id="tls-cert-manager-install-cert-manager">Install <em>cert-manager</em><a class="headerlink" href="#tls-cert-manager-install-cert-manager" title="Permanent link">&para;</a></h2>
-<p>The cert-manager requires its own namespace</p>
-<p>The steps to install the <em>cert-manager</em> are the following:</p>
+<p>See <a href="#tls">Transport Layer Security (TLS)</a> for a comparison of cert-manager integration with manual certificate generation.</p>
+<h2 id="tls-cert-manager-prerequisites">Prerequisites<a class="headerlink" href="#tls-cert-manager-prerequisites" title="Permanent link">&para;</a></h2>
+<p>To use cert-manager with the Operator, ensure the following:</p>
+<ol>
+<li>You have deployed the Operator. Check if it runs with <code>kubectl get deploy -n &lt;namespace&gt;</code>.</li>
+<li>Your Custom Resource does <strong>not</strong> already include a user-provided TLS Secret in <a href="#operator-sslsecretname"><code>sslSecretName</code></a>. If that Secret exists and was created by you, the Operator uses it and does not create cert-manager resources.</li>
+</ol>
+<h2 id="tls-cert-manager-install-the-cert-manager">Install the cert-manager<a class="headerlink" href="#tls-cert-manager-install-the-cert-manager" title="Permanent link">&para;</a></h2>
+<p>The cert-manager requires its own namespace. By default, this is the <code>cert-manager</code> namespace.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="tls-cert-manager-__tabbed_1_1" name="tls-cert-manager-__tabbed_1" type="radio" /><input id="tls-cert-manager-__tabbed_1_2" name="tls-cert-manager-__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="tls-cert-manager-__tabbed_1_1">with kubectl</label><label for="tls-cert-manager-__tabbed_1_2">with Helm</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/cert-manager/cert-manager/releases/download/v1.20.2/cert-manager.yaml
+</code></pre></div>
+<p>This creates the dedicated <code>cert-manager</code> namespace and installs cert-manager Deployments, Pods, and Services. It also creates cluster-wide resources such as Custom Resource Definitions and RBAC so you can use cert-manager in any namespace.</p>
+</div>
+<div class="tabbed-block">
 <ol>
 <li>
-<p>Create a namespace:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>cert-manager
+<p>Add the Helm chart and update the repositories:</p>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>jetstack<span class="w"> </span>https://charts.jetstack.io<span class="w"> </span>--force-update
+helm<span class="w"> </span>repo<span class="w"> </span>update
 </code></pre></div>
 </li>
 <li>
-<p>Disable resource validations on the cert-manager namespace:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>label<span class="w"> </span>namespace<span class="w"> </span>cert-manager<span class="w"> </span>certmanager.k8s.io/disable-validation<span class="o">=</span><span class="nb">true</span>
+<p>Install cert-manager with default parameters:</p>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>cert-manager<span class="w"> </span>jetstack/cert-manager<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>cert-manager<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--version<span class="w"> </span>v1.20.2<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>crds.enabled<span class="o">=</span><span class="nb">true</span>
 </code></pre></div>
 </li>
-<li>
-<p>Install the cert-manager:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/jetstack/cert-manager/releases/download/v1.20.2/cert-manager.yaml
+</ol>
+</div>
+</div>
+</div>
+<p>Verify that cert-manager is running:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>cert-manager
 </code></pre></div>
-</li>
-<li>
-<p>Verify the <em>cert-manager</em> by running the following command:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>cert-manager
-</code></pre></div>
-<p>The result should display the <em>cert-manager</em> and webhook active and running:</p>
 <details class="example">
 <summary>Expected output</summary>
 <div class="no-copy highlight"><pre><span></span><code>NAME                                       READY   STATUS    RESTARTS   AGE
-cert-manager-69f748766f-6chvt              1/1     Running   0          65s
-cert-manager-cainjector-7cf6557c49-l2cwt   1/1     Running   0          66s
-cert-manager-webhook-58f4cff74d-th4pp      1/1     Running   0          65s
+cert-manager-7d59dd4888-tmjqq              1/1     Running   0          3m8s
+cert-manager-cainjector-85899d45d9-8ncw9   1/1     Running   0          3m8s
+cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
 </code></pre></div>
 </details>
+<p>At this point you are ready to <a href="#kubernetes">deploy a Percona Server for MySQL cluster</a>.</p>
+<p>See the sections below for how you can fine-tune the Operator and cert-manager when managing TLS for your cluster:</p>
+<h2 id="tls-cert-manager-operator-managed-namespace-scoped-issuers-default">Operator-managed namespace-scoped issuers (default)<a class="headerlink" href="#tls-cert-manager-operator-managed-namespace-scoped-issuers-default" title="Permanent link">&para;</a></h2>
+<p>Once you create the database with the Operator and cert-manager is running, the Operator automatically creates:</p>
+<ul>
+<li>a self-signed CA <code>Issuer</code> (<code>&lt;cluster-name&gt;-ps-ca-issuer</code>) and CA <code>Certificate</code> (<code>&lt;cluster-name&gt;-ca-cert</code>) in the database namespace,</li>
+<li>a signing <code>Issuer</code> (<code>&lt;cluster-name&gt;-ps-issuer</code>) that references the CA,</li>
+<li>a leaf TLS <code>Certificate</code> (<code>&lt;cluster-name&gt;-ssl</code>) whose Secret is stored as <a href="#operator-sslsecretname"><code>sslSecretName</code></a>. The default name is <code>&lt;cluster-name&gt;-ssl</code>.</li>
+</ul>
+<p>cert-manager issues short-lived certificates and renews them on schedule. The default certificate duration is 90 days. The CA certificate is valid for 1 year.</p>
+<p>You do not set <code>tls.issuerConf</code> for this mode.</p>
+<h2 id="tls-cert-manager-use-an-existing-clusterissuer">Use an existing ClusterIssuer<a class="headerlink" href="#tls-cert-manager-use-an-existing-clusterissuer" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Version added: 1.3.0</p>
+</div>
+<p>If your cluster already runs cert-manager with a cluster-wide issuer, such as Smallstep or an internal CA, you can configure the Operator to request Percona Server for MySQL certificates from that issuer instead of creating its own CA chain. Public ACME issuers such as Let&rsquo;s Encrypt generally cannot issue the default certificate because it includes Kubernetes-internal Service DNS names.</p>
+<p>The Operator does not create or manage <code>ClusterIssuer</code> resources. You must create the <code>ClusterIssuer</code> first, then reference it in the Custom Resource.</p>
+<ol>
+<li>
+<p>Edit the <code>deploy/cr.yaml</code> and set <code>tls.issuerConf</code> to the existing <code>ClusterIssuer</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">issuerConf</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-org-issuer</span><span class="w">        </span><span class="c1"># name of your existing ClusterIssuer</span>
+<span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIssuer</span>
+<span class="w">    </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager.io</span>
+</code></pre></div>
+<p>Replace <code>my-org-issuer</code> with the name of your existing <code>ClusterIssuer</code>.</p>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
 </li>
 </ol>
-<p>Once you create the database with the Operator, it will automatically trigger the cert-manager to create certificates. Whenever you check certificates for expiration, you will find that they are valid and short-term.</p>
-<p>When a leaf is due for renewal, cert-manager reissues the server certificate signed by the same CA. Starting with version 1.3.0, MySQL Pods pick up that leaf without a restart. HAProxy, MySQL Router, and Orchestrator Pods still restart. See <a href="#tls-update">Update certificates</a>.</p></section><section class="print-page" id="tls-manual" heading-number="7.1.3"><h1 id="tls-manual-generate-certificates-manually">Generate certificates manually<a class="headerlink" href="#tls-manual-generate-certificates-manually" title="Permanent link">&para;</a></h1>
+<p>When you deploy the cluster, the Operator creates a <code>Certificate</code> resource that references your <code>ClusterIssuer</code>. cert-manager signs the resulting Secret. The Operator does not create a parallel CA or overwrite your issuer.</p>
+<p>If the <code>ClusterIssuer</code> does not exist, the Operator fails reconciliation and logs an error asking you to check <code>.spec.tls.issuerConf</code>. If you point an already-working cluster at a <code>ClusterIssuer</code> that doesn&rsquo;t exist, the Operator leaves the existing <code>Certificate</code> untouched.</p>
+<p>You can also add <code>tls.issuerConf</code> to a running cluster. The Operator updates the existing <code>Certificate</code> to use your <code>ClusterIssuer</code>.</p>
+<h2 id="tls-cert-manager-use-an-existing-namespace-scoped-issuer">Use an existing namespace-scoped Issuer<a class="headerlink" href="#tls-cert-manager-use-an-existing-namespace-scoped-issuer" title="Permanent link">&para;</a></h2>
+<p>To use a cert-manager <code>Issuer</code> that already exists in the database namespace, set <a href="#operator-tlsissuerconfname"><code>tls.issuerConf.name</code></a> to that issuer&rsquo;s name. You can leave <code>kind</code> at the default value (<code>Issuer</code>).</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">issuerConf</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-org-issuer</span><span class="w">        </span><span class="c1"># name of your existing Issuer</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Issuer</span>
+<span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cert-manager.io</span>
+</code></pre></div>
+<p>When <code>tls.issuerConf</code> is set, the Operator creates only the leaf TLS <code>Certificate</code> and does not create its own CA chain. The referenced <code>Issuer</code> must already exist and be ready in the same namespace as the cluster. If it is missing, the Operator fails reconciliation and asks you to check <code>.spec.tls.issuerConf</code>.</p>
+<h2 id="tls-cert-manager-add-extra-domains-to-the-certificate">Add extra domains to the certificate<a class="headerlink" href="#tls-cert-manager-add-extra-domains-to-the-certificate" title="Permanent link">&para;</a></h2>
+<p>Use <a href="#operator-tlssans"><code>tls.SANs</code></a> to add extra DNS names to the certificate that cert-manager issues. This is useful when clients connect through hostnames that are not part of the default Service DNS names.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">SANs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql-1.example.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql-2.example.com</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql-3.example.com</span>
+</code></pre></div>
+<p>You can set <code>tls.SANs</code> with Operator-managed issuers or with an existing <code>Issuer</code> or <code>ClusterIssuer</code>.</p>
+<h2 id="tls-cert-manager-verify-cert-manager-resources">Verify cert-manager resources<a class="headerlink" href="#tls-cert-manager-verify-cert-manager-resources" title="Permanent link">&para;</a></h2>
+<p>After the cluster is created, inspect the cert-manager resources:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="tls-cert-manager-__tabbed_2_1" name="tls-cert-manager-__tabbed_2" type="radio" /><input id="tls-cert-manager-__tabbed_2_2" name="tls-cert-manager-__tabbed_2" type="radio" /><input id="tls-cert-manager-__tabbed_2_3" name="tls-cert-manager-__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="tls-cert-manager-__tabbed_2_1">Namespace-scoped Issuer (default)</label><label for="tls-cert-manager-__tabbed_2_2">Existing ClusterIssuer</label><label for="tls-cert-manager-__tabbed_2_3">Existing Issuer</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># List Issuers</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>issuers<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+
+<span class="c1"># List Certificates</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>certificates<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+
+<span class="c1"># Check certificate status</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>certificate<span class="w"> </span>&lt;cluster-name&gt;-ssl<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml
+</code></pre></div>
+<p>The Operator creates Issuers and Certificates in the same namespace as the cluster. Default names are <code>&lt;cluster-name&gt;-ps-ca-issuer</code>, <code>&lt;cluster-name&gt;-ps-issuer</code>, <code>&lt;cluster-name&gt;-ca-cert</code>, and <code>&lt;cluster-name&gt;-ssl</code>.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># List cluster-scoped issuers</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>clusterissuer
+
+<span class="c1"># List Certificates in the database namespace</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>certificates<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+
+<span class="c1"># Check that the leaf certificate references your ClusterIssuer</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>certificate<span class="w"> </span>&lt;cluster-name&gt;-ssl<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml
+</code></pre></div>
+<p>Only your <code>ClusterIssuer</code> appears among cluster issuers. The Operator creates the <code>Certificate</code> in the database namespace and sets <code>issuerRef</code> to your <code>ClusterIssuer</code>.</p>
+<p>If the cluster previously used the default Operator-managed issuers (<code>&lt;cluster-name&gt;-ps-ca-issuer</code>, <code>&lt;cluster-name&gt;-ps-issuer</code>, and <code>&lt;cluster-name&gt;-ca-cert</code>), they remain in the namespace. The Operator does not delete them when you switch to an external issuer.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># List Issuers</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>issuers<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+
+<span class="c1"># List Certificates</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>certificates<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>Your <code>Issuer</code> remains in the database namespace. The Operator creates the <code>&lt;cluster-name&gt;-ssl</code> <code>Certificate</code> and points it at that issuer.</p>
+<p>If the cluster previously used the default Operator-managed issuers, <code>&lt;cluster-name&gt;-ps-ca-issuer</code>, <code>&lt;cluster-name&gt;-ps-issuer</code>, and <code>&lt;cluster-name&gt;-ca-cert</code> remain in the namespace. The Operator does not delete them when you switch to an external issuer.</p>
+</div>
+</div>
+</div>
+<p>You can also <a href="#tls-update-check-your-certificates-for-expiration">check certificates for expiration</a> at any time.</p>
+<p>For more details on all cert-manager-related Custom Resource options, see the <a href="#operator-operator-issuerconf-section"><code>tls.issuerConf</code> options</a> in the Operator spec reference.</p></section><section class="print-page" id="tls-manual" heading-number="7.1.3"><h1 id="tls-manual-generate-certificates-manually">Generate certificates manually<a class="headerlink" href="#tls-manual-generate-certificates-manually" title="Permanent link">&para;</a></h1>
 <p>You can generate TLS certificates manually instead of using the Operator&rsquo;s automatic certificate generation. This approach gives you full control over certificate properties and is useful for production environments with specific security requirements.</p>
 <h2 id="tls-manual-what-youll-create">What you&rsquo;ll create<a class="headerlink" href="#tls-manual-what-youll-create" title="Permanent link">&para;</a></h2>
 <p>When you follow the steps from this guide, you&rsquo;ll generate these certificate files:</p>
@@ -12511,13 +12663,19 @@ ps-cluster1-ssl       True    ps-cluster1-ssl       43m
 </details>
 </li>
 <li>
-<p>Optionally you can also check that the certificates issuer is up and running:</p>
+<p>Optionally you can also check that the certificates issuer is up and running.</p>
+<p>If the Operator manages issuers in the database namespace:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>issuer<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
-<p>The response should be as follows:</p>
-<div class="no-copy highlight"><pre><span></span><code>NAME                              READY   AGE
+<details class="example">
+<summary>Sample output</summary>
+<div class="no-copy highlight"><pre><span></span><code>NAME                       READY   AGE
 ps-cluster1-ps-ca-issuer   True    40m
 ps-cluster1-ps-issuer      True    38m
+</code></pre></div>
+</details>
+<p>If you <a href="#tls-cert-manager-use-an-existing-clusterissuer">use an existing ClusterIssuer</a>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>clusterissuer
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -18595,7 +18753,7 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h3 id="operator-sslsecretname"><code>sslSecretName</code><a class="headerlink" href="#operator-sslsecretname" title="Permanent link">&para;</a></h3>
-<p>A secret with TLS certificate generated for <em>external</em> communications, see <a href="#tls">Transport Layer Security (TLS)</a> for details. When undefined, the Operator creates the Secrets object named in the format <code>&lt;cluster-name&gt;-secrets-ssl</code>. Otherwise, it uses the provided name.</p>
+<p>A secret with the TLS certificate used by the cluster, see <a href="#tls">Transport Layer Security (TLS)</a> for details. When undefined, the Operator creates the Secrets object named <code>&lt;cluster-name&gt;-ssl</code>. Otherwise, it uses the provided name. If this Secret already exists and was created by you, the Operator uses it and does not request a certificate from cert-manager.</p>
 <table>
 <thead>
 <tr>
@@ -18793,9 +18951,9 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h2 id="operator-extended-cert-manager-configuration-section"><a name="operator-issuerconf-section"></a>Extended cert-manager configuration section<a class="headerlink" href="#operator-extended-cert-manager-configuration-section" title="Permanent link">&para;</a></h2>
-<p>The <code>tls</code> section in the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file contains various configuration options for additional customization of the <a href="#tls-cert-manager">TLS cert-manager</a>.</p>
+<p>The <code>tls</code> section in the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file contains options that control how the Operator requests TLS certificates from <a href="#tls-cert-manager">cert-manager</a>.</p>
 <h3 id="operator-tlssans"><code>tls.SANs</code><a class="headerlink" href="#operator-tlssans" title="Permanent link">&para;</a></h3>
-<p>Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration.</p>
+<p>Additional DNS names (subject alternative names) to add to the TLS certificate that cert-manager issues.</p>
 <table>
 <thead>
 <tr>
@@ -18806,12 +18964,13 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 <tbody>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span> subdoc</td>
-<td></td>
+<td><code>mysql-1.example.com</code></td>
 </tr>
 </tbody>
 </table>
 <h3 id="operator-tlsissuerconfname"><code>tls.issuerConf.name</code><a class="headerlink" href="#operator-tlsissuerconfname" title="Permanent link">&para;</a></h3>
-<p>A <a href="https://cert-manager.io/docs/concepts/issuer/">cert-manager issuer name <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>The name of the cert-manager issuer that signs the cluster TLS certificate.</p>
+<p>When set, the Operator creates a <code>Certificate</code> that references this issuer and does not create its own CA chain. Use this to integrate with an existing organizational PKI. See <a href="#tls-cert-manager-use-an-existing-clusterissuer">Use an existing ClusterIssuer</a> and <a href="#tls-cert-manager-use-an-existing-namespace-scoped-issuer">Use an existing namespace-scoped Issuer</a>.</p>
 <table>
 <thead>
 <tr>
@@ -18827,7 +18986,12 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h3 id="operator-tlsissuerconfkind"><code>tls.issuerConf.kind</code><a class="headerlink" href="#operator-tlsissuerconfkind" title="Permanent link">&para;</a></h3>
-<p>A <a href="https://cert-manager.io/docs/configuration/">cert-manager issuer type <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>The cert-manager issuer type referenced by the cluster <code>Certificate</code>.</p>
+<p>Supported values:</p>
+<ul>
+<li><code>Issuer</code> (default) — namespace-scoped issuer in the database namespace.</li>
+<li><code>ClusterIssuer</code> — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. You must <a href="#tls-cert-manager-grant-the-operator-permission-to-read-clusterissuers">grant the Operator permission to read ClusterIssuers</a>.</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -18843,7 +19007,7 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h3 id="operator-tlsissuerconfgroup"><code>tls.issuerConf.group</code><a class="headerlink" href="#operator-tlsissuerconfgroup" title="Permanent link">&para;</a></h3>
-<p>A <a href="https://cert-manager.io/docs/configuration/">cert-manager issuer group <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. Should be <code>cert-manager.io</code> for built-in cert-manager certificate issuers |</p>
+<p>The cert-manager API group for the issuer referenced in <code>issuerConf</code>. Use <code>cert-manager.io</code> for built-in cert-manager issuers.</p>
 <table>
 <thead>
 <tr>

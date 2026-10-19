@@ -5427,13 +5427,19 @@ ps-cluster1-ssl       True    ps-cluster1-ssl       43m
 </details>
 </li>
 <li>
-<p>Optionally you can also check that the certificates issuer is up and running:</p>
+<p>Optionally you can also check that the certificates issuer is up and running.</p>
+<p>If the Operator manages issuers in the database namespace:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>issuer<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
-<p>The response should be as follows:</p>
-<div class="no-copy highlight"><pre><span></span><code>NAME                              READY   AGE
+<details class="example">
+<summary>Sample output</summary>
+<div class="no-copy highlight"><pre><span></span><code>NAME                       READY   AGE
 ps-cluster1-ps-ca-issuer   True    40m
 ps-cluster1-ps-issuer      True    38m
+</code></pre></div>
+</details>
+<p>If you <a href="tls-cert-manager.html#use-an-existing-clusterissuer">use an existing ClusterIssuer</a>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>clusterissuer
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -5596,7 +5602,7 @@ kubectl<span class="w"> </span>delete<span class="w"> </span>certificate/<span c
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 6, 2026 07:37:37 UTC">October 6, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:24:38 UTC">October 19, 2026</span>
       
         <br>
         Created:

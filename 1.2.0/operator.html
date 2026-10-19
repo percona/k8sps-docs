@@ -15658,7 +15658,7 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h3 id="sslsecretname"><code>sslSecretName</code><a class="headerlink" href="#sslsecretname" title="Permanent link">&para;</a></h3>
-<p>A secret with TLS certificate generated for <em>external</em> communications, see <a href="TLS.html">Transport Layer Security (TLS)</a> for details. When undefined, the Operator creates the Secrets object named in the format <code>&lt;cluster-name&gt;-secrets-ssl</code>. Otherwise, it uses the provided name.</p>
+<p>A secret with the TLS certificate used by the cluster, see <a href="TLS.html">Transport Layer Security (TLS)</a> for details. When undefined, the Operator creates the Secrets object named <code>&lt;cluster-name&gt;-ssl</code>. Otherwise, it uses the provided name. If this Secret already exists and was created by you, the Operator uses it and does not request a certificate from cert-manager.</p>
 <table>
 <thead>
 <tr>
@@ -15856,9 +15856,9 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h2 id="extended-cert-manager-configuration-section"><a name="operator-issuerconf-section"></a>Extended cert-manager configuration section<a class="headerlink" href="#extended-cert-manager-configuration-section" title="Permanent link">&para;</a></h2>
-<p>The <code>tls</code> section in the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file contains various configuration options for additional customization of the <a href="tls-cert-manager.html">TLS cert-manager</a>.</p>
+<p>The <code>tls</code> section in the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file contains options that control how the Operator requests TLS certificates from <a href="tls-cert-manager.html">cert-manager</a>.</p>
 <h3 id="tlssans"><code>tls.SANs</code><a class="headerlink" href="#tlssans" title="Permanent link">&para;</a></h3>
-<p>Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration.</p>
+<p>Additional DNS names (subject alternative names) to add to the TLS certificate that cert-manager issues.</p>
 <table>
 <thead>
 <tr>
@@ -15869,12 +15869,13 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 <tbody>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span> subdoc</td>
-<td></td>
+<td><code>mysql-1.example.com</code></td>
 </tr>
 </tbody>
 </table>
 <h3 id="tlsissuerconfname"><code>tls.issuerConf.name</code><a class="headerlink" href="#tlsissuerconfname" title="Permanent link">&para;</a></h3>
-<p>A <a href="https://cert-manager.io/docs/concepts/issuer/">cert-manager issuer name <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>The name of the cert-manager issuer that signs the cluster TLS certificate.</p>
+<p>When set, the Operator creates a <code>Certificate</code> that references this issuer and does not create its own CA chain. Use this to integrate with an existing organizational PKI. See <a href="tls-cert-manager.html#use-an-existing-clusterissuer">Use an existing ClusterIssuer</a> and <a href="tls-cert-manager.html#use-an-existing-namespace-scoped-issuer">Use an existing namespace-scoped Issuer</a>.</p>
 <table>
 <thead>
 <tr>
@@ -15890,7 +15891,12 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h3 id="tlsissuerconfkind"><code>tls.issuerConf.kind</code><a class="headerlink" href="#tlsissuerconfkind" title="Permanent link">&para;</a></h3>
-<p>A <a href="https://cert-manager.io/docs/configuration/">cert-manager issuer type <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>The cert-manager issuer type referenced by the cluster <code>Certificate</code>.</p>
+<p>Supported values:</p>
+<ul>
+<li><code>Issuer</code> (default) — namespace-scoped issuer in the database namespace.</li>
+<li><code>ClusterIssuer</code> — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. You must <a href="tls-cert-manager.html#grant-the-operator-permission-to-read-clusterissuers">grant the Operator permission to read ClusterIssuers</a>.</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -15906,7 +15912,7 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h3 id="tlsissuerconfgroup"><code>tls.issuerConf.group</code><a class="headerlink" href="#tlsissuerconfgroup" title="Permanent link">&para;</a></h3>
-<p>A <a href="https://cert-manager.io/docs/configuration/">cert-manager issuer group <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>. Should be <code>cert-manager.io</code> for built-in cert-manager certificate issuers |</p>
+<p>The cert-manager API group for the issuer referenced in <code>issuerConf</code>. Use <code>cert-manager.io</code> for built-in cert-manager issuers.</p>
 <table>
 <thead>
 <tr>
@@ -22402,7 +22408,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:23:42 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:24:38 UTC">October 19, 2026</span>
       
         <br>
         Created:
