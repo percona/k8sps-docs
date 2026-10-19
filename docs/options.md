@@ -138,7 +138,7 @@ follows:
     string:
 
     ```bash
-    echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
+    echo "W215c3FsZF0KbWF4X2Nvbm5lY3Rpb25zPTI1MAo=" | base64 --decode
     ```
 
 Finally, use a yaml file to create the Secret object. For example, you can
@@ -150,7 +150,7 @@ kind: Secret
 metadata:
   name: ps-cluster1-mysql
 data:
-  my.cnf: "bWF4X2Nvbm5lY3Rpb25zPTI1MAo"
+  my.cnf: "W215c3FsZF0KbWF4X2Nvbm5lY3Rpb25zPTI1MAo="
 ```
 
 When ready, apply it with the following command:
