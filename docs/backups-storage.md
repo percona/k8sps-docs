@@ -298,6 +298,34 @@ The Operator uses this CA to verify TLS when it runs backups, restores, and back
 
 If the CA lives in a cert-manager Secret that also contains `tls.crt` and `tls.key`, still set `caBundle.key` to `ca.crt` (or the key that holds the CA). The Operator mounts only that key.
 
+## Update the CA bundle
+
+The Operator does not detect changes inside an existing CA Secret. To add, replace, or rotate certificates in the bundle, create a **new** Secret and point `caBundle` at it.
+
+1. Create a new Secret with the updated CA. Use a different name than the Secret you already reference:
+
+    ```bash
+    kubectl create secret generic minio-ca-bundle-v2 --from-file=ca.crt=/path/to/updated-ca.crt -n <namespace>
+    ```
+
+2. Update `caBundle.name` in the Custom Resource to the new Secret:
+
+    ```yaml
+    caBundle:
+      name: minio-ca-bundle-v2
+      key: ca.crt
+    ```
+
+    If Binlog Server also uses this CA, update `backup.pitr.binlogServer.storage.s3.caBundle.name` as well. See [Verify TLS with a custom CA](backups-pitr.md#verify-tls-with-a-custom-ca).
+
+3. Apply the configuration:
+
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```
+
+After backups and restores succeed with the new CA, you can delete the old Secret.
+
 If you configure several S3 storages, each can reference its own CA. The Operator mounts all of those CAs on MySQL Pods. A backup or restore Job uses the CA of the storage you selected.
 
 `caBundle` on `backup.storages` does not apply to Binlog Server. To verify TLS communication for [point-in-time recovery](backups-pitr.md), supply your custom certificate within the Binlog Server configuration as well by setting `caBundle` on [`backup.pitr.binlogServer.storage.s3`](backups-pitr.md#verify-tls-with-a-custom-ca). See [Verify TLS with a custom CA](backups-pitr.md#verify-tls-with-a-custom-ca).

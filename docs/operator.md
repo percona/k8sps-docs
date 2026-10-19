@@ -2578,7 +2578,7 @@ The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 
 ### `backup.pitr.binlogServer.storage.s3.caBundle.name`
 
-The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible binlog storage. This setting is independent from [`backup.storages.STORAGE-NAME.s3.caBundle`](#backupstoragesstorage-names3cabundlename). See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible binlog storage. This setting is independent from [`backup.storages.STORAGE-NAME.s3.caBundle`](#backupstoragesstorage-names3cabundlename). To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](backups-storage.md#update-the-ca-bundle).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -3134,7 +3134,7 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 
 ### `backup.storages.STORAGE-NAME.s3.caBundle.name`
 
-The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](backups-storage.md#update-the-ca-bundle).
 
 | Value type  | Example    |
 | ----------- | ---------- |

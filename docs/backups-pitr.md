@@ -134,6 +134,8 @@ The steps are:
 
 When you restore with `backupSource`, create the CA Secret on the target cluster and set `caBundle` on the restore object. See [Use a custom CA](backups-restore-pitr.md#use-a-custom-ca).
 
+To add or rotate certificates in the bundle, create a new Secret and point `caBundle.name` at it. Editing the existing Secret is not enough. See [Update the CA bundle](backups-storage.md#update-the-ca-bundle).
+
 ## Implementation specifics
 
 1. Point-in-time recovery is supported for both asynchronous and group replication topologies.
