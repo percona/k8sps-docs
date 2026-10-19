@@ -964,7 +964,7 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 ### `mysql.configuration`
 
-The `my.cnf` file options to be passed to Percona Server for MySQL instances.
+The `my.cnf` file options to be passed to Percona Server for MySQL instances. Start the value with the `[mysqld]` section header: without it, backups fail. Add the `loose-` prefix to `group_replication_*` options. For details, see [Changing MySQL options](options.md).
 
 | Value type  | Example    |
 | ----------- | ---------- |
