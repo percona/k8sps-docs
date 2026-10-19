@@ -95,8 +95,7 @@ markdown_extensions:
         - docs/assets/fragments
         - docs/ReleaseNotes
         - docs/
-      auto_append:
-        - services-banner.md
+        
   pymdownx.highlight: 
     use_pygments: true
   pymdownx.emoji:
