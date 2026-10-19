@@ -130,6 +130,10 @@ doctl kubernetes cluster delete <cluster-name>
 
 Cluster deletion takes several minutes.
 
+Deleting the cluster leaves its load balancers, volumes, and volume snapshots in your DigitalOcean account. You can still pay for those resources until you delete them.
+
+For more ways to delete a cluster, and for how to remove the associated load balancers, volumes, and volume snapshots, see [How to destroy DigitalOcean Kubernetes clusters :octicons-link-external-16:](https://docs.digitalocean.com/products/kubernetes/how-to/destroy-clusters/).
+
 !!! warning
 
-    Deleting the cluster deletes all data stored in it.
+    Deleting the cluster removes access to the database. Data on any volumes that remain is deleted only when you delete those volumes.
