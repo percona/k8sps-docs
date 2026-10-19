@@ -95,58 +95,24 @@ If your cluster already runs cert-manager with a cluster-wide issuer, such as Sm
 
 The Operator does not create or manage `ClusterIssuer` resources. You must create the `ClusterIssuer` first, then reference it in the Custom Resource.
 
-### Grant the Operator permission to read ClusterIssuers
+1. Edit the `deploy/cr.yaml` and set `tls.issuerConf` to the existing `ClusterIssuer`:
 
-The Operator's default RBAC covers namespace-scoped `Issuer` and `Certificate` objects only. It does not grant access to cluster-scoped `ClusterIssuer` resources. Grant the Operator ServiceAccount permission to get, list, and watch `ClusterIssuer` objects before you reference one.
+    ```yaml
+    spec:
+    tls:
+        issuerConf:
+        name: my-org-issuer        # name of your existing ClusterIssuer
+        kind: ClusterIssuer
+        group: cert-manager.io
+    ```
 
-Create a `ClusterRole` and `ClusterRoleBinding`. Replace the `<cluster-issuer-name>` and `<operator-namespace>`  placeholders with your `ClusterIssuer` name, and the namespace where the Operator is deployed. Specify the Operator ServiceAccount name. The following example uses the default ServiceAccount name `percona-server-mysql-operator`:
+    Replace `my-org-issuer` with the name of your existing `ClusterIssuer`.
 
-```yaml title="clusterissuer-rbac.yaml"
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: <cluster-issuer-name>-reader
-rules:
-- apiGroups: ["cert-manager.io"]
-  resources: ["clusterissuers"]
-  verbs: ["get", "list", "watch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: <cluster-issuer-name>-reader-<operator-namespace>
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: <cluster-issuer-name>-reader
-subjects:
-- kind: ServiceAccount
-  name: percona-server-mysql-operator
-  namespace: <operator-namespace>
-```
-
-Apply the manifest:
-
-```bash
-kubectl apply -f clusterissuer-rbac.yaml
-```
-
-You need this extra RBAC for both [namespace-scoped and cluster-wide](cluster-wide.md) Operator installations.
-
-### Configure the Custom Resource
-
-Edit the `deploy/cr.yaml` and set `tls.issuerConf` to the existing `ClusterIssuer`:
-
-```yaml
-spec:
-  tls:
-    issuerConf:
-      name: my-org-issuer        # name of your existing ClusterIssuer
-      kind: ClusterIssuer
-      group: cert-manager.io
-```
-
-Replace `my-org-issuer` with the name of your existing `ClusterIssuer`.
+2. Apply the configuration:
+    
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n <namespace>
+    ```
 
 When you deploy the cluster, the Operator creates a `Certificate` resource that references your `ClusterIssuer`. cert-manager signs the resulting Secret. The Operator does not create a parallel CA or overwrite your issuer.
 
