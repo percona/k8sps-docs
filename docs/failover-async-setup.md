@@ -1,6 +1,6 @@
 # Configure and orchestrate zero-data-loss failover in async clusters
 
-This page covers the setup and management of the zero-data-loss failover for clusters with [asynchronous replication](architecture.md#asynchronous-replication-tech-preview). For background on how the failover mechanism works and the explanation of the timeouts and Orchestrator behavior when timeout expires, see [About zero data loss failover](failover-async-about.md).
+This page covers the setup and management of the zero-data-loss failover for clusters with [asynchronous replication](architecture.md#asynchronous-replication-tech-preview). For background on how the failover mechanism works and the explanation of the timeouts and Orchestrator behavior when timeout expires, see [About zero data loss failover](failover-async.md).
 
 ## Configure failover
 
@@ -9,16 +9,14 @@ Configure the `spec.orchestrator.failover` subsection in the Custom Resource.
 1. Set the following keys:
     
     * `timeout` - How long the cluster tries to recover transactions that exist only on the failed primary. The time covers every retry and starts at the first attempt for that primary.
-    * `onTimeout` - What happens when timeout expires. The values are `Abort` and `ForceWithPossibleDataLoss`. See [Understand failover timeout and recovery policy](#understand-failover-timeout-and-recovery-policy) to learn more
-    * `switchoverCatchUpTimeout` - How long a graceful switchover waits for the candidate to catch up before promoting it.
+    * `onTimeout` - What happens when timeout expires. The values are `Abort` and `ForceWithPossibleDataLoss`. See [Understand failover timeout and recovery policy](failover-async.md#understand-failover-timeout-and-recovery-policy) to learn more
 
     ```yaml
     spec:
       orchestrator:
         failover:
-          timeout: 6h
+          timeout: 1h
           onTimeout: Abort
-          switchoverCatchUpTimeout: 5m
     ```
 
 2. Apply the configuration:
@@ -26,6 +24,20 @@ Configure the `spec.orchestrator.failover` subsection in the Custom Resource.
     ```bash
     kubectl apply -f deploy/cr.yaml -n <namespace>
     ```
+
+## Set the replication lag limit for a planned switchover
+
+A planned switchover is allowed only when the candidate replica is close enough to the primary. Orchestrator rejects a candidate whose replication lag exceeds the `ReasonableMaintenanceReplicationLagSeconds` setting. The default is 120 seconds, which is twice the `ReasonableReplicationLagSeconds` value of 60 seconds. For how the switchover works, see [Promote the candidate](failover-async.md#promote-the-candidate).
+
+To change the limit, set `ReasonableMaintenanceReplicationLagSeconds` in the `spec.orchestrator.configuration` key. The value is a JSON object passed as a string:
+
+```yaml
+spec:
+  orchestrator:
+    configuration: '{"ReasonableMaintenanceReplicationLagSeconds": 180}'
+```
+
+Apply the change with `kubectl apply -f deploy/cr.yaml -n <namespace>`. Updating `orchestrator.configuration` triggers a rolling restart of the Orchestrator Pods. See [`orchestrator.configuration`](operator.md#orchestratorconfiguration) for the full description of the option.
 
 ## See whether a failover is blocked
 
@@ -52,8 +64,9 @@ The cluster also records these events:
 | `FailoverBlocked` | Warning | `timeout` expired and `onTimeout` is `Abort`. |
 | `FailoverForced` | Warning | `timeout` expired and `onTimeout` is `ForceWithPossibleDataLoss`, or the force-promotion annotation was handled. |
 | `FailoverFailed` | Warning | Orchestrator gave up on the recovery. |
+| `FailoverUnprotected` | Warning | Backups are disabled, so the Operator cannot recover the transactions stranded on the failed primary. Orchestrator promotes a replica without fetching them, and the cluster loses every transaction that the failed primary committed and never replicated. The cluster has no `timeout` wait and no `onTimeout` policy in this case. |
 
-Orchestrator retries a blocked recovery every few seconds. After one `FailoverWaiting`, `FailoverBlocked`, or `FailoverFailed` event for a primary, the same event stays quiet for five minutes. `FailoverForced` is recorded each time.
+Orchestrator retries a blocked recovery every few seconds. After one `FailoverWaiting`, `FailoverBlocked`, `FailoverFailed` or `FailoverUnprotected` event for a primary, the same event stays quiet for five minutes. `FailoverForced` is recorded each time.
 
 ## Force a promotion
 

@@ -14,7 +14,7 @@ To ensure no data is lost during a failover, the Operator and Orchestrator split
 2. **[Apply the transactions to the candidate and wait for it to catch up](#apply-the-binary-logs-on-the-candidate-replica).** The candidate then has everything the old primary had finished writing.
 3. **[Promote the candidate](#promote-the-candidate).**
 
-Until the candidate is promoted, or until the failover timeout expires, the cluster has no writable primary. The default timeout is `6h`. You set that limit when you [Configure failover](failover-async-configure.md#configure-failover). What happens while the cluster waits and when the timeout runs out is covered in [Understand failover timeout and recovery policy](#understand-failover-timeout-and-recovery-policy).
+Until the candidate is promoted, or until the failover timeout expires, the cluster has no writable primary. The default timeout is `1h`. You set that limit when you [Configure failover](failover-async-setup.md#configure-failover). What happens while the cluster waits and when the timeout runs out is covered in [Understand failover timeout and recovery policy](#understand-failover-timeout-and-recovery-policy).
 
 Orchestrator drives the failover stages through its failover hooks. The Operator's role is to configure the mechanism through the Custom Resource, oversee it and surface its outcome through the cluster's conditions and events.
 
@@ -29,7 +29,17 @@ Orchestrator drives the failover stages through its failover hooks. The Operator
 
 On an older `crVersion`, the Operator accepts `spec.orchestrator.failover` but does not apply it. Setting that block on a group replication cluster fails validation. A cluster of one MySQL Pod has no replica to promote.
 
-The candidate reads the old primary's binary logs from the `xtrabackup` sidecar. That sidecar starts only when backups are enabled. On an asynchronous cluster, disabling backups requires an unsafe flag. If backups are disabled, Orchestrator falls back to its existing failover. It promotes a replica without fetching those binary logs, so transactions that never left the old primary are lost.
+The candidate reads the old primary's binary logs from the `xtrabackup` sidecar. That sidecar starts only when backups are enabled. On an asynchronous cluster, the Operator rejects a Custom Resource with disabled backups unless you set [`unsafeFlags.asyncFailoverWithPossibleDataLoss`](operator.md#unsafeflagsasyncfailoverwithpossibledataloss) to `true`:
+
+```yaml
+spec:
+  unsafeFlags:
+    asyncFailoverWithPossibleDataLoss: true
+  backup:
+    enabled: false
+```
+
+With backups disabled, Orchestrator falls back to its existing failover. It promotes a replica without fetching those binary logs, so transactions that never left the old primary are lost. The Operator records a `FailoverUnprotected` warning event on the cluster. See [Events](cr-statuses.md#events).
 
 The binary log and relay log settings a zero data loss failover depends on are described in [Known limitations](#known-limitations).
 
@@ -83,7 +93,7 @@ Orchestrator chooses which replica to promote. It prefers a replica with no prob
 
 A candidate that fails its readiness probe during failover is expected. Orchestrator can still reach that Pod and promote it.
 
-A planned switchover does not salvage binary logs. The primary is alive, so the failover hook returns without fetching them. The switchover waits for the candidate to catch up, then promotes it. The time to wait is defined with the [`switchoverCatchUpTimeout`](failover-async-configure.md#configure-failover) Custom Resource option.
+A planned switchover does not salvage binary logs. The primary is alive, so the failover hook returns without fetching them. A switchover is allowed only when the candidate's replication lag does not exceed the `ReasonableMaintenanceReplicationLagSeconds` Orchestrator setting. Orchestrator rejects any replica that lags more, and the Operator retries the switchover on the next reconcile. After Orchestrator makes the primary read-only, it waits for the candidate to catch up for at most the same time, and then promotes it. The default value is 120 seconds. To change it, see [Set the replication lag limit for a planned switchover](failover-async-setup.md#set-the-replication-lag-limit-for-a-planned-switchover).
 
 ### If the old primary comes back
 
@@ -104,11 +114,17 @@ Orchestrator ends the failover.
 
 When the old primary's Pod is gone, Orchestrator skips the check and the promotion continues.
 
- [Configure failover](failover-async-configure.md#configure-failover):
+## Understand failover timeout and recovery policy
 
-* **`Abort`** (default) Orchestrator stops the recovery, and every Pod stays read-only. Orchestrator keeps retrying, and each retry stops immediately. The cluster stays read-only until you [force a promotion](failover-async-configure.md#force-a-promotion). See the event table in [See whether a failover is blocked](failover-async-configure.md#see-whether-a-failover-is-blocked) for what the cluster records.
+While Orchestrator recovers the transactions from the failed primary, the cluster has no writable primary. The `orchestrator.failover.timeout` option limits this wait. The default is `1h`. The time covers every retry and starts at the first attempt for that primary. If the Orchestrator Raft leader changes during the failover, the timeout restarts. The `FailoverWaiting` event on the cluster names the policy that applies when the time runs out.
 
-* **`ForceWithPossibleDataLoss`** makes Orchestrator pick a candidate and skip the binary log fetch. It still checks whether the old primary is back. When that primary accepts connections and holds every transaction the candidate has, nothing is promoted, and Orchestrator makes the primary writable. Otherwise Orchestrator promotes the candidate. Transactions that never left the old primary are lost. When the primary has no replicas, nothing is promoted. See the event table in [See whether a failover is blocked](failover-async-configure.md#see-whether-a-failover-is-blocked) for what gets recorded.
+When the timeout expires, the `orchestrator.failover.onTimeout` option decides what happens. You set both options when you [configure failover](failover-async-setup.md#configure-failover). 
+
+The values are:
+
+* **`Abort`** (default) Orchestrator stops the recovery, and every Pod stays read-only. Orchestrator keeps retrying, and each retry stops immediately. The cluster stays read-only until you [force a promotion](failover-async-setup.md#force-a-promotion). See the event table in [See whether a failover is blocked](failover-async-setup.md#see-whether-a-failover-is-blocked) for what the cluster records.
+
+* **`ForceWithPossibleDataLoss`** makes Orchestrator pick a candidate and skip the binary log fetch. It still checks whether the old primary is back. When that primary accepts connections and holds every transaction the candidate has, nothing is promoted, and Orchestrator makes the primary writable. Otherwise Orchestrator promotes the candidate. Transactions that never left the old primary are lost. When the primary has no replicas, nothing is promoted. See the event table in [See whether a failover is blocked](failover-async-setup.md#see-whether-a-failover-is-blocked) for what gets recorded.
 
 ## Known limitations
 
@@ -120,7 +136,7 @@ Zero-data-loss recovery depends on durability that the Operator doesn't enforce:
 
 * **The old primary's binary logs must still exist.** If they were already purged or expired, every recovery attempt fails the same way until `orchestrator.failover.timeout` runs out and [`onTimeout`](#understand-failover-timeout-and-recovery-policy) applies. Nothing can recover those transactions.
 
-* **The old primary's data volume must still exist.** If it's gone, the transactions it alone held are gone too. The only way forward is [`onTimeout`](#understand-failover-timeout-and-recovery-policy) or the [force-promote annotation](failover-async-configure.md#force-a-promotion).
+* **The old primary's data volume must still exist.** If it's gone, the transactions it alone held are gone too. The only way forward is [`onTimeout`](#understand-failover-timeout-and-recovery-policy) or the [force-promote annotation](failover-async-setup.md#force-a-promotion).
 * **Binlog encryption with [data-at-rest-encryption](encryption.md) is not supported**
 
 Starting at `crVersion` 1.3.0, the Operator also pins several Orchestrator settings that this mechanism depends on and silently ignores any conflicting value in [`orchestrator.configuration`](operator.md#orchestratorconfiguration) — see that field's reference entry for the current list.
