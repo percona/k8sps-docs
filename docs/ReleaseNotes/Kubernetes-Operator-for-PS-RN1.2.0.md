@@ -103,7 +103,7 @@ This improvement makes the restore path straightforward. By separating binlog co
 
 Point-in-time recovery remains a tech preview feature. We do not recommend using it in production environments yet, but we encourage you to try this workflow in staging or test clusters and share your feedback.
 
-Read more about point-in-time recovery and restore to a new cluster in our [documentation](../backups-restore-to-new-cluster.md#restore-with-point-in-time-recovery).
+Read more about point-in-time recovery and restore to a new cluster in our [documentation](../backups-restore-pitr.md#restore-on-a-new-cluster).
 
 ### Disable NodePort allocation for LoadBalancer Services
 
