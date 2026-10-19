@@ -10967,7 +10967,8 @@ xb-restore-restore2                                Complete             1/1     
 <li>If you define environment variables for a backup job, they are passed to both the <code>xtrabackup</code> and <code>xbcloud</code> processes running within the <code>xtrabackup</code> sidecar container. You can verify this by inspecting the process environment variables inside the container during a backup.</li>
 <li>Environment variables for a restore job are set for the <code>xtrabackup</code> container in the restore Pod.</li>
 <li>The <code>VERIFY_TLS</code> environment variable currently applies only to restore operations and is ignored for backups. </li>
-<li>If the same binary is configured globally and individually for backups or restores, individual settings take precedence. </li>
+<li>If the same binary is configured globally and individually for backups or restores, individual settings take precedence.</li>
+<li>You cannot pass the <code>--defaults-extra-file</code> option to <code>xtrabackup</code> in a <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> object. Use the <code>--defaults-file</code> option if you need to pass your custom settings.</li>
 </ol></section><section class="print-page" id="backups-delete" heading-number="6.3.11"><h1 id="backups-delete-delete-unneeded-backups">Delete unneeded backups<a class="headerlink" href="#backups-delete-delete-unneeded-backups" title="Permanent link">&para;</a></h1>
 <p>You can delete backups in the following ways:</p>
 <ul>
