@@ -1111,6 +1111,34 @@
   
   
     <li class="md-nav__item">
+      <a href="doks.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Install on DigitalOcean Kubernetes (DOKS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="openshift.html" class="md-nav__link">
         
   
@@ -5414,6 +5442,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#doks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install on DigitalOcean Kubernetes (DOKS)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#openshift" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7275,6 +7314,7 @@ Nodes, with the following resources:</p>
 <li><a href="#minikube">on Minikube</a></li>
 <li><a href="#gke">on Google Kubernetes Engine (GKE)</a></li>
 <li><a href="#eks">on Amazon Elastic Kubernetes Service (AWS EKS)</a></li>
+<li><a href="#doks">on DigitalOcean Kubernetes (DOKS)</a></li>
 <li><a href="#kubernetes">in a Kubernetes-based environment</a></li>
 </ul></section>
                     <section class='print-page md-section' id='section-4-3' heading-number='4.3'>
@@ -7355,6 +7395,7 @@ NOTES:
 <li><a href="#minikube">Set up Minikube</a></li>
 <li><a href="#gke">Create and configure the GKE cluster</a></li>
 <li><a href="#eks">Set up Amazon Elastic Kubernetes Service</a></li>
+<li><a href="#doks">Install on DigitalOcean Kubernetes</a></li>
 </ul>
 </div>
 </li>
@@ -8481,7 +8522,205 @@ mysql&gt;
 mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-P<span class="w"> </span><span class="m">3306</span><span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </li>
-</ol></section><section class="print-page" id="openshift" heading-number="5.3"><h1 id="openshift-install-percona-server-for-mysql-on-openshift">Install Percona Server for MySQL on OpenShift<a class="headerlink" href="#openshift-install-percona-server-for-mysql-on-openshift" title="Permanent link">&para;</a></h1>
+</ol></section><section class="print-page" id="doks" heading-number="5.3"><h1 id="doks-install-percona-server-for-mysql-on-digitalocean-kubernetes-doks">Install Percona Server for MySQL on DigitalOcean Kubernetes (DOKS)<a class="headerlink" href="#doks-install-percona-server-for-mysql-on-digitalocean-kubernetes-doks" title="Permanent link">&para;</a></h1>
+<p>This guide shows you how to deploy Percona Operator for MySQL on DigitalOcean Kubernetes (DOKS). The document assumes some experience with the platform. For more information on DOKS, see the <a href="https://docs.digitalocean.com/products/kubernetes/">DigitalOcean Kubernetes documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<h2 id="doks-prerequisites">Prerequisites<a class="headerlink" href="#doks-prerequisites" title="Permanent link">&para;</a></h2>
+<p>Prepare the following before you create a cluster:</p>
+<ol>
+<li>Install <a href="https://docs.digitalocean.com/reference/doctl/how-to/install/">doctl <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, the DigitalOcean command-line interface (CLI), to create and manage DOKS clusters.</li>
+<li>
+<p>Create a <a href="https://docs.digitalocean.com/reference/api/create-personal-access-token/">DigitalOcean personal access token <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> so <code>doctl</code> can access your account. After you create the token, authenticate <code>doctl</code>:</p>
+<div class="highlight"><pre><span></span><code>doctl<span class="w"> </span>auth<span class="w"> </span>init
+</code></pre></div>
+</li>
+<li>
+<p>Install <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> to manage Kubernetes resources.</p>
+</li>
+</ol>
+<h2 id="doks-before-you-start">Before you start<a class="headerlink" href="#doks-before-you-start" title="Permanent link">&para;</a></h2>
+<p>Check the <a href="#system-requirements">System requirements</a> to confirm your environment meets the prerequisites. Use a cluster with at least three nodes.</p>
+<h2 id="doks-create-a-digitalocean-kubernetes-cluster">Create a DigitalOcean Kubernetes cluster<a class="headerlink" href="#doks-create-a-digitalocean-kubernetes-cluster" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Decide on the following details:</p>
+<ul>
+<li>Cluster name</li>
+<li>Region where you deploy the cluster</li>
+<li>Kubernetes version</li>
+<li>Node size and count for the <a href="https://docs.digitalocean.com/products/kubernetes/how-to/add-node-pools/">node pool <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+</ul>
+</li>
+<li>
+<p>Create the cluster in the DigitalOcean control panel, or with <code>doctl</code>:</p>
+<div class="highlight"><pre><span></span><code>doctl<span class="w"> </span>kubernetes<span class="w"> </span>cluster<span class="w"> </span>create<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>--region<span class="w"> </span>&lt;region&gt;<span class="w"> </span>--version<span class="w"> </span>&lt;version&gt;<span class="w"> </span>--size<span class="w"> </span>&lt;node-size&gt;<span class="w"> </span>--count<span class="w"> </span><span class="m">3</span>
+</code></pre></div>
+<p>Replace the <code>&lt;cluster-name&gt;</code>, <code>&lt;region&gt;</code>, <code>&lt;version&gt;</code> and <code>&lt;node-size&gt;</code> placeholders with your values. Cluster creation takes several minutes.</p>
+<p>For the full list of options, see <a href="https://docs.digitalocean.com/products/kubernetes/how-to/create-clusters/">How to create Kubernetes clusters <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+</li>
+<li>
+<p>Save the cluster credentials to your <code>kubeconfig</code> file so <code>kubectl</code> can connect:</p>
+<div class="highlight"><pre><span></span><code>doctl<span class="w"> </span>kubernetes<span class="w"> </span>cluster<span class="w"> </span>kubeconfig<span class="w"> </span>save<span class="w"> </span>&lt;cluster-name&gt;
+</code></pre></div>
+<p>For more connection options, see <a href="https://docs.digitalocean.com/products/kubernetes/how-to/connect-to-cluster/">How to connect to a DigitalOcean Kubernetes cluster <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+</li>
+</ol>
+<h2 id="doks-install-the-operator-and-deploy-your-mysql-cluster">Install the Operator and deploy your MySQL cluster<a class="headerlink" href="#doks-install-the-operator-and-deploy-your-mysql-cluster" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Create a namespace and set it as the current context. Replace <code>&lt;namespace&gt;</code> with a descriptive name:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>&lt;namespace&gt;
+kubectl<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span><span class="k">$(</span>kubectl<span class="w"> </span>config<span class="w"> </span>current-context<span class="k">)</span><span class="w"> </span>--namespace<span class="o">=</span>&lt;namespace&gt;
+</code></pre></div>
+<details class="example">
+<summary>Expected output</summary>
+<div class="no-copy highlight"><pre><span></span><code>namespace/&lt;namespace&gt; created
+Context "&lt;context&gt;" modified.
+</code></pre></div>
+</details>
+</li>
+<li>
+<p>Deploy the Operator:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.2.0/deploy/bundle.yaml
+</code></pre></div>
+<details class="example">
+<summary>Expected output</summary>
+<div class="no-copy highlight"><pre><span></span><code>customresourcedefinition.apiextensions.k8s.io/perconaservermysqlbackups.ps.percona.com created
+customresourcedefinition.apiextensions.k8s.io/perconaservermysqlrestores.ps.percona.com created
+customresourcedefinition.apiextensions.k8s.io/perconaservermysqls.ps.percona.com created
+serviceaccount/percona-server-mysql-operator created
+role.rbac.authorization.k8s.io/percona-server-mysql-operator-leaderelection created
+role.rbac.authorization.k8s.io/percona-server-mysql-operator created
+rolebinding.rbac.authorization.k8s.io/percona-server-mysql-operator-leaderelection created
+rolebinding.rbac.authorization.k8s.io/percona-server-mysql-operator created
+configmap/percona-server-mysql-operator-config created
+deployment.apps/percona-server-mysql-operator created
+</code></pre></div>
+</details>
+<p>The Operator Pod is now running.</p>
+</li>
+<li>
+<p>Deploy the Percona Server for MySQL cluster.</p>
+<p>DOKS installs the DigitalOcean Container Storage Interface (CSI) driver and sets <code>do-block-storage</code> as the default StorageClass. The default cluster manifest uses that StorageClass. Set <code>storageClassName</code> only if you want a different volume type.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.2.0/deploy/cr.yaml
+</code></pre></div>
+<details class="example">
+<summary>Expected output</summary>
+<div class="no-copy highlight"><pre><span></span><code>perconaservermysql.ps.percona.com/ps-cluster1 created
+</code></pre></div>
+</details>
+</li>
+<li>
+<p>Check the cluster status. Creation takes several minutes:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps
+</code></pre></div>
+<details class="example">
+<summary>Expected output</summary>
+<div class="no-copy highlight"><pre><span></span><code>NAME          REPLICATION         ENDPOINT                          STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+ps-cluster1   group-replication   ps-cluster1-haproxy.&lt;namespace&gt;   ready   3                                3        20m
+</code></pre></div>
+</details>
+<p>When the <code>STATE</code> column shows <code>ready</code>, the cluster is running.</p>
+</li>
+</ol>
+<h2 id="doks-verify-the-cluster-operation">Verify the cluster operation<a class="headerlink" href="#doks-verify-the-cluster-operation" title="Permanent link">&para;</a></h2>
+<p>When <code>kubectl get ps</code> shows the cluster status as <code>ready</code>, connect to the cluster.</p>
+<p>To connect to Percona Server for MySQL, use the connection Secret that the Operator creates for the <code>root</code> user. It is named <code>&lt;cluster_name&gt;-psuser-root</code> (by default, <code>ps-cluster1-psuser-root</code>) and contains hostnames, ports, credentials, and ready-to-use connection URIs. Read <a href="#connection-secrets">Connection secrets</a> for the full reference.</p>
+<p>Here&rsquo;s how to connect:</p>
+<ol>
+<li>
+<p>Export the namespace, cluster name and the Secret name as environment variables:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>my-namespace
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=</span>ps-cluster1
+<span class="nb">export</span><span class="w"> </span><span class="nv">SECRET_NAME</span><span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-psuser-root
+</code></pre></div>
+<p>Replace <code>ps-cluster1</code> with the <a href="#operator-metadata-name">name of your cluster</a> if you changed it during installation.</p>
+</li>
+<li>
+<p>List the Secrets objects.</p>
+<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+</code></pre></div>
+<p>Look for the Secret named <code>&lt;cluster_name&gt;-psuser-root</code>. By default, it is <code>ps-cluster1-psuser-root</code>.</p>
+</li>
+<li>
+<p>Retrieve the user credentials from the Secret:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.user}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
+kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
+</code></pre></div>
+</li>
+<li>
+<p>Run a container with the <code>mysql</code> tool and connect its console output to your terminal:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-i<span class="w"> </span>--rm<span class="w"> </span>--tty<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
+</code></pre></div>
+<p>It may require some time to execute the command and deploy the corresponding Pod.</p>
+</li>
+<li>
+<p>Now run <code>mysql</code> tool in the <code>percona-client</code> command shell using the password
+    obtained from the Secret instead of the <code>&lt;root password&gt;</code> placeholder.
+    The command will look different depending on whether the cluster uses load
+    balancing with <a href="#haproxy-conf">HAProxy</a> (the default behavior) or uses
+    <a href="#router-conf">MySQL Router</a> (can be used with Group Replication clusters):</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="doks-__tabbed_1_1" name="doks-__tabbed_1" type="radio" /><input id="doks-__tabbed_1_2" name="doks-__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="doks-__tabbed_1_1">If using HAProxy (default)</label><label for="doks-__tabbed_1_2">If using MySQL Router</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-router<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+</code></pre></div>
+</div>
+</div>
+</div>
+<details class="example">
+<summary>Expected output</summary>
+<div class="no-copy highlight"><pre><span></span><code>mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1665
+Server version: 8.4.10-10.1 Percona Server (GPL), Release 6, Revision dbba4396
+
+Copyright (c) 2009-2026 Percona LLC and/or its affiliates
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql&gt;
+</code></pre></div>
+</details>
+<p>The following example uses the MySQL prompt to check the
+<code>max_connections</code> variable:</p>
+<div class="highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
+</code></pre></div>
+<details class="example">
+<summary>Expected output</summary>
+<div class="no-copy highlight"><pre><span></span><code>+-----------------+-------+
+| Variable_name   | Value |
++-----------------+-------+
+| max_connections | 158   |
++-----------------+-------+
+1 row in set (0.02 sec)
+
+mysql&gt; 
+</code></pre></div>
+</details>
+</li>
+</ol>
+<h2 id="doks-delete-the-digitalocean-kubernetes-cluster">Delete the DigitalOcean Kubernetes cluster<a class="headerlink" href="#doks-delete-the-digitalocean-kubernetes-cluster" title="Permanent link">&para;</a></h2>
+<p>To delete the cluster, run the following command:</p>
+<div class="highlight"><pre><span></span><code>doctl<span class="w"> </span>kubernetes<span class="w"> </span>cluster<span class="w"> </span>delete<span class="w"> </span>&lt;cluster-name&gt;
+</code></pre></div>
+<p>Cluster deletion takes several minutes.</p>
+<p>Deleting the cluster leaves its load balancers, volumes, and volume snapshots in your DigitalOcean account. You can still pay for those resources until you delete them.</p>
+<p>For more ways to delete a cluster, and for how to remove the associated load balancers, volumes, and volume snapshots, see <a href="https://docs.digitalocean.com/products/kubernetes/how-to/destroy-clusters/">How to destroy DigitalOcean Kubernetes clusters <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deleting the cluster removes access to the database. Data on any volumes that remain is deleted only when you delete those volumes.</p>
+</div></section><section class="print-page" id="openshift" heading-number="5.4"><h1 id="openshift-install-percona-server-for-mysql-on-openshift">Install Percona Server for MySQL on OpenShift<a class="headerlink" href="#openshift-install-percona-server-for-mysql-on-openshift" title="Permanent link">&para;</a></h1>
 <p>You can install Percona Operator for MySQL on OpenShift clusters. This makes it portable across hybrid clouds and it fully supports the Red Hat OpenShift lifecycle.</p>
 <p>To install Percona Server for MySQL on OpenShift means:</p>
 <ul>
@@ -8805,7 +9044,7 @@ mysql&gt;
 <h2 id="openshift-next-steps">Next steps<a class="headerlink" href="#openshift-next-steps" title="Permanent link">&para;</a></h2>
 <p><a class="md-button" href="#backups">Configure Backup and Restore</a>
 <a class="md-button" href="#monitoring">Set up monitoring</a>
-<a class="md-button" href="#scaling">Scale your cluster</a></p></section><section class="print-page" id="minikube" heading-number="5.4"><h1 id="minikube-install-percona-server-for-mysql-on-minikube">Install Percona Server for MySQL on Minikube<a class="headerlink" href="#minikube-install-percona-server-for-mysql-on-minikube" title="Permanent link">&para;</a></h1>
+<a class="md-button" href="#scaling">Scale your cluster</a></p></section><section class="print-page" id="minikube" heading-number="5.5"><h1 id="minikube-install-percona-server-for-mysql-on-minikube">Install Percona Server for MySQL on Minikube<a class="headerlink" href="#minikube-install-percona-server-for-mysql-on-minikube" title="Permanent link">&para;</a></h1>
 <p><a href="https://github.com/kubernetes/minikube">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> lets you run a Kubernetes cluster locally without a cloud provider. It works on Linux, Windows, and macOS using a hypervisor like VirtualBox, KVM/QEMU, VMware Fusion, Hyper-V, or Docker. This makes it perfect for testing the Operator before deploying it in a cloud or in production</p>
 <h2 id="minikube-prerequisites">Prerequisites<a class="headerlink" href="#minikube-prerequisites" title="Permanent link">&para;</a></h2>
 <p>Before you begin, you need to <a href="https://kubernetes.io/docs/tasks/tools/install-minikube/">install Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> on your system. The installation includes three components:</p>
@@ -8961,7 +9200,7 @@ mysql&gt;
 </code></pre></div>
 </details>
 </li>
-</ol></section><section class="print-page" id="kubernetes" heading-number="5.5"><h1 id="kubernetes-install-percona-server-for-mysql-on-kubernetes">Install Percona Server for MySQL on Kubernetes<a class="headerlink" href="#kubernetes-install-percona-server-for-mysql-on-kubernetes" title="Permanent link">&para;</a></h1>
+</ol></section><section class="print-page" id="kubernetes" heading-number="5.6"><h1 id="kubernetes-install-percona-server-for-mysql-on-kubernetes">Install Percona Server for MySQL on Kubernetes<a class="headerlink" href="#kubernetes-install-percona-server-for-mysql-on-kubernetes" title="Permanent link">&para;</a></h1>
 <ol>
 <li>
 <p>First of all, clone the percona-server-mysql-operator repository:</p>
@@ -29816,11 +30055,13 @@ and <a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji">
 
 .print-site-enumerate-headings #eks > h1:before { content: '5.2 ' }
 
-.print-site-enumerate-headings #openshift > h1:before { content: '5.3 ' }
+.print-site-enumerate-headings #doks > h1:before { content: '5.3 ' }
 
-.print-site-enumerate-headings #minikube > h1:before { content: '5.4 ' }
+.print-site-enumerate-headings #openshift > h1:before { content: '5.4 ' }
 
-.print-site-enumerate-headings #kubernetes > h1:before { content: '5.5 ' }
+.print-site-enumerate-headings #minikube > h1:before { content: '5.5 ' }
+
+.print-site-enumerate-headings #kubernetes > h1:before { content: '5.6 ' }
 
 .print-site-enumerate-headings #section-6 > h1:before { content: '6 ' }
 .print-site-enumerate-headings #users > h1:before { content: '6.1 ' }
