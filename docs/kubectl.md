@@ -43,22 +43,23 @@ Here's a sequence of steps to follow:
 2. Deploy the Operator with the following command:
 
     ```{.bash data-prompt="$" }
-    $ kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/bundle.yaml  -n <namespace>
+    $ kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v{{ release }}/deploy/bundle.yaml  -n <namespace>
     ```
 
     ??? example "Expected output"
 
         ```{.text .no-copy}
-        customresourcedefinition.apiextensions.k8s.io/perconaservermysqlbackups.ps.percona.com created
-        customresourcedefinition.apiextensions.k8s.io/perconaservermysqlrestores.ps.percona.com created
-        customresourcedefinition.apiextensions.k8s.io/perconaservermysqls.ps.percona.com created
-        serviceaccount/percona-server-mysql-operator created
-        role.rbac.authorization.k8s.io/percona-server-mysql-operator-leaderelection created
-        role.rbac.authorization.k8s.io/percona-server-mysql-operator created
-        rolebinding.rbac.authorization.k8s.io/percona-server-mysql-operator-leaderelection created
-        rolebinding.rbac.authorization.k8s.io/percona-server-mysql-operator created
-        configmap/percona-server-mysql-operator-config created
-        deployment.apps/percona-server-mysql-operator created
+        customresourcedefinition.apiextensions.k8s.io/perconaservermysqlbackups.ps.percona.com serverside-applied
+        customresourcedefinition.apiextensions.k8s.io/perconaservermysqlclustersets.ps.percona.com serverside-applied
+        customresourcedefinition.apiextensions.k8s.io/perconaservermysqlrestores.ps.percona.com serverside-applied
+        customresourcedefinition.apiextensions.k8s.io/perconaservermysqls.ps.percona.com serverside-applied
+        serviceaccount/percona-server-mysql-operator serverside-applied
+        role.rbac.authorization.k8s.io/percona-server-mysql-operator-leaderelection serverside-applied
+        role.rbac.authorization.k8s.io/percona-server-mysql-operator serverside-applied
+        rolebinding.rbac.authorization.k8s.io/percona-server-mysql-operator serverside-applied
+        rolebinding.rbac.authorization.k8s.io/percona-server-mysql-operator-leaderelection serverside-applied
+        configmap/percona-server-mysql-operator-config serverside-applied
+        deployment.apps/percona-server-mysql-operator serverside-applied
         ```
 
     As the result you will have the Operator Pod up and running.
