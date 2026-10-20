@@ -97,7 +97,7 @@ To recover the cluster, do the following:
 1. Make sure that all MySQL Pods are running and are `Ready`:
 
     ```bash
-    kubectl get pods -n <namespace> -l app.kubernetes.io/component=database
+    kubectl get pods -n <namespace> -l app.kubernetes.io/component=mysql,app.kubernetes.io/instance=<cluster-name>
     ```
 
 2. Optionally, check the `GTID_EXECUTED` value saved in each Pod. The Pod with the most transactions has the most recent data:
