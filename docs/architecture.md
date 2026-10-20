@@ -99,7 +99,7 @@ If a node fails, Kubernetes automatically reschedules the affected Pod on anothe
    ![image](assets/images/operator.svg)
 
 
-* In **group replication** clusters, the native group membership protocol automatically handles member removal, primary election, and topology recovery.
+* In **group replication** clusters, the native group membership protocol automatically handles member removal, primary election and topology recovery. If all members go down at the same time, the group can't recover on its own. The cluster enters the `error` state with the `FullClusterCrashDetected` reason. The Operator reboots it as described in [Recover from a full cluster crash](crash-recovery.md).
 
    ![image](assets/images/operator-GR.svg)
 

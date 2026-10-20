@@ -182,7 +182,7 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 
 * `Initializing`, `Ready` (matching the cluster state)
 * `ErrorReconcile` — cluster reconciliation failed; see the condition message
-* `FullClusterCrashDetected` — all Group Replication members have crash recovery files
+* `FullClusterCrashDetected` — at least one `Ready` Group Replication member has the `/var/lib/mysql/full-cluster-crash` file. See [Recover from a full cluster crash](crash-recovery.md)
 * `ManualBootstrapRequested` — the cluster is waiting for external bootstrap
 * `ClusterSetReplicationRunning` — ClusterSet replica replication is active
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
@@ -206,8 +206,9 @@ The cluster controller emits Kubernetes events you can view with `kubectl descri
 | Event reason | Meaning |
 | --- | --- |
 | `ClusterStateChanged` | `status.state` changed (for example, `initializing` → `ready`). |
-| `ReconcileError` | Cluster reconciliation failed. |
-| `FullClusterCrashDetected` | A full Group Replication cluster crash was detected. |
+| `ErrorReconcile` | Cluster reconciliation failed. |
+| `FullClusterCrashDetected` | A full Group Replication cluster crash was detected. The Operator records this event on every reconciliation until the crash is resolved. |
+| `FullClusterCrashRecovered` | The Operator rebooted the Group Replication cluster after a full cluster crash. |
 | `AsyncReplicationNotReady` | Orchestrator reported replication problems on one or more instances. |
 | `StorageAutoscalingTriggered` | Storage autoscaling started a PVC resize. |
 
