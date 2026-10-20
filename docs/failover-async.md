@@ -49,7 +49,7 @@ Let's have a closer look at the failover stages
 
 ### Fetch the transactions from the primary's binary log
 
-The `xtrabackup` sidecar in every MySQL Pod runs an HTTP server that controls backups. A replica to be promoted (the candidate) connects to this server on the `/failover/stream:6450` endpoint  to fetch the binary logs it does not have yet.
+The `xtrabackup` sidecar in every MySQL Pod runs an HTTP server that controls backups. A replica to be promoted (the candidate) connects to this server on the `/failover/stream` endpoint  to fetch the binary logs it does not have yet.
 
 The candidate authenticates as the [`operator`](users.md#system-users) user and reads whatever transactions the old primary never replicated directly from its binary logs, starting from the latest position the replica I/O thread has received from the primary. The position is determined by the values from `Source_Log_File` and `Read_Source_Log_Pos`. 
 
