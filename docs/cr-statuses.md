@@ -203,7 +203,7 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 
 * `Initializing`, `Ready` (matching the cluster state)
 * `ErrorReconcile` — cluster reconciliation failed; see the condition message
-* `FullClusterCrashDetected` — all Group Replication members have crash recovery files
+* `FullClusterCrashDetected` — at least one `Ready` Group Replication member has the `/var/lib/mysql/full-cluster-crash` file. See [Recover from a full cluster crash](crash-recovery.md)
 * `ManualBootstrapRequested` — the cluster is waiting for external bootstrap
 * `ClusterSetMember` - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason `Primary` for the primary cluster and `Replica` for the replica cluster. A cluster created with the Operator 1.2.0 can still show `ClusterSetReplicationRunning: True` after the upgrade. Use the `ClusterSetMember` to see whether the cluster is the primary or a replica.
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
@@ -230,8 +230,9 @@ The cluster controller emits Kubernetes events you can view with `kubectl descri
 | Event reason | Meaning |
 | --- | --- |
 | `ClusterStateChanged` | `status.state` changed (for example, `initializing` → `ready`). |
-| `ReconcileError` | Cluster reconciliation failed. |
-| `FullClusterCrashDetected` | A full Group Replication cluster crash was detected. |
+| `ErrorReconcile` | Cluster reconciliation failed. |
+| `FullClusterCrashDetected` | A full Group Replication cluster crash was detected. The Operator records this event on every reconciliation until the crash is resolved. |
+| `FullClusterCrashRecovered` | The Operator rebooted the Group Replication cluster after a full cluster crash. |
 | `AsyncReplicationNotReady` | Orchestrator reported replication problems on one or more instances. |
 | `ReplicationLagging` | A Warning event emitted when replicas start lagging behind the primary. The `ReplicationLagging` condition becomes `True`. |
 | `StorageAutoscalingTriggered` | Storage autoscaling started a PVC resize. |

@@ -403,7 +403,7 @@ Supported values:
 
 ### `mysql.autoRecovery`
 
-Enables or disables the Operator from attempting to fix the issue in the event of a full cluster crash. See [Recover from a full cluster crash](crash-recovery.md) and [the `full-cluster-crash` file](datadir-special-files.md#full-cluster-crash).
+Enables the Operator to recover the cluster automatically after a full cluster crash. Applies to clusters with Group Replication. If you omit the option, the Operator treats it as `false`. See [Recover from a full cluster crash](crash-recovery.md) and [the `full-cluster-crash` file](datadir-special-files.md#full-cluster-crash).
 
 | Value type  | Example    |
 | ----------- | ---------- |
