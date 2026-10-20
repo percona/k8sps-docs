@@ -109,37 +109,53 @@ When creating users via the Custom Resource, keep the following behavior in mind
 
 ### Create users manually
 
-Instead of using the Custom Resource, you can create unprivileged users directly in MySQL using standard SQL commands. This approach gives you full control over user creation and is useful when you need configurations that the Custom Resource does not express.
-
-Start a temporary Percona MySQL client Pod and connect to MySQL in your cluster:
-
-```bash
-kubectl run -it --rm percona-client --image=percona:8.4 --restart=Never -- mysql -hps-cluster1-mysql -uroot -proot_password
-```
-
-The following SQL command creates a new user `user1` with the password `password1`, and grants this user all privileges on all tables in the `database1` database. The `@'%'` means that the user can connect from any host.
-
-```sql
-CREATE USER 'user1'@'%' IDENTIFIED BY 'password1';
-GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%';
-FLUSH PRIVILEGES;
-```
-
 !!! note
 
-    MySQL password here should not exceed 32 characters due to the [replication-specific limit introduced in MySQL 5.7.5 :octicons-link-external-16:](https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html).
+    For Operator version 1.2.0 and earlier, create users manually in MySQL. That is the only way to add unprivileged users. Creating users in the Custom Resource is available starting with version 1.3.0.
 
-Verify that the user was created successfully. If successful, the
-following command will let you successfully login to MySQL shell:
+Instead of using the Custom Resource, you can create unprivileged users directly in MySQL. Use this when you need a configuration that the Custom Resource does not express.
 
-```bash
-kubectl run -it --rm percona-client --image=percona:8.4 --restart=Never -- bash -il
-percona-client:/$ mysql -h ps-cluster1-mysql-primary -uuser1 -ppassword1
-mysql> SELECT * FROM database1.table1 LIMIT 1;
-```
+1. List the Secrets in the namespace and find the cluster Secret. The default name is `ps-cluster1-secrets`. This name is the value of `spec.secretsName` in the Custom Resource:
 
-You may also try executing any simple SQL statement to ensure the
-permissions have been successfully granted.
+    ```bash
+    kubectl get secrets
+    kubectl get ps ps-cluster1 -o jsonpath='{.spec.secretsName}' && echo
+    ```
+
+2. Get the `root` user password from that Secret. The password is stored under the `root` key. Replace `ps-cluster1-secrets` if your cluster uses a different Secret name:
+
+    ```bash
+    ROOT_PASSWORD=$(kubectl get secret ps-cluster1-secrets -o jsonpath='{.data.root}' | base64 --decode)
+    echo "$ROOT_PASSWORD"
+    ```
+
+    The same password is also in the `<cluster-name>-psuser-root` [connection Secret](connection-secrets.md), under the `password` key.
+
+3. Start a temporary client Pod and connect to MySQL. Replace `root_password` with the password from the previous step:
+
+    ```bash
+    kubectl run -it --rm percona-client --image=percona/percona-server:8.4 --restart=Never -- mysql -hps-cluster1-mysql -uroot -p"$ROOT_PASSWORD"
+    ```
+
+4. Create the user. This statement creates `user1` with the password `password1` and grants all privileges on `database1`. The `'%'` host lets the user connect from any host:
+
+    ```sql
+    CREATE USER 'user1'@'%' IDENTIFIED BY 'password1';
+    GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%';
+    FLUSH PRIVILEGES;
+    ```
+
+    !!! note
+
+        Do not use a password longer than 32 characters. MySQL has a [replication-specific limit introduced in MySQL 5.7.5 :octicons-link-external-16:](https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html).
+
+5. Confirm that the user can log in, then run a simple SQL statement to confirm the grants:
+
+    ```bash
+    kubectl run -it --rm percona-client --image=percona/percona-server:8.4 --restart=Never -- bash -il
+    percona-client:/$ mysql -h ps-cluster1-mysql-primary -uuser1 -ppassword1
+    mysql> SELECT * FROM database1.table1 LIMIT 1;
+    ```
 
 ## Connection secrets
 

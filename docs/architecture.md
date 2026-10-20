@@ -18,7 +18,7 @@ The [StatefulSet :octicons-link-external-16:](https://kubernetes.io/docs/concept
 
 * [Percona Toolkit :octicons-link-external-16:](https://docs.percona.com/percona-toolkit/) - a set of tools for debugging MySQL Pods.
 
-It can also include sidecar containers such as PMM Client or your custom ones. This depends on how you further fine-tune your cluster. Learn more about [sidecar containers](sidecar.md).
+It can also include sidecar containers such as PMM Client, the [log collector](persistent-logging.md), or your custom ones. This depends on how you further fine-tune your cluster. Learn more about [sidecar containers](sidecar.md).
 
 
 ## Replication types
