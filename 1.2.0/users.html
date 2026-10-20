@@ -4818,7 +4818,7 @@
   <span class="md-ellipsis">
     
   
-    Percona Operator for MySQL 0.10.0 (2025-06-04)
+    Percona Operator for MySQL 0.10.0 (2025-06-06)
   
 
     
@@ -5667,27 +5667,49 @@ considered separately in the following sections.</p>
 <li><strong>Internal Secret</strong>: The Operator also maintains a Secret named <code>&lt;cluster-name&gt;-internal-custom-users</code> for its own tracking. Do not edit this Secret.</li>
 </ul>
 <h3 id="create-users-manually">Create users manually<a class="headerlink" href="#create-users-manually" title="Permanent link">&para;</a></h3>
-<p>Instead of using the Custom Resource, you can create unprivileged users directly in MySQL using standard SQL commands. This approach gives you full control over user creation and is useful when you need configurations that the Custom Resource does not express.</p>
-<p>Start a temporary Percona MySQL client Pod and connect to MySQL in your cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>mysql<span class="w"> </span>-hps-cluster1-mysql<span class="w"> </span>-uroot<span class="w"> </span>-proot_password
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For Operator version 1.2.0 and earlier, create users manually in MySQL. That is the only way to add unprivileged users. Creating users in the Custom Resource is available starting with version 1.3.0.</p>
+</div>
+<p>Instead of using the Custom Resource, you can create unprivileged users directly in MySQL. Use this when you need a configuration that the Custom Resource does not express.</p>
+<ol>
+<li>
+<p>List the Secrets in the namespace and find the cluster Secret. The default name is <code>ps-cluster1-secrets</code>. This name is the value of <code>spec.secretsName</code> in the Custom Resource:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets
+kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.secretsName}'</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
 </code></pre></div>
-<p>The following SQL command creates a new user <code>user1</code> with the password <code>password1</code>, and grants this user all privileges on all tables in the <code>database1</code> database. The <code>@'%'</code> means that the user can connect from any host.</p>
+</li>
+<li>
+<p>Get the <code>root</code> user password from that Secret. The password is stored under the <code>root</code> key. Replace <code>ps-cluster1-secrets</code> if your cluster uses a different Secret name:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">ROOT_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>ps-cluster1-secrets<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.root}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$ROOT_PASSWORD</span><span class="s2">"</span>
+</code></pre></div>
+<p>The same password is also in the <code>&lt;cluster-name&gt;-psuser-root</code> <a href="connection-secrets.html">connection Secret</a>, under the <code>password</code> key.</p>
+</li>
+<li>
+<p>Start a temporary client Pod and connect to MySQL. Replace <code>root_password</code> with the password from the previous step:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>mysql<span class="w"> </span>-hps-cluster1-mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$ROOT_PASSWORD</span><span class="s2">"</span>
+</code></pre></div>
+</li>
+<li>
+<p>Create the user. This statement creates <code>user1</code> with the password <code>password1</code> and grants all privileges on <code>database1</code>. The <code>'%'</code> host lets the user connect from any host:</p>
 <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">'user1'</span><span class="o">@</span><span class="s1">'%'</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">'password1'</span><span class="p">;</span>
 <span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">database1</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="s1">'user1'</span><span class="o">@</span><span class="s1">'%'</span><span class="p">;</span>
 <span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>MySQL password here should not exceed 32 characters due to the <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html">replication-specific limit introduced in MySQL 5.7.5 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
+<p>Do not use a password longer than 32 characters. MySQL has a <a href="https://dev.mysql.com/doc/relnotes/mysql/5.7/en/news-5-7-5.html">replication-specific limit introduced in MySQL 5.7.5 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 </div>
-<p>Verify that the user was created successfully. If successful, the
-following command will let you successfully login to MySQL shell:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
+</li>
+<li>
+<p>Confirm that the user can log in, then run a simple SQL statement to confirm the grants:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--rm<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
 percona-client:/$<span class="w"> </span>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-mysql-primary<span class="w"> </span>-uuser1<span class="w"> </span>-ppassword1
 mysql&gt;<span class="w"> </span>SELECT<span class="w"> </span>*<span class="w"> </span>FROM<span class="w"> </span>database1.table1<span class="w"> </span>LIMIT<span class="w"> </span><span class="m">1</span><span class="p">;</span>
 </code></pre></div>
-<p>You may also try executing any simple SQL statement to ensure the
-permissions have been successfully granted.</p>
+</li>
+</ol>
 <h2 id="connection-secrets">Connection secrets<a class="headerlink" href="#connection-secrets" title="Permanent link">&para;</a></h2>
 <p>For the <code>root</code> user, the Operator creates a Secret named <code>&lt;cluster_name&gt;-psuser-root</code> that contains ready-to-use connection details: hostname, port, username, password, connection URIs, and proxy endpoints. The Operator updates this Secret automatically when the primary changes or when proxy configuration changes.</p>
 <p>For example, the <code>root</code> user on a cluster named <code>ps-cluster1</code> gets a Secret called <code>ps-cluster1-psuser-root</code>. Application Pods can mount this Secret directly instead of assembling connection parameters manually.</p>
@@ -5863,7 +5885,7 @@ for more details.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 6, 2026 07:38:39 UTC">October 6, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 20, 2026 07:59:08 UTC">October 20, 2026</span>
       
         <br>
         Created:
