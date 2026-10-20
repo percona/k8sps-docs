@@ -322,7 +322,7 @@ The [environment variables set as key-value pairs :octicons-link-external-16:](h
 
 ## `containerOptions.args.xtrabackup`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -330,7 +330,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `containerOptions.args.xbcloud`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -338,7 +338,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `containerOptions.args.xbstream`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
 
 | Value type  | Example    |
 | ----------- | ---------- |
