@@ -274,6 +274,7 @@ nav:
           - "Check the events": debug-events.md
           - "Check the logs": debug-logs.md
           - "Troubleshoot backups and restores": debug-backup-restore.md
+          - "Special files in the data directory": datadir-special-files.md
           
     - Reference:
         - Custom Resource reference:
