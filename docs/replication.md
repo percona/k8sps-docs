@@ -78,7 +78,7 @@ For cross-region links, prefer `REQUIRED` or a stricter mode over the default `A
 | Requirement | Supported versions |
 | ----------- | ------------------ |
 | **Operator** | Percona Operator for MySQL **1.2.0** and later |
-| **Percona Server for MySQL** | **8.0.27** and later, **8.4** (tested with {{ ps80recommended }} and {{ ps84recommended }}) |
+| **Percona Server for MySQL** | **8.0.27** and later, **8.4** (tested with 8.0.46-37.1 and 8.4.10-10.1) |
 | **MySQL Shell** | `mysqlsh` version must match MySQL endpoints it talks to |
 | **Cluster type** | `group-replication` only |
 | **Kubernetes** | Same platforms as the Operator — see [Versions compatibility](versions.md) |
@@ -99,16 +99,17 @@ credentials cannot differ per site.
 
 * **MySQL versioning** — Primary and replicas can have different but compatible MySQL versions. Replication is supported from one release series to the next higher series. For example, from the primary running Percona Server for MySQL 8.0.27+ to the replica running Percona Server for MySQL 8.4.x.
 * **Manual bootstrap for replicas** — When you deploy a replica site, specify `spec.mysql.bootstrap.mode: manual` to prevent the replica from starting as a Group Replication cluster. Instead, Pod-0 comes up and waits for the ClusterSet controller to create the group. Pod-1+ do not start until Pod-0 is Ready.
-* **Long operations as Jobs** — `createReplicaCluster`, switchover, and cluster removal run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.
+* **Long operations as Jobs** — `createReplicaCluster`, switchover, cluster removal, and rejoin run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.
 * **Finalizer on delete** — The `percona.com/clusterset-dissolve` finalizer dissolves the ClusterSet when you delete the `PerconaServerMySQLClusterSet` Custom Resource. Data in the underlying clusters is preserved. 
 * **ClusterSet members are protected from deletion** - The Operator version 1.3.0 protects the ClusterSet members from deletion. It sets the `percona.com/clusterset-protection` finalizer on each member while the ClusterSet has at least one replica. Remove the cluster from the ClusterSet or delete the ClusterSet before you delete the cluster. If you delete a member earlier, the cluster stays in `Terminating` until that finalizer is removed.
+* **Replica recovery after pause or crash** — The Operator recovers a ClusterSet replica through full cluster crash recovery. It runs `dba.rebootClusterFromCompleteOutage()`, which restores the local Group Replication group and rejoins the replica to the ClusterSet. If only the ClusterSet channel is down, you trigger rejoin with an annotation. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster).
+* **Finalizer on delete** — The `percona.com/clusterset-dissolve` finalizer ensures that the ClusterSet dissolves when the `PerconaServerMySQLClusterSet` Custom Resource is removed. Data in underlying clusters is preserved.
 * **No automatic switchover** — All switchovers are user-initiated. You must edit the ClusterSet Custom Resource for a planned or a forced failover.
 
 ## Known limitations
 
-* **No automatic rejoin to ClusterSet after replication stops** — If replication on a ClusterSet replica is interrupted (for example, if a cluster is paused or stopped), the Operator does not automatically rejoin it to the ClusterSet when it starts. You must restore replication manually. Determine the safe window, connect to the replica cluster and run the `dba.rebootClusterFromCompleteOutage()` command to re-initialize the cluster metadata. Then connect to the primary cluster and run the `dba.getCluster().getClusterSet().rejoinCluster("<innodb_cluster_name>")` command to rejoin the replica.
+* **No automatic rejoin when only the ClusterSet channel is down** — After a pause, stop, or crash, the Operator recovers the replica and rejoins it to the ClusterSet. If the replica is already healthy but ClusterSet replication is down (for example after a long primary outage), the Operator does not rejoin it automatically. You must choose a safe window and [trigger rejoin](replication-setup.md#rejoin-a-replica-cluster).
 * **No adopting existing ClusterSets** — The controller only bootstraps a new ClusterSet or refuses if the metadata is inconsistent. You cannot adopt into management any ClusterSet that was created manually with `mysqlsh`.
-* **Restoring backups onto replica clusters in a ClusterSet is not supported** — While a replica is part of a ClusterSet, restoring a backup onto it is not supported. If you attempt to do so, the replica will fail to rejoin the ClusterSet afterward. In this case, you must manually reboot the cluster (using `dba.rebootClusterFromCompleteOutage()`) and rejoin it to the ClusterSet from the primary.
 * **Backups taken on a ClusterSet cannot be restored on a fresh cluster** — Backups include the ClusterSet metadata that is tied to the specific topology and identities of the clusters within that ClusterSet. Restoring such a backup onto a new, unrelated cluster will lead to inconsistencies or errors, since the metadata will not match the new environment or cluster configuration.
 * **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.
 * **If you delete the primary cluster before deleting a ClusterSet with only one member, the ClusterSet deletion gets stuck** — A ClusterSet that contains only the primary has no `percona.com/clusterset-protection` finalizer. Delete the ClusterSet before you delete that primary. If you already deleted the primary, ClusterSet deletion is stuck. Edit the ClusterSet object and remove the `percona.com/clusterset-dissolve` finalizer.

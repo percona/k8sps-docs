@@ -13,6 +13,8 @@ To restore a backup on this cluster, follow the steps below.
 
 To restore to a timestamp or GTID, use [Restore with point-in-time recovery](backups-restore-pitr.md#restore-on-the-same-cluster).
 
+If this cluster already verifies S3 with a [custom CA](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), the Operator reads the  `caBundle` defined on the cluster Custom Resource. You do not add `caBundle` to the restore object when you restore with `backupName`.
+
 To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/backup/restore.yaml). 
 
 You can check available options in the [restore options reference](restore-cr.md).

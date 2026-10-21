@@ -121,7 +121,7 @@ If you use Binlog Server for point-in-time recovery, complete the [pre-upgrade s
     * *version number* - specify the desired version explicitly
         (version numbers are specified as `{{ ps80recommended }}`, etc.).
         Actual versions can be found [in the list of certified images](images.md)
-        (for older releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation)).
+        (for older releases, please refer to the [old releases documentation archive :octicons-link-external-16:](https://docs.percona.com/legacy-documentation/)).
 
 5. Make sure to set the valid Version Server URL for the `upgradeOptions.versionServiceEndpoint` key. The Operator checks the new software versions in the Version Server. If the Operator can’t reach the Version Server, the upgrades won’t happen.
 

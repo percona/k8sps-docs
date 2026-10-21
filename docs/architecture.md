@@ -18,7 +18,7 @@ The [StatefulSet :octicons-link-external-16:](https://kubernetes.io/docs/concept
 
 * [Percona Toolkit :octicons-link-external-16:](https://docs.percona.com/percona-toolkit/) - a set of tools for debugging MySQL Pods.
 
-It can also include sidecar containers such as PMM Client or your custom ones. This depends on how you further fine-tune your cluster. Learn more about [sidecar containers](sidecar.md).
+It can also include sidecar containers such as PMM Client, the [log collector](persistent-logging.md), or your custom ones. This depends on how you further fine-tune your cluster. Learn more about [sidecar containers](sidecar.md).
 
 
 ## Replication types
@@ -38,6 +38,7 @@ With asynchronous replication, writes complete on the primary instance without w
 * **Consistency** - Eventual consistency: replicas may lag behind the primary instance, which can affect applications requiring real-time data. There is a risk that some transactions committed on the primary may be lost if it fails before replicas catch up.
 * **Write scaling** - Does not allow for horizontal write scaling; scaling writes relies on vertical scaling, which is increasing the resources (RAM, CPU) of the primary instance, rather than on adding more write nodes.
 * **Failover** - Orchestrator handles automatic primary election and replication topology recovery.
+* **Cluster size** - You can run 2 or more MySQL instances, including an even count. The recommended size is 3 instances. The Operator takes backups from a replica and stops replication for the duration of the backup. With 2 instances, a long backup leaves the replica behind the primary until replication resumes.
 * **Status** - Currently in tech preview and not recommended for production use.
 
 ### Group replication
@@ -80,7 +81,7 @@ The proxy you use depends on your replication type and requirements:
 
 **Tip:** Choose Group Replication for stronger consistency and read scaling; choose asynchronous replication for lower write latency and simpler topology when it reaches GA status.
 
-You can change the replication type if needed. Refer to the [Change replication type](change-replication-type.md) guide for step-by-step instructions. Note that replication type change is not supported on a running cluster. See [Known limitations](limitations.md) for other topology constraints.
+You can change the replication type if needed. Refer to the [Change replication type](change-replication-type.md) guide for step-by-step instructions. Starting with Operator 1.3.0, you can switch the type on a running cluster. The switch causes downtime.
 
 ## High availability
 

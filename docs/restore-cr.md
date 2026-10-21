@@ -155,6 +155,22 @@ The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 | ----------- | ---------- |
 | :material-code-string: string     | `us-west-2` |
 
+#### `pitr.backupSource.binlogServer.storage.s3.caBundle.name`
+
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage for Binlog Server. See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `minio-ca-bundle` |
+
+#### `pitr.backupSource.binlogServer.storage.s3.caBundle.key`
+
+The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses `ca.crt`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ca.crt` |
+
 #### `pitr.backupSource.binlogServer.connectTimeout`
 
 Timeout in seconds for establishing a connection to MySQL.
@@ -256,6 +272,38 @@ The [AWS region  :octicons-link-external-16:](https://docs.aws.amazon.com/genera
 | ----------- | ---------- |
 | :material-code-string: string     | `us-west-2`|
 
+### `backupSource.storage.s3.endpointUrl`
+
+The endpoint URL of the S3-compatible storage that holds the backup. Not needed for Amazon S3.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `https://minio-service:9000` |
+
+### `backupSource.storage.s3.prefix`
+
+The path (sub-folder) inside the bucket where the backup is stored.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `PREFIX-WHERE-BACKUP-IS-STORED` |
+
+### `backupSource.storage.s3.caBundle.name`
+
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `minio-ca-bundle` |
+
+### `backupSource.storage.s3.caBundle.key`
+
+The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses `ca.crt`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ca.crt` |
+
 ### `backupSource.storage.type`
 
 Specifies the type of the backup storage. Available options: `s3`, `azure`.
@@ -274,7 +322,7 @@ The [environment variables set as key-value pairs :octicons-link-external-16:](h
 
 ## `containerOptions.args.xtrabackup`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -282,7 +330,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `containerOptions.args.xbcloud`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -290,7 +338,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `containerOptions.args.xbstream`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
 
 | Value type  | Example    |
 | ----------- | ---------- |

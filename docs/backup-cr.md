@@ -69,6 +69,24 @@ Specifies the **full backup** to serve as the base for the incremental chain. Th
 | ----------- | ---------- |
 | :material-code-string: string     | `ps-backup` |
 
+### `startingDeadlineSeconds`
+
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. When defined, takes precedence over the cluster-level [`backup.startingDeadlineSeconds`](operator.md#backupstartingdeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
+
+### `suspendedDeadlineSeconds`
+
+The maximum time, in seconds, a [suspended](cr-statuses.md#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline. 
+
+When defined, takes precedence over the cluster-level [`backup.suspendedDeadlineSeconds`](operator.md#backupsuspendeddeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
+
 ### `containerOptions.env`
 
 The [environment variables set as key-value pairs :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the backup job.
@@ -79,7 +97,7 @@ The [environment variables set as key-value pairs :octicons-link-external-16:](h
 
 ### `containerOptions.args.xtrabackup`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -87,7 +105,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `containerOptions.args.xbcloud`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -95,7 +113,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `containerOptions.args.xbstream`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
 
 | Value type  | Example    |
 | ----------- | ---------- |

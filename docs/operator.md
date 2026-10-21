@@ -195,7 +195,7 @@ A custom cluster domain suffix the Operator uses when constructing internal serv
 
 ### `sslSecretName`
 
-A secret with TLS certificate generated for *external* communications, see [Transport Layer Security (TLS)](TLS.md) for details. When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets-ssl`. Otherwise, it uses the provided name.
+A secret with the TLS certificate used by the cluster, see [Transport Layer Security (TLS)](TLS.md) for details. When undefined, the Operator creates the Secrets object named `<cluster-name>-ssl`. Otherwise, it uses the provided name. If this Secret already exists and was created by you, the Operator uses it and does not request a certificate from cert-manager.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -259,7 +259,10 @@ Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is
 
 ### `unsafeFlags.mysqlSize`
 
-Allows users to start the cluster with less than 3 MySQL instances or with more than 9 (the maximum safe size).
+Allows a cluster size that is outside the safe defaults for the replication type:
+
+* **Asynchronous (`async`):** a single MySQL instance (`mysql.size: 1`). Size 2 or greater is allowed without this flag starting with Operator 1.3.0, including even counts.
+* **Group Replication (`group-replication`):** an even instance count, or more than 9 instances.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -299,19 +302,21 @@ Allows users to set [orchestrator.size](#orchestratorsize) option to a value les
 
 ## <a name="operator-issuerconf-section"></a>Extended cert-manager configuration section
 
-The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains various configuration options for additional customization of the [TLS cert-manager](tls-cert-manager.md).
+The `tls` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains options that control how the Operator requests TLS certificates from [cert-manager](tls-cert-manager.md).
 
 ### `tls.SANs`
 
-Additional domains (SAN) to be added to the TLS certificate within the extended cert-manager configuration.
+Additional DNS names (subject alternative names) to add to the TLS certificate that cert-manager issues.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-text-long: subdoc     | |
+| :material-text-long: subdoc     | `mysql-1.example.com` |
 
 ### `tls.issuerConf.name`
 
-A [cert-manager issuer name :octicons-link-external-16:](https://cert-manager.io/docs/concepts/issuer/).
+The name of the cert-manager issuer that signs the cluster TLS certificate.
+
+When set, the Operator creates a `Certificate` that references this issuer and does not create its own CA chain. Use this to integrate with an existing organizational PKI. See [Use an existing ClusterIssuer](tls-cert-manager.md#use-an-existing-clusterissuer) and [Use an existing namespace-scoped Issuer](tls-cert-manager.md#use-an-existing-namespace-scoped-issuer).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -319,7 +324,12 @@ A [cert-manager issuer name :octicons-link-external-16:](https://cert-manager.io
 
 ### `tls.issuerConf.kind`
 
-A [cert-manager issuer type :octicons-link-external-16:](https://cert-manager.io/docs/configuration/).
+The cert-manager issuer type referenced by the cluster `Certificate`.
+
+Supported values:
+
+* `Issuer` (default) — namespace-scoped issuer in the database namespace.
+* `ClusterIssuer` — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. You must [grant the Operator permission to read ClusterIssuers](tls-cert-manager.md#grant-the-operator-permission-to-read-clusterissuers).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -327,7 +337,7 @@ A [cert-manager issuer type :octicons-link-external-16:](https://cert-manager.io
 
 ### `tls.issuerConf.group`
 
-A [cert-manager issuer group :octicons-link-external-16:](https://cert-manager.io/docs/configuration/). Should be `cert-manager.io` for built-in cert-manager certificate issuers |
+The cert-manager API group for the issuer referenced in `issuerConf`. Use `cert-manager.io` for built-in cert-manager issuers.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -360,7 +370,9 @@ configuration options for the Percona Server for MySQL.
 
 ### `mysql.clusterType`
 
-The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html).
+The cluster type: `async` for [Asynchronous replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/replication.html), `group-replication` for [Group Replication :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/group-replication.html).
+
+Starting with Operator version 1.3.0, you can change this value on a running cluster. The Operator converts the topology in place. The switch causes downtime. See [Change replication type](change-replication-type.md) to learn more.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -401,6 +413,8 @@ Specifies the secret for the [HashiCorp Vault :octicons-link-external-16:](https
 ### `mysql.size`
 
 The number of the Percona Server for MySQL instances. This setting is required.
+
+The safe range depends on `mysql.clusterType`. For `async`, use 2 or more instances (even counts are allowed). Size `1` requires [`unsafeFlags.mysqlSize`](#unsafeflagsmysqlsize). For `group-replication`, use an odd count between 3 and 9 unless you set that flag.
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -593,9 +607,13 @@ The number of seconds to wait before performing the [startup probe :octicons-lin
 
 The number of seconds after which the [startup probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
 
+The startup probe runs MySQL bootstrap. On an asynchronous replica, bootstrap includes the clone, so this value limits how long that clone can run.
+
+When `spec.crVersion` is `1.3.0` or higher, the default is 604800 seconds (7 days). A `crVersion` older than 1.3.0 keeps the previous default of 43200 seconds (12 hours). A value you set here replaces the default. See [Set the clone stall timeout](env-vars-custom.md#set-the-clone-stall-timeout).
+
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-numeric-1-box: int     | `43200` |
+| :material-numeric-1-box: int     | `604800` |
 
 ### `mysql.startupProbe.periodSeconds`
 
@@ -703,7 +721,7 @@ The number of failed probes required to mark the container unhealthy.
 
 ### `mysql.env.name`
 
-Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster.
+Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster. The `BOOTSTRAP_CLONE_STALL_TIMEOUT` sets how long an asynchronous clone can go without progress before bootstrap stops it for clusters with `crVersion` set to 1.3.0 or higher. See [Set the clone stall timeout](env-vars-custom.md#set-the-clone-stall-timeout).
 
 Read more about defining environment variables in [Kubernetes documentation :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/).
 
@@ -963,6 +981,8 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 ### `mysql.configuration`
 
 The `my.cnf` file options to be passed to Percona Server for MySQL instances.
+
+The Operator does not validate these options against your replication type. See [Check configuration compatibility](options.md#check-configuration-compatibility).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -1831,6 +1851,8 @@ configuration options for the Orchestrator - a replication topology manager, use
 
 Enables or disables the Orchestrator.
 
+Orchestrator is used with asynchronous replication. Disable it when you [switch from async to group replication](change-replication-type.md#switch-from-async-to-group-replication). Enable it when you [switch from group replication to async](change-replication-type.md#switch-from-group-replication-to-async).
+
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
@@ -2286,13 +2308,75 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 
 ### `orchestrator.configuration`
 
-Custom [Orchestrator :octicons-link-external-16:](https://github.com/openark/orchestrator) options to merge into the Orchestrator configuration. For example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds` are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored. 
+Custom [Orchestrator :octicons-link-external-16:](https://github.com/percona/orchestrator) options to merge into the Orchestrator configuration. For example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds` are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.
+
+Starting with Custom Resource version 1.3.0, the Operator sets `ReasonableReplicationLagSeconds` to `60` by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the [`ReplicationLagging` condition](cr-statuses.md#conditions). You can override this value here.
 
 Updating this field triggers a rolling restart of the Orchestrator Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `'{"FailMasterPromotionOnLagMinutes": 10}'` |
+
+## <a name="operator-users-section"></a>Users section
+
+The `users` section in the [deploy/cr.yaml  :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file contains configuration options [to create custom MySQL users via the Custom Resource](users.md#create-users-in-the-custom-resource).
+
+### `users.name`
+
+The username of the MySQL user. This field is required.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `my-user` |
+
+### `users.dbs`
+
+Databases that the user can access. If a specified database does not exist, the Operator creates it. When you omit this field and set `grants`, privileges apply to all databases (`*.*`). Omit this field when you set administrative (global) grants such as `SHUTDOWN`, because those privileges apply at the global level.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["db1", "db2"]` |
+
+### `users.hosts`
+
+Hosts that the user can connect from. If not specified, defaults to `'%'`, enabling the user to connect from any host.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["localhost"]` |
+
+### `users.passwordSecretRef.name`
+
+Name of the Secret that contains the user's password. If not provided, the Operator generates a password and stores it in a Secret named `<cluster-name>-user-<username>` (for example, `ps-cluster1-user-my-user`).
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `my-user-pwd` |
+
+### `users.passwordSecretRef.key`
+
+Key in the Secret that holds the user's password (`password` by default).
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-code-string: string | `password` |
+
+### `users.withGrantOption`
+
+When `true`, the user can grant their own privileges to other users. The default is `false`.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-toggle-switch-outline: boolean | `false` |
+
+### `users.grants`
+
+Privileges granted to the user. If omitted, the Operator creates the user without additional `GRANT` statements.
+
+| Value type | Example |
+| ---------- | ------- |
+| :material-application-array-outline: array | `["SELECT", "DELETE", "INSERT"]` |
 
 ## <a name="operator-pmm-section"></a>PMM section
 
@@ -2330,6 +2414,21 @@ Enables to pass MySQL parameters to PMM. For example, to change the number of ta
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | `"--disable-tablestats-limit=2000"` |
+
+### `pmm.haproxyParams`
+
+Additional parameters passed to the `pmm-admin add haproxy` command for HAProxy Pods. Use this to add custom labels, skip the connection check, or change the metrics listen port.
+
+See the [PMM documentation :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-client/connect-database/haproxy.html) for the list of available flags.
+
+Note the following:
+
+- The Operator registers HAProxy with `--listen-port=8404` by default. If you pass `--listen-port=<value>`, it replaces the default `8404`.
+- Any other flags you pass are appended to the `pmm-admin add haproxy` command.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `"--custom-labels=env=prod --skip-connection-check"` |
 
 ### `pmm.readinessProbe.initialDelaySeconds`
 
@@ -2459,6 +2558,252 @@ A custom name to define for a cluster. PMM Server uses this name to properly par
 | ----------- | ---------- |
 | :material-code-string: string     | `cluster1-custom` |
 
+## <a name="operator-logcollector-section"></a>Log collector section
+
+The `logcollector` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml) file configures the Fluent Bit and `logrotate` sidecars on MySQL Pods. Available starting with Operator version 1.3.0. See [Persistent logging](persistent-logging.md) and [Log rotation](logrotate.md).
+
+The Operator adds the sidecars only when `crVersion` is 1.3.0 or later and `logcollector.enabled` is `true`. `resources` and `containerSecurityContext` apply to both the `logs` and `logrotate` containers. `image` is required when the `logcollector` section is present.
+
+### `logcollector.enabled`
+
+Enables or disables [persistent logging](persistent-logging.md). 
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     | `true` |
+
+### `logcollector.image`
+
+Fluent Bit Docker image to use.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `perconalab/fluentbit:{{fluentbitrecommended}}` |
+
+### `logcollector.imagePullPolicy`
+
+The [policy used to update images :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#updating-images) for the `logs` and `logrotate` containers. Valid values are `Always`, `IfNotPresent`, and `Never`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Always` |
+
+### `logcollector.configuration`
+
+Additional Fluent Bit rules. You cannot override the default configuration. Must be in [Fluent Bit YAML :octicons-link-external-16:](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/) format. The classic `.conf` format is not supported. An invalid snippet is ignored when the `logs` container starts. Changing this field restarts the MySQL Pods.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `logcollector.env.name`
+
+Name of an environment variable for the `logs` container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `AWS_REGION` |
+
+### `logcollector.env.value`
+
+Value of an environment variable for the `logs` container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `us-east-1` |
+
+### `logcollector.envFrom.configMapRef.name`
+
+Name of a ConfigMap whose keys are loaded as environment variables for the `logs` container.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-log-collector-config` |
+
+### `logcollector.envFrom.secretRef.name`
+
+Name of a Secret whose keys are loaded as environment variables for the `logs` container. Use this for credentials of a remote Fluent Bit output.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-log-collector-secret` |
+
+### `logcollector.resources.requests.memory`
+
+[Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `150M` |
+
+### `logcollector.resources.requests.cpu`
+
+[Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `300m` |
+
+### `logcollector.resources.limits.memory`
+
+[Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `200M` |
+
+### `logcollector.resources.limits.cpu`
+
+[Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `350m` |
+
+### `logcollector.containerSecurityContext`
+
+A custom [Kubernetes Security Context :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the `logs` and `logrotate` containers.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
+
+### `logcollector.livenessProbe`
+
+A custom [Kubernetes liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logs` container. When unset, the container has no liveness probe. The built-in Fluent Bit configuration listens on port `2020`, so a `tcpSocket` probe on that port works without extra configuration.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `tcpSocket: { port: 2020 }` |
+
+### `logcollector.livenessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logs` container starts before the first liveness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `logcollector.livenessProbe.periodSeconds`
+
+How often to run the liveness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `logcollector.readinessProbe`
+
+A custom [Kubernetes readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logs` container. When unset, the container has no readiness probe. The built-in Fluent Bit configuration listens on port `2020`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `tcpSocket: { port: 2020 }` |
+
+### `logcollector.readinessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logs` container starts before the first readiness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `logcollector.readinessProbe.periodSeconds`
+
+How often to run the readiness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
+### `logcollector.volumeMounts`
+
+Extra [volume mounts :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) for the `logs` and `logrotate` containers. Use these with `logcollector.volumes`. For example, to mount a CA bundle for an S3 output.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- name: s3-ca<br>  mountPath: /etc/fluentbit/tls<br>  readOnly: true</pre> |
+
+### `logcollector.volumes`
+
+Extra [volumes :octicons-link-external-16:](https://kubernetes.io/docs/concepts/storage/volumes/) on the MySQL Pod for the log collector sidecars.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | <pre>- name: s3-ca<br>  secret:<br>    secretName: my-s3-ca</pre> |
+
+### `logcollector.logRotate.configuration`
+
+Replaces the default `logrotate` configuration. You must provide the full configuration. An invalid snippet is ignored and the sidecar uses the built-in rules. See [Override the default configuration](logrotate.md#override-the-default-configuration).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | |
+
+### `logcollector.logRotate.extraConfig.name`
+
+Name of a ConfigMap in the same namespace that holds extra `logrotate` rules. Each key must end with `.conf`. Do not use  `mysql.conf` as the name. That name is reserved for the Operator-managed configuration. See [Add extra rules from a ConfigMap](logrotate.md#add-extra-rules-from-a-configmap).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `my-logrotate-extra` |
+
+### `logcollector.logRotate.schedule`
+
+Cron expression of five fields for the `logrotate` sidecar. The default is `0 0 * * *` (once a day at midnight). The Operator rejects a value that is not valid cron or that contains a newline.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `0 */6 * * *` |
+
+### `logcollector.logRotate.livenessProbe`
+
+A custom [Kubernetes liveness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logrotate` container. When unset, the container has no liveness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `exec: { command: [/bin/true] }` |
+
+### `logcollector.logRotate.livenessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logrotate` container starts before the first liveness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `30` |
+
+### `logcollector.logRotate.livenessProbe.periodSeconds`
+
+How often to run the liveness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `15` |
+
+### `logcollector.logRotate.readinessProbe`
+
+A custom [Kubernetes readiness probe :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logrotate` container. When unset, the container has no readiness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-text-long: subdoc     | `exec: { command: [/bin/true] }` |
+
+### `logcollector.logRotate.readinessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logrotate` container starts before the first readiness probe.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `5` |
+
+### `logcollector.logRotate.readinessProbe.periodSeconds`
+
+How often to run the readiness probe, in seconds.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `10` |
+
 ## <a name="operator-backup-section"></a>Backup section
 
 The `backup` section in the [deploy/cr.yaml :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/blob/v{{release}}/deploy/cr.yaml)
@@ -2496,7 +2841,7 @@ Enables or disables point-in-time recovery functionality.
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
-### `backup.binlogServer.size`
+### `backup.pitr.binlogServer.size`
 
 Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. The Custom Resource allows only `1` (larger values are rejected). To learn more, see [Point-in-time recovery](backups-pitr.md).
 
@@ -2504,7 +2849,7 @@ Controls the number of Percona Binarylog Server Pods for binlog collection. Defa
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `1` |
 
-### `backup.binlogServer.image`
+### `backup.pitr.binlogServer.image`
 
 The Docker image to use to deploy Percona Binarylog Server.
 
@@ -2512,7 +2857,7 @@ The Docker image to use to deploy Percona Binarylog Server.
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-binlog-server:0.2.1` |
 
-### `backup.binlogServer.imagePullPolicy`
+### `backup.pitr.binlogServer.imagePullPolicy`
 
 The [policy :octicons-link-external-16:](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) the `kubelet` uses to pull the Percona Binarylog Server image.
 
@@ -2520,7 +2865,7 @@ The [policy :octicons-link-external-16:](https://kubernetes.io/docs/concepts/con
 | ----------- | ---------- |
 | :material-code-string: string     | `Always` |
 
-### `backup.binlogServer.imagePullSecrets.name`
+### `backup.pitr.binlogServer.imagePullSecrets.name`
 
 The name of a Secret the `kubelet` uses to authenticate to a private image registry. You can list several Secrets as an array of objects with the `name` key.
 
@@ -2528,7 +2873,7 @@ The name of a Secret the `kubelet` uses to authenticate to a private image regis
 | ----------- | ---------- |
 | :material-code-string: string     | `my-secret-1` |
 
-### `backup.binlogServer.serverId`
+### `backup.pitr.binlogServer.serverId`
 
 The unique server ID that Percona Binarylog Server uses when connecting to MySQL as a replication client for binlog collection.
 
@@ -2536,7 +2881,7 @@ The unique server ID that Percona Binarylog Server uses when connecting to MySQL
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `100` |
 
-### `backup.binlogServer.storage.s3.bucket`
+### `backup.pitr.binlogServer.storage.s3.bucket`
 
 The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed.
 
@@ -2544,7 +2889,7 @@ The name of the bucket on AWS S3 or S3-compatible storage where binlogs are stre
 | ----------- | ---------- |
 | :material-code-string: string     | `S3-BACKUP-BUCKET-NAME-HERE` |
 
-### `backup.binlogServer.storage.s3.credentialsSecret`
+### `backup.pitr.binlogServer.storage.s3.credentialsSecret`
 
 The Kubernetes Secret for binlog storage. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
 
@@ -2552,7 +2897,7 @@ The Kubernetes Secret for binlog storage. It should contain `AWS_ACCESS_KEY_ID` 
 | ----------- | ---------- |
 | :material-code-string: string     | `ps-cluster1-s3-credentials` |
 
-### `backup.binlogServer.storage.s3.endpointUrl`
+### `backup.pitr.binlogServer.storage.s3.endpointUrl`
 
 The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.
 
@@ -2560,7 +2905,7 @@ The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.
 | ----------- | ---------- |
 | :material-code-string: string     | `https://s3.amazonaws.com` |
 
-### `backup.binlogServer.storage.s3.prefix`
+### `backup.pitr.binlogServer.storage.s3.prefix`
 
 The path prefix (folder) in the bucket where binlogs are stored. You cannot change the prefix after you configured the Binlog Server.
 
@@ -2568,7 +2913,7 @@ The path prefix (folder) in the bucket where binlogs are stored. You cannot chan
 | ----------- | ---------- |
 | :material-code-string: string     | `PREFIX_NAME` |
 
-### `backup.binlogServer.storage.s3.region`
+### `backup.pitr.binlogServer.storage.s3.region`
 
 The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 
@@ -2576,7 +2921,23 @@ The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 | ----------- | ---------- |
 | :material-code-string: string     | `us-west-2` |
 
-### `backup.binlogServer.connectTimeout`
+### `backup.pitr.binlogServer.storage.s3.caBundle.name`
+
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible binlog storage. This setting is independent from [`backup.storages.STORAGE-NAME.s3.caBundle`](#backupstoragesstorage-names3cabundlename). To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](backups-storage.md#update-the-ca-bundle).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `minio-ca-bundle` |
+
+### `backup.pitr.binlogServer.storage.s3.caBundle.key`
+
+The key in the Secret that holds the CA certificate. If you omit this field, the Operator defaults to `ca.crt`.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ca.crt` |
+
+### `backup.pitr.binlogServer.connectTimeout`
 
 Timeout in seconds for establishing a connection to MySQL. 
 
@@ -2584,7 +2945,7 @@ Timeout in seconds for establishing a connection to MySQL.
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `backup.binlogServer.readTimeout`
+### `backup.pitr.binlogServer.readTimeout`
 
 The maximum time in seconds the Binlog Server waits to read data from the MySQL instance.
 
@@ -2592,7 +2953,7 @@ The maximum time in seconds the Binlog Server waits to read data from the MySQL 
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `backup.binlogServer.writeTimeout`
+### `backup.pitr.binlogServer.writeTimeout`
 
 The maximum time in seconds the Binlog Server waits to write data to a remote server.
 
@@ -2600,7 +2961,7 @@ The maximum time in seconds the Binlog Server waits to write data to a remote se
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `backup.binlogServer.idleTime`
+### `backup.pitr.binlogServer.idleTime`
 
 The maximum time in seconds the Binlog Server stays in idle mode before trying to reconnect.
 
@@ -2608,7 +2969,7 @@ The maximum time in seconds the Binlog Server stays in idle mode before trying t
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `30` |
 
-### `backup.binlogServer.affinity.antiAffinityTopologyKey`
+### `backup.pitr.binlogServer.affinity.antiAffinityTopologyKey`
 
 The Kubernetes [topologyKey :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)  constraint for node anti-affinity on Percona Binarylog Server Pods.
 
@@ -2616,7 +2977,7 @@ The Kubernetes [topologyKey :octicons-link-external-16:](https://kubernetes.io/d
 | ----------- | ---------- |
 | :material-code-string: string     | `kubernetes.io/hostname` |
 
-### `backup.binlogServer.affinity.advanced`
+### `backup.pitr.binlogServer.affinity.advanced`
 
 In cases where the pods require complex tuning the advanced option turns off the topologykey effect. This setting allows the standard Kubernetes affinity constraints of any complexity to be used.
 
@@ -2624,7 +2985,7 @@ In cases where the pods require complex tuning the advanced option turns off the
 | ----------- | ---------- |
 | :material-text-long: subdoc     | |
 
-### `backup.binlogServer.checkpointInterval`
+### `backup.pitr.binlogServer.checkpointInterval`
 
 How often the Binlog Server writes checkpoints - the snapshot of its state. 
 
@@ -2632,7 +2993,7 @@ How often the Binlog Server writes checkpoints - the snapshot of its state.
 | ----------- | ---------- |
 | :material-code-string: string     | `30s` |
 
-### `backup.binlogServer.checkpointSize`
+### `backup.pitr.binlogServer.checkpointSize`
 
 Defines the size threshold for checkpoints. Default is 16M.
 
@@ -2640,7 +3001,7 @@ Defines the size threshold for checkpoints. Default is 16M.
 | ----------- | ---------- |
 | :material-code-string: string     | `16M` |
 
-### `backup.binlogServer.containerSecurityContext`
+### `backup.pitr.binlogServer.containerSecurityContext`
 
 A custom [Kubernetes security context for a container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the Percona Binlog Server container.
 
@@ -2648,7 +3009,7 @@ A custom [Kubernetes security context for a container :octicons-link-external-16
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
 
-### `backup.binlogServer.env`
+### `backup.pitr.binlogServer.env`
 
 Custom [environment variables :octicons-link-external-16:](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the Percona Binarylog Server container.
 
@@ -2656,7 +3017,7 @@ Custom [environment variables :octicons-link-external-16:](https://kubernetes.io
 | ----------- | ---------- |
 | :material-text-long: subdoc     | `[]` |
 
-### `backup.binlogServer.envFrom`
+### `backup.pitr.binlogServer.envFrom`
 
 The source for the bulk-import of all key-value pairs from a ConfigMap or Secret as environment variables for the Percona Binarylog Server container.
 
@@ -2664,7 +3025,7 @@ The source for the bulk-import of all key-value pairs from a ConfigMap or Secret
 | ----------- | ---------- |
 | :material-text-long: subdoc     | `[]` |
 
-### `backup.binlogServer.initContainer.image`
+### `backup.pitr.binlogServer.initContainer.image`
 
 The container image for the Binlog Server init container.
 
@@ -2672,7 +3033,7 @@ The container image for the Binlog Server init container.
 | ----------- | ---------- |
 | :material-code-string: string     | `perconalab/percona-server-mysql-operator:main` |
 
-### `backup.binlogServer.initContainer.containerSecurityContext`
+### `backup.pitr.binlogServer.initContainer.containerSecurityContext`
 
 A custom [Kubernetes security context for a container :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the Binlog Server init container.
 
@@ -2680,7 +3041,7 @@ A custom [Kubernetes security context for a container :octicons-link-external-16
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>privileged: false<br>runAsUser: 1001<br>runAsGroup: 1001</pre> |
 
-### `backup.binlogServer.initContainer.resources.requests.memory`
+### `backup.pitr.binlogServer.initContainer.resources.requests.memory`
 
 [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
 
@@ -2688,7 +3049,7 @@ A custom [Kubernetes security context for a container :octicons-link-external-16
 | ----------- | ---------- |
 | :material-code-string: string     | `200M` |
 
-### `backup.binlogServer.initContainer.resources.requests.cpu`
+### `backup.pitr.binlogServer.initContainer.resources.requests.cpu`
 
 [Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
 
@@ -2696,7 +3057,7 @@ A custom [Kubernetes security context for a container :octicons-link-external-16
 | ----------- | ---------- |
 | :material-code-string: string     | `200m` |
 
-### `backup.binlogServer.initContainer.resources.limits.memory`
+### `backup.pitr.binlogServer.initContainer.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
 
@@ -2704,7 +3065,7 @@ A custom [Kubernetes security context for a container :octicons-link-external-16
 | ----------- | ---------- |
 | :material-code-string: string     | `100M` |
 
-### `backup.binlogServer.initContainer.resources.limits.cpu`
+### `backup.pitr.binlogServer.initContainer.resources.limits.cpu`
 
 [Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
 
@@ -2712,7 +3073,7 @@ A custom [Kubernetes security context for a container :octicons-link-external-16
 | ----------- | ---------- |
 | :material-code-string: string     | `100m` |
 
-### `backup.binlogServer.initImage`
+### `backup.pitr.binlogServer.initImage`
 
 An alternative init image for the Percona Binarylog Server Pod. Leave empty to use the default one.
 
@@ -2720,7 +3081,7 @@ An alternative init image for the Percona Binarylog Server Pod. Leave empty to u
 | ----------- | ---------- |
 | :material-code-string: string     | `""` |
 
-### `backup.binlogServer.logLevel`
+### `backup.pitr.binlogServer.logLevel`
 
 Log level for the Percona Binarylog Server. Defaults to `info`.
 
@@ -2728,7 +3089,7 @@ Log level for the Percona Binarylog Server. Defaults to `info`.
 | ----------- | ---------- |
 | :material-code-string: string     | `info` |
 
-### `backup.binlogServer.podSecurityContext`
+### `backup.pitr.binlogServer.podSecurityContext`
 
 A custom [Kubernetes Pod security context :octicons-link-external-16:](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for Percona Binarylog Server Pods.
 
@@ -2736,7 +3097,7 @@ A custom [Kubernetes Pod security context :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-text-long: subdoc     | <pre>fsGroup: 1001<br>supplementalGroups:<br>  - 1001</pre> |
 
-### `backup.binlogServer.resources.requests.memory`
+### `backup.pitr.binlogServer.resources.requests.memory`
 
 [Kubernetes memory requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
 
@@ -2744,7 +3105,7 @@ A custom [Kubernetes Pod security context :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-code-string: string     | `200M` |
 
-### `backup.binlogServer.resources.requests.cpu`
+### `backup.pitr.binlogServer.resources.requests.cpu`
 
 [Kubernetes CPU requests :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
 
@@ -2752,7 +3113,7 @@ A custom [Kubernetes Pod security context :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-code-string: string     | `200m` |
 
-### `backup.binlogServer.resources.limits.memory`
+### `backup.pitr.binlogServer.resources.limits.memory`
 
 [Kubernetes memory limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
 
@@ -2760,7 +3121,7 @@ A custom [Kubernetes Pod security context :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-code-string: string     | `100M` |
 
-### `backup.binlogServer.resources.limits.cpu`
+### `backup.pitr.binlogServer.resources.limits.cpu`
 
 [Kubernetes CPU limits :octicons-link-external-16:](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
 
@@ -2768,7 +3129,7 @@ A custom [Kubernetes Pod security context :octicons-link-external-16:](https://k
 | ----------- | ---------- |
 | :material-code-string: string     | `100m` |
 
-### `backup.binlogServer.rewriteFileSize`
+### `backup.pitr.binlogServer.rewriteFileSize`
 
 Specifies the maximum binlog file size for rewrite. Defaults to `128M`. Set to an empty string to use the default.
 
@@ -2776,7 +3137,7 @@ Specifies the maximum binlog file size for rewrite. Defaults to `128M`. Set to a
 | ----------- | ---------- |
 | :material-code-string: string     | `128M` |
 
-### `backup.binlogServer.sslMode`
+### `backup.pitr.binlogServer.sslMode`
 
 The TLS mode for the Binlog Server connection to MySQL. Defaults to `verify_identity`.
 
@@ -2881,6 +3242,25 @@ The number of retries to make a backup (by default, 6 retries are made).
 | ----------- | ---------- |
 | :material-numeric-1-box: int     | `6` |
 
+
+### `backup.startingDeadlineSeconds`
+
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. The backup can wait if the cluster isn't ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](backup-cr.md#startingdeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
+
+### `backup.suspendedDeadlineSeconds`
+
+The maximum time, in seconds, a [suspended](cr-statuses.md#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline. 
+
+Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds`](backup-cr.md#suspendeddeadlineseconds).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-numeric-1-box: int     | `900` |
+
 ### `backup.storages.STORAGE-NAME.type`
 
 The cloud storage type used for backups. The following types are supported: `s3`, `gcs` and `azure`.
@@ -2891,7 +3271,9 @@ The cloud storage type used for backups. The following types are supported: `s3`
 
 ### `backup.storages.STORAGE-NAME.verifyTLS`
 
-Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate.
+Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate. 
+
+Starting with version 1.3.0, the Operator supports TLS verification with your organization's CA. Keep this option enabled and use the CA your company already trusts. See [Configure TLS verification with custom certificates for S3 storage](backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -3036,7 +3418,7 @@ The [environment variables set as key-value pairs :octicons-link-external-16:](h
 
 ### `backup.storages.STORAGE-NAME.containerOptions.args.xtrabackup`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -3044,7 +3426,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `backup.storages.STORAGE-NAME.containerOptions.args.xbcloud`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -3052,7 +3434,7 @@ Custom [command line options :octicons-link-external-16:](https://docs.percona.c
 
 ### `backup.storages.STORAGE-NAME.containerOptions.args.xbstream`
 
-Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/innovation-release/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
+Custom [command line options :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -3113,6 +3495,22 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 | Value type  | Example    |
 | ----------- | ---------- |
 | :material-code-string: string     | |
+
+### `backup.storages.STORAGE-NAME.s3.caBundle.name`
+
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](backups-storage.md#update-the-ca-bundle).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `minio-ca-bundle` |
+
+### `backup.storages.STORAGE-NAME.s3.caBundle.key`
+
+The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses `ca.crt`. The Operator mounts only this key from the Secret.
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `ca.crt` |
 
 ### `backup.storages.STORAGE-NAME.azure.container`
 

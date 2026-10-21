@@ -13,6 +13,11 @@ Before you start, read [Cross-site replication](replication.md) for architecture
 * `mysqlsh` version for each cluster must match the MySQL major version it runs
 * `yq` utility for parsing YAML or JSON outputs from Kubernetes commands
 
+This guides uses the following software versions:
+
+* Operator 1.2.0
+* Percona Server for MySQL 8.4.10-10.1
+
 ## Prepare your environment
 
 1. Clone the repository with all manifests and source code by executing the following command:
@@ -37,7 +42,7 @@ Before you start, read [Cross-site replication](replication.md) for architecture
 
 ## Step 1. Deploy the primary cluster
 
-1. Follow the [quickstart guide](kubectl.md) to install the Operator deployment, if you haven't done it, and deploy Percona Server for MySQL cluster with replication type `group replication`. Let's rename the cluster to `source-cluster` to differentiate them.
+1. Follow the [quickstart guide](kubectl.md) to install the Operator 1.2.0 deployment, if you haven't done it, and deploy Percona Server for MySQL cluster with replication type `group replication`. Let's rename the cluster to `source-cluster` to differentiate them.
 
     Here's the example configuration:
 
@@ -47,12 +52,12 @@ Before you start, read [Cross-site replication](replication.md) for architecture
     metadata:
       name: source-cluster
     spec:
-      crVersion: {{ release }}
+      crVersion: 1.2.0
       secretsName: source-cluster-secrets
       mysql:
         clusterType: group-replication
         size: 3
-        image: percona/percona-server:{{ ps84recommended }}
+        image: percona/percona-server:8.4.10-10.1
       proxy:
         haproxy:
           enabled: true
@@ -152,12 +157,12 @@ Before you start, read [Cross-site replication](replication.md) for architecture
     metadata:
       name: replica-cluster
     spec:
-      crVersion: {{ release }}
+      crVersion: 1.2.0
       secretsName: replica-cluster-secrets
       mysql:
         clusterType: group-replication
         size: 3
-        image: percona/percona-server:{{ ps84recommended }}
+        image: percona/percona-server:8.4.10-10.1
         bootstrap:
           mode: manual
     ```
@@ -245,7 +250,7 @@ Now it's time to link clusters. To do this, configure a `PerconaServerMySQLClust
           createReplicaClusterOptions:
             recoveryMethod: clone
           mysqlshellRunner:
-            image: percona/percona-server:{{ ps84recommended }}
+            image: percona/percona-server:8.4.10-10.1
           clusters:
             - innodbClusterName: sourcecluster
               endpoints:
@@ -275,7 +280,7 @@ Now it's time to link clusters. To do this, configure a `PerconaServerMySQLClust
           createReplicaClusterOptions:
             recoveryMethod: incremental
           mysqlshellRunner:
-            image: percona/percona-server:{{ ps84recommended }}
+            image: percona/percona-server:8.4.10-10.1
           clusters:
             - innodbClusterName: sourcecluster
               endpoints:
@@ -340,6 +345,27 @@ When the Job completes, Pod-0 on the replica cluster becomes Ready and Pod-1, Po
     * `status.conditions` includes `Ready: True` with reason `ClusterSetHealthy`
     * `status.clusters` shows each member with `clusterRole` (`PRIMARY` or `REPLICA`) and `globalStatus` (`OK` for healthy members)
     * `status.primaryCluster` matches your desired primary
+
+### Check replication lag
+
+A replica cluster may lag behind the primary.
+  
+To see how far a replica cluster is behind the primary, run:
+
+```bash
+kubectl get ps-clusterset my-cluster-set -n $SOURCE_NS \
+  -o jsonpath='{.status.clusters.replicacluster.replicationLagSeconds}{"\n"}'
+```
+
+??? example "Sample output"
+
+    ```text
+    121
+    ```
+
+An empty result means either this cluster is the primary, or the replica is caught up (or lag could not be determined). A growing value means the replica is falling behind. Wait for the lag to drop before you promote the replica or rely on it for reads.
+
+For field details, see [Custom resource statuses](cr-statuses.md#per-member-cluster-status).
 
 ### Check per-cluster status
 
@@ -450,7 +476,46 @@ The controller runs `forcePrimaryCluster()`. The old primary cluster is marked *
 
     Set `unsafeFlags.forcedFailover` to `true` only when you are certain the old primary cannot recover or accept writes.
 
-To recover an invalidated cluster later, either use MySQL Shell `rejoinCluster()` manually, or remove and recreate the cluster in the ClusterSet.
+To recover an invalidated cluster later, [rejoin it](#rejoin-a-replica-cluster) if GTIDs are compatible, or remove and recreate the cluster in the ClusterSet.
+
+### Rejoin a replica cluster
+
+If the replica's Group Replication channel is down (for example, you paused or stopped a ClusterSet replica or it crashed), the Operator recovers the local Group Replication group and rejoins it to the ClusterSet automatically. 
+
+However, when the replica itself is healthy but the ClusterSet replication is down, you trigger the rejoin manually by annotating the ClusterSet. This happens typically after the primary was unreachable long enough to exhaust retries. 
+
+Rejoin when `globalStatus` stays `OK_NOT_REPLICATING`, or `ClusterSetReplicationRunning` is `False`, after the replica cluster is `Ready`. You can also rejoin an `INVALIDATED` former primary after [forced failover](#forced-failover) if its GTIDs are still compatible with the current primary.
+
+!!! important
+
+    Do not rejoin while a switchover or failover is running, and do not target the current primary.
+
+    * If `SwitchoverInProgress` is `True`, or `spec.primaryCluster` differs from `status.primaryCluster`, wait until switchover finishes. If you trigger the rejoin operation during switchover, the Operator defers the rejoin until it completes.
+    * Set the annotation to the replica's InnoDB cluster name (`status.innodbClusterName`), not the Kubernetes Custom Resource name and not the current primary. The Operator ignores a rejoin annotation that names the primary.
+    * If the primary is unreachable, the Operator keeps the annotation and does not create a Job. Rejoin starts when the primary is available again.
+
+1. Annotate the ClusterSet. Use the replica's InnoDB cluster name — in this tutorial, `replicacluster`:
+
+    ```bash
+    kubectl annotate ps-clusterset my-cluster-set -n $SOURCE_NS \
+      percona.com/clusterset-rejoin-cluster=replicacluster
+    ```
+
+    The Operator then:
+
+    1. Creates a Job that runs `dba.getCluster().getClusterSet().rejoinCluster('replicacluster')`
+    2. Sets the `RejoinClusterInProgress` condition while the Job runs
+    3. After the Job completes, checks that the replica's `globalStatus` is `OK`. Only then it removes the annotation and the condition, and emits a `ClusterSetMemberRejoined` event.
+    4. If the Job failed or it completed but `globalStatus` is not `OK`, the Operator treats the rejoin as failed. It removes the annotation, deletes a failed Job, sets `RejoinClusterInProgress` to `False` with reason `RejoinFailed`, and emits a `ClusterSetMemberRejoinFailed` warning. Fix the cause, then annotate again.
+
+2. Monitor progress:
+
+    ```bash
+    kubectl describe ps-clusterset my-cluster-set -n $SOURCE_NS
+    kubectl get jobs -n $SOURCE_NS | grep rejoin
+    ```
+
+    Confirm that the replica's `globalStatus` is `OK` and that `ClusterSetReplicationRunning` is `True` on the replica cluster. If you see the `RejoinFailed` condition or a `ClusterSetMemberRejoinFailed` event, read the condition message and Job logs (the Job may have succeeded while the replica stayed `OK_NOT_REPLICATING`). Fix the cause, then annotate again.
 
 ### Remove a replica cluster
 
@@ -551,6 +616,7 @@ To delete the primary and replica clusters, delete their `PerconaServerMySQL` Cu
 | Replica Pod-0 stays NotReady | ClusterSet Job still running, or `createReplicaCluster` failed |
 | `Ready: False`, reason `ReplicaNotStandalone` | Target cluster is already in another InnoDB Cluster or ClusterSet |
 | Switchover stuck | Check `SwitchoverInProgress` condition and switchover Job status |
+| Replica `globalStatus: OK_NOT_REPLICATING`, `RejoinFailed` or `ClusterSetMemberRejoinFailed` | The replica is healthy but ClusterSet replication is down (for example after a long primary outage). Or a rejoin attempt did not restore `globalStatus: OK`.Inspect the rejoin Job logs, then [rejoin the replica](#rejoin-a-replica-cluster). |
 | `ErrorReconcile: True`, reason `AccessDenied` | Incorrect password configured on the replica site |
 | `ErrorReconcile: True`, reason `PrimaryUnreachable` | Primary cluster is not reachable |
 | `ReplicaManagementFailure` | One or more replicas could not be added or removed. See the condition message for exact details. Make sure that your replicas are reachable before removing them. |
