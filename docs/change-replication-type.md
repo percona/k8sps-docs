@@ -12,6 +12,7 @@ In Operator 1.2.0 and earlier, you cannot change the type on a running cluster. 
 
     The switch causes downtime while Pods are deleted and the new topology comes up. It applies to the **entire** cluster. You cannot convert a single Group Replication member into a standalone async replica.
 
+
 ## Change the proxy
 
 HAProxy works with either replication type and is recommended. MySQL Router works only with Group Replication.
@@ -77,7 +78,7 @@ Group Replication, Orchestrator for async.
         ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3                      3                 27m
         ```
 
-3. Take an [on-demand backup](backups-ondemand.md) so you can restore if the switch does not complete.
+3. Take an [on-demand backup](backups-ondemand.md) so you can restore if the switch does not complete. If you are switching from async replication, [take the backup from the primary](#take-a-backup-from-the-primary), not from a replica.
 
 4. If you are switching to async and the cluster uses MySQL Router, [enable HAProxy and disable Router](haproxy-conf.md) first. Wait until the cluster is `ready` again.
 
@@ -140,6 +141,73 @@ kubectl get ps $CLUSTER_NAME -n $NAMESPACE
 See [Verify the switch](#verify-the-switch).
 
 ### Switch from async to group replication
+
+!!! warning "Risk of data loss when switching from asynchronous replication to Group Replication"
+
+    Do not switch an asynchronous replication cluster to Group Replication unless every replica has applied all transactions from the primary.
+
+    The Operator does not check replication lag or compare GTID sets before the switch. It creates the new Group Replication cluster on `mysql-0`. If another Pod, such as the asynchronous primary, holds transactions that `mysql-0` does not have, the Operator treats that Pod as diverged and re-creates its data with a clone from `mysql-0`. The clone overwrites the data on that Pod, and the transactions that existed only there are lost without an error.
+
+    Before you switch, [verify that all replicas are caught up](#verify-that-all-replicas-are-caught-up) and [take a backup from the primary](#take-a-backup-from-the-primary). These checks protect the transactions that exist only on the asynchronous primary. If the primary is `mysql-0`, the Operator creates the Group Replication cluster from the primary and the risk does not apply, but run the checks anyway to confirm which Pod is the primary.
+
+#### Verify that all replicas are caught up
+
+1. Stop the applications from writing to the cluster. The GTID sets keep changing while writes continue, so the comparison in the next steps is not reliable.
+
+2. Set the root password and find the primary. The primary Pod prints no replica status:
+
+    ```bash
+    export ROOT_PASSWORD=$(kubectl -n $NAMESPACE get secret $CLUSTER_NAME-psuser-root -o jsonpath='{.data.password}' | base64 -d)
+
+    for i in 0 1 2; do
+      echo "== $CLUSTER_NAME-mysql-$i"
+      kubectl exec -n $NAMESPACE $CLUSTER_NAME-mysql-$i -c mysql -- \
+        mysql -uroot -p"$ROOT_PASSWORD" -e "SHOW REPLICA STATUS\G" \
+        | grep -E "Replica_IO_Running:|Replica_SQL_Running:|Seconds_Behind_Source:"
+    done
+    ```
+
+    On each replica, the IO and SQL threads report `Yes`.
+
+3. Read the executed GTID set of the primary. Replace `<primary-index>` with the ordinal of the primary Pod:
+
+    ```bash
+    export GTID_PRIMARY=$(kubectl exec -n $NAMESPACE $CLUSTER_NAME-mysql-<primary-index> -c mysql -- \
+      mysql -uroot -p"$ROOT_PASSWORD" -N -B -e "SELECT REPLACE(@@GLOBAL.gtid_executed, '\n', '');")
+    ```
+
+4. Check that every Pod has applied all transactions of the primary:
+
+    ```bash
+    for i in 0 1 2; do
+      echo -n "$CLUSTER_NAME-mysql-$i: "
+      kubectl exec -n $NAMESPACE $CLUSTER_NAME-mysql-$i -c mysql -- \
+        mysql -uroot -p"$ROOT_PASSWORD" -N -B -e "SELECT GTID_SUBSET('$GTID_PRIMARY', @@GLOBAL.gtid_executed);"
+    done
+    ```
+
+    Every Pod must return `1`. A `0` means that Pod has not applied all transactions from the primary. Wait and repeat the check. If a Pod does not reach `1`, do not switch.
+
+#### Take a backup from the primary
+
+By default, the Operator takes a backup of an asynchronous cluster from a replica. A lagging replica does not contain the transactions that exist only on the primary, so such a backup does not protect them.
+
+Set the `spec.sourcePod` option of the backup to the primary Pod:
+
+```yaml
+apiVersion: ps.percona.com/v1
+kind: PerconaServerMySQLBackup
+metadata:
+  name: before-switch
+spec:
+  clusterName: ps-cluster1
+  storageName: s3-us-west
+  sourcePod: ps-cluster1-mysql-<primary-index>
+```
+
+For all backup options, see the [Backup resource reference](backup-cr.md). Wait until the backup reaches the `Succeeded` state before you continue.
+
+#### Run the switch
 
 Disable Orchestrator in the same change. The Operator refuses the switch while Orchestrator is enabled.
 
@@ -244,15 +312,21 @@ PWD=$(kubectl -n $NAMESPACE get secret $CLUSTER_NAME-psuser-root -o jsonpath='{.
 
 ## Known limitations
 
-If you switch from group replication to async and the Operator fails to bootstrap the new topology, you cannot switch the cluster back to group replication.
+1. When you switch from async replication to Group Replication, the Operator does not verify that the replicas are caught up. If another Pod holds transactions that `mysql-0` does not have, the Operator overwrites that Pod with a clone from `mysql-0`, and those transactions are lost. Until the Operator checks this itself, [verify the GTID sets](#verify-that-all-replicas-are-caught-up) and [take a backup from the primary](#take-a-backup-from-the-primary) before you switch.
 
-The Operator sets `status.clusterType` to `async` when it deletes the old workloads, before it finishes that bootstrap. If the bootstrap fails, the MySQL Pods cannot accept the connections the Operator needs to tear the async setup down. Setting `mysql.clusterType` back to `group-replication` does not restore the previous topology, and the cluster stays out of `ready`.
+2. If you switch from group replication to async and the Operator fails to bootstrap the new topology, you cannot switch the cluster back to group replication.
 
-This limitation is known and will be fixed in a later release. [Restore the cluster](backups-restore.md) from the backup you took before the switch.
+    The Operator sets `status.clusterType` to `async` when it deletes the old workloads, before it finishes that bootstrap. If the bootstrap fails, the MySQL Pods cannot accept the connections the Operator needs to tear the async setup down. Setting `mysql.clusterType` back to `group-replication` does not restore the previous topology, and the cluster stays out of `ready`.
+
+    This limitation is known and will be fixed in a later release. [Restore the cluster](backups-restore.md) from the backup you took before the switch.
 
 ## Operator 1.2.0 and earlier
 
-Do not use this procedure with Operator 1.3.0 or later. Those versions require the cluster to stay `ready`.
+This procedure applies to Operator 1.2.0 or earlier. 
+
+!!! warning
+
+    The data loss risk described for [the switch from async to group replication](#switch-from-async-to-group-replication) applies to this procedure too. Complete the checks in [Verify that all replicas are caught up](#verify-that-all-replicas-are-caught-up) and [Take a backup from the primary](#take-a-backup-from-the-primary) before you pause the cluster. 
 
 1. [Pause](pause.md) the cluster:
 

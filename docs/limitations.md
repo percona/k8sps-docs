@@ -14,7 +14,6 @@ Group replication is generally available and is the recommended topology for pro
 
 ## Replication and topology
 
-* Changing the replication type on a **running** cluster is not supported. Pause the cluster, change `spec.mysql.clusterType`, then resume it. See [Change replication type](change-replication-type.md).
 * Semi-synchronous replication is not supported. Use group replication or asynchronous replication.
 * Group replication supports a maximum of **9** MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See [Architecture](architecture.md#group-replication).
 * Safe defaults require at least **3** MySQL instances for group replication, an **odd** replica count, and (for asynchronous replication) Orchestrator size of **3 or greater and odd**. You must set the matching [`unsafeFlags`](operator.md#operator-unsafeflags-section) option to go below those limits.
