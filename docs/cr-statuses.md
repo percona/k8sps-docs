@@ -73,7 +73,23 @@ kubectl get ps-clusterset <clusterset-name> -n <namespace> \
     True: ClusterSetHealthy
     ```
 
-**Example 3. Get the backup destination path:**
+**Example 3. Get replication lag for ClusterSet members:**
+
+```bash
+kubectl get ps-clusterset <clusterset-name> -n <namespace> \
+  -o jsonpath='{range .status.clusters.*}{.clusterRole}{": "}{.replicationLagSeconds}{"\n"}{end}'
+```
+
+??? example "Sample output"
+
+    ```{.text .no-copy}
+    PRIMARY: 
+    REPLICA: 121
+    ```
+
+The field appears only on replica clusters when MySQL Shell reports the lag. The primary cluster and caught-up replicas omit it.
+
+**Example 4. Get the backup destination path:**
 
 ```bash
 kubectl get ps-backup <backup-name> -n <namespace> \
@@ -86,6 +102,29 @@ kubectl get ps-backup <backup-name> -n <namespace> \
     s3://<my-bucket>/ps-cluster1-2026-06-29-08:06:10-full
     ```
 
+**Example 4. Get the backup size:**
+
+```bash
+kubectl get ps-backup <backup-name> -n <namespace> \
+  -o jsonpath='{.status.size}{"\n"}{.status.uncompressedSize}{"\n"}{.status.compressed}{"\n"}'
+```
+
+??? example "Sample output for an uncompressed backup"
+
+    ```{.text .no-copy}
+    4.2MiB
+    4.2MiB
+    ```
+
+
+??? example "Sample output for a compressed backup"
+
+    ```{.text .no-copy}
+    1.1MiB
+    4.2MiB
+    true
+    ```
+
 ## PerconaServerMySQL status
 
 The main cluster state is recorded in `status.state`. Component-level states are recorded in the `status.mysql`, `status.haproxy`, `status.router`, `status.orchestrator`, and `status.binlogserver` sections. A component subsection is populated only when that component is enabled.
@@ -93,6 +132,7 @@ The main cluster state is recorded in `status.state`. Component-level states are
 Common fields:
 
 * `status.state` — overall cluster state
+* `status.clusterType` — replication type the Operator has applied (`group-replication` or `async`). It stays on the current type while a [replication type switch](change-replication-type.md) is waiting to start, then changes after the Operator tears down the previous topology. It can differ from `spec.mysql.clusterType` until the switch finishes. The `REPLICATION` column of `kubectl get ps` shows `spec.mysql.clusterType`.
 * `status.host` — connection endpoint (proxy Service, LoadBalancer address, or MySQL Service)
 * `status.innodbClusterName` — InnoDB cluster name derived from the Custom Resource name (non-alphanumeric characters stripped). Use this value in the [ClusterSet Custom Resource](clusterset-cr.md#specclustersinnodbclustername)
 * `status.mysql.ready` / `status.mysql.size` — number of ready MySQL Pods and the desired size
@@ -107,6 +147,8 @@ The overall `status.state` stays `initializing` until:
 * Group Replication members are `ONLINE` (for `group-replication` clusters) or asynchronous replication has no Orchestrator problems (for `async` clusters), 
 * point-in-time recovery's binlog server is ready when enabled, 
 * any LoadBalancer Services have an assigned address.
+
+Replication lag on an `async` replica does not keep the cluster in the `initializing` state. A lagging replica is still replicating, so the Operator reports the lag in the separate [`ReplicationLagging`](#conditions) condition instead.
 
 ### Cluster state values
 
@@ -144,6 +186,8 @@ Common condition fields:
 | `InnoDBClusterBootstrapped` | The InnoDB Cluster metadata exists and Group Replication is formed. |
 | `AwaitingExternalBootstrap` | The cluster is configured with `spec.mysql.bootstrap.mode: manual` and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication. |
 | `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active. |
+| `ClusterTypeSwitchInProgress` | A replication type switch is in progress. The Operator removes this condition only after `status.state` is `ready` under the new type. |
+| `ReplicationLagging` | For `async` clusters, this condition is `True` when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the `ReasonableReplicationLagSeconds` value). This threshold is defined via the [`orchestrator.configuration`](operator.md#orchestratorconfiguration) option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be `ready` while this condition is `True`. |
 
 `status.conditions[].status` values:
 
@@ -161,6 +205,8 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 * `ManualBootstrapRequested` — the cluster is waiting for external bootstrap
 * `ClusterSetReplicationRunning` — ClusterSet replica replication is active
 * `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
+* `TeardownStarted` — the Operator started switching `mysql.clusterType`. The message names the previous type and the new type. Used with `ClusterTypeSwitchInProgress`.
+* `ReplicationLagDetected` / `NoReplicationLag` — whether any `async` replica lags behind the primary (used by the `ReplicationLagging` condition)
 
 ### Storage autoscaling status
 
@@ -183,6 +229,7 @@ The cluster controller emits Kubernetes events you can view with `kubectl descri
 | `ReconcileError` | Cluster reconciliation failed. |
 | `FullClusterCrashDetected` | A full Group Replication cluster crash was detected. |
 | `AsyncReplicationNotReady` | Orchestrator reported replication problems on one or more instances. |
+| `ReplicationLagging` | A Warning event emitted when replicas start lagging behind the primary. The `ReplicationLagging` condition becomes `True`. |
 | `StorageAutoscalingTriggered` | Storage autoscaling started a PVC resize. |
 
 ## PerconaServerMySQLClusterSet status
@@ -207,15 +254,18 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | `clusterRole` | `PRIMARY` or `REPLICA` as observed by MySQL Shell |
 | `globalStatus` | Member health in the ClusterSet |
 | `primary` | Host:port of the cluster's local Group Replication primary |
+| `replicationLagSeconds` | How many seconds the primary node of the replica cluster is behind the ClusterSet primary. Present only on `REPLICA` members when lag is greater than zero. Omitted on the `PRIMARY` cluster and when there is no lag or it is unavailable. |
+
+`replicationLagSeconds` comes from MySQL Shell's `replicationLagFromOriginalSource` value for the replica's primary member, shown in whole seconds. Use it to see whether a replica is catching up before you run switchover or send the regional read traffic there.
 
 `globalStatus` values (from MySQL Shell):
 
 | Value | Meaning |
 | --- | --- |
 | `OK` | Cluster is healthy and replicating as expected. |
-| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). |
+| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists after the replica is `Ready`, [rejoin the replica](replication-setup.md#rejoin-a-replica-cluster). |
 | `NOT_OK` | Cluster has a problem; check MySQL Shell status and events. |
-| `INVALIDATED` | Cluster was fenced off after forced failover; it may have divergent GTIDs. Rejoin it with `rejoinCluster()` if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
+| `INVALIDATED` | Cluster was fenced off after forced failover; it may have divergent GTIDs. [Rejoin it](replication-setup.md#rejoin-a-replica-cluster) if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
 | `UNKNOWN` | Status could not be determined (for example, the primary is unreachable). |
 
 ### Conditions
@@ -228,6 +278,7 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 | `ClusterSetBootstrapped` | The primary cluster is configured as a ClusterSet. |
 | `MySQLShellRunnerReady` | The `mysqlshell-runner` Pod is running and ready. |
 | `SwitchoverInProgress` | `spec.primaryCluster` differs from the observed primary and a switchover Job is running, pending, or failed. |
+| `RejoinClusterInProgress` | A rejoin Job is running or has failed. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster). |
 | `ErrorReconcile` | An error occurred during reconciliation. |
 | `ReplicaManagementFailure` | A replica add or remove Job failed; see the Job logs. |
 | `ClusterSetDissolving` | The Custom Resource is being deleted and the dissolve finalizer is running. |
@@ -257,6 +308,13 @@ Common `SwitchoverInProgress` reasons:
 | `SwitchoverInProgress` | A switchover Job is running. Condition status is `True`. |
 | `SwitchoverFailed` | The switchover Job failed. Condition status is `False`. |
 
+Common `RejoinClusterInProgress` reasons:
+
+| Reason | Meaning |
+| --- | --- |
+| `RejoinInProgress` | A rejoin Job is running. Condition status is `True`. |
+| `RejoinFailed` | The rejoin Job failed or the Job completed but the replica's `globalStatus` is not `OK`. Condition status is `False`. The annotation is removed so you can retry. |
+
 `ErrorReconcile` uses the reason `ErrorReconcile` for general failures, or `AccessDenied` / `PrimaryUnreachable` when the ClusterSet manager cannot reach or authenticate to the primary.
 
 ### Events
@@ -270,6 +328,8 @@ The ClusterSet controller emits Kubernetes events you can view with `kubectl des
 | `ClusterSetPrimaryForcedSwitched` | Forced failover completed. |
 | `ClusterSetMemberAdded` | A cluster was added to the ClusterSet. |
 | `ClusterSetMemberRemoved` | A cluster was removed from the ClusterSet. |
+| `ClusterSetMemberRejoined` | A replica cluster rejoined the ClusterSet. |
+| `ClusterSetMemberRejoinFailed` | Warning. Rejoin failed: the Job failed or the Job completed but the replica stayed unhealthy (for example `OK_NOT_REPLICATING`). |
 | `ClusterSetHealthDegraded` | Overall ClusterSet health dropped from healthy to unhealthy. |
 
 ## PerconaServerMySQLBackup status
@@ -287,6 +347,8 @@ Common fields:
 * `status.storage` — copy of the storage configuration used for this backup
 * `status.image` — Percona XtraBackup image used for the Job
 * `status.compressed` — whether the backup was compressed
+* `status.size` — backup size in IEC units (`KiB`, `MiB`, `GiB`). Displayed only after the backup succeeds. Empty while the backup is running or if it failed. Available with Operator version 1.3.0
+* `status.uncompressedSize` — uncompressed size of the backup. Equal to `status.size` unless the backup is compressed (`status.compressed: true`). Available with Operator version 1.3.0
 * `status.conditions` — additional conditions
 
 ### Backup state values
@@ -298,9 +360,10 @@ Common fields:
 | `""` | Backup is created but not processed yet. |
 | `Starting` | Backup is starting. |
 | `Running` | Backup is in progress. |
+| `Suspended` | The cluster became unready while the backup was running. The Operator pauses the backup Job and resumes it automatically once the cluster is ready again. This restarts the backup from the beginning rather than continuing it. If the cluster doesn't become ready before `suspendedDeadlineSeconds` expires, the backup moves to `Failed`. |
 | `Succeeded` | Backup completed successfully. |
-| `Error` | Backup failed to start (for example, the cluster is not ready, backups are disabled, or the storage name is missing). Check `status.stateDescription`. This state is terminal; fix the cause and create a new backup. |
-| `Failed` | Backup started but failed during execution. Check `status.stateDescription` and the backup Job logs. |
+| `Error` | Backup failed to start (for example, backups are disabled, the storage name is missing, or `startingDeadlineSeconds` expired while waiting for the cluster to be ready or for another backup to complete). Check `status.stateDescription`. This state is terminal; fix the cause and create a new backup. |
+| `Failed` | Backup started but failed during execution — for example, a suspended backup did not resume before `suspendedDeadlineSeconds` expired (`stateDescription: backup did not resume before suspendedDeadlineSeconds expired`). Check `status.stateDescription` and the backup Job logs. |
 
 For troubleshooting steps, see [Troubleshoot backups and restores](debug-backup-restore.md).
 

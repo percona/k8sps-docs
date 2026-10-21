@@ -48,6 +48,7 @@ Keep your data secure with built-in security features:
 - Transport encryption with TLS/SSL support
 - Data-at-rest encryption with key management integration
 - Encrypted backups for object storage
+- Additional trusted CA certificates from your PKI for TLS verification with S3-compatible backup storage (available starting with Operator version 1.3.0)
 - Role-based access control with fine-grained permissions
 - Secret management with Kubernetes-native secrets
 - Orchestrator API authentication for async replication clusters (available starting with Operator version 1.2.0)
@@ -58,7 +59,7 @@ Gain deep insights into your database performance:
 
 - Percona Monitoring and Management (PMM) integration for comprehensive monitoring
 - Custom metrics and alerting capabilities
-- Log aggregation and centralized logging
+- Logging — Gain insights into MySQL logs even after Pod restarts with [persistent logging](persistent-logging.md). Configure [log rotation](logrotate.md) for optimized storage usage.
 - Performance insights with query analysis
 - Health dashboards for operational visibility
 

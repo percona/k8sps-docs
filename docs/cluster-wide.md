@@ -22,28 +22,28 @@ Let’s say you will use a Kubernetes Namespace called `percona-db-1`.
 
 1. Clone `percona-server-mysql-operator` repository:
 
-    ``` {.bash data-prompt="$" }
-    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
-    $ cd percona-server-mysql-operator
+    ```bash
+    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    cd percona-server-mysql-operator
     ```
 
 2. Create your `percona-db-1` Namespace (if it doesn't yet exist) as follows:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl create namespace percona-db-1
+    ```bash
+    kubectl create namespace percona-db-1
     ```
 
 3. Deploy the Operator [using :octicons-link-external-16:](https://kubernetes.io/docs/reference/using-api/server-side-apply/)
     the following command:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply --server-side -f deploy/bundle.yaml -n percona-db-1
+    ```bash
+    kubectl apply --server-side -f deploy/bundle.yaml -n percona-db-1
     ```
 
 4. Once Operator is up and running, deploy the database cluster itself:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f deploy/cr.yaml -n percona-db-1
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n percona-db-1
     ```
 
 You can deploy multiple clusters in this namespace.
@@ -54,20 +54,20 @@ What if there is a need to deploy clusters in another namespace? The solution fo
 
 1. Create your `percona-db-2` namespace (if it doesn't yet exist) as follows:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl create namespace percona-db-2
+    ```bash
+    kubectl create namespace percona-db-2
     ```
 
 2. Deploy the Operator:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply --server-side -f deploy/bundle.yaml -n percona-db-2
+    ```bash
+    kubectl apply --server-side -f deploy/bundle.yaml -n percona-db-2
     ```
 
 3. Once Operator is up and running deploy the database cluster itself:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f deploy/cr.yaml -n percona-db-2
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n percona-db-2
     ```
 
     !!! note
@@ -106,17 +106,17 @@ Kubernetes.
 
 1. Clone `percona-server-mysql-operator` repository:
 
-    ``` {.bash data-prompt="$" }
-    $ git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
-    $ cd percona-server-mysql-operator
+    ```bash
+    git clone -b v{{ release }} https://github.com/percona/percona-server-mysql-operator
+    cd percona-server-mysql-operator
     ```
 
 2. Let’s say you will use `ps-operator` namespace for the Operator, and `percona-db-1`
     namespace for the cluster. Create these namespaces, if needed:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl create namespace ps-operator
-    $ kubectl create namespace percona-db-1
+    ```bash
+    kubectl create namespace ps-operator
+    kubectl create namespace percona-db-1
     ```
 
 3. Edit the ``deploy/cw-bundle.yaml`` configuration file to make sure it
@@ -141,8 +141,8 @@ Kubernetes.
 
 4. Apply the `deploy/cw-bundle.yaml` file with the following command:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply --server-side -f deploy/cw-bundle.yaml -n ps-operator
+    ```bash
+    kubectl apply --server-side -f deploy/cw-bundle.yaml -n ps-operator
     ```
 
     Right now the operator deployed in cluster-wide mode will monitor all
@@ -150,8 +150,8 @@ Kubernetes.
 
 5. Deploy the cluster in the namespace of your choice:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f deploy/cr.yaml -n percona-db-1
+    ```bash
+    kubectl apply -f deploy/cr.yaml -n percona-db-1
     ```
 
 ## Verifying the cluster operation
@@ -208,9 +208,9 @@ To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](
 1. Update the [Custom Resource Definition :octicons-link-external-16:](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
     for the Operator, and do the same for the Role-based access control:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl apply -f deploy/crd.yaml
-    $ kubectl apply -f deploy/cw-rbac.yaml
+    ```bash
+    kubectl apply -f deploy/crd.yaml
+    kubectl apply -f deploy/cw-rbac.yaml
     ```
 
 2. Now you should [apply a patch :octicons-link-external-16:](https://kubernetes.io/docs/tasks/run-application/update-api-object-kubectl-patch/) to your
@@ -219,8 +219,8 @@ To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](
     For example, updating to the `{{ release }}` version in the `ps-operator` namespace should look as
     follows.
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl patch deployment percona-server-mysql-operator \
+    ```bash
+    kubectl patch deployment percona-server-mysql-operator \
       -p'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"percona/percona-server-mysql-operator:{{ release }}"}]}}}}' -n ps-operator
     ```
 
@@ -228,6 +228,6 @@ To upgrade the cluster-wide Operator you follow the [standard upgrade scenario](
     You can track the rollout process in real time with the
     `kubectl rollout status` command with the name of your cluster:
 
-    ``` {.bash data-prompt="$" }
-    $ kubectl rollout status deployments percona-server-mysql-operator -n ps-operator
+    ```bash
+    kubectl rollout status deployments percona-server-mysql-operator -n ps-operator
     ```

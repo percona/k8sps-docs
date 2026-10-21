@@ -84,6 +84,8 @@ List backups with this command:
 kubectl get ps-backup -n $NAMESPACE
 ```
 
+--8<-- "backup-size.txt"
+
 ## Specifying the backup source
 
 When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object's status:

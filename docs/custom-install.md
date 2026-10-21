@@ -34,11 +34,11 @@ To check available configuration options, see [deploy/cr.yaml :octicons-link-ext
 
     To pass a custom parameter to Helm, use the `--set key=value` flag with the `helm install` command.
 
-    For example, to enable [Percona Monitoring and Management (PMM) :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/2/index.html) for the database cluster, run:
+    For example, to enable [Percona Monitoring and Management (PMM) :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/index.html) for the database cluster, run:
 
     ```bash
     helm install my-db percona/ps-db --version {{ release }} --namespace my-namespace \
-      --set mysql.image.tag={{ ps84recommended }} \
+      --set mysql.image.tag={{ ps97recommended }} \
       --set pmm.enabled=true
     ```
 
@@ -55,7 +55,7 @@ To check available configuration options, see [deploy/cr.yaml :octicons-link-ext
     ```yaml
     mysql:
       image:
-        tag: {{ ps84recommended }}
+        tag: {{ ps97recommended }}
     pmm:
       enabled: true
     ```

@@ -6,7 +6,7 @@ The following information is gathered:
 
 * ID of the Custom Resource (the `metadata.uid` field)
 * Kubernetes version
-* Platform (is it Kubernetes or Openshift)
+* Platform (Kubernetes or OpenShift. The Operator 1.3.0 and above also collects the cloud provider name on Kubernetes. For example, `kubernetes-gke` for GKE cluster)
 * PMM Version
 * Operator version
 * Percona Server for MySQL version

@@ -95,8 +95,7 @@ markdown_extensions:
         - docs/assets/fragments
         - docs/ReleaseNotes
         - docs/
-      auto_append:
-        - services-banner.md
+        
   pymdownx.highlight: 
     use_pygments: true
   pymdownx.emoji:
@@ -189,6 +188,7 @@ nav:
     - Platform-specific installation:
           - "Install on Google Kubernetes Engine (GKE)": gke.md
           - "Install on Amazon Elastic Kubernetes Service (AWS EKS)": eks.md
+          - "Install on DigitalOcean Kubernetes (DOKS)": doks.md
           - "Install on OpenShift": openshift.md
           - "Install on Minikube": minikube.md
           - "Generic Kubernetes installation": kubernetes.md
@@ -215,6 +215,9 @@ nav:
           - Monitoring:
               - "Monitor your cluster with PMM": monitoring.md
               - "Monitor Kubernetes": monitor-kubernetes.md
+          - Logging:
+              - "Persistent logging": persistent-logging.md
+              - "Log rotation": logrotate.md
           - "Scale your cluster": scaling.md
 
 
@@ -251,6 +254,7 @@ nav:
               - Manually: update-crd-manual.md
               - With Helm: update-crd-helm.md
               - Via OLM: update-openshift.md
+            - Apply security builds: security-builds.md
             - "Upgrade the database": update-db.md
         - "Pause or restart the cluster": pause.md
         - Cleanup:
