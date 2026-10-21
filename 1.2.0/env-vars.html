@@ -5280,7 +5280,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h1 id="configure-environment-variables">Configure environment variables<a class="headerlink" href="#configure-environment-variables" title="Permanent link">&para;</a></h1>
 <p>You can configure environment variables in Percona Operator for MySQL based on Percona Server for MySQL for the following purposes:</p>
 <ol>
-<li><strong><a href="env-vars-operator.html">Configure Operator environment variables</a></strong> — Control the Operator’s behavior, such as logging, telemetry, and which namespaces the Operator watches. You set these on the Operator Deployment (<code>deploy/operator.yaml</code> or equivalent).</li>
+<li><strong><a href="env-vars-operator.html">Configure Operator environment variables</a></strong> — Control the Operator’s behavior, such as logging, telemetry, leader election, and which namespaces the Operator watches. You set these for the Operator Deployment.</li>
 <li><strong><a href="env-vars-custom.html">Define environment variables for cluster components</a></strong> — Set variables for database and proxy Pods through the Custom Resource (<code>deploy/cr.yaml</code>): use <strong>supported tuning names</strong> (for example bootstrap or HAProxy timeouts) or <strong>arbitrary custom</strong> names, via <code>env</code> / <code>envFrom</code> and optional ConfigMaps or Secrets.</li>
 </ol>
 <h2 id="when-to-use-environment-variables">When to use environment variables<a class="headerlink" href="#when-to-use-environment-variables" title="Permanent link">&para;</a></h2>
@@ -5294,7 +5294,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <tbody>
 <tr>
 <td>Operator environment variables</td>
-<td>- Control logging for debugging and log aggregation. <br> - Manage <a href="telemetry.html">telemetry</a>. <br> - Configure the namespaces for the Operator to watch.</td>
+<td>- Control logging for debugging and log aggregation. <br> - Manage <a href="telemetry.html">telemetry</a>. <br> - Configure the namespaces for the Operator to watch. <br> - Configure leader election timing.</td>
 </tr>
 <tr>
 <td>Cluster component environment variables</td>
@@ -5308,7 +5308,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 14, 2026 06:47:42 UTC">April 14, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:30:09 UTC">October 21, 2026</span>
       
         <br>
         Created:

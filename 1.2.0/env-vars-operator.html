@@ -3003,6 +3003,61 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_ENABLED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_lease_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_LEASE_NAME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_lease_duration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_LEASE_DURATION
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_renew_deadline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_RENEW_DEADLINE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_retry_period" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_RETRY_PERIOD
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5403,6 +5458,61 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_ENABLED
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_lease_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_LEASE_NAME
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_lease_duration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_LEASE_DURATION
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_renew_deadline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_RENEW_DEADLINE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pso_leader_election_retry_period" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PSO_LEADER_ELECTION_RETRY_PERIOD
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5623,6 +5733,127 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_TELEMETRY</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
 </code></pre></div>
+<h3 id="pso_leader_election_enabled"><code>PSO_LEADER_ELECTION_ENABLED</code><a class="headerlink" href="#pso_leader_election_enabled" title="Permanent link">&para;</a></h3>
+<p>Controls whether the Operator runs leader election. Enabled by default.</p>
+<p>Leader election ensures only one Operator instance manages resources when multiple replicas run. Set this to <code>"false"</code> only when the Deployment has one replica.</p>
+<p>When this variable is set, it overrides the <code>--leader-elect</code> container argument. When this variable is unset, the Operator uses that argument.</p>
+<p>When you disable leader election, the Operator restarts and deletes the existing Lease object.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Default</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td><code>"true"</code></td>
+<td><code>"false"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_ENABLED</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"false"</span>
+</code></pre></div>
+<h3 id="pso_leader_election_lease_name"><code>PSO_LEADER_ELECTION_LEASE_NAME</code><a class="headerlink" href="#pso_leader_election_lease_name" title="Permanent link">&para;</a></h3>
+<p>Sets the name of the Lease object that stores the leader lock. The Operator creates this Lease in the Operator namespace. The name must be a valid DNS subdomain.  Leave empty to use the default <code>08db2feb.percona.com</code>.</p>
+<p>When you change the name, the Operator creates a new Lease. The previous Lease stays in the namespace.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Default</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td><code>"08db2feb.percona.com"</code></td>
+<td><code>"my-lease"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_LEASE_NAME</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"my-lease"</span>
+</code></pre></div>
+<h3 id="pso_leader_election_lease_duration"><code>PSO_LEADER_ELECTION_LEASE_DURATION</code><a class="headerlink" href="#pso_leader_election_lease_duration" title="Permanent link">&para;</a></h3>
+<p>Sets how long another Operator replica waits after the last successful renewal before it takes leadership. Use a duration such as <code>60s</code> or <code>2m</code>. Increase this value when leader election fails because of high latency or limited resources.</p>
+<p>The lease duration must be greater than the <a href="#pso_leader_election_renew_deadline">renew deadline</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Default</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td><code>"60s"</code></td>
+<td><code>"90s"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_LEASE_DURATION</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"90s"</span>
+</code></pre></div>
+<h3 id="pso_leader_election_renew_deadline"><code>PSO_LEADER_ELECTION_RENEW_DEADLINE</code><a class="headerlink" href="#pso_leader_election_renew_deadline" title="Permanent link">&para;</a></h3>
+<p>Sets how long the current leader retries renewing the Lease before it gives up leadership. Use a duration such as <code>40s</code>.</p>
+<p>The renew deadline must be greater than the <a href="#pso_leader_election_retry_period">retry period</a> multiplied by 1.2.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Default</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td><code>"40s"</code></td>
+<td><code>"60s"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_RENEW_DEADLINE</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"60s"</span>
+</code></pre></div>
+<h3 id="pso_leader_election_retry_period"><code>PSO_LEADER_ELECTION_RETRY_PERIOD</code><a class="headerlink" href="#pso_leader_election_retry_period" title="Permanent link">&para;</a></h3>
+<p>Sets how long the Operator waits between leader election attempts. Use a duration such as <code>10s</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Default</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td><code>"10s"</code></td>
+<td><code>"15s"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_RETRY_PERIOD</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"15s"</span>
+</code></pre></div>
 <h2 id="update-environment-variables">Update environment variables<a class="headerlink" href="#update-environment-variables" title="Permanent link">&para;</a></h2>
 <h3 id="using-kubectl-patch">Using <code>kubectl patch</code><a class="headerlink" href="#using-kubectl-patch" title="Permanent link">&para;</a></h3>
 <p>You can update environment variables in an existing Operator Deployment by applying a patch. To keep existing environment variables, you must specify the full list of them.</p>
@@ -5642,12 +5873,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="s1">    {"name": "LOG_LEVEL", "value": "DEBUG"},</span>
 <span class="s1">    {"name": "WATCH_NAMESPACE", "valueFrom": {"fieldRef": {"apiVersion": "v1",     "fieldPath": "metadata.namespace"}}},</span>
 <span class="s1">    {"name": "MAX_CONCURRENT_RECONCILES", "value": "1"},</span>
-<span class="s1">    {"name": "DISABLE_TELEMETRY", "value": "false"}</span>
+<span class="s1">    {"name": "DISABLE_TELEMETRY", "value": "false"},</span>
+<span class="s1">    {"name": "PSO_LEADER_ELECTION_ENABLED", "value": "true"},</span>
+<span class="s1">    {"name": "PSO_LEADER_ELECTION_LEASE_NAME", "value": "08db2feb.percona.com"},</span>
+<span class="s1">    {"name": "PSO_LEADER_ELECTION_LEASE_DURATION", "value": "60s"},</span>
+<span class="s1">    {"name": "PSO_LEADER_ELECTION_RENEW_DEADLINE", "value": "40s"},</span>
+<span class="s1">    {"name": "PSO_LEADER_ELECTION_RETRY_PERIOD", "value": "10s"}</span>
 <span class="s1">  ]}]'</span>
 </code></pre></div>
 </li>
 </ol>
-<p>Adjust the list to match your current Deployment (for example cluster-wide <code>WATCH_NAMESPACE</code> with a string <code>value</code> instead of <code>valueFrom</code>).</p>
+<p>Adjust the list to match your current Deployment (for example cluster-wide <code>WATCH_NAMESPACE</code> with a string <code>value</code> instead of <code>valueFrom</code>). Starting with version 1.3.0, keep the <code>PSO_LEADER_ELECTION_*</code> entries in the list.</p>
 <h3 id="using-kubectl-edit">Using <code>kubectl edit</code><a class="headerlink" href="#using-kubectl-edit" title="Permanent link">&para;</a></h3>
 <p>You can also edit the Deployment directly:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>edit<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;operator-namespace&gt;
@@ -5659,7 +5895,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 09:03:14 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:30:09 UTC">October 21, 2026</span>
       
         <br>
         Created:
