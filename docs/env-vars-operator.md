@@ -127,7 +127,7 @@ Leader election ensures only one Operator instance manages resources when multip
 
 When this variable is set, it overrides the `--leader-elect` container argument. When this variable is unset, the Operator uses that argument.
 
-When you disable leader election, the Operator stops renewing the Lease. The existing Lease object stays in the namespace.
+When you disable leader election, the Operator restarts and deletes the existing Lease object.
 
 | Value type | Default | Example |
 | ---------- | ------- | ------- |
