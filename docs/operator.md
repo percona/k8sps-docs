@@ -1867,7 +1867,7 @@ Orchestrator is used with asynchronous replication. Disable it when you [switch 
 
 ### `orchestrator.failover.timeout`
 
-How long the cluster tries to recover the transactions from the failed primary's binlog. Default is `6h`.
+How long the cluster tries to recover the transactions from the failed primary's binlog. Default is `1h`.
 
 The timeout is measured from the moment Orchestrator first detects the failure and covers every retry, not a single attempt. If the Orchestrator Raft leader changes while a failover is running, the timeout restarts. This delays the decision what to do when the timeout expires.
 
@@ -1875,7 +1875,7 @@ Only applies to [async](#mysqlclustertype) clusters, and only takes effect start
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `6h` |
+| :material-code-string: string     | `1h` |
 
 ### `orchestrator.failover.onTimeout`
 

@@ -76,7 +76,7 @@ Additional constraints include:
 * a primary whose binary logs were already purged or whose data volume is gone, can't be recovered from; 
 * starting `crVersion` 1.3.0, the Operator pins several Orchestrator settings the mechanism depends on and ignores conflicting overrides in [`orchestrator.configuration`](operator.md#orchestratorconfiguration).
 
-See [About zero data loss failover](failover-async-about.md#known-limitations) for the full list.
+See [About zero data loss failover](failover-async.md#known-limitations) for the full list.
 
 ## Scaling and storage
 
