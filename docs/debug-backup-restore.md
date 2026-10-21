@@ -325,6 +325,8 @@ kubectl logs <restore-pod-name> -n <namespace>
 
 Point-in-time recovery adds a Binlog Server Pod and a PITR Job (`pitr-restore-<restore-name>`) on top of the base restore Job (`xb-restore-<restore-name>`). Check both Jobs and the Binlog Server Pod, not only `xb-restore-*`.
 
+To inspect the restored base backup before the binary logs are applied, see [Pause a point-in-time recovery](pause-pitr.md).
+
 ### Binlog Server is in CrashLoopBackOff
 
 If the binlog bucket contains too many objects, Binlog Server can get stuck listing them and enter the CrashLoopBackOff state. Point-in-time recovery cannot proceed until the Pod is healthy.

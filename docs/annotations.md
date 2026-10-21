@@ -82,6 +82,7 @@ Use **Annotations** when:
 | `percona.com/last-config-hash` | Services | Stores the hash of the most recent configuration |
 | `percona.com/passwords-updated`| Secrets | Indicates when passwords were last updated in the Secret |
 | `percona.com/clusterset-rejoin-cluster` | `PerconaServerMySQLClusterSet` | Triggers a rejoin when the replica is healthy but ClusterSet replication is down. Value is the replica's InnoDB cluster name (`status.innodbClusterName`). The Operator removes the annotation after the rejoin attempt, whether it succeeded or failed. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster). | `replicacluster` |
+| `percona.com/pitr-sleep-forever` | `PerconaServerMySQLRestore` | Pauses a point-in-time recovery after the base backup is restored and before the binary logs are applied. The Operator checks only that the annotation exists, not its value. See [Pause a point-in-time recovery](pause-pitr.md). | `"true"` |
 
 ## Setting labels and annotations in the Custom Resource
 

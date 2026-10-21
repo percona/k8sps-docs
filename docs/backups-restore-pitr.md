@@ -266,4 +266,4 @@ kubectl get ps-restore -n <namespace>
 
 If the restore fails, see [Troubleshoot backups and restores](debug-backup-restore.md#restores) and [Point-in-time recovery](debug-backup-restore.md#point-in-time-recovery).
 
-To inspect the restored base backup before the binlogs are applied, you can pause the PITR Job with the `percona.com/pitr-sleep-forever` annotation. See [Pause a point-in-time recovery](datadir-special-files.md#pause-a-point-in-time-recovery).
+To inspect the restored base backup before the binlogs are applied, you can pause the PITR Job with the `percona.com/pitr-sleep-forever` annotation. See [Pause a point-in-time recovery](pause-pitr.md).
