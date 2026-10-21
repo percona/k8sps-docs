@@ -5565,7 +5565,6 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 <li>
 <p><strong>You cannot change the <code>prefix</code> value for the binlog bucket</strong> after you configure Binlog Server.</p>
 </li>
-<li><strong>Data-at-rest encryption is not supported</strong> with point-in-time recovery.</li>
 <li><strong>Password change.</strong> If the Operator user password differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password.</li>
 <li><strong>Restore retries are not idempotent.</strong> If recovery fails after the base backup is restored, a retry does not restore the full backup again. Set <code>spec.backup.backoffLimit=0</code> in <code>cr.yaml</code> to prevent automatic Job retries.</li>
 <li><strong>Binlog storage is separate</strong> from base backup storage. During the in-place restore on the same cluster, the Operator uses the settings defined in the <code>spec.backup.pitr.binlogServer</code> of the cluster&rsquo;s Custom Resource. For a cross-cluster restore, specify the Binlog storage settings
@@ -5579,7 +5578,7 @@ object.</li>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 10:21:26 UTC">October 21, 2026</span>
       
         <br>
         Created:
