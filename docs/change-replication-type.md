@@ -4,6 +4,10 @@ The Operator deploys Percona Server for MySQL with [group-replication](architect
 
 Starting with Operator 1.3.0, you can change the replication type on a running cluster. The Operator tears down the current topology, recreates the MySQL and proxy workloads, and bootstraps the new type on the existing PersistentVolumeClaims. Users, Secrets, and the HAProxy Service stay in place, so applications keep the same endpoint if they already use HAProxy.
 
+!!! admonition ""
+
+    Changing the replication type on a running cluster is a tech preview. The behavior can change in future releases. Do not use it in production yet. Try it in a test or staging cluster first.
+
 To compare the two types, see [Replication types](architecture.md#replication-types).
 
 In Operator 1.2.0 and earlier, you cannot change the type on a running cluster. [Pause the cluster, change the type, then unpause it](#operator-120-and-earlier).

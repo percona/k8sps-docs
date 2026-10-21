@@ -7,6 +7,7 @@ This page describes known limitations of Percona Operator for MySQL based on Per
 The following features are in tech preview. Behavior can change in future releases. Do not use them in production yet. We encourage you to try them in test or staging clusters and share feedback.
 
 * [Asynchronous replication](architecture.md#asynchronous-replication-tech-preview) (`spec.mysql.clusterType: async`)
+* [Replication type switch on a running cluster](change-replication-type.md) (Operator 1.3.0 and later)
 * [Point-in-time recovery](backups-pitr.md)
 * [Incremental backups](backups-incremental.md)
 
