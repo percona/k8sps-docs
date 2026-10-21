@@ -121,7 +121,9 @@ env:
 
 ### `PSO_LEADER_ELECTION_ENABLED`
 
-Controls whether the Operator runs leader election. Leader election ensures only one Operator instance manages resources when multiple replicas run. Set this to `"false"` only when the Deployment has one replica.
+Controls whether the Operator runs leader election. Enabled by default.
+
+Leader election ensures only one Operator instance manages resources when multiple replicas run. Set this to `"false"` only when the Deployment has one replica.
 
 When this variable is set, it overrides the `--leader-elect` container argument. When this variable is unset, the Operator uses that argument.
 
