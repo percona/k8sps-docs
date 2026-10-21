@@ -5841,6 +5841,7 @@ true
 <li>point-in-time recovery&rsquo;s binlog server is ready when enabled, </li>
 <li>any LoadBalancer Services have an assigned address.</li>
 </ul>
+<p>Replication lag on an <code>async</code> replica does not keep the cluster in the <code>initializing</code> state. A lagging replica is still replicating, so the Operator reports the lag in the separate <a href="#conditions"><code>ReplicationLagging</code></a> condition instead.</p>
 <h3 id="cluster-state-values">Cluster state values<a class="headerlink" href="#cluster-state-values" title="Permanent link">&para;</a></h3>
 <p><code>status.state</code> values are:</p>
 <table>
@@ -5924,6 +5925,10 @@ true
 <td><code>ClusterTypeSwitchInProgress</code></td>
 <td>A replication type switch is in progress. The Operator removes this condition only after <code>status.state</code> is <code>ready</code> under the new type.</td>
 </tr>
+<tr>
+<td><code>ReplicationLagging</code></td>
+<td>For <code>async</code> clusters, this condition is <code>True</code> when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the <code>ReasonableReplicationLagSeconds</code> value). This threshold is defined via the <a href="operator.html#orchestratorconfiguration"><code>orchestrator.configuration</code></a> option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be <code>ready</code> while this condition is <code>True</code>.</td>
+</tr>
 </tbody>
 </table>
 <p><code>status.conditions[].status</code> values:</p>
@@ -5958,6 +5963,7 @@ true
 <li><code>ClusterSetReplicationRunning</code> — ClusterSet replica replication is active</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
 <li><code>TeardownStarted</code> — the Operator started switching <code>mysql.clusterType</code>. The message names the previous type and the new type. Used with <code>ClusterTypeSwitchInProgress</code>.</li>
+<li><code>ReplicationLagDetected</code> / <code>NoReplicationLag</code> — whether any <code>async</code> replica lags behind the primary (used by the <code>ReplicationLagging</code> condition)</li>
 </ul>
 <h3 id="storage-autoscaling-status">Storage autoscaling status<a class="headerlink" href="#storage-autoscaling-status" title="Permanent link">&para;</a></h3>
 <p>When you enable <a href="scaling.html#scale-storage">storage autoscaling</a>, the Operator records per-PVC progress in <code>status.storageAutoscaling.&lt;pvc-name&gt;</code>:</p>
@@ -6012,6 +6018,10 @@ true
 <tr>
 <td><code>AsyncReplicationNotReady</code></td>
 <td>Orchestrator reported replication problems on one or more instances.</td>
+</tr>
+<tr>
+<td><code>ReplicationLagging</code></td>
+<td>A Warning event emitted when replicas start lagging behind the primary. The <code>ReplicationLagging</code> condition becomes <code>True</code>.</td>
 </tr>
 <tr>
 <td><code>StorageAutoscalingTriggered</code></td>
@@ -6404,7 +6414,7 @@ true
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:11 UTC">October 21, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 12:02:05 UTC">October 21, 2026</span>
       
         <br>
         Created:

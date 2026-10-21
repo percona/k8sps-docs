@@ -5543,6 +5543,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <td><code>ASYNC_SOURCE_CONNECT_RETRY</code></td>
 <td>Non-negative integer. Used when configuring asynchronous replication.</td>
 </tr>
+<tr>
+<td><code>POD_IP_EXCLUDE_REGEX</code></td>
+<td>Custom <code>grep -E</code> filter for Pod IP addresses that the MySQL entrypoint excludes when it picks the Pod IP to bind MySQL <code>admin-address</code>. Default: <code>^169\.254\.</code>. If every address matches the filter, the entrypoint uses the first unfiltered IP. Use this only if the default exclusion is too broad or too narrow for your CNI. Most clusters do not need to set it.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="haproxy-environment-variables">HAProxy environment variables<a class="headerlink" href="#haproxy-environment-variables" title="Permanent link">&para;</a></h3>
@@ -5721,7 +5725,7 @@ kubectl apply -f haproxy-configmap.yaml -n $NAMESPACE</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 14, 2026 06:47:42 UTC">April 14, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 10:21:40 UTC">October 21, 2026</span>
       
         <br>
         Created:

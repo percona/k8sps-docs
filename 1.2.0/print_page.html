@@ -15494,6 +15494,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <td><code>ASYNC_SOURCE_CONNECT_RETRY</code></td>
 <td>Non-negative integer. Used when configuring asynchronous replication.</td>
 </tr>
+<tr>
+<td><code>POD_IP_EXCLUDE_REGEX</code></td>
+<td>Custom <code>grep -E</code> filter for Pod IP addresses that the MySQL entrypoint excludes when it picks the Pod IP to bind MySQL <code>admin-address</code>. Default: <code>^169\.254\.</code>. If every address matches the filter, the entrypoint uses the first unfiltered IP. Use this only if the default exclusion is too broad or too narrow for your CNI. Most clusters do not need to set it.</td>
+</tr>
 </tbody>
 </table>
 <h3 id="env-vars-custom-haproxy-environment-variables">HAProxy environment variables<a class="headerlink" href="#env-vars-custom-haproxy-environment-variables" title="Permanent link">&para;</a></h3>
@@ -23272,7 +23276,8 @@ configuration options for the Orchestrator - a replication topology manager, use
 </tbody>
 </table>
 <h3 id="operator-orchestratorconfiguration"><code>orchestrator.configuration</code><a class="headerlink" href="#operator-orchestratorconfiguration" title="Permanent link">&para;</a></h3>
-<p>Custom <a href="https://github.com/openark/orchestrator">Orchestrator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> options to merge into the Orchestrator configuration. For example, <code>FailMasterPromotionOnLagMinutes</code> or <code>RecoveryPeriodBlockSeconds</code> are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored. </p>
+<p>Custom <a href="https://github.com/percona/orchestrator">Orchestrator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> options to merge into the Orchestrator configuration. For example, <code>FailMasterPromotionOnLagMinutes</code> or <code>RecoveryPeriodBlockSeconds</code> are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.</p>
+<p>Starting with Custom Resource version 1.3.0, the Operator sets <code>ReasonableReplicationLagSeconds</code> to <code>60</code> by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the <a href="#cr-statuses-conditions"><code>ReplicationLagging</code> condition</a>. You can override this value here.</p>
 <p>Updating this field triggers a rolling restart of the Orchestrator Pods.</p>
 <table>
 <thead>
@@ -27116,6 +27121,7 @@ true
 <li>point-in-time recovery&rsquo;s binlog server is ready when enabled, </li>
 <li>any LoadBalancer Services have an assigned address.</li>
 </ul>
+<p>Replication lag on an <code>async</code> replica does not keep the cluster in the <code>initializing</code> state. A lagging replica is still replicating, so the Operator reports the lag in the separate <a href="#cr-statuses-conditions"><code>ReplicationLagging</code></a> condition instead.</p>
 <h3 id="cr-statuses-cluster-state-values">Cluster state values<a class="headerlink" href="#cr-statuses-cluster-state-values" title="Permanent link">&para;</a></h3>
 <p><code>status.state</code> values are:</p>
 <table>
@@ -27199,6 +27205,10 @@ true
 <td><code>ClusterTypeSwitchInProgress</code></td>
 <td>A replication type switch is in progress. The Operator removes this condition only after <code>status.state</code> is <code>ready</code> under the new type.</td>
 </tr>
+<tr>
+<td><code>ReplicationLagging</code></td>
+<td>For <code>async</code> clusters, this condition is <code>True</code> when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the <code>ReasonableReplicationLagSeconds</code> value). This threshold is defined via the <a href="#operator-orchestratorconfiguration"><code>orchestrator.configuration</code></a> option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be <code>ready</code> while this condition is <code>True</code>.</td>
+</tr>
 </tbody>
 </table>
 <p><code>status.conditions[].status</code> values:</p>
@@ -27233,6 +27243,7 @@ true
 <li><code>ClusterSetReplicationRunning</code> — ClusterSet replica replication is active</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
 <li><code>TeardownStarted</code> — the Operator started switching <code>mysql.clusterType</code>. The message names the previous type and the new type. Used with <code>ClusterTypeSwitchInProgress</code>.</li>
+<li><code>ReplicationLagDetected</code> / <code>NoReplicationLag</code> — whether any <code>async</code> replica lags behind the primary (used by the <code>ReplicationLagging</code> condition)</li>
 </ul>
 <h3 id="cr-statuses-storage-autoscaling-status">Storage autoscaling status<a class="headerlink" href="#cr-statuses-storage-autoscaling-status" title="Permanent link">&para;</a></h3>
 <p>When you enable <a href="#scaling-scale-storage">storage autoscaling</a>, the Operator records per-PVC progress in <code>status.storageAutoscaling.&lt;pvc-name&gt;</code>:</p>
@@ -27287,6 +27298,10 @@ true
 <tr>
 <td><code>AsyncReplicationNotReady</code></td>
 <td>Orchestrator reported replication problems on one or more instances.</td>
+</tr>
+<tr>
+<td><code>ReplicationLagging</code></td>
+<td>A Warning event emitted when replicas start lagging behind the primary. The <code>ReplicationLagging</code> condition becomes <code>True</code>.</td>
 </tr>
 <tr>
 <td><code>StorageAutoscalingTriggered</code></td>
