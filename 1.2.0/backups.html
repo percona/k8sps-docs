@@ -5426,6 +5426,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>The <code>xtrabackup</code> container receives the request and starts the backup process.</li>
 <li>Backups are streamed to storage; the Operator does not keep a separate local copy of the backup on disk.</li>
 </ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>For <a href="architecture.html#asynchronous-replication-tech-preview">asynchronous replication</a> clusters, the Operator uses a replica as the backup source and stops replication for the duration of the backup. If a cluster consists of only 2 members, that replica is the only standby. See <a href="limitations.html#replication-and-topology">Known limitations</a>.</p>
+</div>
 <p>The following diagram outlines this workflow:</p>
 <p><img alt="image" src="assets/images/backup-job.svg" /></p>
 <h2 id="backup-types">Backup types<a class="headerlink" href="#backup-types" title="Permanent link">&para;</a></h2>
@@ -5479,7 +5483,7 @@ storage alongside your normal backup configuration.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:48:43 UTC">October 1, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
       
         <br>
         Created:

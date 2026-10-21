@@ -5702,12 +5702,14 @@ specifically saved config, or on the fly, using the following command:</p>
 </code></pre></div>
 <p>In this example we have changed the size of the Percona Server for MySQL
 Cluster to <code>5</code> instances.</p>
+<p>The Operator validates <code>mysql.size</code> against the cluster type. For <strong>asynchronous</strong> replication, you can scale to 2, 4, 6, or any larger count without extra flags. Scaling to <strong>1</strong> requires <a href="operator.html#unsafeflagsmysqlsize"><code>unsafeFlags.mysqlSize: true</code></a>. 
+For <strong>group replication</strong>, keep an odd count between 3 and 9. ,Setting an even count or for more than 9 instances is not recommended and requires setting <a href="operator.html#unsafeflagsmysqlsize"><code>unsafeFlags.mysqlSize: true</code></a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 20, 2026 08:22:37 UTC">August 20, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
       
         <br>
         Created:

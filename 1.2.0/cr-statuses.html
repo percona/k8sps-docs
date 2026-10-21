@@ -5783,7 +5783,18 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <div class="no-copy highlight"><pre><span></span><code>True: ClusterSetHealthy
 </code></pre></div>
 </details>
-<p><strong>Example 3. Get the backup destination path:</strong></p>
+<p><strong>Example 3. Get replication lag for ClusterSet members:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.clusters.*}{.clusterRole}{": "}{.replicationLagSeconds}{"\n"}{end}'</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample output</summary>
+<div class="no-copy highlight"><pre><span></span><code>PRIMARY: 
+REPLICA: 121
+</code></pre></div>
+</details>
+<p>The field appears only on replica clusters when MySQL Shell reports the lag. The primary cluster and caught-up replicas omit it.</p>
+<p><strong>Example 4. Get the backup destination path:</strong></p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.destination}{"\n"}'</span>
 </code></pre></div>
@@ -6041,8 +6052,13 @@ true
 <td><code>primary</code></td>
 <td>Host:port of the cluster&rsquo;s local Group Replication primary</td>
 </tr>
+<tr>
+<td><code>replicationLagSeconds</code></td>
+<td>How many seconds the primary node of the replica cluster is behind the ClusterSet primary. Present only on <code>REPLICA</code> members when lag is greater than zero. Omitted on the <code>PRIMARY</code> cluster and when there is no lag or it is unavailable.</td>
+</tr>
 </tbody>
 </table>
+<p><code>replicationLagSeconds</code> comes from MySQL Shell&rsquo;s <code>replicationLagFromOriginalSource</code> value for the replica&rsquo;s primary member, shown in whole seconds. Use it to see whether a replica is catching up before you run switchover or send the regional read traffic there.</p>
 <p><code>globalStatus</code> values (from MySQL Shell):</p>
 <table>
 <thead>
@@ -6388,7 +6404,7 @@ true
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 6, 2026 07:40:37 UTC">October 6, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:11 UTC">October 21, 2026</span>
       
         <br>
         Created:

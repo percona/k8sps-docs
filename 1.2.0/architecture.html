@@ -5568,6 +5568,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><strong>Consistency</strong> - Eventual consistency: replicas may lag behind the primary instance, which can affect applications requiring real-time data. There is a risk that some transactions committed on the primary may be lost if it fails before replicas catch up.</li>
 <li><strong>Write scaling</strong> - Does not allow for horizontal write scaling; scaling writes relies on vertical scaling, which is increasing the resources (RAM, CPU) of the primary instance, rather than on adding more write nodes.</li>
 <li><strong>Failover</strong> - Orchestrator handles automatic primary election and replication topology recovery.</li>
+<li><strong>Cluster size</strong> - You can run 2 or more MySQL instances, including an even count. The recommended size is 3 instances. The Operator takes backups from a replica and stops replication for the duration of the backup. With 2 instances, a long backup leaves the replica behind the primary until replication resumes.</li>
 <li><strong>Status</strong> - Currently in tech preview and not recommended for production use.</li>
 </ul>
 <h3 id="group-replication">Group replication<a class="headerlink" href="#group-replication" title="Permanent link">&para;</a></h3>
@@ -5684,7 +5685,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:23:42 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
       
         <br>
         Created:

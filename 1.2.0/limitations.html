@@ -5522,13 +5522,27 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Changing the replication type on a <strong>running</strong> cluster is not supported. Pause the cluster, change <code>spec.mysql.clusterType</code>, then resume it. See <a href="change-replication-type.html">Change replication type</a>.</li>
 <li>Semi-synchronous replication is not supported. Use group replication or asynchronous replication.</li>
 <li>Group replication supports a maximum of <strong>9</strong> MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See <a href="architecture.html#group-replication">Architecture</a>.</li>
-<li>Safe defaults require at least <strong>3</strong> MySQL instances for group replication, an <strong>odd</strong> replica count, and (for asynchronous replication) Orchestrator size of <strong>3 or greater and odd</strong>. You must set the matching <a href="operator.html#operator-unsafeflags-section"><code>unsafeFlags</code></a> option to go below those limits.</li>
-<li>HAProxy and MySQL Router cannot be enabled at the same time. MySQL Router is available only with group replication. Asynchronous replication requires HAProxy (unless you set <code>unsafeFlags.proxy</code>).</li>
+<li>
+<p>Safe defaults for the cluster depend on the replication type. You must set the matching <a href="operator.html#operator-unsafeflags-section"><code>unsafeFlags</code></a> option to go outside these limits:</p>
+<ul>
+<li><strong>Group replication:</strong> at least <strong>3</strong> MySQL instances and an <strong>odd</strong> replica count with the maximum of <strong>9</strong> members. To exceed this number or to configure an even number of members requires setting the <code>unsafeFlags.mysqlSize</code> option.</li>
+<li>
+<p><strong>Asynchronous replication:</strong> at least <strong>2</strong> MySQL instances, recommended number is 3. Even counts are allowed starting with Operator version 1.3.0, because no quorum is required during asynchronous replication. The Orchestrator size must still be <strong>3 or greater and odd</strong>.</p>
+<p>With <code>mysql.size: 2</code>, the cluster has one primary and one replica. The Operator takes backups from the replica and stops replication for the duration of the backup. During that window the replica does not apply changes from the primary, so you have no up-to-date standby until replication resumes.</p>
+<p>To deploy a single-instance cluster (<code>mysql.size: 1</code>) requires setting <code>unsafeFlags.mysqlSize</code>.
+To override the number of Orchestrator instances, set <code>unsafeFlags.orchestratorSize</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>HAProxy and MySQL Router cannot be enabled at the same time. MySQL Router is available only with group replication. Asynchronous replication requires HAProxy (unless you set <code>unsafeFlags.proxy</code>).</p>
+</li>
 <li>The cluster Custom Resource <code>metadata.name</code> must include only URL-compatible characters, must not exceed 22 characters, must start with an alphabetic character, and must end with an alphanumeric character.</li>
 </ul>
 <h2 id="backups-and-restores">Backups and restores<a class="headerlink" href="#backups-and-restores" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The Operator stores backups in cloud object storage only. These object storages are supported: AWS S3 and S3-compatible storages, Microsoft Azure Blob Storage, Google Cloud Storage. Local filesystem backups are not supported.</li>
+<li>In clusters with <a href="architecture.html#asynchronous-replication-tech-preview">asynchronous replication</a>, the Operator takes backups from a replica and stops replication while the backup runs. With <code>mysql.size: 2</code>, that replica is the only standby. See <a href="#replication-and-topology">Replication and topology</a>.</li>
 <li>Backup compression supports only the <code>zstd</code> algorithm. <code>lz4</code> is not supported yet.</li>
 <li>
 <p>When several <a href="backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage">scheduled backups</a> use the <strong>same storage location</strong>:</p>
@@ -5586,7 +5600,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 6, 2026 07:37:37 UTC">October 6, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
       
         <br>
         Created:

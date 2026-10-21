@@ -5220,7 +5220,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>These operations ensure that your actual database environment always matches your request.</p>
 <p>Each MySQL node in your cluster contains a complete copy of your data, synchronized across all nodes. </p>
 <p><img alt="image" src="assets/images/replication.svg" /></p>
-<p>The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally. Read more about <a href="architecture.html#high-availability">high-availability</a> </p>
+<p>The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally. Asynchronous clusters can also run with even number of instances (minimum for high availability). Read more about <a href="architecture.html#high-availability">high availability</a> and <a href="limitations.html#replication-and-topology">cluster size limits</a>. </p>
 <p>To keep your data safe and persistent, the Operator uses Kubernetes storage systems called Persistent Volumes (PVs) and PersistentVolumeClaims (PVCs). When you request storage for your database, a PVC automatically finds and attaches available storage for you. If a node fails, the Kubernetes storage system can move your data to another node, making sure your database remains available and your data stays protected.</p>
 <p>Ready to get started? Continue to the <a href="quickstart.html">quickstart guide</a> to deploy your first cluster, or explore the <a href="architecture.html">architecture overview</a> to understand the inner workings of the Operator. For hands-on steps and best practices, check out <a href="what-next.html">What next?</a>.</p>
 <hr>
@@ -5228,7 +5228,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 3, 2025 15:29:25 UTC">November 3, 2025</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
       
         <br>
         Created:

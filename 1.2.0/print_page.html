@@ -7037,7 +7037,7 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <p>These operations ensure that your actual database environment always matches your request.</p>
 <p>Each MySQL node in your cluster contains a complete copy of your data, synchronized across all nodes. </p>
 <p><img alt="image" src="assets/images/replication.svg" /></p>
-<p>The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally. Read more about <a href="#architecture-high-availability">high-availability</a> </p>
+<p>The recommended configuration is to use at least 3 nodes. Such setup provides high availability — if any node fails, the cluster continues operating normally. Asynchronous clusters can also run with even number of instances (minimum for high availability). Read more about <a href="#architecture-high-availability">high availability</a> and <a href="#limitations-replication-and-topology">cluster size limits</a>. </p>
 <p>To keep your data safe and persistent, the Operator uses Kubernetes storage systems called Persistent Volumes (PVs) and PersistentVolumeClaims (PVCs). When you request storage for your database, a PVC automatically finds and attaches available storage for you. If a node fails, the Kubernetes storage system can move your data to another node, making sure your database remains available and your data stays protected.</p>
 <p>Ready to get started? Continue to the <a href="#quickstart">quickstart guide</a> to deploy your first cluster, or explore the <a href="#architecture">architecture overview</a> to understand the inner workings of the Operator. For hands-on steps and best practices, check out <a href="#what-next">What next?</a>.</p></section><section class="print-page" id="architecture" heading-number="3.3"><h1 id="architecture-architecture">Architecture<a class="headerlink" href="#architecture-architecture" title="Permanent link">&para;</a></h1>
 <p>Percona Operator for MySQL automates deploying and operating Percona Server for MySQL clusters on Kubernetes. This document explains what components the Operator uses and how they work together to provide a highly available MySQL database. Also, read more about <a href="#how-it-works">How the Operator works</a>.</p>
@@ -7076,6 +7076,7 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <li><strong>Consistency</strong> - Eventual consistency: replicas may lag behind the primary instance, which can affect applications requiring real-time data. There is a risk that some transactions committed on the primary may be lost if it fails before replicas catch up.</li>
 <li><strong>Write scaling</strong> - Does not allow for horizontal write scaling; scaling writes relies on vertical scaling, which is increasing the resources (RAM, CPU) of the primary instance, rather than on adding more write nodes.</li>
 <li><strong>Failover</strong> - Orchestrator handles automatic primary election and replication topology recovery.</li>
+<li><strong>Cluster size</strong> - You can run 2 or more MySQL instances, including an even count. The recommended size is 3 instances. The Operator takes backups from a replica and stops replication for the duration of the backup. With 2 instances, a long backup leaves the replica behind the primary until replication resumes.</li>
 <li><strong>Status</strong> - Currently in tech preview and not recommended for production use.</li>
 </ul>
 <h3 id="architecture-group-replication">Group replication<a class="headerlink" href="#architecture-group-replication" title="Permanent link">&para;</a></h3>
@@ -7201,13 +7202,27 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <li>Changing the replication type on a <strong>running</strong> cluster is not supported. Pause the cluster, change <code>spec.mysql.clusterType</code>, then resume it. See <a href="#change-replication-type">Change replication type</a>.</li>
 <li>Semi-synchronous replication is not supported. Use group replication or asynchronous replication.</li>
 <li>Group replication supports a maximum of <strong>9</strong> MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See <a href="#architecture-group-replication">Architecture</a>.</li>
-<li>Safe defaults require at least <strong>3</strong> MySQL instances for group replication, an <strong>odd</strong> replica count, and (for asynchronous replication) Orchestrator size of <strong>3 or greater and odd</strong>. You must set the matching <a href="#operator-operator-unsafeflags-section"><code>unsafeFlags</code></a> option to go below those limits.</li>
-<li>HAProxy and MySQL Router cannot be enabled at the same time. MySQL Router is available only with group replication. Asynchronous replication requires HAProxy (unless you set <code>unsafeFlags.proxy</code>).</li>
+<li>
+<p>Safe defaults for the cluster depend on the replication type. You must set the matching <a href="#operator-operator-unsafeflags-section"><code>unsafeFlags</code></a> option to go outside these limits:</p>
+<ul>
+<li><strong>Group replication:</strong> at least <strong>3</strong> MySQL instances and an <strong>odd</strong> replica count with the maximum of <strong>9</strong> members. To exceed this number or to configure an even number of members requires setting the <code>unsafeFlags.mysqlSize</code> option.</li>
+<li>
+<p><strong>Asynchronous replication:</strong> at least <strong>2</strong> MySQL instances, recommended number is 3. Even counts are allowed starting with Operator version 1.3.0, because no quorum is required during asynchronous replication. The Orchestrator size must still be <strong>3 or greater and odd</strong>.</p>
+<p>With <code>mysql.size: 2</code>, the cluster has one primary and one replica. The Operator takes backups from the replica and stops replication for the duration of the backup. During that window the replica does not apply changes from the primary, so you have no up-to-date standby until replication resumes.</p>
+<p>To deploy a single-instance cluster (<code>mysql.size: 1</code>) requires setting <code>unsafeFlags.mysqlSize</code>.
+To override the number of Orchestrator instances, set <code>unsafeFlags.orchestratorSize</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>HAProxy and MySQL Router cannot be enabled at the same time. MySQL Router is available only with group replication. Asynchronous replication requires HAProxy (unless you set <code>unsafeFlags.proxy</code>).</p>
+</li>
 <li>The cluster Custom Resource <code>metadata.name</code> must include only URL-compatible characters, must not exceed 22 characters, must start with an alphabetic character, and must end with an alphanumeric character.</li>
 </ul>
 <h2 id="limitations-backups-and-restores">Backups and restores<a class="headerlink" href="#limitations-backups-and-restores" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The Operator stores backups in cloud object storage only. These object storages are supported: AWS S3 and S3-compatible storages, Microsoft Azure Blob Storage, Google Cloud Storage. Local filesystem backups are not supported.</li>
+<li>In clusters with <a href="#architecture-asynchronous-replication-tech-preview">asynchronous replication</a>, the Operator takes backups from a replica and stops replication while the backup runs. With <code>mysql.size: 2</code>, that replica is the only standby. See <a href="#limitations-replication-and-topology">Replication and topology</a>.</li>
 <li>Backup compression supports only the <code>zstd</code> algorithm. <code>lz4</code> is not supported yet.</li>
 <li>
 <p>When several <a href="#backups-scheduled-managing-multiple-backup-schedules-in-the-same-storage">scheduled backups</a> use the <strong>same storage location</strong>:</p>
@@ -9912,6 +9927,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 <li>The <code>xtrabackup</code> container receives the request and starts the backup process.</li>
 <li>Backups are streamed to storage; the Operator does not keep a separate local copy of the backup on disk.</li>
 </ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>For <a href="#architecture-asynchronous-replication-tech-preview">asynchronous replication</a> clusters, the Operator uses a replica as the backup source and stops replication for the duration of the backup. If a cluster consists of only 2 members, that replica is the only standby. See <a href="#limitations-replication-and-topology">Known limitations</a>.</p>
+</div>
 <p>The following diagram outlines this workflow:</p>
 <p><img alt="image" src="assets/images/backup-job.svg" /></p>
 <h2 id="backups-backup-types">Backup types<a class="headerlink" href="#backups-backup-types" title="Permanent link">&para;</a></h2>
@@ -12531,7 +12550,9 @@ specifically saved config, or on the fly, using the following command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span><span class="s1">'json'</span><span class="w"> </span>-p<span class="o">=</span><span class="s1">'[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'</span>
 </code></pre></div>
 <p>In this example we have changed the size of the Percona Server for MySQL
-Cluster to <code>5</code> instances.</p></section></section>
+Cluster to <code>5</code> instances.</p>
+<p>The Operator validates <code>mysql.size</code> against the cluster type. For <strong>asynchronous</strong> replication, you can scale to 2, 4, 6, or any larger count without extra flags. Scaling to <strong>1</strong> requires <a href="#operator-unsafeflagsmysqlsize"><code>unsafeFlags.mysqlSize: true</code></a>. 
+For <strong>group replication</strong>, keep an odd count between 3 and 9. ,Setting an even count or for more than 9 instances is not recommended and requires setting <a href="#operator-unsafeflagsmysqlsize"><code>unsafeFlags.mysqlSize: true</code></a>.</p></section></section>
                     <section class='print-page md-section' id='section-7' heading-number='7'>
                         <h1>Production configuration<a class='headerlink' href='#section-7' title='Permanent link'></a>
                         </h1>
@@ -14844,6 +14865,19 @@ my-cluster-set   sourcecluster  source-cluster-mysql-0:3306              True   
 </ul>
 </li>
 </ol>
+<h3 id="replication-setup-check-replication-lag">Check replication lag<a class="headerlink" href="#replication-setup-check-replication-lag" title="Permanent link">&para;</a></h3>
+<p>A replica cluster may lag behind the primary.</p>
+<p>To see how far a replica cluster is behind the primary, run:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.clusters.replicacluster.replicationLagSeconds}{"\n"}'</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample output</summary>
+<div class="highlight"><pre><span></span><code>121
+</code></pre></div>
+</details>
+<p>An empty result means either this cluster is the primary, or the replica is caught up (or lag could not be determined). A growing value means the replica is falling behind. Wait for the lag to drop before you promote the replica or rely on it for reads.</p>
+<p>For field details, see <a href="#cr-statuses-per-member-cluster-status">Custom resource statuses</a>.</p>
 <h3 id="replication-setup-check-per-cluster-status">Check per-cluster status<a class="headerlink" href="#replication-setup-check-per-cluster-status" title="Permanent link">&para;</a></h3>
 <p>Run on the replica cluster:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[*]}{.type}{": "}{.status}{"\n"}{end}'</span>
@@ -19258,7 +19292,11 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 </tbody>
 </table>
 <h3 id="operator-unsafeflagsmysqlsize"><code>unsafeFlags.mysqlSize</code><a class="headerlink" href="#operator-unsafeflagsmysqlsize" title="Permanent link">&para;</a></h3>
-<p>Allows users to start the cluster with less than 3 MySQL instances or with more than 9 (the maximum safe size).</p>
+<p>Allows a cluster size that is outside the safe defaults for the replication type:</p>
+<ul>
+<li><strong>Asynchronous (<code>async</code>):</strong> a single MySQL instance (<code>mysql.size: 1</code>). Size 2 or greater is allowed without this flag starting with Operator 1.3.0, including even counts.</li>
+<li><strong>Group Replication (<code>group-replication</code>):</strong> an even instance count, or more than 9 instances.</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -19532,6 +19570,7 @@ configuration options for the Percona Server for MySQL.</p>
 </table>
 <h3 id="operator-mysqlsize"><code>mysql.size</code><a class="headerlink" href="#operator-mysqlsize" title="Permanent link">&para;</a></h3>
 <p>The number of the Percona Server for MySQL instances. This setting is required.</p>
+<p>The safe range depends on <code>mysql.clusterType</code>. For <code>async</code>, use 2 or more instances (even counts are allowed). Size <code>1</code> requires <a href="#operator-unsafeflagsmysqlsize"><code>unsafeFlags.mysqlSize</code></a>. For <code>group-replication</code>, use an odd count between 3 and 9 unless you set that flag.</p>
 <table>
 <thead>
 <tr>
@@ -27020,7 +27059,18 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <div class="no-copy highlight"><pre><span></span><code>True: ClusterSetHealthy
 </code></pre></div>
 </details>
-<p><strong>Example 3. Get the backup destination path:</strong></p>
+<p><strong>Example 3. Get replication lag for ClusterSet members:</strong></p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.clusters.*}{.clusterRole}{": "}{.replicationLagSeconds}{"\n"}{end}'</span>
+</code></pre></div>
+<details class="example">
+<summary>Sample output</summary>
+<div class="no-copy highlight"><pre><span></span><code>PRIMARY: 
+REPLICA: 121
+</code></pre></div>
+</details>
+<p>The field appears only on replica clusters when MySQL Shell reports the lag. The primary cluster and caught-up replicas omit it.</p>
+<p><strong>Example 4. Get the backup destination path:</strong></p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.destination}{"\n"}'</span>
 </code></pre></div>
@@ -27278,8 +27328,13 @@ true
 <td><code>primary</code></td>
 <td>Host:port of the cluster&rsquo;s local Group Replication primary</td>
 </tr>
+<tr>
+<td><code>replicationLagSeconds</code></td>
+<td>How many seconds the primary node of the replica cluster is behind the ClusterSet primary. Present only on <code>REPLICA</code> members when lag is greater than zero. Omitted on the <code>PRIMARY</code> cluster and when there is no lag or it is unavailable.</td>
+</tr>
 </tbody>
 </table>
+<p><code>replicationLagSeconds</code> comes from MySQL Shell&rsquo;s <code>replicationLagFromOriginalSource</code> value for the replica&rsquo;s primary member, shown in whole seconds. Use it to see whether a replica is catching up before you run switchover or send the regional read traffic there.</p>
 <p><code>globalStatus</code> values (from MySQL Shell):</p>
 <table>
 <thead>
