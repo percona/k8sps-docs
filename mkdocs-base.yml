@@ -274,6 +274,7 @@ nav:
           - "Check the events": debug-events.md
           - "Check the logs": debug-logs.md
           - "Troubleshoot backups and restores": debug-backup-restore.md
+          - "Recover from a full cluster crash": crash-recovery.md
           
     - Reference:
         - Custom Resource reference:
