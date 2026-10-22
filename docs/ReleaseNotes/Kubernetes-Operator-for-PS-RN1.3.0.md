@@ -52,7 +52,7 @@ Check the following before you upgrade the Operator to 1.3.0. The upgrade steps 
 
 ### Leader election is enabled by default
 
-Starting with version 1.3.0, leader election for the Operator Deployment is on by default. When you upgrade the Operator to version 1.3.0, you can disable it via the `PSO_CONTROLLER_LEADER_ELECTION_ENABLED` environment.
+Starting with version 1.3.0, leader election for the Operator Deployment is on by default. When you upgrade the Operator to version 1.3.0, you can disable it via the `PSO_LEADER_ELECTION_ENABLED` environment.
 
 See [Configurable leader election for the Operator](#configurable-leader-election-for-the-operator).
 
@@ -178,7 +178,7 @@ When a replica joins or rejoins an asynchronous cluster, MySQL copies the data w
 
 This behavior applies to clusters with `crVersion` set to 1.3.0. The Operator ignores `BOOTSTRAP_CLONE_TIMEOUT` for those clusters. The fixed timeout remains only for clusters with `crVersion` older than 1.3.0.
 
-To turn off the stall check, set `BOOTSTRAP_CLONE_STALL_TIMEOUT` to `0`. See [Configure Operator environment variables](../env-vars-operator.md) for guidelines.
+To turn off the stall check, set `BOOTSTRAP_CLONE_STALL_TIMEOUT` to `0`. See [Define environment variables for cluster components](../env-vars-custom.md) for guidelines.
 
 ### Encrypted binlogs for point-in-time recovery
 
