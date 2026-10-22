@@ -5595,12 +5595,13 @@ you tailor backup security to your unique requirements.</p>
 <p class="admonition-title">Keep your backup encryption keys safe</p>
 <p>To restore from an encrypted backup, you <strong>must have the original encryption key</strong>. If the key is lost or rotated, your backups are irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
 </div>
+<p>Binlogs collected for point-in-time recovery are stored separately from these backups. To encrypt those files in object storage, see <a href="backups-pitr.html#binlog-encryption">Binlog encryption</a>.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:01 UTC">October 22, 2026</span>
       
         <br>
         Created:

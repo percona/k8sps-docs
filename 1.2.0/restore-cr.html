@@ -4195,6 +4195,39 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pitrkeyringsecret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pitr.keyringSecret
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pitrkeyringsecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pitr.keyringSecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pitrkeyringsecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pitr.keyringSecret.key
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5862,6 +5895,39 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#pitrkeyringsecret" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pitr.keyringSecret
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pitrkeyringsecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pitr.keyringSecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pitrkeyringsecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pitr.keyringSecret.key
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -6416,6 +6482,54 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
+<h4 id="pitrkeyringsecret"><code>pitr.keyringSecret</code><a class="headerlink" href="#pitrkeyringsecret" title="Permanent link">&para;</a></h4>
+<p>Optional reference to a Kubernetes Secret that contains the keyring to <a href="backups-pitr.html#binlog-encryption">decrypt encrypted binlogs</a> during point-in-time recovery. By default the Operator uses the keyring configured on the cluster. Set this field when keys have been rotated into a different Secret, or when you restore to a cluster that does not have the source keyring.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span> subdoc</td>
+<td><pre>name: ps-cluster1-binlog-server-keyring<br>key: keyring.json</pre></td>
+</tr>
+</tbody>
+</table>
+<h4 id="pitrkeyringsecretname"><code>pitr.keyringSecret.name</code><a class="headerlink" href="#pitrkeyringsecretname" title="Permanent link">&para;</a></h4>
+<p>The name of the Kubernetes Secret that stores the binlog keyring.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ps-cluster1-binlog-server-keyring</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="pitrkeyringsecretkey"><code>pitr.keyringSecret.key</code><a class="headerlink" href="#pitrkeyringsecretkey" title="Permanent link">&para;</a></h4>
+<p>The key within the Secret that holds the keyring JSON. Defaults to <code>keyring.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>keyring.json</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="the-pitrbackupsource-subsection">The <code>pitr.backupSource</code> subsection<a class="headerlink" href="#the-pitrbackupsource-subsection" title="Permanent link">&para;</a></h3>
 <p>This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when <a href="backups-restore-pitr.html#restore-on-a-new-cluster">restoring to a new Kubernetes environment</a>. When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.</p>
 <h4 id="pitrbackupsourcebinlogserversize"><code>pitr.backupSource.binlogServer.size</code><a class="headerlink" href="#pitrbackupsourcebinlogserversize" title="Permanent link">&para;</a></h4>
@@ -6923,7 +7037,7 @@ If you are restoring to a new cluster and both the source and target clusters us
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 20, 2026 07:58:44 UTC">October 20, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:01 UTC">October 22, 2026</span>
       
         <br>
         Created:

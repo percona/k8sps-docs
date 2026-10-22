@@ -8022,6 +8022,50 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverstorageencryptioncipher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.storage.encryption.cipher
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverstorageencryptionkekid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.storage.encryption.kekId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverkeyringsecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.keyringSecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverkeyringsecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.keyringSecret.key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#backuppitrbinlogserverconnecttimeout" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -14297,6 +14341,50 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         backup.pitr.binlogServer.storage.s3.caBundle.key
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverstorageencryptioncipher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.storage.encryption.cipher
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverstorageencryptionkekid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.storage.encryption.kekId
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverkeyringsecretname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.keyringSecret.name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backuppitrbinlogserverkeyringsecretkey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backup.pitr.binlogServer.keyringSecret.key
       
     </span>
   </a>
@@ -21005,6 +21093,71 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="backuppitrbinlogserverstorageencryptioncipher"><code>backup.pitr.binlogServer.storage.encryption.cipher</code><a class="headerlink" href="#backuppitrbinlogserverstorageencryptioncipher" title="Permanent link">&para;</a></h3>
+<p>The cipher used to <a href="backups-pitr.html#binlog-encryption">encrypt binlog data</a> before Percona Binlog Server writes files to object storage. Only CTR mode is supported.</p>
+<p>Allowed values: <code>AES-128-CTR</code>, <code>AES-192-CTR</code>, <code>AES-256-CTR</code>. Defaults to <code>AES-256-CTR</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>AES-256-CTR</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backuppitrbinlogserverstorageencryptionkekid"><code>backup.pitr.binlogServer.storage.encryption.kekId</code><a class="headerlink" href="#backuppitrbinlogserverstorageencryptionkekid" title="Permanent link">&para;</a></h3>
+<p>The <code>id</code> of the key encryption key (KEK) in the keyring Secret used to wrap the per-file data encryption key. If omitted, Percona Binlog Server uses the first key in the keyring. Changing this value affects only new binlogs. See <a href="backups-pitr.html#binlog-encryption">Binlog encryption</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>alpha</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backuppitrbinlogserverkeyringsecretname"><code>backup.pitr.binlogServer.keyringSecret.name</code><a class="headerlink" href="#backuppitrbinlogserverkeyringsecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that stores the binlog keyring file. Required when <code>storage.encryption</code> is set. Keep this Secret configured after you disable encryption if the bucket still contains encrypted binlogs. See <a href="backups-pitr.html#disable-binlog-encryption">Binlog encryption</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ps-cluster1-binlog-server-keyring</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="backuppitrbinlogserverkeyringsecretkey"><code>backup.pitr.binlogServer.keyringSecret.key</code><a class="headerlink" href="#backuppitrbinlogserverkeyringsecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the keyring JSON. Defaults to <code>keyring.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>keyring.json</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="backuppitrbinlogserverconnecttimeout"><code>backup.pitr.binlogServer.connectTimeout</code><a class="headerlink" href="#backuppitrbinlogserverconnecttimeout" title="Permanent link">&para;</a></h3>
 <p>Timeout in seconds for establishing a connection to MySQL. </p>
 <table>
@@ -22444,7 +22597,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 14:33:31 UTC">October 21, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:01 UTC">October 22, 2026</span>
       
         <br>
         Created:

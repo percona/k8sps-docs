@@ -6991,6 +6991,7 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <li>Transport encryption with TLS/SSL support</li>
 <li>Data-at-rest encryption with key management integration</li>
 <li>Encrypted backups for object storage</li>
+<li><a href="#backups-pitr-binlog-encryption">Encrypted binlogs</a> for point-in-time recovery, without depending on S3 server-side encryption</li>
 <li>Additional trusted CA certificates from your PKI for TLS verification with S3-compatible backup storage (available starting with Operator version 1.3.0)</li>
 <li>Role-based access control with fine-grained permissions</li>
 <li>Secret management with Kubernetes-native secrets</li>
@@ -9978,7 +9979,8 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 <p>For the full list of backup states, see <a href="#cr-statuses-backup-state-values">Backup state values</a>.</p>
 <h2 id="backups-point-in-time-recovery">Point-in-time recovery<a class="headerlink" href="#backups-point-in-time-recovery" title="Permanent link">&para;</a></h2>
 <p>Starting with Operator 1.1.0, you can combine a base backup with archived binary logs to <a href="#backups-restore-pitr">restore to a specific GTID or timestamp</a>. <a href="#backups-pitr-enable-binlog-collection">Enable binlog collection</a> to stream binlogs to the object
-storage alongside your normal backup configuration.</p></section><section class="print-page" id="backups-storage" heading-number="6.3.2"><h1 id="backups-storage-configure-storage-for-backups">Configure storage for backups<a class="headerlink" href="#backups-storage-configure-storage-for-backups" title="Permanent link">&para;</a></h1>
+storage alongside your normal backup configuration.</p>
+<p>You can also <a href="#backups-pitr-binlog-encryption">encrypt binlogs</a> for an additional security layer.</p></section><section class="print-page" id="backups-storage" heading-number="6.3.2"><h1 id="backups-storage-configure-storage-for-backups">Configure storage for backups<a class="headerlink" href="#backups-storage-configure-storage-for-backups" title="Permanent link">&para;</a></h1>
 <p>You configure backup storage in the <code>backup.storages</code> subsection of your Custom Resource using the <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.2.0/deploy/cr.yaml">deploy/cr.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> file.</p>
 <p>Before configuring storage, you need to create a <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> object that contains the credentials needed to access your storage.</p>
 <p>To <a href="#backups-encrypted">encrypt backups</a> in object storage, create a separate Secret with your encryption key and reference it in <code>spec.backup.encryptionKeySecret</code> or under the storage entry.</p>
@@ -10797,7 +10799,8 @@ you tailor backup security to your unique requirements.</p>
 <div class="admonition warning">
 <p class="admonition-title">Keep your backup encryption keys safe</p>
 <p>To restore from an encrypted backup, you <strong>must have the original encryption key</strong>. If the key is lost or rotated, your backups are irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
-</div></section>
+</div>
+<p>Binlogs collected for point-in-time recovery are stored separately from these backups. To encrypt those files in object storage, see <a href="#backups-pitr-binlog-encryption">Binlog encryption</a>.</p></section>
                     <section class='print-page md-section' id='section-6-3-8' heading-number='6.3.8'>
                         <h1>Point-in-time recovery<a class='headerlink' href='#section-6-3-8' title='Permanent link'></a>
                         </h1>
@@ -10897,7 +10900,108 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 </code></pre></div>
 </li>
 </ol>
-<p>To restore, use <a href="#backups-restore-pitr">Restore with point-in-time recovery</a>.</p>
+<p>By default, collected files are stored in plaintext. You can add an extra layer of protection by <a href="#backups-pitr-binlog-encryption">encrypting them</a> before they are written to the bucket.</p>
+<p>To restore, use <a href="#backups-restore-pitr">Restore with point-in-time recovery</a>. </p>
+<h2 id="backups-pitr-binlog-encryption">Binlog encryption<a class="headerlink" href="#backups-pitr-binlog-encryption" title="Permanent link">&para;</a></h2>
+<div class="admonition admonition">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>Binlog encryption gives you an extra protection layer that you
+control. This encrypts only the binlog copies in object storage. Binlog encryption is separate from <a href="#encryption">data-at-rest encryption</a> on the database and from <a href="#backups-encrypted">encrypted backups</a>. Use it when you want a key you control, including on S3-compatible storage that has no server-side encryption.</p>
+<p>After you enable binlog encryption, Percona Binlog Server encrypts each file <strong>before</strong>
+writing it to the bucket, using a key you keep in a Kubernetes
+Secret. The same key is used for decrypting files during
+point-in-time recovery.</p>
+<h3 id="backups-pitr-how-encryption-works">How encryption works<a class="headerlink" href="#backups-pitr-how-encryption-works" title="Permanent link">&para;</a></h3>
+<ul>
+<li>You store one or more <strong>key encryption keys (KEKs)</strong> in a keyring Secret. The Operator validates the Secret and mounts it into Binlog Server and the point-in-time recovery Job.</li>
+<li>Binlog Server generates a <strong>data encryption key (DEK)</strong> for each file, encrypts the binlog, wraps the DEK with the selected KEK, and records which KEK was used.</li>
+<li>During restore, the Job decrypts each encrypted file with the matching KEK. Unencrypted files are applied as-is, so you can enable encryption on a bucket that already has plaintext binlogs.</li>
+</ul>
+<p>Changing the active KEK affects only <strong>new</strong> files. Binlog Server does not re-encrypt files already in storage. Keep every KEK that was ever used so older files remain recoverable.</p>
+<h3 id="backups-pitr-enable-binlog-encryption">Enable binlog encryption<a class="headerlink" href="#backups-pitr-enable-binlog-encryption" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Generate a KEK. Key length must match the KEK cipher: 16 bytes for AES-128, 24 for AES-192, 32 for AES-256.</p>
+<div class="highlight"><pre><span></span><code>openssl<span class="w"> </span>rand<span class="w"> </span>-hex<span class="w"> </span><span class="m">16</span>
+</code></pre></div>
+</li>
+<li>
+<p>Create a Secret. Modify the example <a href="https://github.com/percona/percona-server-mysql-operator/tree/v1.2.0/deploy/keyring-secret.yaml"><code>deploy/keyring-secret.yaml</code> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> manifest. Set:</p>
+<ul>
+<li><code>id</code> — identifier that <code>kekId</code> in the Custom Resource refers to</li>
+<li><code>cipher</code> — cipher used to wrap the DEK, in the format <code>AES-&lt;128\|192\|256&gt;-&lt;mode&gt;</code>. Supported modes: <code>ECB</code>, <code>CBC</code>, <code>CTR</code>, <code>GCM</code></li>
+<li><code>data_hex</code> — the key from step 1. Do not use a sample value in production.</li>
+</ul>
+<div class="highlight"><span class="filename">binlog-keyring.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-binlog-server-keyring</span>
+<span class="nt">stringData</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">keyring.json</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">{</span>
+<span class="w">      </span><span class="no">"version": 1,</span>
+<span class="w">      </span><span class="no">"keys": [</span>
+<span class="w">        </span><span class="no">{</span>
+<span class="w">          </span><span class="no">"id": "alpha",</span>
+<span class="w">          </span><span class="no">"cipher": "AES-128-ECB",</span>
+<span class="w">          </span><span class="no">"data_hex": "&lt;generated-hex-key&gt;"</span>
+<span class="w">        </span><span class="no">}</span>
+<span class="w">      </span><span class="no">]</span>
+<span class="w">    </span><span class="no">}</span>
+</code></pre></div>
+<p>Apply the manifest:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>binlog-keyring.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>The Operator rejects a missing, empty, or invalid keyring before it configures Binlog Server.</p>
+</li>
+<li>
+<p>Edit <code>deploy/cr.yaml</code> and set these fields under <code>spec.backup.pitr.binlogServer</code>. Only CTR mode is supported for binlog <strong>data</strong> encryption. The KEK cipher in the keyring (for example <code>AES-128-ECB</code>) is separate from this data cipher.</p>
+<ul>
+<li><code>keyringSecret.name</code> — Secret that holds the keyring. Required when encryption is enabled. Keep it set after you disable encryption if the bucket still has encrypted binlogs.</li>
+<li><code>keyringSecret.key</code> — Key inside the Secret. Defaults to <code>keyring.json</code>.</li>
+<li><code>storage.encryption.cipher</code> — <code>AES-128-CTR</code>, <code>AES-192-CTR</code>, or <code>AES-256-CTR</code>. Defaults to <code>AES-256-CTR</code>.</li>
+<li><code>storage.encryption.kekId</code> — <code>id</code> of the KEK to use. If omitted, Binlog Server uses the first key in the file.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">keyringSecret</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-binlog-server-keyring</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keyring.json</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">encryption</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">cipher</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AES-256-CTR</span>
+<span class="w">            </span><span class="nt">kekId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alpha</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-binlogs</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-s3-secret</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-east-1</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+</code></pre></div>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>The Operator restarts the Binlog Server Pod and starts encrypting new binlogs. Files already in the bucket stay as they are.</p>
+</li>
+</ol>
+<h3 id="backups-pitr-restore-with-encrypted-binlogs">Restore with encrypted binlogs<a class="headerlink" href="#backups-pitr-restore-with-encrypted-binlogs" title="Permanent link">&para;</a></h3>
+<p>On the same cluster, the Operator uses the cluster keyring automatically. On a new cluster, or if keys live in a different Secret, set <code>spec.pitr.keyringSecret</code> on the restore object. See <a href="#backups-restore-pitr-restore-with-encrypted-binlogs">Perform point-in-time recovery with encrypted binlogs</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Keep your binlog encryption keys safe</p>
+<p>To restore from encrypted binlogs, you <strong>must have the original KEKs</strong>. If a key is lost or removed from the keyring, binlogs wrapped with that key are irrecoverable. Back up the keyring Secret separately from the binlog bucket.</p>
+</div>
+<h3 id="backups-pitr-rotate-encryption-key">Rotate encryption key<a class="headerlink" href="#backups-pitr-rotate-encryption-key" title="Permanent link">&para;</a></h3>
+<p>To start encrypting new binlogs with a different KEK, add the new key to the same Secret and <strong>keep every previous key</strong>. Then set <code>storage.encryption.kekId</code> to the new <code>id</code> and apply the Custom Resource. If you drop an old key, binlogs wrapped with it become unrestorable.</p>
+<h3 id="backups-pitr-disable-binlog-encryption">Disable binlog encryption<a class="headerlink" href="#backups-pitr-disable-binlog-encryption" title="Permanent link">&para;</a></h3>
+<p>To stop encrypting new binlogs, clear <code>storage.encryption</code>. Keep <code>keyringSecret</code> set so Binlog Server and later restores can still read encrypted files in the bucket:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>--type<span class="w"> </span>merge<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="s1">'{"spec":{"backup":{"pitr":{"binlogServer":{"storage":{"encryption":null}}}}}}'</span>
+</code></pre></div>
 <h2 id="backups-pitr-verify-tls-with-a-custom-ca">Verify TLS with a custom CA<a class="headerlink" href="#backups-pitr-verify-tls-with-a-custom-ca" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
@@ -10974,6 +11078,7 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 <li>
 <p><strong>You cannot change the <code>prefix</code> value for the binlog bucket</strong> after you configure Binlog Server.</p>
 </li>
+<li><strong>Binlog data encryption</strong> supports only CTR (<code>AES-128-CTR</code>, <code>AES-192-CTR</code>, <code>AES-256-CTR</code>). Changing <code>kekId</code> does not re-encrypt existing files.</li>
 <li><strong>Password change.</strong> If the Operator user password differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password.</li>
 <li><strong>Restore retries are not idempotent.</strong> If recovery fails after the base backup is restored, a retry does not restore the full backup again. Set <code>spec.backup.backoffLimit=0</code> in <code>cr.yaml</code> to prevent automatic Job retries.</li>
 <li><strong>Binlog storage is separate</strong> from base backup storage. During the in-place restore on the same cluster, the Operator uses the settings defined in the <code>spec.backup.pitr.binlogServer</code> of the cluster&rsquo;s Custom Resource. For a cross-cluster restore, specify the Binlog storage settings
@@ -10996,6 +11101,7 @@ object.</li>
 <li>Choose a target timestamp (<code>type: date</code>) or a GTID set (<code>type: gtid</code>)</li>
 <li>Set the <code>spec.backup.backoffLimit=0</code> in the cluster Custom Resource so a failed PITR Job does not retry automatically (<a href="#backups-pitr-known-limitations">known limitations</a>)</li>
 <li>If the source verified S3 with a custom CA, follow <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a></li>
+<li>If the source cluster encrypted binlogs, follow <a href="#backups-restore-pitr-restore-with-encrypted-binlogs">Restore with encrypted binlogs</a></li>
 </ul>
 <h2 id="backups-restore-pitr-restore-on-the-same-cluster">Restore on the same cluster<a class="headerlink" href="#backups-restore-pitr-restore-on-the-same-cluster" title="Permanent link">&para;</a></h2>
 <p>The Operator reads binlog storage from <code>spec.backup.pitr.binlogServer</code> on the cluster Custom Resource.</p>
@@ -11056,6 +11162,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li>User password Secret matches the source cluster. Copy it as described in <a href="#backups-restore-to-new-cluster-preconditions">Preconditions</a></li>
 <li>If the base backup was <a href="#backups-encrypted">encrypted</a>, create the same encryption-key Secret on the target and set <code>spec.backupSource.storage.encryptionKeySecret</code></li>
 <li>If the source verified S3 with a custom CA, follow <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a></li>
+<li>If source binlogs were encrypted, copy the keyring Secret and set <code>spec.pitr.keyringSecret</code>. See <a href="#backups-restore-pitr-restore-with-encrypted-binlogs">Restore with encrypted binlogs</a></li>
 </ul>
 <p>Keep these three prefixes distinct:</p>
 <table>
@@ -11164,6 +11271,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <td>Use a custom CA</td>
 <td>Follow <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a></td>
 </tr>
+<tr>
+<td>Decrypt encrypted binlogs</td>
+<td>See <a href="#backups-restore-pitr-restore-with-encrypted-binlogs">Restore with encrypted binlogs</a></td>
+</tr>
 </tbody>
 </table>
 <p>Start the restore:</p>
@@ -11236,6 +11347,82 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <p><a href="#backups-restore-pitr-view-restore-details">Watch the restore</a>. If TLS verification fails, see <a href="#debug-backup-restore-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</p>
 </li>
 </ol>
+<h2 id="backups-restore-pitr-restore-with-encrypted-binlogs">Restore with encrypted binlogs<a class="headerlink" href="#backups-restore-pitr-restore-with-encrypted-binlogs" title="Permanent link">&para;</a></h2>
+<p>Use this section when the source cluster <a href="#backups-pitr-binlog-encryption">encrypted binlogs</a> in object storage. The restore Job decrypts each file with the key encryption key (KEK) recorded in that file&rsquo;s metadata. Unencrypted binlogs in the same bucket are applied as-is.</p>
+<p>You <strong>must have every KEK</strong> that wrapped the binlogs you are replaying. If a key is missing from the keyring, those files cannot be decrypted.</p>
+<h3 id="backups-restore-pitr-on-the-same-cluster">On the same cluster<a class="headerlink" href="#backups-restore-pitr-on-the-same-cluster" title="Permanent link">&para;</a></h3>
+<p>If <code>spec.backup.pitr.binlogServer.keyringSecret</code> is still set on the cluster and the Secret still holds every KEK, run the restore as in <a href="#backups-restore-pitr-restore-on-the-same-cluster">Restore on the same cluster</a>. The Operator mounts that keyring automatically. No extra fields are required.</p>
+<p>Set <code>spec.pitr.keyringSecret</code> on the restore object when the keys you need live in a <strong>different</strong> Secret than the one on the cluster (for example after you rotated keys into a new Secret):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-encrypted</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
+<span class="w">    </span><span class="nt">keyringSecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-binlog-server-keyring</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keyring.json</span>
+</code></pre></div>
+<p>The <code>key</code> field defaults to <code>keyring.json</code> if you omit it.</p>
+<h3 id="backups-restore-pitr-new-cluster">New cluster<a class="headerlink" href="#backups-restore-pitr-new-cluster" title="Permanent link">&para;</a></h3>
+<p>The target cluster has no access to Secrets from the source environment. Copy the keyring Secret, then point the restore at it.</p>
+<ol>
+<li>
+<p>On the <strong>source</strong> cluster, export the keyring Secret. Use the name from <code>spec.backup.pitr.binlogServer.keyringSecret</code> on the source Custom Resource:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>ps-cluster1-binlog-server-keyring<span class="w"> </span>-n<span class="w"> </span>&lt;source-namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>binlog-keyring.yaml
+</code></pre></div>
+</li>
+<li>
+<p>Strip cluster-specific metadata:</p>
+<div class="highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)'</span><span class="w"> </span>binlog-keyring.yaml<span class="w"> </span>&gt;<span class="w"> </span>binlog-keyring-target.yaml
+</code></pre></div>
+</li>
+<li>
+<p>Apply the Secret on the <strong>target</strong> cluster:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>binlog-keyring-target.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+<p>Confirm the Secret&rsquo;s <code>keyring.json</code> still lists <strong>every</strong> KEK that encrypted the binlogs still in the source bucket (including retired <code>id</code> values after rotation).</p>
+</li>
+<li>
+<p>Create the restore as in <a href="#backups-restore-pitr-restore-on-a-new-cluster">Restore on a new cluster</a> and add <code>spec.pitr.keyringSecret</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;BACKUP-PREFIX&gt;</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
+<span class="w">    </span><span class="nt">keyringSecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-binlog-server-keyring</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keyring.json</span>
+<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+</code></pre></div>
+</li>
+</ol>
+<p>If the <strong>base backup</strong> was also encrypted, add <code>spec.backupSource.storage.encryptionKeySecret</code> as well. That key is separate from the binlog keyring. See <a href="#backups-encrypted">Encrypted backups</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Keep your binlog encryption keys safe</p>
+<p>If a KEK is lost or removed from the keyring, binlogs wrapped with that key are irrecoverable. Store a backup of the keyring Secret separately from the binlog bucket.</p>
+</div>
+<p>Apply the restore and <a href="#backups-restore-pitr-view-restore-details">watch the restore</a>. If decryption fails, see <a href="#debug-backup-restore-encrypted-binlogs-fail-to-decrypt">Encrypted binlogs fail to decrypt</a>.</p>
 <h2 id="backups-restore-pitr-ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay<a class="headerlink" href="#backups-restore-pitr-ignore-sql-errors-during-binlog-replay" title="Permanent link">&para;</a></h2>
 <p>Updates made by <code>mysql-shell</code> can produce replication errors during replay, for example <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>To ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code>. This passes <code>--force</code> to the MySQL client.</p>
@@ -13133,9 +13320,10 @@ kubectl<span class="w"> </span>delete<span class="w"> </span>certificate/<span c
 <h2 id="encryption-backups-and-encryption">Backups and encryption<a class="headerlink" href="#encryption-backups-and-encryption" title="Permanent link">&para;</a></h2>
 <p>Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up <a href="#encryption-setup">encrypted</a> tablespaces. When your database uses the <code>keyring_vault</code> plugin, backup files retain that encryption layer as part of the physical backup data.</p>
 <p>Starting with Operator 1.2.0, you can also <a href="#backups-encrypted">encrypt backup files in the object storage</a> independently of database encryption. This protects backup data even when live database encryption is not enabled.</p>
+<p>Data-at-rest encryption on the server does not encrypt the binlog files required for point-in-time recovery. To protect those files, enable <a href="#backups-pitr-binlog-encryption">binlog encryption</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Keep your encryption keys safe</p>
-<p>To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is the <strong>the original Vault master encryption key</strong>. For encrypted backups, this is the <strong>backup encryption key</strong> from the Kubernetes Secret.</p>
+<p>To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is <strong>the original Vault master encryption key</strong>. For encrypted backups, this is the <strong>backup encryption key</strong> from the Kubernetes Secret.</p>
 <p>If either key is lost or rotated, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
 </div>
 <h2 id="encryption-next-steps">Next steps<a class="headerlink" href="#encryption-next-steps" title="Permanent link">&para;</a></h2>
@@ -14534,6 +14722,8 @@ credentials cannot differ per site.</li>
 <li><strong>MySQL versioning</strong> — Primary and replicas can have different but compatible MySQL versions. Replication is supported from one release series to the next higher series. For example, from the primary running Percona Server for MySQL 8.0.27+ to the replica running Percona Server for MySQL 8.4.x.</li>
 <li><strong>Manual bootstrap for replicas</strong> — When you deploy a replica site, specify <code>spec.mysql.bootstrap.mode: manual</code> to prevent the replica from starting as a Group Replication cluster. Instead, Pod-0 comes up and waits for the ClusterSet controller to create the group. Pod-1+ do not start until Pod-0 is Ready.</li>
 <li><strong>Long operations as Jobs</strong> — <code>createReplicaCluster</code>, switchover, cluster removal, and rejoin run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.</li>
+<li><strong>Finalizer on delete</strong> — The <code>percona.com/clusterset-dissolve</code> finalizer dissolves the ClusterSet when you delete the <code>PerconaServerMySQLClusterSet</code> Custom Resource. Data in the underlying clusters is preserved. </li>
+<li><strong>ClusterSet members are protected from deletion</strong> - The Operator version 1.3.0 protects the ClusterSet members from deletion. It sets the <code>percona.com/clusterset-protection</code> finalizer on each member while the ClusterSet has at least one replica. Remove the cluster from the ClusterSet or delete the ClusterSet before you delete the cluster. If you delete a member earlier, the cluster stays in <code>Terminating</code> until that finalizer is removed.</li>
 <li><strong>Replica recovery after pause or crash</strong> — The Operator recovers a ClusterSet replica through full cluster crash recovery. It runs <code>dba.rebootClusterFromCompleteOutage()</code>, which restores the local Group Replication group and rejoins the replica to the ClusterSet. If only the ClusterSet channel is down, you trigger rejoin with an annotation. See <a href="#replication-setup-rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</li>
 <li><strong>Finalizer on delete</strong> — The <code>percona.com/clusterset-dissolve</code> finalizer ensures that the ClusterSet dissolves when the <code>PerconaServerMySQLClusterSet</code> Custom Resource is removed. Data in underlying clusters is preserved.</li>
 <li><strong>No automatic switchover</strong> — All switchovers are user-initiated. You must edit the ClusterSet Custom Resource for a planned or a forced failover.</li>
@@ -14544,7 +14734,7 @@ credentials cannot differ per site.</li>
 <li><strong>No adopting existing ClusterSets</strong> — The controller only bootstraps a new ClusterSet or refuses if the metadata is inconsistent. You cannot adopt into management any ClusterSet that was created manually with <code>mysqlsh</code>.</li>
 <li><strong>Backups taken on a ClusterSet cannot be restored on a fresh cluster</strong> — Backups include the ClusterSet metadata that is tied to the specific topology and identities of the clusters within that ClusterSet. Restoring such a backup onto a new, unrelated cluster will lead to inconsistencies or errors, since the metadata will not match the new environment or cluster configuration.</li>
 <li><strong>Removal is one-way</strong> — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.</li>
-<li><strong>Deletion of ClusterSet object is stuck if the cluster is deleted beforehand</strong> - Ensure your ClusterSet members are running before you delete the ClusterSet object. If the deletion is stuck, edit the ClusterSet object and remove the <code>percona.com/clusterset-dissolve</code> finalizer to proceed.</li>
+<li><strong>If you delete the primary cluster before deleting a ClusterSet with only one member, the ClusterSet deletion gets stuck</strong> — A ClusterSet that contains only the primary has no <code>percona.com/clusterset-protection</code> finalizer. Delete the ClusterSet before you delete that primary. If you already deleted the primary, ClusterSet deletion is stuck. Edit the ClusterSet object and remove the <code>percona.com/clusterset-dissolve</code> finalizer.</li>
 <li><strong>Credential rotation on replicas</strong> — The <code>clusterset</code> user password is always replicated from the primary; you cannot rotate it independently on replica clusters while they are ClusterSet members.</li>
 <li><strong>Minimum replica size</strong> — A replica Group Replication cluster still needs enough members for local high availability (typically 3). Single-node replicas are supported for testing but not recommended for production.</li>
 </ul>
@@ -14884,10 +15074,11 @@ my-cluster-set   sourcecluster  source-cluster-mysql-0:3306              True   
 <summary>Expected output</summary>
 <div class="highlight"><pre><span></span><code>Initializing: False
 Ready: True
-ClusterSetReplicationRunning: True
+ClusterSetMember: True
 InnoDBClusterBootstrapped: True
 </code></pre></div>
 </details>
+<p><code>ClusterSetMember</code> is <code>True</code> on each cluster that belongs to a ClusterSet with at least one replica. The reason is <code>Replica</code> on a replica cluster and <code>Primary</code> on the primary cluster. A ClusterSet that contains only the primary has no <code>ClusterSetMember</code> condition. Starting with Operator version 1.3.0, use <code>ClusterSetMember</code> for this check. A cluster created with Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code>.</p>
 <h3 id="replication-setup-verify-data-replication">Verify data replication<a class="headerlink" href="#replication-setup-verify-data-replication" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
@@ -15070,7 +15261,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </ol>
 <p>Underlying <code>PerconaServerMySQL</code> clusters <strong>continue running</strong> as standalone InnoDB Clusters. The per-site Operator keeps managing them.</p>
 <p>If dissolve fails (for example, because the primary is permanently unreachable), the Custom Resource stays with <code>deletionTimestamp</code> set. Fix connectivity or resolve the MySQL-side issue, then the finalizer retries automatically.</p>
-<p>To delete replica and primary clusters themselves, delete their <code>PerconaServerMySQL</code> Custom Resources separately after the ClusterSet is gone.</p>
+<p>To delete the primary and replica clusters, delete their <code>PerconaServerMySQL</code> Custom Resources after the ClusterSet is gone.</p>
 <h2 id="replication-setup-troubleshooting">Troubleshooting<a class="headerlink" href="#replication-setup-troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -15115,6 +15306,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <tr>
 <td><code>ReplicaManagementFailure</code></td>
 <td>One or more replicas could not be added or removed. See the condition message for exact details. Make sure that your replicas are reachable before removing them.</td>
+</tr>
+<tr>
+<td>Member cluster stays <code>Terminating</code></td>
+<td>The <code>percona.com/clusterset-protection</code> finalizer is still set. Remove the cluster from the ClusterSet. Or, delete the ClusterSet and then delete the cluster.</td>
 </tr>
 </tbody>
 </table>
@@ -18906,6 +19101,15 @@ xb-restore-restore2                                      Complete   1/1         
 <h3 id="debug-backup-restore-replication-errors-during-binlog-replay">Replication errors during binlog replay<a class="headerlink" href="#debug-backup-restore-replication-errors-during-binlog-replay" title="Permanent link">&para;</a></h3>
 <p>Updates made by <code>mysql-shell</code> can produce errors such as <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>If you choose to ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code> in the restore object. This passes <code>--force</code> to the MySQL client and silently ignores <strong>all</strong> SQL errors during replay, which can hide data loss. See <a href="#backups-restore-pitr-ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay</a>.</p>
+<h3 id="debug-backup-restore-encrypted-binlogs-fail-to-decrypt">Encrypted binlogs fail to decrypt<a class="headerlink" href="#debug-backup-restore-encrypted-binlogs-fail-to-decrypt" title="Permanent link">&para;</a></h3>
+<p>The PITR Job cannot unwrap a binlog if the mounted keyring does not contain the KEK recorded in that file.</p>
+<p>Typical causes:</p>
+<ul>
+<li>Restore to a new cluster without <code>spec.pitr.keyringSecret</code></li>
+<li>Keys rotated into another Secret, but the restore still uses the cluster keyring</li>
+<li>A KEK removed from <code>keyring.json</code></li>
+</ul>
+<p>Check the PITR Job logs (<code>pitr-restore-&lt;restore-name&gt;</code>) for KEK / keyring errors. To copy the Secret and set <code>keyringSecret</code>, see <a href="#backups-restore-pitr-restore-with-encrypted-binlogs">Restore with encrypted binlogs</a>. Lost keys cannot be recovered.</p>
 <h3 id="debug-backup-restore-operator-user-password-changed-after-the-backup">Operator user password changed after the backup<a class="headerlink" href="#debug-backup-restore-operator-user-password-changed-after-the-backup" title="Permanent link">&para;</a></h3>
 <p>If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.</p>
 <h2 id="debug-backup-restore-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#debug-backup-restore-restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">&para;</a></h2>
@@ -24586,6 +24790,71 @@ file contains the following configuration options for the regular Percona XtraDB
 </tr>
 </tbody>
 </table>
+<h3 id="operator-backuppitrbinlogserverstorageencryptioncipher"><code>backup.pitr.binlogServer.storage.encryption.cipher</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorageencryptioncipher" title="Permanent link">&para;</a></h3>
+<p>The cipher used to <a href="#backups-pitr-binlog-encryption">encrypt binlog data</a> before Percona Binlog Server writes files to object storage. Only CTR mode is supported.</p>
+<p>Allowed values: <code>AES-128-CTR</code>, <code>AES-192-CTR</code>, <code>AES-256-CTR</code>. Defaults to <code>AES-256-CTR</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>AES-256-CTR</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backuppitrbinlogserverstorageencryptionkekid"><code>backup.pitr.binlogServer.storage.encryption.kekId</code><a class="headerlink" href="#operator-backuppitrbinlogserverstorageencryptionkekid" title="Permanent link">&para;</a></h3>
+<p>The <code>id</code> of the key encryption key (KEK) in the keyring Secret used to wrap the per-file data encryption key. If omitted, Percona Binlog Server uses the first key in the keyring. Changing this value affects only new binlogs. See <a href="#backups-pitr-binlog-encryption">Binlog encryption</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>alpha</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backuppitrbinlogserverkeyringsecretname"><code>backup.pitr.binlogServer.keyringSecret.name</code><a class="headerlink" href="#operator-backuppitrbinlogserverkeyringsecretname" title="Permanent link">&para;</a></h3>
+<p>The name of the Kubernetes Secret that stores the binlog keyring file. Required when <code>storage.encryption</code> is set. Keep this Secret configured after you disable encryption if the bucket still contains encrypted binlogs. See <a href="#backups-pitr-disable-binlog-encryption">Binlog encryption</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ps-cluster1-binlog-server-keyring</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-backuppitrbinlogserverkeyringsecretkey"><code>backup.pitr.binlogServer.keyringSecret.key</code><a class="headerlink" href="#operator-backuppitrbinlogserverkeyringsecretkey" title="Permanent link">&para;</a></h3>
+<p>The key within the Secret that holds the keyring JSON. Defaults to <code>keyring.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>keyring.json</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="operator-backuppitrbinlogserverconnecttimeout"><code>backup.pitr.binlogServer.connectTimeout</code><a class="headerlink" href="#operator-backuppitrbinlogserverconnecttimeout" title="Permanent link">&para;</a></h3>
 <p>Timeout in seconds for establishing a connection to MySQL. </p>
 <table>
@@ -26049,7 +26318,10 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 <p><code>finalizers</code> — ensure safe deletion of resources in Kubernetes under certain conditions. This subsection includes the following finalizers:</p>
 </li>
 <li>
-<p><code>percona.com/clusterset-dissolve</code> — Runs <code>.dissolve()</code> on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.</p>
+<p><code>percona.com/clusterset-dissolve</code> — Runs <code>.dissolve()</code> on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.  </p>
+</li>
+<li>
+<p><code>percona.com/clusterset-protection</code> - Blocks deletion of the ClusterSet member cluster while the ClusterSet has at least one replica. The finalizer is set on both the primary and the replica clusters starting with Operator version 1.3.0.</p>
 </li>
 <li>
 <p><code>annotations</code> — Kubernetes annotations on the ClusterSet object. The Operator uses the following annotation:</p>
@@ -26601,6 +26873,54 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg></span> boolean</td>
 <td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="restore-cr-pitrkeyringsecret"><code>pitr.keyringSecret</code><a class="headerlink" href="#restore-cr-pitrkeyringsecret" title="Permanent link">&para;</a></h4>
+<p>Optional reference to a Kubernetes Secret that contains the keyring to <a href="#backups-pitr-binlog-encryption">decrypt encrypted binlogs</a> during point-in-time recovery. By default the Operator uses the keyring configured on the cluster. Set this field when keys have been rotated into a different Secret, or when you restore to a cluster that does not have the source keyring.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg></span> subdoc</td>
+<td><pre>name: ps-cluster1-binlog-server-keyring<br>key: keyring.json</pre></td>
+</tr>
+</tbody>
+</table>
+<h4 id="restore-cr-pitrkeyringsecretname"><code>pitr.keyringSecret.name</code><a class="headerlink" href="#restore-cr-pitrkeyringsecretname" title="Permanent link">&para;</a></h4>
+<p>The name of the Kubernetes Secret that stores the binlog keyring.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>ps-cluster1-binlog-server-keyring</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="restore-cr-pitrkeyringsecretkey"><code>pitr.keyringSecret.key</code><a class="headerlink" href="#restore-cr-pitrkeyringsecretkey" title="Permanent link">&para;</a></h4>
+<p>The key within the Secret that holds the keyring JSON. Defaults to <code>keyring.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>keyring.json</code></td>
 </tr>
 </tbody>
 </table>
@@ -27290,6 +27610,10 @@ true
 <td>The cluster is configured with <code>spec.mysql.bootstrap.mode: manual</code> and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication.</td>
 </tr>
 <tr>
+<td><code>ClusterSetMember</code></td>
+<td>The cluster is a primary or a replica in an InnoDB ClusterSet that has at least one replica. <code>reason</code> is <code>Primary</code> or <code>Replica</code>. A ClusterSet that contains only the primary has no <code>ClusterSetMember</code> condition.</td>
+</tr>
+<tr>
 <td><code>ClusterSetReplicationRunning</code></td>
 <td>The cluster is a <code>REPLICA</code> member of an InnoDB ClusterSet and async replication from the primary cluster is active.</td>
 </tr>
@@ -27332,7 +27656,7 @@ true
 <li><code>ErrorReconcile</code> — cluster reconciliation failed; see the condition message</li>
 <li><code>FullClusterCrashDetected</code> — all Group Replication members have crash recovery files</li>
 <li><code>ManualBootstrapRequested</code> — the cluster is waiting for external bootstrap</li>
-<li><code>ClusterSetReplicationRunning</code> — ClusterSet replica replication is active</li>
+<li><code>ClusterSetMember</code> - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason <code>Primary</code> for the primary cluster and <code>Replica</code> for the replica cluster. A cluster created with the Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code> after the upgrade. Use the <code>ClusterSetMember</code> to see whether the cluster is the primary or a replica.</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
 <li><code>TeardownStarted</code> — the Operator started switching <code>mysql.clusterType</code>. The message names the previous type and the new type. Used with <code>ClusterTypeSwitchInProgress</code>.</li>
 <li><code>ReplicationLagDetected</code> / <code>NoReplicationLag</code> — whether any <code>async</code> replica lags behind the primary (used by the <code>ReplicationLagging</code> condition)</li>
@@ -27402,7 +27726,7 @@ true
 </tbody>
 </table>
 <h2 id="cr-statuses-perconaservermysqlclusterset-status">PerconaServerMySQLClusterSet status<a class="headerlink" href="#cr-statuses-perconaservermysqlclusterset-status" title="Permanent link">&para;</a></h2>
-<p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>. For configuration options, see <a href="#clusterset-cr">ClusterSet Resource options</a>. For setup, see <a href="#replication-setup">Set up cross-site replication</a>.</p>
+<p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>. Each member <code>PerconaServerMySQL</code> cluster reports its own role with the <code>ClusterSetMember</code> condition. See <a href="#cr-statuses-conditions">PerconaServerMySQL conditions</a>. For configuration options, see <a href="#clusterset-cr">ClusterSet Resource options</a>. For setup, see <a href="#replication-setup">Set up cross-site replication</a>.</p>
 <p>Common fields:</p>
 <ul>
 <li><code>status.primaryCluster</code> — the cluster currently serving as the ClusterSet primary (observed; may lag <code>spec.primaryCluster</code> briefly during switchover)</li>

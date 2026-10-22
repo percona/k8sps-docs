@@ -5918,6 +5918,10 @@ true
 <td>The cluster is configured with <code>spec.mysql.bootstrap.mode: manual</code> and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication.</td>
 </tr>
 <tr>
+<td><code>ClusterSetMember</code></td>
+<td>The cluster is a primary or a replica in an InnoDB ClusterSet that has at least one replica. <code>reason</code> is <code>Primary</code> or <code>Replica</code>. A ClusterSet that contains only the primary has no <code>ClusterSetMember</code> condition.</td>
+</tr>
+<tr>
 <td><code>ClusterSetReplicationRunning</code></td>
 <td>The cluster is a <code>REPLICA</code> member of an InnoDB ClusterSet and async replication from the primary cluster is active.</td>
 </tr>
@@ -5960,7 +5964,7 @@ true
 <li><code>ErrorReconcile</code> — cluster reconciliation failed; see the condition message</li>
 <li><code>FullClusterCrashDetected</code> — all Group Replication members have crash recovery files</li>
 <li><code>ManualBootstrapRequested</code> — the cluster is waiting for external bootstrap</li>
-<li><code>ClusterSetReplicationRunning</code> — ClusterSet replica replication is active</li>
+<li><code>ClusterSetMember</code> - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason <code>Primary</code> for the primary cluster and <code>Replica</code> for the replica cluster. A cluster created with the Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code> after the upgrade. Use the <code>ClusterSetMember</code> to see whether the cluster is the primary or a replica.</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
 <li><code>TeardownStarted</code> — the Operator started switching <code>mysql.clusterType</code>. The message names the previous type and the new type. Used with <code>ClusterTypeSwitchInProgress</code>.</li>
 <li><code>ReplicationLagDetected</code> / <code>NoReplicationLag</code> — whether any <code>async</code> replica lags behind the primary (used by the <code>ReplicationLagging</code> condition)</li>
@@ -6030,7 +6034,7 @@ true
 </tbody>
 </table>
 <h2 id="perconaservermysqlclusterset-status">PerconaServerMySQLClusterSet status<a class="headerlink" href="#perconaservermysqlclusterset-status" title="Permanent link">&para;</a></h2>
-<p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>. For configuration options, see <a href="clusterset-cr.html">ClusterSet Resource options</a>. For setup, see <a href="replication-setup.html">Set up cross-site replication</a>.</p>
+<p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>. Each member <code>PerconaServerMySQL</code> cluster reports its own role with the <code>ClusterSetMember</code> condition. See <a href="#conditions">PerconaServerMySQL conditions</a>. For configuration options, see <a href="clusterset-cr.html">ClusterSet Resource options</a>. For setup, see <a href="replication-setup.html">Set up cross-site replication</a>.</p>
 <p>Common fields:</p>
 <ul>
 <li><code>status.primaryCluster</code> — the cluster currently serving as the ClusterSet primary (observed; may lag <code>spec.primaryCluster</code> briefly during switchover)</li>
@@ -6414,7 +6418,7 @@ true
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 12:02:05 UTC">October 21, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:16 UTC">October 22, 2026</span>
       
         <br>
         Created:

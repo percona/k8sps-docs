@@ -4058,6 +4058,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#encrypted-binlogs-fail-to-decrypt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encrypted binlogs fail to decrypt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#operator-user-password-changed-after-the-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5651,6 +5662,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#encrypted-binlogs-fail-to-decrypt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encrypted binlogs fail to decrypt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#operator-user-password-changed-after-the-backup" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5951,6 +5973,15 @@ xb-restore-restore2                                      Complete   1/1         
 <h3 id="replication-errors-during-binlog-replay">Replication errors during binlog replay<a class="headerlink" href="#replication-errors-during-binlog-replay" title="Permanent link">&para;</a></h3>
 <p>Updates made by <code>mysql-shell</code> can produce errors such as <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>If you choose to ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code> in the restore object. This passes <code>--force</code> to the MySQL client and silently ignores <strong>all</strong> SQL errors during replay, which can hide data loss. See <a href="backups-restore-pitr.html#ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay</a>.</p>
+<h3 id="encrypted-binlogs-fail-to-decrypt">Encrypted binlogs fail to decrypt<a class="headerlink" href="#encrypted-binlogs-fail-to-decrypt" title="Permanent link">&para;</a></h3>
+<p>The PITR Job cannot unwrap a binlog if the mounted keyring does not contain the KEK recorded in that file.</p>
+<p>Typical causes:</p>
+<ul>
+<li>Restore to a new cluster without <code>spec.pitr.keyringSecret</code></li>
+<li>Keys rotated into another Secret, but the restore still uses the cluster keyring</li>
+<li>A KEK removed from <code>keyring.json</code></li>
+</ul>
+<p>Check the PITR Job logs (<code>pitr-restore-&lt;restore-name&gt;</code>) for KEK / keyring errors. To copy the Secret and set <code>keyringSecret</code>, see <a href="backups-restore-pitr.html#restore-with-encrypted-binlogs">Restore with encrypted binlogs</a>. Lost keys cannot be recovered.</p>
 <h3 id="operator-user-password-changed-after-the-backup">Operator user password changed after the backup<a class="headerlink" href="#operator-user-password-changed-after-the-backup" title="Permanent link">&para;</a></h3>
 <p>If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.</p>
 <h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">&para;</a></h2>
@@ -5969,7 +6000,7 @@ xb-restore-restore2                                      Complete   1/1         
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:01 UTC">October 22, 2026</span>
       
         <br>
         Created:

@@ -1803,6 +1803,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#restore-with-encrypted-binlogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore with encrypted binlogs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Restore with encrypted binlogs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-the-same-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On the same cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ignore-sql-errors-during-binlog-replay" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5449,6 +5488,45 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
+  <a href="#restore-with-encrypted-binlogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore with encrypted binlogs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Restore with encrypted binlogs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on-the-same-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        On the same cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#new-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        New cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ignore-sql-errors-during-binlog-replay" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5526,6 +5604,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Choose a target timestamp (<code>type: date</code>) or a GTID set (<code>type: gtid</code>)</li>
 <li>Set the <code>spec.backup.backoffLimit=0</code> in the cluster Custom Resource so a failed PITR Job does not retry automatically (<a href="backups-pitr.html#known-limitations">known limitations</a>)</li>
 <li>If the source verified S3 with a custom CA, follow <a href="#use-a-custom-ca">Use a custom CA</a></li>
+<li>If the source cluster encrypted binlogs, follow <a href="#restore-with-encrypted-binlogs">Restore with encrypted binlogs</a></li>
 </ul>
 <h2 id="restore-on-the-same-cluster">Restore on the same cluster<a class="headerlink" href="#restore-on-the-same-cluster" title="Permanent link">&para;</a></h2>
 <p>The Operator reads binlog storage from <code>spec.backup.pitr.binlogServer</code> on the cluster Custom Resource.</p>
@@ -5586,6 +5665,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <li>User password Secret matches the source cluster. Copy it as described in <a href="backups-restore-to-new-cluster.html#preconditions">Preconditions</a></li>
 <li>If the base backup was <a href="backups-encrypted.html">encrypted</a>, create the same encryption-key Secret on the target and set <code>spec.backupSource.storage.encryptionKeySecret</code></li>
 <li>If the source verified S3 with a custom CA, follow <a href="#use-a-custom-ca">Use a custom CA</a></li>
+<li>If source binlogs were encrypted, copy the keyring Secret and set <code>spec.pitr.keyringSecret</code>. See <a href="#restore-with-encrypted-binlogs">Restore with encrypted binlogs</a></li>
 </ul>
 <p>Keep these three prefixes distinct:</p>
 <table>
@@ -5694,6 +5774,10 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <td>Use a custom CA</td>
 <td>Follow <a href="#use-a-custom-ca">Use a custom CA</a></td>
 </tr>
+<tr>
+<td>Decrypt encrypted binlogs</td>
+<td>See <a href="#restore-with-encrypted-binlogs">Restore with encrypted binlogs</a></td>
+</tr>
 </tbody>
 </table>
 <p>Start the restore:</p>
@@ -5766,6 +5850,82 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="
 <p><a href="#view-restore-details">Watch the restore</a>. If TLS verification fails, see <a href="debug-backup-restore.html#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</p>
 </li>
 </ol>
+<h2 id="restore-with-encrypted-binlogs">Restore with encrypted binlogs<a class="headerlink" href="#restore-with-encrypted-binlogs" title="Permanent link">&para;</a></h2>
+<p>Use this section when the source cluster <a href="backups-pitr.html#binlog-encryption">encrypted binlogs</a> in object storage. The restore Job decrypts each file with the key encryption key (KEK) recorded in that file&rsquo;s metadata. Unencrypted binlogs in the same bucket are applied as-is.</p>
+<p>You <strong>must have every KEK</strong> that wrapped the binlogs you are replaying. If a key is missing from the keyring, those files cannot be decrypted.</p>
+<h3 id="on-the-same-cluster">On the same cluster<a class="headerlink" href="#on-the-same-cluster" title="Permanent link">&para;</a></h3>
+<p>If <code>spec.backup.pitr.binlogServer.keyringSecret</code> is still set on the cluster and the Secret still holds every KEK, run the restore as in <a href="#restore-on-the-same-cluster">Restore on the same cluster</a>. The Operator mounts that keyring automatically. No extra fields are required.</p>
+<p>Set <code>spec.pitr.keyringSecret</code> on the restore object when the keys you need live in a <strong>different</strong> Secret than the one on the cluster (for example after you rotated keys into a new Secret):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore-pitr-encrypted</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
+<span class="w">    </span><span class="nt">keyringSecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-binlog-server-keyring</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keyring.json</span>
+</code></pre></div>
+<p>The <code>key</code> field defaults to <code>keyring.json</code> if you omit it.</p>
+<h3 id="new-cluster">New cluster<a class="headerlink" href="#new-cluster" title="Permanent link">&para;</a></h3>
+<p>The target cluster has no access to Secrets from the source environment. Copy the keyring Secret, then point the restore at it.</p>
+<ol>
+<li>
+<p>On the <strong>source</strong> cluster, export the keyring Secret. Use the name from <code>spec.backup.pitr.binlogServer.keyringSecret</code> on the source Custom Resource:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>ps-cluster1-binlog-server-keyring<span class="w"> </span>-n<span class="w"> </span>&lt;source-namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>binlog-keyring.yaml
+</code></pre></div>
+</li>
+<li>
+<p>Strip cluster-specific metadata:</p>
+<div class="highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)'</span><span class="w"> </span>binlog-keyring.yaml<span class="w"> </span>&gt;<span class="w"> </span>binlog-keyring-target.yaml
+</code></pre></div>
+</li>
+<li>
+<p>Apply the Secret on the <strong>target</strong> cluster:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>binlog-keyring-target.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
+</code></pre></div>
+<p>Confirm the Secret&rsquo;s <code>keyring.json</code> still lists <strong>every</strong> KEK that encrypted the binlogs still in the source bucket (including retired <code>id</code> values after rotation).</p>
+</li>
+<li>
+<p>Create the restore as in <a href="#restore-on-a-new-cluster">Restore on a new cluster</a> and add <code>spec.pitr.keyringSecret</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3://S3-BUCKET-NAME/BACKUP-NAME</span>
+<span class="w">    </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">      </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BUCKET-NAME</span>
+<span class="w">        </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">        </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;BACKUP-PREFIX&gt;</span>
+<span class="w">  </span><span class="nt">pitr</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">date</span>
+<span class="w">    </span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="s">"2026-03-20</span><span class="nv"> </span><span class="s">09:15:00"</span>
+<span class="w">    </span><span class="nt">keyringSecret</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-binlog-server-keyring</span>
+<span class="w">      </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keyring.json</span>
+<span class="w">    </span><span class="nt">backupSource</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">binlogServer</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">storage</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">s3</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">S3-BINLOG-BUCKET-NAME</span>
+<span class="w">            </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
+<span class="w">            </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
+<span class="w">            </span><span class="nt">prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">binlogs</span>
+</code></pre></div>
+</li>
+</ol>
+<p>If the <strong>base backup</strong> was also encrypted, add <code>spec.backupSource.storage.encryptionKeySecret</code> as well. That key is separate from the binlog keyring. See <a href="backups-encrypted.html">Encrypted backups</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Keep your binlog encryption keys safe</p>
+<p>If a KEK is lost or removed from the keyring, binlogs wrapped with that key are irrecoverable. Store a backup of the keyring Secret separately from the binlog bucket.</p>
+</div>
+<p>Apply the restore and <a href="#view-restore-details">watch the restore</a>. If decryption fails, see <a href="debug-backup-restore.html#encrypted-binlogs-fail-to-decrypt">Encrypted binlogs fail to decrypt</a>.</p>
 <h2 id="ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay<a class="headerlink" href="#ignore-sql-errors-during-binlog-replay" title="Permanent link">&para;</a></h2>
 <p>Updates made by <code>mysql-shell</code> can produce replication errors during replay, for example <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>To ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code>. This passes <code>--force</code> to the MySQL client.</p>
@@ -5791,7 +5951,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:10:31 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:01 UTC">October 22, 2026</span>
       
         <br>
         Created:

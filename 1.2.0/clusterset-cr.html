@@ -5673,7 +5673,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><code>finalizers</code> — ensure safe deletion of resources in Kubernetes under certain conditions. This subsection includes the following finalizers:</p>
 </li>
 <li>
-<p><code>percona.com/clusterset-dissolve</code> — Runs <code>.dissolve()</code> on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.</p>
+<p><code>percona.com/clusterset-dissolve</code> — Runs <code>.dissolve()</code> on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.  </p>
+</li>
+<li>
+<p><code>percona.com/clusterset-protection</code> - Blocks deletion of the ClusterSet member cluster while the ClusterSet has at least one replica. The finalizer is set on both the primary and the replica clusters starting with Operator version 1.3.0.</p>
 </li>
 <li>
 <p><code>annotations</code> — Kubernetes annotations on the ClusterSet object. The Operator uses the following annotation:</p>
@@ -5901,7 +5904,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 1, 2026 10:21:00 UTC">October 1, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:16 UTC">October 22, 2026</span>
       
         <br>
         Created:

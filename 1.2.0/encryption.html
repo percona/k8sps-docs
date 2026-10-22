@@ -5359,9 +5359,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h2 id="backups-and-encryption">Backups and encryption<a class="headerlink" href="#backups-and-encryption" title="Permanent link">&para;</a></h2>
 <p>Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up <a href="encryption-setup.html">encrypted</a> tablespaces. When your database uses the <code>keyring_vault</code> plugin, backup files retain that encryption layer as part of the physical backup data.</p>
 <p>Starting with Operator 1.2.0, you can also <a href="backups-encrypted.html">encrypt backup files in the object storage</a> independently of database encryption. This protects backup data even when live database encryption is not enabled.</p>
+<p>Data-at-rest encryption on the server does not encrypt the binlog files required for point-in-time recovery. To protect those files, enable <a href="backups-pitr.html#binlog-encryption">binlog encryption</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Keep your encryption keys safe</p>
-<p>To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is the <strong>the original Vault master encryption key</strong>. For encrypted backups, this is the <strong>backup encryption key</strong> from the Kubernetes Secret.</p>
+<p>To restore the encrypted data you must have the original key that was used to encrypt it. For data-at-rest encryption, this is <strong>the original Vault master encryption key</strong>. For encrypted backups, this is the <strong>backup encryption key</strong> from the Kubernetes Secret.</p>
 <p>If either key is lost or rotated, your backups will be irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.</p>
 </div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
@@ -5371,7 +5372,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 3, 2026 07:33:16 UTC">July 3, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:01 UTC">October 22, 2026</span>
       
         <br>
         Created:
