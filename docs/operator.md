@@ -249,6 +249,14 @@ The `unsafeFlags` section in the [deploy/cr.yaml  :octicons-link-external-16:](h
 
     Once unsafe configurations are enabled, you cannot revert these settings simply by setting the same keys back to `false`. Any such changes will be ignored, so enable these options with caution.
 
+### `unsafeFlags.asyncFailoverWithPossibleDataLoss`
+
+Allows users to disable backups in a cluster with asynchronous replication. Without this flag, the Operator rejects such a Custom Resource, because a [zero-data-loss failover](failover-async.md) reads the failed primary's binary logs from the `xtrabackup` sidecar, and the sidecar runs only when backups are enabled. With backups disabled, a failover promotes a replica without recovering the transactions that the failed primary has not yet replicated. The Operator records the `FailoverUnprotected` [event](cr-statuses.md#events).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-toggle-switch-outline: boolean     |`false` |
+
 ### `unsafeFlags.backupNonReadyCluster`
 
 Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is not yet ready.
@@ -1857,6 +1865,32 @@ Orchestrator is used with asynchronous replication. Disable it when you [switch 
 | ----------- | ---------- |
 | :material-toggle-switch-outline: boolean     | `true` |
 
+### `orchestrator.failover.timeout`
+
+How long the cluster tries to recover the transactions from the failed primary's binlog. Default is `1h`.
+
+The timeout is measured from the moment Orchestrator first detects the failure and covers every retry, not a single attempt. If the Orchestrator Raft leader changes while a failover is running, the timeout restarts. This delays the decision what to do when the timeout expires.
+
+Only applies to [async](#mysqlclustertype) clusters, and only takes effect starting with `crVersion` 1.3.0. With an older `crVersion`, the Operator validates this field but ignores it. See [Understand failover timeout and recovery policy](failover-async.md#understand-failover-timeout-and-recovery-policy).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `1h` |
+
+### `orchestrator.failover.onTimeout`
+
+What the Operator does once [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) expires without recovering the transactions stranded on a failed primary:
+
+* `Abort` (default) — leaves the cluster without a writable primary until you intervene. No transactions are lost, but writes stay blocked. Promote a replica yourself with the [`percona.com/force-promote-with-possible-data-loss`](failover-async-setup.md#force-a-promotion) annotation.
+* `ForceWithPossibleDataLoss` — promotes the best available candidate anyway. Transactions the old primary committed and never replicated are lost.
+
+Only applies to async clusters, and only takes effect starting with `crVersion` 1.3.0. See [Understand failover timeout and recovery policy](failover-async.md#understand-failover-timeout-and-recovery-policy).
+
+| Value type  | Example    |
+| ----------- | ---------- |
+| :material-code-string: string     | `Abort` |
+
+
 ### `orchestrator.size`
 
 The number of the Orchestrator Pods to provide load balancing. This setting is required.
@@ -2308,15 +2342,30 @@ The [Kubernetes PersistentVolumeClaim :octicons-link-external-16:](https://kuber
 
 ### `orchestrator.configuration`
 
-Custom [Orchestrator :octicons-link-external-16:](https://github.com/percona/orchestrator) options to merge into the Orchestrator configuration. For example, `FailMasterPromotionOnLagMinutes` or `RecoveryPeriodBlockSeconds` are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.
+Custom [Orchestrator :octicons-link-external-16:](https://github.com/percona/orchestrator) options to merge into the Orchestrator configuration. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.
 
 Starting with Custom Resource version 1.3.0, the Operator sets `ReasonableReplicationLagSeconds` to `60` by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the [`ReplicationLagging` condition](cr-statuses.md#conditions). You can override this value here.
+
+For an async cluster with `crVersion` 1.3.0 or later, the Operator also derives and pins the settings the [zero-data-loss failover](failover-async.md) mechanism depends on, and ignores any override of them here:
+
+| Orchestrator key | Derived from |
+| --- | --- |
+| `FailMasterPromotionOnLagMinutes` | Always `0` |
+| `DelayMasterPromotionIfSQLThreadNotUpToDate`, `FailMasterPromotionIfSQLThreadNotUpToDate` | Always `false` |
+| `PreFailoverProcesses`, `PostFailoverProcesses`, `PostUnsuccessfulFailoverProcesses` | The failover mechanism itself |
+| `RecoveryPeriodBlockSeconds` | [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) + 1 hour |
+| `UnseenInstanceForgetHours` | [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) + 1 hour, rounded up |
+
+The following setting is not pinned, and you can override it:
+
+* `ReasonableMaintenanceReplicationLagSeconds` is the maximum replication lag, in seconds, that a candidate replica can have for Orchestrator to allow a planned switchover. Orchestrator rejects any replica that lags more. After the primary becomes read-only, Orchestrator also waits at most this long for the candidate to catch up. With `crVersion` 1.3.0 or later, the default is 120, twice `ReasonableReplicationLagSeconds`, which is 60 by default. With an older `crVersion`, the value from the Orchestrator image applies, which is 300. See [Set the replication lag limit for a planned switchover](failover-async-setup.md#set-the-replication-lag-limit-for-a-planned-switchover).
+
 
 Updating this field triggers a rolling restart of the Orchestrator Pods.
 
 | Value type  | Example    |
 | ----------- | ---------- |
-| :material-code-string: string     | `'{"FailMasterPromotionOnLagMinutes": 10}'` |
+| :material-code-string: string     | `'{"ReplicationLagQuery": "..."}'` |
 
 ## <a name="operator-users-section"></a>Users section
 

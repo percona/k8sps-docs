@@ -65,6 +65,19 @@ Additional constraints include: no automatic rejoin after replication stops, no 
 
 See [Cross-site replication](replication.md#known-limitations) for the full list and recovery steps.
 
+## Zero-data-loss failover (asynchronous clusters)
+
+Zero-data-loss failover requires Operator 1.3.0 or later and `crVersion` 1.3.0 or later on the cluster. With an older `crVersion`, the Operator validates `spec.orchestrator.failover` but the mechanism has no effect.
+
+Additional constraints include: 
+
+* backups are required. Set `backup.enabled` to `true`. The candidate reads the old primary's binary logs from the `xtrabackup` sidecar, and that sidecar starts only when backups are enabled. To run without backups, set `unsafeFlags.asyncFailoverWithPossibleDataLoss` to `true`. Failover then promotes a replica without those logs, and transactions that exist only on the old primary are lost. An asynchronous cluster upgraded from Operator 1.2.0 with backups disabled fails validation until you enable backups or set this flag. See [Requirements](failover-async.md#requirements).
+* recovery depends on durable commits on the primary (`sync_binlog=1`, `innodb_flush_log_at_trx_commit=1`) and durable relay logs on the candidate, neither of which the Operator enforces. 
+* a primary whose binary logs were already purged or whose data volume is gone, can't be recovered from; 
+* starting `crVersion` 1.3.0, the Operator pins several Orchestrator settings the mechanism depends on and ignores conflicting overrides in [`orchestrator.configuration`](operator.md#orchestratorconfiguration).
+
+See [About zero data loss failover](failover-async.md#known-limitations) for the full list.
+
 ## Scaling and storage
 
 * You cannot shrink an existing Persistent Volume Claim. You can only increase storage size. See [Scale storage](scaling.md#scale-storage).
