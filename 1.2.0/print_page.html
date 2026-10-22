@@ -7193,13 +7193,13 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <p>The following features are in tech preview. Behavior can change in future releases. Do not use them in production yet. We encourage you to try them in test or staging clusters and share feedback.</p>
 <ul>
 <li><a href="#architecture-asynchronous-replication-tech-preview">Asynchronous replication</a> (<code>spec.mysql.clusterType: async</code>)</li>
+<li><a href="#change-replication-type">Replication type switch on a running cluster</a> (Operator 1.3.0 and later)</li>
 <li><a href="#backups-pitr">Point-in-time recovery</a></li>
 <li><a href="#backups-incremental">Incremental backups</a></li>
 </ul>
 <p>Group replication is generally available and is the recommended topology for production.</p>
 <h2 id="limitations-replication-and-topology">Replication and topology<a class="headerlink" href="#limitations-replication-and-topology" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Changing the replication type on a <strong>running</strong> cluster is not supported. Pause the cluster, change <code>spec.mysql.clusterType</code>, then resume it. See <a href="#change-replication-type">Change replication type</a>.</li>
 <li>Semi-synchronous replication is not supported. Use group replication or asynchronous replication.</li>
 <li>Group replication supports a maximum of <strong>9</strong> MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See <a href="#architecture-group-replication">Architecture</a>.</li>
 <li>
@@ -15482,8 +15482,12 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <td>Non-negative integer (seconds). Read/write timeout for bootstrap and related MySQL client operations.</td>
 </tr>
 <tr>
+<td><code>BOOTSTRAP_CLONE_STALL_TIMEOUT</code></td>
+<td>Non-negative integer (seconds). Starting with <code>crVersion</code> 1.3.0, how long an asynchronous clone can make no progress before bootstrap stops it. The default is 900. Set to <code>0</code> to turn the check off. See <a href="#env-vars-custom-set-the-clone-stall-timeout">Set the clone stall timeout</a>.</td>
+</tr>
+<tr>
 <td><code>BOOTSTRAP_CLONE_TIMEOUT</code></td>
-<td>Non-negative integer (seconds). Upper bound for clone operations during asynchronous bootstrap.</td>
+<td>Non-negative integer (seconds). Upper bound for a clone during asynchronous bootstrap when <code>crVersion</code> is older than 1.3.0. Starting with <code>crVersion</code> 1.3.0, the Operator ignores this variable.</td>
 </tr>
 <tr>
 <td><code>ASYNC_SOURCE_RETRY_COUNT</code></td>
@@ -15499,6 +15503,24 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </tr>
 </tbody>
 </table>
+<h3 id="env-vars-custom-set-the-clone-stall-timeout">Set the clone stall timeout<a class="headerlink" href="#env-vars-custom-set-the-clone-stall-timeout" title="Permanent link">&para;</a></h3>
+<p>An asynchronous replica copies its data with the <a href="https://dev.mysql.com/doc/refman/8.4/en/clone-plugin.html">MySQL clone plugin <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> when it joins the cluster or rebuilds its data volume. Starting with <code>crVersion</code> 1.3.0, the clone keeps running while it makes progress.</p>
+<p>Bootstrap reads <code>performance_schema.clone_progress</code> and stops the clone when that view shows no change for <code>BOOTSTRAP_CLONE_STALL_TIMEOUT</code> seconds. No change means both of the following:</p>
+<ul>
+<li>No additional bytes are transferred</li>
+<li>No clone stage finishes</li>
+</ul>
+<p>The default is 900 seconds (15 minutes). A stage that transfers no bytes, such as file sync or recovery, can run longer than this window. Increase the value for a large database, or set it to <code>0</code> to turn the check off.</p>
+<p>If bootstrap cannot read clone progress for the whole window, it stops the clone. The MySQL container restarts, and the clone starts again.</p>
+<p>The MySQL startup probe is the hard limit on how long the clone can run. When you leave <code>spec.mysql.startupProbe.timeoutSeconds</code> unset and <code>spec.crVersion</code> is <code>1.3.0</code> or higher, the Operator sets that timeout to 604800 seconds (7 days). Set <a href="#operator-mysqlstartupprobetimeoutseconds"><code>mysql.startupProbe.timeoutSeconds</code></a> when you want a shorter limit.</p>
+<p>When <code>spec.crVersion</code> is older than 1.3.0, <code>BOOTSTRAP_CLONE_TIMEOUT</code> is the upper bound for the clone. The Operator ignores <code>BOOTSTRAP_CLONE_TIMEOUT</code> when <code>crVersion</code> is 1.3.0 or higher.</p>
+<p>Set the stall timeout in <code>spec.mysql.env</code>. The value is a string:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">BOOTSTRAP_CLONE_STALL_TIMEOUT</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"1800"</span>
+</code></pre></div>
 <h3 id="env-vars-custom-haproxy-environment-variables">HAProxy environment variables<a class="headerlink" href="#env-vars-custom-haproxy-environment-variables" title="Permanent link">&para;</a></h3>
 <p>The following environment variables are available for HAProxy</p>
 <table>
@@ -17439,6 +17461,9 @@ persistentvolumeclaim "datadir-ps-cluster1-mysql-2" deleted
                     <section class="print-page" id="change-replication-type" heading-number="9.1"><h1 id="change-replication-type-change-replication-type">Change replication type<a class="headerlink" href="#change-replication-type-change-replication-type" title="Permanent link">&para;</a></h1>
 <p>The Operator deploys Percona Server for MySQL with <a href="#architecture-group-replication">group-replication</a> and HAProxy by default.</p>
 <p>Starting with Operator 1.3.0, you can change the replication type on a running cluster. The Operator tears down the current topology, recreates the MySQL and proxy workloads, and bootstraps the new type on the existing PersistentVolumeClaims. Users, Secrets, and the HAProxy Service stay in place, so applications keep the same endpoint if they already use HAProxy.</p>
+<div class="admonition admonition">
+<p>Changing the replication type on a running cluster is a tech preview. The behavior can change in future releases. Do not use it in production yet. Try it in a test or staging cluster first.</p>
+</div>
 <p>To compare the two types, see <a href="#architecture-replication-types">Replication types</a>.</p>
 <p>In Operator 1.2.0 and earlier, you cannot change the type on a running cluster. <a href="#change-replication-type-operator-120-and-earlier">Pause the cluster, change the type, then unpause it</a>.</p>
 <div class="admonition important">
@@ -17502,7 +17527,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </details>
 </li>
 <li>
-<p>Take an <a href="#backups-ondemand">on-demand backup</a> so you can restore if the switch does not complete.</p>
+<p>Take an <a href="#backups-ondemand">on-demand backup</a> so you can restore if the switch does not complete. If you are switching from async replication, <a href="#change-replication-type-take-a-backup-from-the-primary">take the backup from the primary</a>, not from a replica.</p>
 </li>
 <li>
 <p>If you are switching to async and the cluster uses MySQL Router, <a href="#haproxy-conf">enable HAProxy and disable Router</a> first. Wait until the cluster is <code>ready</code> again.</p>
@@ -17563,6 +17588,61 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </code></pre></div>
 <p>See <a href="#change-replication-type-verify-the-switch">Verify the switch</a>.</p>
 <h3 id="change-replication-type-switch-from-async-to-group-replication">Switch from async to group replication<a class="headerlink" href="#change-replication-type-switch-from-async-to-group-replication" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Risk of data loss when switching from asynchronous replication to Group Replication</p>
+<p>Do not switch an asynchronous replication cluster to Group Replication unless every replica has applied all transactions from the primary.</p>
+<p>The Operator does not check replication lag or compare GTID sets before the switch. It creates the new Group Replication cluster on <code>mysql-0</code>. If another Pod, such as the asynchronous primary, holds transactions that <code>mysql-0</code> does not have, the Operator treats that Pod as diverged and re-creates its data with a clone from <code>mysql-0</code>. The clone overwrites the data on that Pod, and the transactions that existed only there are lost without an error.</p>
+<p>Before you switch, <a href="#change-replication-type-verify-that-all-replicas-are-caught-up">verify that all replicas are caught up</a> and <a href="#change-replication-type-take-a-backup-from-the-primary">take a backup from the primary</a>. These checks protect the transactions that exist only on the asynchronous primary. If the primary is <code>mysql-0</code>, the Operator creates the Group Replication cluster from the primary and the risk does not apply, but run the checks anyway to confirm which Pod is the primary.</p>
+</div>
+<h4 id="change-replication-type-verify-that-all-replicas-are-caught-up">Verify that all replicas are caught up<a class="headerlink" href="#change-replication-type-verify-that-all-replicas-are-caught-up" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<p>Stop the applications from writing to the cluster. The GTID sets keep changing while writes continue, so the comparison in the next steps is not reliable.</p>
+</li>
+<li>
+<p>Set the root password and find the primary. The primary Pod prints no replica status:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ROOT_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-psuser-root<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
+
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"== </span><span class="nv">$CLUSTER_NAME</span><span class="s2">-mysql-</span><span class="nv">$i</span><span class="s2">"</span>
+<span class="w">  </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-<span class="nv">$i</span><span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$ROOT_PASSWORD</span><span class="s2">"</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SHOW REPLICA STATUS\G"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"Replica_IO_Running:|Replica_SQL_Running:|Seconds_Behind_Source:"</span>
+<span class="k">done</span>
+</code></pre></div>
+<p>On each replica, the IO and SQL threads report <code>Yes</code>.</p>
+</li>
+<li>
+<p>Read the executed GTID set of the primary. Replace <code>&lt;primary-index&gt;</code> with the ordinal of the primary Pod:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">GTID_PRIMARY</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-&lt;primary-index&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$ROOT_PASSWORD</span><span class="s2">"</span><span class="w"> </span>-N<span class="w"> </span>-B<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT REPLACE(@@GLOBAL.gtid_executed, '\n', '');"</span><span class="k">)</span>
+</code></pre></div>
+</li>
+<li>
+<p>Check that every Pod has applied all transactions of the primary:</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$CLUSTER_NAME</span><span class="s2">-mysql-</span><span class="nv">$i</span><span class="s2">: "</span>
+<span class="w">  </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-<span class="nv">$i</span><span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$ROOT_PASSWORD</span><span class="s2">"</span><span class="w"> </span>-N<span class="w"> </span>-B<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT GTID_SUBSET('</span><span class="nv">$GTID_PRIMARY</span><span class="s2">', @@GLOBAL.gtid_executed);"</span>
+<span class="k">done</span>
+</code></pre></div>
+<p>Every Pod must return <code>1</code>. A <code>0</code> means that Pod has not applied all transactions from the primary. Wait and repeat the check. If a Pod does not reach <code>1</code>, do not switch.</p>
+</li>
+</ol>
+<h4 id="change-replication-type-take-a-backup-from-the-primary">Take a backup from the primary<a class="headerlink" href="#change-replication-type-take-a-backup-from-the-primary" title="Permanent link">&para;</a></h4>
+<p>By default, the Operator takes a backup of an asynchronous cluster from a replica. A lagging replica does not contain the transactions that exist only on the primary, so such a backup does not protect them.</p>
+<p>Set the <code>spec.sourcePod</code> option of the backup to the primary Pod:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">before-switch</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">clusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
+<span class="w">  </span><span class="nt">storageName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3-us-west</span>
+<span class="w">  </span><span class="nt">sourcePod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-mysql-&lt;primary-index&gt;</span>
+</code></pre></div>
+<p>For all backup options, see the <a href="#backup-cr">Backup resource reference</a>. Wait until the backup reaches the <code>Succeeded</code> state before you continue.</p>
+<h4 id="change-replication-type-run-the-switch">Run the switch<a class="headerlink" href="#change-replication-type-run-the-switch" title="Permanent link">&para;</a></h4>
 <p>Disable Orchestrator in the same change. The Operator refuses the switch while Orchestrator is enabled.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="change-replication-type-__tabbed_2_1" name="change-replication-type-__tabbed_2" type="radio" /><input id="change-replication-type-__tabbed_2_2" name="change-replication-type-__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="change-replication-type-__tabbed_2_1">kubectl patch</label><label for="change-replication-type-__tabbed_2_2">Edit the Custom Resource</label></div>
 <div class="tabbed-content">
@@ -17648,11 +17728,22 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </div>
 </div>
 <h2 id="change-replication-type-known-limitations">Known limitations<a class="headerlink" href="#change-replication-type-known-limitations" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>When you switch from async replication to Group Replication, the Operator does not verify that the replicas are caught up. If another Pod holds transactions that <code>mysql-0</code> does not have, the Operator overwrites that Pod with a clone from <code>mysql-0</code>, and those transactions are lost. Until the Operator checks this itself, <a href="#change-replication-type-verify-that-all-replicas-are-caught-up">verify the GTID sets</a> and <a href="#change-replication-type-take-a-backup-from-the-primary">take a backup from the primary</a> before you switch.</p>
+</li>
+<li>
 <p>If you switch from group replication to async and the Operator fails to bootstrap the new topology, you cannot switch the cluster back to group replication.</p>
 <p>The Operator sets <code>status.clusterType</code> to <code>async</code> when it deletes the old workloads, before it finishes that bootstrap. If the bootstrap fails, the MySQL Pods cannot accept the connections the Operator needs to tear the async setup down. Setting <code>mysql.clusterType</code> back to <code>group-replication</code> does not restore the previous topology, and the cluster stays out of <code>ready</code>.</p>
 <p>This limitation is known and will be fixed in a later release. <a href="#backups-restore">Restore the cluster</a> from the backup you took before the switch.</p>
+</li>
+</ol>
 <h2 id="change-replication-type-operator-120-and-earlier">Operator 1.2.0 and earlier<a class="headerlink" href="#change-replication-type-operator-120-and-earlier" title="Permanent link">&para;</a></h2>
-<p>Do not use this procedure with Operator 1.3.0 or later. Those versions require the cluster to stay <code>ready</code>.</p>
+<p>This procedure applies to Operator 1.2.0 or earlier. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The data loss risk described for <a href="#change-replication-type-switch-from-async-to-group-replication">the switch from async to group replication</a> applies to this procedure too. Complete the checks in <a href="#change-replication-type-verify-that-all-replicas-are-caught-up">Verify that all replicas are caught up</a> and <a href="#change-replication-type-take-a-backup-from-the-primary">Take a backup from the primary</a> before you pause the cluster. </p>
+</div>
 <ol>
 <li>
 <p><a href="#pause">Pause</a> the cluster:</p>
@@ -19943,6 +20034,8 @@ configuration options for the Percona Server for MySQL.</p>
 </table>
 <h3 id="operator-mysqlstartupprobetimeoutseconds"><code>mysql.startupProbe.timeoutSeconds</code><a class="headerlink" href="#operator-mysqlstartupprobetimeoutseconds" title="Permanent link">&para;</a></h3>
 <p>The number of seconds after which the <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/">startup probe <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> times out.</p>
+<p>The startup probe runs MySQL bootstrap. On an asynchronous replica, bootstrap includes the clone, so this value limits how long that clone can run.</p>
+<p>When <code>spec.crVersion</code> is <code>1.3.0</code> or higher, the default is 604800 seconds (7 days). A <code>crVersion</code> older than 1.3.0 keeps the previous default of 43200 seconds (12 hours). A value you set here replaces the default. See <a href="#env-vars-custom-set-the-clone-stall-timeout">Set the clone stall timeout</a>.</p>
 <table>
 <thead>
 <tr>
@@ -19953,7 +20046,7 @@ configuration options for the Percona Server for MySQL.</p>
 <tbody>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 17h-2V9h-2V7h4m5-4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> int</td>
-<td><code>43200</code></td>
+<td><code>604800</code></td>
 </tr>
 </tbody>
 </table>
@@ -20166,7 +20259,7 @@ configuration options for the Percona Server for MySQL.</p>
 </tbody>
 </table>
 <h3 id="operator-mysqlenvname"><code>mysql.env.name</code><a class="headerlink" href="#operator-mysqlenvname" title="Permanent link">&para;</a></h3>
-<p>Name of an environment variable for MySQL Pods. The <code>BOOTSTRAP_READ_TIMEOUT</code> variable controls the timeout for bootstrapping the cluster.</p>
+<p>Name of an environment variable for MySQL Pods. The <code>BOOTSTRAP_READ_TIMEOUT</code> variable controls the timeout for bootstrapping the cluster. The <code>BOOTSTRAP_CLONE_STALL_TIMEOUT</code> sets how long an asynchronous clone can go without progress before bootstrap stops it for clusters with <code>crVersion</code> set to 1.3.0 or higher. See <a href="#env-vars-custom-set-the-clone-stall-timeout">Set the clone stall timeout</a>.</p>
 <p>Read more about defining environment variables in <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/">Kubernetes documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <table>
 <thead>

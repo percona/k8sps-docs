@@ -5513,13 +5513,13 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The following features are in tech preview. Behavior can change in future releases. Do not use them in production yet. We encourage you to try them in test or staging clusters and share feedback.</p>
 <ul>
 <li><a href="architecture.html#asynchronous-replication-tech-preview">Asynchronous replication</a> (<code>spec.mysql.clusterType: async</code>)</li>
+<li><a href="change-replication-type.html">Replication type switch on a running cluster</a> (Operator 1.3.0 and later)</li>
 <li><a href="backups-pitr.html">Point-in-time recovery</a></li>
 <li><a href="backups-incremental.html">Incremental backups</a></li>
 </ul>
 <p>Group replication is generally available and is the recommended topology for production.</p>
 <h2 id="replication-and-topology">Replication and topology<a class="headerlink" href="#replication-and-topology" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Changing the replication type on a <strong>running</strong> cluster is not supported. Pause the cluster, change <code>spec.mysql.clusterType</code>, then resume it. See <a href="change-replication-type.html">Change replication type</a>.</li>
 <li>Semi-synchronous replication is not supported. Use group replication or asynchronous replication.</li>
 <li>Group replication supports a maximum of <strong>9</strong> MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See <a href="architecture.html#group-replication">Architecture</a>.</li>
 <li>
@@ -5600,7 +5600,7 @@ To override the number of Orchestrator instances, set <code>unsafeFlags.orchestr
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:24:19 UTC">October 22, 2026</span>
       
         <br>
         Created:
