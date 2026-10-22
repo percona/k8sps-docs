@@ -1,6 +1,6 @@
 # Recover from a full cluster crash
 
-A full cluster crash happens when all members of a cluster with [Group Replication](architecture.md#group-replication) (GR) go down at the same time. This can be a power loss in the data center, deletion of all MySQL Pods at once, or an out-of-memory kill that hits every node. After the Pods restart, no member can form the group on its own, because none of them knows if it has the most recent data.
+A full cluster crash happens when the majority of members in a cluster with [Group Replication](architecture.md#group-replication) (GR) are down and the group loses quorum. A power loss in the data center, deletion of MySQL Pods, or an out-of-memory kill can take down enough members to cause this. After the Pods restart, no member can form the group on its own, because none of them knows if it has the most recent data.
 
 The Operator detects this situation and recovers the cluster automatically. This page explains how to recognize a full cluster crash, how to track the recovery, what to do when you disable automatic recovery or when it doesn't succeed, and how the recovery works.
 
