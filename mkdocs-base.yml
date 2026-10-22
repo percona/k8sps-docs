@@ -302,6 +302,7 @@ nav:
           
     - Release Notes:
           - "Release notes index": ReleaseNotes/index.md
+          - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md
           - ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md
