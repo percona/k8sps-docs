@@ -505,18 +505,22 @@ belongs to a ClusterSet. The Operator adds a finalizer so that delete does not l
 
 The Operator was developed and tested with the following software:
 
-* Percona Server for MySQL 8.4.10-10.1
+* Percona Server for MySQL 9.7.2-2.1
+* Percona Server for MySQL 8.4.11-11.1
 * Percona Server for MySQL 8.0.46-37.1
-* XtraBackup 8.4.0-6.1
+* XtraBackup 9.7.1-rc1.1
+* XtraBackup 8.4.0-7.1
 * XtraBackup 8.0.35-36.1
-* MySQL Router 8.4.10
+* MySQL Router 9.7.2
+* MySQL Router 8.4.11
 * MySQL Router 8.0.46
-* HAProxy 2.8.18-1
-* Orchestrator 3.2.6-22
+* HAProxy 3.4.4-1
+* Orchestrator 3.2.6-24
 * Percona Toolkit 3.7.1-4
+* Log collector (Fluent Bit) 5.1.4-1
 * PMM Client 3.8.1
-* Cert Manager 1.20.2
-* Percona Binlog Server 0.3.1
+* Cert Manager 1.21.2
+* Percona Binlog Server 0.4.1
 
 Other options may also work but have not been tested.
 
@@ -528,10 +532,11 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [start:platforms]
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.33 - 1.35
-* [Amazon Elastic Kubernetes Service (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/) 1.33 - 1.36
-* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.18 - 4.22
-* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.38.1 with Kubernetes v1.35.1
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.34 - 1.35
+* [Amazon Elastic Kubernetes Service (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/) 1.34 - 1.37
+* [DigitalOcean Kubernetes Service (DOKS) :octicons-link-external-16:](https://docs.digitalocean.com/products/kubernetes/) latest
+* [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.19 - 4.22
+* [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.39.0 with Kubernetes v1.37.0
 
 --8<-- [end:platforms]
 
