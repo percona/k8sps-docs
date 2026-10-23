@@ -74,6 +74,8 @@ After applying the patch, the deployment rollout will be automatically triggered
 kubectl rollout status sts ps-cluster1-ps
 ```
 
+If the rollout stops because one MySQL Pod stays unready, see [Unblock a stuck rolling update](pause-mysql-pod.md#unblock-a-stuck-rolling-update).
+
 ## Automated upgrade
 
 ### Assumptions

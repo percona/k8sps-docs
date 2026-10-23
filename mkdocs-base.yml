@@ -207,6 +207,7 @@ nav:
               - Point-in-time recovery:
                   - "About point-in-time recovery": backups-pitr.md
                   - "Restore with point-in-time recovery": backups-restore-pitr.md
+                  - "Pause a point-in-time recovery": pause-pitr.md
               - Restore from a backup:
                 - "On the same cluster": backups-restore.md
                 - "On a new cluster": backups-restore-to-new-cluster.md
@@ -274,6 +275,8 @@ nav:
           - "Check the events": debug-events.md
           - "Check the logs": debug-logs.md
           - "Troubleshoot backups and restores": debug-backup-restore.md
+          - "Special files in the data directory": datadir-special-files.md
+          - "Pause a MySQL Pod": pause-mysql-pod.md
           
     - Reference:
         - Custom Resource reference:
