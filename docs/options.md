@@ -41,8 +41,15 @@ spec:
   mysql:
     ...
       configuration: |
+        [mysqld]
         max_connections=250
 ```
+
+!!! important
+
+    Always start the configuration with the `[mysqld]` section header, as in a regular `my.cnf` file. The same applies when you pass the configuration through a [ConfigMap](#use-a-configmap) or a [Secret object](#use-a-secret-object).
+
+    MySQL server accepts options without the header, but the Operator mounts your configuration as a separate file that other components read on their own. For example, the `xtrabackup` container reads this file when it makes a backup. If the header is missing, every backup fails with the `Found option without preceding group in config file` error.
 
 See the [Custom Resource options, MySQL section](operator.md#operator-mysql-section)
 for more details.
@@ -61,7 +68,8 @@ For example, let’s suppose that your application requires more
 connections. To increase your `max_connections` setting in MySQL, you
 define a `my.cnf` configuration file with the following setting:
 
-```default
+```ini
+[mysqld]
 max_connections=250
 ```
 
@@ -119,7 +127,8 @@ Actual options should be encoded with [Base64 :octicons-link-external-16:](https
 For example, let’s define a `my.cnf` configuration file and put there a pair
 of MySQL options we used in the previous example:
 
-```
+```ini
+[mysqld]
 max_connections=250
 ```
 
@@ -144,7 +153,7 @@ follows:
     string:
 
     ```bash
-    echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
+    echo "W215c3FsZF0KbWF4X2Nvbm5lY3Rpb25zPTI1MAo=" | base64 --decode
     ```
 
 Finally, use a yaml file to create the Secret object. For example, you can
@@ -156,7 +165,7 @@ kind: Secret
 metadata:
   name: ps-cluster1-mysql
 data:
-  my.cnf: "bWF4X2Nvbm5lY3Rpb25zPTI1MAo"
+  my.cnf: "W215c3FsZF0KbWF4X2Nvbm5lY3Rpb25zPTI1MAo="
 ```
 
 When ready, apply it with the following command:
@@ -216,6 +225,20 @@ To keep a value you already set with `SET GLOBAL`, add it to the Custom
 Resource, ConfigMap or a Secret. The Operator applies `SET GLOBAL` again and
 does not restart Pods.
 
+## Set Group Replication options
+
+When Percona Server for MySQL initializes a new cluster member with an empty data directory, it reads your custom configuration before it loads the Group Replication plugin. At this point, the server doesn't know the `group_replication_*` variables. If your configuration contains such an option without a prefix, the server fails with an "unknown variable" error and the member doesn't start.
+
+To avoid this, add the `loose-` prefix to every `group_replication_*` option. With the prefix, the server skips an option it doesn't recognize yet and applies the value after the plugin loads:
+
+```yaml
+spec:
+  mysql:
+    configuration: |
+      [mysqld]
+      loose-group_replication_member_expel_timeout=30
+```
+
 ## Auto-tuning MySQL options
 
 Few configuration options for MySQL can be calculated and set by the Operator
@@ -239,7 +262,7 @@ as follows:
 
 ```yaml
 mysql:
-    configuration: |
+  configuration: |
     [mysqld]
     innodb_buffer_pool_size={{'{{'}}containerMemoryLimit * 3 / 4{{'}}'}}
     ...
