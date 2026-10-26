@@ -1,8 +1,8 @@
 # Recover from a full cluster crash
 
-A full cluster crash happens when the majority of members in a cluster with [Group Replication](architecture.md#group-replication) (GR) are down and the group loses quorum. A power loss in the data center, deletion of MySQL Pods, or an out-of-memory kill can take down enough members to cause this. After the Pods restart, no member can form the group on its own, because none of them knows if it has the most recent data.
+A full cluster crash happens when the majority of members in a cluster with [Group Replication](architecture.md#group-replication) (GR) are down and the group loses quorum. Even if the primary is among the survivors, the group can't vote, so after a short timeout, the primary enters the error state too. A power loss in the data center, deletion of MySQL Pods, or an out-of-memory kill can take down enough members to cause this. After the Pods restart, no member can form the group on its own, because none of them knows if it has the most recent data.
 
-The Operator detects this situation and recovers the cluster automatically. This page explains how to recognize a full cluster crash, how to track the recovery, what to do when you disable automatic recovery or when it doesn't succeed, and how the recovery works.
+The Operator detects this situation and recovers the cluster automatically if the `spec.mysql.autoRecovery` is set to `true`. This page explains how to recognize a full cluster crash, how to track the recovery, what to do when you disable automatic recovery or when it doesn't succeed, and how the recovery works.
 
 This page applies to clusters with Group Replication, the default replication type. Clusters with [asynchronous replication](architecture.md#asynchronous-replication-tech-preview) don't use this mechanism, and the `mysql.autoRecovery` option has no effect on them. After all MySQL Pods restart, Orchestrator restores the replication topology without manual steps. For details, see [Zero data loss failover in async clusters](failover-async.md). 
 
