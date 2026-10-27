@@ -4,7 +4,7 @@
 
 Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router, and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.
 
-This release adds automatic MySQL configuration tuning, a replication type switch on a running cluster (tech preview),  encrypted binlogs for point-in-time recovery, ability to manage application users via the Custom Resource, security builds for the Operator you already run, and support for Percona Server for MySQL 9.7. It also provides a number of improvements for async clusters and ClusterSet improvements.
+This release adds automatic MySQL configuration tuning, a replication type switch on a running cluster (tech preview), encrypted binlogs for point-in-time recovery, ability to manage application users via the Custom Resource, security builds for the Operator you already run, and support for Percona Server for MySQL 9.7. It also provides a number of improvements for async clusters and ClusterSet improvements.
 
 
 ## What's new at a glance
