@@ -45,7 +45,7 @@ This release adds automatic MySQL configuration tuning, a replication type switc
 **Platforms and MySQL versions**
 
 - [Official support for DigitalOcean Kubernetes Service (DOKS)](#official-support-for-digitalocean-kubernetes-service-doks) - run the Operator on DigitalOcean Kubernetes
-- [Support for MySQL 9.7](#support-for-mysql-97) - Percona Server for MySQL 9.7 is the default for a new cluster
+- [Support for MySQL 9.7](#support-for-mysql-97) 
 
 ## Important upgrade notes
 
@@ -357,9 +357,6 @@ To install the Operator on DOKS, read the [installation guide](../doks.md).
 
 This release adds support for Percona Server for MySQL 9.7. The Operator supports the major functionality of this version.
 
-Percona Server for MySQL 9.7 is the default MySQL version for a new database cluster.
-
-
 
 ## CRD changes
 
@@ -421,7 +418,7 @@ Validation changes:
 
 * [K8SPS-762](https://perconadev.atlassian.net/browse/K8SPS-762) - Added security builds so you can patch a High or Critical vulnerability in the Operator image without upgrading to a new Operator version. Numbered tags such as `1.3.0-2` stay on a fixed image, and `1.3.0-latest` points at the newest image for your current release.
 
-- [K8SPS-780](https://perconadev.atlassian.net/browse/K8SPS-780) - Added support for Percona Server for MySQL 9.7 so you can run clusters on this long-term support release. MySQL 9.7 is the default database version for a new cluster.
+- [K8SPS-780](https://perconadev.atlassian.net/browse/K8SPS-780) - Added support for Percona Server for MySQL 9.7 so you can run clusters on this long-term support release. 
 
 * [K8SPS-792](https://perconadev.atlassian.net/browse/K8SPS-792) - Added a custom certificate authority (CA) for S3-compatible backup storage so TLS verification can stay on with your organization's certificates. 
 
@@ -441,7 +438,7 @@ Validation changes:
 
 * [K8SPS-514](https://perconadev.atlassian.net/browse/K8SPS-514) - The Operator now extends Orchestrator downtime on the backup source until the backup finishes. Orchestrator no longer ends that maintenance window mid-backup and fails over the Pod that is still being backed up.
 
-- [K8SPS-528](https://perconadev.atlassian.net/browse/K8SPS-528) - You can set `mysql.size` to an even number of two or greater on an asynchronous cluster without `unsafeFlags.mysqlSize`. A single-instance cluster still requires that flag because there is no replica to fail over to.
+* [K8SPS-528](https://perconadev.atlassian.net/browse/K8SPS-528) - You can set `mysql.size` to an even number of two or greater on an asynchronous cluster without `unsafeFlags.mysqlSize`. A single-instance cluster still requires that flag because there is no replica to fail over to.
 
 * [K8SPS-563](https://perconadev.atlassian.net/browse/K8SPS-563) - Backup status now reports `status.size` and `status.uncompressedSize` after the backup succeeds. You can read the artifact size from `PerconaServerMySQLBackup` instead of checking object storage.
 
