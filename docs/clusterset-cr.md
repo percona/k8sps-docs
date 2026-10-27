@@ -24,7 +24,9 @@ The metadata section identifies the ClusterSet object. It includes the following
 * `namespace` — Namespace where the ClusterSet Custom Resource and the `mysqlshell-runner` Pod run.
 * `finalizers` — ensure safe deletion of resources in Kubernetes under certain conditions. This subsection includes the following finalizers:
   
-  * `percona.com/clusterset-dissolve` — Runs `.dissolve()` on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.
+  * `percona.com/clusterset-dissolve` — Runs `.dissolve()` on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.  
+  * `percona.com/clusterset-protection` - Blocks deletion of the ClusterSet member cluster while the ClusterSet has at least one replica. The finalizer is set on both the primary and the replica clusters starting with Operator version 1.3.0.
+  
 * `annotations` — Kubernetes annotations on the ClusterSet object. The Operator uses the following annotation:
 
   * `percona.com/clusterset-rejoin-cluster` — Set this to a replica's InnoDB cluster name (`spec.clusters[].innodbClusterName`) when the replica is healthy but ClusterSet replication is down. Do not set it to the current primary. The Operator removes the annotation after the rejoin attempt, whether it succeeds or fails. See [Rejoin a replica cluster](replication-setup.md#rejoin-a-replica-cluster).
