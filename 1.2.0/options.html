@@ -10,12 +10,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="You may require a configuration change for your application. MySQL
-allows the option to configure the database with a configuration file.
-You can pass options from the
-my.cnf 
-configuration file to be included in the MySQL configuration in one of the
-following ways:">
+        <meta name="description" content="The Operator can tune MySQL for you, or you can pass your own options from a my.cnf  configuration file. Read the following sections before you choose a method.">
       
       
         <meta name="author" content="Percona LLC">
@@ -27,7 +22,7 @@ following ways:">
         <link rel="prev" href="constraints.html">
       
       
-        <link rel="next" href="dns-suffix.html">
+        <link rel="next" href="autoconfig.html">
       
       
         
@@ -2639,6 +2634,55 @@ following ways:">
   
   
   
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL configuration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MySQL configuration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
     <li class="md-nav__item md-nav__item--active">
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
@@ -2698,7 +2742,40 @@ following ways:">
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#choose-automatic-tuning-or-your-own-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose automatic tuning or your own configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-compatibility-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration compatibility considerations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-operator-applies-your-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Operator applies your configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-compatibility-considerations_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Configuration compatibility considerations
@@ -2783,6 +2860,42 @@ following ways:">
     </ul>
   
 </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="autoconfig.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic configuration tuning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -5507,7 +5620,40 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#choose-automatic-tuning-or-your-own-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose automatic tuning or your own configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#configuration-compatibility-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration compatibility considerations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-the-operator-applies-your-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Operator applies your configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-compatibility-considerations_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Configuration compatibility considerations
@@ -5620,22 +5766,53 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 
 
 <h1 id="changing-mysql-options">Changing MySQL Options<a class="headerlink" href="#changing-mysql-options" title="Permanent link">&para;</a></h1>
-<p>You may require a configuration change for your application. MySQL
-allows the option to configure the database with a configuration file.
-You can pass options from the
-<a href="https://dev.mysql.com/doc/refman/8.0/en/option-files.html">my.cnf <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>
-configuration file to be included in the MySQL configuration in one of the
-following ways:</p>
+<p>The Operator can tune MySQL for you, or you can pass your own options from a <a href="https://dev.mysql.com/doc/refman/8.0/en/option-files.html">my.cnf <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> configuration file. Read the following sections before you choose a method.</p>
+<h2 id="choose-automatic-tuning-or-your-own-configuration">Choose automatic tuning or your own configuration<a class="headerlink" href="#choose-automatic-tuning-or-your-own-configuration" title="Permanent link">&para;</a></h2>
+<p>These settings aren&rsquo;t independent. <strong>Setting any configuration of your own disables the Operator&rsquo;s <a href="autoconfig.html">automatic configuration tuning</a></strong>, even if you only set one unrelated option:</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>What controls the configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nothing set</td>
+<td>The Operator&rsquo;s basic auto-tuning (<code>innodb_buffer_pool_size</code> and <code>max_connections</code> only)</td>
+</tr>
+<tr>
+<td><code>spec.mysql.autoConfig.enabled: true</code>, no manual configuration</td>
+<td>The Operator calculates a full configuration from your resources and workload profile</td>
+</tr>
+<tr>
+<td><code>spec.mysql.configuration</code>, a ConfigMap, or a Secret</td>
+<td>Your values only</td>
+</tr>
+</tbody>
+</table>
+<p>To let the Operator tune MySQL for you, see <a href="autoconfig.html">Automatic configuration tuning</a>.</p>
+<h2 id="configuration-compatibility-considerations">Configuration compatibility considerations<a class="headerlink" href="#configuration-compatibility-considerations" title="Permanent link">&para;</a></h2>
+<p>The Operator passes configuration options you define to MySQL as-is. It doesn&rsquo;t check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.</p>
+<p>Before you apply a change, check the variable&rsquo;s requirements and restrictions for your topology:</p>
 <ul>
-<li>
-<p>edit the <code>deploy/cr.yaml</code> file,</p>
-</li>
-<li>
-<p>use a ConfigMap,</p>
-</li>
-<li>
-<p>use a Secret object.</p>
-</li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html">MySQL Group Replication requirements <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html">CHANGE REPLICATION SOURCE TO <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+<li><a href="https://docs.percona.com/percona-server/8.4/">Percona Server for MySQL <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+</ul>
+<p>For example, Group Replication requires <code>log_replica_updates=ON</code> so members record replicated transactions in their binary logs for distributed recovery. Setting it to <code>OFF</code> is incompatible with Group Replication.</p>
+<h2 id="how-the-operator-applies-your-configuration">How the Operator applies your configuration<a class="headerlink" href="#how-the-operator-applies-your-configuration" title="Permanent link">&para;</a></h2>
+<p>The Operator applies your configuration to all MySQL Pods as follows:</p>
+<ul>
+<li><strong>Dynamic variables.</strong> The Operator applies these variables at runtime with the <code>SET GLOBAL</code> command and doesn&rsquo;t restart the MySQL StatefulSet. See <a href="#dynamic-configuration">Dynamic configuration</a>.</li>
+<li><strong>Static variables.</strong> MySQL cannot change these variables while the server is running. The Operator applies them with a rolling restart of the MySQL StatefulSet.</li>
+<li><strong>Removed variables.</strong> The Operator applies the removal with a rolling restart of the MySQL StatefulSet.</li>
+</ul>
+<p>Pass your own options in one of the following ways:</p>
+<ul>
+<li><a href="#edit-the-deploycryaml-file">Edit the <code>deploy/cr.yaml</code> file</a></li>
+<li><a href="#use-a-configmap">Use a ConfigMap</a></li>
+<li><a href="#use-a-secret-object">Use a Secret</a></li>
 </ul>
 <p>The Operator applies your configuration to all MySQL Pods as follows:</p>
 <ul>
@@ -5644,7 +5821,7 @@ following ways:</p>
 <li>If any variable is <strong>removed</strong>, the Operator applies the changes with a rolling restart of
   the MySQL StatefulSet.</li>
 </ul>
-<h2 id="configuration-compatibility-considerations">Configuration compatibility considerations<a class="headerlink" href="#configuration-compatibility-considerations" title="Permanent link">&para;</a></h2>
+<h2 id="configuration-compatibility-considerations_1">Configuration compatibility considerations<a class="headerlink" href="#configuration-compatibility-considerations_1" title="Permanent link">&para;</a></h2>
 <p>The Operator passes configuration options you define to MySQL as-is. It does not check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.</p>
 <p>Before you apply a change, check the variable&rsquo;s requirements and restrictions for your topology in the <a href="https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html">MySQL Group Replication requirements <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, <a href="https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html">CHANGE REPLICATION SOURCE TO <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, and <a href="https://docs.percona.com/percona-server/8.4/">Percona Server for MySQL <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> documentation.</p>
 <p>For example, Group Replication requires <code>log_replica_updates=ON</code> so members record replicated transactions in their binary logs for distributed recovery. Setting it to <code>OFF</code> is incompatible with Group Replication.</p>
@@ -5788,22 +5965,21 @@ ConfigMap, or a Secret is lost.</p>
 Resource, ConfigMap or a Secret. The Operator applies <code>SET GLOBAL</code> again and
 does not restart Pods.</p>
 <h2 id="auto-tuning-mysql-options">Auto-tuning MySQL options<a class="headerlink" href="#auto-tuning-mysql-options" title="Permanent link">&para;</a></h2>
-<p>Few configuration options for MySQL can be calculated and set by the Operator
-automatically based on the available Pod memory resource limits
-<strong>if constant values for these options are not specified by the user</strong> (either
-in cr.yaml or in ConfigMap).</p>
-<p>Options which can be set automatically are the following ones:</p>
+<p>The Operator
+calculates a few MySQL options automatically based on the memory available to
+the MySQL container:</p>
 <ul>
-<li>
-<p><code>innodb_buffer_pool_size</code></p>
-</li>
-<li>
-<p><code>max_connections</code></p>
-</li>
+<li><code>innodb_buffer_pool_size</code> — about 50% of the container memory,</li>
+<li><code>innodb_buffer_pool_chunk_size</code> — set together with <code>innodb_buffer_pool_size</code>,
+  so the buffer pool size is a valid multiple of the chunk size,</li>
+<li><code>max_connections</code> — one connection per ~12 MiB of container memory.</li>
 </ul>
-<p>If Percona Server for MySQL container resource limits are defined, then limits
-values are used to calculate these options. If Percona Server for MySQL
-container resource limits are not defined, auto-tuning is not done.</p>
+<p>The Operator uses the memory limit from <code>mysql.resources.limits</code>. If no limit
+is set, it uses the memory request from <code>mysql.resources.requests</code>. If neither
+is set, auto-tuning is not done.</p>
+<p>The Operator doesn&rsquo;t auto-tune an option you set yourself in
+<code>spec.mysql.configuration</code>. If you set an option in your own ConfigMap or
+Secret, your value takes precedence over the auto-tuned one.</p>
 <p>Also, starting from the Operator 0.4.0, there is another way of auto-tuning.
 You can use <code>"{{ containerMemoryLimit }}"</code> as a value in <code>spec.mysql.configuration</code>
 as follows:</p>
@@ -5813,12 +5989,18 @@ as follows:</p>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">innodb_buffer_pool_size={{containerMemoryLimit * 3 / 4}}</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 </code></pre></div>
+<p>Starting with Operator 1.3.0, a more comprehensive form of automatic tuning is
+available. See <a href="autoconfig.html">Automatic configuration tuning</a>. </p>
+<p>The tuning of the buffer pool and <code>max_connections</code> is what the Operator continues to use
+whenever that feature is disabled (<code>spec.mysql.autoConfig.enabled: false</code> or
+unset). This behavior remains and applies to any cluster that
+doesn&rsquo;t opt in.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 16:03:03 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:58:31 UTC">October 27, 2026</span>
       
         <br>
         Created:

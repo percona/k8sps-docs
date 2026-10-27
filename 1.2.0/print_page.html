@@ -2638,6 +2638,53 @@
   
   
   
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL configuration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MySQL configuration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="options.html" class="md-nav__link">
         
@@ -2655,6 +2702,42 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="autoconfig.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic configuration tuning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -6192,6 +6275,18 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#section-7-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MySQL configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MySQL configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#options" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -6199,6 +6294,22 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autoconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic configuration tuning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -7253,6 +7364,8 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <li>Load balancing through HAProxy or MySQL Router</li>
 <li>Resource optimization with intelligent pod placement</li>
 </ul>
+<h3 id="features-automatic-mysql-configuration-tuning">Automatic MySQL configuration tuning<a class="headerlink" href="#features-automatic-mysql-configuration-tuning" title="Permanent link">&para;</a></h3>
+<p>Get your cluster production-ready without deep MySQL tuning expertise. Specify the CPU and memory you allocate to MySQL, your workload profile, and the MySQL version. The Operator <a href="#autoconfig">automatically calculates and applies the MySQL configuration</a> for you and recalculates it whenever those resources change, so you pay only for the resources you actually use.</p>
 <h3 id="features-security-and-compliance">Security and compliance<a class="headerlink" href="#features-security-and-compliance" title="Permanent link">&para;</a></h3>
 <p>Keep your data secure with built-in security features:</p>
 <ul>
@@ -8329,6 +8442,7 @@ kubectl<span class="w"> </span>logs<span class="w">  </span>&lt;cluster-name&gt;
 <ul>
 <li><a href="#scaling">Scale your cluster</a> - Add more nodes for better performance or increase resources for existing nodes</li>
 <li><a href="#options">Configure MySQL options</a> - Tune MySQL settings for your workload requirements</li>
+<li><a href="#autoconfig">Let the Operator tune MySQL automatically</a> - Calculate a full configuration from your cluster&rsquo;s resources and workload instead of tuning by hand</li>
 <li><a href="#backups-fine-tune">Fine-tune backups and restores</a> - Optimize backup performance and customize restore operations</li>
 </ul>
 <h3 id="what-next-monitoring-and-observability">Monitoring and observability<a class="headerlink" href="#what-next-monitoring-and-observability" title="Permanent link">&para;</a></h3>
@@ -12845,6 +12959,10 @@ following section in the Custom Resource:</p>
 </code></pre></div>
 <p>Use our reference documentation for the <a href="#operator">Custom Resource options</a> 
 for more details about other components.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Changing compute resources for MySQL Pods (<code>mysql.resources</code>) triggers a recalculation of the MySQL configuration, when the <a href="#autoconfig">automatic configuration tuning</a> is enabled (<code>mysql.autoConfig.enabled: true</code>). The settings that usually change because of that are buffer pool and redo log. Since they can only be set at startup, this causes a rolling restart of the MySQL StatefulSet. Plan a resize of <code>mysql.resources</code> as a change-management event.</p>
+</div>
 <h3 id="scaling-scale-storage">Scale storage<a class="headerlink" href="#scaling-scale-storage" title="Permanent link">&para;</a></h3>
 <p>Kubernetes manages storage with the following components:</p>
 <ul>
@@ -14422,23 +14540,58 @@ equipped machine or for cost optimization by choosing the nodes in the same avai
 <span class="w">      </span><span class="nt">minAvailable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
 </code></pre></div>
 <p>Refer to <a href="https://kubernetes.io/docs/concepts/workloads/pods/disruptions/">the official Kubernetes
-documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for more information about Pod disruption budgets and <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/#protecting-an-application-with-a-poddisruptionbudget">considerations how to protect your application <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p></section><section class="print-page" id="options" heading-number="7.5"><h1 id="options-changing-mysql-options">Changing MySQL Options<a class="headerlink" href="#options-changing-mysql-options" title="Permanent link">&para;</a></h1>
-<p>You may require a configuration change for your application. MySQL
-allows the option to configure the database with a configuration file.
-You can pass options from the
-<a href="https://dev.mysql.com/doc/refman/8.0/en/option-files.html">my.cnf <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>
-configuration file to be included in the MySQL configuration in one of the
-following ways:</p>
+documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for more information about Pod disruption budgets and <a href="https://kubernetes.io/docs/tasks/run-application/configure-pdb/#protecting-an-application-with-a-poddisruptionbudget">considerations how to protect your application <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p></section>
+                    <section class='print-page md-section' id='section-7-5' heading-number='7.5'>
+                        <h1>MySQL configuration<a class='headerlink' href='#section-7-5' title='Permanent link'></a>
+                        </h1>
+                    <section class="print-page" id="options" heading-number="7.5.1"><h1 id="options-changing-mysql-options">Changing MySQL Options<a class="headerlink" href="#options-changing-mysql-options" title="Permanent link">&para;</a></h1>
+<p>The Operator can tune MySQL for you, or you can pass your own options from a <a href="https://dev.mysql.com/doc/refman/8.0/en/option-files.html">my.cnf <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> configuration file. Read the following sections before you choose a method.</p>
+<h2 id="options-choose-automatic-tuning-or-your-own-configuration">Choose automatic tuning or your own configuration<a class="headerlink" href="#options-choose-automatic-tuning-or-your-own-configuration" title="Permanent link">&para;</a></h2>
+<p>These settings aren&rsquo;t independent. <strong>Setting any configuration of your own disables the Operator&rsquo;s <a href="#autoconfig">automatic configuration tuning</a></strong>, even if you only set one unrelated option:</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>What controls the configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nothing set</td>
+<td>The Operator&rsquo;s basic auto-tuning (<code>innodb_buffer_pool_size</code> and <code>max_connections</code> only)</td>
+</tr>
+<tr>
+<td><code>spec.mysql.autoConfig.enabled: true</code>, no manual configuration</td>
+<td>The Operator calculates a full configuration from your resources and workload profile</td>
+</tr>
+<tr>
+<td><code>spec.mysql.configuration</code>, a ConfigMap, or a Secret</td>
+<td>Your values only</td>
+</tr>
+</tbody>
+</table>
+<p>To let the Operator tune MySQL for you, see <a href="#autoconfig">Automatic configuration tuning</a>.</p>
+<h2 id="options-configuration-compatibility-considerations">Configuration compatibility considerations<a class="headerlink" href="#options-configuration-compatibility-considerations" title="Permanent link">&para;</a></h2>
+<p>The Operator passes configuration options you define to MySQL as-is. It doesn&rsquo;t check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.</p>
+<p>Before you apply a change, check the variable&rsquo;s requirements and restrictions for your topology:</p>
 <ul>
-<li>
-<p>edit the <code>deploy/cr.yaml</code> file,</p>
-</li>
-<li>
-<p>use a ConfigMap,</p>
-</li>
-<li>
-<p>use a Secret object.</p>
-</li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html">MySQL Group Replication requirements <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html">CHANGE REPLICATION SOURCE TO <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+<li><a href="https://docs.percona.com/percona-server/8.4/">Percona Server for MySQL <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a></li>
+</ul>
+<p>For example, Group Replication requires <code>log_replica_updates=ON</code> so members record replicated transactions in their binary logs for distributed recovery. Setting it to <code>OFF</code> is incompatible with Group Replication.</p>
+<h2 id="options-how-the-operator-applies-your-configuration">How the Operator applies your configuration<a class="headerlink" href="#options-how-the-operator-applies-your-configuration" title="Permanent link">&para;</a></h2>
+<p>The Operator applies your configuration to all MySQL Pods as follows:</p>
+<ul>
+<li><strong>Dynamic variables.</strong> The Operator applies these variables at runtime with the <code>SET GLOBAL</code> command and doesn&rsquo;t restart the MySQL StatefulSet. See <a href="#options-dynamic-configuration">Dynamic configuration</a>.</li>
+<li><strong>Static variables.</strong> MySQL cannot change these variables while the server is running. The Operator applies them with a rolling restart of the MySQL StatefulSet.</li>
+<li><strong>Removed variables.</strong> The Operator applies the removal with a rolling restart of the MySQL StatefulSet.</li>
+</ul>
+<p>Pass your own options in one of the following ways:</p>
+<ul>
+<li><a href="#options-edit-the-deploycryaml-file">Edit the <code>deploy/cr.yaml</code> file</a></li>
+<li><a href="#options-use-a-configmap">Use a ConfigMap</a></li>
+<li><a href="#options-use-a-secret-object">Use a Secret</a></li>
 </ul>
 <p>The Operator applies your configuration to all MySQL Pods as follows:</p>
 <ul>
@@ -14447,7 +14600,7 @@ following ways:</p>
 <li>If any variable is <strong>removed</strong>, the Operator applies the changes with a rolling restart of
   the MySQL StatefulSet.</li>
 </ul>
-<h2 id="options-configuration-compatibility-considerations">Configuration compatibility considerations<a class="headerlink" href="#options-configuration-compatibility-considerations" title="Permanent link">&para;</a></h2>
+<h2 id="options-configuration-compatibility-considerations_1">Configuration compatibility considerations<a class="headerlink" href="#options-configuration-compatibility-considerations_1" title="Permanent link">&para;</a></h2>
 <p>The Operator passes configuration options you define to MySQL as-is. It does not check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.</p>
 <p>Before you apply a change, check the variable&rsquo;s requirements and restrictions for your topology in the <a href="https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html">MySQL Group Replication requirements <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, <a href="https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html">CHANGE REPLICATION SOURCE TO <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>, and <a href="https://docs.percona.com/percona-server/8.4/">Percona Server for MySQL <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> documentation.</p>
 <p>For example, Group Replication requires <code>log_replica_updates=ON</code> so members record replicated transactions in their binary logs for distributed recovery. Setting it to <code>OFF</code> is incompatible with Group Replication.</p>
@@ -14591,22 +14744,21 @@ ConfigMap, or a Secret is lost.</p>
 Resource, ConfigMap or a Secret. The Operator applies <code>SET GLOBAL</code> again and
 does not restart Pods.</p>
 <h2 id="options-auto-tuning-mysql-options">Auto-tuning MySQL options<a class="headerlink" href="#options-auto-tuning-mysql-options" title="Permanent link">&para;</a></h2>
-<p>Few configuration options for MySQL can be calculated and set by the Operator
-automatically based on the available Pod memory resource limits
-<strong>if constant values for these options are not specified by the user</strong> (either
-in cr.yaml or in ConfigMap).</p>
-<p>Options which can be set automatically are the following ones:</p>
+<p>The Operator
+calculates a few MySQL options automatically based on the memory available to
+the MySQL container:</p>
 <ul>
-<li>
-<p><code>innodb_buffer_pool_size</code></p>
-</li>
-<li>
-<p><code>max_connections</code></p>
-</li>
+<li><code>innodb_buffer_pool_size</code> — about 50% of the container memory,</li>
+<li><code>innodb_buffer_pool_chunk_size</code> — set together with <code>innodb_buffer_pool_size</code>,
+  so the buffer pool size is a valid multiple of the chunk size,</li>
+<li><code>max_connections</code> — one connection per ~12 MiB of container memory.</li>
 </ul>
-<p>If Percona Server for MySQL container resource limits are defined, then limits
-values are used to calculate these options. If Percona Server for MySQL
-container resource limits are not defined, auto-tuning is not done.</p>
+<p>The Operator uses the memory limit from <code>mysql.resources.limits</code>. If no limit
+is set, it uses the memory request from <code>mysql.resources.requests</code>. If neither
+is set, auto-tuning is not done.</p>
+<p>The Operator doesn&rsquo;t auto-tune an option you set yourself in
+<code>spec.mysql.configuration</code>. If you set an option in your own ConfigMap or
+Secret, your value takes precedence over the auto-tuned one.</p>
 <p>Also, starting from the Operator 0.4.0, there is another way of auto-tuning.
 You can use <code>"{{ containerMemoryLimit }}"</code> as a value in <code>spec.mysql.configuration</code>
 as follows:</p>
@@ -14615,7 +14767,205 @@ as follows:</p>
 <span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">mysqld</span><span class="p p-Indicator">]</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">innodb_buffer_pool_size={{containerMemoryLimit * 3 / 4}}</span>
 <span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-</code></pre></div></section><section class="print-page" id="dns-suffix" heading-number="7.6"><h1 id="dns-suffix-configure-dns-suffix-for-service-discovery">Configure DNS suffix for service discovery<a class="headerlink" href="#dns-suffix-configure-dns-suffix-for-service-discovery" title="Permanent link">&para;</a></h1>
+</code></pre></div>
+<p>Starting with Operator 1.3.0, a more comprehensive form of automatic tuning is
+available. See <a href="#autoconfig">Automatic configuration tuning</a>. </p>
+<p>The tuning of the buffer pool and <code>max_connections</code> is what the Operator continues to use
+whenever that feature is disabled (<code>spec.mysql.autoConfig.enabled: false</code> or
+unset). This behavior remains and applies to any cluster that
+doesn&rsquo;t opt in.</p></section><section class="print-page" id="autoconfig" heading-number="7.5.2"><h1 id="autoconfig-automatic-configuration-tuning">Automatic configuration tuning<a class="headerlink" href="#autoconfig-automatic-configuration-tuning" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0.md">1.3.0</a></p>
+</div>
+<p>The Operator can calculate a full MySQL configuration in addition to <code>innodb_buffer_pool_size</code> and <code>max_connections</code>. The calculation is based on the CPU and memory you allocate to the MySQL container, the workload you run, and the MySQL version. You set those resources and the Operator sizes the database settings to match them. When the resources change, the Operator recalculates the settings accordingly.</p>
+<p>This automatic configuration tuning gives you:</p>
+<ul>
+<li>Production-ready cluster tuned to its actual resources and workload out of the box</li>
+<li>Effective resource utilization – you pay only for what you use</li>
+<li>Updated settings when you change <code>mysql.resources</code> or the workload profile</li>
+</ul>
+<p>The Operator uses the <a href="https://github.com/Tusamarco/mysqloperatorcalculator">mysqloperatorcalculator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> library to calculate these settings. It sets <code>[mysqld]</code> variables only. Container resources, probe timings, and storage size stay under your control.</p>
+<h2 id="autoconfig-availability">Availability<a class="headerlink" href="#autoconfig-availability" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>New clusters</strong>: enabled when you deploy with Operator 1.3.0+ and the <code>crVersion</code> is <code>1.3.0</code> or higher. </li>
+<li><strong>Existing clusters</strong>: upgrading the Operator does not turn automatic configuration tuning on for you. <a href="#autoconfig-turn-on-automatic-configuration-tuning">Turn it on</a> yourself once you&rsquo;ve upgraded.</li>
+</ul>
+<h3 id="autoconfig-supported-percona-server-for-mysql-versions">Supported Percona Server for MySQL versions<a class="headerlink" href="#autoconfig-supported-percona-server-for-mysql-versions" title="Permanent link">&para;</a></h3>
+<p>The Operator can calculate MySQL settings for these Percona Server for MySQL versions:</p>
+<ul>
+<li>9.7.x</li>
+<li>8.4.x (all patch releases)</li>
+<li>8.0.46 and later</li>
+</ul>
+<p>On 8.0.45 or older, the Operator falls back to <a href="#options-auto-tuning-mysql-options">basic buffer-pool and <code>max_connections</code> tuning</a>. See <a href="#autoconfig-autoconfigfallback-warning">AutoConfigFallback warning</a> if you weren&rsquo;t expecting it.</p>
+<h2 id="autoconfig-turn-on-automatic-configuration-tuning">Turn on automatic configuration tuning<a class="headerlink" href="#autoconfig-turn-on-automatic-configuration-tuning" title="Permanent link">&para;</a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If <code>spec.mysql.configuration</code> is set, or you have MySQL settings in your own ConfigMap or Secret, the Operator does not calculate the configuration even when automatic configuration tuning is turned on. See <a href="#autoconfig-automatic-vs-user-provided-mysql-configuration">Automatic vs user-provided MySQL configuration</a> for details. Clear those settings first if you want the Operator to calculate the MySQL configuration for you.</p>
+</div>
+<p>Configure the <code>spec.mysql.autoConfig.</code> section in the Custom Resource.</p>
+<ul>
+<li>Set <code>enabled</code> to <code>true</code>.</li>
+<li>Specify the workload profile in the <code>loadType</code>. See <a href="#autoconfig-choose-a-workload-profile">Choose a workload profile</a> to understand which one you need.</li>
+<li>
+<p>When <code>enabled</code> is <code>true</code>, the following fields are required. The Custom Resource is rejected otherwise:</p>
+</li>
+<li>
+<p><code>mysql.resources</code> with both CPU and memory, set in <code>requests</code> or <code>limits</code>. CPU must be greater than 0 and memory must be at least 12Mi.</p>
+</li>
+<li><code>mysql.autoConfig.version</code>, in the <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code> format.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">autoConfig</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">loadType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">someWrites</span><span class="w">  </span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"8.4.8"</span><span class="w">       </span><span class="c1"># the MySQL version to tune for</span>
+<span class="w">    </span><span class="nt">resources</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">requests</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"2"</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4Gi</span>
+<span class="w">      </span><span class="nt">limits</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s">"4"</span>
+<span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8Gi</span>
+</code></pre></div>
+<p>See the <a href="#operator-operator-mysql-section">Custom Resource reference</a> for the full field list.</p>
+<h3 id="autoconfig-choose-a-workload-profile">Choose a workload profile<a class="headerlink" href="#autoconfig-choose-a-workload-profile" title="Permanent link">&para;</a></h3>
+<p><code>loadType</code> tells the Operator how to balance read-oriented and write-oriented settings:</p>
+<table>
+<thead>
+<tr>
+<th><code>loadType</code></th>
+<th>Approximate read/write mix</th>
+<th>Choose this when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mostlyReads</code></td>
+<td>~95% reads</td>
+<td>Reporting, blogs, or read-replica workloads rarely write</td>
+</tr>
+<tr>
+<td><code>someWrites</code> (default)</td>
+<td>~80% reads</td>
+<td>A typical read-dominated application, such as e-commerce or light OLTP</td>
+</tr>
+<tr>
+<td><code>equalReadsWrites</code></td>
+<td>~50/50</td>
+<td>Mixed analytics or heavy OLTP</td>
+</tr>
+<tr>
+<td><code>heavyWrites</code></td>
+<td>Write-dominated</td>
+<td>Log ingestion, event streams, or high-frequency inserts</td>
+</tr>
+</tbody>
+</table>
+<h2 id="autoconfig-understand-how-calculation-works">Understand how calculation works<a class="headerlink" href="#autoconfig-understand-how-calculation-works" title="Permanent link">&para;</a></h2>
+<p>When automatic configuration tuning is turned on, the Operator uses these inputs to calculate the configuration on every reconcile:</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU and memory</td>
+<td><code>mysql.resources</code>. When both <code>limits</code> and <code>requests</code> are set, the Operator uses <code>limits</code>.</td>
+</tr>
+<tr>
+<td>Workload profile</td>
+<td><code>mysql.autoConfig.loadType</code>. See <a href="#autoconfig-choose-a-workload-profile">Choose a workload profile</a> for available profiles and the default.</td>
+</tr>
+<tr>
+<td>MySQL version</td>
+<td><code>mysql.autoConfig.version</code>. This selects the parameter set — see <a href="#autoconfig-keep-the-mysql-version-in-sync">Keep the MySQL version in sync</a>.</td>
+</tr>
+<tr>
+<td>Replication type</td>
+<td><code>mysql.clusterType</code>. Group Replication and asynchronous replication receive different settings.</td>
+</tr>
+</tbody>
+</table>
+<p>The Operator writes the result to the <code>auto-&lt;cluster-name&gt;-mysql</code> ConfigMap. It updates that ConfigMap only when the result changes, so a cluster with unchanged inputs does not restart.</p>
+<h3 id="autoconfig-keep-the-mysql-version-in-sync">Keep the MySQL version in sync<a class="headerlink" href="#autoconfig-keep-the-mysql-version-in-sync" title="Permanent link">&para;</a></h3>
+<p><code>mysql.autoConfig.version</code> tells the Operator which MySQL version to tune for. It does not change which image is deployed, and the Operator does not check that the two match. Update <code>mysql.autoConfig.version</code> whenever you change <code>mysql.image</code>. A mismatch can make the Operator emit a parameter the running server does not recognize, and that can prevent MySQL from starting.</p>
+<h3 id="autoconfig-automatic-vs-user-provided-mysql-configuration">Automatic vs user-provided MySQL configuration<a class="headerlink" href="#autoconfig-automatic-vs-user-provided-mysql-configuration" title="Permanent link">&para;</a></h3>
+<p>The Operator calculates the full configuration only when the <code>spec.mysql.configuration</code> in the Custom Resource is empty and you have not put MySQL settings in a ConfigMap or Secret of your own.</p>
+<p>Any value in <code>spec.mysql.configuration</code> or any MySQL settings in a ConfigMap or Secret you create disable automatic configuration tuning. The Operator applies only your settings plus the  <code>innodb_buffer_pool_size</code>, <code>innodb_buffer_pool_chunk_size</code>, and <code>max_connections</code> values that it calculates from the container memory. It logs <code>a user configuration is set, skipping autoconfig</code> message and does not record a Kubernetes event for this skip.</p>
+<p>The <code>auto-&lt;cluster-name&gt;-mysql</code> ConfigMap is the Operator&rsquo;s output. It does not count as configuration you supplied.</p>
+<p>The Operator calculates the full configuration once you&rsquo;ve <a href="#autoconfig-turn-on-automatic-configuration-tuning">turned it on</a> and cleared <code>spec.mysql.configuration</code> and removed MySQL settings from your own ConfigMap or Secret.</p>
+<h3 id="autoconfig-full-list-of-tunable-variables">Full list of tunable variables<a class="headerlink" href="#autoconfig-full-list-of-tunable-variables" title="Permanent link">&para;</a></h3>
+<p>The Operator includes a variable only when <code>mysql.autoConfig.version</code> falls inside that variable&rsquo;s supported range. Read the ConfigMap to see the variables and values for your cluster:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>configmap<span class="w"> </span>auto-&lt;cluster-name&gt;-mysql<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.my\.cnf}'</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<details class="note">
+<summary>InnoDB, connections, binlog, replication, and Group Replication variables</summary>
+<p><strong>InnoDB, on every cluster:</strong></p>
+<ul>
+<li><code>innodb_buffer_pool_size</code>, <code>innodb_buffer_pool_instances</code>, and <code>innodb_buffer_pool_chunk_size</code></li>
+<li><code>innodb_redo_log_capacity</code>, or <code>innodb_log_file_size</code> and <code>innodb_log_files_in_group</code> on MySQL 8.0</li>
+<li><code>innodb_flush_method</code> and <code>innodb_flush_log_at_trx_commit</code></li>
+<li><code>innodb_io_capacity_max</code>, <code>innodb_purge_threads</code>, and <code>innodb_parallel_read_threads</code></li>
+<li><code>innodb_adaptive_hash_index</code>, <code>innodb_numa_interleave</code>, and <code>innodb_monitor_enable</code></li>
+</ul>
+<p><strong>Connections and session buffers, on every cluster:</strong></p>
+<ul>
+<li><code>max_connections</code> and <code>thread_cache_size</code></li>
+<li><code>join_buffer_size</code>, <code>sort_buffer_size</code>, and <code>read_rnd_buffer_size</code></li>
+<li><code>tmp_table_size</code>, <code>max_heap_table_size</code>, and <code>sync_binlog</code></li>
+</ul>
+<p><strong>Replication applier, on every cluster:</strong></p>
+<ul>
+<li><code>replica_parallel_workers</code> and <code>replica_parallel_type</code></li>
+<li><code>replica_preserve_commit_order</code>, <code>replica_exec_mode</code>, and <code>replica_compressed_protocol</code></li>
+</ul>
+<p><strong>Binary logging and asynchronous replication, on asynchronous replication clusters:</strong></p>
+<ul>
+<li><code>binlog_cache_size</code>, <code>binlog_stmt_cache_size</code>, <code>binlog_format</code>, <code>binlog_row_image</code>, and <code>binlog_expire_logs_seconds</code></li>
+<li><code>gtid_mode</code> and <code>enforce_gtid_consistency</code></li>
+<li><code>relay_log_space_limit</code>, <code>sync_relay_log</code>, <code>replica_net_timeout</code>, and <code>replica_checkpoint_period</code></li>
+</ul>
+<p><strong>Group Replication, on Group Replication clusters:</strong></p>
+<ul>
+<li><code>group_replication_message_cache_size</code> and <code>group_replication_communication_max_message_size</code></li>
+<li><code>group_replication_flow_control_period</code> and <code>group_replication_member_expel_timeout</code></li>
+<li><code>group_replication_autorejoin_tries</code> and <code>group_replication_paxos_single_leader</code></li>
+<li><code>binlog_transaction_dependency_tracking</code></li>
+</ul>
+</details>
+<h3 id="autoconfig-how-calculated-settings-are-applied">How calculated settings are applied<a class="headerlink" href="#autoconfig-how-calculated-settings-are-applied" title="Permanent link">&para;</a></h3>
+<p>The Operator applies calculated values after all MySQL Pods are ready:</p>
+<ul>
+<li>Variables that MySQL accepts at runtime are applied with <code>SET GLOBAL</code> on each Pod, with no restart.</li>
+<li>The buffer pool, redo log settings and variables that MySQL accepts only at startup cause a rolling restart of the MySQL StatefulSet. Removing a variable from the configuration also causes a rolling restart.</li>
+</ul>
+<p>Changing <code>mysql.resources</code> changes the buffer pool and the redo log. This change usually restarts the MySQL Pods. Plan a resize of <code>mysql.resources</code> as a change-management event. See <a href="#scaling-scale-compute-resources">Scale compute resources</a>.</p>
+<p>Before the Operator writes the configuration, it checks the calculated redo log against the data volume. When the redo log would exceed 25% of that volume, reconciliation stops. See <a href="#autoconfig-autoconfiginsufficientstorage-warning">AutoConfigInsufficientStorage warning</a>.</p>
+<h2 id="autoconfig-troubleshoot-automatic-configuration-tuning">Troubleshoot automatic configuration tuning<a class="headerlink" href="#autoconfig-troubleshoot-automatic-configuration-tuning" title="Permanent link">&para;</a></h2>
+<p>Check the cluster events first. See <a href="#debug-events">Check the Events</a>.</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>--field-selector<span class="w"> </span>involvedObject.name<span class="o">=</span>&lt;cluster-name&gt;
+</code></pre></div>
+<h3 id="autoconfig-autoconfiginsufficientstorage-warning">AutoConfigInsufficientStorage warning<a class="headerlink" href="#autoconfig-autoconfiginsufficientstorage-warning" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom.</strong> Reconciliation is stuck. <code>kubectl get events</code> shows a warning with reason <code>AutoConfigInsufficientStorage</code>. The message names the calculated redo log size, the data volume size, and the minimum volume size needed.</p>
+<p><strong>Cause.</strong> The redo log size follows the buffer pool, and the buffer pool follows the memory in <code>mysql.resources</code>. MySQL preallocates the full redo log on disk. The Operator refuses a configuration whose redo log would exceed 25% of the data volume, so a volume that is too small does not reach a server that fails to start or clone.</p>
+<p>The Operator uses the capacity of the smallest existing MySQL data volume in the cluster. When no PersistentVolumeClaims exist yet, it uses the storage size in <code>mysql.volumeSpec</code>. When the size cannot be determined, for example with a <code>hostPath</code> volume or an <code>emptyDir</code> volume without <code>sizeLimit</code>, the Operator skips this check.</p>
+<p><strong>Fix.</strong> Do one of the following, then let the Operator reconcile again:</p>
+<ul>
+<li><a href="#scaling-scale-storage">Increase the storage size</a> of the MySQL data volume.</li>
+<li>Lower the memory in <code>mysql.resources</code> so the Operator sizes a smaller buffer pool and redo log.</li>
+</ul>
+<h3 id="autoconfig-autoconfigfallback-warning">AutoConfigFallback warning<a class="headerlink" href="#autoconfig-autoconfigfallback-warning" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom.</strong> The cluster starts, and events include a warning with reason <code>AutoConfigFallback</code>.</p>
+<p><strong>Cause.</strong> The Operator could not calculate the full configuration. It uses the basic buffer pool and <code>max_connections</code> tuning instead. Typical causes are a missing CPU value, an unsupported MySQL version, or an internal calculation error.</p>
+<p>A configuration you set yourself also skips automatic configuration tuning, and that skip is written to the Operator log only. See <a href="#autoconfig-automatic-vs-user-provided-mysql-configuration">Automatic vs user-provided MySQL configuration</a>.</p>
+<h3 id="autoconfig-autoconfigfailed-warning">AutoConfigFailed warning<a class="headerlink" href="#autoconfig-autoconfigfailed-warning" title="Permanent link">&para;</a></h3>
+<p><strong>Symptom.</strong> Events include a warning with reason <code>AutoConfigFailed</code>.</p>
+<p><strong>Cause.</strong> The basic buffer pool and <code>max_connections</code> tuning also failed. MySQL starts with no calculated parameters.</p></section></section><section class="print-page" id="dns-suffix" heading-number="7.6"><h1 id="dns-suffix-configure-dns-suffix-for-service-discovery">Configure DNS suffix for service discovery<a class="headerlink" href="#dns-suffix-configure-dns-suffix-for-service-discovery" title="Permanent link">&para;</a></h1>
 <p>In Kubernetes, services are assigned a DNS name to be accessible within the cluster. The domain name follows the pattern <code>&lt;service-name&gt;.&lt;namespace&gt;.svc.&lt;cluster-domain&gt;</code>. The default cluster domain is <code>cluster.local</code>, so a typical FQDN looks like <code>&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code>.</p>
 <p>When you refer to a service using only its short name, Kubernetes automatically expands it with this domain so the name resolves inside the cluster. This enables workloads to communicate without the need to specify fully-qualified domain names.</p>
 <p>Clusters with custom DNS configurations may use a domain suffix different from the default <code>cluster.local</code>. This includes scenarios such as running inside a vcluster, which may respond to DNS queries with records that do not match the actual cluster domain.</p>
@@ -21836,6 +22186,57 @@ configuration options for the Percona Server for MySQL.</p>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
 <td><pre><code>[mysqld]</code><br><code>max_connections=250</code></pre></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-mysqlautoconfigenabled"><code>mysql.autoConfig.enabled</code><a class="headerlink" href="#operator-mysqlautoconfigenabled" title="Permanent link">&para;</a></h3>
+<p>Enables <a href="#autoconfig">automatic configuration tuning</a>. The Operator calculates a full MySQL configuration based on the Pod resources, database workload profile, and MySQL version. Requires <code>mysql.resources</code> (CPU and memory) and <code>mysql.autoConfig.version</code> to be set.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-mysqlautoconfigloadtype"><code>mysql.autoConfig.loadType</code><a class="headerlink" href="#operator-mysqlautoconfigloadtype" title="Permanent link">&para;</a></h3>
+<p>The workload profile used to calculate the configuration. If not set, the Operator defaults to <code>someWrites</code>. </p>
+<p>See <a href="#autoconfig-choose-a-workload-profile">Choose a workload profile</a> for what each value means.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Allowed values</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>mostlyReads</code>, <code>someWrites</code>, <code>equalReadsWrites</code>, <code>heavyWrites</code></td>
+<td><code>someWrites</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-mysqlautoconfigversion"><code>mysql.autoConfig.version</code><a class="headerlink" href="#operator-mysqlautoconfigversion" title="Permanent link">&para;</a></h3>
+<p>The MySQL version the configuration is calculated for, in the <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code> format. This option controls the parameters set for the selected Percona Server for MySQL version. The <a href="#operator-mysqlimage"><code>mysql.image</code></a> option controls the image version to be deployed. The Operator reads these two values separately. You must keep <code>mysql.autoConfig.version</code> and <a href="#operator-mysqlimage"><code>mysql.image</code></a> values in sync yourself. Read more in the <a href="#autoconfig-keep-the-mysql-version-in-sync">Keep the MySQL version in sync</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>8.4.8</code></td>
 </tr>
 </tbody>
 </table>
@@ -31715,7 +32116,10 @@ and <a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji">
 
 .print-site-enumerate-headings #constraints > h1:before { content: '7.4 ' }
 
-.print-site-enumerate-headings #options > h1:before { content: '7.5 ' }
+.print-site-enumerate-headings #section-7-5 > h1:before { content: '7.5 ' }
+.print-site-enumerate-headings #options > h1:before { content: '7.5.1 ' }
+
+.print-site-enumerate-headings #autoconfig > h1:before { content: '7.5.2 ' }
 
 .print-site-enumerate-headings #dns-suffix > h1:before { content: '7.6 ' }
 

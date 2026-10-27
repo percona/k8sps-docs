@@ -25,6 +25,10 @@
          <lastmod>2026-10-27</lastmod>
     </url>
     <url>
+         <loc>https://docs.percona.com/percona-operator-for-mysql/1.2.0/autoconfig.html</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
          <loc>https://docs.percona.com/percona-operator-for-mysql/1.2.0/backup-cr.html</loc>
          <lastmod>2026-10-27</lastmod>
     </url>

@@ -2782,6 +2782,53 @@ Kubernetes nodes.">
   
   
   
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MySQL configuration
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MySQL configuration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="options.html" class="md-nav__link">
         
@@ -2799,6 +2846,42 @@ Kubernetes nodes.">
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="autoconfig.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automatic configuration tuning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -5684,6 +5767,10 @@ following section in the Custom Resource:</p>
 </code></pre></div>
 <p>Use our reference documentation for the <a href="operator.html">Custom Resource options</a> 
 for more details about other components.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Changing compute resources for MySQL Pods (<code>mysql.resources</code>) triggers a recalculation of the MySQL configuration, when the <a href="autoconfig.html">automatic configuration tuning</a> is enabled (<code>mysql.autoConfig.enabled: true</code>). The settings that usually change because of that are buffer pool and redo log. Since they can only be set at startup, this causes a rolling restart of the MySQL StatefulSet. Plan a resize of <code>mysql.resources</code> as a change-management event.</p>
+</div>
 <h3 id="scale-storage">Scale storage<a class="headerlink" href="#scale-storage" title="Permanent link">&para;</a></h3>
 <p>Kubernetes manages storage with the following components:</p>
 <ul>
@@ -5904,7 +5991,7 @@ For <strong>group replication</strong>, keep an odd count between 3 and 9. ,Sett
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:58:31 UTC">October 27, 2026</span>
       
         <br>
         Created:
