@@ -53,7 +53,7 @@ Check the following before you upgrade the Operator to 1.3.0. The upgrade steps 
 
 ### Leader election is enabled by default
 
-Starting with version 1.3.0, leader election for the Operator Deployment is on by default. When you upgrade the Operator to version 1.3.0, you can disable it via the `PSO_LEADER_ELECTION_ENABLED` environment.
+Starting with version 1.3.0, leader election for the Operator Deployment is on by default. When you upgrade the Operator to version 1.3.0, you can disable it via the `PSO_LEADER_ELECTION_ENABLED` environment variable.
 
 See [Configurable leader election for the Operator](#configurable-leader-election-for-the-operator).
 
