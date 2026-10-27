@@ -1,17 +1,44 @@
 # Changing MySQL Options
 
-You may require a configuration change for your application. MySQL
-allows the option to configure the database with a configuration file.
-You can pass options from the
-[my.cnf :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/option-files.html)
-configuration file to be included in the MySQL configuration in one of the
-following ways:
+The Operator can tune MySQL for you, or you can pass your own options from a [my.cnf :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/option-files.html) configuration file. Read the following sections before you choose a method.
 
-* edit the `deploy/cr.yaml` file,
+## Choose automatic tuning or your own configuration
 
-* use a ConfigMap,
+These settings aren't independent. **Setting any configuration of your own disables the Operator's [automatic configuration tuning](autoconfig.md)**, even if you only set one unrelated option:
 
-* use a Secret object.
+| Approach | What controls the configuration |
+| --- | --- |
+| Nothing set | The Operator's basic auto-tuning (`innodb_buffer_pool_size` and `max_connections` only) |
+| `spec.mysql.autoConfig.enabled: true`, no manual configuration | The Operator calculates a full configuration from your resources and workload profile |
+| `spec.mysql.configuration`, a ConfigMap, or a Secret | Your values only |
+
+To let the Operator tune MySQL for you, see [Automatic configuration tuning](autoconfig.md).
+
+## Configuration compatibility considerations
+
+The Operator passes configuration options you define to MySQL as-is. It doesn't check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.
+
+Before you apply a change, check the variable's requirements and restrictions for your topology:
+
+* [MySQL Group Replication requirements :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html)
+* [CHANGE REPLICATION SOURCE TO :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html)
+* [Percona Server for MySQL :octicons-link-external-16:](https://docs.percona.com/percona-server/8.4/)
+
+For example, Group Replication requires `log_replica_updates=ON` so members record replicated transactions in their binary logs for distributed recovery. Setting it to `OFF` is incompatible with Group Replication.
+
+## How the Operator applies your configuration
+
+The Operator applies your configuration to all MySQL Pods as follows:
+
+* **Dynamic variables.** The Operator applies these variables at runtime with the `SET GLOBAL` command and doesn't restart the MySQL StatefulSet. See [Dynamic configuration](#dynamic-configuration).
+* **Static variables.** MySQL cannot change these variables while the server is running. The Operator applies them with a rolling restart of the MySQL StatefulSet.
+* **Removed variables.** The Operator applies the removal with a rolling restart of the MySQL StatefulSet.
+
+Pass your own options in one of the following ways:
+
+* [Edit the `deploy/cr.yaml` file](#edit-the-deploycryaml-file)
+* [Use a ConfigMap](#use-a-configmap)
+* [Use a Secret](#use-a-secret-object)
 
 The Operator applies your configuration to all MySQL Pods as follows:
 
@@ -218,20 +245,22 @@ does not restart Pods.
 
 ## Auto-tuning MySQL options
 
-Few configuration options for MySQL can be calculated and set by the Operator
-automatically based on the available Pod memory resource limits
-**if constant values for these options are not specified by the user** (either
-in cr.yaml or in ConfigMap).
+The Operator
+calculates a few MySQL options automatically based on the memory available to
+the MySQL container:
 
-Options which can be set automatically are the following ones:
+* `innodb_buffer_pool_size` — about 50% of the container memory,
+* `innodb_buffer_pool_chunk_size` — set together with `innodb_buffer_pool_size`,
+  so the buffer pool size is a valid multiple of the chunk size,
+* `max_connections` — one connection per ~12 MiB of container memory.
 
-* `innodb_buffer_pool_size`
+The Operator uses the memory limit from `mysql.resources.limits`. If no limit
+is set, it uses the memory request from `mysql.resources.requests`. If neither
+is set, auto-tuning is not done.
 
-* `max_connections`
-
-If Percona Server for MySQL container resource limits are defined, then limits
-values are used to calculate these options. If Percona Server for MySQL
-container resource limits are not defined, auto-tuning is not done.
+The Operator doesn't auto-tune an option you set yourself in
+`spec.mysql.configuration`. If you set an option in your own ConfigMap or
+Secret, your value takes precedence over the auto-tuned one.
 
 Also, starting from the Operator 0.4.0, there is another way of auto-tuning.
 You can use `"{{containerMemoryLimit}}"` as a value in `spec.mysql.configuration`
@@ -244,3 +273,11 @@ mysql:
     innodb_buffer_pool_size={{'{{'}}containerMemoryLimit * 3 / 4{{'}}'}}
     ...
 ```
+
+Starting with Operator 1.3.0, a more comprehensive form of automatic tuning is
+available. See [Automatic configuration tuning](autoconfig.md). 
+
+The tuning of the buffer pool and `max_connections` is what the Operator continues to use
+whenever that feature is disabled (`spec.mysql.autoConfig.enabled: false` or
+unset). This behavior remains and applies to any cluster that
+doesn't opt in.
