@@ -1,27 +1,44 @@
 # Changing MySQL Options
 
-You may require a configuration change for your application. MySQL
-allows the option to configure the database with a configuration file.
-You can pass options from the
-[my.cnf :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/option-files.html)
-configuration file to be included in the MySQL configuration in one of the
-following ways:
+The Operator can tune MySQL for you, or you can pass your own options from a [my.cnf :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.0/en/option-files.html) configuration file. Read the following sections before you choose a method.
 
-* edit the `deploy/cr.yaml` file,
+## Choose automatic tuning or your own configuration
 
-* use a ConfigMap,
-
-* use a Secret object.
-
-Before choosing an approach, note that these aren't independent settings you can freely combine. **Setting any configuration of your own disables the Operator's [automatic configuration tuning](autoconfig.md)**, even if you only set one unrelated option:
+These settings aren't independent. **Setting any configuration of your own disables the Operator's [automatic configuration tuning](autoconfig.md)**, even if you only set one unrelated option:
 
 | Approach | What controls the configuration |
 | --- | --- |
 | Nothing set | The Operator's basic auto-tuning (`innodb_buffer_pool_size` and `max_connections` only) |
 | `spec.mysql.autoConfig.enabled: true`, no manual configuration | The Operator calculates a full configuration from your resources and workload profile |
-| `spec.mysql.configuration`, a ConfigMap, or a Secret (any of the methods below) | Your values only |
+| `spec.mysql.configuration`, a ConfigMap, or a Secret | Your values only |
 
-If you want the Operator to fully tune MySQL for you, see [Automatic configuration tuning](autoconfig.md) instead of the manual methods on this page.
+To let the Operator tune MySQL for you, see [Automatic configuration tuning](autoconfig.md).
+
+## Configuration compatibility considerations
+
+The Operator passes configuration options you define to MySQL as-is. It doesn't check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.
+
+Before you apply a change, check the variable's requirements and restrictions for your topology:
+
+* [MySQL Group Replication requirements :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html)
+* [CHANGE REPLICATION SOURCE TO :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html)
+* [Percona Server for MySQL :octicons-link-external-16:](https://docs.percona.com/percona-server/8.4/)
+
+For example, Group Replication requires `log_replica_updates=ON` so members record replicated transactions in their binary logs for distributed recovery. Setting it to `OFF` is incompatible with Group Replication.
+
+## How the Operator applies your configuration
+
+The Operator applies your configuration to all MySQL Pods as follows:
+
+* **Dynamic variables.** The Operator applies these variables at runtime with the `SET GLOBAL` command and doesn't restart the MySQL StatefulSet. See [Dynamic configuration](#dynamic-configuration).
+* **Static variables.** MySQL cannot change these variables while the server is running. The Operator applies them with a rolling restart of the MySQL StatefulSet.
+* **Removed variables.** The Operator applies the removal with a rolling restart of the MySQL StatefulSet.
+
+Pass your own options in one of the following ways:
+
+* [Edit the `deploy/cr.yaml` file](#edit-the-deploycryaml-file)
+* [Use a ConfigMap](#use-a-configmap)
+* [Use a Secret](#use-a-secret-object)
 
 ## Edit the `deploy/cr.yaml` file
 
