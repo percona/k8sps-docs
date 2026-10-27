@@ -151,3 +151,4 @@ The recovery keeps failing:
 * [`mysql.autoRecovery`](operator.md#mysqlautorecovery) - enables or disables the automatic recovery.
 * [`FullClusterCrashDetected` condition reason and event](cr-statuses.md#conditions)
 * [`FullClusterCrashRecovered` event](cr-statuses.md#events)
+* [The `full-cluster-crash` file](datadir-special-files.md#full-cluster-crash) and other special files in the data directory

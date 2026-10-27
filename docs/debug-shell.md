@@ -78,3 +78,5 @@ The instance will restart automatically and run in its usual way as soon as you
 remove this file (you can do it with a command similar to the one you have used
 to create the file, just substitute `touch` to `rm` in it).
 
+See [Pause a Pod for debugging](pause-mysql-pod.md#pause-a-pod-for-debugging) for the full steps and [Special files in the data directory](datadir-special-files.md) for other files that change how the container starts.
+
