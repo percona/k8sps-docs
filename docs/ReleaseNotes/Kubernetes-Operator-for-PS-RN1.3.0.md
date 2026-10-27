@@ -453,7 +453,7 @@ Validation changes:
 
 * [K8SPS-704](https://perconadev.atlassian.net/browse/K8SPS-704) - `spec.backupSource` on a restore is now its own object with `destination` and `storage`. Restore manifests no longer reuse backup status fields that a restore does not apply.
 
-- [K8SPS-726](https://perconadev.atlassian.net/browse/K8SPS-726) - Point-in-time recovery now works with data-at-rest encryption. The Operator uses your existing Vault Secret during restore, so tablespaces and binary logs stay encrypted while you roll forward to a GTID or a time.
+* [K8SPS-726](https://perconadev.atlassian.net/browse/K8SPS-726) - Point-in-time recovery now works with data-at-rest encryption. The Operator uses your existing Vault Secret during restore, so tablespaces and binary logs stay encrypted while you roll forward to a GTID or a time.
 
 * [K8SPS-730](https://perconadev.atlassian.net/browse/K8SPS-730) - The Operator now applies dynamic MySQL variables at runtime, so a change in `mysql.configuration` does not roll the Pods. A value you already set with `SET GLOBAL` on a Pod stays in place until you change the Custom Resource, and a matching value does not cause a restart.
 
