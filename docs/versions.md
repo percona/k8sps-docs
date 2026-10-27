@@ -16,7 +16,7 @@ Below you can find the versions of software components and platforms that have b
 
 | Operator | [GKE :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine)         | [EKS :octicons-link-external-16:](https://aws.amazon.com)         | [Openshift :octicons-link-external-16:](https://www.redhat.com/en/technologies/cloud-computing/openshift) | [Minikube :octicons-link-external-16:](https://github.com/kubernetes/minikube)                          | [DigitalOcean Kubernetes Service (DOKS) :octicons-link-external-16:](https://docs.digitalocean.com/products/kubernetes/) |
 |:--------|:------------|:------------|:------------|:--------------------|:------------|
-|[1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)  | 1.34 - 1.35 | 1.34 - 1.37 | 4.19 - 4.22 | 1.39.0 | |
+|[1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)  | 1.34 - 1.35 | 1.34 - 1.37 | 4.19 - 4.22 | 1.39.0 | 1.37 |
 |[1.2.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md)  | 1.33 - 1.35 | 1.33 - 1.36 | 4.18 - 4.22 | 1.38.1 | |
 |[1.1.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md)  | 1.32 - 1.35 | 1.33 - 1.35 | 4.18 - 4.21 | 1.38.1 | |
 |[1.0.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md)  | 1.31 - 1.33 | 1.31 - 1.34 | 4.16 - 4.20 |  1.37.0 | |

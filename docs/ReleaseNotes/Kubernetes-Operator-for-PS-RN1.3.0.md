@@ -40,6 +40,7 @@ This release adds automatic MySQL configuration tuning, a replication type switc
 
 - [Manage application users from the Custom Resource](#manage-application-users-from-the-custom-resource) - declare users, grants, and passwords in the cluster spec
 - [Configurable leader election for the Operator](#configurable-leader-election-for-the-operator) - tune lease timing, or turn election off
+- [Persistent logging](#persistent-logging) - keep the MySQL error log after a Pod restarts
 
 **Platforms and MySQL versions**
 
@@ -336,6 +337,16 @@ Leader election is enabled by default. When you upgrade, you can turn it off wit
 
 Learn more about these environment variables in the [documentation](../env-vars-operator.md).
 
+### Persistent logging
+
+Container logs disappear when a Pod restarts, so the MySQL error log from a crash is often gone by the time you look. Now the Operator keeps that error log on the MySQL data volume and rotates it so the file does not fill the volume.
+
+Each MySQL Pod runs two sidecars. The `logs` container uses Fluent Bit to collect the error logs and the `logrotate` container rotates those files. During a backup, Fluent Bit also tails the Percona XtraBackup log. Those files live on an emptyDir volume. The Operator does not rotate them, and they do not survive a restart of the MySQL Pod.
+
+Persistent logging is on by default for a cluster with `crVersion` 1.3.0 or later. It covers MySQL Pods only. HAProxy, MySQL Router, Orchestrator, and Percona Binlog Server still write only to standard output.
+
+Read [Persistent logging](../persistent-logging.md) and [Log rotation](../logrotate.md) to learn more.
+
 ### Official support for DigitalOcean Kubernetes Service (DOKS)
 
 DigitalOcean Kubernetes Service (DOKS) is now a supported platform. Every Operator release is tested on DOKS, so you can run the Operator on DigitalOcean-managed Kubernetes clusters.
@@ -534,7 +545,7 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 * [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.34 - 1.35
 * [Amazon Elastic Kubernetes Service (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/) 1.34 - 1.37
-* [DigitalOcean Kubernetes Service (DOKS) :octicons-link-external-16:](https://docs.digitalocean.com/products/kubernetes/) latest
+* [DigitalOcean Kubernetes Service (DOKS) :octicons-link-external-16:](https://docs.digitalocean.com/products/kubernetes/) 1.37
 * [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.19 - 4.22
 * [Minikube :octicons-link-external-16:](https://minikube.sigs.k8s.io/docs/) 1.39.0 with Kubernetes v1.37.0
 
