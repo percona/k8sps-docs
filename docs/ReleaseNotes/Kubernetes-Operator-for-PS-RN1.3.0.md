@@ -78,7 +78,7 @@ Group Replication clusters are not part of this check.
 
 ### Automatic MySQL configuration tuning
 
-By default, the Operator tunes only two settings from the MySQL Pod's memory limit: `innodb_buffer_pool_size` and `max_connections`. Every other setting uses the same server default, unless a database administrator (DBA) sets it by hand. Without that tuning, a cluster either keeps defaults that do'nt align with the Pod's allocated resources, or runs on manual settings that go stale when someone resizes the Pod.
+By default, the Operator tunes only two settings from the MySQL Pod's memory limit: `innodb_buffer_pool_size` and `max_connections`. Every other setting uses the same server default, unless a database administrator (DBA) sets it by hand. Without that tuning, a cluster either keeps defaults that don't align with the Pod's allocated resources, or runs on manual settings that go stale when someone resizes the Pod.
 
 Starting with version 1.3.0, the Operator calculates a MySQL configuration from the Pod's CPU and memory, the workload you run, and the MySQL version. The calculation covers the InnoDB buffer pool and redo log, session buffers, connection limits, and replication settings for the cluster type you run. When you change the Pod's resources or the workload, the Operator calculates those settings again.
 
