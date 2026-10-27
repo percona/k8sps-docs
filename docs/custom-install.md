@@ -38,7 +38,7 @@ To check available configuration options, see [deploy/cr.yaml :octicons-link-ext
 
     ```bash
     helm install my-db percona/ps-db --version {{ release }} --namespace my-namespace \
-      --set mysql.image.tag={{ ps97recommended }} \
+      --set mysql.image.tag={{ ps84recommended }} \
       --set pmm.enabled=true
     ```
 
@@ -55,7 +55,7 @@ To check available configuration options, see [deploy/cr.yaml :octicons-link-ext
     ```yaml
     mysql:
       image:
-        tag: {{ ps97recommended }}
+        tag: {{ ps84recommended }}
     pmm:
       enabled: true
     ```

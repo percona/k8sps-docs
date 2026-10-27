@@ -45,7 +45,7 @@ This release adds automatic MySQL configuration tuning, a replication type switc
 **Platforms and MySQL versions**
 
 - [Official support for DigitalOcean Kubernetes Service (DOKS)](#official-support-for-digitalocean-kubernetes-service-doks) - run the Operator on DigitalOcean Kubernetes
-- [Support for MySQL 9.7](#support-for-mysql-97) 
+- [Support for MySQL 9.7](#support-for-mysql-97) - run a cluster on Percona Server for MySQL 9.7
 
 ## Important upgrade notes
 
