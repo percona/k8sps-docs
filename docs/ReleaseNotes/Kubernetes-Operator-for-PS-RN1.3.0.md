@@ -522,11 +522,11 @@ The Operator was developed and tested with the following software:
 * MySQL Router 9.7.2
 * MySQL Router 8.4.11
 * MySQL Router 8.0.46
-* HAProxy 3.4.4-1
+* HAProxy 2.8.29-1
 * Orchestrator 3.2.6-24
-* Percona Toolkit 3.7.1-4
+* Percona Toolkit 3.7.2-1
 * Log collector (Fluent Bit) 5.1.4-1
-* PMM Client 3.8.1
+* PMM Client 3.10.0
 * Cert Manager 1.21.2
 * Percona Binlog Server 0.4.1
 

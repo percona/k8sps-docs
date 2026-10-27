@@ -27,12 +27,12 @@ routerrecommended: '8.0.46'
 
 # Other software
 
-haproxyrecommended: '3.4.4-1'
+haproxyrecommended: '2.8.29-1'
 orchestratorrecommended: '3.2.6-24'
-ptrecommended: '3.7.1-4'
+ptrecommended: '3.7.2-1'
 fluentbitrecommended: '5.1.4-1'
 binlogserverrecommended: '0.4.1'
-pmm3recommended: '3.8.1'
+pmm3recommended: '3.10.0'
 certmanagerrecommended: '1.21.2'
 
 # Platforms
