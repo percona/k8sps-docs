@@ -693,6 +693,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#zero-data-loss-failover-asynchronous-clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zero-data-loss failover (asynchronous clusters)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#scaling-and-storage" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3020,7 +3031,7 @@
   <span class="md-ellipsis">
     
   
-    Define environment variables
+    Zero-data-loss failover in async clusters
   
 
     
@@ -3033,6 +3044,117 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Zero-data-loss failover in async clusters
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About zero-data-loss failover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure and orchestrate zero-data-loss failover in async clusters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Define environment variables
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -5490,6 +5612,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
       
         <li class="md-nav__item">
+  <a href="#zero-data-loss-failover-asynchronous-clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zero-data-loss failover (asynchronous clusters)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#scaling-and-storage" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5657,6 +5790,16 @@ To override the number of Orchestrator instances, set <code>unsafeFlags.orchestr
 <p>Cross-site replication (InnoDB ClusterSet) requires Operator 1.2.0 or later and <strong>group replication</strong> clusters only. Mixing asynchronous and group replication in a ClusterSet is not supported. Switchover is always user-initiated.</p>
 <p>Additional constraints include: no automatic rejoin after replication stops, no support of ClusterSets created outside the Operator, no restore onto a ClusterSet replica, backups from a ClusterSet cannot be restored onto a fresh unrelated cluster, and a removed member cannot rejoin the same ClusterSet.</p>
 <p>See <a href="replication.html#known-limitations">Cross-site replication</a> for the full list and recovery steps.</p>
+<h2 id="zero-data-loss-failover-asynchronous-clusters">Zero-data-loss failover (asynchronous clusters)<a class="headerlink" href="#zero-data-loss-failover-asynchronous-clusters" title="Permanent link">&para;</a></h2>
+<p>Zero-data-loss failover requires Operator 1.3.0 or later and <code>crVersion</code> 1.3.0 or later on the cluster. With an older <code>crVersion</code>, the Operator validates <code>spec.orchestrator.failover</code> but the mechanism has no effect.</p>
+<p>Additional constraints include: </p>
+<ul>
+<li>backups are required. Set <code>backup.enabled</code> to <code>true</code>. The candidate reads the old primary&rsquo;s binary logs from the <code>xtrabackup</code> sidecar, and that sidecar starts only when backups are enabled. To run without backups, set <code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code> to <code>true</code>. Failover then promotes a replica without those logs, and transactions that exist only on the old primary are lost. An asynchronous cluster upgraded from Operator 1.2.0 with backups disabled fails validation until you enable backups or set this flag. See <a href="failover-async.html#requirements">Requirements</a>.</li>
+<li>recovery depends on durable commits on the primary (<code>sync_binlog=1</code>, <code>innodb_flush_log_at_trx_commit=1</code>) and durable relay logs on the candidate, neither of which the Operator enforces. </li>
+<li>a primary whose binary logs were already purged or whose data volume is gone, can&rsquo;t be recovered from; </li>
+<li>starting <code>crVersion</code> 1.3.0, the Operator pins several Orchestrator settings the mechanism depends on and ignores conflicting overrides in <a href="operator.html#orchestratorconfiguration"><code>orchestrator.configuration</code></a>.</li>
+</ul>
+<p>See <a href="failover-async.html#known-limitations">About zero data loss failover</a> for the full list.</p>
 <h2 id="scaling-and-storage">Scaling and storage<a class="headerlink" href="#scaling-and-storage" title="Permanent link">&para;</a></h2>
 <ul>
 <li>You cannot shrink an existing Persistent Volume Claim. You can only increase storage size. See <a href="scaling.html#scale-storage">Scale storage</a>.</li>
@@ -5684,7 +5827,7 @@ To override the number of Orchestrator instances, set <code>unsafeFlags.orchestr
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:24:19 UTC">October 22, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:48:06 UTC">October 27, 2026</span>
       
         <br>
         Created:

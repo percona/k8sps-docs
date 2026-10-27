@@ -2846,7 +2846,7 @@ are used to attach additional metadata information to Kubernetes resources.">
   <span class="md-ellipsis">
     
   
-    Define environment variables
+    Zero-data-loss failover in async clusters
   
 
     
@@ -2859,6 +2859,117 @@ are used to attach additional metadata information to Kubernetes resources.">
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Zero-data-loss failover in async clusters
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About zero-data-loss failover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure and orchestrate zero-data-loss failover in async clusters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Define environment variables
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -5799,6 +5910,12 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <td><code>replicacluster</code></td>
 </tr>
 <tr>
+<td><code>percona.com/force-promote-with-possible-data-loss</code></td>
+<td><code>PerconaServerMySQL</code></td>
+<td>Promotes a replica by hand when an async cluster has no writable primary. The annotation accepts 2 values: <br> - <code>true</code> lets the Operator pick the best candidate, using the same ranking as an automatic failover; <br> - a MySQL Pod&rsquo;s name promotes that Pod instead. <br>The Operator removes the annotation once it acts on it, whether the promotion succeeded, failed, or was refused. See <a href="failover-async-setup.html#force-a-promotion">Force a promotion</a>.</td>
+<td><code>true</code>, <code>cluster1-mysql-2</code></td>
+</tr>
+<tr>
 <td><code>percona.com/pitr-sleep-forever</code></td>
 <td><code>PerconaServerMySQLRestore</code></td>
 <td>Pauses a point-in-time recovery after the base backup is restored and before the binary logs are applied. The Operator checks only that the annotation exists, not its value. See <a href="pause-pitr.html">Pause a point-in-time recovery</a>.</td>
@@ -5928,7 +6045,7 @@ nothing if a new label or an annotation is added to the Service object.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:31:24 UTC">October 27, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:48:06 UTC">October 27, 2026</span>
       
         <br>
         Created:

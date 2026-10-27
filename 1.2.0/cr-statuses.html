@@ -2844,7 +2844,7 @@
   <span class="md-ellipsis">
     
   
-    Define environment variables
+    Zero-data-loss failover in async clusters
   
 
     
@@ -2857,6 +2857,117 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Zero-data-loss failover in async clusters
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About zero-data-loss failover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure and orchestrate zero-data-loss failover in async clusters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Define environment variables
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -6017,6 +6128,10 @@ true
 <td><code>ReplicationLagging</code></td>
 <td>For <code>async</code> clusters, this condition is <code>True</code> when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the <code>ReasonableReplicationLagSeconds</code> value). This threshold is defined via the <a href="operator.html#orchestratorconfiguration"><code>orchestrator.configuration</code></a> option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be <code>ready</code> while this condition is <code>True</code>.</td>
 </tr>
+<tr>
+<td><code>AsyncFailoverBlocked</code></td>
+<td>Whether an async cluster currently has a writable primary. Not set for a single-Pod cluster, while Orchestrator can&rsquo;t be read, or while the primary is deliberately read-only for a graceful switchover. See reasons below.</td>
+</tr>
 </tbody>
 </table>
 <p><code>status.conditions[].status</code> values:</p>
@@ -6051,6 +6166,8 @@ true
 <li><code>ClusterSetMember</code> - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason <code>Primary</code> for the primary cluster and <code>Replica</code> for the replica cluster. A cluster created with the Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code> after the upgrade. Use the <code>ClusterSetMember</code> to see whether the cluster is the primary or a replica.</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
 <li><code>TeardownStarted</code> — the Operator started switching <code>mysql.clusterType</code>. The message names the previous type and the new type. Used with <code>ClusterTypeSwitchInProgress</code>.</li>
+<li><code>NoWritablePrimary</code> — the cluster&rsquo;s primary is read-only, or Orchestrator&rsquo;s last check of it failed. A failover may have aborted because the transactions stranded on the old primary couldn&rsquo;t be recovered. See the cluster&rsquo;s events. <a href="failover-async-setup.html#force-a-promotion">Force a promotion</a> to promote a replica anyway.</li>
+<li><code>PrimaryWritable</code> — the primary is writable and Orchestrator&rsquo;s last check of it succeeded.</li>
 <li><code>ReplicationLagDetected</code> / <code>NoReplicationLag</code> — whether any <code>async</code> replica lags behind the primary (used by the <code>ReplicationLagging</code> condition)</li>
 </ul>
 <h3 id="storage-autoscaling-status">Storage autoscaling status<a class="headerlink" href="#storage-autoscaling-status" title="Permanent link">&para;</a></h3>
@@ -6115,8 +6232,29 @@ true
 <td><code>StorageAutoscalingTriggered</code></td>
 <td>Storage autoscaling started a PVC resize.</td>
 </tr>
+<tr>
+<td><code>FailoverWaiting</code></td>
+<td>The first recovery attempt for a failed primary. The cluster has no writable primary until recovery finishes or the failover timeout defined in <code>orchestrator.failover.timeout</code> expires. The message names the <code>onTimeout</code> policy that applies next.</td>
+</tr>
+<tr>
+<td><code>FailoverBlocked</code></td>
+<td><code>orchestrator.failover.timeout</code> expired with <code>onTimeout: Abort</code>. The cluster stays without a writable primary. See <a href="failover-async-setup.html#force-a-promotion">Force a promotion</a>.</td>
+</tr>
+<tr>
+<td><code>FailoverForced</code></td>
+<td>A replica was promoted without full recovery of the data from the failed primary. The event is emitted when the <code>orchestrator.failover.timeout</code> expired and the <code>onTimeout</code> behavior is <code>ForceWithPossibleDataLoss</code>. The <code>percona.com/force-promote-with-possible-data-loss</code> annotation produces the same event when it promotes a replica, fails, or is refused. The message says what triggered the event and whether a replica was promoted. A successful promotion loses transactions the old primary committed and never replicated.</td>
+</tr>
+<tr>
+<td><code>FailoverFailed</code></td>
+<td>Orchestrator gave up on recovering the transactions stranded on the failed primary.</td>
+</tr>
+<tr>
+<td><code>FailoverUnprotected</code></td>
+<td>Backups are disabled, so the Operator cannot recover the transactions stranded on the failed primary. Orchestrator promotes a replica without them, and the cluster loses every transaction the failed primary committed and never replicated. The <code>orchestrator.failover.timeout</code> and <code>onTimeout</code> settings do not apply.</td>
+</tr>
 </tbody>
 </table>
+<p>Orchestrator retries a blocked recovery every few seconds, so <code>FailoverWaiting</code>, <code>FailoverBlocked</code>, <code>FailoverFailed</code>, and <code>FailoverUnprotected</code> are each deduplicated per source for five minutes rather than repeated on every retry. <code>FailoverForced</code> is recorded each time.</p>
 <h2 id="perconaservermysqlclusterset-status">PerconaServerMySQLClusterSet status<a class="headerlink" href="#perconaservermysqlclusterset-status" title="Permanent link">&para;</a></h2>
 <p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>. Each member <code>PerconaServerMySQL</code> cluster reports its own role with the <code>ClusterSetMember</code> condition. See <a href="#conditions">PerconaServerMySQL conditions</a>. For configuration options, see <a href="clusterset-cr.html">ClusterSet Resource options</a>. For setup, see <a href="replication-setup.html">Set up cross-site replication</a>.</p>
 <p>Common fields:</p>
@@ -6502,7 +6640,7 @@ true
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 22, 2026 09:44:16 UTC">October 22, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:48:06 UTC">October 27, 2026</span>
       
         <br>
         Created:

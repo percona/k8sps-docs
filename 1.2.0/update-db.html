@@ -2844,7 +2844,7 @@
   <span class="md-ellipsis">
     
   
-    Define environment variables
+    Zero-data-loss failover in async clusters
   
 
     
@@ -2857,6 +2857,117 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Zero-data-loss failover in async clusters
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About zero-data-loss failover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure and orchestrate zero-data-loss failover in async clusters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Define environment variables
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3392,6 +3503,17 @@
     <span class="md-ellipsis">
       
         If you use Binlog Server
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-you-upgrade-an-asynchronous-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you upgrade an asynchronous cluster
       
     </span>
   </a>
@@ -5483,6 +5605,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#if-you-upgrade-an-asynchronous-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you upgrade an asynchronous cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5619,7 +5752,7 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <p>For previous versions, refer to the <a href="https://docs.percona.com/legacy-documentation/">old releases documentation archive <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <h2 id="minor-upgrade-to-a-specific-version">Minor upgrade to a specific version<a class="headerlink" href="#minor-upgrade-to-a-specific-version" title="Permanent link">&para;</a></h2>
 <h3 id="assumptions">Assumptions<a class="headerlink" href="#assumptions" title="Permanent link">&para;</a></h3>
-<p>For the procedures in this tutorial, we assume that you have set up the <code>Smart Update</code> strategy to update the objects in your database cluster.</p>
+<p>For the procedures in this tutorial, we assume that you have set up the <code>SmartUpdate</code> strategy to update the objects in your database cluster.</p>
 <h3 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h3>
 <p>Before updating the database, complete the following preparation steps:</p>
 <ol>
@@ -5644,13 +5777,14 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <p>Before selecting the update command, identify your current setup:</p>
 <ul>
 <li><strong>MySQL version</strong>: Check your current <code>mysql.image</code> value in your Custom Resource</li>
-<li><strong>Replication type</strong>: Check the <code>mysql.clusterType</code> option in your Custom Resource (<code>async</code> or <code>group</code>)</li>
+<li><strong>Replication type</strong>: Check the <code>mysql.clusterType</code> option in your Custom Resource (<code>async</code> or <code>group-replication</code>)</li>
 <li><strong>Proxy type</strong>: For async replication, you use HAProxy. For group replication, check if <code>proxy.haproxy.enabled</code> or <code>proxy.router.enabled</code> is set to <code>true</code> in your Custom Resource</li>
 </ul>
 </li>
 <li>
-<p>We recommend to <a href="https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html">update PMM Server <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> before upgrading PMM Client.</p>
+<p>For <code>async</code> clusters, check that either <code>backups.enabled</code> is  <code>true</code> or you set the <code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code>. See <a href="#if-you-upgrade-an-asynchronous-cluster">If you upgrade an asynchronous cluster</a> for more information.</p>
 </li>
+<li>We recommend to <a href="https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html">update PMM Server <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> before upgrading PMM Client.</li>
 </ol>
 <h4 id="if-you-use-binlog-server">If you use Binlog Server<a class="headerlink" href="#if-you-use-binlog-server" title="Permanent link">&para;</a></h4>
 <p>The new Binlog Server image 0.3.1 is incompatible with the previous version. To upgrade the Binlog Server you must start a fresh binlog collection. Here&rsquo;s how to do it:</p>
@@ -5659,6 +5793,12 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <li>Make a new full backup</li>
 <li>Change the binlog storage settings in your cluster configuration to point to a new location. It can be a new bucket or a new prefix for the existing bucket</li>
 </ol>
+<h4 id="if-you-upgrade-an-asynchronous-cluster">If you upgrade an asynchronous cluster<a class="headerlink" href="#if-you-upgrade-an-asynchronous-cluster" title="Permanent link">&para;</a></h4>
+<p>Version 1.3.0 requires backups for the <a href="failover-async.html">failover on asynchronous clusters</a>. After the Operator upgrade, reconciliation stops because status updates fail validation:</p>
+<div class="no-copy highlight"><pre><span></span><code>PerconaServerMySQL.ps.percona.com "ps-cluster1" is invalid: spec: Invalid value: "object": no such key: unsafeFlags evaluating rule: Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
+</code></pre></div>
+<p>Before you upgrade, <a href="backups-storage.html">enable and configure backups</a>. To let reconciliation continue without backups, set <a href="operator.html#unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code></a> to <code>true</code>. Make sure you understand the tradeoffs.</p>
+<p>Without backups, a failover cannot recover transactions that remain on the old primary.</p>
 <h3 id="update-commands">Update commands<a class="headerlink" href="#update-commands" title="Permanent link">&para;</a></h3>
 <p>Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.</p>
 <p>Find the image names <a href="images.html">in the list of certified images</a>.</p>
@@ -6101,7 +6241,7 @@ another more conservative schedule when the upgrade is complete.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:31:24 UTC">October 27, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:48:06 UTC">October 27, 2026</span>
       
         <br>
         Created:

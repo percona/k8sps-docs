@@ -2852,7 +2852,7 @@
   <span class="md-ellipsis">
     
   
-    Define environment variables
+    Zero-data-loss failover in async clusters
   
 
     
@@ -2865,6 +2865,117 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Zero-data-loss failover in async clusters
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About zero-data-loss failover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure and orchestrate zero-data-loss failover in async clusters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Define environment variables
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -6156,6 +6267,45 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <a href="#section-7-9" class="md-nav__link">
     <span class="md-ellipsis">
       
+        Zero-data-loss failover in async clusters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zero-data-loss failover in async clusters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#failover-async" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        About zero-data-loss failover
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failover-async-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure and orchestrate zero-data-loss failover in async clusters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#section-7-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         Define environment variables
       
     </span>
@@ -7078,6 +7228,7 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 <p>Never lose sleep over database downtime again. The Operator provides robust high availability through:</p>
 <ul>
 <li>Automatic failover with intelligent primary election handled by the Orchestrator</li>
+<li>Configurable recovery timeout and policy for async clusters, with zero-data-loss recovery by default and a manual override for emergencies</li>
 <li>Multi-node deployments with anti-affinity rules to prevent single points of failure  </li>
 <li>Health monitoring with automatic recovery from node failures</li>
 <li>Zero-downtime upgrades with rolling update strategies</li>
@@ -7371,6 +7522,16 @@ To override the number of Orchestrator instances, set <code>unsafeFlags.orchestr
 <p>Cross-site replication (InnoDB ClusterSet) requires Operator 1.2.0 or later and <strong>group replication</strong> clusters only. Mixing asynchronous and group replication in a ClusterSet is not supported. Switchover is always user-initiated.</p>
 <p>Additional constraints include: no automatic rejoin after replication stops, no support of ClusterSets created outside the Operator, no restore onto a ClusterSet replica, backups from a ClusterSet cannot be restored onto a fresh unrelated cluster, and a removed member cannot rejoin the same ClusterSet.</p>
 <p>See <a href="#replication-known-limitations">Cross-site replication</a> for the full list and recovery steps.</p>
+<h2 id="limitations-zero-data-loss-failover-asynchronous-clusters">Zero-data-loss failover (asynchronous clusters)<a class="headerlink" href="#limitations-zero-data-loss-failover-asynchronous-clusters" title="Permanent link">&para;</a></h2>
+<p>Zero-data-loss failover requires Operator 1.3.0 or later and <code>crVersion</code> 1.3.0 or later on the cluster. With an older <code>crVersion</code>, the Operator validates <code>spec.orchestrator.failover</code> but the mechanism has no effect.</p>
+<p>Additional constraints include: </p>
+<ul>
+<li>backups are required. Set <code>backup.enabled</code> to <code>true</code>. The candidate reads the old primary&rsquo;s binary logs from the <code>xtrabackup</code> sidecar, and that sidecar starts only when backups are enabled. To run without backups, set <code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code> to <code>true</code>. Failover then promotes a replica without those logs, and transactions that exist only on the old primary are lost. An asynchronous cluster upgraded from Operator 1.2.0 with backups disabled fails validation until you enable backups or set this flag. See <a href="#failover-async-requirements">Requirements</a>.</li>
+<li>recovery depends on durable commits on the primary (<code>sync_binlog=1</code>, <code>innodb_flush_log_at_trx_commit=1</code>) and durable relay logs on the candidate, neither of which the Operator enforces. </li>
+<li>a primary whose binary logs were already purged or whose data volume is gone, can&rsquo;t be recovered from; </li>
+<li>starting <code>crVersion</code> 1.3.0, the Operator pins several Orchestrator settings the mechanism depends on and ignores conflicting overrides in <a href="#operator-orchestratorconfiguration"><code>orchestrator.configuration</code></a>.</li>
+</ul>
+<p>See <a href="#failover-async-known-limitations">About zero data loss failover</a> for the full list.</p>
 <h2 id="limitations-scaling-and-storage">Scaling and storage<a class="headerlink" href="#limitations-scaling-and-storage" title="Permanent link">&para;</a></h2>
 <ul>
 <li>You cannot shrink an existing Persistent Volume Claim. You can only increase storage size. See <a href="#scaling-scale-storage">Scale storage</a>.</li>
@@ -15475,9 +15636,230 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </table>
 <p>For status field reference, see <a href="#cr-statuses">Custom resource statuses</a>.</p></section></section>
                     <section class='print-page md-section' id='section-7-9' heading-number='7.9'>
-                        <h1>Define environment variables<a class='headerlink' href='#section-7-9' title='Permanent link'></a>
+                        <h1>Zero-data-loss failover in async clusters<a class='headerlink' href='#section-7-9' title='Permanent link'></a>
                         </h1>
-                    <section class="print-page" id="env-vars" heading-number="7.9.1"><h1 id="env-vars-configure-environment-variables">Configure environment variables<a class="headerlink" href="#env-vars-configure-environment-variables" title="Permanent link">&para;</a></h1>
+                    <section class="print-page" id="failover-async" heading-number="7.9.1"><h1 id="failover-async-zero-data-loss-failover-in-async-clusters">Zero data loss failover in async clusters<a class="headerlink" href="#failover-async-zero-data-loss-failover-in-async-clusters" title="Permanent link">&para;</a></h1>
+<p>This page applies to clusters with <a href="#architecture-asynchronous-replication-tech-preview">asynchronous replication</a>, where Orchestrator manages the replication topology. </p>
+<h2 id="failover-async-overview">Overview<a class="headerlink" href="#failover-async-overview" title="Permanent link">&para;</a></h2>
+<p>In an async cluster, replication runs with some lag. This lag means a transaction has already reached a replica&rsquo;s relay log and waits to be applied.  </p>
+<p>If the primary goes down as a result of an out-of-memory kill or a hardware failure and it hasn&rsquo;t transmitted a transaction to any replica before that, that transaction exists only in that primary&rsquo;s binary log. Promoting a replica at that point loses this data.</p>
+<p>To ensure no data is lost during a failover, the Operator and Orchestrator split the failover process into these stages: </p>
+<ol>
+<li><strong><a href="#failover-async-fetch-the-transactions-from-the-primarys-binary-log">Fetch the transactions still on the failed primary</a>.</strong> The candidate replica reads them from the old primary&rsquo;s binary logs.</li>
+<li><strong><a href="#failover-async-apply-the-binary-logs-on-the-candidate-replica">Apply the transactions to the candidate and wait for it to catch up</a>.</strong> The candidate then has everything the old primary had finished writing.</li>
+<li><strong><a href="#failover-async-promote-the-candidate">Promote the candidate</a>.</strong></li>
+</ol>
+<p>Until the candidate is promoted, or until the failover timeout expires, the cluster has no writable primary. The default timeout is <code>1h</code>. You set that limit when you <a href="#failover-async-setup-configure-failover">Configure failover</a>. What happens while the cluster waits and when the timeout runs out is covered in <a href="#failover-async-understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a>.</p>
+<p>Orchestrator drives the failover stages through its failover hooks. The Operator&rsquo;s role is to configure the mechanism through the Custom Resource, oversee it and surface its outcome through the cluster&rsquo;s conditions and events.</p>
+<h2 id="failover-async-requirements">Requirements<a class="headerlink" href="#failover-async-requirements" title="Permanent link">&para;</a></h2>
+<ul>
+<li>The Operator version 1.3.0 and higher</li>
+<li>
+<p>The MySQL cluster that:</p>
+<ul>
+<li>Uses asynchronous replication with Orchestrator</li>
+<li>Uses <code>spec.crVersion</code> <code>1.3.0</code> or later</li>
+<li>Has backups enabled (<code>spec.backup.enabled: true</code>)</li>
+</ul>
+</li>
+</ul>
+<p>On an older <code>crVersion</code>, the Operator accepts <code>spec.orchestrator.failover</code> but does not apply it. Setting that block on a group replication cluster fails validation. A cluster of one MySQL Pod has no replica to promote.</p>
+<p>The candidate reads the old primary&rsquo;s binary logs from the <code>xtrabackup</code> sidecar. That sidecar starts only when backups are enabled. On an asynchronous cluster, the Operator rejects a Custom Resource with disabled backups unless you set <a href="#operator-unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code></a> to <code>true</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">unsafeFlags</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">asyncFailoverWithPossibleDataLoss</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<p>With backups disabled, Orchestrator falls back to its existing failover. It promotes a replica without fetching those binary logs, so transactions that never left the old primary are lost. The Operator records a <code>FailoverUnprotected</code> warning event on the cluster. See <a href="#cr-statuses-events">Events</a>.</p>
+<p>The binary log and relay log settings a zero data loss failover depends on are described in <a href="#failover-async-known-limitations">Known limitations</a>.</p>
+<h2 id="failover-async-how-failover-works">How failover works<a class="headerlink" href="#failover-async-how-failover-works" title="Permanent link">&para;</a></h2>
+<p>Let&rsquo;s have a closer look at the failover stages</p>
+<h3 id="failover-async-fetch-the-transactions-from-the-primarys-binary-log">Fetch the transactions from the primary&rsquo;s binary log<a class="headerlink" href="#failover-async-fetch-the-transactions-from-the-primarys-binary-log" title="Permanent link">&para;</a></h3>
+<p>The <code>xtrabackup</code> sidecar in every MySQL Pod runs an HTTP server that controls backups. A replica to be promoted (the candidate) connects to this server on the <code>/failover/stream</code> endpoint  to fetch the binary logs it does not have yet.</p>
+<p>The candidate authenticates as the <a href="#users-system-users"><code>operator</code></a> user and reads whatever transactions the old primary never replicated directly from its binary logs, starting from the latest position the replica I/O thread has received from the primary. The position is determined by the values from <code>Source_Log_File</code> and <code>Read_Source_Log_Pos</code>. </p>
+<p>The sidecar returns one tar stream that includes everything from the requested position to the last log. The candidate extracts the archive into a staging directory. The default path is <code>/var/lib/mysql/source-logs</code>.</p>
+<h4 id="failover-async-if-the-primary-pod-is-unreachable">If the primary Pod is unreachable<a class="headerlink" href="#failover-async-if-the-primary-pod-is-unreachable" title="Permanent link">&para;</a></h4>
+<p>To fetch binary logs, the old primary Pod needs to be reachable over the network. <code>mysqld</code> on that Pod can be down. The <code>xtrabackup</code> sidecar serves the binary logs over HTTP.</p>
+<p>When the Pod can&rsquo;t be scheduled, or the candidate can&rsquo;t reach it, a fetch attempt fails. Orchestrator retries repeatedly until the <a href="#failover-async-understand-failover-timeout-and-recovery-policy">failover timeout</a> is reached. </p>
+<p>An attempt stops at either of these limits:</p>
+<ul>
+<li>Orchestrator waits up to two minutes for the source Pod to exist and receive an IP address.</li>
+<li>Streaming stops when the source sends no data for two minutes.</li>
+</ul>
+<p>The second limit covers sidecar startup, the response headers, and each read of the body. A transfer that keeps sending data runs to completion.</p>
+<h3 id="failover-async-apply-the-binary-logs-on-the-candidate-replica">Apply the binary logs on the candidate replica<a class="headerlink" href="#failover-async-apply-the-binary-logs-on-the-candidate-replica" title="Permanent link">&para;</a></h3>
+<p>The candidate adds the binary logs it just fetched to its relay log, then waits until they are applied.</p>
+<p>The candidate takes these steps:</p>
+<ol>
+<li>Stops replication, so nothing new arrives while the logs are added.</li>
+<li>Closes the relay log it was writing. MySQL opens a new relay log, and the closed one receives the fetched logs.</li>
+<li>Adds the fetched binary logs to the end of that closed relay log.</li>
+<li>Starts applying those events and waits until every one of them is applied.</li>
+</ol>
+<p>The replication process that normally receives events from a primary remains stopped, since there is no primary available until the candidate is promoted. Once the candidate finishes applying the fetched events, it contains all the transactions that the old primary had stored in its binary log.</p>
+<p>A crash can leave a partial event at the end of the last binary log. That fragment is left out. The primary never finished writing it, and applying it would stop replication on the candidate.</p>
+<p>When the candidate already has everything the primary wrote, nothing is added and the candidate moves on.</p>
+<h3 id="failover-async-promote-the-candidate">Promote the candidate<a class="headerlink" href="#failover-async-promote-the-candidate" title="Permanent link">&para;</a></h3>
+<p>After the candidate has caught up, Orchestrator promotes it. The candidate becomes the primary and starts accepting writes. The other replicas replicate from it.</p>
+<p>Orchestrator chooses which replica to promote. It prefers a replica with no problems reported, then the one that has applied the most transactions. When two replicas are equal, the one with the lower Pod name is chosen.</p>
+<p>A candidate that fails its readiness probe during failover is expected. Orchestrator can still reach that Pod and promote it.</p>
+<p>A planned switchover does not salvage binary logs. The primary is alive, so the failover hook returns without fetching them. A switchover is allowed only when the candidate&rsquo;s replication lag does not exceed the <code>ReasonableMaintenanceReplicationLagSeconds</code> Orchestrator setting. Orchestrator rejects any replica that lags more, and the Operator retries the switchover on the next reconcile. After Orchestrator makes the primary read-only, it waits for the candidate to catch up for at most the same time, and then promotes it. The default value is 120 seconds. To change it, see <a href="#failover-async-setup-set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover</a>.</p>
+<h3 id="failover-async-if-the-old-primary-comes-back">If the old primary comes back<a class="headerlink" href="#failover-async-if-the-old-primary-comes-back" title="Permanent link">&para;</a></h3>
+<p>Orchestrator keeps checking whether the old primary is back. The check runs before the candidate is changed, again while the candidate applies the recovered transactions, and once more just before promotion. A primary that comes back during that wait stops the promotion, even when applying has just finished.</p>
+<p>The old primary counts as back when both of these are true:</p>
+<ul>
+<li>Accepts connections</li>
+<li>Holds every transaction the candidate already has</li>
+</ul>
+<p>If the candidate has transactions the old primary no longer has, the check fails and promotion continues. That is what keeps those transactions.</p>
+<p>A Pod that has only restarted is still read-only. Orchestrator  counts it as back when it accepts connections and holds every transaction the candidate has. Orchestrator stops the failover only after two successful checks in a row, so one brief response does not cancel it.</p>
+<p>When the old primary is back, Orchestrator aborts the failover and promotes nothing. It then makes that primary writable. Promoting the candidate as well would leave two Pods accepting writes. The candidate starts replicating from the old primary again. Events already added to its relay log stay there and keep being applied. The candidate also requests that same range from the primary, and MySQL skips transactions it has already applied.</p>
+<p>Orchestrator ends the failover. </p>
+<p>When the old primary&rsquo;s Pod is gone, Orchestrator skips the check and the promotion continues.</p>
+<h2 id="failover-async-understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy<a class="headerlink" href="#failover-async-understand-failover-timeout-and-recovery-policy" title="Permanent link">&para;</a></h2>
+<p>While Orchestrator recovers the transactions from the failed primary, the cluster has no writable primary. The <code>orchestrator.failover.timeout</code> option limits this wait. The default is <code>1h</code>. The time covers every retry and starts at the first attempt for that primary. If the Orchestrator Raft leader changes during the failover, the timeout restarts. The <code>FailoverWaiting</code> event on the cluster names the policy that applies when the time runs out.</p>
+<p>When the timeout expires, the <code>orchestrator.failover.onTimeout</code> option decides what happens. You set both options when you <a href="#failover-async-setup-configure-failover">configure failover</a>. </p>
+<p>The values are:</p>
+<ul>
+<li>
+<p><strong><code>Abort</code></strong> (default) Orchestrator stops the recovery, and every Pod stays read-only. Orchestrator keeps retrying, and each retry stops immediately. The cluster stays read-only until you <a href="#failover-async-setup-force-a-promotion">force a promotion</a>. See the event table in <a href="#failover-async-setup-see-whether-a-failover-is-blocked">See whether a failover is blocked</a> for what the cluster records.</p>
+</li>
+<li>
+<p><strong><code>ForceWithPossibleDataLoss</code></strong> makes Orchestrator pick a candidate and skip the binary log fetch. It still checks whether the old primary is back. When that primary accepts connections and holds every transaction the candidate has, nothing is promoted, and Orchestrator makes the primary writable. Otherwise Orchestrator promotes the candidate. Transactions that never left the old primary are lost. When the primary has no replicas, nothing is promoted. See the event table in <a href="#failover-async-setup-see-whether-a-failover-is-blocked">See whether a failover is blocked</a> for what gets recorded.</p>
+</li>
+</ul>
+<h2 id="failover-async-known-limitations">Known limitations<a class="headerlink" href="#failover-async-known-limitations" title="Permanent link">&para;</a></h2>
+<p>Zero-data-loss recovery depends on durability that the Operator doesn&rsquo;t enforce:</p>
+<ul>
+<li>
+<p><strong>Durable commits on the primary</strong> This assumes <code>sync_binlog=1</code> and <code>innodb_flush_log_at_trx_commit=1</code> on every Pod. These are MySQL&rsquo;s defaults, and the Operator does not change them. Relax either one, and a crashed primary can lose transactions it already acknowledged to clients before they reached disk. No recovery step brings those back.</p>
+</li>
+<li>
+<p><strong>Durable relay logs on the candidate</strong>. The Operator doesn&rsquo;t set relay log durability options either, so MySQL&rsquo;s defaults apply (<code>sync_relay_log=10000</code> and <code>relay_log_recovery=ON</code>). A candidate that crashes mid-recovery can lose relay log events it already received, including the ones fetched from the old primary. The next failover attempt reads that position and fetches the missing range again, as long as the old primary&rsquo;s binary logs are still available. This costs a retry.</p>
+</li>
+<li>
+<p><strong>The old primary&rsquo;s binary logs must still exist.</strong> If they were already purged or expired, every recovery attempt fails the same way until <code>orchestrator.failover.timeout</code> runs out and <a href="#failover-async-understand-failover-timeout-and-recovery-policy"><code>onTimeout</code></a> applies. Nothing can recover those transactions.</p>
+</li>
+<li>
+<p><strong>The old primary&rsquo;s data volume must still exist.</strong> If it&rsquo;s gone, the transactions it alone held are gone too. The only way forward is <a href="#failover-async-understand-failover-timeout-and-recovery-policy"><code>onTimeout</code></a> or the <a href="#failover-async-setup-force-a-promotion">force-promote annotation</a>.</p>
+</li>
+<li>
+<p><strong>Backups are required.</strong> The candidate reads the old primary&rsquo;s binary logs from the <code>xtrabackup</code> sidecar. That sidecar starts only when <code>spec.backup.enabled</code> is <code>true</code>. The Operator rejects an asynchronous cluster with backups disabled unless you set <a href="#operator-unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code></a> to <code>true</code>. With that flag, Orchestrator promotes a replica without fetching those logs, and transactions that never left the old primary are lost.</p>
+</li>
+<li>
+<p><strong>Binlog encryption with <a href="#encryption">data-at-rest-encryption</a> is not supported.</strong></p>
+</li>
+</ul>
+<p>Starting at <code>crVersion</code> 1.3.0, the Operator also pins several Orchestrator settings that this mechanism depends on and silently ignores any conflicting value in <a href="#operator-orchestratorconfiguration"><code>orchestrator.configuration</code></a> — see that field&rsquo;s reference entry for the current list.</p></section><section class="print-page" id="failover-async-setup" heading-number="7.9.2"><h1 id="failover-async-setup-configure-and-orchestrate-zero-data-loss-failover-in-async-clusters">Configure and orchestrate zero-data-loss failover in async clusters<a class="headerlink" href="#failover-async-setup-configure-and-orchestrate-zero-data-loss-failover-in-async-clusters" title="Permanent link">&para;</a></h1>
+<p>This page covers the setup and management of the zero-data-loss failover for clusters with <a href="#architecture-asynchronous-replication-tech-preview">asynchronous replication</a>. For background on how the failover mechanism works and the explanation of the timeouts and Orchestrator behavior when timeout expires, see <a href="#failover-async">About zero data loss failover</a>.</p>
+<h2 id="failover-async-setup-configure-failover">Configure failover<a class="headerlink" href="#failover-async-setup-configure-failover" title="Permanent link">&para;</a></h2>
+<p>Configure the <code>spec.orchestrator.failover</code> subsection in the Custom Resource. </p>
+<ol>
+<li>
+<p>Set the following keys:</p>
+<ul>
+<li><code>timeout</code> - How long the cluster tries to recover transactions that exist only on the failed primary. The time covers every retry and starts at the first attempt for that primary.</li>
+<li><code>onTimeout</code> - What happens when timeout expires. The values are <code>Abort</code> and <code>ForceWithPossibleDataLoss</code>. See <a href="#failover-async-understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a> to learn more</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">failover</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h</span>
+<span class="w">      </span><span class="nt">onTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Abort</span>
+</code></pre></div>
+</li>
+<li>
+<p>Apply the configuration:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<h2 id="failover-async-setup-set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover<a class="headerlink" href="#failover-async-setup-set-the-replication-lag-limit-for-a-planned-switchover" title="Permanent link">&para;</a></h2>
+<p>A planned switchover is allowed only when the candidate replica is close enough to the primary. Orchestrator rejects a candidate whose replication lag exceeds the <code>ReasonableMaintenanceReplicationLagSeconds</code> setting. The default is 120 seconds, which is twice the <code>ReasonableReplicationLagSeconds</code> value of 60 seconds. For how the switchover works, see <a href="#failover-async-promote-the-candidate">Promote the candidate</a>.</p>
+<p>To change the limit, set <code>ReasonableMaintenanceReplicationLagSeconds</code> in the <code>spec.orchestrator.configuration</code> key. The value is a JSON object passed as a string:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="s">'{"ReasonableMaintenanceReplicationLagSeconds":</span><span class="nv"> </span><span class="s">180}'</span>
+</code></pre></div>
+<p>Apply the change with <code>kubectl apply -f deploy/cr.yaml -n &lt;namespace&gt;</code>. Updating <code>orchestrator.configuration</code> triggers a rolling restart of the Orchestrator Pods. See <a href="#operator-orchestratorconfiguration"><code>orchestrator.configuration</code></a> for the full description of the option.</p>
+<h2 id="failover-async-setup-see-whether-a-failover-is-blocked">See whether a failover is blocked<a class="headerlink" href="#failover-async-setup-see-whether-a-failover-is-blocked" title="Permanent link">&para;</a></h2>
+<p>The Operator reports whether the cluster currently has a writable primary in the <code>AsyncFailoverBlocked</code> condition:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[?(@.type=="AsyncFailoverBlocked")]}{.status}{": "}{.reason}{"\n"}{end}'</span>
+</code></pre></div>
+<p>A <code>status: "True"</code> with <code>reason: NoWritablePrimary</code> means writes are currently blocked. See <a href="#cr-statuses-conditions">Conditions</a> and <a href="#cr-statuses-events">Events</a> for the full list of condition and event reasons this feature adds.</p>
+<p>The Operator leaves the condition unchanged when:</p>
+<ul>
+<li>Cluster has one MySQL Pod</li>
+<li>Orchestrator Pod is not ready, or Orchestrator cannot resolve the cluster or its primary</li>
+<li>Planned switchover holds the primary in downtime</li>
+</ul>
+<p>The cluster also records these events:</p>
+<table>
+<thead>
+<tr>
+<th>Reason</th>
+<th>Type</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FailoverWaiting</code></td>
+<td>Normal</td>
+<td>The first attempt for a primary. The cluster has no writable primary until recovery finishes, for up to <code>timeout</code>. The event names the <code>onTimeout</code> policy.</td>
+</tr>
+<tr>
+<td><code>FailoverBlocked</code></td>
+<td>Warning</td>
+<td><code>timeout</code> expired and <code>onTimeout</code> is <code>Abort</code>.</td>
+</tr>
+<tr>
+<td><code>FailoverForced</code></td>
+<td>Warning</td>
+<td><code>timeout</code> expired and <code>onTimeout</code> is <code>ForceWithPossibleDataLoss</code>, or the force-promotion annotation was handled.</td>
+</tr>
+<tr>
+<td><code>FailoverFailed</code></td>
+<td>Warning</td>
+<td>Orchestrator gave up on the recovery.</td>
+</tr>
+<tr>
+<td><code>FailoverUnprotected</code></td>
+<td>Warning</td>
+<td>Backups are disabled, so the Operator cannot recover the transactions stranded on the failed primary. Orchestrator promotes a replica without fetching them, and the cluster loses every transaction that the failed primary committed and never replicated. The cluster has no <code>timeout</code> wait and no <code>onTimeout</code> policy in this case.</td>
+</tr>
+</tbody>
+</table>
+<p>Orchestrator retries a blocked recovery every few seconds. After one <code>FailoverWaiting</code>, <code>FailoverBlocked</code>, <code>FailoverFailed</code> or <code>FailoverUnprotected</code> event for a primary, the same event stays quiet for five minutes. <code>FailoverForced</code> is recorded each time.</p>
+<h2 id="failover-async-setup-force-a-promotion">Force a promotion<a class="headerlink" href="#failover-async-setup-force-a-promotion" title="Permanent link">&para;</a></h2>
+<p>When the old primary&rsquo;s binary logs cannot be recovered, and you accept losing the transactions that never reached a replica, annotate the cluster:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>percona.com/force-promote-with-possible-data-loss<span class="o">=</span>&lt;value&gt;
+</code></pre></div>
+<p><code>&lt;value&gt;</code> is one of the following:</p>
+<ul>
+<li>Pod name, such as <code>cluster1-mysql-2</code>, names the replica to promote. Orchestrator has to know that Pod as a member of this cluster.</li>
+<li><code>true</code> leaves the choice to the Operator. It uses the same ranking as a failover.</li>
+</ul>
+<p>A forced promotion does not fetch binary logs. The failover hook treats it as a planned takeover and returns without salvaging.</p>
+<div class="admonition warning">
+<p class="admonition-title">Writable primary</p>
+<p>The Operator refuses this annotation while the cluster has a writable primary. A forced promotion does not stop that primary or point it at the new one. If it still accepts writes, the promoted replica misses those writes and the old primary keeps its own data.</p>
+</div>
+<p>The Operator also refuses the request when Orchestrator cannot resolve the cluster or its primary.</p>
+<p>The Operator removes the annotation after it handles the request. That is when:</p>
+<ul>
+<li>the replica is promoted, </li>
+<li>the request fails or is refused, or </li>
+<li>the candidate is already the primary. </li>
+</ul>
+<p>When no Orchestrator Pod is ready or when Orchestrator is still busy recovering the failed primary, the annotation stays and the Operator tries again on the next reconcile.</p></section></section>
+                    <section class='print-page md-section' id='section-7-10' heading-number='7.10'>
+                        <h1>Define environment variables<a class='headerlink' href='#section-7-10' title='Permanent link'></a>
+                        </h1>
+                    <section class="print-page" id="env-vars" heading-number="7.10.1"><h1 id="env-vars-configure-environment-variables">Configure environment variables<a class="headerlink" href="#env-vars-configure-environment-variables" title="Permanent link">&para;</a></h1>
 <p>You can configure environment variables in Percona Operator for MySQL based on Percona Server for MySQL for the following purposes:</p>
 <ol>
 <li><strong><a href="#env-vars-operator">Configure Operator environment variables</a></strong> — Control the Operator’s behavior, such as logging, telemetry, leader election, and which namespaces the Operator watches. You set these for the Operator Deployment.</li>
@@ -15502,7 +15884,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </tr>
 </tbody>
 </table>
-<p>For field-level details, see <a href="#operator">Custom Resource options</a>.</p></section><section class="print-page" id="env-vars-operator" heading-number="7.9.2"><h1 id="env-vars-operator-configure-operator-environment-variables">Configure Operator environment variables<a class="headerlink" href="#env-vars-operator-configure-operator-environment-variables" title="Permanent link">&para;</a></h1>
+<p>For field-level details, see <a href="#operator">Custom Resource options</a>.</p></section><section class="print-page" id="env-vars-operator" heading-number="7.10.2"><h1 id="env-vars-operator-configure-operator-environment-variables">Configure Operator environment variables<a class="headerlink" href="#env-vars-operator-configure-operator-environment-variables" title="Permanent link">&para;</a></h1>
 <p>You can configure the Percona Operator for MySQL by setting environment variables on the Operator Deployment. This lets you tune Operator behavior without rebuilding images.</p>
 <p>You can set environment variables in the following ways:</p>
 <ul>
@@ -15804,7 +16186,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>edit<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;operator-namespace&gt;
 </code></pre></div>
 <p>Then modify the env section in the container specification, save, and exit. Kubernetes rolls out a new ReplicaSet for the Operator Pod.</p>
-<p>After you change environment variables, the Operator Pod restarts with the new settings.</p></section><section class="print-page" id="env-vars-custom" heading-number="7.9.3"><h1 id="env-vars-custom-define-environment-variables-for-cluster-components">Define environment variables for cluster components<a class="headerlink" href="#env-vars-custom-define-environment-variables-for-cluster-components" title="Permanent link">&para;</a></h1>
+<p>After you change environment variables, the Operator Pod restarts with the new settings.</p></section><section class="print-page" id="env-vars-custom" heading-number="7.10.3"><h1 id="env-vars-custom-define-environment-variables-for-cluster-components">Define environment variables for cluster components<a class="headerlink" href="#env-vars-custom-define-environment-variables-for-cluster-components" title="Permanent link">&para;</a></h1>
 <p>Tuning through environment variables helps when you need to:</p>
 <ul>
 <li><strong>Change timeouts and limits</strong> for bootstrap, replication, or health checks without building a new image.</li>
@@ -17104,7 +17486,7 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <p>For previous versions, refer to the <a href="https://docs.percona.com/legacy-documentation/">old releases documentation archive <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 <h2 id="update-db-minor-upgrade-to-a-specific-version">Minor upgrade to a specific version<a class="headerlink" href="#update-db-minor-upgrade-to-a-specific-version" title="Permanent link">&para;</a></h2>
 <h3 id="update-db-assumptions">Assumptions<a class="headerlink" href="#update-db-assumptions" title="Permanent link">&para;</a></h3>
-<p>For the procedures in this tutorial, we assume that you have set up the <code>Smart Update</code> strategy to update the objects in your database cluster.</p>
+<p>For the procedures in this tutorial, we assume that you have set up the <code>SmartUpdate</code> strategy to update the objects in your database cluster.</p>
 <h3 id="update-db-before-you-start">Before you start<a class="headerlink" href="#update-db-before-you-start" title="Permanent link">&para;</a></h3>
 <p>Before updating the database, complete the following preparation steps:</p>
 <ol>
@@ -17129,13 +17511,14 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <p>Before selecting the update command, identify your current setup:</p>
 <ul>
 <li><strong>MySQL version</strong>: Check your current <code>mysql.image</code> value in your Custom Resource</li>
-<li><strong>Replication type</strong>: Check the <code>mysql.clusterType</code> option in your Custom Resource (<code>async</code> or <code>group</code>)</li>
+<li><strong>Replication type</strong>: Check the <code>mysql.clusterType</code> option in your Custom Resource (<code>async</code> or <code>group-replication</code>)</li>
 <li><strong>Proxy type</strong>: For async replication, you use HAProxy. For group replication, check if <code>proxy.haproxy.enabled</code> or <code>proxy.router.enabled</code> is set to <code>true</code> in your Custom Resource</li>
 </ul>
 </li>
 <li>
-<p>We recommend to <a href="https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html">update PMM Server <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> before upgrading PMM Client.</p>
+<p>For <code>async</code> clusters, check that either <code>backups.enabled</code> is  <code>true</code> or you set the <code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code>. See <a href="#update-db-if-you-upgrade-an-asynchronous-cluster">If you upgrade an asynchronous cluster</a> for more information.</p>
 </li>
+<li>We recommend to <a href="https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html">update PMM Server <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> before upgrading PMM Client.</li>
 </ol>
 <h4 id="update-db-if-you-use-binlog-server">If you use Binlog Server<a class="headerlink" href="#update-db-if-you-use-binlog-server" title="Permanent link">&para;</a></h4>
 <p>The new Binlog Server image 0.3.1 is incompatible with the previous version. To upgrade the Binlog Server you must start a fresh binlog collection. Here&rsquo;s how to do it:</p>
@@ -17144,6 +17527,12 @@ allowing StatefulSet to redeploy the cluster Pods with the new image.</p>
 <li>Make a new full backup</li>
 <li>Change the binlog storage settings in your cluster configuration to point to a new location. It can be a new bucket or a new prefix for the existing bucket</li>
 </ol>
+<h4 id="update-db-if-you-upgrade-an-asynchronous-cluster">If you upgrade an asynchronous cluster<a class="headerlink" href="#update-db-if-you-upgrade-an-asynchronous-cluster" title="Permanent link">&para;</a></h4>
+<p>Version 1.3.0 requires backups for the <a href="#failover-async">failover on asynchronous clusters</a>. After the Operator upgrade, reconciliation stops because status updates fail validation:</p>
+<div class="no-copy highlight"><pre><span></span><code>PerconaServerMySQL.ps.percona.com "ps-cluster1" is invalid: spec: Invalid value: "object": no such key: unsafeFlags evaluating rule: Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
+</code></pre></div>
+<p>Before you upgrade, <a href="#backups-storage">enable and configure backups</a>. To let reconciliation continue without backups, set <a href="#operator-unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code></a> to <code>true</code>. Make sure you understand the tradeoffs.</p>
+<p>Without backups, a failover cannot recover transactions that remain on the old primary.</p>
 <h3 id="update-db-update-commands">Update commands<a class="headerlink" href="#update-db-update-commands" title="Permanent link">&para;</a></h3>
 <p>Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.</p>
 <p>Find the image names <a href="#images">in the list of certified images</a>.</p>
@@ -18457,6 +18846,12 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <td><code>PerconaServerMySQLClusterSet</code></td>
 <td>Triggers a rejoin when the replica is healthy but ClusterSet replication is down. Value is the replica&rsquo;s InnoDB cluster name (<code>status.innodbClusterName</code>). The Operator removes the annotation after the rejoin attempt, whether it succeeded or failed. See <a href="#replication-setup-rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</td>
 <td><code>replicacluster</code></td>
+</tr>
+<tr>
+<td><code>percona.com/force-promote-with-possible-data-loss</code></td>
+<td><code>PerconaServerMySQL</code></td>
+<td>Promotes a replica by hand when an async cluster has no writable primary. The annotation accepts 2 values: <br> - <code>true</code> lets the Operator pick the best candidate, using the same ranking as an automatic failover; <br> - a MySQL Pod&rsquo;s name promotes that Pod instead. <br>The Operator removes the annotation once it acts on it, whether the promotion succeeded, failed, or was refused. See <a href="#failover-async-setup-force-a-promotion">Force a promotion</a>.</td>
+<td><code>true</code>, <code>cluster1-mysql-2</code></td>
 </tr>
 <tr>
 <td><code>percona.com/pitr-sleep-forever</code></td>
@@ -20008,6 +20403,22 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 <p class="admonition-title">Warning</p>
 <p>Once unsafe configurations are enabled, you cannot revert these settings simply by setting the same keys back to <code>false</code>. Any such changes will be ignored, so enable these options with caution.</p>
 </div>
+<h3 id="operator-unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code><a class="headerlink" href="#operator-unsafeflagsasyncfailoverwithpossibledataloss" title="Permanent link">&para;</a></h3>
+<p>Allows users to disable backups in a cluster with asynchronous replication. Without this flag, the Operator rejects such a Custom Resource, because a <a href="#failover-async">zero-data-loss failover</a> reads the failed primary&rsquo;s binary logs from the <code>xtrabackup</code> sidecar, and the sidecar runs only when backups are enabled. With backups disabled, a failover promotes a replica without recovering the transactions that the failed primary has not yet replicated. The Operator records the <code>FailoverUnprotected</code> <a href="#cr-statuses-events">event</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="operator-unsafeflagsbackupnonreadycluster"><code>unsafeFlags.backupNonReadyCluster</code><a class="headerlink" href="#operator-unsafeflagsbackupnonreadycluster" title="Permanent link">&para;</a></h3>
 <p>Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is not yet ready.</p>
 <table>
@@ -23124,6 +23535,45 @@ configuration options for the Orchestrator - a replication topology manager, use
 </tr>
 </tbody>
 </table>
+<h3 id="operator-orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code><a class="headerlink" href="#operator-orchestratorfailovertimeout" title="Permanent link">&para;</a></h3>
+<p>How long the cluster tries to recover the transactions from the failed primary&rsquo;s binlog. Default is <code>1h</code>.</p>
+<p>The timeout is measured from the moment Orchestrator first detects the failure and covers every retry, not a single attempt. If the Orchestrator Raft leader changes while a failover is running, the timeout restarts. This delays the decision what to do when the timeout expires.</p>
+<p>Only applies to <a href="#operator-mysqlclustertype">async</a> clusters, and only takes effect starting with <code>crVersion</code> 1.3.0. With an older <code>crVersion</code>, the Operator validates this field but ignores it. See <a href="#failover-async-understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>1h</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="operator-orchestratorfailoverontimeout"><code>orchestrator.failover.onTimeout</code><a class="headerlink" href="#operator-orchestratorfailoverontimeout" title="Permanent link">&para;</a></h3>
+<p>What the Operator does once <a href="#operator-orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code></a> expires without recovering the transactions stranded on a failed primary:</p>
+<ul>
+<li><code>Abort</code> (default) — leaves the cluster without a writable primary until you intervene. No transactions are lost, but writes stay blocked. Promote a replica yourself with the <a href="#failover-async-setup-force-a-promotion"><code>percona.com/force-promote-with-possible-data-loss</code></a> annotation.</li>
+<li><code>ForceWithPossibleDataLoss</code> — promotes the best available candidate anyway. Transactions the old primary committed and never replicated are lost.</li>
+</ul>
+<p>Only applies to async clusters, and only takes effect starting with <code>crVersion</code> 1.3.0. See <a href="#failover-async-understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>Abort</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="operator-orchestratorsize"><code>orchestrator.size</code><a class="headerlink" href="#operator-orchestratorsize" title="Permanent link">&para;</a></h3>
 <p>The number of the Orchestrator Pods to provide load balancing. This setting is required.</p>
 <table>
@@ -24008,8 +24458,43 @@ configuration options for the Orchestrator - a replication topology manager, use
 </tbody>
 </table>
 <h3 id="operator-orchestratorconfiguration"><code>orchestrator.configuration</code><a class="headerlink" href="#operator-orchestratorconfiguration" title="Permanent link">&para;</a></h3>
-<p>Custom <a href="https://github.com/percona/orchestrator">Orchestrator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> options to merge into the Orchestrator configuration. For example, <code>FailMasterPromotionOnLagMinutes</code> or <code>RecoveryPeriodBlockSeconds</code> are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.</p>
+<p>Custom <a href="https://github.com/percona/orchestrator">Orchestrator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> options to merge into the Orchestrator configuration. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.</p>
 <p>Starting with Custom Resource version 1.3.0, the Operator sets <code>ReasonableReplicationLagSeconds</code> to <code>60</code> by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the <a href="#cr-statuses-conditions"><code>ReplicationLagging</code> condition</a>. You can override this value here.</p>
+<p>For an async cluster with <code>crVersion</code> 1.3.0 or later, the Operator also derives and pins the settings the <a href="#failover-async">zero-data-loss failover</a> mechanism depends on, and ignores any override of them here:</p>
+<table>
+<thead>
+<tr>
+<th>Orchestrator key</th>
+<th>Derived from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FailMasterPromotionOnLagMinutes</code></td>
+<td>Always <code>0</code></td>
+</tr>
+<tr>
+<td><code>DelayMasterPromotionIfSQLThreadNotUpToDate</code>, <code>FailMasterPromotionIfSQLThreadNotUpToDate</code></td>
+<td>Always <code>false</code></td>
+</tr>
+<tr>
+<td><code>PreFailoverProcesses</code>, <code>PostFailoverProcesses</code>, <code>PostUnsuccessfulFailoverProcesses</code></td>
+<td>The failover mechanism itself</td>
+</tr>
+<tr>
+<td><code>RecoveryPeriodBlockSeconds</code></td>
+<td><a href="#operator-orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code></a> + 1 hour</td>
+</tr>
+<tr>
+<td><code>UnseenInstanceForgetHours</code></td>
+<td><a href="#operator-orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code></a> + 1 hour, rounded up</td>
+</tr>
+</tbody>
+</table>
+<p>The following setting is not pinned, and you can override it:</p>
+<ul>
+<li><code>ReasonableMaintenanceReplicationLagSeconds</code> is the maximum replication lag, in seconds, that a candidate replica can have for Orchestrator to allow a planned switchover. Orchestrator rejects any replica that lags more. After the primary becomes read-only, Orchestrator also waits at most this long for the candidate to catch up. With <code>crVersion</code> 1.3.0 or later, the default is 120, twice <code>ReasonableReplicationLagSeconds</code>, which is 60 by default. With an older <code>crVersion</code>, the value from the Orchestrator image applies, which is 300. See <a href="#failover-async-setup-set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover</a>.</li>
+</ul>
 <p>Updating this field triggers a rolling restart of the Orchestrator Pods.</p>
 <table>
 <thead>
@@ -24021,7 +24506,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 <tbody>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
-<td><code>'{"FailMasterPromotionOnLagMinutes": 10}'</code></td>
+<td><code>'{"ReplicationLagQuery": "..."}'</code></td>
 </tr>
 </tbody>
 </table>
@@ -28061,6 +28546,10 @@ true
 <td><code>ReplicationLagging</code></td>
 <td>For <code>async</code> clusters, this condition is <code>True</code> when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the <code>ReasonableReplicationLagSeconds</code> value). This threshold is defined via the <a href="#operator-orchestratorconfiguration"><code>orchestrator.configuration</code></a> option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be <code>ready</code> while this condition is <code>True</code>.</td>
 </tr>
+<tr>
+<td><code>AsyncFailoverBlocked</code></td>
+<td>Whether an async cluster currently has a writable primary. Not set for a single-Pod cluster, while Orchestrator can&rsquo;t be read, or while the primary is deliberately read-only for a graceful switchover. See reasons below.</td>
+</tr>
 </tbody>
 </table>
 <p><code>status.conditions[].status</code> values:</p>
@@ -28095,6 +28584,8 @@ true
 <li><code>ClusterSetMember</code> - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason <code>Primary</code> for the primary cluster and <code>Replica</code> for the replica cluster. A cluster created with the Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code> after the upgrade. Use the <code>ClusterSetMember</code> to see whether the cluster is the primary or a replica.</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
 <li><code>TeardownStarted</code> — the Operator started switching <code>mysql.clusterType</code>. The message names the previous type and the new type. Used with <code>ClusterTypeSwitchInProgress</code>.</li>
+<li><code>NoWritablePrimary</code> — the cluster&rsquo;s primary is read-only, or Orchestrator&rsquo;s last check of it failed. A failover may have aborted because the transactions stranded on the old primary couldn&rsquo;t be recovered. See the cluster&rsquo;s events. <a href="#failover-async-setup-force-a-promotion">Force a promotion</a> to promote a replica anyway.</li>
+<li><code>PrimaryWritable</code> — the primary is writable and Orchestrator&rsquo;s last check of it succeeded.</li>
 <li><code>ReplicationLagDetected</code> / <code>NoReplicationLag</code> — whether any <code>async</code> replica lags behind the primary (used by the <code>ReplicationLagging</code> condition)</li>
 </ul>
 <h3 id="cr-statuses-storage-autoscaling-status">Storage autoscaling status<a class="headerlink" href="#cr-statuses-storage-autoscaling-status" title="Permanent link">&para;</a></h3>
@@ -28159,8 +28650,29 @@ true
 <td><code>StorageAutoscalingTriggered</code></td>
 <td>Storage autoscaling started a PVC resize.</td>
 </tr>
+<tr>
+<td><code>FailoverWaiting</code></td>
+<td>The first recovery attempt for a failed primary. The cluster has no writable primary until recovery finishes or the failover timeout defined in <code>orchestrator.failover.timeout</code> expires. The message names the <code>onTimeout</code> policy that applies next.</td>
+</tr>
+<tr>
+<td><code>FailoverBlocked</code></td>
+<td><code>orchestrator.failover.timeout</code> expired with <code>onTimeout: Abort</code>. The cluster stays without a writable primary. See <a href="#failover-async-setup-force-a-promotion">Force a promotion</a>.</td>
+</tr>
+<tr>
+<td><code>FailoverForced</code></td>
+<td>A replica was promoted without full recovery of the data from the failed primary. The event is emitted when the <code>orchestrator.failover.timeout</code> expired and the <code>onTimeout</code> behavior is <code>ForceWithPossibleDataLoss</code>. The <code>percona.com/force-promote-with-possible-data-loss</code> annotation produces the same event when it promotes a replica, fails, or is refused. The message says what triggered the event and whether a replica was promoted. A successful promotion loses transactions the old primary committed and never replicated.</td>
+</tr>
+<tr>
+<td><code>FailoverFailed</code></td>
+<td>Orchestrator gave up on recovering the transactions stranded on the failed primary.</td>
+</tr>
+<tr>
+<td><code>FailoverUnprotected</code></td>
+<td>Backups are disabled, so the Operator cannot recover the transactions stranded on the failed primary. Orchestrator promotes a replica without them, and the cluster loses every transaction the failed primary committed and never replicated. The <code>orchestrator.failover.timeout</code> and <code>onTimeout</code> settings do not apply.</td>
+</tr>
 </tbody>
 </table>
+<p>Orchestrator retries a blocked recovery every few seconds, so <code>FailoverWaiting</code>, <code>FailoverBlocked</code>, <code>FailoverFailed</code>, and <code>FailoverUnprotected</code> are each deduplicated per source for five minutes rather than repeated on every retry. <code>FailoverForced</code> is recorded each time.</p>
 <h2 id="cr-statuses-perconaservermysqlclusterset-status">PerconaServerMySQLClusterSet status<a class="headerlink" href="#cr-statuses-perconaservermysqlclusterset-status" title="Permanent link">&para;</a></h2>
 <p>ClusterSet progress and topology are reflected in <code>status.primaryCluster</code>, <code>status.clusters</code>, and <code>status.conditions</code>. Each member <code>PerconaServerMySQL</code> cluster reports its own role with the <code>ClusterSetMember</code> condition. See <a href="#cr-statuses-conditions">PerconaServerMySQL conditions</a>. For configuration options, see <a href="#clusterset-cr">ClusterSet Resource options</a>. For setup, see <a href="#replication-setup">Set up cross-site replication</a>.</p>
 <p>Common fields:</p>
@@ -31215,11 +31727,16 @@ and <a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji">
 .print-site-enumerate-headings #replication-setup > h1:before { content: '7.8.2 ' }
 
 .print-site-enumerate-headings #section-7-9 > h1:before { content: '7.9 ' }
-.print-site-enumerate-headings #env-vars > h1:before { content: '7.9.1 ' }
+.print-site-enumerate-headings #failover-async > h1:before { content: '7.9.1 ' }
 
-.print-site-enumerate-headings #env-vars-operator > h1:before { content: '7.9.2 ' }
+.print-site-enumerate-headings #failover-async-setup > h1:before { content: '7.9.2 ' }
 
-.print-site-enumerate-headings #env-vars-custom > h1:before { content: '7.9.3 ' }
+.print-site-enumerate-headings #section-7-10 > h1:before { content: '7.10 ' }
+.print-site-enumerate-headings #env-vars > h1:before { content: '7.10.1 ' }
+
+.print-site-enumerate-headings #env-vars-operator > h1:before { content: '7.10.2 ' }
+
+.print-site-enumerate-headings #env-vars-custom > h1:before { content: '7.10.3 ' }
 
 .print-site-enumerate-headings #section-8 > h1:before { content: '8 ' }
 .print-site-enumerate-headings #section-8-1 > h1:before { content: '8.1 ' }

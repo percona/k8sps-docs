@@ -2844,7 +2844,7 @@
   <span class="md-ellipsis">
     
   
-    Define environment variables
+    Zero-data-loss failover in async clusters
   
 
     
@@ -2857,6 +2857,117 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Zero-data-loss failover in async clusters
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About zero-data-loss failover
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="failover-async-setup.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure and orchestrate zero-data-loss failover in async clusters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Define environment variables
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -4403,6 +4514,17 @@
   
     <nav class="md-nav" aria-label="Unsafe flags section">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unsafeflagsasyncfailoverwithpossibledataloss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unsafeFlags.asyncFailoverWithPossibleDataLoss
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#unsafeflagsbackupnonreadycluster" class="md-nav__link">
@@ -6601,6 +6723,28 @@
     <span class="md-ellipsis">
       
         orchestrator.enabled
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orchestratorfailovertimeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        orchestrator.failover.timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orchestratorfailoverontimeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        orchestrator.failover.onTimeout
       
     </span>
   </a>
@@ -10731,6 +10875,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#unsafeflagsasyncfailoverwithpossibledataloss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unsafeFlags.asyncFailoverWithPossibleDataLoss
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#unsafeflagsbackupnonreadycluster" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12927,6 +13082,28 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <span class="md-ellipsis">
       
         orchestrator.enabled
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orchestratorfailovertimeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        orchestrator.failover.timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#orchestratorfailoverontimeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        orchestrator.failover.onTimeout
       
     </span>
   </a>
@@ -15959,6 +16136,22 @@ Autoscaling stops when storage reaches this limit. Must be at least <code>1Gi</c
 <p class="admonition-title">Warning</p>
 <p>Once unsafe configurations are enabled, you cannot revert these settings simply by setting the same keys back to <code>false</code>. Any such changes will be ignored, so enable these options with caution.</p>
 </div>
+<h3 id="unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code><a class="headerlink" href="#unsafeflagsasyncfailoverwithpossibledataloss" title="Permanent link">&para;</a></h3>
+<p>Allows users to disable backups in a cluster with asynchronous replication. Without this flag, the Operator rejects such a Custom Resource, because a <a href="failover-async.html">zero-data-loss failover</a> reads the failed primary&rsquo;s binary logs from the <code>xtrabackup</code> sidecar, and the sidecar runs only when backups are enabled. With backups disabled, a failover promotes a replica without recovering the transactions that the failed primary has not yet replicated. The Operator records the <code>FailoverUnprotected</code> <a href="cr-statuses.html#events">event</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4m0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg></span> boolean</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="unsafeflagsbackupnonreadycluster"><code>unsafeFlags.backupNonReadyCluster</code><a class="headerlink" href="#unsafeflagsbackupnonreadycluster" title="Permanent link">&para;</a></h3>
 <p>Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is not yet ready.</p>
 <table>
@@ -19075,6 +19268,45 @@ configuration options for the Orchestrator - a replication topology manager, use
 </tr>
 </tbody>
 </table>
+<h3 id="orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code><a class="headerlink" href="#orchestratorfailovertimeout" title="Permanent link">&para;</a></h3>
+<p>How long the cluster tries to recover the transactions from the failed primary&rsquo;s binlog. Default is <code>1h</code>.</p>
+<p>The timeout is measured from the moment Orchestrator first detects the failure and covers every retry, not a single attempt. If the Orchestrator Raft leader changes while a failover is running, the timeout restarts. This delays the decision what to do when the timeout expires.</p>
+<p>Only applies to <a href="#mysqlclustertype">async</a> clusters, and only takes effect starting with <code>crVersion</code> 1.3.0. With an older <code>crVersion</code>, the Operator validates this field but ignores it. See <a href="failover-async.html#understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>1h</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="orchestratorfailoverontimeout"><code>orchestrator.failover.onTimeout</code><a class="headerlink" href="#orchestratorfailoverontimeout" title="Permanent link">&para;</a></h3>
+<p>What the Operator does once <a href="#orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code></a> expires without recovering the transactions stranded on a failed primary:</p>
+<ul>
+<li><code>Abort</code> (default) — leaves the cluster without a writable primary until you intervene. No transactions are lost, but writes stay blocked. Promote a replica yourself with the <a href="failover-async-setup.html#force-a-promotion"><code>percona.com/force-promote-with-possible-data-loss</code></a> annotation.</li>
+<li><code>ForceWithPossibleDataLoss</code> — promotes the best available candidate anyway. Transactions the old primary committed and never replicated are lost.</li>
+</ul>
+<p>Only applies to async clusters, and only takes effect starting with <code>crVersion</code> 1.3.0. See <a href="failover-async.html#understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Value type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
+<td><code>Abort</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="orchestratorsize"><code>orchestrator.size</code><a class="headerlink" href="#orchestratorsize" title="Permanent link">&para;</a></h3>
 <p>The number of the Orchestrator Pods to provide load balancing. This setting is required.</p>
 <table>
@@ -19959,8 +20191,43 @@ configuration options for the Orchestrator - a replication topology manager, use
 </tbody>
 </table>
 <h3 id="orchestratorconfiguration"><code>orchestrator.configuration</code><a class="headerlink" href="#orchestratorconfiguration" title="Permanent link">&para;</a></h3>
-<p>Custom <a href="https://github.com/percona/orchestrator">Orchestrator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> options to merge into the Orchestrator configuration. For example, <code>FailMasterPromotionOnLagMinutes</code> or <code>RecoveryPeriodBlockSeconds</code> are used to tune failover behavior per cluster. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.</p>
+<p>Custom <a href="https://github.com/percona/orchestrator">Orchestrator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> options to merge into the Orchestrator configuration. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.</p>
 <p>Starting with Custom Resource version 1.3.0, the Operator sets <code>ReasonableReplicationLagSeconds</code> to <code>60</code> by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the <a href="cr-statuses.html#conditions"><code>ReplicationLagging</code> condition</a>. You can override this value here.</p>
+<p>For an async cluster with <code>crVersion</code> 1.3.0 or later, the Operator also derives and pins the settings the <a href="failover-async.html">zero-data-loss failover</a> mechanism depends on, and ignores any override of them here:</p>
+<table>
+<thead>
+<tr>
+<th>Orchestrator key</th>
+<th>Derived from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FailMasterPromotionOnLagMinutes</code></td>
+<td>Always <code>0</code></td>
+</tr>
+<tr>
+<td><code>DelayMasterPromotionIfSQLThreadNotUpToDate</code>, <code>FailMasterPromotionIfSQLThreadNotUpToDate</code></td>
+<td>Always <code>false</code></td>
+</tr>
+<tr>
+<td><code>PreFailoverProcesses</code>, <code>PostFailoverProcesses</code>, <code>PostUnsuccessfulFailoverProcesses</code></td>
+<td>The failover mechanism itself</td>
+</tr>
+<tr>
+<td><code>RecoveryPeriodBlockSeconds</code></td>
+<td><a href="#orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code></a> + 1 hour</td>
+</tr>
+<tr>
+<td><code>UnseenInstanceForgetHours</code></td>
+<td><a href="#orchestratorfailovertimeout"><code>orchestrator.failover.timeout</code></a> + 1 hour, rounded up</td>
+</tr>
+</tbody>
+</table>
+<p>The following setting is not pinned, and you can override it:</p>
+<ul>
+<li><code>ReasonableMaintenanceReplicationLagSeconds</code> is the maximum replication lag, in seconds, that a candidate replica can have for Orchestrator to allow a planned switchover. Orchestrator rejects any replica that lags more. After the primary becomes read-only, Orchestrator also waits at most this long for the candidate to catch up. With <code>crVersion</code> 1.3.0 or later, the default is 120, twice <code>ReasonableReplicationLagSeconds</code>, which is 60 by default. With an older <code>crVersion</code>, the value from the Orchestrator image applies, which is 300. See <a href="failover-async-setup.html#set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover</a>.</li>
+</ul>
 <p>Updating this field triggers a rolling restart of the Orchestrator Pods.</p>
 <table>
 <thead>
@@ -19972,7 +20239,7 @@ configuration options for the Orchestrator - a replication topology manager, use
 <tbody>
 <tr>
 <td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm9.5 6h-1A1.5 1.5 0 0 1 10 9.5 1.5 1.5 0 0 1 11.5 8h1A1.5 1.5 0 0 1 14 9.5h2A3.5 3.5 0 0 0 12.5 6h-1A3.5 3.5 0 0 0 8 9.5a3.5 3.5 0 0 0 3.5 3.5h1a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5H8a3.5 3.5 0 0 0 3.5 3.5h1a3.5 3.5 0 0 0 3.5-3.5 3.5 3.5 0 0 0-3.5-3.5"/></svg></span> string</td>
-<td><code>'{"FailMasterPromotionOnLagMinutes": 10}'</code></td>
+<td><code>'{"ReplicationLagQuery": "..."}'</code></td>
 </tr>
 </tbody>
 </table>
@@ -22681,7 +22948,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:31:24 UTC">October 27, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:48:06 UTC">October 27, 2026</span>
       
         <br>
         Created:
