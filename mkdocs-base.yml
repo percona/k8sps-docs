@@ -279,6 +279,7 @@ nav:
           - "Check the events": debug-events.md
           - "Check the logs": debug-logs.md
           - "Troubleshoot backups and restores": debug-backup-restore.md
+          - "Recover from a full cluster crash": crash-recovery.md
           - "Special files in the data directory": datadir-special-files.md
           - "Pause a MySQL Pod": pause-mysql-pod.md
           
