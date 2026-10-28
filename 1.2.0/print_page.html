@@ -4054,6 +4054,34 @@
   
   
     <li class="md-nav__item">
+      <a href="crash-recovery.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recover from a full cluster crash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="datadir-special-files.html" class="md-nav__link">
         
   
@@ -6786,6 +6814,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
         
           <li class="md-nav__item">
+  <a href="#crash-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recover from a full cluster crash
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#datadir-special-files" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -7551,7 +7590,7 @@ Check upcoming releases on the <a href="https://github.com/orgs/percona/projects
 </ul>
 <p><img alt="image" src="assets/images/operator.svg" /></p>
 <ul>
-<li>In <strong>group replication</strong> clusters, the native group membership protocol automatically handles member removal, primary election, and topology recovery.</li>
+<li>In <strong>group replication</strong> clusters, the native group membership protocol automatically handles member removal, primary election and topology recovery. If the majority of members go down at the same time, the group can&rsquo;t recover on its own. The cluster enters the <code>error</code> state with the <code>FullClusterCrashDetected</code> reason. The Operator reboots it as described in <a href="#crash-recovery">Recover from a full cluster crash</a>.</li>
 </ul>
 <p><img alt="image" src="assets/images/operator-GR.svg" /></p>
 <h3 id="architecture-client-connectivity">Client connectivity<a class="headerlink" href="#architecture-client-connectivity" title="Permanent link">&para;</a></h3>
@@ -18351,6 +18390,7 @@ percona-server-mysql-operator-7ff9cff46f-6dtgs   1/1     Running   0          13
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Clusters with Group Replication undergo crash recovery on each unpause. This is caused by the specifics of Group Replication, which supposes continuous availability of the database service by design. See <a href="https://dev.mysql.com/doc/refman/8.0/en/group-replication-restarting-group.html">upstream documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> for more details.</p>
+<p>The Operator recovers the cluster automatically if <a href="#operator-mysqlautorecovery"><code>mysql.autoRecovery</code></a> is <code>true</code>. If it&rsquo;s <code>false</code>, the cluster stays in the <code>error</code> state after you unpause it until you recover it manually. See <a href="#crash-recovery">Recover from a full cluster crash</a>.</p>
 <p>If this cluster is a replica in a ClusterSet, the Operator recovers the local group on unpause and rejoins it to the ClusterSet. If the primary was down long enough to break the replication channel, you must <a href="#replication-setup-rejoin-a-replica-cluster">rejoin the replica</a>.</p>
 </div></section>
                     <section class='print-page md-section' id='section-8-3' heading-number='8.3'>
@@ -20036,7 +20076,187 @@ xb-restore-restore2                                      Complete   1/1         
 <li>Set <code>caBundle</code> on the restore object. For a backup-only restore, set it on <code>spec.backupSource.storage.s3</code>. For point-in-time recovery, also set it on <code>spec.pitr.backupSource.binlogServer.storage.s3</code>.</li>
 </ol>
 <p>On the same cluster with <code>backupName</code>, the Operator can use <code>caBundle</code> already set on the cluster Custom Resource.</p>
-<p>See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>, <a href="#backups-restore-to-new-cluster-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>, and <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a> for point-in-time recovery.</p></section><section class="print-page" id="datadir-special-files" heading-number="10.6"><h1 id="datadir-special-files-special-files-in-the-data-directory">Special files in the data directory<a class="headerlink" href="#datadir-special-files-special-files-in-the-data-directory" title="Permanent link">&para;</a></h1>
+<p>See <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>, <a href="#backups-restore-to-new-cluster-restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>, and <a href="#backups-restore-pitr-use-a-custom-ca">Use a custom CA</a> for point-in-time recovery.</p></section><section class="print-page" id="crash-recovery" heading-number="10.6"><h1 id="crash-recovery-recover-from-a-full-cluster-crash">Recover from a full cluster crash<a class="headerlink" href="#crash-recovery-recover-from-a-full-cluster-crash" title="Permanent link">&para;</a></h1>
+<p>A full cluster crash happens when the majority of members in a cluster with <a href="#architecture-group-replication">Group Replication</a> (GR) are down and the group loses quorum. Even if the primary is among the survivors, the group can&rsquo;t vote, so after a short timeout, the primary enters the error state too. A power loss in the data center, deletion of MySQL Pods, or an out-of-memory kill can take down enough members to cause this. After the Pods restart, no member can form the group on its own, because none of them knows if it has the most recent data.</p>
+<p>The Operator detects this situation and recovers the cluster automatically if the <code>spec.mysql.autoRecovery</code> is set to <code>true</code>. This page explains how to recognize a full cluster crash, how to track the recovery, what to do when you disable automatic recovery or when it doesn&rsquo;t succeed, and how the recovery works.</p>
+<p>This page applies to clusters with Group Replication, the default replication type. Clusters with <a href="#architecture-asynchronous-replication-tech-preview">asynchronous replication</a> don&rsquo;t use this mechanism, and the <code>mysql.autoRecovery</code> option has no effect on them. After all MySQL Pods restart, Orchestrator restores the replication topology without manual steps. For details, see <a href="#failover-async">Zero data loss failover in async clusters</a>. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pausing a cluster with Group Replication and starting it again goes through the same recovery, because all members stop at the same time. See <a href="#pause">Pause/resume the cluster</a>. Keep automatic recovery enabled, or be ready to follow the <a href="#crash-recovery-recover-the-cluster-manually">manual steps</a> after every resume.</p>
+</div>
+<h2 id="crash-recovery-symptoms">Symptoms<a class="headerlink" href="#crash-recovery-symptoms" title="Permanent link">&para;</a></h2>
+<p>A cluster is in a full cluster crash when you see the following:</p>
+<ul>
+<li><code>kubectl get ps &lt;cluster-name&gt; -n &lt;namespace&gt;</code> shows the <code>error</code> state, and the cluster condition has the <code>FullClusterCrashDetected</code> reason.</li>
+<li><code>kubectl describe ps &lt;cluster-name&gt; -n &lt;namespace&gt;</code> shows the <code>FullClusterCrashDetected</code> warning event (<code>Full cluster crash detected</code>).</li>
+<li>The log of the <code>mysql</code> container in the MySQL Pods contains a message between two <code>######FULL_CLUSTER_CRASH:&lt;Pod FQDN&gt;######</code> lines.</li>
+<li>The MySQL Pods are <code>Ready</code>, but your applications can&rsquo;t write to the database, because the cluster has no primary.</li>
+</ul>
+<h2 id="crash-recovery-choose-what-to-do">Choose what to do<a class="headerlink" href="#crash-recovery-choose-what-to-do" title="Permanent link">&para;</a></h2>
+<p>Check whether automatic recovery is enabled:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.mysql.autoRecovery}'</span>
+</code></pre></div>
+<p>An empty output means that the option isn&rsquo;t set, and the Operator treats it as <code>false</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mysql.autoRecovery</code> is <code>true</code></td>
+<td>The Operator recovers the cluster. <a href="#crash-recovery-track-the-recovery">Track the recovery</a>.</td>
+</tr>
+<tr>
+<td><code>mysql.autoRecovery</code> is <code>false</code> or not set</td>
+<td><a href="#crash-recovery-recover-the-cluster-manually">Recover the cluster manually</a>.</td>
+</tr>
+<tr>
+<td>The recovery doesn&rsquo;t start or keeps failing</td>
+<td><a href="#crash-recovery-troubleshoot-the-recovery">Troubleshoot the recovery</a>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="crash-recovery-recover-the-cluster-automatically">Recover the cluster automatically<a class="headerlink" href="#crash-recovery-recover-the-cluster-automatically" title="Permanent link">&para;</a></h2>
+<p>The <code>mysql.autoRecovery</code> option in the Custom Resource controls the automatic recovery. The <code>deploy/cr.yaml</code> and <code>deploy/cr-minimal.yaml</code> files set it to <code>true</code>. If you omit the option in your own Custom Resource, the Operator treats it as <code>false</code>, so set it explicitly:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">group-replication</span>
+<span class="w">    </span><span class="nt">autoRecovery</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<p>The Operator starts the recovery only when all MySQL Pods exist and are <code>Ready</code>. Make sure that all Pods are scheduled and running. Because the Pods start one after another and each one restarts once before it becomes <code>Ready</code>, the recovery takes several minutes even for a small cluster. Recovery time also depends on the cluster size and the amount of data the members must catch up on.</p>
+<p>For the steps that the Operator takes, see <a href="#crash-recovery-what-the-operator-does-during-the-automatic-recovery">What the Operator does during the automatic recovery</a>.</p>
+<h3 id="crash-recovery-track-the-recovery">Track the recovery<a class="headerlink" href="#crash-recovery-track-the-recovery" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Check the cluster state and conditions:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.conditions}'</span>
+</code></pre></div>
+<p>The state is <code>error</code> with the reason <code>FullClusterCrashDetected</code> while the crash is detected. After the reboot, the state changes to <code>initializing</code> while the secondary members restart and rejoin, and then to <code>ready</code>.</p>
+</li>
+<li>
+<p>List the events of the cluster:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+<p>Look for the <code>FullClusterCrashDetected</code> warning event (<code>Full cluster crash detected</code>) and the <code>FullClusterCrashRecovered</code> normal event (<code>Cluster recovered from full cluster crash</code>). See <a href="#cr-statuses-events">Events</a> for all events.</p>
+</li>
+<li>
+<p>Check the Operator logs. The following messages show the progress:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>deploy/percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">"crash recovery"</span>
+</code></pre></div>
+<ul>
+<li><code>Pod is waiting for recovery</code> - the Operator found the <code>full-cluster-crash</code> file in the Pod. The message includes the Pod name and its <code>GTID_EXECUTED</code> value.</li>
+<li><code>Cluster is online, restarting crashed members</code> - the cluster was already online. The Operator then logs <code>Deleting pod with stale full cluster crash marker</code> for each Pod that it restarts.</li>
+<li><code>Attempting to reboot cluster from complete outage</code> - the Operator runs the reboot command on the Pod.</li>
+<li><code>failed to reboot cluster from complete outage</code> - the reboot failed on this Pod. The Operator tries the next one.</li>
+<li><code>Cluster was successfully rebooted</code> - the reboot succeeded.</li>
+<li><code>Primary pod detected</code> and <code>Deleting secondary pod</code> - the Operator restarts the secondary members so that they rejoin the cluster.</li>
+</ul>
+</li>
+</ol>
+<h2 id="crash-recovery-recover-the-cluster-manually">Recover the cluster manually<a class="headerlink" href="#crash-recovery-recover-the-cluster-manually" title="Permanent link">&para;</a></h2>
+<p>Recover the cluster manually when <code>mysql.autoRecovery</code> is <code>false</code>, or when the automatic recovery doesn&rsquo;t succeed. In the <code>false</code> case, the Operator only writes the following error to its log on every reconciliation:</p>
+<div class="no-copy highlight"><pre><span></span><code>Full cluster crash detected but auto recovery is not enabled.
+Enable .spec.mysql.autoRecovery or recover cluster manually
+(connect to one of the pods using mysql-shell and run 'dba.rebootClusterFromCompleteOutage() and delete /var/lib/mysql/full-cluster-crash in each pod.').
+</code></pre></div>
+<p>To recover the cluster, do the following:</p>
+<ol>
+<li>
+<p>Make sure that all MySQL Pods are running and are <code>Ready</code>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/component<span class="o">=</span>database
+</code></pre></div>
+</li>
+<li>
+<p>Optionally, check the <code>GTID_EXECUTED</code> value saved in each Pod. The Pod with the most transactions has the most recent data:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-2<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+</code></pre></div>
+<p>You can run the reboot on any Pod. MySQL Shell checks all members and starts the group from the one with the most transactions.</p>
+</li>
+<li>
+<p>Get the password of the <code>root</code> user from the Secret that you set in the <code>spec.secretsName</code> option (<code>&lt;cluster-name&gt;-secrets</code> by default):</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>&lt;cluster-name&gt;-secrets<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.root}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode
+</code></pre></div>
+</li>
+<li>
+<p>Connect to a MySQL Pod using MySQL Shell in JavaScript mode:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>mysqlsh<span class="w"> </span>--js<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p
+</code></pre></div>
+<p>Enter the password from the previous step when MySQL Shell asks for it. The <code>--js</code> flag is required, because MySQL Shell in the container starts in SQL mode by default. Don&rsquo;t pass the password in a <code>root:&lt;password&gt;@localhost</code> URI: the generated passwords contain special characters that MySQL Shell rejects in a URI.</p>
+</li>
+<li>
+<p>Reboot the cluster:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">dba</span><span class="p">.</span><span class="nx">rebootClusterFromCompleteOutage</span><span class="p">()</span>
+</code></pre></div>
+<p>MySQL Shell prints <code>The Cluster was successfully rebooted.</code> when it finishes. If you run the command on a Pod that doesn&rsquo;t have the most transactions, MySQL Shell reports that it switches over to the instance with the highest GTID set and uses it to start the group. If the command fails with an error, exit and repeat steps 4 and 5 on another Pod.</p>
+</li>
+<li>
+<p>Check that all members are <code>ONLINE</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">dba</span><span class="p">.</span><span class="nx">getCluster</span><span class="p">().</span><span class="nx">status</span><span class="p">()</span>
+</code></pre></div>
+<p>Then exit MySQL Shell with <code>\quit</code>.</p>
+</li>
+<li>
+<p>Delete the <code>full-cluster-crash</code> file in every Pod. The cluster stays in the <code>error</code> state until the file is gone:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>rm<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>rm<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-2<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>rm<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+</code></pre></div>
+<p>Delete the file only after the reboot succeeds. If you delete it earlier, the <code>mysql</code> containers restart and create the file again.</p>
+</li>
+<li>
+<p>Wait until the cluster reaches the <code>ready</code> state:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+</ol>
+<p>You don&rsquo;t need to delete the secondary Pods after a manual recovery. MySQL Shell rejoins them to the cluster during the reboot.</p>
+<h2 id="crash-recovery-troubleshoot-the-recovery">Troubleshoot the recovery<a class="headerlink" href="#crash-recovery-troubleshoot-the-recovery" title="Permanent link">&para;</a></h2>
+<p>The recovery doesn&rsquo;t start:</p>
+<ul>
+<li>
+<p>Check that all MySQL Pods exist and are <code>Ready</code>. The Operator doesn&rsquo;t act on a partially started cluster and doesn&rsquo;t log anything about the recovery while a Pod is missing. Because Pods start one at a time, a single Pod that can&rsquo;t start blocks all Pods after it. If a Pod is missing, check the events of the StatefulSet:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>statefulset<span class="w"> </span>&lt;cluster-name&gt;-mysql<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+</code></pre></div>
+</li>
+<li>
+<p>Check the Operator logs for the <code>Full cluster crash detected but auto recovery is not enabled</code> error. If you see it, either enable <code>mysql.autoRecovery</code> or recover the cluster <a href="#crash-recovery-recover-the-cluster-manually">manually</a>.</p>
+</li>
+<li>Check that the Operator Pod is running. While the Operator is down, <code>kubectl get ps</code> shows the last state that the Operator reported, which can be <code>ready</code>. The recovery starts after the Operator is back.</li>
+</ul>
+<p>The recovery keeps failing:</p>
+<ul>
+<li>Look for the <code>failed to reboot cluster from complete outage</code> messages in the Operator logs. They contain the error returned by MySQL Shell.</li>
+<li>Check the log of the <code>mysql</code> containers for the reason that the member can&rsquo;t join the group.</li>
+<li><a href="#crash-recovery-recover-the-cluster-manually">Recover the cluster manually</a> and use the error from MySQL Shell to choose the Pod to run the reboot on.</li>
+</ul>
+<h2 id="crash-recovery-how-full-cluster-crash-recovery-works">How full cluster crash recovery works<a class="headerlink" href="#crash-recovery-how-full-cluster-crash-recovery-works" title="Permanent link">&para;</a></h2>
+<h3 id="crash-recovery-how-the-operator-detects-a-full-cluster-crash">How the Operator detects a full cluster crash<a class="headerlink" href="#crash-recovery-how-the-operator-detects-a-full-cluster-crash" title="Permanent link">&para;</a></h3>
+<ol>
+<li>MySQL Pods start one at a time: Kubernetes creates the next Pod only after the previous one is <code>Ready</code>. Every MySQL Pod tries to find a member of the cluster to join. When it can&rsquo;t reach any peer, the Pod reads its <code>GTID_EXECUTED</code> value (the set of global transaction identifiers it has applied) and saves it to the <code>/var/lib/mysql/full-cluster-crash</code> file. Then the <code>mysql</code> container restarts.</li>
+<li>The container sees the file at startup and keeps <code>mysqld</code> running in read-only mode. It prints a message between two <code>######FULL_CLUSTER_CRASH:&lt;Pod FQDN&gt;######</code> lines to its log, where <code>&lt;Pod FQDN&gt;</code> is the fully qualified domain name of the Pod, for example, <code>ps-cluster1-mysql-0.ps-cluster1-mysql.&lt;namespace&gt;.svc.cluster.local</code>. The message contains the last <code>GTID_EXECUTED</code> value of that Pod. The Pods report the <code>Ready</code> state in this mode, so that you and the Operator can connect to them.</li>
+<li>As soon as a <code>Ready</code> MySQL Pod has the file, the Operator sets the cluster <code>status.state</code> to <code>error</code>, adds a condition with the <code>FullClusterCrashDetected</code> reason, and records the <code>FullClusterCrashDetected</code> warning event. The Operator records this event again on every reconciliation until the crash is resolved.</li>
+</ol>
+<h3 id="crash-recovery-what-the-operator-does-during-the-automatic-recovery">What the Operator does during the automatic recovery<a class="headerlink" href="#crash-recovery-what-the-operator-does-during-the-automatic-recovery" title="Permanent link">&para;</a></h3>
+<p>When automatic recovery is enabled and all MySQL Pods are <code>Ready</code>, the Operator does the following:</p>
+<ol>
+<li>Asks the Pods that don&rsquo;t have the <code>full-cluster-crash</code> file whether the cluster is online. Starting with version 1.3.0, if the cluster is online, the Operator removes the file from the other Pods and restarts these Pods so that they rejoin the cluster. No further steps are needed.</li>
+<li>If the cluster is not online, picks a Pod with the <code>full-cluster-crash</code> file and runs the <code>dba.rebootClusterFromCompleteOutage()</code> command from <a href="https://dev.mysql.com/doc/mysql-shell/8.4/en/">MySQL Shell <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> on it. The Operator doesn&rsquo;t compare the <code>GTID_EXECUTED</code> values to choose the Pod: MySQL Shell finds the member with the most transactions and uses it to start the group. If the command fails on this Pod, the Operator logs the error and tries the next Pod.</li>
+<li>After the reboot succeeds, records the <code>FullClusterCrashRecovered</code> event and removes the <code>full-cluster-crash</code> file from every Pod.</li>
+<li>Waits for the cluster to elect the primary Pod and deletes all other MySQL Pods. Kubernetes recreates them, and they rejoin the cluster as secondary members.</li>
+</ol>
+<h2 id="crash-recovery-related-options-and-events">Related options and events<a class="headerlink" href="#crash-recovery-related-options-and-events" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#operator-mysqlautorecovery"><code>mysql.autoRecovery</code></a> - enables or disables the automatic recovery.</li>
+<li><a href="#cr-statuses-conditions"><code>FullClusterCrashDetected</code> condition reason and event</a></li>
+<li><a href="#cr-statuses-events"><code>FullClusterCrashRecovered</code> event</a></li>
+<li><a href="#datadir-special-files-full-cluster-crash">The <code>full-cluster-crash</code> file</a> and other special files in the data directory</li>
+</ul></section><section class="print-page" id="datadir-special-files" heading-number="10.7"><h1 id="datadir-special-files-special-files-in-the-data-directory">Special files in the data directory<a class="headerlink" href="#datadir-special-files-special-files-in-the-data-directory" title="Permanent link">&para;</a></h1>
 <p>The <code>mysql</code> container of every MySQL Pod checks for several marker files in its data directory, <code>/var/lib/mysql</code>. When one of these files exists, the container, its probes, or the Operator change their behavior. For example, the container may not start <code>mysqld</code>, or the Pod may skip joining the cluster.</p>
 <p>The data directory is on the Pod&rsquo;s Persistent Volume. So these files stay in place when the Pod or the container restarts. They are removed only when you or the Operator delete them.</p>
 <div class="admonition tip">
@@ -20233,7 +20453,7 @@ If you want to exit from infinity loop you need to remove /var/lib/mysql/sleep-f
 </ul>
 <p>For example:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-&lt;N&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/bootstrap.log
-</code></pre></div></section><section class="print-page" id="pause-mysql-pod" heading-number="10.7"><h1 id="pause-mysql-pod-pause-a-mysql-pod">Pause a MySQL Pod<a class="headerlink" href="#pause-mysql-pod-pause-a-mysql-pod" title="Permanent link">&para;</a></h1>
+</code></pre></div></section><section class="print-page" id="pause-mysql-pod" heading-number="10.8"><h1 id="pause-mysql-pod-pause-a-mysql-pod">Pause a MySQL Pod<a class="headerlink" href="#pause-mysql-pod-pause-a-mysql-pod" title="Permanent link">&para;</a></h1>
 <p>Use the <code>sleep-forever</code> file in <code>/var/lib/mysql</code> when you need the MySQL container to stay up without <code>mysqld</code>, or when an unready Pod must report <code>Ready</code> so a rolling update can continue. See <a href="#datadir-special-files-sleep-forever"><code>sleep-forever</code></a> for what the file changes.</p>
 <div class="admonition tip">
 <p class="admonition-title">Use another container if <code>mysql</code> keeps crashing</p>
@@ -21031,7 +21251,7 @@ configuration options for the Percona Server for MySQL.</p>
 </tbody>
 </table>
 <h3 id="operator-mysqlautorecovery"><code>mysql.autoRecovery</code><a class="headerlink" href="#operator-mysqlautorecovery" title="Permanent link">&para;</a></h3>
-<p>Enables or disables the Operator from attempting to fix the issue in the event of a full cluster crash. See <a href="#crash-recovery">Recover from a full cluster crash</a> and <a href="#datadir-special-files-full-cluster-crash">the <code>full-cluster-crash</code> file</a>.</p>
+<p>Enables the Operator to recover the cluster automatically after a full cluster crash. Applies to clusters with Group Replication. If you omit the option, the Operator treats it as <code>false</code>. See <a href="#crash-recovery">Recover from a full cluster crash</a> and <a href="#datadir-special-files-full-cluster-crash">the <code>full-cluster-crash</code> file</a>.</p>
 <table>
 <thead>
 <tr>
@@ -28980,7 +29200,7 @@ true
 <ul>
 <li><code>Initializing</code>, <code>Ready</code> (matching the cluster state)</li>
 <li><code>ErrorReconcile</code> — cluster reconciliation failed; see the condition message</li>
-<li><code>FullClusterCrashDetected</code> — all Group Replication members have crash recovery files</li>
+<li><code>FullClusterCrashDetected</code> — at least one <code>Ready</code> Group Replication member has the <code>/var/lib/mysql/full-cluster-crash</code> file. See <a href="#crash-recovery">Recover from a full cluster crash</a></li>
 <li><code>ManualBootstrapRequested</code> — the cluster is waiting for external bootstrap</li>
 <li><code>ClusterSetMember</code> - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason <code>Primary</code> for the primary cluster and <code>Replica</code> for the replica cluster. A cluster created with the Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code> after the upgrade. Use the <code>ClusterSetMember</code> to see whether the cluster is the primary or a replica.</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
@@ -29032,12 +29252,16 @@ true
 <td><code>status.state</code> changed (for example, <code>initializing</code> → <code>ready</code>).</td>
 </tr>
 <tr>
-<td><code>ReconcileError</code></td>
+<td><code>ErrorReconcile</code></td>
 <td>Cluster reconciliation failed.</td>
 </tr>
 <tr>
 <td><code>FullClusterCrashDetected</code></td>
-<td>A full Group Replication cluster crash was detected.</td>
+<td>A full Group Replication cluster crash was detected. The Operator records this event on every reconciliation until the crash is resolved.</td>
+</tr>
+<tr>
+<td><code>FullClusterCrashRecovered</code></td>
+<td>The Operator rebooted the Group Replication cluster after a full cluster crash.</td>
 </tr>
 <tr>
 <td><code>AsyncReplicationNotReady</code></td>
@@ -32188,9 +32412,11 @@ and <a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji">
 
 .print-site-enumerate-headings #debug-backup-restore > h1:before { content: '10.5 ' }
 
-.print-site-enumerate-headings #datadir-special-files > h1:before { content: '10.6 ' }
+.print-site-enumerate-headings #crash-recovery > h1:before { content: '10.6 ' }
 
-.print-site-enumerate-headings #pause-mysql-pod > h1:before { content: '10.7 ' }
+.print-site-enumerate-headings #datadir-special-files > h1:before { content: '10.7 ' }
+
+.print-site-enumerate-headings #pause-mysql-pod > h1:before { content: '10.8 ' }
 
 .print-site-enumerate-headings #section-11 > h1:before { content: '11 ' }
 .print-site-enumerate-headings #section-11-1 > h1:before { content: '11.1 ' }

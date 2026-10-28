@@ -4234,6 +4234,34 @@
   
   
     <li class="md-nav__item">
+      <a href="crash-recovery.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recover from a full cluster crash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="datadir-special-files.html" class="md-nav__link">
         
   
@@ -5939,7 +5967,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ul>
 <p><img alt="image" src="assets/images/operator.svg" /></p>
 <ul>
-<li>In <strong>group replication</strong> clusters, the native group membership protocol automatically handles member removal, primary election, and topology recovery.</li>
+<li>In <strong>group replication</strong> clusters, the native group membership protocol automatically handles member removal, primary election and topology recovery. If the majority of members go down at the same time, the group can&rsquo;t recover on its own. The cluster enters the <code>error</code> state with the <code>FullClusterCrashDetected</code> reason. The Operator reboots it as described in <a href="crash-recovery.html">Recover from a full cluster crash</a>.</li>
 </ul>
 <p><img alt="image" src="assets/images/operator-GR.svg" /></p>
 <h3 id="client-connectivity">Client connectivity<a class="headerlink" href="#client-connectivity" title="Permanent link">&para;</a></h3>
@@ -5963,7 +5991,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 21, 2026 09:31:50 UTC">October 21, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 28, 2026 10:31:48 UTC">October 28, 2026</span>
       
         <br>
         Created:

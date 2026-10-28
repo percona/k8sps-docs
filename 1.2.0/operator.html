@@ -4046,6 +4046,34 @@
   
   
     <li class="md-nav__item">
+      <a href="crash-recovery.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recover from a full cluster crash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="datadir-special-files.html" class="md-nav__link">
         
   
@@ -16563,7 +16591,7 @@ configuration options for the Percona Server for MySQL.</p>
 </tbody>
 </table>
 <h3 id="mysqlautorecovery"><code>mysql.autoRecovery</code><a class="headerlink" href="#mysqlautorecovery" title="Permanent link">&para;</a></h3>
-<p>Enables or disables the Operator from attempting to fix the issue in the event of a full cluster crash. See <a href="crash-recovery.html">Recover from a full cluster crash</a> and <a href="datadir-special-files.html#full-cluster-crash">the <code>full-cluster-crash</code> file</a>.</p>
+<p>Enables the Operator to recover the cluster automatically after a full cluster crash. Applies to clusters with Group Replication. If you omit the option, the Operator treats it as <code>false</code>. See <a href="crash-recovery.html">Recover from a full cluster crash</a> and <a href="datadir-special-files.html#full-cluster-crash">the <code>full-cluster-crash</code> file</a>.</p>
 <table>
 <thead>
 <tr>
@@ -23148,7 +23176,7 @@ options for <a href="https://docs.percona.com/percona-toolkit/">Percona Toolkit 
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:58:31 UTC">October 27, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 28, 2026 10:31:48 UTC">October 28, 2026</span>
       
         <br>
         Created:

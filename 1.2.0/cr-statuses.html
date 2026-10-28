@@ -4046,6 +4046,34 @@
   
   
     <li class="md-nav__item">
+      <a href="crash-recovery.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recover from a full cluster crash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="datadir-special-files.html" class="md-nav__link">
         
   
@@ -6244,7 +6272,7 @@ true
 <ul>
 <li><code>Initializing</code>, <code>Ready</code> (matching the cluster state)</li>
 <li><code>ErrorReconcile</code> — cluster reconciliation failed; see the condition message</li>
-<li><code>FullClusterCrashDetected</code> — all Group Replication members have crash recovery files</li>
+<li><code>FullClusterCrashDetected</code> — at least one <code>Ready</code> Group Replication member has the <code>/var/lib/mysql/full-cluster-crash</code> file. See <a href="crash-recovery.html">Recover from a full cluster crash</a></li>
 <li><code>ManualBootstrapRequested</code> — the cluster is waiting for external bootstrap</li>
 <li><code>ClusterSetMember</code> - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason <code>Primary</code> for the primary cluster and <code>Replica</code> for the replica cluster. A cluster created with the Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code> after the upgrade. Use the <code>ClusterSetMember</code> to see whether the cluster is the primary or a replica.</li>
 <li><code>InnoDBClusterBootstrapped</code> — InnoDB Cluster metadata exists</li>
@@ -6296,12 +6324,16 @@ true
 <td><code>status.state</code> changed (for example, <code>initializing</code> → <code>ready</code>).</td>
 </tr>
 <tr>
-<td><code>ReconcileError</code></td>
+<td><code>ErrorReconcile</code></td>
 <td>Cluster reconciliation failed.</td>
 </tr>
 <tr>
 <td><code>FullClusterCrashDetected</code></td>
-<td>A full Group Replication cluster crash was detected.</td>
+<td>A full Group Replication cluster crash was detected. The Operator records this event on every reconciliation until the crash is resolved.</td>
+</tr>
+<tr>
+<td><code>FullClusterCrashRecovered</code></td>
+<td>The Operator rebooted the Group Replication cluster after a full cluster crash.</td>
 </tr>
 <tr>
 <td><code>AsyncReplicationNotReady</code></td>
@@ -6723,7 +6755,7 @@ true
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 27, 2026 08:48:06 UTC">October 27, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 28, 2026 10:31:48 UTC">October 28, 2026</span>
       
         <br>
         Created:
