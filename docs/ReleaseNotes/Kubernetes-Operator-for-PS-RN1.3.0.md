@@ -540,7 +540,7 @@ Percona Operators are designed for compatibility with all [CNCF-certified :octic
 
 --8<-- [start:platforms]
 
-* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.34 - 1.35
+* [Google Kubernetes Engine (GKE) :octicons-link-external-16:](https://cloud.google.com/kubernetes-engine) 1.34 - 1.36
 * [Amazon Elastic Kubernetes Service (EKS) :octicons-link-external-16:](https://aws.amazon.com/eks/) 1.34 - 1.37
 * [DigitalOcean Kubernetes Service (DOKS) :octicons-link-external-16:](https://docs.digitalocean.com/products/kubernetes/) 1.37
 * [OpenShift :octicons-link-external-16:](https://www.openshift.com) 4.19 - 4.22

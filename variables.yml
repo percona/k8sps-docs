@@ -37,7 +37,7 @@ certmanagerrecommended: '1.21.2'
 
 # Platforms
 
-gkerecommended: '1.35'
+gkerecommended: '1.36'
 eksrecommended: '1.37'
 openshiftrecommended: '4.22'
 minikuberecommended: '1.39.0'
