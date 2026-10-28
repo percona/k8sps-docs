@@ -6,3 +6,6 @@ site/
 .idea
 .cursor
 Claude outputs/
+
+.lycheecache
+lychee/
