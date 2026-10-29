@@ -351,5 +351,4 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 

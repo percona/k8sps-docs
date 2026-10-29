@@ -52,3 +52,7 @@ The upgrade includes the following steps.
 ## Update the Custom Resource, the database and components 
 
 {% include 'assets/fragments/update-db-commands.txt' %}
+
+## Post-upgrade steps
+
+If point-in-time recovery is enabled, take a new base backup after the upgrade to make it a new starting point for subsequent point-in-time recovery.
