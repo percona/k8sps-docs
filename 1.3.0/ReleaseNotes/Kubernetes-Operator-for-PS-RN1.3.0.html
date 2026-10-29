@@ -4873,6 +4873,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#take-a-new-base-backup-when-point-in-time-recovery-is-enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Take a new base backup when point-in-time recovery is enabled
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -6044,6 +6055,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#take-a-new-base-backup-when-point-in-time-recovery-is-enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Take a new base backup when point-in-time recovery is enabled
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -6530,6 +6552,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Set <code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code> to <code>true</code> to continue without backups. A failover then cannot recover transactions that remain on the old primary.</li>
 </ul>
 <p>Group Replication clusters are not part of this check.</p>
+<h3 id="take-a-new-base-backup-when-point-in-time-recovery-is-enabled">Take a new base backup when point-in-time recovery is enabled<a class="headerlink" href="#take-a-new-base-backup-when-point-in-time-recovery-is-enabled" title="Permanent link">&para;</a></h3>
+<p>If point-in-time recovery (PITR) is enabled, a recovery from a backup taken before the upgrade can fail with the following error:</p>
+<div class="highlight"><pre><span></span><code>54edf529-d2cc-11f1-aebd-668621c1d52d:1-94 --stop-datetime=2026-10-28T13:50:49]
+2026-10-28T13:52:40.183741217Z 0 [Info] [Recovery] streaming binlog binlogs1/binlog.000001
+2026-10-28T13:52:40.692443772Z 0 [Info] [Recovery] pitr failed: apply binlogs: mysql failed: exit status 1, stderr: ERROR 1396 (HY000) at line 1907: Operation ALTER USER failed for 'configurator'@'%'
+</code></pre></div>
+<p>Do one of the following:</p>
+<ul>
+<li>Take a new base backup after the upgrade. Use that backup as the starting point for later point-in-time recovery. This is the recommended option.</li>
+<li>Force the restore. Set <a href="../restore-cr.html#pitrforce"><code>pitr.force</code></a> to <code>true</code> on the restore object. This passes <code>--force</code> to the MySQL client and ignores SQL errors during binlog replay, which can hide data loss. See <a href="../backups-restore-pitr.html#ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay</a>.</li>
+</ul>
 <h2 id="release-highlights">Release highlights<a class="headerlink" href="#release-highlights" title="Permanent link">&para;</a></h2>
 <h3 id="automatic-mysql-configuration-tuning">Automatic MySQL configuration tuning<a class="headerlink" href="#automatic-mysql-configuration-tuning" title="Permanent link">&para;</a></h3>
 <p>By default, the Operator tunes only two settings from the MySQL Pod&rsquo;s memory limit: <code>innodb_buffer_pool_size</code> and <code>max_connections</code>. Every other setting uses the same server default, unless a database administrator (DBA) sets it by hand. Without that tuning, a cluster either keeps defaults that don&rsquo;t align with the Pod&rsquo;s allocated resources, or runs on manual settings that go stale when someone resizes the Pod.</p>
@@ -7085,7 +7118,7 @@ belongs to a ClusterSet. The Operator adds a finalizer so that delete does not l
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 11:04:11 UTC">October 29, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 13:47:52 UTC">October 29, 2026</span>
       
         <br>
         Created:
