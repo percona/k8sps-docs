@@ -25,47 +25,7 @@ For previous versions, refer to the [old releases documentation archive :octicon
 
 For the procedures in this tutorial, we assume that you have set up the `SmartUpdate` strategy to update the objects in your database cluster.
 
-### Before you start
-
-Before updating the database, complete the following preparation steps:
-
-1. Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the [Operator upgrade guide](update-operator.md).
-
-2. Check the [Custom Resource](operator.md) manifest configuration to ensure the following:
-
-    * `spec.updateStrategy` option is set to `SmartUpdate`
-    * `spec.upgradeOptions.apply` option is set to `Never` or `Disabled` (this means that the Operator will not carry on upgrades automatically)
-
-    ```yaml
-    ...
-    spec:
-      updateStrategy: SmartUpdate
-      upgradeOptions:
-        apply: Disabled
-        ...
-    ```
-
-3. Before selecting the update command, identify your current setup:
-
-    * **MySQL version**: Check your current `mysql.image` value in your Custom Resource
-    * **Replication type**: Check the `mysql.clusterType` option in your Custom Resource (`async` or `group-replication`)
-    * **Proxy type**: For async replication, you use HAProxy. For group replication, check if `proxy.haproxy.enabled` or `proxy.router.enabled` is set to `true` in your Custom Resource
-
-4. For `async` clusters, check that either `backups.enabled` is  `true` or you set the `unsafeFlags.asyncFailoverWithPossibleDataLoss`. See [If you upgrade an asynchronous cluster](#if-you-upgrade-an-asynchronous-cluster) for more information.
-5. We recommend to [update PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html) before upgrading PMM Client.
-
-#### If you upgrade an asynchronous cluster
-
-Version 1.3.0 requires backups for the [failover on asynchronous clusters](failover-async.md). After the Operator upgrade, reconciliation stops because status updates fail validation:
-
-```{.text .no-copy}
-PerconaServerMySQL.ps.percona.com "ps-cluster1" is invalid: spec: Invalid value: "object": no such key: unsafeFlags evaluating rule: Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
-```
-
-Before you upgrade, [enable and configure backups](backups-storage.md). To let reconciliation continue without backups, set [`unsafeFlags.asyncFailoverWithPossibleDataLoss`](operator.md#unsafeflagsasyncfailoverwithpossibledataloss) to `true`. Make sure you understand the tradeoffs.
-    
-Without backups, a failover cannot recover transactions that remain on the old primary.
-
+{% include 'assets/fragments/pre-upgrade-steps.txt' %}
 
 ### Update commands
 
