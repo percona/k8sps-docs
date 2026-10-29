@@ -20,7 +20,7 @@ You can create these unprivileged users in the following ways:
 
 ### Create users in the Custom Resource
 
-!!! admonition "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)
+!!! admonition "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 You can create users in Percona Server for MySQL via the `spec.users` subsection in the Custom Resource. This is called declarative user management.
 
