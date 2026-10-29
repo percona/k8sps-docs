@@ -54,14 +54,6 @@ Before updating the database, complete the following preparation steps:
 4. For `async` clusters, check that either `backups.enabled` is  `true` or you set the `unsafeFlags.asyncFailoverWithPossibleDataLoss`. See [If you upgrade an asynchronous cluster](#if-you-upgrade-an-asynchronous-cluster) for more information.
 5. We recommend to [update PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html) before upgrading PMM Client.
 
-#### If you use Binlog Server
-
-The new Binlog Server image 0.3.1 is incompatible with the previous version. To upgrade the Binlog Server you must start a fresh binlog collection. Here's how to do it:
-
-1. Stop point-in-time recovery binlog collection
-2. Make a new full backup
-3. Change the binlog storage settings in your cluster configuration to point to a new location. It can be a new bucket or a new prefix for the existing bucket
-
 #### If you upgrade an asynchronous cluster
 
 Version 1.3.0 requires backups for the [failover on asynchronous clusters](failover-async.md). After the Operator upgrade, reconciliation stops because status updates fail validation:
