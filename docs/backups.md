@@ -61,7 +61,7 @@ You can create backups in two ways:
 
 ## Set a waiting time for a backup to start 
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 You can fine-tune a backup queue by assigning a waiting time for a backup to start. 
 
@@ -71,7 +71,7 @@ This timer also covers a backup that is waiting because the cluster is not ready
 
 ## Suspend backups on an unhealthy cluster
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 Your database cluster can become unhealthy. For example, when one of the Pods crashes and restarts. The Operator monitors the database cluster state while a backup is running and suspends it for an unhealthy cluster to reduce the load on the cluster.
 

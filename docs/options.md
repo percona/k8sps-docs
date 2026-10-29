@@ -200,7 +200,7 @@ kubectl create -f deploy/mysql-secret.yaml
 
 ## Dynamic configuration
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 Some MySQL system
 are [dynamic :octicons-link-external-16:](https://dev.mysql.com/doc/refman/8.4/en/dynamic-system-variables.html) and you can change them at runtime while

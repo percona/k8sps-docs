@@ -225,7 +225,7 @@ To [encrypt backups](backups-encrypted.md) in object storage, create a separate 
 
 ## Configure TLS verification with custom certificates for S3 storage
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 You can use your organization's CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.
 

@@ -1,6 +1,6 @@
 # Log rotation
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 `logrotate` limits how large log files grow. Without rotation, the MySQL error log can fill the data volume.
 

@@ -1,6 +1,6 @@
 # Automatic configuration tuning
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 The Operator can calculate a full MySQL configuration in addition to `innodb_buffer_pool_size` and `max_connections`. The calculation is based on the CPU and memory you allocate to the MySQL container, the workload you run, and the MySQL version. You set those resources and the Operator sizes the database settings to match them. When the resources change, the Operator recalculates the settings accordingly.
 

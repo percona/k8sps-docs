@@ -95,7 +95,7 @@ To restore, use [Restore with point-in-time recovery](backups-restore-pitr.md).
 
 ## Binlog encryption
 
-!!! admonition "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! admonition "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 Binlog encryption gives you an extra protection layer that you
 control. This encrypts only the binlog copies in object storage. Binlog encryption is separate from [data-at-rest encryption](encryption.md) on the database and from [encrypted backups](backups-encrypted.md). Use it when you want a key you control, including on S3-compatible storage that has no server-side encryption.
@@ -121,7 +121,7 @@ Changing the active KEK affects only **new** files. Binlog Server does not re-en
     openssl rand -hex 16
     ```
 
-2. Create a Secret. Modify the example [`deploy/keyring-secret.yaml` :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/tree/v{{release}}/deploy/keyring-secret.yaml) manifest. Set:
+2. Create a Secret. Modify the example [`deploy/keyring-secret.yaml` :octicons-link-external-16:](https://github.com/percona/percona-server-mysql-operator/tree/v1.3.0/deploy/keyring-secret.yaml) manifest. Set:
 
     * `id` — identifier that `kekId` in the Custom Resource refers to
     * `cipher` — cipher used to wrap the DEK, in the format `AES-<128\|192\|256>-<mode>`. Supported modes: `ECB`, `CBC`, `CTR`, `GCM`
@@ -212,7 +212,7 @@ kubectl patch ps ps-cluster1 -n <namespace> --type merge \
 
 ## Verify TLS with a custom CA
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 You can use your organization's CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.
 

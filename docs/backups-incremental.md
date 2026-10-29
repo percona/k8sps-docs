@@ -56,7 +56,7 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 
 ## Speed up incremental backups with page tracking
 
-!!! admonition "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! admonition "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 Page tracking lets Percona XtraBackup copy only the InnoDB pages that changed since the last backup, instead of scanning every data file. The Operator installs the `mysqlbackup` component that this feature needs. For details, see [Take an incremental backup using page tracking :octicons-link-external-16:](https://docs.percona.com/percona-xtrabackup/latest/page-tracking.html).
 

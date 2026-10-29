@@ -1,6 +1,6 @@
 # Operator security builds
 
-!!! note "Version added: [1.3.0](ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)"
+!!! note "Version added: [1.3.0](ReleaseNotes/index.md)"
 
 The Operator has access to your cluster's credentials and other sensitive configuration. A vulnerability in the Operator image is a path to that data, even when your MySQL cluster itself is fully patched. **Security builds** close that gap on a release you already run, without waiting for the next Operator version or retesting a full upgrade.
 
