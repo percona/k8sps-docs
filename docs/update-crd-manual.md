@@ -1,10 +1,14 @@
 # Upgrade the Operator and CRD manually
 
-Before you start, export your namespace as an environment variable to simplify the configuration:
+## Before you start
+
+Export your namespace as an environment variable to simplify the configuration:
 
 ```bash
 export NAMESPACE=<my-namespace>
 ```
+
+## Upgrade the CRD and Operator Deployment
 
 The upgrade includes the following steps.
 
@@ -50,6 +54,10 @@ The upgrade includes the following steps.
 4. Update the Custom Resource, the database and components. This step ensures all new features and improvements of the latest release work well within your environment.
 
 ## Update the Custom Resource, the database and components 
+
+{% include 'assets/fragments/pre-upgrade-steps.txt' %}
+
+### Update steps
 
 {% include 'assets/fragments/update-db-commands.txt' %}
 
