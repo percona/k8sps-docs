@@ -10,7 +10,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Before you start, export your namespace as an environment variable to simplify the configuration:">
+        <meta name="description" content="Documentation">
       
       
         <meta name="author" content="Percona LLC">
@@ -3429,10 +3429,88 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#before-you-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before you start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrade-the-crd-and-operator-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade the CRD and Operator Deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#update-the-custom-resource-the-database-and-components" class="md-nav__link">
     <span class="md-ellipsis">
       
         Update the Custom Resource, the database and components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Update the Custom Resource, the database and components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-upgrade-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-upgrade steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-upgrade steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#if-you-upgrade-an-asynchronous-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you upgrade an asynchronous cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-upgrade-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-upgrade steps
       
     </span>
   </a>
@@ -5573,10 +5651,88 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#before-you-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before you start
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrade-the-crd-and-operator-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade the CRD and Operator Deployment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#update-the-custom-resource-the-database-and-components" class="md-nav__link">
     <span class="md-ellipsis">
       
         Update the Custom Resource, the database and components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Update the Custom Resource, the database and components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-upgrade-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-upgrade steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-upgrade steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#if-you-upgrade-an-asynchronous-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you upgrade an asynchronous cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-upgrade-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-upgrade steps
       
     </span>
   </a>
@@ -5614,9 +5770,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 
 
 <h1 id="upgrade-the-operator-and-crd-manually">Upgrade the Operator and CRD manually<a class="headerlink" href="#upgrade-the-operator-and-crd-manually" title="Permanent link">&para;</a></h1>
-<p>Before you start, export your namespace as an environment variable to simplify the configuration:</p>
+<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
+<p>Export your namespace as an environment variable to simplify the configuration:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>&lt;my-namespace&gt;
 </code></pre></div>
+<h2 id="upgrade-the-crd-and-operator-deployment">Upgrade the CRD and Operator Deployment<a class="headerlink" href="#upgrade-the-crd-and-operator-deployment" title="Permanent link">&para;</a></h2>
 <p>The upgrade includes the following steps.</p>
 <ol>
 <li>
@@ -5659,6 +5817,46 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 </ol>
 <h2 id="update-the-custom-resource-the-database-and-components">Update the Custom Resource, the database and components<a class="headerlink" href="#update-the-custom-resource-the-database-and-components" title="Permanent link">&para;</a></h2>
+<h3 id="pre-upgrade-steps">Pre-upgrade steps<a class="headerlink" href="#pre-upgrade-steps" title="Permanent link">&para;</a></h3>
+<p>Before updating the database, complete the following preparation steps:</p>
+<ol>
+<li>
+<p>Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the <a href="update-operator.html">Operator upgrade guide</a>.</p>
+</li>
+<li>
+<p>Check the <a href="operator.html">Custom Resource</a> manifest configuration to ensure the following:</p>
+<ul>
+<li><code>spec.updateStrategy</code> option is set to <code>SmartUpdate</code></li>
+<li><code>spec.upgradeOptions.apply</code> option is set to <code>Never</code> or <code>Disabled</code> (this means that the Operator will not carry on upgrades automatically)</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nn">...</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">updateStrategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SmartUpdate</span>
+<span class="w">  </span><span class="nt">upgradeOptions</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">apply</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Disabled</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+</li>
+<li>
+<p>Before selecting the update command, identify your current setup:</p>
+<ul>
+<li><strong>MySQL version</strong>: Check your current <code>mysql.image</code> value in your Custom Resource</li>
+<li><strong>Replication type</strong>: Check the <code>mysql.clusterType</code> option in your Custom Resource (<code>async</code> or <code>group-replication</code>)</li>
+<li><strong>Proxy type</strong>: For async replication, you use HAProxy. For group replication, check if <code>proxy.haproxy.enabled</code> or <code>proxy.router.enabled</code> is set to <code>true</code> in your Custom Resource</li>
+</ul>
+</li>
+<li>
+<p>For <code>async</code> clusters, check that either <code>backups.enabled</code> is  <code>true</code> or you set the <code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code>. See <a href="#if-you-upgrade-an-asynchronous-cluster">If you upgrade an asynchronous cluster</a> for more information.</p>
+</li>
+<li>We recommend to <a href="https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html">update PMM Server <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> before upgrading PMM Client.</li>
+</ol>
+<h4 id="if-you-upgrade-an-asynchronous-cluster">If you upgrade an asynchronous cluster<a class="headerlink" href="#if-you-upgrade-an-asynchronous-cluster" title="Permanent link">&para;</a></h4>
+<p>Version 1.3.0 requires backups for the <a href="failover-async.html">failover on asynchronous clusters</a>. After the Operator upgrade, reconciliation stops because status updates fail validation:</p>
+<div class="no-copy highlight"><pre><span></span><code>PerconaServerMySQL.ps.percona.com "ps-cluster1" is invalid: spec: Invalid value: "object": no such key: unsafeFlags evaluating rule: Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
+</code></pre></div>
+<p>Before you upgrade, <a href="backups-storage.html">enable and configure backups</a>. To let reconciliation continue without backups, set <a href="operator.html#unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code></a> to <code>true</code>. Make sure you understand the tradeoffs.</p>
+<p>Without backups, a failover cannot recover transactions that remain on the old primary.</p>
+<h3 id="update-steps">Update steps<a class="headerlink" href="#update-steps" title="Permanent link">&para;</a></h3>
 <p>Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.</p>
 <p>Find the image names <a href="images.html">in the list of certified images</a>.</p>
 <p>We recommend to update the PMM Server <strong>before</strong> the upgrade of PMM Client. If you haven&rsquo;t updated your PMM Server yet, exclude PMM Client from the list of images to update.</p>
@@ -5989,7 +6187,6 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <span class="s1">       "toolkit":{ "image": "percona/percona-toolkit:3.7.2-1" }</span>
 <span class="s1">   }}'</span>
 </code></pre></div>
-<p>After the upgrade, <a href="backups-pitr.html#enable-binlog-collection">enable point-in-time binlog collection</a>.</p>
 </li>
 </ul>
 </div>
@@ -5998,12 +6195,14 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </div>
 </div>
 </div>
+<h2 id="post-upgrade-steps">Post-upgrade steps<a class="headerlink" href="#post-upgrade-steps" title="Permanent link">&para;</a></h2>
+<p>If point-in-time recovery is enabled, take a new base backup after the upgrade to make it a new starting point for subsequent point-in-time recovery.</p>
 <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="April 14, 2026 10:57:53 UTC">April 14, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 15:37:22 UTC">October 29, 2026</span>
       
         <br>
         Created:
