@@ -5677,7 +5677,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 
 <h1 id="log-rotation">Log rotation<a class="headerlink" href="#log-rotation" title="Permanent link">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.html">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="ReleaseNotes/index.html">1.3.0</a></p>
 </div>
 <p><code>logrotate</code> limits how large log files grow. Without rotation, the MySQL error log can fill the data volume.</p>
 <p><code>logrotate</code> runs in a <code>logrotate</code> sidecar on every MySQL Pod when <a href="persistent-logging.html">persistent logging</a> is enabled. By default, it rotates MySQL logs under <code>/var/lib/mysql/log/*.log</code>, including <code>mysqld-error.log</code>. The rule uses the <code>nocreate</code> directive, so <code>logrotate</code> does not create a new log file. The <code>postrotate</code> script flushes the logs, and MySQL creates the new file.</p>
@@ -5792,7 +5792,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 19, 2026 17:23:42 UTC">October 19, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 16:37:56 UTC">October 29, 2026</span>
       
         <br>
         Created:

@@ -5805,7 +5805,7 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 </code></pre></div>
 <h2 id="speed-up-incremental-backups-with-page-tracking">Speed up incremental backups with page tracking<a class="headerlink" href="#speed-up-incremental-backups-with-page-tracking" title="Permanent link">¶</a></h2>
 <div class="admonition admonition">
-<p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.html">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="ReleaseNotes/index.html">1.3.0</a></p>
 </div>
 <p>Page tracking lets Percona XtraBackup copy only the InnoDB pages that changed since the last backup, instead of scanning every data file. The Operator installs the <code>mysqlbackup</code> component that this feature needs. For details, see <a href="https://docs.percona.com/percona-xtrabackup/latest/page-tracking.html">Take an incremental backup using page tracking <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
 <p>Enable page tracking by passing the <code>--page-tracking</code> flag in the <code>xtrabackup</code> container options. Set it on the <strong>storage</strong> so the whole chain uses it:</p>
@@ -5858,7 +5858,7 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 11:04:11 UTC">October 29, 2026</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="October 29, 2026 16:37:56 UTC">October 29, 2026</span>
       
         <br>
         Created:

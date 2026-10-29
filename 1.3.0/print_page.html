@@ -10015,7 +10015,9 @@ considered separately in the following sections.</p>
 <li>Manually in MySQL</li>
 </ul>
 <h3 id="users-create-users-in-the-custom-resource">Create users in the Custom Resource<a class="headerlink" href="#users-create-users-in-the-custom-resource" title="Permanent link">¶</a></h3>
-<p>!!! admonition “Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<div class="admonition admonition">
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
+</div>
 <p>You can create users in Percona Server for MySQL via the <code>spec.users</code> subsection in the Custom Resource. This is called declarative user management.</p>
 <p>You can change the <code>spec.users</code> section in the <code>deploy/cr.yaml</code> configuration file either at cluster creation time or adjust it later. For each user, you can specify:</p>
 <ul>
@@ -10577,14 +10579,14 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 </ul>
 <h2 id="backups-set-a-waiting-time-for-a-backup-to-start">Set a waiting time for a backup to start<a class="headerlink" href="#backups-set-a-waiting-time-for-a-backup-to-start" title="Permanent link">¶</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>You can fine-tune a backup queue by assigning a waiting time for a backup to start. </p>
 <p>Use the <a href="#operator-backupstartingdeadlineseconds"><code>backup.startingDeadlineSeconds</code></a> option in the <code>deploy/cr.yaml</code> file to set this time for all backups. Override it for an on-demand backup by setting the <a href="#backup-cr-startingdeadlineseconds"><code>startingDeadlineSeconds</code></a> option on the <code>PerconaServerMySQLBackup</code> object. If the Operator does not create the Job before this time expires, the backup state becomes <code>Error</code> with <code>stateDescription: backup did not start before startingDeadlineSeconds expired</code>.</p>
 <p>This timer also covers a backup that is waiting because the cluster is not ready. See <a href="#backups-suspend-backups-on-an-unhealthy-cluster">Suspend backups on an unhealthy cluster</a>.</p>
 <h2 id="backups-suspend-backups-on-an-unhealthy-cluster">Suspend backups on an unhealthy cluster<a class="headerlink" href="#backups-suspend-backups-on-an-unhealthy-cluster" title="Permanent link">¶</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>Your database cluster can become unhealthy. For example, when one of the Pods crashes and restarts. The Operator monitors the database cluster state while a backup is running and suspends it for an unhealthy cluster to reduce the load on the cluster.</p>
 <p>When the cluster is ready again, the Operator resumes the backup Job. Resuming a Job creates a new Pod, so the backup starts over from the beginning rather than continuing from where it stopped.</p>
@@ -10813,7 +10815,7 @@ storage alongside your normal backup configuration.</p>
 </div>
 <h2 id="backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage<a class="headerlink" href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage" title="Permanent link">¶</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>You can use your organization’s CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.</p>
 <p>You must run the Operator 1.3.0 and have a Custom Resource version (<code>spec.crVersion</code>) set to <code>1.3.0</code> or later.</p>
@@ -10943,7 +10945,7 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 </code></pre></div>
 <h2 id="backups-incremental-speed-up-incremental-backups-with-page-tracking">Speed up incremental backups with page tracking<a class="headerlink" href="#backups-incremental-speed-up-incremental-backups-with-page-tracking" title="Permanent link">¶</a></h2>
 <div class="admonition admonition">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>Page tracking lets Percona XtraBackup copy only the InnoDB pages that changed since the last backup, instead of scanning every data file. The Operator installs the <code>mysqlbackup</code> component that this feature needs. For details, see <a href="https://docs.percona.com/percona-xtrabackup/latest/page-tracking.html">Take an incremental backup using page tracking <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
 <p>Enable page tracking by passing the <code>--page-tracking</code> flag in the <code>xtrabackup</code> container options. Set it on the <strong>storage</strong> so the whole chain uses it:</p>
@@ -11039,7 +11041,7 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 </code></pre></div>
 <h2 id="backups-scheduled-view-backup-size">View backup size<a class="headerlink" href="#backups-scheduled-view-backup-size" title="Permanent link">¶</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>After a backup succeeds, the Operator records its size on the Backup object.</p>
 <p>The Backup object has two fields:</p>
@@ -11215,7 +11217,7 @@ xb-cron-ps-cluster2-gcp-20251107152047-9mgo5-gcp         1/1           9s       
 </code></pre></div>
 <h2 id="backups-ondemand-view-backup-size">View backup size<a class="headerlink" href="#backups-ondemand-view-backup-size" title="Permanent link">¶</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>After a backup succeeds, the Operator records its size on the Backup object.</p>
 <p>The Backup object has two fields:</p>
@@ -11561,7 +11563,7 @@ up to a specific transaction. Specify the target in the <code>PerconaServerMySQL
 <p>To restore, use <a href="#backups-restore-pitr">Restore with point-in-time recovery</a>. </p>
 <h2 id="backups-pitr-binlog-encryption">Binlog encryption<a class="headerlink" href="#backups-pitr-binlog-encryption" title="Permanent link">¶</a></h2>
 <div class="admonition admonition">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>Binlog encryption gives you an extra protection layer that you
 control. This encrypts only the binlog copies in object storage. Binlog encryption is separate from <a href="#encryption">data-at-rest encryption</a> on the database and from <a href="#backups-encrypted">encrypted backups</a>. Use it when you want a key you control, including on S3-compatible storage that has no server-side encryption.</p>
@@ -11661,7 +11663,7 @@ point-in-time recovery.</p>
 </code></pre></div>
 <h2 id="backups-pitr-verify-tls-with-a-custom-ca">Verify TLS with a custom CA<a class="headerlink" href="#backups-pitr-verify-tls-with-a-custom-ca" title="Permanent link">¶</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>You can use your organization’s CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.</p>
 <p>This setting is independent from <a href="#backups-storage-configure-tls-verification-with-custom-certificates-for-s3-storage">configuring custom certificates for a backup storage</a>. Configuring a custom CA for backups does not apply it to Binlog Server.</p>
@@ -13075,7 +13077,7 @@ vmagent-vm-k8s-victoria-metrics-k8s-stack-fbc86c9db-rz8wk   2/2     Running   0 
         </script>
         </head><body><h1 id="persistent-logging">Persistent logging<a class="headerlink" href="#persistent-logging-persistent-logging" title="Permanent link">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>In a distributed Kubernetes environment, it is often difficult to debug issues because container logs are tied to the lifecycle of individual Pods. If a Pod fails and restarts, its logs in stdout and stderr may be lost, making it hard to identify the root cause.</p>
 <p>Percona Operator for MySQL addresses this challenge with <strong>persistent logging</strong>. It keeps the MySQL error log on the data volume of individual Pods so you can still read it after a Pod restarts. A sidecar streams a copy to standard output for <code>kubectl logs</code>.</p>
@@ -13142,7 +13144,7 @@ vmagent-vm-k8s-victoria-metrics-k8s-stack-fbc86c9db-rz8wk   2/2     Running   0 
         </script>
         </head><body><h1 id="log-rotation">Log rotation<a class="headerlink" href="#logrotate-log-rotation" title="Permanent link">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p><code>logrotate</code> limits how large log files grow. Without rotation, the MySQL error log can fill the data volume.</p>
 <p><code>logrotate</code> runs in a <code>logrotate</code> sidecar on every MySQL Pod when <a href="#persistent-logging">persistent logging</a> is enabled. By default, it rotates MySQL logs under <code>/var/lib/mysql/log/*.log</code>, including <code>mysqld-error.log</code>. The rule uses the <code>nocreate</code> directive, so <code>logrotate</code> does not create a new log file. The <code>postrotate</code> script flushes the logs, and MySQL creates the new file.</p>
@@ -15103,7 +15105,7 @@ the Secret trigger a rolling restart. </p>
 </div>
 <h2 id="options-dynamic-configuration">Dynamic configuration<a class="headerlink" href="#options-dynamic-configuration" title="Permanent link">¶</a></h2>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>Some MySQL system
 are <a href="https://dev.mysql.com/doc/refman/8.4/en/dynamic-system-variables.html">dynamic <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> and you can change them at runtime while
@@ -15178,7 +15180,7 @@ doesn’t opt in.</p></body></html></section><section class="print-page" id="aut
         </script>
         </head><body><h1 id="automatic-configuration-tuning">Automatic configuration tuning<a class="headerlink" href="#autoconfig-automatic-configuration-tuning" title="Permanent link">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>The Operator can calculate a full MySQL configuration in addition to <code>innodb_buffer_pool_size</code> and <code>max_connections</code>. The calculation is based on the CPU and memory you allocate to the MySQL container, the workload you run, and the MySQL version. You set those resources and the Operator sizes the database settings to match them. When the resources change, the Operator recalculates the settings accordingly.</p>
 <p>This automatic configuration tuning gives you:</p>
@@ -18284,7 +18286,7 @@ However, OLM doesn’t modify the <code>PerconaServerMySQL</code> Custom Resourc
         </script>
         </head><body><h1 id="operator-security-builds">Operator security builds<a class="headerlink" href="#security-builds-operator-security-builds" title="Permanent link">¶</a></h1>
 <div class="admonition note">
-<p class="admonition-title">Version added: <a href="#releasenotes-kubernetes-operator-for-ps-rn1.3.0">1.3.0</a></p>
+<p class="admonition-title">Version added: <a href="#releasenotes-index">1.3.0</a></p>
 </div>
 <p>The Operator has access to your cluster’s credentials and other sensitive configuration. A vulnerability in the Operator image is a path to that data, even when your MySQL cluster itself is fully patched. <strong>Security builds</strong> close that gap on a release you already run, without waiting for the next Operator version or retesting a full upgrade.</p>
 <p>This page covers patching your current Operator version. To move to a newer Operator version instead, see <a href="#update-operator">Upgrade the Operator and CRD</a>.</p>
