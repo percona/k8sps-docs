@@ -1,10 +1,4 @@
-
-
-
-
-<!doctype html>
-<html lang="en" class="no-js">
-  <head>
+<!DOCTYPE html><html lang="en" class="no-js"><head>
     
   
       <meta charset="utf-8">
@@ -70,8 +64,8 @@
       
         
         
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
@@ -119,17 +113,23 @@
                  
                  
                  
-                 <meta property="og:type" content="website" />
-                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Install on OpenShift" />
+                 <meta property="og:type" content="website">
+                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Install on OpenShift">
                     <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/assets/images/kubernetes-operators.png">
                     <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/">
-                </head>
-                <body>
-                </body>
-              </html>
-
+                
               
-  </head>
+  <link href="assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
   
   
     
@@ -157,7 +157,7 @@
       
     </div>
     
-      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
         
       </div>
     
@@ -177,10 +177,10 @@
       <a href="https://docs.percona.com/percona-operators/" title="Percona Documentation home page">
         <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <mask id="a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-            <path d="M0 0h24v24H0z"/>
+            <path d="M0 0h24v24H0z"></path>
           </mask>
           <g mask="url(#a)">
-            <path d="m7.825 13 5.6 5.6L12 20l-8-8 8-8 1.425 1.4-5.6 5.6H20v2H7.825Z"/>
+            <path d="m7.825 13 5.6 5.6L12 20l-8-8 8-8 1.425 1.4-5.6 5.6H20v2H7.825Z"></path>
           </g>
         </svg>
         <span>Percona Operators Documentation</span>
@@ -188,19 +188,10 @@
     </div>
   </div>
 
-  <nav
-    class="md-header__inner md-grid"
-    aria-label="Header"
-  >
+  <nav class="md-header__inner md-grid" aria-label="Header">
 
     <!-- Link to home -->
-    <a
-      href="index.html"
-      title="Percona Operator for MySQL based on Percona Server for MySQL"
-      class="md-header__button md-logo"
-      aria-label="Percona Operator for MySQL based on Percona Server for MySQL"
-      data-md-component="logo"
-    >
+    <a href="index.html" title="Percona Operator for MySQL based on Percona Server for MySQL" class="md-header__button md-logo" aria-label="Percona Operator for MySQL based on Percona Server for MySQL" data-md-component="logo">
       
   <img src="assets/operators-logo.svg" alt="logo">
 
@@ -209,7 +200,7 @@
     <!-- Button to open drawer -->
     <label class="md-header__button md-icon" for="__drawer">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
     </label>
 
   <!-- Header title -->
@@ -240,30 +231,30 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Color theme set to Automatic. Click to change"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Color theme set to Automatic. Click to change" type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="Color theme set to Automatic. Click to change" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      <label class="md-header__button md-icon" title="Color theme set to Automatic. Click to change" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
       </label>
     
   
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Color theme set to Light Mode. Click to change"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="Color theme set to Light Mode. Click to change" type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="Color theme set to Light Mode. Click to change" for="__palette_2" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      <label class="md-header__button md-icon" title="Color theme set to Light Mode. Click to change" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
       </label>
     
   
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Color theme set to Dark Mode. Click to change"  type="radio" name="__palette" id="__palette_2">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="Color theme set to Dark Mode. Click to change" type="radio" name="__palette" id="__palette_2">
     
-      <label class="md-header__button md-icon" title="Color theme set to Dark Mode. Click to change" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      <label class="md-header__button md-icon" title="Color theme set to Dark Mode. Click to change" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
       </label>
     
   
@@ -283,7 +274,7 @@
     
       <label class="md-header__button md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
       </label>
 
       <!-- Search interface -->
@@ -291,24 +282,24 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
       <label class="md-search__icon md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
         </button>
       </nav>
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -327,7 +318,7 @@
         <a href="https://github.com/percona/k8sps-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
   </div>
   <div class="md-source__repository">
     percona/k8sps-docs
@@ -353,7 +344,7 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -374,7 +365,7 @@
       <a href="https://github.com/percona/k8sps-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
   </div>
   <div class="md-source__repository">
     percona/k8sps-docs
@@ -382,7 +373,7 @@
 </a>
     </div>
   
-  <ul class="md-nav__list" data-md-scrollfix>
+  <ul class="md-nav__list" data-md-scrollfix="">
     
       
       
@@ -453,7 +444,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -483,7 +474,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -619,7 +610,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
@@ -649,7 +640,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -722,7 +713,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
         
           
           <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
@@ -752,7 +743,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -972,7 +963,7 @@
   <span class="md-ellipsis">
     
   
-    What&rsquo;s next?
+    What’s next?
   
 
     
@@ -1010,7 +1001,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked="">
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -1040,7 +1031,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1190,7 +1181,7 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
       
         <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
@@ -1534,7 +1525,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1564,7 +1555,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1637,7 +1628,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3">
         
           
           <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
@@ -1667,7 +1658,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1880,7 +1871,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8">
         
           
           <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
@@ -1910,7 +1901,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2019,7 +2010,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_9">
         
           
           <label class="md-nav__link" for="__nav_6_3_9" id="__nav_6_3_9_label" tabindex="0">
@@ -2049,7 +2040,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2194,7 +2185,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4">
         
           
           <label class="md-nav__link" for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
@@ -2224,7 +2215,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2305,7 +2296,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5">
         
           
           <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
@@ -2335,7 +2326,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2451,7 +2442,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7">
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
@@ -2481,7 +2472,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2498,7 +2489,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1">
         
           
           <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
@@ -2528,7 +2519,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2665,7 +2656,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2">
         
           
           <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
@@ -2695,7 +2686,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2776,7 +2767,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3">
         
           
           <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
@@ -2806,7 +2797,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2943,7 +2934,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5">
         
           
           <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
@@ -2973,7 +2964,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3110,7 +3101,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_8">
         
           
           <label class="md-nav__link" for="__nav_7_8" id="__nav_7_8_label" tabindex="0">
@@ -3140,7 +3131,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3221,7 +3212,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_9">
         
           
           <label class="md-nav__link" for="__nav_7_9" id="__nav_7_9_label" tabindex="0">
@@ -3251,7 +3242,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3332,7 +3323,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10">
         
           
           <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
@@ -3362,7 +3353,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3478,7 +3469,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
@@ -3508,7 +3499,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3525,7 +3516,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1">
         
           
           <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
@@ -3555,7 +3546,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3600,7 +3591,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1_2">
         
           
           <label class="md-nav__link" for="__nav_8_1_2" id="__nav_8_1_2_label" tabindex="0">
@@ -3630,7 +3621,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3859,7 +3850,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3">
         
           
           <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
@@ -3889,7 +3880,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3949,7 +3940,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9">
         
           
           <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
@@ -3979,7 +3970,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4171,7 +4162,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10">
         
           
           <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
@@ -4201,7 +4192,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4449,7 +4440,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11">
         
           
           <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
@@ -4479,7 +4470,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4496,7 +4487,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1">
         
           
           <label class="md-nav__link" for="__nav_11_1" id="__nav_11_1_label" tabindex="0">
@@ -4526,7 +4517,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4691,7 +4682,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_2">
         
           
           <label class="md-nav__link" for="__nav_11_2" id="__nav_11_2_label" tabindex="0">
@@ -4721,7 +4712,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4858,7 +4849,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_5">
         
           
           <label class="md-nav__link" for="__nav_11_5" id="__nav_11_5_label" tabindex="0">
@@ -4888,7 +4879,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -5004,7 +4995,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12">
         
           
           <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
@@ -5034,7 +5025,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -5524,8 +5515,7 @@
                     <br>
                     <label class="md-nav__title" for="__drawer">
                       <a href="https://learn.percona.com/download-percona-operator-for-mysql" onclick="_gaq.push(['b._trackEvent', 'Percona Operator for
-                      MySQL', 'Download', 'Download Manual PerconaOperator for MySQL']);" class="md-nav__link md-nav__link--active"
-                      style="font-size: .7rem;">
+                      MySQL', 'Download', 'Download Manual PerconaOperator for MySQL']);" class="md-nav__link md-nav__link--active" style="font-size: .7rem;">
                       Download PDF
                       </a>
 
@@ -5536,7 +5526,7 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     <!-- Feedback Widget -->
@@ -5680,7 +5670,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       color: var(--md-default-fg-color);
       background: var(--md-default-bg-color);
       border: 0.05rem solid var(--md-default-fg-color--lightest);
-    " />
+    ">
 
 <button id="submit-feedback" style="
   padding: 5px 10px;
@@ -5766,7 +5756,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       <a href="https://github.com/percona/k8sps-docs/edit/main/docs/openshift.md" title="Edit this page on GitHub" class="edit-page-link">
         <span class="edit-page-icon">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
         </span>
         <span class="edit-page-text">Edit this page on GitHub</span>
       </a>
@@ -5775,11 +5765,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       <div class="banner-divider"></div>
   
       <!-- Contributing Guide below, smaller -->
-      <a href="https://github.com/percona/k8sps-docs/blob/main/CONTRIBUTING.md"
-         title="Contributing guide"
-         class="contrib-link"
-         target="_blank"
-         rel="noopener">
+      <a href="https://github.com/percona/k8sps-docs/blob/main/CONTRIBUTING.md" title="Contributing guide" class="contrib-link" target="_blank" rel="noopener">
         Contributing guide
       </a>
     </div>
@@ -5810,7 +5796,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
       
         <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
@@ -6092,82 +6078,82 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     
     <a href="https://github.com/percona/k8sps-docs/raw/main/docs/openshift.md" title="View source of this page" class="md-content__button md-icon">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
     </a>
   
 
 
-<h1 id="install-percona-server-for-mysql-on-openshift">Install Percona Server for MySQL on OpenShift<a class="headerlink" href="#install-percona-server-for-mysql-on-openshift" title="Permanent link">&para;</a></h1>
+<h1 id="install-percona-server-for-mysql-on-openshift">Install Percona Server for MySQL on OpenShift<a class="headerlink" href="#install-percona-server-for-mysql-on-openshift" title="Permanent link">¶</a></h1>
 <p>You can install Percona Operator for MySQL on OpenShift clusters. This makes it portable across hybrid clouds and it fully supports the Red Hat OpenShift lifecycle.</p>
 <p>To install Percona Server for MySQL on OpenShift means:</p>
 <ul>
 <li>Install Percona Operator for MySQL,</li>
 <li>Install Percona Server for MySQL using the Operator.</li>
 </ul>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
 <ul>
 <li>OpenShift cluster with administrative access</li>
 <li><code>oc</code> command-line tool installed</li>
 <li>Git client installed</li>
 </ul>
-<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
+<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">¶</a></h2>
 <p>Check the <a href="System-Requirements.html">System Requirements</a> to ensure your environment meets the necessary prerequisites.</p>
 <p>You can install Percona Operator for MySQL on OpenShift using either:</p>
 <ul>
-<li>The <a href="https://docs.redhat.com/en/documentation/openshift_container_platform/4.2/html/operators/understanding-the-operator-lifecycle-manager-olm#olm-overview_olm-understanding-olm">Operator Lifecycle Manager <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> web interface </li>
+<li>The <a href="https://docs.redhat.com/en/documentation/openshift_container_platform/4.2/html/operators/understanding-the-operator-lifecycle-manager-olm#olm-overview_olm-understanding-olm">Operator Lifecycle Manager <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> web interface </li>
 <li>The command-line interface</li>
 </ul>
 <p>Choose the method that best suits your needs. The web interface is recommended for beginners, while the CLI method offers more control and automation capabilities.</p>
-<h2 id="install-the-operator-via-the-operator-lifecycle-manager-olm">Install the Operator via the Operator Lifecycle Manager (OLM)<a class="headerlink" href="#install-the-operator-via-the-operator-lifecycle-manager-olm" title="Permanent link">&para;</a></h2>
-<p>Operator Lifecycle Manager (OLM) is a part of the <a href="https://github.com/operator-framework">Operator Framework <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> that allows you to install, update, and manage the Operators lifecycle on the OpenShift platform via the web interface.</p>
+<h2 id="install-the-operator-via-the-operator-lifecycle-manager-olm">Install the Operator via the Operator Lifecycle Manager (OLM)<a class="headerlink" href="#install-the-operator-via-the-operator-lifecycle-manager-olm" title="Permanent link">¶</a></h2>
+<p>Operator Lifecycle Manager (OLM) is a part of the <a href="https://github.com/operator-framework">Operator Framework <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> that allows you to install, update, and manage the Operators lifecycle on the OpenShift platform via the web interface.</p>
 <p>This tutorial provides guidelines for OpenShift v4.20. Follow closely the requirements for your OpenShift version.</p>
-<h3 id="prerequisites_1">Prerequisites<a class="headerlink" href="#prerequisites_1" title="Permanent link">&para;</a></h3>
+<h3 id="prerequisites_1">Prerequisites<a class="headerlink" href="#prerequisites_1" title="Permanent link">¶</a></h3>
 <p>Before you start, ensure you have the following:</p>
 <ol>
 <li>You can log in to the OpenShift console</li>
 <li>You have the ARN role assigned to your OLM user (for OpenShift 4.20).</li>
 </ol>
-<h3 id="install-the-operator-deployment">Install the Operator Deployment<a class="headerlink" href="#install-the-operator-deployment" title="Permanent link">&para;</a></h3>
+<h3 id="install-the-operator-deployment">Install the Operator Deployment<a class="headerlink" href="#install-the-operator-deployment" title="Permanent link">¶</a></h3>
 <p>Follow these steps to deploy the Operator and Percona Server for MySQL cluster:</p>
 <ol>
 <li>Login to the OpenShift console.</li>
 <li>Navigate to the Ecosystem -&gt; Software Catalog.</li>
 <li>
-<p>Search for &ldquo;Percona Operator for MySQL&rdquo;, select &ldquo;Percona Operator for MySQL based on Percona Server for MySQL&rdquo;. You may need to change the project for your user:</p>
-<p><img alt="image" src="assets/images/olm1.svg" /></p>
+<p>Search for “Percona Operator for MySQL”, select “Percona Operator for MySQL based on Percona Server for MySQL”. You may need to change the project for your user:</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/olm1.svg" data-desc-position="bottom"><img alt="image" src="assets/images/olm1.svg"></a></p>
 </li>
 <li>
-<p>Then click &ldquo;Continue&rdquo;, and &ldquo;Install&rdquo;.</p>
-<p><img alt="image" src="assets/images/olm1-1.svg" /></p>
+<p>Then click “Continue”, and “Install”.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/olm1-1.svg" data-desc-position="bottom"><img alt="image" src="assets/images/olm1-1.svg"></a></p>
 </li>
 <li>
 <p>A new page opens where you choose the Operator version and the Namespace / OpenShift project you would like to install the Operator into. You can create a namespace (an OpenShift project) right away by clicking the <strong>Create Project</strong> and filling in project details like name, display name and description.</p>
 <p>For OpenShift 4.20, you also need to specify the ARN role assigned to your user.</p>
 </li>
 <li>
-<p>Click &ldquo;Install&rdquo;</p>
-<p><img alt="image" src="assets/images/olm2.svg" /></p>
+<p>Click “Install”</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/olm2.svg" data-desc-position="bottom"><img alt="image" src="assets/images/olm2.svg"></a></p>
 </li>
 </ol>
 <p>You can track the install process on the Installed Operators page. The Operator should report the <strong>Succeeded</strong> status.</p>
-<h3 id="deploy-percona-server-for-mysql">Deploy Percona Server for MySQL<a class="headerlink" href="#deploy-percona-server-for-mysql" title="Permanent link">&para;</a></h3>
+<h3 id="deploy-percona-server-for-mysql">Deploy Percona Server for MySQL<a class="headerlink" href="#deploy-percona-server-for-mysql" title="Permanent link">¶</a></h3>
 <p>Now you can deploy Percona Server for MySQL</p>
 <ol>
 <li>Click the Operator you installed. </li>
 <li>On the Details page, find the <code>PerconaServerMySQL</code> Custom Resource</li>
-<li>Click &ldquo;Create instance&rdquo;</li>
+<li>Click “Create instance”</li>
 <li>Edit the Custom Resource manifest to fine-tune your cluster configuration. Refer to <a href="operator.html">Custom Resource reference</a> for the description of available options</li>
 <li>
-<p>Click &ldquo;Create&rdquo;</p>
-<p><img alt="image" src="assets/images/olm3.svg" /> </p>
+<p>Click “Create”</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/olm3.svg" data-desc-position="bottom"><img alt="image" src="assets/images/olm3.svg"></a> </p>
 </li>
 <li>
-<p>Upon successful installation, you should see the &ldquo;Ready&rdquo; status for the database cluster.</p>
-<p><img alt="image" src="assets/images/olm4.svg" /></p>
+<p>Upon successful installation, you should see the “Ready” status for the database cluster.</p>
+<p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/olm4.svg" data-desc-position="bottom"><img alt="image" src="assets/images/olm4.svg"></a></p>
 </li>
 </ol>
-<h2 id="install-the-operator-via-the-command-line-interface">Install the Operator via the command-line interface<a class="headerlink" href="#install-the-operator-via-the-command-line-interface" title="Permanent link">&para;</a></h2>
-<p>The following steps install the latest version of the Operator with default parameters. To install a specific version, replace the <code>v1.3.0</code> tag with your value. See the full list of tags <a href="https://github.com/percona/percona-server-mysql-operator/tags">in the Operator repository <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> on GitHub.</p>
+<h2 id="install-the-operator-via-the-command-line-interface">Install the Operator via the command-line interface<a class="headerlink" href="#install-the-operator-via-the-command-line-interface" title="Permanent link">¶</a></h2>
+<p>The following steps install the latest version of the Operator with default parameters. To install a specific version, replace the <code>v1.3.0</code> tag with your value. See the full list of tags <a href="https://github.com/percona/percona-server-mysql-operator/tags">in the Operator repository <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> on GitHub.</p>
 <p>To install the Operator with customized parameters, see <a href="custom-install.html">Install Percona Operator for MySQL with customized parameters</a>.</p>
 <p>Choose the approach that fits your needs:</p>
 <ul>
@@ -6175,7 +6161,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="#step-by-step-installation"><strong>Step-by-step install</strong></a> — Run each installation step separately. Use this when
  you want more control over the installation process or you need to customize the installation.</li>
 </ul>
-<h3 id="quick-install">Quick install<a class="headerlink" href="#quick-install" title="Permanent link">&para;</a></h3>
+<h3 id="quick-install">Quick install<a class="headerlink" href="#quick-install" title="Permanent link">¶</a></h3>
 <ol>
 <li>
 <p>Clone the <code>percona-server-mysql-operator</code> repository and change the directory to <code>percona-server-mysql-operator</code>. </p>
@@ -6217,9 +6203,9 @@ deployment.apps/percona-server-mysql-operator serverside-applied
 </details>
 </li>
 </ol>
-<h3 id="step-by-step-installation">Step-by-step installation<a class="headerlink" href="#step-by-step-installation" title="Permanent link">&para;</a></h3>
+<h3 id="step-by-step-installation">Step-by-step installation<a class="headerlink" href="#step-by-step-installation" title="Permanent link">¶</a></h3>
 <p>This section splits the installation flow into separate steps giving you more control over the process.</p>
-<h4 id="step-1-clone-the-repository">Step 1: Clone the repository<a class="headerlink" href="#step-1-clone-the-repository" title="Permanent link">&para;</a></h4>
+<h4 id="step-1-clone-the-repository">Step 1: Clone the repository<a class="headerlink" href="#step-1-clone-the-repository" title="Permanent link">¶</a></h4>
 <p>Use the following commands to clone the <code>percona-server-mysql-operator</code> repository and change the directory to <code>percona-server-mysql-operator</code>. </p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -6228,52 +6214,52 @@ deployment.apps/percona-server-mysql-operator serverside-applied
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 <span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
 </code></pre></div>
-<h4 id="step-2-create-the-custom-resource-definition">Step 2: Create the Custom Resource Definition<a class="headerlink" href="#step-2-create-the-custom-resource-definition" title="Permanent link">&para;</a></h4>
+<h4 id="step-2-create-the-custom-resource-definition">Step 2: Create the Custom Resource Definition<a class="headerlink" href="#step-2-create-the-custom-resource-definition" title="Permanent link">¶</a></h4>
 <p>At this step you must create the Custom Resource Definition for Percona Operator for MySQL from the <code>deploy/crd.yaml</code> file.</p>
-<p>The Custom Resource Definition extends the standard set of resources which Kubernetes &ldquo;knows&rdquo; about with new items.</p>
+<p>The Custom Resource Definition extends the standard set of resources which Kubernetes “knows” about with new items.</p>
 <p>You create the Custom Resource Definition only once. It is not bound to a specific namespace and all other deployments will use this Custom Resource Definition. </p>
 <p>Use the following command to create the Custom Resource Definition:</p>
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/crd.yaml
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This step requires cluster-admin privileges. If you&rsquo;re using a non-privileged user, you&rsquo;ll need to set up additional permissions.</p>
+<p>This step requires cluster-admin privileges. If you’re using a non-privileged user, you’ll need to set up additional permissions.</p>
 </div>
-<h4 id="step-3-optional-set-up-user-permissions">Step 3: (optional) Set up user permissions<a class="headerlink" href="#step-3-optional-set-up-user-permissions" title="Permanent link">&para;</a></h4>
-<p>If you&rsquo;re using a non-privileged user, grant the required permissions by applying the following clusterrole:</p>
+<h4 id="step-3-optional-set-up-user-permissions">Step 3: (optional) Set up user permissions<a class="headerlink" href="#step-3-optional-set-up-user-permissions" title="Permanent link">¶</a></h4>
+<p>If you’re using a non-privileged user, grant the required permissions by applying the following clusterrole:</p>
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>ps-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>perconaservermysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
 oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </span>add-cluster-role-to-user<span class="w"> </span>ps-admin<span class="w"> </span>&lt;some-user&gt;
 </code></pre></div>
 <p>If you have a <a href="https://
     docs.cert-manager.io/en/release-0.8/
     getting-started/install/openshift.
-    html">cert-manager<br />
-<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> installed, add these permissions to manage certificates with a 
+    html">cert-manager<br>
+<span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> installed, add these permissions to manage certificates with a 
     non-privileged user:</p>
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>cert-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
 oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </span>add-cluster-role-to-user<span class="w"> </span>cert-admin<span class="w"> </span>&lt;some-user&gt;
 </code></pre></div>
-<h4 id="step-4-create-a-project">Step 4: Create a project<a class="headerlink" href="#step-4-create-a-project" title="Permanent link">&para;</a></h4>
+<h4 id="step-4-create-a-project">Step 4: Create a project<a class="headerlink" href="#step-4-create-a-project" title="Permanent link">¶</a></h4>
 <p>A project in OpenShift corresponds to a Kubernetes namespace. When you create a new project, you isolate workloads in it. </p>
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>new-project<span class="w"> </span>ps
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<p>Now using project &ldquo;ps&rdquo; on server &ldquo;https://api.openshift-4-15-my-cluster.example.com:6443&rdquo;.</p>
+<p>Now using project “ps” on server “https://api.openshift-4-15-my-cluster.example.com:6443”.</p>
 </details>
 <p>The command automatically sets context to this project so that all further resources are created in it.</p>
-<h4 id="step-5-configure-rbac">Step 5: Configure RBAC<a class="headerlink" href="#step-5-configure-rbac" title="Permanent link">&para;</a></h4>
+<h4 id="step-5-configure-rbac">Step 5: Configure RBAC<a class="headerlink" href="#step-5-configure-rbac" title="Permanent link">¶</a></h4>
 <p>Role-Based Access Control (RBAC) manages resource access in OpenShift. The Operator needs specific permissions to run Percona Server for MySQL properly. These permissions are defined within roles. </p>
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/rbac.yaml
 </code></pre></div>
-<h4 id="step-6-deploy-the-operator">Step 6: Deploy the Operator<a class="headerlink" href="#step-6-deploy-the-operator" title="Permanent link">&para;</a></h4>
+<h4 id="step-6-deploy-the-operator">Step 6: Deploy the Operator<a class="headerlink" href="#step-6-deploy-the-operator" title="Permanent link">¶</a></h4>
 <p>Now you can deploy the Operator with the following command:</p>
 <div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/operator.yaml
 </code></pre></div>
-<h3 id="install-percona-server-for-mysql">Install Percona Server for MySQL<a class="headerlink" href="#install-percona-server-for-mysql" title="Permanent link">&para;</a></h3>
+<h3 id="install-percona-server-for-mysql">Install Percona Server for MySQL<a class="headerlink" href="#install-percona-server-for-mysql" title="Permanent link">¶</a></h3>
 <p>After installing the Operator, you can deploy Percona Server for MySQL. This section guides you through the process of setting up secrets, certificates, and creating your first cluster.</p>
-<h4 id="step-1-configure-secrets-optional">Step 1: Configure secrets (optional)<a class="headerlink" href="#step-1-configure-secrets-optional" title="Permanent link">&para;</a></h4>
-<p>By default, the Operator generates users Secrets automatically, so you don&rsquo;t have to do anything. Yet if you wish to use your own Secrets, here&rsquo;s how:</p>
+<h4 id="step-1-configure-secrets-optional">Step 1: Configure secrets (optional)<a class="headerlink" href="#step-1-configure-secrets-optional" title="Permanent link">¶</a></h4>
+<p>By default, the Operator generates users Secrets automatically, so you don’t have to do anything. Yet if you wish to use your own Secrets, here’s how:</p>
 <ol>
 <li>
 <p>Edit the <code>deploy/secrets.yaml</code> file to set up your MySQL users and passwords:</p>
@@ -6297,15 +6283,15 @@ oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </sp
 </code></pre></div>
 </li>
 </ol>
-<h4 id="step-2-configure-certificates-optional">Step 2: Configure certificates (optional)<a class="headerlink" href="#step-2-configure-certificates-optional" title="Permanent link">&para;</a></h4>
-<p>The Operator handles certificate generation automatically so don&rsquo;t have to do anything. However, if you need custom certificates:</p>
+<h4 id="step-2-configure-certificates-optional">Step 2: Configure certificates (optional)<a class="headerlink" href="#step-2-configure-certificates-optional" title="Permanent link">¶</a></h4>
+<p>The Operator handles certificate generation automatically so don’t have to do anything. However, if you need custom certificates:</p>
 <ol>
 <li>Generate your certificates</li>
 <li>Create a secret with your certificates</li>
 <li>Reference the secret in your cluster configuration</li>
 </ol>
 <p>See <a href="TLS.html">TLS Configuration</a> for detailed instructions.</p>
-<h4 id="step-3-deploy-the-database-cluster">Step 3: Deploy the database cluster<a class="headerlink" href="#step-3-deploy-the-database-cluster" title="Permanent link">&para;</a></h4>
+<h4 id="step-3-deploy-the-database-cluster">Step 3: Deploy the database cluster<a class="headerlink" href="#step-3-deploy-the-database-cluster" title="Permanent link">¶</a></h4>
 <ol>
 <li>
 <p>To deploy Percona Server for MySQL cluster means to create a Custom Resource for it in OpenShift. This Custom Resource uses the Percona Server for MySQL Operator, which automates the deployment, scaling, and management of MySQL clusters.</p>
@@ -6331,9 +6317,9 @@ ps-cluster1   group-replication   ps-cluster1-haproxy.nastena1   ready   3      
 <p>The <code>ready</code> status indicates that your cluster is fully operational.</p>
 </li>
 </ol>
-<h2 id="verify-the-cluster-operation">Verify the cluster operation<a class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">&para;</a></h2>
+<h2 id="verify-the-cluster-operation">Verify the cluster operation<a class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">¶</a></h2>
 <p>To connect to Percona Server for MySQL, use the connection Secret that the Operator creates for the <code>root</code> user. It is named <code>&lt;cluster_name&gt;-psuser-root</code> (by default, <code>ps-cluster1-psuser-root</code>) and contains hostnames, ports, credentials, and ready-to-use connection URIs. Read <a href="connection-secrets.html">Connection secrets</a> for the full reference.</p>
-<p>Here&rsquo;s how to connect:</p>
+<p>Here’s how to connect:</p>
 <ol>
 <li>
 <p>Export the namespace, cluster name and the Secret name as environment variables:</p>
@@ -6369,7 +6355,7 @@ oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </sp
     The command will look different depending on whether the cluster uses load
     balancing with <a href="haproxy-conf.html">HAProxy</a> (the default behavior) or uses
     <a href="router-conf.html">MySQL Router</a> (can be used with Group Replication clusters):</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
@@ -6418,7 +6404,7 @@ mysql&gt;
 </details>
 </li>
 </ol>
-<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">¶</a></h2>
 <p><a class="md-button" href="backups.html">Configure Backup and Restore</a>
 <a class="md-button" href="monitoring.html">Set up monitoring</a>
 <a class="md-button" href="scaling.html">Scale your cluster</a></p>
@@ -6478,9 +6464,9 @@ mysql&gt;
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
-          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
   Back to top
 </button>
         
@@ -6492,7 +6478,7 @@ mysql&gt;
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
     <div class="md-copyright__highlight">
- <a href='https://percona.com' target='_blank'>Percona LLC and/or its affiliates, </a> &copy; 2026
+ <a href="https://percona.com" target="_blank">Percona LLC and/or its affiliates, </a> © 2026
  — <a href="#" onclick="Osano.cm.showDrawer('osano-cm-dom-info-dialog-open')">Cookie Preferences</a>
     </div>
   
@@ -6538,23 +6524,14 @@ mysql&gt;
       
         <script src="js/posthog-version.js"></script>
       
+        <script src="js/diagram-zoom.js"></script>
+      
         <script src="js/open_in_new_tab.js"></script>
       
     
-              <script
-                id="kapa-widget-script"
-                async
-                data-osano="ESSENTIAL"
-                src="https://widget.kapa.ai/kapa-widget.bundle.js"
-                data-website-id="0e0d55cf-6370-4a6d-a987-96670a7fe935"
-                data-button-hide="true"
-                data-project-name="Percona"
-                data-modal-title="Percona AI Assistant"
-                font-size="0.875rem"
-                data-modal-disclaimer="The **Percona AI Assistant** helps you find simple, clear answers to your Percona questions using [official documentation](https://docs.percona.com/), resolved [forum posts](https://forums.percona.com/) and [blog posts](https://www.percona.com/blog/). Note, do not enter personal or confidential information. Before using Percona AI assistant, read the [Legal Notice](https://docs.percona.com/percona-operator-for-mysql/latest/legal-notice.html)."
-                data-modal-example-questions="How do I deploy Percona Operator for MySQL?, How do I connect my application to the Percona Server for MySQL cluster?, How do I upgrade Percona Operator for MySQL?, How do I configure automated backups?, What's new in the latest release?"
-                data-project-logo="https://docs.percona.com/percona-operator-for-mysql/latest/assets/percona-logomark-one-color-dark.png"
-              ></script>
+              <script id="kapa-widget-script" async="" data-osano="ESSENTIAL" src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="0e0d55cf-6370-4a6d-a987-96670a7fe935" data-button-hide="true" data-project-name="Percona" data-modal-title="Percona AI Assistant" font-size="0.875rem" data-modal-disclaimer="The **Percona AI Assistant** helps you find simple, clear answers to your Percona questions using [official documentation](https://docs.percona.com/), resolved [forum posts](https://forums.percona.com/) and [blog posts](https://www.percona.com/blog/). Note, do not enter personal or confidential information. Before using Percona AI assistant, read the [Legal Notice](https://docs.percona.com/percona-operator-for-mysql/latest/legal-notice.html)." data-modal-example-questions="How do I deploy Percona Operator for MySQL?, How do I connect my application to the Percona Server for MySQL cluster?, How do I upgrade Percona Operator for MySQL?, How do I configure automated backups?, What's new in the latest release?" data-project-logo="https://docs.percona.com/percona-operator-for-mysql/latest/assets/percona-logomark-one-color-dark.png"></script>
               
-  </body>
-</html>
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

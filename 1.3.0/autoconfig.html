@@ -1,10 +1,4 @@
-
-
-
-
-<!doctype html>
-<html lang="en" class="no-js">
-  <head>
+<!DOCTYPE html><html lang="en" class="no-js"><head>
     
   
       <meta charset="utf-8">
@@ -70,8 +64,8 @@
       
         
         
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
@@ -119,17 +113,23 @@
                  
                  
                  
-                 <meta property="og:type" content="website" />
-                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Automatic configuration tuning" />
+                 <meta property="og:type" content="website">
+                 <meta property="og:title" content="Percona Operator for MySQL based on Percona Server for MySQL - Automatic configuration tuning">
                     <meta property="og:image" content="https://docs.percona.com/percona-operator-for-mysql/assets/images/kubernetes-operators.png">
                     <meta property="og:url" content="https://docs.percona.com/percona-operator-for-mysql/">
-                </head>
-                <body>
-                </body>
-              </html>
-
+                
               
-  </head>
+  <link href="assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
   
   
     
@@ -157,7 +157,7 @@
       
     </div>
     
-      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
         
       </div>
     
@@ -177,10 +177,10 @@
       <a href="https://docs.percona.com/percona-operators/" title="Percona Documentation home page">
         <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <mask id="a" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-            <path d="M0 0h24v24H0z"/>
+            <path d="M0 0h24v24H0z"></path>
           </mask>
           <g mask="url(#a)">
-            <path d="m7.825 13 5.6 5.6L12 20l-8-8 8-8 1.425 1.4-5.6 5.6H20v2H7.825Z"/>
+            <path d="m7.825 13 5.6 5.6L12 20l-8-8 8-8 1.425 1.4-5.6 5.6H20v2H7.825Z"></path>
           </g>
         </svg>
         <span>Percona Operators Documentation</span>
@@ -188,19 +188,10 @@
     </div>
   </div>
 
-  <nav
-    class="md-header__inner md-grid"
-    aria-label="Header"
-  >
+  <nav class="md-header__inner md-grid" aria-label="Header">
 
     <!-- Link to home -->
-    <a
-      href="index.html"
-      title="Percona Operator for MySQL based on Percona Server for MySQL"
-      class="md-header__button md-logo"
-      aria-label="Percona Operator for MySQL based on Percona Server for MySQL"
-      data-md-component="logo"
-    >
+    <a href="index.html" title="Percona Operator for MySQL based on Percona Server for MySQL" class="md-header__button md-logo" aria-label="Percona Operator for MySQL based on Percona Server for MySQL" data-md-component="logo">
       
   <img src="assets/operators-logo.svg" alt="logo">
 
@@ -209,7 +200,7 @@
     <!-- Button to open drawer -->
     <label class="md-header__button md-icon" for="__drawer">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
     </label>
 
   <!-- Header title -->
@@ -240,30 +231,30 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Color theme set to Automatic. Click to change"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo" aria-label="Color theme set to Automatic. Click to change" type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="Color theme set to Automatic. Click to change" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      <label class="md-header__button md-icon" title="Color theme set to Automatic. Click to change" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"></path></svg>
       </label>
     
   
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Color theme set to Light Mode. Click to change"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="Color theme set to Light Mode. Click to change" type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="Color theme set to Light Mode. Click to change" for="__palette_2" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      <label class="md-header__button md-icon" title="Color theme set to Light Mode. Click to change" for="__palette_2" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
       </label>
     
   
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Color theme set to Dark Mode. Click to change"  type="radio" name="__palette" id="__palette_2">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom" aria-label="Color theme set to Dark Mode. Click to change" type="radio" name="__palette" id="__palette_2">
     
-      <label class="md-header__button md-icon" title="Color theme set to Dark Mode. Click to change" for="__palette_0" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      <label class="md-header__button md-icon" title="Color theme set to Dark Mode. Click to change" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
       </label>
     
   
@@ -283,7 +274,7 @@
     
       <label class="md-header__button md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
       </label>
 
       <!-- Search interface -->
@@ -291,24 +282,24 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
       <label class="md-search__icon md-icon" for="__search">
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
         
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
         </button>
       </nav>
       
     </form>
     <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
             Initializing search
@@ -327,7 +318,7 @@
         <a href="https://github.com/percona/k8sps-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
   </div>
   <div class="md-source__repository">
     percona/k8sps-docs
@@ -353,7 +344,7 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -374,7 +365,7 @@
       <a href="https://github.com/percona/k8sps-docs" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
   </div>
   <div class="md-source__repository">
     percona/k8sps-docs
@@ -382,7 +373,7 @@
 </a>
     </div>
   
-  <ul class="md-nav__list" data-md-scrollfix>
+  <ul class="md-nav__list" data-md-scrollfix="">
     
       
       
@@ -453,7 +444,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3">
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -483,7 +474,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -619,7 +610,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
@@ -649,7 +640,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -722,7 +713,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3">
         
           
           <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
@@ -752,7 +743,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -972,7 +963,7 @@
   <span class="md-ellipsis">
     
   
-    What&rsquo;s next?
+    What’s next?
   
 
     
@@ -1008,7 +999,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5">
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -1038,7 +1029,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1230,7 +1221,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6">
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
@@ -1260,7 +1251,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1333,7 +1324,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3">
         
           
           <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
@@ -1363,7 +1354,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1576,7 +1567,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_8">
         
           
           <label class="md-nav__link" for="__nav_6_3_8" id="__nav_6_3_8_label" tabindex="0">
@@ -1606,7 +1597,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1715,7 +1706,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_9">
         
           
           <label class="md-nav__link" for="__nav_6_3_9" id="__nav_6_3_9_label" tabindex="0">
@@ -1745,7 +1736,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -1890,7 +1881,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4">
         
           
           <label class="md-nav__link" for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
@@ -1920,7 +1911,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2001,7 +1992,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5">
         
           
           <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
@@ -2031,7 +2022,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2149,7 +2140,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked="">
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
@@ -2179,7 +2170,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2196,7 +2187,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_1">
         
           
           <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
@@ -2226,7 +2217,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2363,7 +2354,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2">
         
           
           <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
@@ -2393,7 +2384,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2474,7 +2465,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3">
         
           
           <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
@@ -2504,7 +2495,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2643,7 +2634,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" checked="">
         
           
           <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
@@ -2673,7 +2664,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -2767,7 +2758,7 @@
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
       
         <li class="md-nav__item">
   <a href="#availability" class="md-nav__link">
@@ -3024,7 +3015,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_8">
         
           
           <label class="md-nav__link" for="__nav_7_8" id="__nav_7_8_label" tabindex="0">
@@ -3054,7 +3045,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3135,7 +3126,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_9">
         
           
           <label class="md-nav__link" for="__nav_7_9" id="__nav_7_9_label" tabindex="0">
@@ -3165,7 +3156,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3246,7 +3237,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_10">
         
           
           <label class="md-nav__link" for="__nav_7_10" id="__nav_7_10_label" tabindex="0">
@@ -3276,7 +3267,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3392,7 +3383,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
@@ -3422,7 +3413,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3439,7 +3430,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1">
         
           
           <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
@@ -3469,7 +3460,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3514,7 +3505,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1_2">
         
           
           <label class="md-nav__link" for="__nav_8_1_2" id="__nav_8_1_2_label" tabindex="0">
@@ -3544,7 +3535,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3773,7 +3764,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3">
         
           
           <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
@@ -3803,7 +3794,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -3863,7 +3854,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9">
         
           
           <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
@@ -3893,7 +3884,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4085,7 +4076,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10">
         
           
           <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
@@ -4115,7 +4106,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4363,7 +4354,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11">
         
           
           <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
@@ -4393,7 +4384,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4410,7 +4401,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_1">
         
           
           <label class="md-nav__link" for="__nav_11_1" id="__nav_11_1_label" tabindex="0">
@@ -4440,7 +4431,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4605,7 +4596,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_2">
         
           
           <label class="md-nav__link" for="__nav_11_2" id="__nav_11_2_label" tabindex="0">
@@ -4635,7 +4626,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4772,7 +4763,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11_5">
         
           
           <label class="md-nav__link" for="__nav_11_5" id="__nav_11_5_label" tabindex="0">
@@ -4802,7 +4793,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -4918,7 +4909,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12">
         
           
           <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
@@ -4948,7 +4939,7 @@
   
 
           </label>
-          <ul class="md-nav__list" data-md-scrollfix>
+          <ul class="md-nav__list" data-md-scrollfix="">
             
               
                 
@@ -5438,8 +5429,7 @@
                     <br>
                     <label class="md-nav__title" for="__drawer">
                       <a href="https://learn.percona.com/download-percona-operator-for-mysql" onclick="_gaq.push(['b._trackEvent', 'Percona Operator for
-                      MySQL', 'Download', 'Download Manual PerconaOperator for MySQL']);" class="md-nav__link md-nav__link--active"
-                      style="font-size: .7rem;">
+                      MySQL', 'Download', 'Download Manual PerconaOperator for MySQL']);" class="md-nav__link md-nav__link--active" style="font-size: .7rem;">
                       Download PDF
                       </a>
 
@@ -5450,7 +5440,7 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     <!-- Feedback Widget -->
@@ -5594,7 +5584,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       color: var(--md-default-fg-color);
       background: var(--md-default-bg-color);
       border: 0.05rem solid var(--md-default-fg-color--lightest);
-    " />
+    ">
 
 <button id="submit-feedback" style="
   padding: 5px 10px;
@@ -5680,7 +5670,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       <a href="https://github.com/percona/k8sps-docs/edit/main/docs/autoconfig.md" title="Edit this page on GitHub" class="edit-page-link">
         <span class="edit-page-icon">
           
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
         </span>
         <span class="edit-page-text">Edit this page on GitHub</span>
       </a>
@@ -5689,11 +5679,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       <div class="banner-divider"></div>
   
       <!-- Contributing Guide below, smaller -->
-      <a href="https://github.com/percona/k8sps-docs/blob/main/CONTRIBUTING.md"
-         title="Contributing guide"
-         class="contrib-link"
-         target="_blank"
-         rel="noopener">
+      <a href="https://github.com/percona/k8sps-docs/blob/main/CONTRIBUTING.md" title="Contributing guide" class="contrib-link" target="_blank" rel="noopener">
         Contributing guide
       </a>
     </div>
@@ -5724,7 +5710,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
       
         <li class="md-nav__item">
   <a href="#availability" class="md-nav__link">
@@ -5918,12 +5904,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     
     <a href="https://github.com/percona/k8sps-docs/raw/main/docs/autoconfig.md" title="View source of this page" class="md-content__button md-icon">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"></path></svg>
     </a>
   
 
 
-<h1 id="automatic-configuration-tuning">Automatic configuration tuning<a class="headerlink" href="#automatic-configuration-tuning" title="Permanent link">&para;</a></h1>
+<h1 id="automatic-configuration-tuning">Automatic configuration tuning<a class="headerlink" href="#automatic-configuration-tuning" title="Permanent link">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.html">1.3.0</a></p>
 </div>
@@ -5934,21 +5920,21 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Effective resource utilization – you pay only for what you use</li>
 <li>Updated settings when you change <code>mysql.resources</code> or the workload profile</li>
 </ul>
-<p>The Operator uses the <a href="https://github.com/Tusamarco/mysqloperatorcalculator">mysqloperatorcalculator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a> library to calculate these settings. It sets <code>[mysqld]</code> variables only. Container resources, probe timings, and storage size stay under your control.</p>
-<h2 id="availability">Availability<a class="headerlink" href="#availability" title="Permanent link">&para;</a></h2>
+<p>The Operator uses the <a href="https://github.com/Tusamarco/mysqloperatorcalculator">mysqloperatorcalculator <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> library to calculate these settings. It sets <code>[mysqld]</code> variables only. Container resources, probe timings, and storage size stay under your control.</p>
+<h2 id="availability">Availability<a class="headerlink" href="#availability" title="Permanent link">¶</a></h2>
 <ul>
 <li><strong>New clusters</strong>: enabled when you deploy with Operator 1.3.0+ and the <code>crVersion</code> is <code>1.3.0</code> or higher. </li>
-<li><strong>Existing clusters</strong>: upgrading the Operator does not turn automatic configuration tuning on for you. <a href="#turn-on-automatic-configuration-tuning">Turn it on</a> yourself once you&rsquo;ve upgraded.</li>
+<li><strong>Existing clusters</strong>: upgrading the Operator does not turn automatic configuration tuning on for you. <a href="#turn-on-automatic-configuration-tuning">Turn it on</a> yourself once you’ve upgraded.</li>
 </ul>
-<h3 id="supported-percona-server-for-mysql-versions">Supported Percona Server for MySQL versions<a class="headerlink" href="#supported-percona-server-for-mysql-versions" title="Permanent link">&para;</a></h3>
+<h3 id="supported-percona-server-for-mysql-versions">Supported Percona Server for MySQL versions<a class="headerlink" href="#supported-percona-server-for-mysql-versions" title="Permanent link">¶</a></h3>
 <p>The Operator can calculate MySQL settings for these Percona Server for MySQL versions:</p>
 <ul>
 <li>9.7.x</li>
 <li>8.4.x (all patch releases)</li>
 <li>8.0.46 and later</li>
 </ul>
-<p>On 8.0.45 or older, the Operator falls back to <a href="options.html#auto-tuning-mysql-options">basic buffer-pool and <code>max_connections</code> tuning</a>. See <a href="#autoconfigfallback-warning">AutoConfigFallback warning</a> if you weren&rsquo;t expecting it.</p>
-<h2 id="turn-on-automatic-configuration-tuning">Turn on automatic configuration tuning<a class="headerlink" href="#turn-on-automatic-configuration-tuning" title="Permanent link">&para;</a></h2>
+<p>On 8.0.45 or older, the Operator falls back to <a href="options.html#auto-tuning-mysql-options">basic buffer-pool and <code>max_connections</code> tuning</a>. See <a href="#autoconfigfallback-warning">AutoConfigFallback warning</a> if you weren’t expecting it.</p>
+<h2 id="turn-on-automatic-configuration-tuning">Turn on automatic configuration tuning<a class="headerlink" href="#turn-on-automatic-configuration-tuning" title="Permanent link">¶</a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>If <code>spec.mysql.configuration</code> is set, or you have MySQL settings in your own ConfigMap or Secret, the Operator does not calculate the configuration even when automatic configuration tuning is turned on. See <a href="#automatic-vs-user-provided-mysql-configuration">Automatic vs user-provided MySQL configuration</a> for details. Clear those settings first if you want the Operator to calculate the MySQL configuration for you.</p>
@@ -5980,7 +5966,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">        </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8Gi</span>
 </code></pre></div>
 <p>See the <a href="operator.html#operator-mysql-section">Custom Resource reference</a> for the full field list.</p>
-<h3 id="choose-a-workload-profile">Choose a workload profile<a class="headerlink" href="#choose-a-workload-profile" title="Permanent link">&para;</a></h3>
+<h3 id="choose-a-workload-profile">Choose a workload profile<a class="headerlink" href="#choose-a-workload-profile" title="Permanent link">¶</a></h3>
 <p><code>loadType</code> tells the Operator how to balance read-oriented and write-oriented settings:</p>
 <table>
 <thead>
@@ -6013,7 +5999,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h2 id="understand-how-calculation-works">Understand how calculation works<a class="headerlink" href="#understand-how-calculation-works" title="Permanent link">&para;</a></h2>
+<h2 id="understand-how-calculation-works">Understand how calculation works<a class="headerlink" href="#understand-how-calculation-works" title="Permanent link">¶</a></h2>
 <p>When automatic configuration tuning is turned on, the Operator uses these inputs to calculate the configuration on every reconcile:</p>
 <table>
 <thead>
@@ -6042,15 +6028,15 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tbody>
 </table>
 <p>The Operator writes the result to the <code>auto-&lt;cluster-name&gt;-mysql</code> ConfigMap. It updates that ConfigMap only when the result changes, so a cluster with unchanged inputs does not restart.</p>
-<h3 id="keep-the-mysql-version-in-sync">Keep the MySQL version in sync<a class="headerlink" href="#keep-the-mysql-version-in-sync" title="Permanent link">&para;</a></h3>
+<h3 id="keep-the-mysql-version-in-sync">Keep the MySQL version in sync<a class="headerlink" href="#keep-the-mysql-version-in-sync" title="Permanent link">¶</a></h3>
 <p><code>mysql.autoConfig.version</code> tells the Operator which MySQL version to tune for. It does not change which image is deployed, and the Operator does not check that the two match. Update <code>mysql.autoConfig.version</code> whenever you change <code>mysql.image</code>. A mismatch can make the Operator emit a parameter the running server does not recognize, and that can prevent MySQL from starting.</p>
-<h3 id="automatic-vs-user-provided-mysql-configuration">Automatic vs user-provided MySQL configuration<a class="headerlink" href="#automatic-vs-user-provided-mysql-configuration" title="Permanent link">&para;</a></h3>
+<h3 id="automatic-vs-user-provided-mysql-configuration">Automatic vs user-provided MySQL configuration<a class="headerlink" href="#automatic-vs-user-provided-mysql-configuration" title="Permanent link">¶</a></h3>
 <p>The Operator calculates the full configuration only when the <code>spec.mysql.configuration</code> in the Custom Resource is empty and you have not put MySQL settings in a ConfigMap or Secret of your own.</p>
 <p>Any value in <code>spec.mysql.configuration</code> or any MySQL settings in a ConfigMap or Secret you create disable automatic configuration tuning. The Operator applies only your settings plus the  <code>innodb_buffer_pool_size</code>, <code>innodb_buffer_pool_chunk_size</code>, and <code>max_connections</code> values that it calculates from the container memory. It logs <code>a user configuration is set, skipping autoconfig</code> message and does not record a Kubernetes event for this skip.</p>
-<p>The <code>auto-&lt;cluster-name&gt;-mysql</code> ConfigMap is the Operator&rsquo;s output. It does not count as configuration you supplied.</p>
-<p>The Operator calculates the full configuration once you&rsquo;ve <a href="#turn-on-automatic-configuration-tuning">turned it on</a> and cleared <code>spec.mysql.configuration</code> and removed MySQL settings from your own ConfigMap or Secret.</p>
-<h3 id="full-list-of-tunable-variables">Full list of tunable variables<a class="headerlink" href="#full-list-of-tunable-variables" title="Permanent link">&para;</a></h3>
-<p>The Operator includes a variable only when <code>mysql.autoConfig.version</code> falls inside that variable&rsquo;s supported range. Read the ConfigMap to see the variables and values for your cluster:</p>
+<p>The <code>auto-&lt;cluster-name&gt;-mysql</code> ConfigMap is the Operator’s output. It does not count as configuration you supplied.</p>
+<p>The Operator calculates the full configuration once you’ve <a href="#turn-on-automatic-configuration-tuning">turned it on</a> and cleared <code>spec.mysql.configuration</code> and removed MySQL settings from your own ConfigMap or Secret.</p>
+<h3 id="full-list-of-tunable-variables">Full list of tunable variables<a class="headerlink" href="#full-list-of-tunable-variables" title="Permanent link">¶</a></h3>
+<p>The Operator includes a variable only when <code>mysql.autoConfig.version</code> falls inside that variable’s supported range. Read the ConfigMap to see the variables and values for your cluster:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>configmap<span class="w"> </span>auto-&lt;cluster-name&gt;-mysql<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.my\.cnf}'</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="note">
@@ -6088,7 +6074,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><code>binlog_transaction_dependency_tracking</code></li>
 </ul>
 </details>
-<h3 id="how-calculated-settings-are-applied">How calculated settings are applied<a class="headerlink" href="#how-calculated-settings-are-applied" title="Permanent link">&para;</a></h3>
+<h3 id="how-calculated-settings-are-applied">How calculated settings are applied<a class="headerlink" href="#how-calculated-settings-are-applied" title="Permanent link">¶</a></h3>
 <p>The Operator applies calculated values after all MySQL Pods are ready:</p>
 <ul>
 <li>Variables that MySQL accepts at runtime are applied with <code>SET GLOBAL</code> on each Pod, with no restart.</li>
@@ -6096,11 +6082,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ul>
 <p>Changing <code>mysql.resources</code> changes the buffer pool and the redo log. This change usually restarts the MySQL Pods. Plan a resize of <code>mysql.resources</code> as a change-management event. See <a href="scaling.html#scale-compute-resources">Scale compute resources</a>.</p>
 <p>Before the Operator writes the configuration, it checks the calculated redo log against the data volume. When the redo log would exceed 25% of that volume, reconciliation stops. See <a href="#autoconfiginsufficientstorage-warning">AutoConfigInsufficientStorage warning</a>.</p>
-<h2 id="troubleshoot-automatic-configuration-tuning">Troubleshoot automatic configuration tuning<a class="headerlink" href="#troubleshoot-automatic-configuration-tuning" title="Permanent link">&para;</a></h2>
+<h2 id="troubleshoot-automatic-configuration-tuning">Troubleshoot automatic configuration tuning<a class="headerlink" href="#troubleshoot-automatic-configuration-tuning" title="Permanent link">¶</a></h2>
 <p>Check the cluster events first. See <a href="debug-events.html">Check the Events</a>.</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>--field-selector<span class="w"> </span>involvedObject.name<span class="o">=</span>&lt;cluster-name&gt;
 </code></pre></div>
-<h3 id="autoconfiginsufficientstorage-warning">AutoConfigInsufficientStorage warning<a class="headerlink" href="#autoconfiginsufficientstorage-warning" title="Permanent link">&para;</a></h3>
+<h3 id="autoconfiginsufficientstorage-warning">AutoConfigInsufficientStorage warning<a class="headerlink" href="#autoconfiginsufficientstorage-warning" title="Permanent link">¶</a></h3>
 <p><strong>Symptom.</strong> Reconciliation is stuck. <code>kubectl get events</code> shows a warning with reason <code>AutoConfigInsufficientStorage</code>. The message names the calculated redo log size, the data volume size, and the minimum volume size needed.</p>
 <p><strong>Cause.</strong> The redo log size follows the buffer pool, and the buffer pool follows the memory in <code>mysql.resources</code>. MySQL preallocates the full redo log on disk. The Operator refuses a configuration whose redo log would exceed 25% of the data volume, so a volume that is too small does not reach a server that fails to start or clone.</p>
 <p>The Operator uses the capacity of the smallest existing MySQL data volume in the cluster. When no PersistentVolumeClaims exist yet, it uses the storage size in <code>mysql.volumeSpec</code>. When the size cannot be determined, for example with a <code>hostPath</code> volume or an <code>emptyDir</code> volume without <code>sizeLimit</code>, the Operator skips this check.</p>
@@ -6109,11 +6095,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="scaling.html#scale-storage">Increase the storage size</a> of the MySQL data volume.</li>
 <li>Lower the memory in <code>mysql.resources</code> so the Operator sizes a smaller buffer pool and redo log.</li>
 </ul>
-<h3 id="autoconfigfallback-warning">AutoConfigFallback warning<a class="headerlink" href="#autoconfigfallback-warning" title="Permanent link">&para;</a></h3>
+<h3 id="autoconfigfallback-warning">AutoConfigFallback warning<a class="headerlink" href="#autoconfigfallback-warning" title="Permanent link">¶</a></h3>
 <p><strong>Symptom.</strong> The cluster starts, and events include a warning with reason <code>AutoConfigFallback</code>.</p>
 <p><strong>Cause.</strong> The Operator could not calculate the full configuration. It uses the basic buffer pool and <code>max_connections</code> tuning instead. Typical causes are a missing CPU value, an unsupported MySQL version, or an internal calculation error.</p>
 <p>A configuration you set yourself also skips automatic configuration tuning, and that skip is written to the Operator log only. See <a href="#automatic-vs-user-provided-mysql-configuration">Automatic vs user-provided MySQL configuration</a>.</p>
-<h3 id="autoconfigfailed-warning">AutoConfigFailed warning<a class="headerlink" href="#autoconfigfailed-warning" title="Permanent link">&para;</a></h3>
+<h3 id="autoconfigfailed-warning">AutoConfigFailed warning<a class="headerlink" href="#autoconfigfailed-warning" title="Permanent link">¶</a></h3>
 <p><strong>Symptom.</strong> Events include a warning with reason <code>AutoConfigFailed</code>.</p>
 <p><strong>Cause.</strong> The basic buffer pool and <code>max_connections</code> tuning also failed. MySQL starts with no calculated parameters.</p>
 <hr>
@@ -6172,9 +6158,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
-          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
   Back to top
 </button>
         
@@ -6186,7 +6172,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
     <div class="md-copyright__highlight">
- <a href='https://percona.com' target='_blank'>Percona LLC and/or its affiliates, </a> &copy; 2026
+ <a href="https://percona.com" target="_blank">Percona LLC and/or its affiliates, </a> © 2026
  — <a href="#" onclick="Osano.cm.showDrawer('osano-cm-dom-info-dialog-open')">Cookie Preferences</a>
     </div>
   
@@ -6232,23 +6218,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
       
         <script src="js/posthog-version.js"></script>
       
+        <script src="js/diagram-zoom.js"></script>
+      
         <script src="js/open_in_new_tab.js"></script>
       
     
-              <script
-                id="kapa-widget-script"
-                async
-                data-osano="ESSENTIAL"
-                src="https://widget.kapa.ai/kapa-widget.bundle.js"
-                data-website-id="0e0d55cf-6370-4a6d-a987-96670a7fe935"
-                data-button-hide="true"
-                data-project-name="Percona"
-                data-modal-title="Percona AI Assistant"
-                font-size="0.875rem"
-                data-modal-disclaimer="The **Percona AI Assistant** helps you find simple, clear answers to your Percona questions using [official documentation](https://docs.percona.com/), resolved [forum posts](https://forums.percona.com/) and [blog posts](https://www.percona.com/blog/). Note, do not enter personal or confidential information. Before using Percona AI assistant, read the [Legal Notice](https://docs.percona.com/percona-operator-for-mysql/latest/legal-notice.html)."
-                data-modal-example-questions="How do I deploy Percona Operator for MySQL?, How do I connect my application to the Percona Server for MySQL cluster?, How do I upgrade Percona Operator for MySQL?, How do I configure automated backups?, What's new in the latest release?"
-                data-project-logo="https://docs.percona.com/percona-operator-for-mysql/latest/assets/percona-logomark-one-color-dark.png"
-              ></script>
+              <script id="kapa-widget-script" async="" data-osano="ESSENTIAL" src="https://widget.kapa.ai/kapa-widget.bundle.js" data-website-id="0e0d55cf-6370-4a6d-a987-96670a7fe935" data-button-hide="true" data-project-name="Percona" data-modal-title="Percona AI Assistant" font-size="0.875rem" data-modal-disclaimer="The **Percona AI Assistant** helps you find simple, clear answers to your Percona questions using [official documentation](https://docs.percona.com/), resolved [forum posts](https://forums.percona.com/) and [blog posts](https://www.percona.com/blog/). Note, do not enter personal or confidential information. Before using Percona AI assistant, read the [Legal Notice](https://docs.percona.com/percona-operator-for-mysql/latest/legal-notice.html)." data-modal-example-questions="How do I deploy Percona Operator for MySQL?, How do I connect my application to the Percona Server for MySQL cluster?, How do I upgrade Percona Operator for MySQL?, How do I configure automated backups?, What's new in the latest release?" data-project-logo="https://docs.percona.com/percona-operator-for-mysql/latest/assets/percona-logomark-one-color-dark.png"></script>
               
-  </body>
-</html>
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
