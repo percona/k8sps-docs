@@ -74,6 +74,22 @@ A cluster that was valid on Operator 1.2.0 hits this check after the upgrade. Be
 
 Group Replication clusters are not part of this check.
 
+### Take a new base backup when point-in-time recovery is enabled
+
+If point-in-time recovery (PITR) is enabled, a recovery from a backup taken before the upgrade can fail with the following error:
+
+```text
+54edf529-d2cc-11f1-aebd-668621c1d52d:1-94 --stop-datetime=2026-10-28T13:50:49]
+2026-10-28T13:52:40.183741217Z 0 [Info] [Recovery] streaming binlog binlogs1/binlog.000001
+2026-10-28T13:52:40.692443772Z 0 [Info] [Recovery] pitr failed: apply binlogs: mysql failed: exit status 1, stderr: ERROR 1396 (HY000) at line 1907: Operation ALTER USER failed for 'configurator'@'%'
+```
+
+Do one of the following:
+
+* Take a new base backup after the upgrade. Use that backup as the starting point for later point-in-time recovery. This is the recommended option.
+* Force the restore. Set [`pitr.force`](../restore-cr.md#pitrforce) to `true` on the restore object. This passes `--force` to the MySQL client and ignores SQL errors during binlog replay, which can hide data loss. See [Ignore SQL errors during binlog replay](../backups-restore-pitr.md#ignore-sql-errors-during-binlog-replay).
+
+
 ## Release highlights
 
 ### Automatic MySQL configuration tuning
