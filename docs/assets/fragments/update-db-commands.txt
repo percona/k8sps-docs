@@ -66,7 +66,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with HAProxy"
@@ -122,7 +122,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with MySQL Router"
@@ -178,7 +178,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
 === "MySQL 8.0"
@@ -239,7 +239,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with HAProxy"
@@ -295,7 +295,7 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with MySQL Router"
@@ -351,5 +351,5 @@ Select the command that matches your setup from the sections below.
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 

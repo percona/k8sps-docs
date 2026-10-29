@@ -44,7 +44,7 @@ You configure backups in the `backup` section of the
 
 You can customize a backup type, scheduling and encryption. See [Making scheduled backups](backups-scheduled.md), [Creating a backup on demand](backups-ondemand.md), and [Encrypted backups](backups-encrypted.md) tutorials for the guidelines.
 
-To fine-tune how long a backup waits to start, see [Fine-tune the backup queue](#run-multiple-backups). To suspend backups when the cluster is unhealthy, see [Suspend backups on an unhealthy cluster](#suspend-backups-on-an-unhealthy-cluster).
+To fine-tune how long a backup waits to start, see [Set a waiting time for a backup to start](#set-a-waiting-time-for-a-backup-to-start). To suspend backups when the cluster is unhealthy, see [Suspend backups on an unhealthy cluster](#suspend-backups-on-an-unhealthy-cluster).
 
 For the full set of backup-related fields, see the [Custom Resource reference](operator.md#operator-backup-section) and the [Backup Resource reference](backup-cr.md) for per-backup options.
 
