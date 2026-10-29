@@ -95,8 +95,6 @@ For the procedures in this tutorial, we assume that you have set up the `Smart U
 
 We recommend to [update PMM Server :octicons-link-external-16:](https://docs.percona.com/percona-monitoring-and-management/3/pmm-upgrade/index.html)  before upgrading PMM Client.
 
-If you use Binlog Server for point-in-time recovery, complete the [pre-upgrade steps](#if-you-use-binlog-server).
-
 ### Procedure
 
 1. Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the [Operator upgrade guide](update-operator.md)
