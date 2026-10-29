@@ -89,6 +89,10 @@ kubectl rollout status sts ps-cluster1-ps
 
 If the rollout stops because one MySQL Pod stays unready, see [Unblock a stuck rolling update](pause-mysql-pod.md#unblock-a-stuck-rolling-update).
 
+### Post-upgrade steps
+
+If point-in-time recovery is enabled, take a new base backup after the upgrade to make it a new starting point for subsequent point-in-time recovery.
+
 ## Automated upgrade
 
 ### Assumptions

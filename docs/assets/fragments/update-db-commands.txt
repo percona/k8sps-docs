@@ -60,13 +60,13 @@ Select the command that matches your setup from the sections below.
                    "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
                    "backup":{
                       "image": "percona/percona-xtrabackup:{{ pxb84recommended }}",
-                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "pitr": { "binlogServer": { "image": "percona/percona-server-mysql-operator:{{release}}-binlog-server-{{ binlogserverrecommended }}" } }
                    },
                    "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with HAProxy"
@@ -116,13 +116,13 @@ Select the command that matches your setup from the sections below.
                    },
                    "backup":{
                       "image": "percona/percona-xtrabackup:{{ pxb84recommended }}",
-                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "pitr": { "binlogServer": { "image": "percona/percona-server-mysql-operator:{{release}}-binlog-server-{{ binlogserverrecommended }}" } }
                    },
                    "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with MySQL Router"
@@ -172,13 +172,13 @@ Select the command that matches your setup from the sections below.
                    },
                    "backup":{
                       "image": "percona/percona-xtrabackup:{{ pxb84recommended }}",
-                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "pitr": { "binlogServer": { "image": "percona/percona-server-mysql-operator:{{release}}-binlog-server-{{ binlogserverrecommended }}" } }
                    },
                    "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
 === "MySQL 8.0"
@@ -233,13 +233,13 @@ Select the command that matches your setup from the sections below.
                    "orchestrator":{ "image": "percona/percona-orchestrator:{{ orchestratorrecommended }}" },
                    "backup":{
                       "image": "percona/percona-xtrabackup:{{ pxb80recommended }}",
-                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "pitr": { "binlogServer": { "image": "percona/percona-server-mysql-operator:{{release}}-binlog-server-{{ binlogserverrecommended }}" } }
                    },
                    "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with HAProxy"
@@ -289,13 +289,13 @@ Select the command that matches your setup from the sections below.
                    },
                    "backup":{
                       "image": "percona/percona-xtrabackup:{{ pxb80recommended }}",
-                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "pitr": { "binlogServer": { "image": "percona/percona-server-mysql-operator:{{release}}-binlog-server-{{ binlogserverrecommended }}" } }
                    },
                    "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 
 
     === "Group replication with MySQL Router"
@@ -345,11 +345,11 @@ Select the command that matches your setup from the sections below.
                    },
                    "backup":{
                       "image": "percona/percona-xtrabackup:{{ pxb80recommended }}",
-                      "pitr": { "binlogServer": { "image": "perconalab/percona-binlog-server:{{ binlogserverrecommended }}" } }
+                      "pitr": { "binlogServer": { "image": "percona/percona-server-mysql-operator:{{release}}-binlog-server-{{ binlogserverrecommended }}" } }
                    },
                    "toolkit":{ "image": "percona/percona-toolkit:{{ ptrecommended }}" }
                }}'
             ```
 
-            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#binary-log-collection).
+            After the upgrade, [enable point-in-time binlog collection](backups-pitr.md#enable-binlog-collection).
 

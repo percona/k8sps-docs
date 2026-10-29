@@ -337,7 +337,7 @@ The cert-manager issuer type referenced by the cluster `Certificate`.
 Supported values:
 
 * `Issuer` (default) — namespace-scoped issuer in the database namespace.
-* `ClusterIssuer` — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. You must [grant the Operator permission to read ClusterIssuers](tls-cert-manager.md#grant-the-operator-permission-to-read-clusterissuers).
+* `ClusterIssuer` — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. See [Use an existing ClusterIssuer](tls-cert-manager.md#use-an-existing-clusterissuer).
 
 | Value type  | Example    |
 | ----------- | ---------- |
@@ -990,7 +990,7 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 The `my.cnf` file options to be passed to Percona Server for MySQL instances.
 
-The Operator does not validate these options against your replication type. See [Check configuration compatibility](options.md#check-configuration-compatibility).
+The Operator does not validate these options against your replication type. See [Configuration compatibility considerations](options.md#configuration-compatibility-considerations).
 
 | Value type  | Example    |
 | ----------- | ---------- |

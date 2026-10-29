@@ -41,7 +41,7 @@ The restore flow is the same for full and incremental backups. Follow [Restore t
 
 The Operator identifies the backup type by name or destination. Incremental destinations use an `.incr` path segment so the Operator can reconstruct the chain. It downloads the full backup and all related increments, restores the full backup first, then applies each increment.
 
-If you make a [point-in-time recovery](backups-pitr.md), the Operator applies binlogs after the chain. See [the point-in-time recovery workflow](backups-pitr.md#point-in-time-recovery-workflow).
+If you make a [point-in-time recovery](backups-pitr.md), the Operator applies binlogs after the chain. See [How it works](backups-pitr.md#how-it-works).
 
 Incremental objects in storage use an `.incr` path segment so the Operator can tell them apart from full backups:
 
