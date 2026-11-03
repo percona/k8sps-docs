@@ -61,7 +61,7 @@ The command above installs Percona Server for MySQL with [default parameters](op
 The following example will deploy a Percona Server for MySQL in the `my-namespace` namespace, with disabled backups and 20 Gi storage:
 
 ```bash
-helm install my-db percona/ps-db \
+helm install my-db percona/ps-db --namespace my-namespace \
   --set mysql.volumeSpec.pvc.resources.requests.storage=20Gi \
   --set backup.enabled=false
 ```
