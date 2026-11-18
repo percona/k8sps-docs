@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5927,19 +5927,19 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="percona-operator-for-mysql-0120-2025-09-23">Percona Operator for MySQL 0.12.0 (2025-09-23)<a class="headerlink" href="#percona-operator-for-mysql-0120-2025-09-23" title="Permanent link">¶</a></h1>
+<h1 id="percona-operator-for-mysql-0120-2025-09-23">Percona Operator for MySQL 0.12.0 (2025-09-23)<a data-markdown-ignore class="headerlink" href="#percona-operator-for-mysql-0120-2025-09-23" title="Permanent link">¶</a></h1>
 <p><a class="md-button" href="../System-Requirements.html#installation-guidelines">Installation</a></p>
 <p>Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.12.0 of the Percona Operator for MySQL is still <strong>a tech preview release</strong>, and it is <strong>not recommended for production environments</strong>. </p>
 <p><strong>As of today, we recommend using</strong> <a href="https://docs.percona.com/percona-operator-for-mysql/pxc/index.html">Percona Operator for MySQL based on Percona XtraDB Cluster</a>, which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.</p>
-<h2 id="release-highlights">Release highlights<a class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
-<h3 id="full-mysql-84-support-now-available">Full MySQL 8.4 support now available<a class="headerlink" href="#full-mysql-84-support-now-available" title="Permanent link">¶</a></h3>
+<h2 id="release-highlights">Release highlights<a data-markdown-ignore class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
+<h3 id="full-mysql-84-support-now-available">Full MySQL 8.4 support now available<a data-markdown-ignore class="headerlink" href="#full-mysql-84-support-now-available" title="Permanent link">¶</a></h3>
 <p>With this release, data-at-rest encryption is now supported for Percona Server for MySQL 8.4.</p>
 <p>In the previous release, we have added support for Percona Server for MySQL 8.4 within the Operator. However, data-at-rest encryption was not yet available. That limitation has now been lifted, unlocking the full potential of Percona Server for MySQL’s latest major version. Check our <a href="../encryption-setup.html">documentation</a> for Percona Server for MySQL 8.4-specific setup instructions.</p>
 <p>This improvement empowers you to take full advantage of Percona Server for MySQL 8.4’s features while benefiting from seamless, automated lifecycle management provided by the Operator. Percona Server for MySQL 8.4 is now the default version for deploying a database cluster.</p>
-<h3 id="ensure-cluster-availability-with-poddisruptionbudgets">Ensure cluster availability with PodDisruptionBudgets<a class="headerlink" href="#ensure-cluster-availability-with-poddisruptionbudgets" title="Permanent link">¶</a></h3>
+<h3 id="ensure-cluster-availability-with-poddisruptionbudgets">Ensure cluster availability with PodDisruptionBudgets<a data-markdown-ignore class="headerlink" href="#ensure-cluster-availability-with-poddisruptionbudgets" title="Permanent link">¶</a></h3>
 <p>A PodDisruptionBudget (PDB) in Kubernetes helps keep your applications available during voluntary disruptions, such as deleting a deployment or draining a node for maintenance. A PDB sets a limit on how many Pods can be unavailable at the same time due to these voluntary actions.</p>
 <p>With this release, you can now configure PodDisruptionBudgets for MySQL, HAProxy, MySQL Router, and Orchestrator Pods, thus ensuring your cluster remains available, even during disruptions or planned maintenance.</p>
-<h3 id="fine-tune-backup-and-restore-operations">Fine-tune backup and restore operations<a class="headerlink" href="#fine-tune-backup-and-restore-operations" title="Permanent link">¶</a></h3>
+<h3 id="fine-tune-backup-and-restore-operations">Fine-tune backup and restore operations<a data-markdown-ignore class="headerlink" href="#fine-tune-backup-and-restore-operations" title="Permanent link">¶</a></h3>
 <p>The Operator sets sensible defaults for backups and restores to ensure their smooth flow. If you need more control, you can fine-tune <code>xtrabackup</code>, <code>xbstream</code>, and <code>xbcloud</code> settings. You can do this globally via the <code>deploy/cr.yaml</code> Custom resource manifest or individually for a specific backup / restore operation via the respective <code>deploy/backup.yaml</code> or <code>deploy/restore.yaml</code> manifests. In either case, define your configuration in the <code>spec.containerOptions</code> subsection. For example:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
@@ -5958,9 +5958,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">             </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--someflag=abc"</span>
 </code></pre></div>
 <p>Note that individual settings take precedence over the global ones. Read more about fine-tuning backups and restores and how the settings are applied in our <a href="../backups-fine-tune.html">documentation</a>.</p>
-<h3 id="monitor-pmm-client-health-and-status">Monitor PMM Client health and status<a class="headerlink" href="#monitor-pmm-client-health-and-status" title="Permanent link">¶</a></h3>
+<h3 id="monitor-pmm-client-health-and-status">Monitor PMM Client health and status<a data-markdown-ignore class="headerlink" href="#monitor-pmm-client-health-and-status" title="Permanent link">¶</a></h3>
 <p>Percona Monitoring and Management (PMM) is a great tool to monitor the health of your database cluster. Now you can also learn if PMM itself is healthy using probes - a Kubernetes diagnostics mechanism to check the health and status of containers. Use the <code>spec.pmm.readinessProbes.*</code> and <code>spec.pmm.livenessProbes.*</code> Custom Resource options to fine-tune Readiness and Liveness probes for PMM Client.</p>
-<h3 id="define-a-source-pod-for-backups">Define a source Pod for backups<a class="headerlink" href="#define-a-source-pod-for-backups" title="Permanent link">¶</a></h3>
+<h3 id="define-a-source-pod-for-backups">Define a source Pod for backups<a data-markdown-ignore class="headerlink" href="#define-a-source-pod-for-backups" title="Permanent link">¶</a></h3>
 <p>You can now explicitly define from what MySQL instance Pod the Operator should make a backup. You can specify the Pod in the deploy/cr.yaml to apply it for all backups, both scheduled and on-demand. You can also override it for an on-demand backup in its resource manifest.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
@@ -5968,7 +5968,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 <p>These options let you tailor your backup strategy to fit your organization’s policies.</p>
 <p>For asynchronous replication clusters, the Operator must know the cluster topology to run a backup. For this, either enable the Orchestrator in your deployment. Or specify the <code>sourcePod</code> value, if your cluster has more than one MySQL Pods. </p>
-<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
+<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a data-markdown-ignore class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
 <ul>
 <li>
 <p>The <code>.spec.initImage</code> field has been replaced by the <code>.spec.initContainer</code> subsection, which follows Kubernetes best practices for defining containers that run before the main containers in a Pod. The <code>initContainer</code> feature is helpful for setup tasks such as:</p>
@@ -5988,15 +5988,15 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The API version in CRD has changed from <code>v1alpha</code> to <code>v1</code>. Read more about updates in <a href="#known-limitations">Known limitations</a>.</p>
 </li>
 </ul>
-<h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
+<h2 id="known-limitations">Known limitations<a data-markdown-ignore class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
 <p>Due to the API version change, CRD updates are currently not supported. In order to update to version 0.12.0, you must manually delete the CRDs, apply new ones and recreate the cluster. To keep the data, do the following:</p>
 <ul>
 <li>check that the <code>percona.com/delete-mysql-pvc</code> finalizer is not enabled in <code>deploy/cr.yaml</code></li>
 <li>don’t delete PVCs manually</li>
 <li>Recreate the cluster with the same name. The Operator then automatically reuses the same PVCs.</li>
 </ul>
-<h2 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
-<h3 id="new-features">New features<a class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
+<h2 id="changelog">Changelog<a data-markdown-ignore class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
+<h3 id="new-features">New features<a data-markdown-ignore class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-400">K8SPS-400</a> - Improved flexibility for backups and restores via adding support for custom options for <code>xtrabackup</code>, <code>xbstream</code>, and <code>xbcloud</code> binaries.</p>
@@ -6011,7 +6011,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-480">K8SPS-480</a> - Added support for data-at-rest encryption for MySQL 8.4.</p>
 </li>
 </ul>
-<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
+<h3 id="improvements">Improvements<a data-markdown-ignore class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-172">K8SPS-172</a> - The operator now includes logs for all haproxy manipulations, providing better visibility for operations like adding, deleting, or downscaling.</p>
@@ -6038,7 +6038,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-488">K8SPS-488</a> - Switched to using API version <code>v1</code> in custom resource definitions</p>
 </li>
 </ul>
-<h3 id="bugs-fixed">Bugs fixed<a class="headerlink" href="#bugs-fixed" title="Permanent link">¶</a></h3>
+<h3 id="bugs-fixed">Bugs fixed<a data-markdown-ignore class="headerlink" href="#bugs-fixed" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-371">K8SPS-371</a> - Added the ability to set a backup source Pod to ensure backups are made for clusters with asynchronous replication when the Orchestrator is disabled.</p>
@@ -6062,7 +6062,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-494">K8SPS-494</a> - Fixed the issue with the constant update of the <code>resourceVersion</code> of the PerconaServerMySQL object after a cluster is created. The issue was caused by the Operator receiving stale objects during reconciliation, which resulted in the <code>InnoDBClusterBootstrapped</code> condition being set twice in every loop and constantly updating its last transition time. The Fix updates the status directly after setting the condition and waits for consistency with the API server.</p>
 </li>
 </ul>
-<h2 id="supported-software">Supported software<a class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
+<h2 id="supported-software">Supported software<a data-markdown-ignore class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
 <p>The Operator was developed and tested with the following software:</p>
 <ul>
 <li>Percona Server for MySQL 8.4.6-6</li>
@@ -6078,7 +6078,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Cert Manager 1.18.2</li>
 </ul>
 <p>Other options may also work but have not been tested.</p>
-<h2 id="supported-platforms">Supported platforms<a class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
+<h2 id="supported-platforms">Supported platforms<a data-markdown-ignore class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
 <p>Percona Operators are designed for compatibility with all <a href="https://www.cncf.io/training/certification/software-conformance/">CNCF-certified <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> Kubernetes distributions. Our release process includes targeted testing and validation on major cloud provider platforms and OpenShift, as detailed below for Operator version 0.12.0:</p>
 <ul>
 <li><a href="https://cloud.google.com/kubernetes-engine">Google Kubernetes Engine (GKE) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.30 - 1.33</li>
@@ -6087,7 +6087,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.37.0 (based on Kubernetes 1.34.0)</li>
 </ul>
 <p>This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.</p>
-<h2 id="percona-certified-images">Percona certified images<a class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
+<h2 id="percona-certified-images">Percona certified images<a data-markdown-ignore class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
 <p>Find Percona’s certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:</p>
 <table>
 <thead>

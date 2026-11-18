@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5851,9 +5851,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">¶</a></h1>
+<h1 id="architecture">Architecture<a data-markdown-ignore class="headerlink" href="#architecture" title="Permanent link">¶</a></h1>
 <p>Percona Operator for MySQL automates deploying and operating Percona Server for MySQL clusters on Kubernetes. This document explains what components the Operator uses and how they work together to provide a highly available MySQL database. Also, read more about <a href="how-it-works.html">How the Operator works</a>.</p>
-<h2 id="components">Components<a class="headerlink" href="#components" title="Permanent link">¶</a></h2>
+<h2 id="components">Components<a data-markdown-ignore class="headerlink" href="#components" title="Permanent link">¶</a></h2>
 <p>The <a href="https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/">StatefulSet <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> deployed with the Operator includes the following components:</p>
 <ul>
 <li>
@@ -5876,10 +5876,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 </ul>
 <p>It can also include sidecar containers such as PMM Client, the <a href="persistent-logging.html">log collector</a>, or your custom ones. This depends on how you further fine-tune your cluster. Learn more about <a href="sidecar.html">sidecar containers</a>.</p>
-<h2 id="replication-types">Replication types<a class="headerlink" href="#replication-types" title="Permanent link">¶</a></h2>
+<h2 id="replication-types">Replication types<a data-markdown-ignore class="headerlink" href="#replication-types" title="Permanent link">¶</a></h2>
 <p>Each MySQL node in your cluster contains a complete copy of your data, replicated across all nodes.</p>
 <p>The Operator supports two replication types, each with different characteristics for performance, consistency, and availability. You <a href="operator.html#mysqlclustertype">choose the replication type</a> when configuring your cluster.</p>
-<h3 id="asynchronous-replication-tech-preview">Asynchronous replication (tech preview)<a class="headerlink" href="#asynchronous-replication-tech-preview" title="Permanent link">¶</a></h3>
+<h3 id="asynchronous-replication-tech-preview">Asynchronous replication (tech preview)<a data-markdown-ignore class="headerlink" href="#asynchronous-replication-tech-preview" title="Permanent link">¶</a></h3>
 <p>With asynchronous replication, writes complete on the primary instance without waiting for replicas. After a write completes, the primary records the change in its binary log, and replicas apply these changes independently.</p>
 <p><strong>Characteristics:</strong></p>
 <ul>
@@ -5891,7 +5891,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><strong>Cluster size</strong> - You can run 2 or more MySQL instances, including an even count. The recommended size is 3 instances. The Operator takes backups from a replica and stops replication for the duration of the backup. With 2 instances, a long backup leaves the replica behind the primary until replication resumes.</li>
 <li><strong>Status</strong> - Currently in tech preview and not recommended for production use.</li>
 </ul>
-<h3 id="group-replication">Group replication<a class="headerlink" href="#group-replication" title="Permanent link">¶</a></h3>
+<h3 id="group-replication">Group replication<a data-markdown-ignore class="headerlink" href="#group-replication" title="Permanent link">¶</a></h3>
 <p>With group replication, write transactions require consensus from the group before completing. Read transactions can execute on any instance, while writes only occur on the primary.</p>
 <p><strong>Characteristics:</strong></p>
 <ul>
@@ -5906,7 +5906,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p class="admonition-title">Note</p>
 <p>MySQL documentation may also use the terms “source/replica” instead of “primary/replica”.</p>
 </div>
-<h2 id="proxy-solutions">Proxy solutions<a class="headerlink" href="#proxy-solutions" title="Permanent link">¶</a></h2>
+<h2 id="proxy-solutions">Proxy solutions<a data-markdown-ignore class="headerlink" href="#proxy-solutions" title="Permanent link">¶</a></h2>
 <p>The proxy you use depends on your replication type and requirements:</p>
 <ul>
 <li>
@@ -5916,7 +5916,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><strong>MySQL Router</strong> - Available only for group replication. Offers intelligent routing, connection pooling, and read-write splitting capabilities.</p>
 </li>
 </ul>
-<h3 id="replication-type-and-proxy-comparison">Replication type and proxy comparison<a class="headerlink" href="#replication-type-and-proxy-comparison" title="Permanent link">¶</a></h3>
+<h3 id="replication-type-and-proxy-comparison">Replication type and proxy comparison<a data-markdown-ignore class="headerlink" href="#replication-type-and-proxy-comparison" title="Permanent link">¶</a></h3>
 <table>
 <thead>
 <tr>
@@ -5970,11 +5970,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </table>
 <p><strong>Tip:</strong> Choose Group Replication for stronger consistency and read scaling; choose asynchronous replication for lower write latency and simpler topology when it reaches GA status.</p>
 <p>You can change the replication type if needed. Refer to the <a href="change-replication-type.html">Change replication type</a> guide for step-by-step instructions. Starting with Operator 1.3.0, you can switch the type on a running cluster. The switch causes downtime.</p>
-<h2 id="high-availability">High availability<a class="headerlink" href="#high-availability" title="Permanent link">¶</a></h2>
+<h2 id="high-availability">High availability<a data-markdown-ignore class="headerlink" href="#high-availability" title="Permanent link">¶</a></h2>
 <p>The Operator provides high availability through multiple layers of protection:</p>
-<h3 id="pod-distribution">Pod distribution<a class="headerlink" href="#pod-distribution" title="Permanent link">¶</a></h3>
+<h3 id="pod-distribution">Pod distribution<a data-markdown-ignore class="headerlink" href="#pod-distribution" title="Permanent link">¶</a></h3>
 <p>The Operator uses <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity">node affinity</a> to distribute Percona Server for MySQL instances across separate worker nodes when possible. This prevents a single node failure from taking down multiple database instances.</p>
-<h3 id="automatic-recovery">Automatic recovery<a class="headerlink" href="#automatic-recovery" title="Permanent link">¶</a></h3>
+<h3 id="automatic-recovery">Automatic recovery<a data-markdown-ignore class="headerlink" href="#automatic-recovery" title="Permanent link">¶</a></h3>
 <p>If a node fails, Kubernetes automatically reschedules the affected Pod on another healthy node. Inside your cluster, automatic recovery is handled as follows:</p>
 <ul>
 <li>In <strong>asynchronous replication</strong> clusters, the Orchestrator detects the failure, promotes a healthy replica to primary, and updates the replication topology.</li>
@@ -5984,14 +5984,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>In <strong>group replication</strong> clusters, the native group membership protocol automatically handles member removal, primary election and topology recovery. If the majority of members go down at the same time, the group can’t recover on its own. The cluster enters the <code>error</code> state with the <code>FullClusterCrashDetected</code> reason. The Operator reboots it as described in <a href="crash-recovery.html">Recover from a full cluster crash</a>.</li>
 </ul>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/operator-GR.svg" data-desc-position="bottom"><img alt="image" src="assets/images/operator-GR.svg"></a></p>
-<h3 id="client-connectivity">Client connectivity<a class="headerlink" href="#client-connectivity" title="Permanent link">¶</a></h3>
+<h3 id="client-connectivity">Client connectivity<a data-markdown-ignore class="headerlink" href="#client-connectivity" title="Permanent link">¶</a></h3>
 <p>Clients connect through HAProxy or MySQL Router, which automatically route traffic to healthy MySQL instances. These proxies detect failures and redirect connections away from failed nodes, ensuring your applications always connect to available database instances.</p>
 <p>For configuration details, see:</p>
 <ul>
 <li><a href="haproxy-conf.html">HAProxy configuration</a></li>
 <li><a href="router-conf.html">MySQL Router configuration</a></li>
 </ul>
-<h2 id="what-to-read-next">What to read next<a class="headerlink" href="#what-to-read-next" title="Permanent link">¶</a></h2>
+<h2 id="what-to-read-next">What to read next<a data-markdown-ignore class="headerlink" href="#what-to-read-next" title="Permanent link">¶</a></h2>
 <p>Now that you understand the architecture, explore these topics:</p>
 <ul>
 <li><a href="backups.html">Backups</a> - Understand backup and restore operations</li>

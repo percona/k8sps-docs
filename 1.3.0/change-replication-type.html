@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5883,7 +5883,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="change-replication-type">Change replication type<a class="headerlink" href="#change-replication-type" title="Permanent link">¶</a></h1>
+<h1 id="change-replication-type">Change replication type<a data-markdown-ignore class="headerlink" href="#change-replication-type" title="Permanent link">¶</a></h1>
 <p>The Operator deploys Percona Server for MySQL with <a href="architecture.html#group-replication">group-replication</a> and HAProxy by default.</p>
 <p>Starting with Operator 1.3.0, you can change the replication type on a running cluster. The Operator tears down the current topology, recreates the MySQL and proxy workloads, and bootstraps the new type on the existing PersistentVolumeClaims. Users, Secrets, and the HAProxy Service stay in place, so applications keep the same endpoint if they already use HAProxy.</p>
 <div class="admonition admonition">
@@ -5895,11 +5895,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p class="admonition-title">Important</p>
 <p>The switch causes downtime while Pods are deleted and the new topology comes up. It applies to the <strong>entire</strong> cluster. You cannot convert a single Group Replication member into a standalone async replica.</p>
 </div>
-<h2 id="change-the-proxy">Change the proxy<a class="headerlink" href="#change-the-proxy" title="Permanent link">¶</a></h2>
+<h2 id="change-the-proxy">Change the proxy<a data-markdown-ignore class="headerlink" href="#change-the-proxy" title="Permanent link">¶</a></h2>
 <p>HAProxy works with either replication type and is recommended. MySQL Router works only with Group Replication.</p>
 <p>You can change from one proxy to another. See <a href="haproxy-conf.html">HAProxy</a> and <a href="router-conf.html">MySQL Router</a> for the steps.</p>
-<h2 id="change-the-replication-type">Change the replication type<a class="headerlink" href="#change-the-replication-type" title="Permanent link">¶</a></h2>
-<h3 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h3>
+<h2 id="change-the-replication-type">Change the replication type<a data-markdown-ignore class="headerlink" href="#change-the-replication-type" title="Permanent link">¶</a></h2>
+<h3 id="prerequisites">Prerequisites<a data-markdown-ignore class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h3>
 <ul>
 <li>Percona Operator for MySQL <strong>1.3.0</strong> or later</li>
 <li>The cluster is <code>ready</code> and is <strong>not</strong> a member of <code>PerconaServerMySQLClusterSet</code>. Dissolving Group Replication on
@@ -5911,7 +5911,7 @@ cluster returns to <code>ready</code>.</li>
 when you switch to <code>async</code> replication type. Disable it when you
 switch to <code>group-replication</code>.</li>
 </ul>
-<h3 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">¶</a></h3>
+<h3 id="how-it-works">How it works<a data-markdown-ignore class="headerlink" href="#how-it-works" title="Permanent link">¶</a></h3>
 <p>When you change <code>mysql.clusterType</code> and apply the Custom Resource, the Operator compares the new value with the current cluster type in the <a href="cr-statuses.html#perconaservermysql-status"><code>status.clusterType</code></a> field. </p>
 <p>If the cluster is paused or not <code>ready</code>, the Operator waits. <code>status.clusterType</code> stays on the current type, and proxies and Orchestrator keep the existing topology.</p>
 <p>When the cluster is <code>ready</code>, the Operator:</p>
@@ -5932,7 +5932,7 @@ switch to <code>group-replication</code>.</li>
 <p>During the switch, the cluster leaves <code>ready</code> and application connections drop until HAProxy (or Router) is ready. If you used MySQL Router and switch to async, update connection strings to the HAProxy Service.</p>
 <p>After the switch, failover works through the new topology: group membership for
 Group Replication, Orchestrator for async.</p>
-<h3 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">¶</a></h3>
+<h3 id="before-you-start">Before you start<a data-markdown-ignore class="headerlink" href="#before-you-start" title="Permanent link">¶</a></h3>
 <ol>
 <li>
 <p>Export the namespace and cluster name:</p>
@@ -5958,9 +5958,9 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <p>If you are switching to async and the cluster uses MySQL Router, <a href="haproxy-conf.html">enable HAProxy and disable Router</a> first. Wait until the cluster is <code>ready</code> again.</p>
 </li>
 </ol>
-<h3 id="switch-from-group-replication-to-async">Switch from group replication to async<a class="headerlink" href="#switch-from-group-replication-to-async" title="Permanent link">¶</a></h3>
+<h3 id="switch-from-group-replication-to-async">Switch from group replication to async<a data-markdown-ignore class="headerlink" href="#switch-from-group-replication-to-async" title="Permanent link">¶</a></h3>
 <p>Enable Orchestrator in the same change. Keep HAProxy enabled and disable MySQL Router if it is on.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">kubectl patch</label><label for="__tabbed_1_2">Edit the Custom Resource</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">kubectl patch</label><label for="__tabbed_1_2">Edit the Custom Resource</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
@@ -6012,14 +6012,14 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <p>See <a href="#verify-the-switch">Verify the switch</a>.</p>
-<h3 id="switch-from-async-to-group-replication">Switch from async to group replication<a class="headerlink" href="#switch-from-async-to-group-replication" title="Permanent link">¶</a></h3>
+<h3 id="switch-from-async-to-group-replication">Switch from async to group replication<a data-markdown-ignore class="headerlink" href="#switch-from-async-to-group-replication" title="Permanent link">¶</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Risk of data loss when switching from asynchronous replication to Group Replication</p>
 <p>Do not switch an asynchronous replication cluster to Group Replication unless every replica has applied all transactions from the primary.</p>
 <p>The Operator does not check replication lag or compare GTID sets before the switch. It creates the new Group Replication cluster on <code>mysql-0</code>. If another Pod, such as the asynchronous primary, holds transactions that <code>mysql-0</code> does not have, the Operator treats that Pod as diverged and re-creates its data with a clone from <code>mysql-0</code>. The clone overwrites the data on that Pod, and the transactions that existed only there are lost without an error.</p>
 <p>Before you switch, <a href="#verify-that-all-replicas-are-caught-up">verify that all replicas are caught up</a> and <a href="#take-a-backup-from-the-primary">take a backup from the primary</a>. These checks protect the transactions that exist only on the asynchronous primary. If the primary is <code>mysql-0</code>, the Operator creates the Group Replication cluster from the primary and the risk does not apply, but run the checks anyway to confirm which Pod is the primary.</p>
 </div>
-<h4 id="verify-that-all-replicas-are-caught-up">Verify that all replicas are caught up<a class="headerlink" href="#verify-that-all-replicas-are-caught-up" title="Permanent link">¶</a></h4>
+<h4 id="verify-that-all-replicas-are-caught-up">Verify that all replicas are caught up<a data-markdown-ignore class="headerlink" href="#verify-that-all-replicas-are-caught-up" title="Permanent link">¶</a></h4>
 <ol>
 <li>
 <p>Stop the applications from writing to the cluster. The GTID sets keep changing while writes continue, so the comparison in the next steps is not reliable.</p>
@@ -6054,7 +6054,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <p>Every Pod must return <code>1</code>. A <code>0</code> means that Pod has not applied all transactions from the primary. Wait and repeat the check. If a Pod does not reach <code>1</code>, do not switch.</p>
 </li>
 </ol>
-<h4 id="take-a-backup-from-the-primary">Take a backup from the primary<a class="headerlink" href="#take-a-backup-from-the-primary" title="Permanent link">¶</a></h4>
+<h4 id="take-a-backup-from-the-primary">Take a backup from the primary<a data-markdown-ignore class="headerlink" href="#take-a-backup-from-the-primary" title="Permanent link">¶</a></h4>
 <p>By default, the Operator takes a backup of an asynchronous cluster from a replica. A lagging replica does not contain the transactions that exist only on the primary, so such a backup does not protect them.</p>
 <p>Set the <code>spec.sourcePod</code> option of the backup to the primary Pod:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
@@ -6067,9 +6067,9 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <span class="w">  </span><span class="nt">sourcePod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-mysql-&lt;primary-index&gt;</span>
 </code></pre></div>
 <p>For all backup options, see the <a href="backup-cr.html">Backup resource reference</a>. Wait until the backup reaches the <code>Succeeded</code> state before you continue.</p>
-<h4 id="run-the-switch">Run the switch<a class="headerlink" href="#run-the-switch" title="Permanent link">¶</a></h4>
+<h4 id="run-the-switch">Run the switch<a data-markdown-ignore class="headerlink" href="#run-the-switch" title="Permanent link">¶</a></h4>
 <p>Disable Orchestrator in the same change. The Operator refuses the switch while Orchestrator is enabled.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">kubectl patch</label><label for="__tabbed_2_2">Edit the Custom Resource</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_2_1">kubectl patch</label><label for="__tabbed_2_2">Edit the Custom Resource</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
@@ -6105,7 +6105,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </div>
 </div>
 <p>Wait until the cluster is <code>ready</code> and the <code>status.clusterType</code> is <code>group-replication</code>. The Orchestrator column is empty. See <a href="#verify-the-switch">Verify the switch</a>.</p>
-<h3 id="verify-the-switch">Verify the switch<a class="headerlink" href="#verify-the-switch" title="Permanent link">¶</a></h3>
+<h3 id="verify-the-switch">Verify the switch<a data-markdown-ignore class="headerlink" href="#verify-the-switch" title="Permanent link">¶</a></h3>
 <p>Confirm the applied type and the cluster state:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.state}{" "}{.status.clusterType}{"\n"}'</span>
@@ -6126,7 +6126,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <p>Inspect the connection secret and extract the password:</p>
 <div class="highlight"><pre><span></span><code><span class="nv">PWD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-psuser-root<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
 </code></pre></div>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><div class="tabbed-labels"><label for="__tabbed_3_1">Group replication</label><label for="__tabbed_3_2">Asynchronous replication</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_3_1">Group replication</label><label for="__tabbed_3_2">Asynchronous replication</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
@@ -6152,7 +6152,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </div>
 </div>
 </div>
-<h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
+<h2 id="known-limitations">Known limitations<a data-markdown-ignore class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>When you switch from async replication to Group Replication, the Operator does not verify that the replicas are caught up. If another Pod holds transactions that <code>mysql-0</code> does not have, the Operator overwrites that Pod with a clone from <code>mysql-0</code>, and those transactions are lost. Until the Operator checks this itself, <a href="#verify-that-all-replicas-are-caught-up">verify the GTID sets</a> and <a href="#take-a-backup-from-the-primary">take a backup from the primary</a> before you switch.</p>
@@ -6163,7 +6163,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <p>This limitation is known and will be fixed in a later release. <a href="backups-restore.html">Restore the cluster</a> from the backup you took before the switch.</p>
 </li>
 </ol>
-<h2 id="operator-120-and-earlier">Operator 1.2.0 and earlier<a class="headerlink" href="#operator-120-and-earlier" title="Permanent link">¶</a></h2>
+<h2 id="operator-120-and-earlier">Operator 1.2.0 and earlier<a data-markdown-ignore class="headerlink" href="#operator-120-and-earlier" title="Permanent link">¶</a></h2>
 <p>This procedure applies to Operator 1.2.0 or earlier. </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>

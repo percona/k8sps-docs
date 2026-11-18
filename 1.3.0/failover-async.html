@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5819,9 +5819,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="zero-data-loss-failover-in-async-clusters">Zero data loss failover in async clusters<a class="headerlink" href="#zero-data-loss-failover-in-async-clusters" title="Permanent link">¶</a></h1>
+<h1 id="zero-data-loss-failover-in-async-clusters">Zero data loss failover in async clusters<a data-markdown-ignore class="headerlink" href="#zero-data-loss-failover-in-async-clusters" title="Permanent link">¶</a></h1>
 <p>This page applies to clusters with <a href="architecture.html#asynchronous-replication-tech-preview">asynchronous replication</a>, where Orchestrator manages the replication topology. </p>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<h2 id="overview">Overview<a data-markdown-ignore class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
 <p>In an async cluster, replication runs with some lag. This lag means a transaction has already reached a replica’s relay log and waits to be applied.  </p>
 <p>If the primary goes down as a result of an out-of-memory kill or a hardware failure and it hasn’t transmitted a transaction to any replica before that, that transaction exists only in that primary’s binary log. Promoting a replica at that point loses this data.</p>
 <p>To ensure no data is lost during a failover, the Operator and Orchestrator split the failover process into these stages: </p>
@@ -5832,7 +5832,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ol>
 <p>Until the candidate is promoted, or until the failover timeout expires, the cluster has no writable primary. The default timeout is <code>1h</code>. You set that limit when you <a href="failover-async-setup.html#configure-failover">Configure failover</a>. What happens while the cluster waits and when the timeout runs out is covered in <a href="#understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a>.</p>
 <p>Orchestrator drives the failover stages through its failover hooks. The Operator’s role is to configure the mechanism through the Custom Resource, oversee it and surface its outcome through the cluster’s conditions and events.</p>
-<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">¶</a></h2>
+<h2 id="requirements">Requirements<a data-markdown-ignore class="headerlink" href="#requirements" title="Permanent link">¶</a></h2>
 <ul>
 <li>The Operator version 1.3.0 and higher</li>
 <li>
@@ -5854,13 +5854,13 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 <p>With backups disabled, Orchestrator falls back to its existing failover. It promotes a replica without fetching those binary logs, so transactions that never left the old primary are lost. The Operator records a <code>FailoverUnprotected</code> warning event on the cluster. See <a href="cr-statuses.html#events">Events</a>.</p>
 <p>The binary log and relay log settings a zero data loss failover depends on are described in <a href="#known-limitations">Known limitations</a>.</p>
-<h2 id="how-failover-works">How failover works<a class="headerlink" href="#how-failover-works" title="Permanent link">¶</a></h2>
+<h2 id="how-failover-works">How failover works<a data-markdown-ignore class="headerlink" href="#how-failover-works" title="Permanent link">¶</a></h2>
 <p>Let’s have a closer look at the failover stages</p>
-<h3 id="fetch-the-transactions-from-the-primarys-binary-log">Fetch the transactions from the primary’s binary log<a class="headerlink" href="#fetch-the-transactions-from-the-primarys-binary-log" title="Permanent link">¶</a></h3>
+<h3 id="fetch-the-transactions-from-the-primarys-binary-log">Fetch the transactions from the primary’s binary log<a data-markdown-ignore class="headerlink" href="#fetch-the-transactions-from-the-primarys-binary-log" title="Permanent link">¶</a></h3>
 <p>The <code>xtrabackup</code> sidecar in every MySQL Pod runs an HTTP server that controls backups. A replica to be promoted (the candidate) connects to this server on the <code>/failover/stream</code> endpoint  to fetch the binary logs it does not have yet.</p>
 <p>The candidate authenticates as the <a href="users.html#system-users"><code>operator</code></a> user and reads whatever transactions the old primary never replicated directly from its binary logs, starting from the latest position the replica I/O thread has received from the primary. The position is determined by the values from <code>Source_Log_File</code> and <code>Read_Source_Log_Pos</code>. </p>
 <p>The sidecar returns one tar stream that includes everything from the requested position to the last log. The candidate extracts the archive into a staging directory. The default path is <code>/var/lib/mysql/source-logs</code>.</p>
-<h4 id="if-the-primary-pod-is-unreachable">If the primary Pod is unreachable<a class="headerlink" href="#if-the-primary-pod-is-unreachable" title="Permanent link">¶</a></h4>
+<h4 id="if-the-primary-pod-is-unreachable">If the primary Pod is unreachable<a data-markdown-ignore class="headerlink" href="#if-the-primary-pod-is-unreachable" title="Permanent link">¶</a></h4>
 <p>To fetch binary logs, the old primary Pod needs to be reachable over the network. <code>mysqld</code> on that Pod can be down. The <code>xtrabackup</code> sidecar serves the binary logs over HTTP.</p>
 <p>When the Pod can’t be scheduled, or the candidate can’t reach it, a fetch attempt fails. Orchestrator retries repeatedly until the <a href="#understand-failover-timeout-and-recovery-policy">failover timeout</a> is reached. </p>
 <p>An attempt stops at either of these limits:</p>
@@ -5869,7 +5869,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Streaming stops when the source sends no data for two minutes.</li>
 </ul>
 <p>The second limit covers sidecar startup, the response headers, and each read of the body. A transfer that keeps sending data runs to completion.</p>
-<h3 id="apply-the-binary-logs-on-the-candidate-replica">Apply the binary logs on the candidate replica<a class="headerlink" href="#apply-the-binary-logs-on-the-candidate-replica" title="Permanent link">¶</a></h3>
+<h3 id="apply-the-binary-logs-on-the-candidate-replica">Apply the binary logs on the candidate replica<a data-markdown-ignore class="headerlink" href="#apply-the-binary-logs-on-the-candidate-replica" title="Permanent link">¶</a></h3>
 <p>The candidate adds the binary logs it just fetched to its relay log, then waits until they are applied.</p>
 <p>The candidate takes these steps:</p>
 <ol>
@@ -5881,12 +5881,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The replication process that normally receives events from a primary remains stopped, since there is no primary available until the candidate is promoted. Once the candidate finishes applying the fetched events, it contains all the transactions that the old primary had stored in its binary log.</p>
 <p>A crash can leave a partial event at the end of the last binary log. That fragment is left out. The primary never finished writing it, and applying it would stop replication on the candidate.</p>
 <p>When the candidate already has everything the primary wrote, nothing is added and the candidate moves on.</p>
-<h3 id="promote-the-candidate">Promote the candidate<a class="headerlink" href="#promote-the-candidate" title="Permanent link">¶</a></h3>
+<h3 id="promote-the-candidate">Promote the candidate<a data-markdown-ignore class="headerlink" href="#promote-the-candidate" title="Permanent link">¶</a></h3>
 <p>After the candidate has caught up, Orchestrator promotes it. The candidate becomes the primary and starts accepting writes. The other replicas replicate from it.</p>
 <p>Orchestrator chooses which replica to promote. It prefers a replica with no problems reported, then the one that has applied the most transactions. When two replicas are equal, the one with the lower Pod name is chosen.</p>
 <p>A candidate that fails its readiness probe during failover is expected. Orchestrator can still reach that Pod and promote it.</p>
 <p>A planned switchover does not salvage binary logs. The primary is alive, so the failover hook returns without fetching them. A switchover is allowed only when the candidate’s replication lag does not exceed the <code>ReasonableMaintenanceReplicationLagSeconds</code> Orchestrator setting. Orchestrator rejects any replica that lags more, and the Operator retries the switchover on the next reconcile. After Orchestrator makes the primary read-only, it waits for the candidate to catch up for at most the same time, and then promotes it. The default value is 120 seconds. To change it, see <a href="failover-async-setup.html#set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover</a>.</p>
-<h3 id="if-the-old-primary-comes-back">If the old primary comes back<a class="headerlink" href="#if-the-old-primary-comes-back" title="Permanent link">¶</a></h3>
+<h3 id="if-the-old-primary-comes-back">If the old primary comes back<a data-markdown-ignore class="headerlink" href="#if-the-old-primary-comes-back" title="Permanent link">¶</a></h3>
 <p>Orchestrator keeps checking whether the old primary is back. The check runs before the candidate is changed, again while the candidate applies the recovered transactions, and once more just before promotion. A primary that comes back during that wait stops the promotion, even when applying has just finished.</p>
 <p>The old primary counts as back when both of these are true:</p>
 <ul>
@@ -5898,7 +5898,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>When the old primary is back, Orchestrator aborts the failover and promotes nothing. It then makes that primary writable. Promoting the candidate as well would leave two Pods accepting writes. The candidate starts replicating from the old primary again. Events already added to its relay log stay there and keep being applied. The candidate also requests that same range from the primary, and MySQL skips transactions it has already applied.</p>
 <p>Orchestrator ends the failover. </p>
 <p>When the old primary’s Pod is gone, Orchestrator skips the check and the promotion continues.</p>
-<h2 id="understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy<a class="headerlink" href="#understand-failover-timeout-and-recovery-policy" title="Permanent link">¶</a></h2>
+<h2 id="understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy<a data-markdown-ignore class="headerlink" href="#understand-failover-timeout-and-recovery-policy" title="Permanent link">¶</a></h2>
 <p>While Orchestrator recovers the transactions from the failed primary, the cluster has no writable primary. The <code>orchestrator.failover.timeout</code> option limits this wait. The default is <code>1h</code>. The time covers every retry and starts at the first attempt for that primary. If the Orchestrator Raft leader changes during the failover, the timeout restarts. The <code>FailoverWaiting</code> event on the cluster names the policy that applies when the time runs out.</p>
 <p>When the timeout expires, the <code>orchestrator.failover.onTimeout</code> option decides what happens. You set both options when you <a href="failover-async-setup.html#configure-failover">configure failover</a>. </p>
 <p>The values are:</p>
@@ -5910,7 +5910,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><strong><code>ForceWithPossibleDataLoss</code></strong> makes Orchestrator pick a candidate and skip the binary log fetch. It still checks whether the old primary is back. When that primary accepts connections and holds every transaction the candidate has, nothing is promoted, and Orchestrator makes the primary writable. Otherwise Orchestrator promotes the candidate. Transactions that never left the old primary are lost. When the primary has no replicas, nothing is promoted. See the event table in <a href="failover-async-setup.html#see-whether-a-failover-is-blocked">See whether a failover is blocked</a> for what gets recorded.</p>
 </li>
 </ul>
-<h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
+<h2 id="known-limitations">Known limitations<a data-markdown-ignore class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
 <p>Zero-data-loss recovery depends on durability that the Operator doesn’t enforce:</p>
 <ul>
 <li>

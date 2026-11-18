@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5705,7 +5705,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="percona-operator-for-mysql-060"><em>Percona Operator for MySQL</em> 0.6.0<a class="headerlink" href="#percona-operator-for-mysql-060" title="Permanent link">¶</a></h1>
+<h1 id="percona-operator-for-mysql-060"><em>Percona Operator for MySQL</em> 0.6.0<a data-markdown-ignore class="headerlink" href="#percona-operator-for-mysql-060" title="Permanent link">¶</a></h1>
 <ul>
 <li>
 <p><strong>Date</strong></p>
@@ -5717,18 +5717,18 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 </ul>
 <p>Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.6.0 of the Percona Operator for MySQL is still <strong>a tech preview release</strong> and it is <strong>not recommended for production environments</strong>. <strong>As of today, we recommend using</strong> <a href="https://docs.percona.com/percona-operator-for-mysql/pxc/index.html">Percona Operator for MySQL based on Percona XtraDB Cluster</a>, which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.</p>
-<h2 id="highlights">Highlights<a class="headerlink" href="#highlights" title="Permanent link">¶</a></h2>
+<h2 id="highlights">Highlights<a data-markdown-ignore class="headerlink" href="#highlights" title="Permanent link">¶</a></h2>
 <ul>
 <li>The <a href="../update-db.html#automated-upgrade">Smart Upgrade functionality</a> allows users to automatically get the latest version of the software compatible with the Operator and apply it safely</li>
 <li>The role of the HAProxy load balancer, which was previously used for asynchronous replication between MySQL instances, has been extended. Now HAProxy can also be used with group replication as an alternative to MySQL Router</li>
 <li>Starting from this release, semi-synchronous replication is not supported by the Operator in favor of using safer options: either group replication, or asynchronous replication (see <a href="https://www.percona.com/blog/face-to-face-with-semi-synchronous-replication/">this blog post <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> for details on how asynchronous replication may cause data loss in case of a node crash)</li>
 </ul>
-<h2 id="new-features">New features<a class="headerlink" href="#new-features" title="Permanent link">¶</a></h2>
+<h2 id="new-features">New features<a data-markdown-ignore class="headerlink" href="#new-features" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="https://jira.percona.com/browse/K8SPS-283">K8SPS-283</a>: Now the cluster with group replication can be deployed with HAProxy instead of MySQL Router</li>
 <li><a href="https://jira.percona.com/browse/K8SPS-160">K8SPS-160</a>: Add Smart Upgrade functionality to automate Percona Server for MySQL upgrades</li>
 </ul>
-<h2 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">¶</a></h2>
+<h2 id="improvements">Improvements<a data-markdown-ignore class="headerlink" href="#improvements" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="https://jira.percona.com/browse/K8SPS-162">K8SPS-162</a>: Now <a href="https://www.percona.com/blog/understanding-mysql-x-all-flavors">MySQL X protocol</a> can be used with HAProxy load balancing</li>
 <li><a href="https://jira.percona.com/browse/K8SPS-163">K8SPS-163</a>: Percona Monitoring and Management (PMM) is now able to gather HAProxy metrics</li>
@@ -5737,7 +5737,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="https://jira.percona.com/browse/K8SPS-280">K8SPS-280</a>: Full cluster crash recovery with group replication is now using MySQL shell built-in checks to detect the member with latest transactions and reboots from it, making the cluster prone to data loss</li>
 <li><a href="https://jira.percona.com/browse/K8SPS-281">K8SPS-281</a>: The Operator <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/CONTRIBUTING.md#1-contributing-to-the-source-tree">can now be run locally <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> against a remote Kubernetes cluster, which simplifies the development process, substantially shortening the way to make and try minor code improvements</li>
 </ul>
-<h2 id="bugs-fixed">Bugs Fixed<a class="headerlink" href="#bugs-fixed" title="Permanent link">¶</a></h2>
+<h2 id="bugs-fixed">Bugs Fixed<a data-markdown-ignore class="headerlink" href="#bugs-fixed" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="https://jira.percona.com/browse/K8SPS-260">K8SPS-260</a>: Fix a bug due to which group replication cluster can stuck in initializing state after restore</li>
 <li><a href="https://jira.percona.com/browse/K8SPS-190">K8SPS-190</a>: Fix a bug due to which the Operator could not delete a cluster that was stuck in initializing state (for example, due to the inability to start one of the Pods)</li>
@@ -5753,11 +5753,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="https://jira.percona.com/browse/K8SPS-272">K8SPS-272</a>: Fix a bug due to which the password of the <code>monitor</code> user was visible in the pmm-client logs</li>
 <li><a href="https://jira.percona.com/browse/K8SPS-278">K8SPS-278</a>: Fix a bug due to which MySQL Pods did not restart when the user-created MySQL config was provided with the <code>&lt;cluster-name&gt;-mysql</code> ConfigMap</li>
 </ul>
-<h2 id="deprecation-and-removal">Deprecation and removal<a class="headerlink" href="#deprecation-and-removal" title="Permanent link">¶</a></h2>
+<h2 id="deprecation-and-removal">Deprecation and removal<a data-markdown-ignore class="headerlink" href="#deprecation-and-removal" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="https://jira.percona.com/browse/K8SPS-276">K8SPS-276</a>: Semi-synchronous replication support was removed from the Operator; now it provides either group replication with HAProxy or MySQL Router, or asynchronous replication with Orchestrator and HAProxy</li>
 </ul>
-<h2 id="supported-platforms">Supported Platforms<a class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
+<h2 id="supported-platforms">Supported Platforms<a data-markdown-ignore class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
 <p>The Operator was developed and tested with Percona Server for MySQL  8.0.33-25.
 Other options may also work but have not been tested. Other software components include:</p>
 <ul>

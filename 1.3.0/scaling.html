@@ -142,7 +142,7 @@ Kubernetes nodes.">
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5776,7 +5776,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="scale-percona-distribution-for-mysql-on-kubernetes">Scale Percona Distribution for MySQL on Kubernetes<a class="headerlink" href="#scale-percona-distribution-for-mysql-on-kubernetes" title="Permanent link">¶</a></h1>
+<h1 id="scale-percona-distribution-for-mysql-on-kubernetes">Scale Percona Distribution for MySQL on Kubernetes<a data-markdown-ignore class="headerlink" href="#scale-percona-distribution-for-mysql-on-kubernetes" title="Permanent link">¶</a></h1>
 <p>One of the great advantages brought by Kubernetes
 platform is the ease of an application scaling. Scaling an application
 results in adding or removing the Pods and scheduling them to available
@@ -5787,8 +5787,8 @@ nodes to the cluster. <a href="architecture.html#high-availability">High availab
 looks technically similar, because it also involves additional nodes, but the
 reason is maintaining liveness of the system in case of server or network
 failures.</p>
-<h2 id="vertical-scaling">Vertical scaling<a class="headerlink" href="#vertical-scaling" title="Permanent link">¶</a></h2>
-<h3 id="scale-compute-resources">Scale compute resources<a class="headerlink" href="#scale-compute-resources" title="Permanent link">¶</a></h3>
+<h2 id="vertical-scaling">Vertical scaling<a data-markdown-ignore class="headerlink" href="#vertical-scaling" title="Permanent link">¶</a></h2>
+<h3 id="scale-compute-resources">Scale compute resources<a data-markdown-ignore class="headerlink" href="#scale-compute-resources" title="Permanent link">¶</a></h3>
 <p>The Operator deploys and manages multiple components, such as Percona 
 Server for MySQL, Orchestrator, HAProxy or MySQL Router and others. You can manage CPU or memory for every component separately by editing corresponding sections in the Custom Resource. We follow 
 the structure for <code>requests</code> and <code>limits</code> that <a href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">Kubernetes provides <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
@@ -5813,7 +5813,7 @@ for more details about other components.</p>
 <p class="admonition-title">Note</p>
 <p>Changing compute resources for MySQL Pods (<code>mysql.resources</code>) triggers a recalculation of the MySQL configuration, when the <a href="autoconfig.html">automatic configuration tuning</a> is enabled (<code>mysql.autoConfig.enabled: true</code>). The settings that usually change because of that are buffer pool and redo log. Since they can only be set at startup, this causes a rolling restart of the MySQL StatefulSet. Plan a resize of <code>mysql.resources</code> as a change-management event.</p>
 </div>
-<h3 id="scale-storage">Scale storage<a class="headerlink" href="#scale-storage" title="Permanent link">¶</a></h3>
+<h3 id="scale-storage">Scale storage<a data-markdown-ignore class="headerlink" href="#scale-storage" title="Permanent link">¶</a></h3>
 <p>Kubernetes manages storage with the following components:</p>
 <ul>
 <li>a PersistentVolume (PV) - a segment of
@@ -5832,7 +5832,7 @@ Note that you <strong>cannot shrink</strong> the size of an existing PVC object.
 </ul>
 <p>You can also use an external autoscaler with the Operator. Enabling an external autoscaler disables the Operator’s internal logic for automatic storage resizing. Choose one method based on your environment and requirements; using both simultaneously is not supported.</p>
 <p>For either option, the volume type must support PVCs expansion.</p>
-<h4 id="check-expansion-capability-for-your-volume-type">Check expansion capability for your volume type<a class="headerlink" href="#check-expansion-capability-for-your-volume-type" title="Permanent link">¶</a></h4>
+<h4 id="check-expansion-capability-for-your-volume-type">Check expansion capability for your volume type<a data-markdown-ignore class="headerlink" href="#check-expansion-capability-for-your-volume-type" title="Permanent link">¶</a></h4>
 <p>Certain volume types support PVCs expansion by default.  You can run the following command to check if your storage supports the expansion capability:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>sc<span class="w"> </span>&lt;storage<span class="w"> </span>class<span class="w"> </span>name&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>AllowVolumeExpansion
 </code></pre></div>
@@ -5844,7 +5844,7 @@ Note that you <strong>cannot shrink</strong> the size of an existing PVC object.
 <p>Find exact details about
 PVCs and the supported volume types in <a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims">Kubernetes
 documentation  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
-<h4 id="automatic-storage-resizing">Automatic storage resizing<a class="headerlink" href="#automatic-storage-resizing" title="Permanent link">¶</a></h4>
+<h4 id="automatic-storage-resizing">Automatic storage resizing<a data-markdown-ignore class="headerlink" href="#automatic-storage-resizing" title="Permanent link">¶</a></h4>
 <p>Starting with version 1.2.0, the Operator can automatically resize Persistent Volume Claims (PVCs) for Percona Server for MySQL Pods based on your configured thresholds. The Operator monitors storage usage of MySQL PVCs. When the usage exceeds the defined threshold, the Operator triggers resizing until the storage size reaches the maximum limit.</p>
 <p>This feature gives you:</p>
 <ul>
@@ -5927,7 +5927,7 @@ documentation  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" vie
 </ul>
 <p>The <code>storageAutoscaling</code> section appears under the <code>.status</code> in the Custom Resource. See <a href="cr-statuses.html#storage-autoscaling-status">Custom resource statuses</a> for field meanings.</p>
 <p>When the storage size reaches the limit, no further resizing is done and this event is recorded in the logs. You can either clean up the data or set a new limit based on your organization’s policies and requirements. For help with common issues, see <a href="debug-logs.html">Operator logs</a>.</p>
-<h4 id="storage-resizing-with-volume-expansion-capability">Storage resizing with Volume Expansion capability<a class="headerlink" href="#storage-resizing-with-volume-expansion-capability" title="Permanent link">¶</a></h4>
+<h4 id="storage-resizing-with-volume-expansion-capability">Storage resizing with Volume Expansion capability<a data-markdown-ignore class="headerlink" href="#storage-resizing-with-volume-expansion-capability" title="Permanent link">¶</a></h4>
 <p>In this document we’re using the default Percona Server for MySQL cluster name <code>ps-cluster1</code>. If you have a different name, replace <code>ps-cluster1</code> with it in the commands.</p>
 <p>To enable storage resizing via volume expansion, do the following:</p>
 <ol>
@@ -5957,7 +5957,7 @@ documentation  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" vie
 </li>
 </ol>
 <p>The storage size change takes some time. When it starts, the Operator automatically adds the <code>pvc-resize-in-progress</code> annotation to the <code>PerconaServerMySQL</code> Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation.</p>
-<h4 id="manual-resizing">Manual resizing<a class="headerlink" href="#manual-resizing" title="Permanent link">¶</a></h4>
+<h4 id="manual-resizing">Manual resizing<a data-markdown-ignore class="headerlink" href="#manual-resizing" title="Permanent link">¶</a></h4>
 <p class="power-number">To increase the storage size manually, do the following:</p>
 <ol>
 <li>
@@ -6016,7 +6016,7 @@ kubectl<span class="w"> </span>edit<span class="w"> </span>pvc<span class="w"> <
 </li>
 </ol>
 <p>The storage size change takes some time. When it starts, the Operator automatically adds the <code>pvc-resize-in-progress</code> annotation to the <code>PerconaServerMySQL</code> Custom Resource. The annotation contains the timestamp of the resize start and indicates that the resize operation is running. After the resize finishes, the Operator deletes this annotation. </p>
-<h2 id="horizontal-scaling">Horizontal scaling<a class="headerlink" href="#horizontal-scaling" title="Permanent link">¶</a></h2>
+<h2 id="horizontal-scaling">Horizontal scaling<a data-markdown-ignore class="headerlink" href="#horizontal-scaling" title="Permanent link">¶</a></h2>
 <p>Size of the cluster is controlled by a <a href="operator.html#mysqlsize">size key</a> in the
 <a href="operator.html">Custom Resource options</a>
 configuration. That’s why scaling the cluster needs nothing more but changing

@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5963,10 +5963,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="clusterset-resource-options">ClusterSet Resource options<a class="headerlink" href="#clusterset-resource-options" title="Permanent link">¶</a></h1>
+<h1 id="clusterset-resource-options">ClusterSet Resource options<a data-markdown-ignore class="headerlink" href="#clusterset-resource-options" title="Permanent link">¶</a></h1>
 <p>The <code>PerconaServerMySQLClusterSet</code> Custom Resource defines cross-site replication between Group Replication clusters as a MySQL InnoDB ClusterSet. Use the short name <code>ps-clusterset</code>.</p>
 <p>This document describes all available options. For status fields and conditions, see <a href="cr-statuses.html">Custom resource statuses</a>. </p>
-<h2 id="apiversion"><code>apiVersion</code><a class="headerlink" href="#apiversion" title="Permanent link">¶</a></h2>
+<h2 id="apiversion"><code>apiVersion</code><a data-markdown-ignore class="headerlink" href="#apiversion" title="Permanent link">¶</a></h2>
 <p>Specifies the API version of the Custom Resource.</p>
 <table>
 <thead>
@@ -5982,9 +5982,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h2 id="kind"><code>kind</code><a class="headerlink" href="#kind" title="Permanent link">¶</a></h2>
+<h2 id="kind"><code>kind</code><a data-markdown-ignore class="headerlink" href="#kind" title="Permanent link">¶</a></h2>
 <p>Defines the type of resource: <code>PerconaServerMySQLClusterSet</code>.</p>
-<h2 id="metadata"><code>metadata</code><a class="headerlink" href="#metadata" title="Permanent link">¶</a></h2>
+<h2 id="metadata"><code>metadata</code><a data-markdown-ignore class="headerlink" href="#metadata" title="Permanent link">¶</a></h2>
 <p>The metadata section identifies the ClusterSet object. It includes the following keys:</p>
 <ul>
 <li><code>name</code> — Name of the ClusterSet resource. </li>
@@ -6005,9 +6005,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><code>percona.com/clusterset-rejoin-cluster</code> — Set this to a replica’s InnoDB cluster name (<code>spec.clusters[].innodbClusterName</code>) when the replica is healthy but ClusterSet replication is down. Do not set it to the current primary. The Operator removes the annotation after the rejoin attempt, whether it succeeds or fails. See <a href="replication-setup.html#rejoin-a-replica-cluster">Rejoin a replica cluster</a>.</p>
 </li>
 </ul>
-<h2 id="spec"><code>spec</code><a class="headerlink" href="#spec" title="Permanent link">¶</a></h2>
+<h2 id="spec"><code>spec</code><a data-markdown-ignore class="headerlink" href="#spec" title="Permanent link">¶</a></h2>
 <p>This section contains the ClusterSet configuration.</p>
-<h3 id="specprimarycluster"><code>spec.primaryCluster</code><a class="headerlink" href="#specprimarycluster" title="Permanent link">¶</a></h3>
+<h3 id="specprimarycluster"><code>spec.primaryCluster</code><a data-markdown-ignore class="headerlink" href="#specprimarycluster" title="Permanent link">¶</a></h3>
 <p>Name of the InnoDB cluster that should serve writes. Must match exactly one <code>spec.clusters[].innodbClusterName</code>. Must contain only alphanumeric characters (max 63).</p>
 <p>Editing this field triggers a <strong>planned switchover</strong> when the current primary is reachable. For a <strong>forced failover</strong> when the current primary is unreachable, you must also set the <a href="#specunsafeflagsforcedfailover"><code>spec.unsafeFlags.forcedFailover</code></a> to <code>true</code>.</p>
 <table>
@@ -6024,9 +6024,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="the-specunsafeflags-subsection">The <code>spec.unsafeFlags</code> subsection<a class="headerlink" href="#the-specunsafeflags-subsection" title="Permanent link">¶</a></h3>
+<h3 id="the-specunsafeflags-subsection">The <code>spec.unsafeFlags</code> subsection<a data-markdown-ignore class="headerlink" href="#the-specunsafeflags-subsection" title="Permanent link">¶</a></h3>
 <p>Groups opt-in flags for destructive ClusterSet operations. Both default to <code>false</code>.</p>
-<h4 id="specunsafeflagsforcedfailover"><code>spec.unsafeFlags.forcedFailover</code><a class="headerlink" href="#specunsafeflagsforcedfailover" title="Permanent link">¶</a></h4>
+<h4 id="specunsafeflagsforcedfailover"><code>spec.unsafeFlags.forcedFailover</code><a data-markdown-ignore class="headerlink" href="#specunsafeflagsforcedfailover" title="Permanent link">¶</a></h4>
 <p>When <code>true</code>, permits <code>forcePrimaryCluster()</code> if you change <code>spec.primaryCluster</code> while the current primary is unreachable.</p>
 <table>
 <thead>
@@ -6046,7 +6046,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p class="admonition-title">Warning</p>
 <p>Forced failover can promote a replica while the old primary may still accept writes, causing split-brain and lost transactions. Set this only when you are certain the old primary cannot recover.</p>
 </div>
-<h4 id="specunsafeflagsforcedclusterremoval"><code>spec.unsafeFlags.forcedClusterRemoval</code><a class="headerlink" href="#specunsafeflagsforcedclusterremoval" title="Permanent link">¶</a></h4>
+<h4 id="specunsafeflagsforcedclusterremoval"><code>spec.unsafeFlags.forcedClusterRemoval</code><a data-markdown-ignore class="headerlink" href="#specunsafeflagsforcedclusterremoval" title="Permanent link">¶</a></h4>
 <p>When <code>true</code>, permits <code>removeCluster(..., {force: true})</code> for an unreachable replica removed from <code>spec.clusters[]</code>.</p>
 <table>
 <thead>
@@ -6066,7 +6066,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p class="admonition-title">Warning</p>
 <p>Forced removal abandons unreplicated transactions on the removed cluster. The cluster may require manual cleanup or a full rebuild.</p>
 </div>
-<h3 id="specsslmode"><code>spec.sslMode</code><a class="headerlink" href="#specsslmode" title="Permanent link">¶</a></h3>
+<h3 id="specsslmode"><code>spec.sslMode</code><a data-markdown-ignore class="headerlink" href="#specsslmode" title="Permanent link">¶</a></h3>
 <p>SSL mode for ClusterSet async replication channels between primary and replica clusters.</p>
 <table>
 <thead>
@@ -6112,7 +6112,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="speccredentialssecretname"><code>spec.credentialsSecret.name</code><a class="headerlink" href="#speccredentialssecretname" title="Permanent link">¶</a></h3>
+<h3 id="speccredentialssecretname"><code>spec.credentialsSecret.name</code><a data-markdown-ignore class="headerlink" href="#speccredentialssecretname" title="Permanent link">¶</a></h3>
 <p>The name of a Secret in the same namespace that holds the <code>clusterset</code> user password. </p>
 <table>
 <thead>
@@ -6128,7 +6128,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="speccredentialssecretkey"><code>spec.credentialsSecret.key</code><a class="headerlink" href="#speccredentialssecretkey" title="Permanent link">¶</a></h3>
+<h3 id="speccredentialssecretkey"><code>spec.credentialsSecret.key</code><a data-markdown-ignore class="headerlink" href="#speccredentialssecretkey" title="Permanent link">¶</a></h3>
 <p>The field in the Secret that holds the <code>clusterset</code> user password value. This password must match on every participating cluster. Defaults to <code>clusterset</code>.</p>
 <table>
 <thead>
@@ -6144,9 +6144,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="the-specclusters-subsection">The <code>spec.clusters</code> subsection<a class="headerlink" href="#the-specclusters-subsection" title="Permanent link">¶</a></h3>
+<h3 id="the-specclusters-subsection">The <code>spec.clusters</code> subsection<a data-markdown-ignore class="headerlink" href="#the-specclusters-subsection" title="Permanent link">¶</a></h3>
 <p>List of InnoDB clusters that participate in the ClusterSet. Minimum 1 entry (primary only at bootstrap); maximum 10. Each cluster name must be unique.</p>
-<h4 id="specclustersinnodbclustername"><code>spec.clusters[].innodbClusterName</code><a class="headerlink" href="#specclustersinnodbclustername" title="Permanent link">¶</a></h4>
+<h4 id="specclustersinnodbclustername"><code>spec.clusters[].innodbClusterName</code><a data-markdown-ignore class="headerlink" href="#specclustersinnodbclustername" title="Permanent link">¶</a></h4>
 <p>Logical name of the InnoDB cluster within the ClusterSet. Used in <code>spec.primaryCluster</code>, status, and MySQL Shell AdminAPI calls. The name must match the value from <code>status.innodbClusterName</code> of a corresponding <code>PerconaServerMySQL</code> Custom Resource. </p>
 <p>Alphanumeric only, max 63 characters. Immutable in practice — rename by remove and re-add.</p>
 <table>
@@ -6163,7 +6163,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="specclustersendpoints"><code>spec.clusters[].endpoints</code><a class="headerlink" href="#specclustersendpoints" title="Permanent link">¶</a></h4>
+<h4 id="specclustersendpoints"><code>spec.clusters[].endpoints</code><a data-markdown-ignore class="headerlink" href="#specclustersendpoints" title="Permanent link">¶</a></h4>
 <p>List of <code>host:port</code> pairs the controller uses to reach MySQL members of this cluster. Minimum 1, maximum 9 per cluster. The controller uses the first reachable endpoint. Multiple entries improve resilience to single-member failures.</p>
 <p>Each <code>host</code> must be unique across <strong>all</strong> clusters in the ClusterSet. It can be the IP address or a DNS name reachable from the <code>mysqlshell-runner</code> Pod.</p>
 <p>The <code>port</code> is MySQL port. Defaults to <code>3306</code>.</p>
@@ -6181,7 +6181,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="speccreatereplicaclusteroptionsrecoverymethod"><code>spec.createReplicaClusterOptions.recoveryMethod</code><a class="headerlink" href="#speccreatereplicaclusteroptionsrecoverymethod" title="Permanent link">¶</a></h3>
+<h3 id="speccreatereplicaclusteroptionsrecoverymethod"><code>spec.createReplicaClusterOptions.recoveryMethod</code><a data-markdown-ignore class="headerlink" href="#speccreatereplicaclusteroptionsrecoverymethod" title="Permanent link">¶</a></h3>
 <p>Preferred method for seeding the first member of a new replica cluster when it joins the ClusterSet.</p>
 <p>Supported values:</p>
 <ul>
@@ -6203,7 +6203,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="specmysqlshellrunnerimage"><code>spec.mysqlshellRunner.image</code><a class="headerlink" href="#specmysqlshellrunnerimage" title="Permanent link">¶</a></h3>
+<h3 id="specmysqlshellrunnerimage"><code>spec.mysqlshellRunner.image</code><a data-markdown-ignore class="headerlink" href="#specmysqlshellrunnerimage" title="Permanent link">¶</a></h3>
 <p>Container image for the <code>mysqlshell-runner</code> Pod and ClusterSet Jobs. Must contain <code>mysqlsh</code> on <code>PATH</code>. The mysqlsh major version must match the MySQL endpoints (8.0 endpoints → 8.0 image, 8.4 endpoints → 8.4 image).</p>
 <table>
 <thead>

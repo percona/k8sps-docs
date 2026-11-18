@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5927,18 +5927,18 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="percona-operator-for-mysql-0110-2025-09-01">Percona Operator for MySQL 0.11.0 (2025-09-01)<a class="headerlink" href="#percona-operator-for-mysql-0110-2025-09-01" title="Permanent link">¶</a></h1>
+<h1 id="percona-operator-for-mysql-0110-2025-09-01">Percona Operator for MySQL 0.11.0 (2025-09-01)<a data-markdown-ignore class="headerlink" href="#percona-operator-for-mysql-0110-2025-09-01" title="Permanent link">¶</a></h1>
 <p><a class="md-button" href="../System-Requirements.html#installation-guidelines">Installation</a></p>
 <p>Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.11.0 of the Percona Operator for MySQL is still <strong>a tech preview release</strong>, and it is <strong>not recommended for production environments</strong>. </p>
 <p><strong>As of today, we recommend using</strong> <a href="https://docs.percona.com/percona-operator-for-mysql/pxc/index.html">Percona Operator for MySQL based on Percona XtraDB Cluster</a>, which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.</p>
-<h2 id="release-highlights">Release highlights<a class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
-<h3 id="support-for-mysql-84">Support for MySQL 8.4<a class="headerlink" href="#support-for-mysql-84" title="Permanent link">¶</a></h3>
+<h2 id="release-highlights">Release highlights<a data-markdown-ignore class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
+<h3 id="support-for-mysql-84">Support for MySQL 8.4<a data-markdown-ignore class="headerlink" href="#support-for-mysql-84" title="Permanent link">¶</a></h3>
 <p>This release introduces support for Percona Server for MySQL 8.4.x. The Operator supports all major functionality for this latest major version except data-at-rest encryption. However, we do not recommended Percona Server for MySQL 8.4 for production environments yet.</p>
-<h3 id="ensure-data-security-with-data-at-rest-encryption">Ensure data security with data at rest encryption<a class="headerlink" href="#ensure-data-security-with-data-at-rest-encryption" title="Permanent link">¶</a></h3>
+<h3 id="ensure-data-security-with-data-at-rest-encryption">Ensure data security with data at rest encryption<a data-markdown-ignore class="headerlink" href="#ensure-data-security-with-data-at-rest-encryption" title="Permanent link">¶</a></h3>
 <p>Data-at-rest encryption provides robust data protection by encrypting your database files on disk. Data is encrypted automatically, in real time, prior to writing to storage and decrypted when read from storage. The Operator uses the <code>keyring_vault</code> plugin to encrypt tablespace files and binlog. It integrates directly with HashiCorp Vault, giving you a secure and automated solution for managing encryption keys.</p>
 <p>With this feature, you can meet your compliance requirements and protect sensitive data without the operational complexity. Learn how to configure it in our <a href="../encryption.html">documentation</a></p>
 <p>Note that data-at-rest encryption is currently not supported for Percona Server for MySQL 8.4.x. We plan to add it in future releases.</p>
-<h3 id="support-for-emptydir-and-hostpath-volumes">Support for <code>emptyDir</code> and <code>hostPath</code> volumes<a class="headerlink" href="#support-for-emptydir-and-hostpath-volumes" title="Permanent link">¶</a></h3>
+<h3 id="support-for-emptydir-and-hostpath-volumes">Support for <code>emptyDir</code> and <code>hostPath</code> volumes<a data-markdown-ignore class="headerlink" href="#support-for-emptydir-and-hostpath-volumes" title="Permanent link">¶</a></h3>
 <p>You can now configure the Operator to use <code>emptyDir</code> or <code>hostPath</code> volumes for MySQL Pods, in addition to <code>persistentVolumeClaim</code> volumes. This extends the number of use cases for using the Operator, such as configuring additional storage for the data you don’t need to persist when a Pod restarts, ephemeral workloads, testing CI/CD automation against a database and more.</p>
 <p>Note the following key points for using volume types:</p>
 <ul>
@@ -5946,23 +5946,23 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><code>emptyDir</code> is not for persistent data.</li>
 <li><code>persistentVolumeClaim</code> is the recommended way for persistent, portable storage in Kubernetes.</li>
 </ul>
-<h3 id="improved-security-for-user-secrets-with-special-characters-in-passwords">Improved security for user secrets with special characters in passwords<a class="headerlink" href="#improved-security-for-user-secrets-with-special-characters-in-passwords" title="Permanent link">¶</a></h3>
+<h3 id="improved-security-for-user-secrets-with-special-characters-in-passwords">Improved security for user secrets with special characters in passwords<a data-markdown-ignore class="headerlink" href="#improved-security-for-user-secrets-with-special-characters-in-passwords" title="Permanent link">¶</a></h3>
 <p>The Operator now generates stronger passwords using the combination of uppercase and lowercase letters, digits, and special characters like <code>! $ % &amp; ( ) * + , - . &lt; = &gt; ? @ [ ] ^ _ { } ~ #</code>. These have been tested to ensure compatibility across SQL queries, shell scripts, YAML files, and connection strings.</p>
 <p>The Operator excludes problematic characters such as <code>’ “ \ / : | ;</code>.</p>
 <p>When you create passwords for user secrets yourself, be sure to stick to the approved character set to ensure your services run smoothly.</p>
-<h3 id="customize-connection-to-mysql-router-via-configurable-ports">Customize connection to MySQL Router via configurable ports<a class="headerlink" href="#customize-connection-to-mysql-router-via-configurable-ports" title="Permanent link">¶</a></h3>
+<h3 id="customize-connection-to-mysql-router-via-configurable-ports">Customize connection to MySQL Router via configurable ports<a data-markdown-ignore class="headerlink" href="#customize-connection-to-mysql-router-via-configurable-ports" title="Permanent link">¶</a></h3>
 <p>You can now modify existing ports for the MySQL Router service, as well as add new custom ports. This ability enables you to fine-tune the connection to your Percona Server for MySQL cluster. For example, you can separate access to the database for different applications, so that each one connects to the same MySQL Router but gets a tailored experience based on the port.</p>
-<h3 id="ability-to-resize-the-volume-with-volume-expansion-capability">Ability to resize the volume with Volume Expansion capability<a class="headerlink" href="#ability-to-resize-the-volume-with-volume-expansion-capability" title="Permanent link">¶</a></h3>
+<h3 id="ability-to-resize-the-volume-with-volume-expansion-capability">Ability to resize the volume with Volume Expansion capability<a data-markdown-ignore class="headerlink" href="#ability-to-resize-the-volume-with-volume-expansion-capability" title="Permanent link">¶</a></h3>
 <p>Previously, users could resize the storage by deleting the cluster and manually adjusting the storage size in custom resources. Now users can leverage the Volume Expansion capability available in Kubernetes and resize their PVCs by just changing the value of the <code>resources.requests.storage</code> option in the PerconaServerMySQL custom resource. The Operator handles the resizing flow thus reducing the intervention required from the user.</p>
-<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
+<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a data-markdown-ignore class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
 <ul>
 <li><code>.spec.pmm.runtimeClassName</code> field has been removed from the <code>crd.yaml</code> and code because it wasn’t being used</li>
 <li><code>.spec.backup.imagePullSecrets</code> will now be applied to the backup and restore jobs</li>
 <li><code>.spec.proxy.haproxy.runtimeClassName</code> will be applied to the HAProxy Pods</li>
 <li><code>.spec.pmm.serverUser</code> is removed as not used in PMM3</li>
 </ul>
-<h2 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
-<h3 id="new-features">New features<a class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
+<h2 id="changelog">Changelog<a data-markdown-ignore class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
+<h3 id="new-features">New features<a data-markdown-ignore class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-126">K8SPS-126</a> -  It is now possible to resize Persistent Volume Claims by patching the PerconaServerMySQL Custom Resource. Enable, volume expansion, change <code>persistentVolumeClaim.resources.requests.storage</code> and let the Operator do the scaling.</p>
@@ -5974,7 +5974,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-445">K8SPS-445</a> - Added MySQL 8.4 support</p>
 </li>
 </ul>
-<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
+<h3 id="improvements">Improvements<a data-markdown-ignore class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-437">K8SPS-437</a> - Removed the <code>spec.pmm.serverUser</code> field as not used in PMM 3</p>
@@ -6016,7 +6016,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-416">K8SPS-416</a> - Added the ability to configure tolerations via the Custom Resource</p>
 </li>
 </ul>
-<h2 id="bugs-fixed">Bugs Fixed<a class="headerlink" href="#bugs-fixed" title="Permanent link">¶</a></h2>
+<h2 id="bugs-fixed">Bugs Fixed<a data-markdown-ignore class="headerlink" href="#bugs-fixed" title="Permanent link">¶</a></h2>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-287">K8SPS-287</a> - Improved logging to include information about <code>allowUnsafeConfigurations</code> not set when a user tries to scale down a cluster to less than 3 Pods</p>
@@ -6040,7 +6040,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-425">K8SPS-425</a> - Fixed the cluster boootstrap process for a group replication clusters with MySQL 8.4</p>
 </li>
 </ul>
-<h2 id="supported-software">Supported software<a class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
+<h2 id="supported-software">Supported software<a data-markdown-ignore class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
 <p>The Operator was developed and tested with the following software:</p>
 <ul>
 <li>Percona Server for MySQL 8.4.5-5</li>
@@ -6056,7 +6056,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Cert Manager 1.18.2</li>
 </ul>
 <p>Other options may also work but have not been tested.</p>
-<h2 id="supported-platforms">Supported platforms<a class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
+<h2 id="supported-platforms">Supported platforms<a data-markdown-ignore class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
 <p>Percona Operators are designed for compatibility with all <a href="https://www.cncf.io/training/certification/software-conformance/">CNCF-certified <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> Kubernetes distributions. Our release process includes targeted testing and validation on major cloud provider platforms and OpenShift, as detailed below for Operator version 0.11.0:</p>
 <ul>
 <li><a href="https://cloud.google.com/kubernetes-engine">Google Kubernetes Engine (GKE) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.31 - 1.33</li>
@@ -6065,7 +6065,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.36.0 (based on Kubernetes 1.33.1)</li>
 </ul>
 <p>This list only includes the platforms that the Percona Operators are specifically tested on as part of the release process. Other Kubernetes flavors and versions depend on backward compatibility offered by Kubernetes itself.</p>
-<h2 id="percona-certified-images">Percona certified images<a class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
+<h2 id="percona-certified-images">Percona certified images<a data-markdown-ignore class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
 <p>Find Percona’s certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:</p>
 <table>
 <thead>

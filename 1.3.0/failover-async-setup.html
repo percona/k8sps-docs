@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5663,9 +5663,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="configure-and-orchestrate-zero-data-loss-failover-in-async-clusters">Configure and orchestrate zero-data-loss failover in async clusters<a class="headerlink" href="#configure-and-orchestrate-zero-data-loss-failover-in-async-clusters" title="Permanent link">¶</a></h1>
+<h1 id="configure-and-orchestrate-zero-data-loss-failover-in-async-clusters">Configure and orchestrate zero-data-loss failover in async clusters<a data-markdown-ignore class="headerlink" href="#configure-and-orchestrate-zero-data-loss-failover-in-async-clusters" title="Permanent link">¶</a></h1>
 <p>This page covers the setup and management of the zero-data-loss failover for clusters with <a href="architecture.html#asynchronous-replication-tech-preview">asynchronous replication</a>. For background on how the failover mechanism works and the explanation of the timeouts and Orchestrator behavior when timeout expires, see <a href="failover-async.html">About zero data loss failover</a>.</p>
-<h2 id="configure-failover">Configure failover<a class="headerlink" href="#configure-failover" title="Permanent link">¶</a></h2>
+<h2 id="configure-failover">Configure failover<a data-markdown-ignore class="headerlink" href="#configure-failover" title="Permanent link">¶</a></h2>
 <p>Configure the <code>spec.orchestrator.failover</code> subsection in the Custom Resource. </p>
 <ol>
 <li>
@@ -5687,7 +5687,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 </li>
 </ol>
-<h2 id="set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover<a class="headerlink" href="#set-the-replication-lag-limit-for-a-planned-switchover" title="Permanent link">¶</a></h2>
+<h2 id="set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover<a data-markdown-ignore class="headerlink" href="#set-the-replication-lag-limit-for-a-planned-switchover" title="Permanent link">¶</a></h2>
 <p>A planned switchover is allowed only when the candidate replica is close enough to the primary. Orchestrator rejects a candidate whose replication lag exceeds the <code>ReasonableMaintenanceReplicationLagSeconds</code> setting. The default is 120 seconds, which is twice the <code>ReasonableReplicationLagSeconds</code> value of 60 seconds. For how the switchover works, see <a href="failover-async.html#promote-the-candidate">Promote the candidate</a>.</p>
 <p>To change the limit, set <code>ReasonableMaintenanceReplicationLagSeconds</code> in the <code>spec.orchestrator.configuration</code> key. The value is a JSON object passed as a string:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
@@ -5695,7 +5695,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">    </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="s">'{"ReasonableMaintenanceReplicationLagSeconds":</span><span class="nv"> </span><span class="s">180}'</span>
 </code></pre></div>
 <p>Apply the change with <code>kubectl apply -f deploy/cr.yaml -n &lt;namespace&gt;</code>. Updating <code>orchestrator.configuration</code> triggers a rolling restart of the Orchestrator Pods. See <a href="operator.html#orchestratorconfiguration"><code>orchestrator.configuration</code></a> for the full description of the option.</p>
-<h2 id="see-whether-a-failover-is-blocked">See whether a failover is blocked<a class="headerlink" href="#see-whether-a-failover-is-blocked" title="Permanent link">¶</a></h2>
+<h2 id="see-whether-a-failover-is-blocked">See whether a failover is blocked<a data-markdown-ignore class="headerlink" href="#see-whether-a-failover-is-blocked" title="Permanent link">¶</a></h2>
 <p>The Operator reports whether the cluster currently has a writable primary in the <code>AsyncFailoverBlocked</code> condition:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[?(@.type=="AsyncFailoverBlocked")]}{.status}{": "}{.reason}{"\n"}{end}'</span>
@@ -5745,7 +5745,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tbody>
 </table>
 <p>Orchestrator retries a blocked recovery every few seconds. After one <code>FailoverWaiting</code>, <code>FailoverBlocked</code>, <code>FailoverFailed</code> or <code>FailoverUnprotected</code> event for a primary, the same event stays quiet for five minutes. <code>FailoverForced</code> is recorded each time.</p>
-<h2 id="force-a-promotion">Force a promotion<a class="headerlink" href="#force-a-promotion" title="Permanent link">¶</a></h2>
+<h2 id="force-a-promotion">Force a promotion<a data-markdown-ignore class="headerlink" href="#force-a-promotion" title="Permanent link">¶</a></h2>
 <p>When the old primary’s binary logs cannot be recovered, and you accept losing the transactions that never reached a replica, annotate the cluster:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>percona.com/force-promote-with-possible-data-loss<span class="o">=</span>&lt;value&gt;

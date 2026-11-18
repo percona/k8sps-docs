@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5807,22 +5807,22 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="encrypted-backups">Encrypted backups<a class="headerlink" href="#encrypted-backups" title="Permanent link">¶</a></h1>
+<h1 id="encrypted-backups">Encrypted backups<a data-markdown-ignore class="headerlink" href="#encrypted-backups" title="Permanent link">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.html">1.2.0</a></p>
 </div>
 <p>Percona Operator for MySQL uses <a href="https://docs.percona.com/percona-xtrabackup/latest/">Percona XtraBackup <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> to create physical backups. By default, backups are unencrypted. To add an extra security layer, you can encrypt backup files before they are stored in your cloud object storage. Encryption is applied inline during the backup stream, so files in the storage stay protected at rest even if the storage account is shared or accessed without authorization. This helps you meet compliance requirements without adding external encryption tools or changing how you run scheduled and on-demand backups.</p>
 <p>Encryption is available for the Group Replication and asynchronous replication cluster types.</p>
-<h2 id="backup-flow">Backup flow<a class="headerlink" href="#backup-flow" title="Permanent link">¶</a></h2>
+<h2 id="backup-flow">Backup flow<a data-markdown-ignore class="headerlink" href="#backup-flow" title="Permanent link">¶</a></h2>
 <p>You can encrypt both full and <a href="backups-incremental.html">incremental</a> backups, whether they are <a href="backups-scheduled.html">scheduled</a> or <a href="backups-ondemand.html">on-demand</a>. When encrypting incremental backups, the key must be the same for every backup in an incremental chain.</p>
 <p>You can enable encryption globally for all backups, or set different encryption options for each storage. The setting you configure for a specific storage overrides the global setting. This flexibility lets
 you tailor backup security to your unique requirements.</p>
-<h2 id="restore-flow">Restore flow<a class="headerlink" href="#restore-flow" title="Permanent link">¶</a></h2>
+<h2 id="restore-flow">Restore flow<a data-markdown-ignore class="headerlink" href="#restore-flow" title="Permanent link">¶</a></h2>
 <p>During the in-place restore to the same cluster, the Operator recognizes the encrypted backup and uses the same encryption key Secret to decrypt the data. </p>
 <p>For a restore on a new cluster or in a different Kubernetes environment, provide the same encryption key in the Restore resource. This is required because the Operator has no access to the encryption key Secrets from the source cluster.</p>
 <p><strong>The key used for the restore must match the key used to encrypt the backup</strong>. If the key is lost or rotated, the backup cannot be recovered.</p>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
-<h3 id="create-an-encryption-key-secret">Create an encryption key Secret<a class="headerlink" href="#create-an-encryption-key-secret" title="Permanent link">¶</a></h3>
+<h2 id="configuration">Configuration<a data-markdown-ignore class="headerlink" href="#configuration" title="Permanent link">¶</a></h2>
+<h3 id="create-an-encryption-key-secret">Create an encryption key Secret<a data-markdown-ignore class="headerlink" href="#create-an-encryption-key-secret" title="Permanent link">¶</a></h3>
 <p>Create a Kubernetes Secret that holds the encryption key. The encryption key must be base64-encoded.</p>
 <p>Generate the encryption key using the following command:</p>
 <div class="highlight"><pre><span></span><code>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">24</span>
@@ -5840,7 +5840,7 @@ you tailor backup security to your unique requirements.</p>
 </code></pre></div>
 <p>The Operator encodes the key when it creates the Secret.</p>
 <p>Store this Secret securely and back it up separately from your database backups. If you lose the key, encrypted backups cannot be restored.</p>
-<h3 id="enable-encryption-for-all-backups">Enable encryption for all backups<a class="headerlink" href="#enable-encryption-for-all-backups" title="Permanent link">¶</a></h3>
+<h3 id="enable-encryption-for-all-backups">Enable encryption for all backups<a data-markdown-ignore class="headerlink" href="#enable-encryption-for-all-backups" title="Permanent link">¶</a></h3>
 <ol>
 <li>Edit the <code>deploy/cr.yaml</code> cluster Custom Resource and reference the Secret under <code>spec.backup.encryptionKeySecret</code>. Specify the name. The <code>key</code> field is optional and defaults to <code>encryptionKey</code>. The Operator never stores the key value, it only references it via the Secret.</li>
 </ol>
@@ -5867,7 +5867,7 @@ you tailor backup security to your unique requirements.</p>
 </li>
 </ol>
 <p>This configuration applies to all backup storages unless a storage entry defines its own key.</p>
-<h3 id="enable-encryption-for-a-specific-storage">Enable encryption for a specific storage<a class="headerlink" href="#enable-encryption-for-a-specific-storage" title="Permanent link">¶</a></h3>
+<h3 id="enable-encryption-for-a-specific-storage">Enable encryption for a specific storage<a data-markdown-ignore class="headerlink" href="#enable-encryption-for-a-specific-storage" title="Permanent link">¶</a></h3>
 <p>To use a different key for a particular storage location, create a new Secret that stores this key. </p>
 <p>Next, configure the <code>encryptionKeySecret</code> subsection in the Custom Resource under that storage entry. </p>
 <p>This example configuration shows how to override encryption settings for the S3 storage. The new encryption key is stored within the Secret named <code>my-encryption-key-s3</code>:</p>
@@ -5888,7 +5888,7 @@ you tailor backup security to your unique requirements.</p>
 <span class="w">          </span><span class="nt">credentialsSecret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-s3-credentials</span>
 </code></pre></div>
 <p>After you apply the configuration, the storage-level encryption settings take precedence over the global settings.</p>
-<h3 id="tune-the-encryption-algorithm-and-performance">Tune the encryption algorithm and performance<a class="headerlink" href="#tune-the-encryption-algorithm-and-performance" title="Permanent link">¶</a></h3>
+<h3 id="tune-the-encryption-algorithm-and-performance">Tune the encryption algorithm and performance<a data-markdown-ignore class="headerlink" href="#tune-the-encryption-algorithm-and-performance" title="Permanent link">¶</a></h3>
 <p>The Operator uses <strong>AES256</strong> by default. To use a different cipher or adjust encryption performance, pass Percona XtraBackup options through <code>containerOptions.args.xtrabackup</code> in the cluster Custom Resource or in a specific backup or restore manifest. See <a href="backups-fine-tune.html">Fine-tuning backup and restore operations</a> for how global and per-job settings interact.</p>
 <p>The example configuration shows how to tune Percona XtraBackup globally on the cluster level.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
@@ -5902,12 +5902,12 @@ you tailor backup security to your unique requirements.</p>
 <span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--encrypt-threads=3"</span>
 <span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"--encrypt-chunk-size=64K"</span>
 </code></pre></div>
-<h2 id="make-an-encrypted-backup">Make an encrypted backup<a class="headerlink" href="#make-an-encrypted-backup" title="Permanent link">¶</a></h2>
+<h2 id="make-an-encrypted-backup">Make an encrypted backup<a data-markdown-ignore class="headerlink" href="#make-an-encrypted-backup" title="Permanent link">¶</a></h2>
 <p>You don’t need any additional configuration to make an encrypted backup. The Operator uses the encryption settings from the Custom Resource for both <a href="backups-ondemand.html">on-demand</a> and <a href="backups-scheduled.html">scheduled</a> backups.</p>
-<h2 id="restore-from-an-encrypted-backup-on-the-same-cluster">Restore from an encrypted backup on the same cluster<a class="headerlink" href="#restore-from-an-encrypted-backup-on-the-same-cluster" title="Permanent link">¶</a></h2>
+<h2 id="restore-from-an-encrypted-backup-on-the-same-cluster">Restore from an encrypted backup on the same cluster<a data-markdown-ignore class="headerlink" href="#restore-from-an-encrypted-backup-on-the-same-cluster" title="Permanent link">¶</a></h2>
 <p>When you restore using <a href="restore-cr.html#backupname"><code>backupName</code></a> on the same cluster where the backup was created, the Operator reads the encryption key from the cluster Custom Resource automatically. No extra configuration is required as long as the same <code>encryptionKeySecret</code> is still defined in the cluster.</p>
 <p>See <a href="backups-restore.html">Restore the cluster from a previously saved backup</a>.</p>
-<h2 id="restore-from-an-encrypted-backup-on-a-new-cluster">Restore from an encrypted backup on a new cluster<a class="headerlink" href="#restore-from-an-encrypted-backup-on-a-new-cluster" title="Permanent link">¶</a></h2>
+<h2 id="restore-from-an-encrypted-backup-on-a-new-cluster">Restore from an encrypted backup on a new cluster<a data-markdown-ignore class="headerlink" href="#restore-from-an-encrypted-backup-on-a-new-cluster" title="Permanent link">¶</a></h2>
 <p>When you restore from a backup on a different cluster or in a different Kubernetes environment, you must provide the encryption key in the restore resource. The Operator has no access to Secrets from the source cluster.</p>
 <p>The key used for restore <strong>must match</strong> the key that was used to encrypt the backup.</p>
 <p>See <a href="backups-restore-to-new-cluster.html#restore-from-an-encrypted-backup">Restore from a backup to a new Kubernetes-based environment</a> for the full cross-cluster restore workflow.</p>

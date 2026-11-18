@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5763,7 +5763,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="incremental-backups">Incremental backups<a class="headerlink" href="#incremental-backups" title="Permanent link">¶</a></h1>
+<h1 id="incremental-backups">Incremental backups<a data-markdown-ignore class="headerlink" href="#incremental-backups" title="Permanent link">¶</a></h1>
 <div class="admonition admonition">
 <p class="admonition-title">Version added: <a href="ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.html">1.1.0</a></p>
 </div>
@@ -5771,7 +5771,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>This feature is in the tech preview stage. The behavior can change in future releases.</p>
 </div>
 <p><strong>Incremental</strong> backups copy only what changed since the previous backup in the chain. They are smaller, faster to transfer, and cheaper to keep than taking a full backup every time.</p>
-<h2 id="backup-chain">Backup chain<a class="headerlink" href="#backup-chain" title="Permanent link">¶</a></h2>
+<h2 id="backup-chain">Backup chain<a data-markdown-ignore class="headerlink" href="#backup-chain" title="Permanent link">¶</a></h2>
 <p>Every incremental backup belongs to a <strong>chain</strong> that starts with one <strong>full</strong> backup on the <strong>same</strong> storage. The Operator checks that a valid full backup exists before it starts an incremental one.</p>
 <pre class="mermaid"><code>flowchart LR
     F["Full backup"] --&gt; I1["Increment 1"]
@@ -5780,7 +5780,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     D --&gt; IN["Increment N"]</code></pre>
 <p>By default, the Operator uses the <strong>latest full backup</strong> as the base. For on-demand backups, you can set a different base with <code>spec.incrementalBaseBackupName</code>.</p>
 <p>You can use any <a href="backups-storage.html">supported storage type</a>.</p>
-<h2 id="how-an-incremental-backup-runs">How an incremental backup runs<a class="headerlink" href="#how-an-incremental-backup-runs" title="Permanent link">¶</a></h2>
+<h2 id="how-an-incremental-backup-runs">How an incremental backup runs<a data-markdown-ignore class="headerlink" href="#how-an-incremental-backup-runs" title="Permanent link">¶</a></h2>
 <ol>
 <li>You <a href="backups-ondemand.html">make an on-demand backup</a> with type <strong>incremental</strong>, or you <a href="backups-scheduled.html">configure a schedule</a> that creates incremental backups.</li>
 <li>The Operator confirms that a valid <strong>full</strong> backup exists on the same storage. Unless you specify another backup, it uses the most recent full backup.</li>
@@ -5791,7 +5791,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p class="admonition-title">Important</p>
 <p>The Operator sets the <code>percona.com/base-backup-name</code> annotation on the base backup to link the chain. Do not edit or remove it. Changing it can break the chain and lead to data corruption.</p>
 </div>
-<h2 id="restore-from-an-incremental-backup">Restore from an incremental backup<a class="headerlink" href="#restore-from-an-incremental-backup" title="Permanent link">¶</a></h2>
+<h2 id="restore-from-an-incremental-backup">Restore from an incremental backup<a data-markdown-ignore class="headerlink" href="#restore-from-an-incremental-backup" title="Permanent link">¶</a></h2>
 <p>The restore flow is the same for full and incremental backups. Follow <a href="backups-restore.html">Restore the cluster from a previously saved backup</a> or <a href="backups-restore-to-new-cluster.html">Restore from a backup to a new Kubernetes-based environment</a>.</p>
 <p>The Operator identifies the backup type by name or destination. Incremental destinations use an <code>.incr</code> path segment so the Operator can reconstruct the chain. It downloads the full backup and all related increments, restores the full backup first, then applies each increment.</p>
 <p>If you make a <a href="backups-pitr.html">point-in-time recovery</a>, the Operator applies binlogs after the chain. See <a href="backups-pitr.html#how-it-works">How it works</a>.</p>
@@ -5803,7 +5803,7 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
     my-cluster-2026-04-08T000000-incr/
     my-cluster-2026-04-09T000000-incr/
 </code></pre></div>
-<h2 id="speed-up-incremental-backups-with-page-tracking">Speed up incremental backups with page tracking<a class="headerlink" href="#speed-up-incremental-backups-with-page-tracking" title="Permanent link">¶</a></h2>
+<h2 id="speed-up-incremental-backups-with-page-tracking">Speed up incremental backups with page tracking<a data-markdown-ignore class="headerlink" href="#speed-up-incremental-backups-with-page-tracking" title="Permanent link">¶</a></h2>
 <div class="admonition admonition">
 <p class="admonition-title">Version added: <a href="ReleaseNotes/index.html">1.3.0</a></p>
 </div>
@@ -5831,8 +5831,8 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 <p>Pass the <code>--page-tracking</code> flag on the <strong>base</strong> backup to start tracking for the whole chain. The next incremental backup then copies only changed pages. Keep the flag on later increments so tracking continues.</p>
 <p>If you set the <code>--page-tracking</code> flag only on an incremental job, that job still scans all pages because the previous full backup did not start tracking.</p>
 <p>For how cluster-level and per-job options interact, see <a href="backups-fine-tune.html">Fine-tuning backup and restore operations</a>.</p>
-<h2 id="implementation-specifics-and-rules">Implementation specifics and rules<a class="headerlink" href="#implementation-specifics-and-rules" title="Permanent link">¶</a></h2>
-<h3 id="backup-chain-rules">Backup chain rules<a class="headerlink" href="#backup-chain-rules" title="Permanent link">¶</a></h3>
+<h2 id="implementation-specifics-and-rules">Implementation specifics and rules<a data-markdown-ignore class="headerlink" href="#implementation-specifics-and-rules" title="Permanent link">¶</a></h2>
+<h3 id="backup-chain-rules">Backup chain rules<a data-markdown-ignore class="headerlink" href="#backup-chain-rules" title="Permanent link">¶</a></h3>
 <ol>
 <li>A full backup is required to start the chain. If none exists, the incremental backup fails.</li>
 <li>The base full backup and its increments must be on the <strong>same</strong> storage.</li>
@@ -5842,13 +5842,13 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 <li>You cannot delete an increment in the middle of a chain. You can delete only the <strong>last</strong> increment, or the base backup, which removes the whole chain.</li>
 <li>The Operator does not run two incremental backups on the <strong>same</strong> chain at once. Increments run one by one.</li>
 </ol>
-<h3 id="restore-rules">Restore rules<a class="headerlink" href="#restore-rules" title="Permanent link">¶</a></h3>
+<h3 id="restore-rules">Restore rules<a data-markdown-ignore class="headerlink" href="#restore-rules" title="Permanent link">¶</a></h3>
 <ol>
 <li><a href="backups-restore.html">Restore in place</a> with <code>backupName</code>, or <a href="backups-restore-to-new-cluster.html">restore across clusters</a> with <code>backupSource.destination</code>.</li>
 <li><code>backupSource</code> restores work across clusters and namespaces when the storage path is reachable. The <code>.incr</code> layout keeps incremental paths discoverable.</li>
 <li>Restore always needs the full chain: full backup first, then increments in order, up to the backup you selected.</li>
 </ol>
-<h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
+<h2 id="known-limitations">Known limitations<a data-markdown-ignore class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
 <ul>
 <li>If a backup in your chain fails but some data was already uploaded, restore still includes that failed backup and fails. Start a new chain.</li>
 <li>If the checkpoint file is missing from a backup directory, the next incremental backup can hang. Start a new chain.</li>

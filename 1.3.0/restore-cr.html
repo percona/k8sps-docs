@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6669,22 +6669,22 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="restore-resource-options-for-percona-server-for-mysql">Restore Resource options for Percona Server for MySQL<a class="headerlink" href="#restore-resource-options-for-percona-server-for-mysql" title="Permanent link">¶</a></h1>
+<h1 id="restore-resource-options-for-percona-server-for-mysql">Restore Resource options for Percona Server for MySQL<a data-markdown-ignore class="headerlink" href="#restore-resource-options-for-percona-server-for-mysql" title="Permanent link">¶</a></h1>
 <p>A Restore resource is a Kubernetes object that tells the Operator how to restore your database from a specific backup. The <code>deploy/backup/restore.yaml</code> file is a template for creating restore resources. It defines the <code>PerconaServerMySQLRestore</code> resource.</p>
 <p>This document describes all available options that you can use to customize a restore. For status fields, see <a href="cr-statuses.html#perconaservermysqlrestore-status">Custom resource statuses</a>. </p>
-<h2 id="apiversion"><code>apiVersion</code><a class="headerlink" href="#apiversion" title="Permanent link">¶</a></h2>
+<h2 id="apiversion"><code>apiVersion</code><a data-markdown-ignore class="headerlink" href="#apiversion" title="Permanent link">¶</a></h2>
 <p>Specifies the API version of the Custom Resource.
 <code>ps.percona.com</code> indicates the group, and <code>v1alpha1</code> is the version of the API.</p>
-<h2 id="kind"><code>kind</code><a class="headerlink" href="#kind" title="Permanent link">¶</a></h2>
+<h2 id="kind"><code>kind</code><a data-markdown-ignore class="headerlink" href="#kind" title="Permanent link">¶</a></h2>
 <p>Defines the type of resource being created: <code>PerconaServerMySQLRestore</code>.</p>
-<h2 id="metadata"><code>metadata</code><a class="headerlink" href="#metadata" title="Permanent link">¶</a></h2>
+<h2 id="metadata"><code>metadata</code><a data-markdown-ignore class="headerlink" href="#metadata" title="Permanent link">¶</a></h2>
 <p>The metadata part of the <code>deploy/backup/restore.yaml</code> contains metadata about the resource, such as its name and other attributes. It includes the following keys:</p>
 <ul>
 <li><code>name</code> - The name of the restore object used to identify it in your deployment. You use this name to track the restore operation status and view information about it.</li>
 </ul>
-<h2 id="spec"><code>spec</code><a class="headerlink" href="#spec" title="Permanent link">¶</a></h2>
+<h2 id="spec"><code>spec</code><a data-markdown-ignore class="headerlink" href="#spec" title="Permanent link">¶</a></h2>
 <p>This section includes the configuration of a restore resource.</p>
-<h3 id="clustername"><code>clusterName</code><a class="headerlink" href="#clustername" title="Permanent link">¶</a></h3>
+<h3 id="clustername"><code>clusterName</code><a data-markdown-ignore class="headerlink" href="#clustername" title="Permanent link">¶</a></h3>
 <p>Specifies the name of the Percona Server for MySQL cluster to restore. </p>
 <table>
 <thead>
@@ -6700,7 +6700,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="backupname"><code>backupName</code><a class="headerlink" href="#backupname" title="Permanent link">¶</a></h3>
+<h3 id="backupname"><code>backupName</code><a data-markdown-ignore class="headerlink" href="#backupname" title="Permanent link">¶</a></h3>
 <p>Specifies the name of a backup to be used for a restore. This backup should be from the same cluster.</p>
 <p>When the backup was <a href="backups-encrypted.html">encrypted</a>, the Operator uses the <code>encryptionKeySecret</code> from the cluster Custom Resource automatically. The key used for the restore must match the key used to encrypt the backup.</p>
 <table>
@@ -6717,9 +6717,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="pitr-section"><code>pitr</code> section<a class="headerlink" href="#pitr-section" title="Permanent link">¶</a></h3>
+<h3 id="pitr-section"><code>pitr</code> section<a data-markdown-ignore class="headerlink" href="#pitr-section" title="Permanent link">¶</a></h3>
 <p>This subsection contains configuration options for <strong>point-in-time recovery</strong>. When present, the Operator restores the base backup (from <code>backupName</code> or <code>backupSource.destination</code>) and then replays binary logs until the requested <strong>GTID</strong> or <strong>timestamp</strong>. You must enable point-in-time recovery and configure a Binlog Server in the cluster; see <a href="backups-pitr.html">Point-in-time recovery</a> for details.</p>
-<h4 id="pitrtype"><code>pitr.type</code><a class="headerlink" href="#pitrtype" title="Permanent link">¶</a></h4>
+<h4 id="pitrtype"><code>pitr.type</code><a data-markdown-ignore class="headerlink" href="#pitrtype" title="Permanent link">¶</a></h4>
 <p>The type of point-in-time recovery. Supported values are:</p>
 <table>
 <thead>
@@ -6753,7 +6753,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrgtid"><code>pitr.gtid</code><a class="headerlink" href="#pitrgtid" title="Permanent link">¶</a></h4>
+<h4 id="pitrgtid"><code>pitr.gtid</code><a data-markdown-ignore class="headerlink" href="#pitrgtid" title="Permanent link">¶</a></h4>
 <p>The exact GTID set for point-in-time recovery, specified in the format “aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee:nnn”. Used when <code>pitr.type</code> is <code>gtid</code>.</p>
 <table>
 <thead>
@@ -6769,7 +6769,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrdate"><code>pitr.date</code><a class="headerlink" href="#pitrdate" title="Permanent link">¶</a></h4>
+<h4 id="pitrdate"><code>pitr.date</code><a data-markdown-ignore class="headerlink" href="#pitrdate" title="Permanent link">¶</a></h4>
 <p>Timestamp string used when <code>pitr.type</code> is <code>date</code>. Specified in the format <code>yyyy-mm-dd hh:mm:ss</code>.</p>
 <table>
 <thead>
@@ -6785,7 +6785,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrforce"><code>pitr.force</code><a class="headerlink" href="#pitrforce" title="Permanent link">¶</a></h4>
+<h4 id="pitrforce"><code>pitr.force</code><a data-markdown-ignore class="headerlink" href="#pitrforce" title="Permanent link">¶</a></h4>
 <p>Forces the <code>mysql</code> client to run with the <code>--force</code> flag and this silently ignores all SQL errors during binlog replay.</p>
 <p><strong>Warning:</strong> This might result in data loss if underlying replication or data integrity errors are ignored.</p>
 <table>
@@ -6802,7 +6802,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrkeyringsecret"><code>pitr.keyringSecret</code><a class="headerlink" href="#pitrkeyringsecret" title="Permanent link">¶</a></h4>
+<h4 id="pitrkeyringsecret"><code>pitr.keyringSecret</code><a data-markdown-ignore class="headerlink" href="#pitrkeyringsecret" title="Permanent link">¶</a></h4>
 <p>Optional reference to a Kubernetes Secret that contains the keyring to <a href="backups-pitr.html#binlog-encryption">decrypt encrypted binlogs</a> during point-in-time recovery. By default the Operator uses the keyring configured on the cluster. Set this field when keys have been rotated into a different Secret, or when you restore to a cluster that does not have the source keyring.</p>
 <table>
 <thead>
@@ -6818,7 +6818,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrkeyringsecretname"><code>pitr.keyringSecret.name</code><a class="headerlink" href="#pitrkeyringsecretname" title="Permanent link">¶</a></h4>
+<h4 id="pitrkeyringsecretname"><code>pitr.keyringSecret.name</code><a data-markdown-ignore class="headerlink" href="#pitrkeyringsecretname" title="Permanent link">¶</a></h4>
 <p>The name of the Kubernetes Secret that stores the binlog keyring.</p>
 <table>
 <thead>
@@ -6834,7 +6834,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrkeyringsecretkey"><code>pitr.keyringSecret.key</code><a class="headerlink" href="#pitrkeyringsecretkey" title="Permanent link">¶</a></h4>
+<h4 id="pitrkeyringsecretkey"><code>pitr.keyringSecret.key</code><a data-markdown-ignore class="headerlink" href="#pitrkeyringsecretkey" title="Permanent link">¶</a></h4>
 <p>The key within the Secret that holds the keyring JSON. Defaults to <code>keyring.json</code>.</p>
 <table>
 <thead>
@@ -6850,9 +6850,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h3 id="the-pitrbackupsource-subsection">The <code>pitr.backupSource</code> subsection<a class="headerlink" href="#the-pitrbackupsource-subsection" title="Permanent link">¶</a></h3>
+<h3 id="the-pitrbackupsource-subsection">The <code>pitr.backupSource</code> subsection<a data-markdown-ignore class="headerlink" href="#the-pitrbackupsource-subsection" title="Permanent link">¶</a></h3>
 <p>This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when <a href="backups-restore-pitr.html#restore-on-a-new-cluster">restoring to a new Kubernetes environment</a>. When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.</p>
-<h4 id="pitrbackupsourcebinlogserversize"><code>pitr.backupSource.binlogServer.size</code><a class="headerlink" href="#pitrbackupsourcebinlogserversize" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserversize"><code>pitr.backupSource.binlogServer.size</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserversize" title="Permanent link">¶</a></h4>
 <p>Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. This is the only allowed number. All greater values will be rejected. To learn more, see <a href="backups-pitr.html">Point-in-time recovery</a>.</p>
 <table>
 <thead>
@@ -6868,7 +6868,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverimage"><code>pitr.backupSource.binlogServer.image</code><a class="headerlink" href="#pitrbackupsourcebinlogserverimage" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverimage"><code>pitr.backupSource.binlogServer.image</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverimage" title="Permanent link">¶</a></h4>
 <p>The Docker image to use to deploy Percona Binarylog Server.</p>
 <table>
 <thead>
@@ -6884,7 +6884,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverserverid"><code>pitr.backupSource.binlogServer.serverId</code><a class="headerlink" href="#pitrbackupsourcebinlogserverserverid" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverserverid"><code>pitr.backupSource.binlogServer.serverId</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverserverid" title="Permanent link">¶</a></h4>
 <p>The unique server ID that Percona Binarylog Server uses when connecting to MySQL as a replication client for binlog collection.</p>
 <table>
 <thead>
@@ -6900,7 +6900,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverstorages3bucket"><code>pitr.backupSource.binlogServer.storage.s3.bucket</code><a class="headerlink" href="#pitrbackupsourcebinlogserverstorages3bucket" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverstorages3bucket"><code>pitr.backupSource.binlogServer.storage.s3.bucket</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverstorages3bucket" title="Permanent link">¶</a></h4>
 <p>The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed. You can use the same values as defined in <code>spec.backup.pitr.binlogServer</code> on the source cluster Custom Resource. For a restore to a new cluster, copy these settings from the source cluster, including the binlog <code>prefix</code> that points to the existing binlog folder.</p>
 <table>
 <thead>
@@ -6916,7 +6916,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverstorages3credentialssecret"><code>pitr.backupSource.binlogServer.storage.s3.credentialsSecret</code><a class="headerlink" href="#pitrbackupsourcebinlogserverstorages3credentialssecret" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverstorages3credentialssecret"><code>pitr.backupSource.binlogServer.storage.s3.credentialsSecret</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverstorages3credentialssecret" title="Permanent link">¶</a></h4>
 <p>The Kubernetes Secret for binlog storage. It should contain <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code> keys.</p>
 <table>
 <thead>
@@ -6932,7 +6932,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverstorages3endpointurl"><code>pitr.backupSource.binlogServer.storage.s3.endpointUrl</code><a class="headerlink" href="#pitrbackupsourcebinlogserverstorages3endpointurl" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverstorages3endpointurl"><code>pitr.backupSource.binlogServer.storage.s3.endpointUrl</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverstorages3endpointurl" title="Permanent link">¶</a></h4>
 <p>The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.</p>
 <table>
 <thead>
@@ -6948,7 +6948,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverstorages3prefix"><code>pitr.backupSource.binlogServer.storage.s3.prefix</code><a class="headerlink" href="#pitrbackupsourcebinlogserverstorages3prefix" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverstorages3prefix"><code>pitr.backupSource.binlogServer.storage.s3.prefix</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverstorages3prefix" title="Permanent link">¶</a></h4>
 <p>Specifies the path prefix (folder) in the bucket where binlogs are stored. After configuring the Binlog Server, this prefix cannot be changed. </p>
 <p><strong>Important:</strong><br>
 If you are restoring to a new cluster and both the source and target clusters use the same binlog storage, be sure to specify a different prefix for the target cluster to avoid conflicts.</p>
@@ -6966,7 +6966,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverstorages3region"><code>pitr.backupSource.binlogServer.storage.s3.region</code><a class="headerlink" href="#pitrbackupsourcebinlogserverstorages3region" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverstorages3region"><code>pitr.backupSource.binlogServer.storage.s3.region</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverstorages3region" title="Permanent link">¶</a></h4>
 <p>The region of the bucket. Required for Amazon S3 and for S3-compatible storage.</p>
 <table>
 <thead>
@@ -6982,7 +6982,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverstorages3cabundlename"><code>pitr.backupSource.binlogServer.storage.s3.caBundle.name</code><a class="headerlink" href="#pitrbackupsourcebinlogserverstorages3cabundlename" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverstorages3cabundlename"><code>pitr.backupSource.binlogServer.storage.s3.caBundle.name</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverstorages3cabundlename" title="Permanent link">¶</a></h4>
 <p>The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage for Binlog Server. See <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>.</p>
 <table>
 <thead>
@@ -6998,7 +6998,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverstorages3cabundlekey"><code>pitr.backupSource.binlogServer.storage.s3.caBundle.key</code><a class="headerlink" href="#pitrbackupsourcebinlogserverstorages3cabundlekey" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverstorages3cabundlekey"><code>pitr.backupSource.binlogServer.storage.s3.caBundle.key</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverstorages3cabundlekey" title="Permanent link">¶</a></h4>
 <p>The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses <code>ca.crt</code>.</p>
 <table>
 <thead>
@@ -7014,7 +7014,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverconnecttimeout"><code>pitr.backupSource.binlogServer.connectTimeout</code><a class="headerlink" href="#pitrbackupsourcebinlogserverconnecttimeout" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverconnecttimeout"><code>pitr.backupSource.binlogServer.connectTimeout</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverconnecttimeout" title="Permanent link">¶</a></h4>
 <p>Timeout in seconds for establishing a connection to MySQL.</p>
 <table>
 <thead>
@@ -7030,7 +7030,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverreadtimeout"><code>pitr.backupSource.binlogServer.readTimeout</code><a class="headerlink" href="#pitrbackupsourcebinlogserverreadtimeout" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverreadtimeout"><code>pitr.backupSource.binlogServer.readTimeout</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverreadtimeout" title="Permanent link">¶</a></h4>
 <p>The maximum time in seconds the Binlog Server waits to read data from the MySQL instance.</p>
 <table>
 <thead>
@@ -7046,7 +7046,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverwritetimeout"><code>pitr.backupSource.binlogServer.writeTimeout</code><a class="headerlink" href="#pitrbackupsourcebinlogserverwritetimeout" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverwritetimeout"><code>pitr.backupSource.binlogServer.writeTimeout</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverwritetimeout" title="Permanent link">¶</a></h4>
 <p>The maximum time in seconds the Binlog Server waits to write data to a remote server.</p>
 <table>
 <thead>
@@ -7062,7 +7062,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserveridletime"><code>pitr.backupSource.binlogServer.idleTime</code><a class="headerlink" href="#pitrbackupsourcebinlogserveridletime" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserveridletime"><code>pitr.backupSource.binlogServer.idleTime</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserveridletime" title="Permanent link">¶</a></h4>
 <p>The maximum time in seconds the Binlog Server stays in idle mode before trying to reconnect.</p>
 <table>
 <thead>
@@ -7078,7 +7078,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h4 id="pitrbackupsourcebinlogserverloglevel"><code>pitr.backupSource.binlogServer.logLevel</code><a class="headerlink" href="#pitrbackupsourcebinlogserverloglevel" title="Permanent link">¶</a></h4>
+<h4 id="pitrbackupsourcebinlogserverloglevel"><code>pitr.backupSource.binlogServer.logLevel</code><a data-markdown-ignore class="headerlink" href="#pitrbackupsourcebinlogserverloglevel" title="Permanent link">¶</a></h4>
 <p>The verbosity level for Binlog Server logs. Supported values are: <code>info</code> (default), <code>warning</code>, <code>error</code>, <code>debug</code>.</p>
 <table>
 <thead>
@@ -7094,9 +7094,9 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h2 id="the-backupsource-subsection">The <code>backupSource</code> subsection<a class="headerlink" href="#the-backupsource-subsection" title="Permanent link">¶</a></h2>
+<h2 id="the-backupsource-subsection">The <code>backupSource</code> subsection<a data-markdown-ignore class="headerlink" href="#the-backupsource-subsection" title="Permanent link">¶</a></h2>
 <p>Contains the configuration options to restore from a backup made in a different cluster, namespace, or Kubernetes environment.</p>
-<h3 id="backupsourcedestination"><code>backupSource.destination</code><a class="headerlink" href="#backupsourcedestination" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcedestination"><code>backupSource.destination</code><a data-markdown-ignore class="headerlink" href="#backupsourcedestination" title="Permanent link">¶</a></h3>
 <p>Specifies the path to the backup on the storage</p>
 <table>
 <thead>
@@ -7112,7 +7112,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorageencryptionkeysecret"><code>backupSource.storage.encryptionKeySecret</code><a class="headerlink" href="#backupsourcestorageencryptionkeysecret" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorageencryptionkeysecret"><code>backupSource.storage.encryptionKeySecret</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorageencryptionkeysecret" title="Permanent link">¶</a></h3>
 <p>References a Kubernetes Secret that contains the key used to decrypt an <a href="backups-encrypted.html">encrypted backup</a>. Required when restoring an encrypted backup from object storage on a cluster that does not have access to the source cluster’s encryption key Secret. The key used for the restore must match the key used to encrypt the backup.</p>
 <table>
 <thead>
@@ -7128,7 +7128,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorageencryptionkeysecretname"><code>backupSource.storage.encryptionKeySecret.name</code><a class="headerlink" href="#backupsourcestorageencryptionkeysecretname" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorageencryptionkeysecretname"><code>backupSource.storage.encryptionKeySecret.name</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorageencryptionkeysecretname" title="Permanent link">¶</a></h3>
 <p>The name of the Kubernetes Secret that stores the backup encryption key.</p>
 <table>
 <thead>
@@ -7144,7 +7144,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorageencryptionkeysecretkey"><code>backupSource.storage.encryptionKeySecret.key</code><a class="headerlink" href="#backupsourcestorageencryptionkeysecretkey" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorageencryptionkeysecretkey"><code>backupSource.storage.encryptionKeySecret.key</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorageencryptionkeysecretkey" title="Permanent link">¶</a></h3>
 <p>The key within the Secret that holds the encryption key value. Defaults to <code>encryptionKey</code>.</p>
 <table>
 <thead>
@@ -7160,7 +7160,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorages3bucket"><code>backupSource.storage.s3.bucket</code><a class="headerlink" href="#backupsourcestorages3bucket" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorages3bucket"><code>backupSource.storage.s3.bucket</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorages3bucket" title="Permanent link">¶</a></h3>
 <p>Specifies the name of the bucket where the backup that you wish to restore from is saved.</p>
 <table>
 <thead>
@@ -7176,7 +7176,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorages3credentialssecret"><code>backupSource.storage.s3.credentialsSecret</code><a class="headerlink" href="#backupsourcestorages3credentialssecret" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorages3credentialssecret"><code>backupSource.storage.s3.credentialsSecret</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorages3credentialssecret" title="Permanent link">¶</a></h3>
 <p>Specifies the Secrets object name with the credentials to access the storage with a backup. </p>
 <table>
 <thead>
@@ -7192,7 +7192,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorages3region"><code>backupSource.storage.s3.region</code><a class="headerlink" href="#backupsourcestorages3region" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorages3region"><code>backupSource.storage.s3.region</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorages3region" title="Permanent link">¶</a></h3>
 <p>The <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html">AWS region  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> to use. Please note <strong>this option is mandatory</strong> for Amazon and all S3-compatible storages.</p>
 <table>
 <thead>
@@ -7208,7 +7208,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorages3endpointurl"><code>backupSource.storage.s3.endpointUrl</code><a class="headerlink" href="#backupsourcestorages3endpointurl" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorages3endpointurl"><code>backupSource.storage.s3.endpointUrl</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorages3endpointurl" title="Permanent link">¶</a></h3>
 <p>The endpoint URL of the S3-compatible storage that holds the backup. Not needed for Amazon S3.</p>
 <table>
 <thead>
@@ -7224,7 +7224,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorages3prefix"><code>backupSource.storage.s3.prefix</code><a class="headerlink" href="#backupsourcestorages3prefix" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorages3prefix"><code>backupSource.storage.s3.prefix</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorages3prefix" title="Permanent link">¶</a></h3>
 <p>The path (sub-folder) inside the bucket where the backup is stored.</p>
 <table>
 <thead>
@@ -7240,7 +7240,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorages3cabundlename"><code>backupSource.storage.s3.caBundle.name</code><a class="headerlink" href="#backupsourcestorages3cabundlename" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorages3cabundlename"><code>backupSource.storage.s3.caBundle.name</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorages3cabundlename" title="Permanent link">¶</a></h3>
 <p>The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. See <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">Configure TLS verification with custom certificates for S3 storage</a>.</p>
 <table>
 <thead>
@@ -7256,7 +7256,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestorages3cabundlekey"><code>backupSource.storage.s3.caBundle.key</code><a class="headerlink" href="#backupsourcestorages3cabundlekey" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestorages3cabundlekey"><code>backupSource.storage.s3.caBundle.key</code><a data-markdown-ignore class="headerlink" href="#backupsourcestorages3cabundlekey" title="Permanent link">¶</a></h3>
 <p>The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses <code>ca.crt</code>.</p>
 <table>
 <thead>
@@ -7272,7 +7272,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="backupsourcestoragetype"><code>backupSource.storage.type</code><a class="headerlink" href="#backupsourcestoragetype" title="Permanent link">¶</a></h3>
+<h3 id="backupsourcestoragetype"><code>backupSource.storage.type</code><a data-markdown-ignore class="headerlink" href="#backupsourcestoragetype" title="Permanent link">¶</a></h3>
 <p>Specifies the type of the backup storage. Available options: <code>s3</code>, <code>azure</code>.</p>
 <table>
 <thead>
@@ -7288,7 +7288,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h2 id="containeroptionsenv"><code>containerOptions.env</code><a class="headerlink" href="#containeroptionsenv" title="Permanent link">¶</a></h2>
+<h2 id="containeroptionsenv"><code>containerOptions.env</code><a data-markdown-ignore class="headerlink" href="#containeroptionsenv" title="Permanent link">¶</a></h2>
 <p>The <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/">environment variables set as key-value pairs <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> for the restore job.</p>
 <table>
 <thead>
@@ -7304,7 +7304,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h2 id="containeroptionsargsxtrabackup"><code>containerOptions.args.xtrabackup</code><a class="headerlink" href="#containeroptionsargsxtrabackup" title="Permanent link">¶</a></h2>
+<h2 id="containeroptionsargsxtrabackup"><code>containerOptions.args.xtrabackup</code><a data-markdown-ignore class="headerlink" href="#containeroptionsargsxtrabackup" title="Permanent link">¶</a></h2>
 <p>Custom <a href="https://docs.percona.com/percona-xtrabackup/latest/xtrabackup-option-reference.html">command line options <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> for the <a href="https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html"><code>xtrabackup</code> Percona XtraBackup tool <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
 <table>
 <thead>
@@ -7320,7 +7320,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="containeroptionsargsxbcloud"><code>containerOptions.args.xbcloud</code><a class="headerlink" href="#containeroptionsargsxbcloud" title="Permanent link">¶</a></h3>
+<h3 id="containeroptionsargsxbcloud"><code>containerOptions.args.xbcloud</code><a data-markdown-ignore class="headerlink" href="#containeroptionsargsxbcloud" title="Permanent link">¶</a></h3>
 <p>Custom <a href="https://docs.percona.com/percona-xtrabackup/latest/xbcloud-options.html">command line options <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> for the <a href="https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html"><code>xbcloud</code> Percona XtraBackup tool <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
 <table>
 <thead>
@@ -7336,7 +7336,7 @@ If you are restoring to a new cluster and both the source and target clusters us
 </tr>
 </tbody>
 </table>
-<h3 id="containeroptionsargsxbstream"><code>containerOptions.args.xbstream</code><a class="headerlink" href="#containeroptionsargsxbstream" title="Permanent link">¶</a></h3>
+<h3 id="containeroptionsargsxbstream"><code>containerOptions.args.xbstream</code><a data-markdown-ignore class="headerlink" href="#containeroptionsargsxbstream" title="Permanent link">¶</a></h3>
 <p>Custom <a href="https://docs.percona.com/percona-xtrabackup/latest/xbstream-options.html">command line options <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> for the <a href="https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html"><code>xbstream</code> Percona XtraBackup tool <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a></p>
 <table>
 <thead>

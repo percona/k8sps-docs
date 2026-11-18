@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6049,7 +6049,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="troubleshoot-backups-and-restores">Troubleshoot backups and restores<a class="headerlink" href="#troubleshoot-backups-and-restores" title="Permanent link">¶</a></h1>
+<h1 id="troubleshoot-backups-and-restores">Troubleshoot backups and restores<a data-markdown-ignore class="headerlink" href="#troubleshoot-backups-and-restores" title="Permanent link">¶</a></h1>
 <p>You can troubleshoot failed backups or restores by checking the status of backup and restore objects, examining the jobs that executed them, and reviewing logs from the jobs and /or the pods created by the Jobs.</p>
 <p>The overall troubleshooting workflow looks like this:</p>
 <ol>
@@ -6060,8 +6060,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Verify configuration. Ensure storage configurations, credentials, and cluster settings are correct.</li>
 </ol>
 <p>Refer to the following sections for details. For status field reference, see <a href="cr-statuses.html">Custom resource statuses</a>.</p>
-<h2 id="backups">Backups<a class="headerlink" href="#backups" title="Permanent link">¶</a></h2>
-<h3 id="check-backup-status">Check backup status<a class="headerlink" href="#check-backup-status" title="Permanent link">¶</a></h3>
+<h2 id="backups">Backups<a data-markdown-ignore class="headerlink" href="#backups" title="Permanent link">¶</a></h2>
+<h3 id="check-backup-status">Check backup status<a data-markdown-ignore class="headerlink" href="#check-backup-status" title="Permanent link">¶</a></h3>
 <p>Start by checking the status of your backup objects:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6077,7 +6077,7 @@ backup5                                        gcp-cs       s3://operator-testin
 cron-ps-cluster1-aws-s3-20251107211029-45srk   aws-s3       s3://operator-testing/ps-cluster1-2025-11-07-21:10:29-full   Succeeded
 </code></pre></div>
 </details>
-<h3 id="check-backup-error-details">Check backup error details<a class="headerlink" href="#check-backup-error-details" title="Permanent link">¶</a></h3>
+<h3 id="check-backup-error-details">Check backup error details<a data-markdown-ignore class="headerlink" href="#check-backup-error-details" title="Permanent link">¶</a></h3>
 <p>When a backup fails, use <code>kubectl describe</code> to get detailed error information:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6101,7 +6101,7 @@ Events:               &lt;none&gt;
 <li><strong>Insufficient permissions</strong>: The backup job doesn’t have permission to write to the storage location</li>
 <li><strong>TLS certificate errors</strong>: The storage endpoint uses a private CA and the Operator cannot verify it. Typical Job or sidecar log messages include <code>x509: certificate signed by unknown authority</code> or <code>certificate verify failed</code>. Keep <code>verifyTLS</code> enabled, confirm <code>crVersion</code> is <code>1.3.0</code> or later, and supply the CA with <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage"><code>s3.caBundle</code></a>.</li>
 </ul>
-<h3 id="check-backup-jobs">Check backup Jobs<a class="headerlink" href="#check-backup-jobs" title="Permanent link">¶</a></h3>
+<h3 id="check-backup-jobs">Check backup Jobs<a data-markdown-ignore class="headerlink" href="#check-backup-jobs" title="Permanent link">¶</a></h3>
 <p>When a backup runs, the Operator creates a Kubernetes Job to execute it. You can view these Jobs to see which backups are running or have completed:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6120,7 +6120,7 @@ xb-backup5-gcp-cs                                        Complete   1/1         
 xb-cron-ps-cluster1-aws-s3-20251107211029-45srk-aws-s3   Complete   1/1           12s        35s
 </code></pre></div>
 </details>
-<h3 id="view-backup-job-logs">View backup job logs<a class="headerlink" href="#view-backup-job-logs" title="Permanent link">¶</a></h3>
+<h3 id="view-backup-job-logs">View backup job logs<a data-markdown-ignore class="headerlink" href="#view-backup-job-logs" title="Permanent link">¶</a></h3>
 <p>To see detailed logs from a backup job, use the job name:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>job/&lt;job-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6150,7 +6150,7 @@ xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision 
 <p>To find the Pod name, list pods and look for pods with names matching your backup job:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>xb-
 </code></pre></div>
-<h3 id="find-the-backup-source-pod">Find the backup source Pod<a class="headerlink" href="#find-the-backup-source-pod" title="Permanent link">¶</a></h3>
+<h3 id="find-the-backup-source-pod">Find the backup source Pod<a data-markdown-ignore class="headerlink" href="#find-the-backup-source-pod" title="Permanent link">¶</a></h3>
 <p>Each backup object contains information about which MySQL Pod was used as the backup source. You can retrieve this information using:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.backupSource}'</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6158,7 +6158,7 @@ xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision 
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>backup1<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.backupSource}'</span>
 </code></pre></div>
 <p>This returns the fully qualified domain name (FQDN) of the source pod, such as <code>ps-cluster1-mysql-1.ps-cluster1-mysql.default</code>.</p>
-<h3 id="view-backup-logs-from-the-source-pod">View backup logs from the source pod<a class="headerlink" href="#view-backup-logs-from-the-source-pod" title="Permanent link">¶</a></h3>
+<h3 id="view-backup-logs-from-the-source-pod">View backup logs from the source pod<a data-markdown-ignore class="headerlink" href="#view-backup-logs-from-the-source-pod" title="Permanent link">¶</a></h3>
 <p>The <code>xtrabackup</code> container in the source pod also contains backup logs. To view them, run:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>&lt;source-pod-name&gt;<span class="w"> </span>-c<span class="w"> </span>xtrabackup<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6180,8 +6180,8 @@ xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision 
 2025-11-07T20:59:33.934783-00:00 0 [Note] [MY-011825] [Xtrabackup] Executing LOCK TABLES FOR BACKUP ...
 </code></pre></div>
 </details>
-<h2 id="restores">Restores<a class="headerlink" href="#restores" title="Permanent link">¶</a></h2>
-<h3 id="check-restore-status">Check restore status<a class="headerlink" href="#check-restore-status" title="Permanent link">¶</a></h3>
+<h2 id="restores">Restores<a data-markdown-ignore class="headerlink" href="#restores" title="Permanent link">¶</a></h2>
+<h3 id="check-restore-status">Check restore status<a data-markdown-ignore class="headerlink" href="#check-restore-status" title="Permanent link">¶</a></h3>
 <p>To check the status of restore operations, run:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6193,7 +6193,7 @@ restore1   Error       5m56s
 restore2   Succeeded   5m37s
 </code></pre></div>
 </details>
-<h3 id="check-restore-error-details">Check restore error details<a class="headerlink" href="#check-restore-error-details" title="Permanent link">¶</a></h3>
+<h3 id="check-restore-error-details">Check restore error details<a data-markdown-ignore class="headerlink" href="#check-restore-error-details" title="Permanent link">¶</a></h3>
 <p>When a restore fails, use the <code>kubectl describe</code> command to get detailed error information:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-restore<span class="w"> </span>&lt;restore-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6227,7 +6227,7 @@ Events:   &lt;none&gt;
 <li><strong>Insufficient resources</strong>: Not enough disk space or memory to complete the restore</li>
 <li><strong>TLS certificate errors</strong>: The restore Job cannot verify the S3 endpoint certificate. See <a href="#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</li>
 </ul>
-<h3 id="check-restore-jobs">Check restore jobs<a class="headerlink" href="#check-restore-jobs" title="Permanent link">¶</a></h3>
+<h3 id="check-restore-jobs">Check restore jobs<a data-markdown-ignore class="headerlink" href="#check-restore-jobs" title="Permanent link">¶</a></h3>
 <p>When a restore runs, the Operator creates a Kubernetes Job to execute it. View these Jobs:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6238,7 +6238,7 @@ Events:   &lt;none&gt;
 xb-restore-restore2                                      Complete   1/1           23s        5m42s
 </code></pre></div>
 </details>
-<h3 id="view-restore-job-logs">View restore job logs<a class="headerlink" href="#view-restore-job-logs" title="Permanent link">¶</a></h3>
+<h3 id="view-restore-job-logs">View restore job logs<a data-markdown-ignore class="headerlink" href="#view-restore-job-logs" title="Permanent link">¶</a></h3>
 <p>To see detailed logs from a restore Job, run:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>job/&lt;restore-job-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
@@ -6260,7 +6260,7 @@ xb-restore-restore2                                      Complete   1/1         
 * [[ true == \f\a\l\s\e ]]
 </code></pre></div>
 </details>
-<h3 id="view-logs-from-the-pod-created-by-the-restore-job">View logs from the Pod created by the restore Job<a class="headerlink" href="#view-logs-from-the-pod-created-by-the-restore-job" title="Permanent link">¶</a></h3>
+<h3 id="view-logs-from-the-pod-created-by-the-restore-job">View logs from the Pod created by the restore Job<a data-markdown-ignore class="headerlink" href="#view-logs-from-the-pod-created-by-the-restore-job" title="Permanent link">¶</a></h3>
 <p>You can also view logs from the Pod created by the restore Job. To find the Pod name, list pods and look for pods with names matching your restore job:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>xb-restore
 </code></pre></div>
@@ -6282,19 +6282,19 @@ xb-restore-restore2                                      Complete   1/1         
 + [[ true == \f\a\l\s\e ]]
 </code></pre></div>
 </details>
-<h2 id="point-in-time-recovery">Point-in-time recovery<a class="headerlink" href="#point-in-time-recovery" title="Permanent link">¶</a></h2>
+<h2 id="point-in-time-recovery">Point-in-time recovery<a data-markdown-ignore class="headerlink" href="#point-in-time-recovery" title="Permanent link">¶</a></h2>
 <p>Point-in-time recovery adds a Binlog Server Pod and a PITR Job (<code>pitr-restore-&lt;restore-name&gt;</code>) on top of the base restore Job (<code>xb-restore-&lt;restore-name&gt;</code>). Check both Jobs and the Binlog Server Pod, not only <code>xb-restore-*</code>.</p>
 <p>To inspect the restored base backup before the binary logs are applied, see <a href="pause-pitr.html">Pause a point-in-time recovery</a>.</p>
-<h3 id="binlog-server-is-in-crashloopbackoff">Binlog Server is in CrashLoopBackOff<a class="headerlink" href="#binlog-server-is-in-crashloopbackoff" title="Permanent link">¶</a></h3>
+<h3 id="binlog-server-is-in-crashloopbackoff">Binlog Server is in CrashLoopBackOff<a data-markdown-ignore class="headerlink" href="#binlog-server-is-in-crashloopbackoff" title="Permanent link">¶</a></h3>
 <p>If the binlog bucket contains too many objects, Binlog Server can get stuck listing them and enter the CrashLoopBackOff state. Point-in-time recovery cannot proceed until the Pod is healthy.</p>
 <p>Delete old binlog objects from the bucket so the object count drops. If you miss the binlog expiration window, restore becomes much harder. Monitor object count in the point-in-time recovery bucket and clean up regularly.</p>
-<h3 id="restore-fails-after-the-base-backup-is-already-restored">Restore fails after the base backup is already restored<a class="headerlink" href="#restore-fails-after-the-base-backup-is-already-restored" title="Permanent link">¶</a></h3>
+<h3 id="restore-fails-after-the-base-backup-is-already-restored">Restore fails after the base backup is already restored<a data-markdown-ignore class="headerlink" href="#restore-fails-after-the-base-backup-is-already-restored" title="Permanent link">¶</a></h3>
 <p>Point-in-time recovery retries are not idempotent. If the PITR Job fails after the base backup is on disk, a retry does not restore that backup again to reset the state.</p>
 <p>Set <code>spec.backup.backoffLimit=0</code> in the cluster Custom Resource so the Job does not retry automatically. Fix the cause, then start a new restore from a known-good base backup.</p>
-<h3 id="replication-errors-during-binlog-replay">Replication errors during binlog replay<a class="headerlink" href="#replication-errors-during-binlog-replay" title="Permanent link">¶</a></h3>
+<h3 id="replication-errors-during-binlog-replay">Replication errors during binlog replay<a data-markdown-ignore class="headerlink" href="#replication-errors-during-binlog-replay" title="Permanent link">¶</a></h3>
 <p>Updates made by <code>mysql-shell</code> can produce errors such as <code>Error_code: 1032</code> / <code>HA_ERR_KEY_NOT_FOUND</code> on <code>mysql_innodb_cluster_metadata.instances</code>.</p>
 <p>If you choose to ignore SQL errors, add <code>force: true</code> under <code>spec.pitr</code> in the restore object. This passes <code>--force</code> to the MySQL client and silently ignores <strong>all</strong> SQL errors during replay, which can hide data loss. See <a href="backups-restore-pitr.html#ignore-sql-errors-during-binlog-replay">Ignore SQL errors during binlog replay</a>.</p>
-<h3 id="encrypted-binlogs-fail-to-decrypt">Encrypted binlogs fail to decrypt<a class="headerlink" href="#encrypted-binlogs-fail-to-decrypt" title="Permanent link">¶</a></h3>
+<h3 id="encrypted-binlogs-fail-to-decrypt">Encrypted binlogs fail to decrypt<a data-markdown-ignore class="headerlink" href="#encrypted-binlogs-fail-to-decrypt" title="Permanent link">¶</a></h3>
 <p>The PITR Job cannot unwrap a binlog if the mounted keyring does not contain the KEK recorded in that file.</p>
 <p>Typical causes:</p>
 <ul>
@@ -6303,9 +6303,9 @@ xb-restore-restore2                                      Complete   1/1         
 <li>A KEK removed from <code>keyring.json</code></li>
 </ul>
 <p>Check the PITR Job logs (<code>pitr-restore-&lt;restore-name&gt;</code>) for KEK / keyring errors. To copy the Secret and set <code>keyringSecret</code>, see <a href="backups-restore-pitr.html#restore-with-encrypted-binlogs">Restore with encrypted binlogs</a>. Lost keys cannot be recovered.</p>
-<h3 id="operator-user-password-changed-after-the-backup">Operator user password changed after the backup<a class="headerlink" href="#operator-user-password-changed-after-the-backup" title="Permanent link">¶</a></h3>
+<h3 id="operator-user-password-changed-after-the-backup">Operator user password changed after the backup<a data-markdown-ignore class="headerlink" href="#operator-user-password-changed-after-the-backup" title="Permanent link">¶</a></h3>
 <p>If the Operator user password in the live cluster differs from the password stored in the base backup, point-in-time recovery fails. Take a new full backup after you change that password, then restore from the new backup.</p>
-<h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">¶</a></h2>
+<h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a data-markdown-ignore class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">¶</a></h2>
 <p>If restore Job logs show <code>x509: certificate signed by unknown authority</code>, <code>certificate verify failed</code>, or a similar TLS error, the S3-compatible endpoint is presenting a certificate your cluster does not trust.</p>
 <p>Do not set <code>verifyTLS: false</code> or <code>VERIFY_TLS=false</code> to work around this. Instead, supply the CA and keep verification enabled.</p>
 <ol>

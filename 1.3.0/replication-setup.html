@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5995,11 +5995,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="cross-site-replication-setup-and-use">Cross-site replication: setup and use<a class="headerlink" href="#cross-site-replication-setup-and-use" title="Permanent link">¶</a></h1>
+<h1 id="cross-site-replication-setup-and-use">Cross-site replication: setup and use<a data-markdown-ignore class="headerlink" href="#cross-site-replication-setup-and-use" title="Permanent link">¶</a></h1>
 <p>This guide walks you through creating a MySQL InnoDB ClusterSet, verifying replication, performing switchover and failover, and removing replica clusters or the entire ClusterSet.</p>
 <p>In this setup both source and replica clusters run Percona Server for MySQL version 8.4 in Kubernetes. Refer to <a href="replication.html#implementation-specifics">Implementation specifics</a> section for more information about running different Percona Server for MySQL versions and their compatibility for replication.</p>
 <p>Before you start, read <a href="replication.html">Cross-site replication</a> for architecture, requirements, and limitations.</p>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
+<h2 id="prerequisites">Prerequisites<a data-markdown-ignore class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
 <ul>
 <li>Percona Operator for MySQL <strong>1.2.0</strong> or later installed</li>
 <li>Network connectivity between all MySQL endpoints</li>
@@ -6011,7 +6011,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Operator 1.2.0</li>
 <li>Percona Server for MySQL 8.4.10-10.1</li>
 </ul>
-<h2 id="prepare-your-environment">Prepare your environment<a class="headerlink" href="#prepare-your-environment" title="Permanent link">¶</a></h2>
+<h2 id="prepare-your-environment">Prepare your environment<a data-markdown-ignore class="headerlink" href="#prepare-your-environment" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Clone the repository with all manifests and source code by executing the following command:</p>
@@ -6031,7 +6031,7 @@ kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span clas
 </code></pre></div>
 </li>
 </ol>
-<h2 id="step-1-deploy-the-primary-cluster">Step 1. Deploy the primary cluster<a class="headerlink" href="#step-1-deploy-the-primary-cluster" title="Permanent link">¶</a></h2>
+<h2 id="step-1-deploy-the-primary-cluster">Step 1. Deploy the primary cluster<a data-markdown-ignore class="headerlink" href="#step-1-deploy-the-primary-cluster" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Follow the <a href="kubectl.html">quickstart guide</a> to install the Operator 1.2.0 deployment, if you haven’t done it, and deploy Percona Server for MySQL cluster with replication type <code>group replication</code>. Let’s rename the cluster to <code>source-cluster</code> to differentiate them.</p>
@@ -6117,7 +6117,7 @@ sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">''</span><
 </ul>
 </li>
 </ol>
-<h2 id="step-2-deploy-the-replica-cluster">Step 2. Deploy the replica cluster<a class="headerlink" href="#step-2-deploy-the-replica-cluster" title="Permanent link">¶</a></h2>
+<h2 id="step-2-deploy-the-replica-cluster">Step 2. Deploy the replica cluster<a data-markdown-ignore class="headerlink" href="#step-2-deploy-the-replica-cluster" title="Permanent link">¶</a></h2>
 <ol>
 <li>Follow the <a href="kubectl.html">quickstart guide</a> to install the Operator deployment in the <code>replica</code> namespace. </li>
 <li>
@@ -6181,12 +6181,12 @@ replica-cluster-mysql           ClusterIP   None             &lt;none&gt;       
 </details>
 </li>
 </ol>
-<h2 id="step-3-restore-the-data-on-the-replica-cluster-from-source-optional">Step 3. Restore the data on the replica cluster from source (optional)<a class="headerlink" href="#step-3-restore-the-data-on-the-replica-cluster-from-source-optional" title="Permanent link">¶</a></h2>
+<h2 id="step-3-restore-the-data-on-the-replica-cluster-from-source-optional">Step 3. Restore the data on the replica cluster from source (optional)<a data-markdown-ignore class="headerlink" href="#step-3-restore-the-data-on-the-replica-cluster-from-source-optional" title="Permanent link">¶</a></h2>
 <p>By default, the replica cluster receives the data from source via the <code>clone</code> recovery method - the Operator uses <code>mysqlshell</code> to create a physical snapshot of the dataset from the source and transfer it to the replica. </p>
 <p>For large datasets, a full clone can last long, add load to the <code>Donor</code> node and be expensive to retry if something goes wrong. </p>
 <p>Instead of using the <code>clone</code> method, make a backup on the primary cluster and restore it on the replica. Then when the replica joins the ClusterSet, it already has the data and the GTID history from the source. So it only receives the binlog changes.</p>
 <p>Refer to the <a href="backups-ondemand.html">make a backup</a> and <a href="backups-restore-to-new-cluster.html">restore from a backup on a new cluster</a> tutorials for step-by-step instructions.</p>
-<h2 id="step-4-create-the-clusterset">Step 4. Create the ClusterSet<a class="headerlink" href="#step-4-create-the-clusterset" title="Permanent link">¶</a></h2>
+<h2 id="step-4-create-the-clusterset">Step 4. Create the ClusterSet<a data-markdown-ignore class="headerlink" href="#step-4-create-the-clusterset" title="Permanent link">¶</a></h2>
 <p>Now it’s time to link clusters. To do this, configure a <code>PerconaServerMySQLClusterSet</code> Custom Resource. </p>
 <ol>
 <li>
@@ -6200,7 +6200,7 @@ replica-cluster-mysql           ClusterIP   None             &lt;none&gt;       
 <li><code>clusters</code> - the list of the ClusterSet members. For each cluster specify its InnoDBCluster name and the endpoint that the Operator will use to reach it. </li>
 </ul>
 <p>Here’s the example configuration:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Clone recovery</label><label for="__tabbed_1_2">Incremental recovery</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">Clone recovery</label><label for="__tabbed_1_2">Incremental recovery</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
@@ -6283,8 +6283,8 @@ kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </
 </li>
 </ol>
 <p>When the Job completes, Pod-0 on the replica cluster becomes Ready and Pod-1, Pod-2 join the local Group Replication group automatically.</p>
-<h2 id="step-5-verify-replication">Step 5. Verify replication<a class="headerlink" href="#step-5-verify-replication" title="Permanent link">¶</a></h2>
-<h3 id="check-clusterset-status">Check ClusterSet status<a class="headerlink" href="#check-clusterset-status" title="Permanent link">¶</a></h3>
+<h2 id="step-5-verify-replication">Step 5. Verify replication<a data-markdown-ignore class="headerlink" href="#step-5-verify-replication" title="Permanent link">¶</a></h2>
+<h3 id="check-clusterset-status">Check ClusterSet status<a data-markdown-ignore class="headerlink" href="#check-clusterset-status" title="Permanent link">¶</a></h3>
 <ol>
 <li>
 <p>Check ClusterSet status:</p>
@@ -6309,7 +6309,7 @@ my-cluster-set   sourcecluster  source-cluster-mysql-0:3306              True   
 </ul>
 </li>
 </ol>
-<h3 id="check-replication-lag">Check replication lag<a class="headerlink" href="#check-replication-lag" title="Permanent link">¶</a></h3>
+<h3 id="check-replication-lag">Check replication lag<a data-markdown-ignore class="headerlink" href="#check-replication-lag" title="Permanent link">¶</a></h3>
 <p>A replica cluster may lag behind the primary.</p>
 <p>To see how far a replica cluster is behind the primary, run:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
@@ -6322,7 +6322,7 @@ my-cluster-set   sourcecluster  source-cluster-mysql-0:3306              True   
 </details>
 <p>An empty result means either this cluster is the primary, or the replica is caught up (or lag could not be determined). A growing value means the replica is falling behind. Wait for the lag to drop before you promote the replica or rely on it for reads.</p>
 <p>For field details, see <a href="cr-statuses.html#per-member-cluster-status">Custom resource statuses</a>.</p>
-<h3 id="check-per-cluster-status">Check per-cluster status<a class="headerlink" href="#check-per-cluster-status" title="Permanent link">¶</a></h3>
+<h3 id="check-per-cluster-status">Check per-cluster status<a data-markdown-ignore class="headerlink" href="#check-per-cluster-status" title="Permanent link">¶</a></h3>
 <p>Run on the replica cluster:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[*]}{.type}{": "}{.status}{"\n"}{end}'</span>
 </code></pre></div>
@@ -6335,7 +6335,7 @@ InnoDBClusterBootstrapped: True
 </code></pre></div>
 </details>
 <p><code>ClusterSetMember</code> is <code>True</code> on each cluster that belongs to a ClusterSet with at least one replica. The reason is <code>Replica</code> on a replica cluster and <code>Primary</code> on the primary cluster. A ClusterSet that contains only the primary has no <code>ClusterSetMember</code> condition. Starting with Operator version 1.3.0, use <code>ClusterSetMember</code> for this check. A cluster created with Operator 1.2.0 can still show <code>ClusterSetReplicationRunning: True</code>.</p>
-<h3 id="verify-data-replication">Verify data replication<a class="headerlink" href="#verify-data-replication" title="Permanent link">¶</a></h3>
+<h3 id="verify-data-replication">Verify data replication<a data-markdown-ignore class="headerlink" href="#verify-data-replication" title="Permanent link">¶</a></h3>
 <ol>
 <li>
 <p>Connect to the primary cluster and insert some data:</p>
@@ -6372,8 +6372,8 @@ InnoDBClusterBootstrapped: True
 <p>You should see the same data that you inserted.</p>
 </li>
 </ol>
-<h2 id="usage-scenarios">Usage scenarios<a class="headerlink" href="#usage-scenarios" title="Permanent link">¶</a></h2>
-<h3 id="planned-switchover">Planned switchover<a class="headerlink" href="#planned-switchover" title="Permanent link">¶</a></h3>
+<h2 id="usage-scenarios">Usage scenarios<a data-markdown-ignore class="headerlink" href="#usage-scenarios" title="Permanent link">¶</a></h2>
+<h3 id="planned-switchover">Planned switchover<a data-markdown-ignore class="headerlink" href="#planned-switchover" title="Permanent link">¶</a></h3>
 <p>To promote a replica cluster to primary, edit <code>spec.primaryCluster</code>:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="o">=</span>merge<span class="w"> </span>-p<span class="w"> </span><span class="s1">'{"spec":{"primaryCluster":"replicacluster"}}'</span>
@@ -6390,7 +6390,7 @@ InnoDBClusterBootstrapped: True
 kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>switchover
 </code></pre></div>
 <p>After switchover, writes go to the new primary cluster. The former primary becomes a replica.</p>
-<h3 id="forced-failover">Forced failover<a class="headerlink" href="#forced-failover" title="Permanent link">¶</a></h3>
+<h3 id="forced-failover">Forced failover<a data-markdown-ignore class="headerlink" href="#forced-failover" title="Permanent link">¶</a></h3>
 <p>Use forced failover only when the current primary cluster is <strong>unreachable</strong> and you accept the risk of split-brain or lost transactions if the old primary is still alive.</p>
 <ol>
 <li>Confirm the primary is unreachable from the controller’s perspective (the <code>ErrorReconcile: True</code> condition with the reason <code>PrimaryUnreachable</code> may be set).</li>
@@ -6411,7 +6411,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <p>Set <code>unsafeFlags.forcedFailover</code> to <code>true</code> only when you are certain the old primary cannot recover or accept writes.</p>
 </div>
 <p>To recover an invalidated cluster later, <a href="#rejoin-a-replica-cluster">rejoin it</a> if GTIDs are compatible, or remove and recreate the cluster in the ClusterSet.</p>
-<h3 id="rejoin-a-replica-cluster">Rejoin a replica cluster<a class="headerlink" href="#rejoin-a-replica-cluster" title="Permanent link">¶</a></h3>
+<h3 id="rejoin-a-replica-cluster">Rejoin a replica cluster<a data-markdown-ignore class="headerlink" href="#rejoin-a-replica-cluster" title="Permanent link">¶</a></h3>
 <p>If the replica’s Group Replication channel is down (for example, you paused or stopped a ClusterSet replica or it crashed), the Operator recovers the local Group Replication group and rejoins it to the ClusterSet automatically. </p>
 <p>However, when the replica itself is healthy but the ClusterSet replication is down, you trigger the rejoin manually by annotating the ClusterSet. This happens typically after the primary was unreachable long enough to exhaust retries. </p>
 <p>Rejoin when <code>globalStatus</code> stays <code>OK_NOT_REPLICATING</code>, or <code>ClusterSetReplicationRunning</code> is <code>False</code>, after the replica cluster is <code>Ready</code>. You can also rejoin an <code>INVALIDATED</code> former primary after <a href="#forced-failover">forced failover</a> if its GTIDs are still compatible with the current primary.</p>
@@ -6446,14 +6446,14 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <p>Confirm that the replica’s <code>globalStatus</code> is <code>OK</code> and that <code>ClusterSetReplicationRunning</code> is <code>True</code> on the replica cluster. If you see the <code>RejoinFailed</code> condition or a <code>ClusterSetMemberRejoinFailed</code> event, read the condition message and Job logs (the Job may have succeeded while the replica stayed <code>OK_NOT_REPLICATING</code>). Fix the cause, then annotate again.</p>
 </li>
 </ol>
-<h3 id="remove-a-replica-cluster">Remove a replica cluster<a class="headerlink" href="#remove-a-replica-cluster" title="Permanent link">¶</a></h3>
+<h3 id="remove-a-replica-cluster">Remove a replica cluster<a data-markdown-ignore class="headerlink" href="#remove-a-replica-cluster" title="Permanent link">¶</a></h3>
 <p>Remove a replica by deleting its entry from <code>spec.clusters[]</code>.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Removal is <strong>one-way</strong>. You cannot add the same cluster back to the same ClusterSet after removal.</p>
 </div>
 <p>Run the following command to remove a cluster:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Replica is running (reachable)</label><label for="__tabbed_2_2">Replica is offline or unreachable</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_2_1">Replica is running (reachable)</label><label for="__tabbed_2_2">Replica is offline or unreachable</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Remove the replica by patching the ClusterSet:</p>
@@ -6504,7 +6504,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </div>
 </div>
 </div>
-<h3 id="delete-the-clusterset">Delete the ClusterSet<a class="headerlink" href="#delete-the-clusterset" title="Permanent link">¶</a></h3>
+<h3 id="delete-the-clusterset">Delete the ClusterSet<a data-markdown-ignore class="headerlink" href="#delete-the-clusterset" title="Permanent link">¶</a></h3>
 <p>Delete the ClusterSet Custom Resource to stop cross-site replication and dissolve ClusterSet metadata:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
@@ -6518,7 +6518,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <p>Underlying <code>PerconaServerMySQL</code> clusters <strong>continue running</strong> as standalone InnoDB Clusters. The per-site Operator keeps managing them.</p>
 <p>If dissolve fails (for example, because the primary is permanently unreachable), the Custom Resource stays with <code>deletionTimestamp</code> set. Fix connectivity or resolve the MySQL-side issue, then the finalizer retries automatically.</p>
 <p>To delete the primary and replica clusters, delete their <code>PerconaServerMySQL</code> Custom Resources after the ClusterSet is gone.</p>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h2 id="troubleshooting">Troubleshooting<a data-markdown-ignore class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
 <table>
 <thead>
 <tr>

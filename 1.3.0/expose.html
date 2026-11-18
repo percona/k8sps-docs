@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5663,7 +5663,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="expose-cluster">Expose cluster<a class="headerlink" href="#expose-cluster" title="Permanent link">¶</a></h1>
+<h1 id="expose-cluster">Expose cluster<a data-markdown-ignore class="headerlink" href="#expose-cluster" title="Permanent link">¶</a></h1>
 <p>The Operator provides different ways to access your MySQL database cluster. Each way uses Kubernetes <a href="https://kubernetes.io/docs/
 concepts/services-networking/service/">Service objects <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> to expose the cluster to client applications. These Service objects are configured by the Operator.</p>
 <p>This document shows you how to configure cluster exposure using options in the <a href="operator.html">Custom Resource manifest</a>. The available options depend on the <a href="architecture.html#replication-type-and-proxy-comparison">replication type</a> of your cluster.</p>
@@ -5678,11 +5678,11 @@ concepts/services-networking/service/">Service objects <span class="twemoji"><sv
 <li><a href="#use-mysql-router">Use MySQL Router</a></li>
 <li><a href="#use-primary-service">Use the Primary Service</a></li>
 </ul>
-<h2 id="use-haproxy">Use HAProxy<a class="headerlink" href="#use-haproxy" title="Permanent link">¶</a></h2>
+<h2 id="use-haproxy">Use HAProxy<a data-markdown-ignore class="headerlink" href="#use-haproxy" title="Permanent link">¶</a></h2>
 <p>HAProxy provides load balancing and proxy service for your cluster. It’s enabled by default and works with both replication types.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/exposure-haproxy.svg" data-desc-position="bottom"><img alt="image" src="assets/images/exposure-haproxy.svg"></a></p>
 <p>To enable HAProxy, set the following in your <code>deploy/cr.yaml</code> manifest:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">Asynchronous replication (tech preview)</label><label for="__tabbed_1_2">Group replication</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">Asynchronous replication (tech preview)</label><label for="__tabbed_1_2">Group replication</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
@@ -5721,7 +5721,7 @@ concepts/services-networking/service/">Service objects <span class="twemoji"><sv
 ps-cluster1-haproxy   ClusterIP   10.76.2.102   &lt;none&gt;        3306/TCP,3307/TCP,3309/TCP   2m32s
 </code></pre></div>
 </details>
-<h2 id="use-mysql-router">Use MySQL Router<a class="headerlink" href="#use-mysql-router" title="Permanent link">¶</a></h2>
+<h2 id="use-mysql-router">Use MySQL Router<a data-markdown-ignore class="headerlink" href="#use-mysql-router" title="Permanent link">¶</a></h2>
 <p>MySQL Router provides intelligent routing for group replication clusters. This option is left for backward compatibility. We recommend to <a href="#use-haproxy">Use HAProxy</a> for exposing the cluster.</p>
 <p>You can expose the cluster through a <code>&lt;CLUSTER_NAME&gt;-router</code> Kubernetes Service.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/exposure-gr.svg" data-desc-position="bottom"><img alt="image" src="assets/images/exposure-gr.svg"></a></p>
@@ -5753,11 +5753,11 @@ my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,
 connect via <a href="https://dev.mysql.com/doc/dev/
 mysql-server/latest/page_mysqlx_protocol.html">MySQL X Protocol <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>. This is 
 useful for operations such as asynchronous calls.</p>
-<h2 id="use-primary-service">Use Primary Service<a class="headerlink" href="#use-primary-service" title="Permanent link">¶</a></h2>
+<h2 id="use-primary-service">Use Primary Service<a data-markdown-ignore class="headerlink" href="#use-primary-service" title="Permanent link">¶</a></h2>
 <p>You can expose your cluster without the proxy by exposing the primary Pod directly. Specify the <code>spec.mysql.exposePrimary.enabled</code> option to <code>true</code> in your Custom Resource. This creates  the <code>&lt;CLUSTER_NAME&gt;-mysql-primary</code> service for connecting to the cluster.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/exposure-async.svg" data-desc-position="bottom"><img alt="image" src="assets/images/exposure-async.svg"></a></p>
 <p>You can change the type of the Service object by setting <code>mysql.exposePrimary.type</code> variable in the Custom Resource. For example, to use a LoadBalancer for the primary service, specify the following configuration in your <code>deploy/cr.yaml</code> manifest:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div class="tabbed-labels"><label for="__tabbed_2_1">Asynchronous replication</label><label for="__tabbed_2_2">Group replication</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_2_1">Asynchronous replication</label><label for="__tabbed_2_2">Group replication</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
@@ -5797,7 +5797,7 @@ ps-cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:3
 <li><code>33061</code> - MySQL Group Replication internal communications port</li>
 </ul>
 <p>In addition, the primary Pod is marked with the label <code>mysql.percona.com/primary=true</code> to distinguish it from the rest of the Pods.</p>
-<h2 id="expose-individual-pods">Expose Individual Pods<a class="headerlink" href="#expose-individual-pods" title="Permanent link">¶</a></h2>
+<h2 id="expose-individual-pods">Expose Individual Pods<a data-markdown-ignore class="headerlink" href="#expose-individual-pods" title="Permanent link">¶</a></h2>
 <p>Sometimes you need to expose each MySQL instance with its own IP address. This is useful when implementing load balancing at the application level.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/exposure-all.svg" data-desc-position="bottom"><img alt="image" src="assets/images/exposure-all.svg"></a></p>
 <p>To expose individual pods, configure the following in your <code>deploy/cr.yaml</code>:</p>

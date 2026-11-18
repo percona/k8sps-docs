@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5685,8 +5685,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="making-on-demand-backup">Making on-demand backup<a class="headerlink" href="#making-on-demand-backup" title="Permanent link">¶</a></h1>
-<h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">¶</a></h2>
+<h1 id="making-on-demand-backup">Making on-demand backup<a data-markdown-ignore class="headerlink" href="#making-on-demand-backup" title="Permanent link">¶</a></h1>
+<h2 id="before-you-begin">Before you begin<a data-markdown-ignore class="headerlink" href="#before-you-begin" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Export the namespace as an environment variable. Replace the <code>&lt;namespace&gt;</code> placeholder with your value:</p>
@@ -5708,7 +5708,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>For incremental backups, check <a href="backups-incremental.html#implementation-specifics-and-rules">implementation specifics and rules</a>.</p>
 </li>
 </ol>
-<h2 id="backup-steps">Backup steps<a class="headerlink" href="#backup-steps" title="Permanent link">¶</a></h2>
+<h2 id="backup-steps">Backup steps<a data-markdown-ignore class="headerlink" href="#backup-steps" title="Permanent link">¶</a></h2>
 <p>To make an on-demand backup, use
 <em>a special backup configuration YAML file</em>. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/backup/backup.yaml">deploy/backup/backup.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
 <p>You can check available options in the <a href="backup-cr.html">Backup resource reference</a></p>
@@ -5722,7 +5722,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Optionally, add the <code>percona.com/delete-backup</code> entry under <code>metadata.finalizers</code> to enable deletion of backup files from a cloud storage when the backup object is removed (manually or by schedule).</li>
 </ul>
 <p>Pass this information to the Operator:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">via the YAML manifest</label><label for="__tabbed_1_2">via the command line</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">via the YAML manifest</label><label for="__tabbed_1_2">via the command line</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ol>
@@ -5766,7 +5766,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>List backups with this command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
-<h2 id="view-backup-size">View backup size<a class="headerlink" href="#view-backup-size" title="Permanent link">¶</a></h2>
+<h2 id="view-backup-size">View backup size<a data-markdown-ignore class="headerlink" href="#view-backup-size" title="Permanent link">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Version added: <a href="ReleaseNotes/index.html">1.3.0</a></p>
 </div>
@@ -5787,7 +5787,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Percona XtraBackup 8.4.0-6 and later</li>
 </ul>
 <p>For the full field list, see <a href="cr-statuses.html#perconaservermysqlbackup-status">Backup status</a>.</p>
-<h2 id="specifying-the-backup-source">Specifying the backup source<a class="headerlink" href="#specifying-the-backup-source" title="Permanent link">¶</a></h2>
+<h2 id="specifying-the-backup-source">Specifying the backup source<a data-markdown-ignore class="headerlink" href="#specifying-the-backup-source" title="Permanent link">¶</a></h2>
 <p>When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object’s status:</p>
 <div class="highlight"><pre><span></span><code>kubectl get ps-backup backup1 -o yaml
 </code></pre></div>
@@ -5815,7 +5815,7 @@ status:
 <span class="w">  </span><span class="nt">storageName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3-us-west</span>
 <span class="w">  </span><span class="nt">sourcePod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-mysql-2</span>
 </code></pre></div>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h2 id="troubleshooting">Troubleshooting<a data-markdown-ignore class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
 <p>If you face issues with backups, refer to our <a href="debug-backup-restore.html">Backup troubleshooting guide</a> for help.</p>
 <hr>
 <div class="md-source-file">

@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5683,9 +5683,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="install-percona-distribution-for-mysql-on-amazon-elastic-kubernetes-service-eks">Install Percona Distribution for MySQL on Amazon Elastic Kubernetes Service (EKS)<a class="headerlink" href="#install-percona-distribution-for-mysql-on-amazon-elastic-kubernetes-service-eks" title="Permanent link">¶</a></h1>
+<h1 id="install-percona-distribution-for-mysql-on-amazon-elastic-kubernetes-service-eks">Install Percona Distribution for MySQL on Amazon Elastic Kubernetes Service (EKS)<a data-markdown-ignore class="headerlink" href="#install-percona-distribution-for-mysql-on-amazon-elastic-kubernetes-service-eks" title="Permanent link">¶</a></h1>
 <p>This guide shows you how to deploy Percona Operator for MySQL on Amazon Elastic Kubernetes Service (EKS). The document assumes some experience with Amazon EKS. For more information on the EKS, see the <a href="https://aws.amazon.com/eks/">Amazon EKS official documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
+<h2 id="prerequisites">Prerequisites<a data-markdown-ignore class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
 <p>The following tools are used in this guide and therefore should be preinstalled:</p>
 <ol>
 <li>
@@ -5702,9 +5702,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 </ol>
 <p>Also, you need to configure AWS CLI with your credentials according to the <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html">official guide <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
-<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">¶</a></h2>
+<h2 id="before-you-start">Before you start<a data-markdown-ignore class="headerlink" href="#before-you-start" title="Permanent link">¶</a></h2>
 <p>Check the <a href="System-Requirements.html">System Requirements</a> to ensure your environment meets the necessary prerequisites.</p>
-<h2 id="create-the-eks-cluster">Create the EKS cluster<a class="headerlink" href="#create-the-eks-cluster" title="Permanent link">¶</a></h2>
+<h2 id="create-the-eks-cluster">Create the EKS cluster<a data-markdown-ignore class="headerlink" href="#create-the-eks-cluster" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>To create your cluster, you will need the following data:</p>
@@ -5728,7 +5728,7 @@ e.g. for testing purposes.</p>
 <p>After you have created the EKS cluster, you also need to <a href="https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html">install the Amazon EBS CSI driver <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> on your cluster. See the <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-ebs-csi.html">official documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> on adding it as an Amazon EKS add-on.</p>
 </li>
 </ol>
-<h2 id="install-the-operator-and-deploy-your-mysql-cluster">Install the Operator and deploy your MySQL cluster<a class="headerlink" href="#install-the-operator-and-deploy-your-mysql-cluster" title="Permanent link">¶</a></h2>
+<h2 id="install-the-operator-and-deploy-your-mysql-cluster">Install the Operator and deploy your MySQL cluster<a data-markdown-ignore class="headerlink" href="#install-the-operator-and-deploy-your-mysql-cluster" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Create a namespace and set the context for the namespace. The resource names must be unique within the namespace and provide a way to divide cluster resources between users spread across multiple projects.</p>
@@ -5787,7 +5787,7 @@ The return statement confirms the creation:</p>
 </code></pre></div>
 </li>
 </ol>
-<h2 id="verify-the-cluster-operation">Verify the cluster operation<a class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">¶</a></h2>
+<h2 id="verify-the-cluster-operation">Verify the cluster operation<a data-markdown-ignore class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">¶</a></h2>
 <p>To connect to Percona Server for MySQL, use the connection Secret that the Operator creates for the <code>root</code> user. It is named <code>&lt;cluster_name&gt;-psuser-root</code> (by default, <code>ps-cluster1-psuser-root</code>) and contains hostnames, ports, credentials, and ready-to-use connection URIs. Read <a href="connection-secrets.html">Connection secrets</a> for the full reference.</p>
 <p>Here’s how to connect:</p>
 <ol>
@@ -5825,7 +5825,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
     The command will look different depending on whether the cluster uses load
     balancing with <a href="haproxy-conf.html">HAProxy</a> (the default behavior) or uses
     <a href="router-conf.html">MySQL Router</a> (can be used with Group Replication clusters):</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;

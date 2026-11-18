@@ -144,7 +144,7 @@ the haproxy.enabled option in the deploy/cr.yaml configuration file.">
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5602,7 +5602,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="configuring-load-balancing-with-haproxy">Configuring Load Balancing with HAProxy<a class="headerlink" href="#configuring-load-balancing-with-haproxy" title="Permanent link">¶</a></h1>
+<h1 id="configuring-load-balancing-with-haproxy">Configuring Load Balancing with HAProxy<a data-markdown-ignore class="headerlink" href="#configuring-load-balancing-with-haproxy" title="Permanent link">¶</a></h1>
 <p>Percona Operator for MySQL provides load balancing and proxy service with
 <a href="https://haproxy.org">HAProxy <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> (enabled by default). HAProxy is the only
 solution proxy when asynchronous replication between MySQL instances is enabled,
@@ -5643,7 +5643,7 @@ take place. First, reader members are upgraded one by one: the Operator waits
 until the upgraded Percona Distribution for MySQL cluster member becomes synced,
 and then proceeds to upgrade the next member. When the upgrade is finished for
 all the readers, then the writer MySQL cluster member is finally upgraded.</p>
-<h2 id="passing-custom-configuration-options-to-haproxy">Passing custom configuration options to HAProxy<a class="headerlink" href="#passing-custom-configuration-options-to-haproxy" title="Permanent link">¶</a></h2>
+<h2 id="passing-custom-configuration-options-to-haproxy">Passing custom configuration options to HAProxy<a data-markdown-ignore class="headerlink" href="#passing-custom-configuration-options-to-haproxy" title="Permanent link">¶</a></h2>
 <p>You can pass custom configuration to HAProxy, adding options from the
 <a href="https://www.haproxy.com/blog/the-four-essential-sections-of-an-haproxy-configuration/">haproxy.cfg <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>
 configuration file to the  <code>haproxy.configuration</code> Custom Resource option in

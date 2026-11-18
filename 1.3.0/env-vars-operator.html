@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5907,7 +5907,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="configure-operator-environment-variables">Configure Operator environment variables<a class="headerlink" href="#configure-operator-environment-variables" title="Permanent link">¶</a></h1>
+<h1 id="configure-operator-environment-variables">Configure Operator environment variables<a data-markdown-ignore class="headerlink" href="#configure-operator-environment-variables" title="Permanent link">¶</a></h1>
 <p>You can configure the Percona Operator for MySQL by setting environment variables on the Operator Deployment. This lets you tune Operator behavior without rebuilding images.</p>
 <p>You can set environment variables in the following ways:</p>
 <ul>
@@ -5915,8 +5915,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>For Helm installations, you can set environment variables through Helm values. Use the <a href="https://github.com/percona/percona-helm-charts/tree/main/charts/ps-operator">ps-operator chart values <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</li>
 <li>For OpenShift installations that use OLM, configure environment variables in the Subscription.</li>
 </ul>
-<h2 id="available-environment-variables">Available environment variables<a class="headerlink" href="#available-environment-variables" title="Permanent link">¶</a></h2>
-<h3 id="log_structured"><code>LOG_STRUCTURED</code><a class="headerlink" href="#log_structured" title="Permanent link">¶</a></h3>
+<h2 id="available-environment-variables">Available environment variables<a data-markdown-ignore class="headerlink" href="#available-environment-variables" title="Permanent link">¶</a></h2>
+<h3 id="log_structured"><code>LOG_STRUCTURED</code><a data-markdown-ignore class="headerlink" href="#log_structured" title="Permanent link">¶</a></h3>
 <p>Controls whether Operator logs are structured (JSON) or plain text.</p>
 <table>
 <thead>
@@ -5940,7 +5940,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
 </code></pre></div>
 <p>Structured logs work well with tools such as <a href="https://stedolan.github.io/jq/">jq <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>. See also <a href="debug-logs.html">Check the logs</a>.</p>
-<h3 id="log_level"><code>LOG_LEVEL</code><a class="headerlink" href="#log_level" title="Permanent link">¶</a></h3>
+<h3 id="log_level"><code>LOG_LEVEL</code><a data-markdown-ignore class="headerlink" href="#log_level" title="Permanent link">¶</a></h3>
 <p>Sets the verbosity of Operator logs.</p>
 <table>
 <thead>
@@ -5970,7 +5970,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LOG_LEVEL</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DEBUG</span>
 </code></pre></div>
-<h3 id="watch_namespace"><code>WATCH_NAMESPACE</code><a class="headerlink" href="#watch_namespace" title="Permanent link">¶</a></h3>
+<h3 id="watch_namespace"><code>WATCH_NAMESPACE</code><a data-markdown-ignore class="headerlink" href="#watch_namespace" title="Permanent link">¶</a></h3>
 <p>Specifies which namespaces the Operator watches for <code>PerconaServerMySQL</code> and related custom resources.</p>
 <p>By default, the value is set to the Operator’s own namespace from the metadata.namespace option via a downward API <code>fieldRef</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WATCH_NAMESPACE</span>
@@ -6006,7 +6006,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w"> </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WATCH_NAMESPACE</span>
 <span class="w">   </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"mysql,mysql-dev,mysql-prod"</span>
 </code></pre></div>
-<h3 id="max_concurrent_reconciles"><code>MAX_CONCURRENT_RECONCILES</code><a class="headerlink" href="#max_concurrent_reconciles" title="Permanent link">¶</a></h3>
+<h3 id="max_concurrent_reconciles"><code>MAX_CONCURRENT_RECONCILES</code><a data-markdown-ignore class="headerlink" href="#max_concurrent_reconciles" title="Permanent link">¶</a></h3>
 <p>Sets the number of concurrent workers that reconcile <code>PerconaServerMySQL</code> and related custom resources in parallel. Useful when you manage multiple clusters with a single Operator. See <a href="reconciliation-concurrency.html">Configure concurrency for a cluster reconciliation</a>.</p>
 <table>
 <thead>
@@ -6030,7 +6030,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MAX_CONCURRENT_RECONCILES</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"2"</span>
 </code></pre></div>
-<h3 id="disable_telemetry"><code>DISABLE_TELEMETRY</code><a class="headerlink" href="#disable_telemetry" title="Permanent link">¶</a></h3>
+<h3 id="disable_telemetry"><code>DISABLE_TELEMETRY</code><a data-markdown-ignore class="headerlink" href="#disable_telemetry" title="Permanent link">¶</a></h3>
 <p>Disables anonymous telemetry data collection by the Operator. For what is collected when telemetry is enabled, see <a href="telemetry.html">Telemetry</a>.</p>
 <table>
 <thead>
@@ -6053,7 +6053,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DISABLE_TELEMETRY</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"true"</span>
 </code></pre></div>
-<h3 id="pso_leader_election_enabled"><code>PSO_LEADER_ELECTION_ENABLED</code><a class="headerlink" href="#pso_leader_election_enabled" title="Permanent link">¶</a></h3>
+<h3 id="pso_leader_election_enabled"><code>PSO_LEADER_ELECTION_ENABLED</code><a data-markdown-ignore class="headerlink" href="#pso_leader_election_enabled" title="Permanent link">¶</a></h3>
 <p>Controls whether the Operator runs leader election. Enabled by default.</p>
 <p>Leader election ensures only one Operator instance manages resources when multiple replicas run. Set this to <code>"false"</code> only when the Deployment has one replica.</p>
 <p>When this variable is set, it overrides the <code>--leader-elect</code> container argument. When this variable is unset, the Operator uses that argument.</p>
@@ -6079,7 +6079,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_ENABLED</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"false"</span>
 </code></pre></div>
-<h3 id="pso_leader_election_lease_name"><code>PSO_LEADER_ELECTION_LEASE_NAME</code><a class="headerlink" href="#pso_leader_election_lease_name" title="Permanent link">¶</a></h3>
+<h3 id="pso_leader_election_lease_name"><code>PSO_LEADER_ELECTION_LEASE_NAME</code><a data-markdown-ignore class="headerlink" href="#pso_leader_election_lease_name" title="Permanent link">¶</a></h3>
 <p>Sets the name of the Lease object that stores the leader lock. The Operator creates this Lease in the Operator namespace. The name must be a valid DNS subdomain.  Leave empty to use the default <code>08db2feb.percona.com</code>.</p>
 <p>When you change the name, the Operator creates a new Lease. The previous Lease stays in the namespace.</p>
 <table>
@@ -6103,7 +6103,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_LEASE_NAME</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"my-lease"</span>
 </code></pre></div>
-<h3 id="pso_leader_election_lease_duration"><code>PSO_LEADER_ELECTION_LEASE_DURATION</code><a class="headerlink" href="#pso_leader_election_lease_duration" title="Permanent link">¶</a></h3>
+<h3 id="pso_leader_election_lease_duration"><code>PSO_LEADER_ELECTION_LEASE_DURATION</code><a data-markdown-ignore class="headerlink" href="#pso_leader_election_lease_duration" title="Permanent link">¶</a></h3>
 <p>Sets how long another Operator replica waits after the last successful renewal before it takes leadership. Use a duration such as <code>60s</code> or <code>2m</code>. Increase this value when leader election fails because of high latency or limited resources.</p>
 <p>The lease duration must be greater than the <a href="#pso_leader_election_renew_deadline">renew deadline</a>.</p>
 <table>
@@ -6127,7 +6127,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_LEASE_DURATION</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"90s"</span>
 </code></pre></div>
-<h3 id="pso_leader_election_renew_deadline"><code>PSO_LEADER_ELECTION_RENEW_DEADLINE</code><a class="headerlink" href="#pso_leader_election_renew_deadline" title="Permanent link">¶</a></h3>
+<h3 id="pso_leader_election_renew_deadline"><code>PSO_LEADER_ELECTION_RENEW_DEADLINE</code><a data-markdown-ignore class="headerlink" href="#pso_leader_election_renew_deadline" title="Permanent link">¶</a></h3>
 <p>Sets how long the current leader retries renewing the Lease before it gives up leadership. Use a duration such as <code>40s</code>.</p>
 <p>The renew deadline must be greater than the <a href="#pso_leader_election_retry_period">retry period</a> multiplied by 1.2.</p>
 <table>
@@ -6151,7 +6151,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_RENEW_DEADLINE</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"60s"</span>
 </code></pre></div>
-<h3 id="pso_leader_election_retry_period"><code>PSO_LEADER_ELECTION_RETRY_PERIOD</code><a class="headerlink" href="#pso_leader_election_retry_period" title="Permanent link">¶</a></h3>
+<h3 id="pso_leader_election_retry_period"><code>PSO_LEADER_ELECTION_RETRY_PERIOD</code><a data-markdown-ignore class="headerlink" href="#pso_leader_election_retry_period" title="Permanent link">¶</a></h3>
 <p>Sets how long the Operator waits between leader election attempts. Use a duration such as <code>10s</code>.</p>
 <table>
 <thead>
@@ -6174,8 +6174,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PSO_LEADER_ELECTION_RETRY_PERIOD</span>
 <span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"15s"</span>
 </code></pre></div>
-<h2 id="update-environment-variables">Update environment variables<a class="headerlink" href="#update-environment-variables" title="Permanent link">¶</a></h2>
-<h3 id="using-kubectl-patch">Using <code>kubectl patch</code><a class="headerlink" href="#using-kubectl-patch" title="Permanent link">¶</a></h3>
+<h2 id="update-environment-variables">Update environment variables<a data-markdown-ignore class="headerlink" href="#update-environment-variables" title="Permanent link">¶</a></h2>
+<h3 id="using-kubectl-patch">Using <code>kubectl patch</code><a data-markdown-ignore class="headerlink" href="#using-kubectl-patch" title="Permanent link">¶</a></h3>
 <p>You can update environment variables in an existing Operator Deployment by applying a patch. To keep existing environment variables, you must specify the full list of them.</p>
 <p>Here’s how to do it:</p>
 <ol>
@@ -6204,7 +6204,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 </ol>
 <p>Adjust the list to match your current Deployment (for example cluster-wide <code>WATCH_NAMESPACE</code> with a string <code>value</code> instead of <code>valueFrom</code>). Starting with version 1.3.0, keep the <code>PSO_LEADER_ELECTION_*</code> entries in the list.</p>
-<h3 id="using-kubectl-edit">Using <code>kubectl edit</code><a class="headerlink" href="#using-kubectl-edit" title="Permanent link">¶</a></h3>
+<h3 id="using-kubectl-edit">Using <code>kubectl edit</code><a data-markdown-ignore class="headerlink" href="#using-kubectl-edit" title="Permanent link">¶</a></h3>
 <p>You can also edit the Deployment directly:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>edit<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;operator-namespace&gt;
 </code></pre></div>

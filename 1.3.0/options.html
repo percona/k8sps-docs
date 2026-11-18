@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5807,9 +5807,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="changing-mysql-options">Changing MySQL Options<a class="headerlink" href="#changing-mysql-options" title="Permanent link">¶</a></h1>
+<h1 id="changing-mysql-options">Changing MySQL Options<a data-markdown-ignore class="headerlink" href="#changing-mysql-options" title="Permanent link">¶</a></h1>
 <p>The Operator can tune MySQL for you, or you can pass your own options from a <a href="https://dev.mysql.com/doc/refman/8.0/en/option-files.html">my.cnf <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> configuration file. Read the following sections before you choose a method.</p>
-<h2 id="choose-automatic-tuning-or-your-own-configuration">Choose automatic tuning or your own configuration<a class="headerlink" href="#choose-automatic-tuning-or-your-own-configuration" title="Permanent link">¶</a></h2>
+<h2 id="choose-automatic-tuning-or-your-own-configuration">Choose automatic tuning or your own configuration<a data-markdown-ignore class="headerlink" href="#choose-automatic-tuning-or-your-own-configuration" title="Permanent link">¶</a></h2>
 <p>These settings aren’t independent. <strong>Setting any configuration of your own disables the Operator’s <a href="autoconfig.html">automatic configuration tuning</a></strong>, even if you only set one unrelated option:</p>
 <table>
 <thead>
@@ -5834,7 +5834,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </tbody>
 </table>
 <p>To let the Operator tune MySQL for you, see <a href="autoconfig.html">Automatic configuration tuning</a>.</p>
-<h2 id="configuration-compatibility-considerations">Configuration compatibility considerations<a class="headerlink" href="#configuration-compatibility-considerations" title="Permanent link">¶</a></h2>
+<h2 id="configuration-compatibility-considerations">Configuration compatibility considerations<a data-markdown-ignore class="headerlink" href="#configuration-compatibility-considerations" title="Permanent link">¶</a></h2>
 <p>The Operator passes configuration options you define to MySQL as-is. It doesn’t check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.</p>
 <p>Before you apply a change, check the variable’s requirements and restrictions for your topology:</p>
 <ul>
@@ -5843,7 +5843,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="https://docs.percona.com/percona-server/8.4/">Percona Server for MySQL <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a></li>
 </ul>
 <p>For example, Group Replication requires <code>log_replica_updates=ON</code> so members record replicated transactions in their binary logs for distributed recovery. Setting it to <code>OFF</code> is incompatible with Group Replication.</p>
-<h2 id="how-the-operator-applies-your-configuration">How the Operator applies your configuration<a class="headerlink" href="#how-the-operator-applies-your-configuration" title="Permanent link">¶</a></h2>
+<h2 id="how-the-operator-applies-your-configuration">How the Operator applies your configuration<a data-markdown-ignore class="headerlink" href="#how-the-operator-applies-your-configuration" title="Permanent link">¶</a></h2>
 <p>The Operator applies your configuration to all MySQL Pods as follows:</p>
 <ul>
 <li><strong>Dynamic variables.</strong> The Operator applies these variables at runtime with the <code>SET GLOBAL</code> command and doesn’t restart the MySQL StatefulSet. See <a href="#dynamic-configuration">Dynamic configuration</a>.</li>
@@ -5863,11 +5863,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>If any variable is <strong>removed</strong>, the Operator applies the changes with a rolling restart of
   the MySQL StatefulSet.</li>
 </ul>
-<h2 id="configuration-compatibility-considerations_1">Configuration compatibility considerations<a class="headerlink" href="#configuration-compatibility-considerations_1" title="Permanent link">¶</a></h2>
+<h2 id="configuration-compatibility-considerations_1">Configuration compatibility considerations<a data-markdown-ignore class="headerlink" href="#configuration-compatibility-considerations_1" title="Permanent link">¶</a></h2>
 <p>The Operator passes configuration options you define to MySQL as-is. It does not check them for typos or for compatibility with your replication type. An incompatible value can stop replication or prevent it from starting. The Custom Resource is still accepted.</p>
 <p>Before you apply a change, check the variable’s requirements and restrictions for your topology in the <a href="https://dev.mysql.com/doc/refman/8.4/en/group-replication-requirements.html">MySQL Group Replication requirements <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>, <a href="https://dev.mysql.com/doc/refman/8.4/en/change-replication-source-to.html">CHANGE REPLICATION SOURCE TO <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>, and <a href="https://docs.percona.com/percona-server/8.4/">Percona Server for MySQL <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> documentation.</p>
 <p>For example, Group Replication requires <code>log_replica_updates=ON</code> so members record replicated transactions in their binary logs for distributed recovery. Setting it to <code>OFF</code> is incompatible with Group Replication.</p>
-<h2 id="edit-the-deploycryaml-file">Edit the <code>deploy/cr.yaml</code> file<a class="headerlink" href="#edit-the-deploycryaml-file" title="Permanent link">¶</a></h2>
+<h2 id="edit-the-deploycryaml-file">Edit the <code>deploy/cr.yaml</code> file<a data-markdown-ignore class="headerlink" href="#edit-the-deploycryaml-file" title="Permanent link">¶</a></h2>
 <p>You can add options from the
 <a href="https://dev.mysql.com/doc/refman/8.0/en/option-files.html">my.cnf <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>
 configuration file by editing the configuration section of the
@@ -5881,7 +5881,7 @@ configuration file by editing the configuration section of the
 </code></pre></div>
 <p>See the <a href="operator.html#operator-mysql-section">Custom Resource options, MySQL section</a>
 for more details.</p>
-<h2 id="use-a-configmap">Use a ConfigMap<a class="headerlink" href="#use-a-configmap" title="Permanent link">¶</a></h2>
+<h2 id="use-a-configmap">Use a ConfigMap<a data-markdown-ignore class="headerlink" href="#use-a-configmap" title="Permanent link">¶</a></h2>
 <p>You can use a ConfigMap to pass configuration options. A ConfigMap allows
 Kubernetes to pass or update configuration data inside a containerized
 application.</p>
@@ -5910,7 +5910,7 @@ name, you can use the following command:</p>
 <p>To view the created configmap, use the following command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>configmaps<span class="w"> </span>ps-cluster1-mysql
 </code></pre></div>
-<h2 id="use-a-secret-object">Use a Secret Object<a class="headerlink" href="#use-a-secret-object" title="Permanent link">¶</a></h2>
+<h2 id="use-a-secret-object">Use a Secret Object<a data-markdown-ignore class="headerlink" href="#use-a-secret-object" title="Permanent link">¶</a></h2>
 <p>The Operator can also store configuration options in <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secrets <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.
 This can be useful if you need additional protection for some sensitive data.</p>
 <p>You should create a Secret object with a specific name, composed of your cluster
@@ -5930,7 +5930,7 @@ of MySQL options we used in the previous example:</p>
 </code></pre></div>
 <p>You can get a Base64 encoded string from your options via the command line as
 follows:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">in Linux</label><label for="__tabbed_1_2">in macOS</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">in Linux</label><label for="__tabbed_1_2">in macOS</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>cat<span class="w"> </span>my.cnf<span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--wrap<span class="o">=</span><span class="m">0</span>
@@ -5967,7 +5967,7 @@ create a <code>deploy/mysql-secret.yaml</code> file with the following contents:
 effect without a restart. Static variables or variables you remove from
 the Secret trigger a rolling restart. </p>
 </div>
-<h2 id="dynamic-configuration">Dynamic configuration<a class="headerlink" href="#dynamic-configuration" title="Permanent link">¶</a></h2>
+<h2 id="dynamic-configuration">Dynamic configuration<a data-markdown-ignore class="headerlink" href="#dynamic-configuration" title="Permanent link">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Version added: <a href="ReleaseNotes/index.html">1.3.0</a></p>
 </div>
@@ -5982,7 +5982,7 @@ incident.</p>
 <p class="admonition-title">Warning</p>
 <p>The Operator does not validate options against your replication type. Dynamic updates skip a rolling restart, so an incompatible value takes effect on the running cluster. Review <a href="#configuration-compatibility-considerations">Configuration compatibility considerations</a> before you apply a change.</p>
 </div>
-<h3 id="how-the-operator-treats-dynamic-options">How the Operator treats dynamic options<a class="headerlink" href="#how-the-operator-treats-dynamic-options" title="Permanent link">¶</a></h3>
+<h3 id="how-the-operator-treats-dynamic-options">How the Operator treats dynamic options<a data-markdown-ignore class="headerlink" href="#how-the-operator-treats-dynamic-options" title="Permanent link">¶</a></h3>
 <p>When you change the Custom Resource, ConfigMap, or Secret, the Operator
 compares the new configuration with the last configuration it applied.</p>
 <ul>
@@ -6006,7 +6006,7 @@ ConfigMap, or a Secret is lost.</p>
 <p>To keep a value you already set with <code>SET GLOBAL</code>, add it to the Custom
 Resource, ConfigMap or a Secret. The Operator applies <code>SET GLOBAL</code> again and
 does not restart Pods.</p>
-<h2 id="auto-tuning-mysql-options">Auto-tuning MySQL options<a class="headerlink" href="#auto-tuning-mysql-options" title="Permanent link">¶</a></h2>
+<h2 id="auto-tuning-mysql-options">Auto-tuning MySQL options<a data-markdown-ignore class="headerlink" href="#auto-tuning-mysql-options" title="Permanent link">¶</a></h2>
 <p>The Operator
 calculates a few MySQL options automatically based on the memory available to
 the MySQL container:</p>

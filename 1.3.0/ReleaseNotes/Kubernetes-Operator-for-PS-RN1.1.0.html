@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5927,31 +5927,31 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="percona-operator-for-mysql-110-2026-04-17">Percona Operator for MySQL 1.1.0 (2026-04-17)<a class="headerlink" href="#percona-operator-for-mysql-110-2026-04-17" title="Permanent link">¶</a></h1>
+<h1 id="percona-operator-for-mysql-110-2026-04-17">Percona Operator for MySQL 1.1.0 (2026-04-17)<a data-markdown-ignore class="headerlink" href="#percona-operator-for-mysql-110-2026-04-17" title="Permanent link">¶</a></h1>
 <p><a class="md-button" href="../System-Requirements.html#installation-guidelines">Installation</a></p>
 <p>Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.</p>
-<h2 id="release-highlights">Release highlights<a class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
+<h2 id="release-highlights">Release highlights<a data-markdown-ignore class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
 <p>This release focuses on backups improvements enabling more efficient and flexible data protection strategies. It also includes a handful of improvements and bug fixes.  </p>
-<h3 id="point-in-time-recovery-tech-preview">Point-in-time recovery (tech preview)<a class="headerlink" href="#point-in-time-recovery-tech-preview" title="Permanent link">¶</a></h3>
+<h3 id="point-in-time-recovery-tech-preview">Point-in-time recovery (tech preview)<a data-markdown-ignore class="headerlink" href="#point-in-time-recovery-tech-preview" title="Permanent link">¶</a></h3>
 <p>This release introduces point-in-time recovery, giving you precise control over how far back you restore your MySQL cluster. Instead of recovering only to the moment a backup was taken, you can now roll the database forward to a specific transaction or timestamp. This is invaluable when you need to undo a bad migration, recover right before someone dropped the wrong table, or meet tighter RPO requirements with minimal data loss.</p>
 <p>Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona Binlog Server to collect binary logs and the <code>mysqlbinlog</code> client to apply them during the restore. Read more about the workflow in our <a href="../backups-pitr.html">documentation</a>.</p>
 <p>Point-in-time recovery is released as a <strong>tech preview</strong>. We do not recommend using it in production environments yet. However, we strongly encourage you to try it out in staging or test clusters and share your feedback. Your input will directly shape how we refine and finalize this capability in future releases.</p>
-<h3 id="incremental-backups-tech-preview">Incremental backups (tech preview)<a class="headerlink" href="#incremental-backups-tech-preview" title="Permanent link">¶</a></h3>
+<h3 id="incremental-backups-tech-preview">Incremental backups (tech preview)<a data-markdown-ignore class="headerlink" href="#incremental-backups-tech-preview" title="Permanent link">¶</a></h3>
 <p>This release introduces incremental backups for MySQL clusters, giving you a faster, more efficient, and more cost effective way to protect your data. Instead of creating a full backup every time, the Operator now captures only the changes since the previous backup, significantly reducing backup size, storage usage, and data transfer overhead. Incremental backups also lower the load on your cluster, helping you maintain performance even during frequent backup operations. This feature works seamlessly with all <a href="../backups-storage.html">supported backup storages</a> and integrates with both <a href="../backups-scheduled.html">scheduled</a> and <a href="../backups-ondemand.html">on-demand</a> backup jobs.</p>
 <p>Incremental backups are released as a <strong>tech preview</strong> feature and we don’t recommend them for production environments yet. However, we encourage you to try them out and leave your feedback. This will help us shape the future of this functionality.</p>
 <p>Learn more about incremental backups in our <a href="../backups-incremental.html">documentation</a>.</p>
-<h3 id="backup-compression">Backup compression<a class="headerlink" href="#backup-compression" title="Permanent link">¶</a></h3>
+<h3 id="backup-compression">Backup compression<a data-markdown-ignore class="headerlink" href="#backup-compression" title="Permanent link">¶</a></h3>
 <p>Percona Operator for MySQL now supports backup compression, giving you faster, lighter, and more cost efficient backups.</p>
 <p>Compressed backups are smaller in size, which means they stream to object storage quicker and consume less storage space as compared to uncompressed ones. In practice, this reduces both storage and data transfer costs.</p>
 <p>Compression works for full and <a href="#incremental-backups-tech-preview">incremental backups</a>, and you can use it for both on demand and scheduled backup workflows. Configure compression globally or per backup storage directly in the Custom Resource . You can also override the compression algorithm for a specific on-demand backup. </p>
 <p>During the restore, the Operator automatically detects whether a backup is compressed and decompresses it as part of the restore workflow, so no additional steps are required from you.</p>
 <p>Currently the Operator supports only the <code>zstd</code> compression algorithm. There is a known limitation for the <code>lz4</code> compression algorithm and it will be lifted after the <a href="https://perconadev.atlassian.net/browse/PXB-3568">PXB-3568</a> is resolved.</p>
 <p>To learn more about compressed backups, read our <a href="../backups-compressed.html">documentation</a>.</p>
-<h3 id="configure-file-descriptor-limit-for-haproxy">Configure file descriptor limit for HAProxy<a class="headerlink" href="#configure-file-descriptor-limit-for-haproxy" title="Permanent link">¶</a></h3>
+<h3 id="configure-file-descriptor-limit-for-haproxy">Configure file descriptor limit for HAProxy<a data-markdown-ignore class="headerlink" href="#configure-file-descriptor-limit-for-haproxy" title="Permanent link">¶</a></h3>
 <p>When HAProxy performs external MySQL health checks, it tries to close every file descriptor (FD) up to the system limit before executing the check script. Some systems set this limit extremely high, so HAProxy ends up looping through millions or even billions of numbers. This causes heavy CPU use, long delays and timeouts.</p>
 <p>This release sets a safe file descriptor limit in the entrypoint script before HAProxy container starts. The default FD limit value is <code>1048576</code>. </p>
 <p>You can change this limit with the <code>HA_RLIMIT_NOFILE</code> environment variable in the Custom Resource. The value is checked, and if it is invalid, the Operator falls back to the default value. If the value is too large, the Operator uses the   hard limit file descriptor value. This makes external checks fast, stable, and predictable.</p>
-<h3 id="configurable-reconnect-attempts-for-clusters-with-asynchronous-replication">Configurable reconnect attempts for clusters with asynchronous replication<a class="headerlink" href="#configurable-reconnect-attempts-for-clusters-with-asynchronous-replication" title="Permanent link">¶</a></h3>
+<h3 id="configurable-reconnect-attempts-for-clusters-with-asynchronous-replication">Configurable reconnect attempts for clusters with asynchronous replication<a data-markdown-ignore class="headerlink" href="#configurable-reconnect-attempts-for-clusters-with-asynchronous-replication" title="Permanent link">¶</a></h3>
 <p>In some cases, the default number of attempts for a replica to reconnect to its source is not sufficient, causing the cluster to become stuck. You can now fine-tune this behavior using the following environment variables:</p>
 <ul>
 <li><code>ASYNC_SOURCE_RETRY_COUNT</code> - controls the number of reconnection attempts</li>
@@ -5960,20 +5960,20 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Specify new values directly in the Custom Resource to match your environment’s needs. </p>
 <p>Read more about other environment variables in our <a href="../env-vars-custom.html">documentation</a>.</p>
 <p>This makes cluster management more predictable and avoids unexpected stalls during replication interruptions.</p>
-<h3 id="documentation-updates">Documentation updates<a class="headerlink" href="#documentation-updates" title="Permanent link">¶</a></h3>
+<h3 id="documentation-updates">Documentation updates<a data-markdown-ignore class="headerlink" href="#documentation-updates" title="Permanent link">¶</a></h3>
 <ul>
 <li>Completed the install on Openshift documentation with instructions how to install using OLM</li>
 <li>Added a tutorial how to upgrade the Operator on OpenShift</li>
 <li>Enhanced Helm install documentation explaining how to install the Operator with customized parameters and apply custom naming to releases</li>
 </ul>
-<h2 id="crd-changes">CRD changes<a class="headerlink" href="#crd-changes" title="Permanent link">¶</a></h2>
+<h2 id="crd-changes">CRD changes<a data-markdown-ignore class="headerlink" href="#crd-changes" title="Permanent link">¶</a></h2>
 <ul>
 <li>The <code>.status.storage.s3.storageClass</code> has now the type <code>string</code></li>
 <li>The <code>v1.^.status.storage.s3.storageClass</code> field is removed</li>
 <li>Added the <code>incrementalBaseBackupName</code> option. This option can be set only when the backup configuration has <code>spec.type</code> set to <code>incremental</code>, and its value must refer to an existing full backup.</li>
 </ul>
-<h2 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
-<h3 id="new-features">New features<a class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
+<h2 id="changelog">Changelog<a data-markdown-ignore class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
+<h3 id="new-features">New features<a data-markdown-ignore class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-410">K8SPS-410</a> - Added the ability to make incremental backups to save only the changes since the previous backup.</p>
@@ -5982,7 +5982,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-642">K8SPS-642</a> - Introduced Point-in-Time Recovery (PITR) support for enhanced data protection. This feature enables the binlog server to collect binary logs, allowing users to restore their database to any specific timestamp.</p>
 </li>
 </ul>
-<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
+<h3 id="improvements">Improvements<a data-markdown-ignore class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-69">K8SPS-69</a> - Updated the readiness probe to fail if replication threads have stopped. This prevents application traffic from being routed to nodes that are no longer receiving updates from the primary.</p>
@@ -6012,7 +6012,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-666">K8SPS-666</a> - Optimized how file descriptors are managed in the HAProxy entrypoint to avoid performance bottlenecks. This fix prevents HAProxy from attempting to close thousands of unused file descriptors during health checks.</p>
 </li>
 </ul>
-<h3 id="fixed-bugs">Fixed bugs<a class="headerlink" href="#fixed-bugs" title="Permanent link">¶</a></h3>
+<h3 id="fixed-bugs">Fixed bugs<a data-markdown-ignore class="headerlink" href="#fixed-bugs" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-530">K8SPS-530</a> - Fixed an issue where the <code>percona/delete-backup</code> finalizer would block the deletion of backups stuck in the starting state. Users can now immediately remove pending or failed backup resources without waiting for a timeout.</p>
@@ -6039,7 +6039,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-684">K8SPS-684</a> - Resolved a connection drop issue that occurred whenever the HAProxy configuration was reloaded. This ensures stable and uninterrupted application connectivity during proxy maintenance or scaling events.</p>
 </li>
 </ul>
-<h2 id="supported-software">Supported software<a class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
+<h2 id="supported-software">Supported software<a data-markdown-ignore class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
 <p>The Operator was developed and tested with the following software:</p>
 <ul>
 <li>Percona Server for MySQL 8.4.8-8.1</li>
@@ -6056,7 +6056,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Percona Binlog Server 0.2.1</li>
 </ul>
 <p>Other options may also work but have not been tested.</p>
-<h2 id="supported-platforms">Supported platforms<a class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
+<h2 id="supported-platforms">Supported platforms<a data-markdown-ignore class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
 <p>Percona Operators are designed for compatibility with all <a href="https://www.cncf.io/training/certification/software-conformance/">CNCF-certified <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> Kubernetes distributions. Our release process includes targeted testing and validation on major cloud provider platforms and OpenShift, as detailed below:</p>
 <ul>
 <li><a href="https://cloud.google.com/kubernetes-engine">Google Kubernetes Engine (GKE) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.32 - 1.35</li>
@@ -6065,7 +6065,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.38.1 based on Kubernetes v1.35.1</li>
 </ul>
 <p>This list only includes the platforms on which the Percona Operators are specifically tested as part of the release process. Compatibility with other Kubernetes flavors and versions depends on the backward compatibility provided by Kubernetes itself.</p>
-<h2 id="percona-certified-images">Percona certified images<a class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
+<h2 id="percona-certified-images">Percona certified images<a data-markdown-ignore class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
 <p>Find Percona’s certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:</p>
 <table>
 <thead>

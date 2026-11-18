@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5685,9 +5685,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="generate-certificates-manually">Generate certificates manually<a class="headerlink" href="#generate-certificates-manually" title="Permanent link">¶</a></h1>
+<h1 id="generate-certificates-manually">Generate certificates manually<a data-markdown-ignore class="headerlink" href="#generate-certificates-manually" title="Permanent link">¶</a></h1>
 <p>You can generate TLS certificates manually instead of using the Operator’s automatic certificate generation. This approach gives you full control over certificate properties and is useful for production environments with specific security requirements.</p>
-<h2 id="what-youll-create">What you’ll create<a class="headerlink" href="#what-youll-create" title="Permanent link">¶</a></h2>
+<h2 id="what-youll-create">What you’ll create<a data-markdown-ignore class="headerlink" href="#what-youll-create" title="Permanent link">¶</a></h2>
 <p>When you follow the steps from this guide, you’ll generate these certificate files:</p>
 <ul>
 <li><code>server.pem</code> - Server certificate for MySQL nodes</li>
@@ -5696,14 +5696,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><code>ca-key.pem</code> - Certificate Authority private key</li>
 </ul>
 <p>Next, create the server TLS certificates using the CA keys, certs, and server details and then reference this Secret in the Custom Resource.</p>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
+<h2 id="prerequisites">Prerequisites<a data-markdown-ignore class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
 <p>Before you start, make sure you have:</p>
 <ul>
 <li><code>cfssl</code> and <code>cfssljson</code> tools installed on your system</li>
 <li>Your cluster name and namespace ready</li>
 <li>Access to your Kubernetes cluster</li>
 </ul>
-<h2 id="generate-certificates">Generate certificates<a class="headerlink" href="#generate-certificates" title="Permanent link">¶</a></h2>
+<h2 id="generate-certificates">Generate certificates<a data-markdown-ignore class="headerlink" href="#generate-certificates" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Replace <code>ps-cluster1</code> and <code>my-namespace</code> with your actual cluster name and namespace in the commands below:</p>
@@ -5751,7 +5751,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The outputs are <code>server.pem</code> (the server certificate) and <code>server-key.pem</code> (the server private key).</p>
 </li>
 </ol>
-<h2 id="create-the-kubernetes-secret-from-the-generated-certificates">Create the Kubernetes Secret from the generated certificates<a class="headerlink" href="#create-the-kubernetes-secret-from-the-generated-certificates" title="Permanent link">¶</a></h2>
+<h2 id="create-the-kubernetes-secret-from-the-generated-certificates">Create the Kubernetes Secret from the generated certificates<a data-markdown-ignore class="headerlink" href="#create-the-kubernetes-secret-from-the-generated-certificates" title="Permanent link">¶</a></h2>
 <p>This command packages the generated certificate and key files into a Kubernetes secret named <code>my-cluster-ssl</code> in your chosen namespace.</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>my-cluster-ssl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--from-file<span class="o">=</span>tls.crt<span class="o">=</span>server.pem<span class="w"> </span><span class="se">\</span>
@@ -5759,7 +5759,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">  </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>ca.pem<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="o">=</span>kubernetes.io/tls
 </code></pre></div>
-<h2 id="configure-your-cluster">Configure your cluster<a class="headerlink" href="#configure-your-cluster" title="Permanent link">¶</a></h2>
+<h2 id="configure-your-cluster">Configure your cluster<a data-markdown-ignore class="headerlink" href="#configure-your-cluster" title="Permanent link">¶</a></h2>
 <p>After creating the Secret, reference it in your cluster configuration in the deploy/cr.yaml.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">sslSecretName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-cluster-ssl</span>

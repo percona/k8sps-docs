@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5775,19 +5775,19 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="restore-from-a-backup-to-a-new-kubernetes-based-environment">Restore from a backup to a new Kubernetes-based environment<a class="headerlink" href="#restore-from-a-backup-to-a-new-kubernetes-based-environment" title="Permanent link">¶</a></h1>
+<h1 id="restore-from-a-backup-to-a-new-kubernetes-based-environment">Restore from a backup to a new Kubernetes-based environment<a data-markdown-ignore class="headerlink" href="#restore-from-a-backup-to-a-new-kubernetes-based-environment" title="Permanent link">¶</a></h1>
 <p>You can restore from a backup as follows:</p>
 <ul>
 <li>On <a href="backups-restore.html">the same Kubernetes cluster where you made the backup</a></li>
 <li>On a new cluster deployed in a different Kubernetes-based environment.</li>
 </ul>
 <p>This document focuses on the restore on a new cluster deployed in a different Kubernetes environment.</p>
-<h2 id="restore-scenarios">Restore scenarios<a class="headerlink" href="#restore-scenarios" title="Permanent link">¶</a></h2>
+<h2 id="restore-scenarios">Restore scenarios<a data-markdown-ignore class="headerlink" href="#restore-scenarios" title="Permanent link">¶</a></h2>
 <p>To restore a backup onto this cluster, follow the steps below. If the backup was encrypted, include <code>encryptionKeySecret</code> as shown in <a href="#restore-from-an-encrypted-backup">Restore from an encrypted backup</a>. If the source used a custom CA, include <code>caBundle</code> as shown in <a href="#restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA</a>.</p>
 <p>To restore to a timestamp or GTID, use <a href="backups-restore-pitr.html#restore-on-a-new-cluster">Restore with point-in-time recovery</a>.</p>
 <p>To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is <a href="https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/backup/restore.yaml">deploy/backup/restore.yaml <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
 <p>You can check available options in the <a href="restore-cr.html">restore options reference</a>.</p>
-<h2 id="preconditions">Preconditions<a class="headerlink" href="#preconditions" title="Permanent link">¶</a></h2>
+<h2 id="preconditions">Preconditions<a data-markdown-ignore class="headerlink" href="#preconditions" title="Permanent link">¶</a></h2>
 <p>When restoring to a new Kubernetes-based environment, make sure it has a Secrets object with the same user passwords as in the source cluster.</p>
 <p>If the backup was <a href="backups-encrypted.html">encrypted</a>, the Operator requires the Secret with the same encryption key that was used for the backup. Reference this Secret in the restore resource under <code>spec.backupSource.storage.encryptionKeySecret</code>.</p>
 <p>If the source cluster verified TLS with a <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, create the CA Secret on the target cluster and set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code>. For a point-in-time restore to a timestamp or GTID, see <a href="backups-restore-pitr.html#use-a-custom-ca">Use a custom CA</a>.</p>
@@ -5836,7 +5836,7 @@ type: Opaque
 </code></pre></div>
 </li>
 </ol>
-<h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">¶</a></h2>
+<h2 id="before-you-begin">Before you begin<a data-markdown-ignore class="headerlink" href="#before-you-begin" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Export the namespace as an environment variable. Replace the <code>&lt;namespace&gt;</code> placeholder with your value:</p>
@@ -5854,7 +5854,7 @@ type: Opaque
 </code></pre></div>
 </li>
 </ol>
-<h2 id="restore-from-a-backup">Restore from a backup<a class="headerlink" href="#restore-from-a-backup" title="Permanent link">¶</a></h2>
+<h2 id="restore-from-a-backup">Restore from a backup<a data-markdown-ignore class="headerlink" href="#restore-from-a-backup" title="Permanent link">¶</a></h2>
 <p>Configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
 <ul>
 <li>set <code>spec.clusterName</code> key to the name of the target cluster to restore the backup on</li>
@@ -5864,7 +5864,7 @@ type: Opaque
 <li>a destination key. Take it from the output of the <code>kubectl get ps-backup</code> command</li>
 <li>
 <p>the necessary <a href="backups-storage.html#configure-storage-for-backups">storage configuration keys</a>, just like in the <code>deploy/cr.yaml</code> file of the source cluster.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">S3-compatible storage</label><label for="__tabbed_1_2">Google Cloud Storage</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">S3-compatible storage</label><label for="__tabbed_1_2">Google Cloud Storage</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
@@ -5912,7 +5912,7 @@ type: Opaque
 <p>Start the restore: </p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
-<h2 id="restore-from-an-encrypted-backup">Restore from an encrypted backup<a class="headerlink" href="#restore-from-an-encrypted-backup" title="Permanent link">¶</a></h2>
+<h2 id="restore-from-an-encrypted-backup">Restore from an encrypted backup<a data-markdown-ignore class="headerlink" href="#restore-from-an-encrypted-backup" title="Permanent link">¶</a></h2>
 <p>Configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
 <ul>
 <li><code>spec.clusterName</code> — the target cluster</li>
@@ -5939,7 +5939,7 @@ type: Opaque
 <p>Start the restore:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
-<h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">¶</a></h2>
+<h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a data-markdown-ignore class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">¶</a></h2>
 <p>If the source cluster verified S3-compatible storage with a <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, keep <code>verifyTLS</code> enabled and set <code>caBundle</code> in the restore resource.</p>
 <p>For a restore to a timestamp or GTID, follow <a href="backups-restore-pitr.html#use-a-custom-ca">Use a custom CA</a>.</p>
 <ol>
@@ -5977,7 +5977,7 @@ type: Opaque
 <p>Start the restore:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
-<h2 id="view-restore-details">View restore details<a class="headerlink" href="#view-restore-details" title="Permanent link">¶</a></h2>
+<h2 id="view-restore-details">View restore details<a data-markdown-ignore class="headerlink" href="#view-restore-details" title="Permanent link">¶</a></h2>
 <p>When you start the restore, the restore job is created. You can check the job details using these commands:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job
 </code></pre></div>
@@ -5990,9 +5990,9 @@ xb-restore-restore2                                Complete             1/1     
 <p>You can check the restore progress with this command:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
-<h2 id="post-restore-steps">Post-restore steps<a class="headerlink" href="#post-restore-steps" title="Permanent link">¶</a></h2>
+<h2 id="post-restore-steps">Post-restore steps<a data-markdown-ignore class="headerlink" href="#post-restore-steps" title="Permanent link">¶</a></h2>
 <p>Make a fresh base backup to start a new timeline for subsequent restores.</p>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
+<h2 id="troubleshooting">Troubleshooting<a data-markdown-ignore class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
 <p>If you face issues with restore, refer to <a href="debug-backup-restore.html#restores">Troubleshoot backups and restores</a>.</p>
 <hr>
 <div class="md-source-file">

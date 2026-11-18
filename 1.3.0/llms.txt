@@ -1,0 +1,154 @@
+# Percona Operator for MySQL based on Percona Server for MySQL
+
+> Documentation
+
+Each page below is also available as markdown. For the documentation of all Percona products, see https://docs.percona.com/llms.txt.
+
+## Overview
+
+- [Home](https://docs.percona.com/percona-operator-for-mysql/1.3.0/index.md)
+- [Get help from Percona](https://docs.percona.com/percona-operator-for-mysql/1.3.0/get-help.md)
+
+## Understand the Operator
+
+- [Features and capabilities](https://docs.percona.com/percona-operator-for-mysql/1.3.0/features.md)
+- [How the Operator works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/how-it-works.md)
+- [Design and architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md)
+- [Known limitations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/limitations.md)
+
+## Quick start
+
+- [Overview](https://docs.percona.com/percona-operator-for-mysql/1.3.0/quickstart.md)
+- [1. System requirements](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md)
+- [Install with Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/helm.md)
+- [Install with kubectl](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.md)
+- [Install with customized parameters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/custom-install.md)
+- [3. Connect to the database](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connect.md)
+- [4. Insert data](https://docs.percona.com/percona-operator-for-mysql/1.3.0/data-insert.md)
+- [5. Make a backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-tutorial.md)
+- [6. Monitor the database with PMM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring-tutorial.md)
+- [What&rsquo;s next?](https://docs.percona.com/percona-operator-for-mysql/1.3.0/what-next.md)
+
+## Platform-specific installation
+
+- [Install on Google Kubernetes Engine (GKE)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/gke.md)
+- [Install on Amazon Elastic Kubernetes Service (AWS EKS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.md)
+- [Install on DigitalOcean Kubernetes (DOKS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/doks.md)
+- [Install on OpenShift](https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.md)
+- [Install on Minikube](https://docs.percona.com/percona-operator-for-mysql/1.3.0/minikube.md)
+- [Generic Kubernetes installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.md)
+
+## Daily operations
+
+- [Manage users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md)
+- [Connection secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connection-secrets.md)
+- [About backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md)
+- [Configure storage for backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md)
+- [Incremental backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md)
+- [Make scheduled backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md)
+- [Make on-demand backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md)
+- [Compressed backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-compressed.md)
+- [Encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md)
+- [About point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md)
+- [Restore with point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md)
+- [Pause a point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.md)
+- [On the same cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md)
+- [On a new cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md)
+- [Fine-tune backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md)
+- [Delete the unneeded backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-delete.md)
+- [Monitor your cluster with PMM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.md)
+- [Monitor Kubernetes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitor-kubernetes.md)
+- [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md)
+- [Log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md)
+- [Scale your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md)
+
+## Production configuration
+
+- [About TLS/SSL security](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md)
+- [Configure TLS using cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md)
+- [Generate certificates manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.md)
+- [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.md)
+- [About data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.md)
+- [Configure data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.md)
+- [Expose your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md)
+- [Configure HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md)
+- [Configure MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md)
+- [Control Pod scheduling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/constraints.md)
+- [Fine-tune MySQL options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.md)
+- [Automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md)
+- [Configure DNS suffix](https://docs.percona.com/percona-operator-for-mysql/1.3.0/dns-suffix.md)
+- [Multi-namespace deployment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md)
+- [About cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md)
+- [Cross-site replication: setup and use](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md)
+- [About zero-data-loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md)
+- [Configure and orchestrate zero-data-loss failover in async clusters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md)
+- [Overview](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars.md)
+- [Configure Operator environment variables](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-operator.md)
+- [Define environment variables for cluster components](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.md)
+
+## Cluster lifecycle management
+
+- [About upgrades](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update.md)
+- [Considerations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.md)
+- [Manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-manual.md)
+- [With Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-helm.md)
+- [Via OLM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-openshift.md)
+- [Apply security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.md)
+- [Upgrade the database](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-db.md)
+- [Pause or restart the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.md)
+- [Delete the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/delete.md)
+
+## Advanced operations
+
+- [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md)
+- [Add sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md)
+- [Labels and annotations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md)
+- [Configure telemetry](https://docs.percona.com/percona-operator-for-mysql/1.3.0/telemetry.md)
+- [Configure concurrent reconciliation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/reconciliation-concurrency.md)
+
+## Troubleshooting
+
+- [Initial troubleshooting](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug.md)
+- [Exec into the container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-shell.md)
+- [Check the events](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-events.md)
+- [Check the logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-logs.md)
+- [Troubleshoot backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md)
+- [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md)
+- [Special files in the data directory](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.md)
+- [Pause a MySQL Pod](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.md)
+
+## Reference
+
+- [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md)
+- [ClusterSet Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.md)
+- [Backup Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.md)
+- [Restore Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.md)
+- [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md)
+- [Percona certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.md)
+- [Retrieve certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.md)
+- [Version compatibility](https://docs.percona.com/percona-operator-for-mysql/1.3.0/versions.md)
+- [How we use artificial intelligence](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ai-docs.md)
+- [Copyright and licensing information](https://docs.percona.com/percona-operator-for-mysql/1.3.0/copyright.md)
+- [Trademark policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/trademark-policy.md)
+- [Legal Notice](https://docs.percona.com/percona-operator-for-mysql/1.3.0/legal-notice.md)
+
+## Release Notes
+
+- [Release notes index](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
+- [Percona Operator for MySQL 1.3.0 (2026-10-29)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md)
+- [Percona Operator for MySQL 1.2.0 (2026-07-03)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md)
+- [Percona Operator for MySQL 1.1.0 (2026-04-17)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md)
+- [Percona Operator for MySQL 1.0.0 (2025-11-17)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.0.0.md)
+- [Percona Operator for MySQL 0.12.0 (2025-09-23)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md)
+- [Percona Operator for MySQL 0.11.0 (2025-09-01)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.11.0.md)
+- [Percona Operator for MySQL 0.10.0 (2025-06-06)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.10.0.md)
+- [Percona Operator for MySQL 0.9.0 (2025-02-11)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.9.0.md)
+- [Percona Operator for MySQL 0.8.0 (2024-07-16)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.8.0.md)
+- [Percona Operator for MySQL 0.7.0 (2024-03-25)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.7.0.md)
+- [Percona Operator for MySQL 0.6.0 (2023-09-05)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.6.0.md)
+- [Percona Operator for MySQL 0.5.0 (2023-03-30)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.5.0.md)
+- [Percona Operator for MySQL 0.4.0 (2023-01-30)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.4.0.md)
+- [Percona Operator for MySQL 0.3.0 (2022-09-29)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.3.0.md)
+- [Percona Operator for MySQL 0.2.0 (2022-06-30)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.2.0.md)
+- [Percona Distribution for MySQL Operator based on Percona Server for MySQL 0.1.0 (2022-01-25)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.1.0.md)
+

@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5697,7 +5697,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="fine-tuning-backup-and-restore-operations">Fine-tuning backup and restore operations<a class="headerlink" href="#fine-tuning-backup-and-restore-operations" title="Permanent link">¶</a></h1>
+<h1 id="fine-tuning-backup-and-restore-operations">Fine-tuning backup and restore operations<a data-markdown-ignore class="headerlink" href="#fine-tuning-backup-and-restore-operations" title="Permanent link">¶</a></h1>
 <p>When you run Percona Server for MySQL on Kubernetes, the Operator uses <a href="https://docs.percona.com/percona-xtrabackup/8.0/index.html">Percona XtraBackup <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> to handle all backup and restore tasks. This process involves a few key binaries: <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code>. The Operator sets sensible defaults for these tools, ensuring the smooth flow for backups and restores. However, you might want to customize their behavior for specific scenarios, such as performance optimization.</p>
 <p>You can configure <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code> tools in two main ways:</p>
 <ul>
@@ -5710,7 +5710,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>If you set <code>xtrabackup</code> arguments globally in <code>deploy/cr.yaml</code> and set <code>xbcloud</code> options for a particular <code>PerconaServerMySQLBackup</code>, only the <code>xbcloud</code> configuration from the <code>PerconaServerMySQLBackup</code> manifest is applied for that job.</li>
 </ul>
 <p>This hierarchy gives you maximum flexibility: you can define consistent default settings for the entire cluster, but still tailor individual backup or restore operations as needed. This way you can optimize performance, troubleshoot, or customize specific scenarios without affecting the global configuration.</p>
-<h2 id="configuring-through-the-custom-resource">Configuring through the Custom Resource<a class="headerlink" href="#configuring-through-the-custom-resource" title="Permanent link">¶</a></h2>
+<h2 id="configuring-through-the-custom-resource">Configuring through the Custom Resource<a data-markdown-ignore class="headerlink" href="#configuring-through-the-custom-resource" title="Permanent link">¶</a></h2>
 <p>To apply settings globally, modify the <code>containerOptions</code> subsection within the <code>backup.storages</code> section of your <code>deploy/cr.yaml</code> file. This is useful for defining a consistent baseline for all backup and restore jobs.</p>
 <p>You can set custom command-line arguments and environment variables for the backup binaries.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
@@ -5732,9 +5732,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><strong><code>xbstream</code></strong>: This binary is for streaming and decompressing backup data during restore. Arguments here, like <code>--parallel</code>, can help accelerate the process. Read more about available options in <a href="https://docs.percona.com/percona-xtrabackup/8.0/xbstream-options.html">The xbstream command-line options reference <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</li>
 </ul>
 <p>The settings you define here are used for both backup and restore jobs, although <code>xbstream</code> and <code>xbcloud</code> arguments are primarily used during the restore process. </p>
-<h2 id="overriding-configuration-for-specific-jobs">Overriding configuration for Specific Jobs<a class="headerlink" href="#overriding-configuration-for-specific-jobs" title="Permanent link">¶</a></h2>
+<h2 id="overriding-configuration-for-specific-jobs">Overriding configuration for Specific Jobs<a data-markdown-ignore class="headerlink" href="#overriding-configuration-for-specific-jobs" title="Permanent link">¶</a></h2>
 <p>For on-demand backups and restores, you can provide specific <code>containerOptions</code> for the <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> objects in the respective <code>deploy/backup/backup.yaml</code> and  <code>deploy/backup/restore.yaml</code> custom resources. This is helpful when you need a one-off task with unique settings that you don’t want to apply globally.</p>
-<h3 id="example-for-an-on-demand-backup">Example for an on-demand backup<a class="headerlink" href="#example-for-an-on-demand-backup" title="Permanent link">¶</a></h3>
+<h3 id="example-for-an-on-demand-backup">Example for an on-demand backup<a data-markdown-ignore class="headerlink" href="#example-for-an-on-demand-backup" title="Permanent link">¶</a></h3>
 <p>To apply specific settings for a single backup job, edit the <code>deploy/backup/backup.yaml</code> manifest.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
@@ -5753,7 +5753,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 <p>You can see here that only <code>xtrabackup</code> and <code>xbcloud</code> arguments are specified. The <code>xbstream</code> binary is not used for backups and its configuration will be ignored, even if you specify it. </p>
 <p>Note that the settings you specify here are used, overriding any global configuration from the <code>deploy/cr.yaml</code> file.</p>
-<h3 id="example-for-a-restore">Example for a Restore<a class="headerlink" href="#example-for-a-restore" title="Permanent link">¶</a></h3>
+<h3 id="example-for-a-restore">Example for a Restore<a data-markdown-ignore class="headerlink" href="#example-for-a-restore" title="Permanent link">¶</a></h3>
 <p>Similarly, for a restore operation, you can define options in the <code>deploy/backup/restore.yaml</code> manifest.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
@@ -5773,7 +5773,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 <p>When this restore job runs, it will use the <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code> arguments defined here, ignoring any settings in the main <code>cr.yaml</code>.</p>
 <p>The Percona Operator for MySQL provides a flexible and powerful way to manage backup and restore operations using <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code>. By leveraging the layered configuration system, you can set general policies in <code>deploy/cr.yaml</code> while retaining the ability to use specialized options for individual jobs. This ensures your operations remain efficient, reliable, and tailored to your specific needs.</p>
-<h2 id="implementation-specifics">Implementation specifics<a class="headerlink" href="#implementation-specifics" title="Permanent link">¶</a></h2>
+<h2 id="implementation-specifics">Implementation specifics<a data-markdown-ignore class="headerlink" href="#implementation-specifics" title="Permanent link">¶</a></h2>
 <ol>
 <li>The <code>xbstream</code> settings apply only to restores.</li>
 <li>If you pass storage-specific parameters (like <code>--s3-region</code>) directly to the <code>xtrabackup</code>, <code>xbcloud</code>, and <code>xbstream</code> binaries, they will be overridden by the configuration in the storage section of the Custom Resource.</li>

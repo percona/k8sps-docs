@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5697,13 +5697,13 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="delete-unneeded-backups">Delete unneeded backups<a class="headerlink" href="#delete-unneeded-backups" title="Permanent link">¶</a></h1>
+<h1 id="delete-unneeded-backups">Delete unneeded backups<a data-markdown-ignore class="headerlink" href="#delete-unneeded-backups" title="Permanent link">¶</a></h1>
 <p>You can delete backups in the following ways:</p>
 <ul>
 <li>Configure the retention policy for full backups and have the Operator delete them according to this policy rules.</li>
 <li>Delete backups of any type manually. However, deleting incremental backups has rules. To learn more, see <a href="#deleting-incremental-backup-chains">Deleting incremental backup chains</a>.</li>
 </ul>
-<h2 id="how-the-operator-handles-backup-deletion">How the Operator handles backup deletion<a class="headerlink" href="#how-the-operator-handles-backup-deletion" title="Permanent link">¶</a></h2>
+<h2 id="how-the-operator-handles-backup-deletion">How the Operator handles backup deletion<a data-markdown-ignore class="headerlink" href="#how-the-operator-handles-backup-deletion" title="Permanent link">¶</a></h2>
 <p>The <code>percona.com/delete-backup</code> <a href="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers">Kubernetes finalizer</a> defined within a <code>PerconaServerMySQLBackup</code> backup object controls its deletion lifecycle. This is done to prevent orphaned backup data.</p>
 <p><strong>How it works</strong>:</p>
 <ul>
@@ -5713,7 +5713,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>When cleanup finishes, the Operator removes the <code>percona.com/delete-backup</code> finalizer. Kubernetes then completes deletion of the backup resource.</li>
 </ul>
 <p>You can force the deletion of a backup by manually removing the <code>percona.com/delete-backup</code> finalizer from the backup object. Be aware that doing this bypasses the Operator’s cleanup steps and may leave backup data or resources orphaned. Only do this if you fully understand the consequences and are certain it is safe.</p>
-<h2 id="configure-retention-for-full-scheduled-backups">Configure retention for full scheduled backups<a class="headerlink" href="#configure-retention-for-full-scheduled-backups" title="Permanent link">¶</a></h2>
+<h2 id="configure-retention-for-full-scheduled-backups">Configure retention for full scheduled backups<a data-markdown-ignore class="headerlink" href="#configure-retention-for-full-scheduled-backups" title="Permanent link">¶</a></h2>
 <p>In the cluster Custom Resource, each entry under <code>backup.schedule</code>  with the type <code>full</code> can include an optional <code>keep</code> field. This field specifies how many most recent successful backups of that schedule to keep. When the count exceeds the <code>keep</code> value, the Operator deletes older backup objects.</p>
 <table>
 <thead>
@@ -5744,12 +5744,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">      </span><span class="nt">storageName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3-us-west</span>
 </code></pre></div>
 <p>See also <a href="operator.html#backupschedulekeep"><code>backup.schedule.keep</code></a> in the Custom Resource reference.</p>
-<h3 id="full-vs-incremental-backup-schedules">Full vs incremental backup schedules<a class="headerlink" href="#full-vs-incremental-backup-schedules" title="Permanent link">¶</a></h3>
+<h3 id="full-vs-incremental-backup-schedules">Full vs incremental backup schedules<a data-markdown-ignore class="headerlink" href="#full-vs-incremental-backup-schedules" title="Permanent link">¶</a></h3>
 <ul>
 <li>Retention policy applies to <strong>scheduled full backups</strong> in the usual way: the Operator keeps only the specified number of newest full backups for that schedule. Note that retention is subject to the <a href="backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage">limitations when multiple schedules share one storage</a>.</li>
 <li><strong>For scheduled incremental backups</strong>, <code>keep</code> is ignored. There is no automatic retention that trims old increments. You can delete <strong>only the latest increment</strong> or <strong>the whole chain</strong> by deleting the base full backup.</li>
 </ul>
-<h2 id="deleting-incremental-backup-chains">Deleting incremental backup chains<a class="headerlink" href="#deleting-incremental-backup-chains" title="Permanent link">¶</a></h2>
+<h2 id="deleting-incremental-backup-chains">Deleting incremental backup chains<a data-markdown-ignore class="headerlink" href="#deleting-incremental-backup-chains" title="Permanent link">¶</a></h2>
 <p>Incremental backups depend on a <strong>chain</strong>: one <strong>full</strong> backup plus <strong>increments</strong> on the same storage. See <a href="backups-incremental.html">Incremental backups</a> for how chains are built.</p>
 <p>Retention works differently than for standalone full backups, if the <code>percona.com/delete-backup</code> finalizer exists in the backup object:</p>
 <ul>
@@ -5763,7 +5763,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>the <strong>full</strong> backup at the base (which removes the whole chain).</li>
 </ul>
 <p>If you use scheduled incremental jobs, plan cleanup: either rotate by deleting the <strong>latest</strong> increment when appropriate, or delete the <strong>base</strong> full backup when you want to drop the whole chain and start fresh (after taking a new full backup, if you still need recovery points).</p>
-<h2 id="delete-a-backup-manually">Delete a backup manually<a class="headerlink" href="#delete-a-backup-manually" title="Permanent link">¶</a></h2>
+<h2 id="delete-a-backup-manually">Delete a backup manually<a data-markdown-ignore class="headerlink" href="#delete-a-backup-manually" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>List backups in the namespace:</p>

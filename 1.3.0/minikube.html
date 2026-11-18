@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5695,9 +5695,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="install-percona-server-for-mysql-on-minikube">Install Percona Server for MySQL on Minikube<a class="headerlink" href="#install-percona-server-for-mysql-on-minikube" title="Permanent link">¶</a></h1>
+<h1 id="install-percona-server-for-mysql-on-minikube">Install Percona Server for MySQL on Minikube<a data-markdown-ignore class="headerlink" href="#install-percona-server-for-mysql-on-minikube" title="Permanent link">¶</a></h1>
 <p><a href="https://github.com/kubernetes/minikube">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> lets you run a Kubernetes cluster locally without a cloud provider. It works on Linux, Windows, and macOS using a hypervisor like VirtualBox, KVM/QEMU, VMware Fusion, Hyper-V, or Docker. This makes it perfect for testing the Operator before deploying it in a cloud or in production</p>
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
+<h2 id="prerequisites">Prerequisites<a data-markdown-ignore class="headerlink" href="#prerequisites" title="Permanent link">¶</a></h2>
 <p>Before you begin, you need to <a href="https://kubernetes.io/docs/tasks/tools/install-minikube/">install Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> on your system. The installation includes three components:</p>
 <ol>
 <li><strong>kubectl</strong> - the Kubernetes command-line tool</li>
@@ -5715,7 +5715,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 <p>This opens the dashboard in your default web browser, giving you a visual view of your cluster’s state.</p>
 </div>
-<h2 id="install-the-operator">Install the Operator<a class="headerlink" href="#install-the-operator" title="Permanent link">¶</a></h2>
+<h2 id="install-the-operator">Install the Operator<a data-markdown-ignore class="headerlink" href="#install-the-operator" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Clone the repository and navigate into it:</p>
@@ -5743,7 +5743,7 @@ deployment.apps/percona-server-mysql-operator created
 </details>
 </li>
 </ol>
-<h2 id="configure-and-deploy-your-mysql-cluster">Configure and deploy your MySQL cluster<a class="headerlink" href="#configure-and-deploy-your-mysql-cluster" title="Permanent link">¶</a></h2>
+<h2 id="configure-and-deploy-your-mysql-cluster">Configure and deploy your MySQL cluster<a data-markdown-ignore class="headerlink" href="#configure-and-deploy-your-mysql-cluster" title="Permanent link">¶</a></h2>
 <p>Since Minikube runs on a single node, the default configuration doesn’t fit. Use the minimal configuration adjusted for Minikube environment.</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr-minimal.yaml
 </code></pre></div>
@@ -5753,7 +5753,7 @@ deployment.apps/percona-server-mysql-operator created
 </code></pre></div>
 </details>
 <p>This creates a group-replication cluster with one Percona Server for MySQL instances and one HAProxy instance. For more configuration options, see the <code>deploy/cr.yaml</code> file and the <a href="operator.html">Custom Resource Options</a> reference.</p>
-<h3 id="check-the-cluster-status">Check the cluster status<a class="headerlink" href="#check-the-cluster-status" title="Permanent link">¶</a></h3>
+<h3 id="check-the-cluster-status">Check the cluster status<a data-markdown-ignore class="headerlink" href="#check-the-cluster-status" title="Permanent link">¶</a></h3>
 <p>The cluster creation process takes a few minutes. Monitor the status with:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps
 </code></pre></div>
@@ -5764,7 +5764,7 @@ deployment.apps/percona-server-mysql-operator created
 ps-cluster1   group-replication    ps-cluster1-haproxy.default   ready   1                     1                  5m50s
 </code></pre></div>
 </details>
-<h2 id="verify-the-cluster-operation">Verify the cluster operation<a class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">¶</a></h2>
+<h2 id="verify-the-cluster-operation">Verify the cluster operation<a data-markdown-ignore class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">¶</a></h2>
 <p>It typically takes about ten minutes for the cluster to start. Once <code>kubectl get ps</code> shows the cluster status as <code>ready</code>, you can connect to it and start using your MySQL database.</p>
 <p>To connect to Percona Server for MySQL, use the connection Secret that the Operator creates for the <code>root</code> user. It is named <code>&lt;cluster_name&gt;-psuser-root</code> (by default, <code>ps-cluster1-psuser-root</code>) and contains hostnames, ports, credentials, and ready-to-use connection URIs. Read <a href="connection-secrets.html">Connection secrets</a> for the full reference.</p>
 <p>Here’s how to connect:</p>
@@ -5803,7 +5803,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
     The command will look different depending on whether the cluster uses load
     balancing with <a href="haproxy-conf.html">HAProxy</a> (the default behavior) or uses
     <a href="router-conf.html">MySQL Router</a> (can be used with Group Replication clusters):</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;

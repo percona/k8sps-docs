@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5805,11 +5805,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="features">Features<a class="headerlink" href="#features" title="Permanent link">¶</a></h1>
+<h1 id="features">Features<a data-markdown-ignore class="headerlink" href="#features" title="Permanent link">¶</a></h1>
 <p>Percona Operator for MySQL is a Kubernetes-native controller that automatically manages the full lifecycle of Percona Server for MySQL clusters. The Operator offloads your teams from manual day-to-day database management operations empowering them to focus on tasks that matter instead.</p>
-<h2 id="core-capabilities">Core capabilities<a class="headerlink" href="#core-capabilities" title="Permanent link">¶</a></h2>
+<h2 id="core-capabilities">Core capabilities<a data-markdown-ignore class="headerlink" href="#core-capabilities" title="Permanent link">¶</a></h2>
 <p>Here’s what the Operator brings to your infrastructure:</p>
-<h3 id="high-availability-and-failover">High availability and failover<a class="headerlink" href="#high-availability-and-failover" title="Permanent link">¶</a></h3>
+<h3 id="high-availability-and-failover">High availability and failover<a data-markdown-ignore class="headerlink" href="#high-availability-and-failover" title="Permanent link">¶</a></h3>
 <p>Never lose sleep over database downtime again. The Operator provides robust high availability through:</p>
 <ul>
 <li>Automatic failover with intelligent primary election handled by the Orchestrator</li>
@@ -5819,17 +5819,17 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Zero-downtime upgrades with rolling update strategies</li>
 </ul>
 <p>Choose between <a href="architecture.html#group-replication">group replication</a> (GA) for stronger consistency or <a href="architecture.html#asynchronous-replication-tech-preview">asynchronous replication</a> (tech preview) for lower latency—both with automatic failover capabilities.</p>
-<h3 id="cross-site-replication">Cross-site replication<a class="headerlink" href="#cross-site-replication" title="Permanent link">¶</a></h3>
+<h3 id="cross-site-replication">Cross-site replication<a data-markdown-ignore class="headerlink" href="#cross-site-replication" title="Permanent link">¶</a></h3>
 <p>Link Group Replication clusters across regions, availability zones, or Kubernetes environments into the InnoDB ClusterSet managed by the Operator. Instead of building custom replication tooling between sites, you apply a <code>PerconaServerMySQLClusterSet</code> Custom Resource and let the Operator handle topology lifecycle.</p>
 <p>Cross-site replication requires Percona Operator for MySQL 1.2.0 or later and Group Replication clusters on Percona Server for MySQL 8.0.27+ or 8.4. Learn more in the <a href="replication.html">cross-site replication documentation</a>.</p>
-<h3 id="automated-backup-and-restore-flows">Automated backup and restore flows<a class="headerlink" href="#automated-backup-and-restore-flows" title="Permanent link">¶</a></h3>
+<h3 id="automated-backup-and-restore-flows">Automated backup and restore flows<a data-markdown-ignore class="headerlink" href="#automated-backup-and-restore-flows" title="Permanent link">¶</a></h3>
 <p>Protect your data with Percona XtraBackup - an enterprise-grade backup solution for hot, non blocking backups. Run:</p>
 <ul>
 <li>Scheduled backups with configurable retention policies</li>
 <li>On-demand backups for critical operations</li>
 <li><a href="backups-encrypted.html">Encrypted backups</a> for compliance-ready protection in cloud object storage</li>
 </ul>
-<h3 id="automated-scaling-and-resource-management">Automated scaling and resource management<a class="headerlink" href="#automated-scaling-and-resource-management" title="Permanent link">¶</a></h3>
+<h3 id="automated-scaling-and-resource-management">Automated scaling and resource management<a data-markdown-ignore class="headerlink" href="#automated-scaling-and-resource-management" title="Permanent link">¶</a></h3>
 <p>Scale your database infrastructure effortlessly:</p>
 <ul>
 <li>Horizontal scaling with automatic replica management</li>
@@ -5838,9 +5838,9 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Load balancing through HAProxy or MySQL Router</li>
 <li>Resource optimization with intelligent pod placement</li>
 </ul>
-<h3 id="automatic-mysql-configuration-tuning">Automatic MySQL configuration tuning<a class="headerlink" href="#automatic-mysql-configuration-tuning" title="Permanent link">¶</a></h3>
+<h3 id="automatic-mysql-configuration-tuning">Automatic MySQL configuration tuning<a data-markdown-ignore class="headerlink" href="#automatic-mysql-configuration-tuning" title="Permanent link">¶</a></h3>
 <p>Get your cluster production-ready without deep MySQL tuning expertise. Specify the CPU and memory you allocate to MySQL, your workload profile, and the MySQL version. The Operator <a href="autoconfig.html">automatically calculates and applies the MySQL configuration</a> for you and recalculates it whenever those resources change, so you pay only for the resources you actually use.</p>
-<h3 id="security-and-compliance">Security and compliance<a class="headerlink" href="#security-and-compliance" title="Permanent link">¶</a></h3>
+<h3 id="security-and-compliance">Security and compliance<a data-markdown-ignore class="headerlink" href="#security-and-compliance" title="Permanent link">¶</a></h3>
 <p>Keep your data secure with built-in security features:</p>
 <ul>
 <li>Transport encryption with TLS/SSL support</li>
@@ -5852,7 +5852,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Secret management with Kubernetes-native secrets</li>
 <li>Orchestrator API authentication for async replication clusters (available starting with Operator version 1.2.0)</li>
 </ul>
-<h3 id="monitoring-and-observability">Monitoring and observability<a class="headerlink" href="#monitoring-and-observability" title="Permanent link">¶</a></h3>
+<h3 id="monitoring-and-observability">Monitoring and observability<a data-markdown-ignore class="headerlink" href="#monitoring-and-observability" title="Permanent link">¶</a></h3>
 <p>Gain deep insights into your database performance:</p>
 <ul>
 <li>Percona Monitoring and Management (PMM) integration for comprehensive monitoring</li>
@@ -5861,7 +5861,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Performance insights with query analysis</li>
 <li>Health dashboards for operational visibility</li>
 </ul>
-<h2 id="how-operator-works">How Operator works<a class="headerlink" href="#how-operator-works" title="Permanent link">¶</a></h2>
+<h2 id="how-operator-works">How Operator works<a data-markdown-ignore class="headerlink" href="#how-operator-works" title="Permanent link">¶</a></h2>
 <p>The Operator extends Kubernetes with custom resources that represent your MySQL cluster’s desired state. </p>
 <p>Here’s what happens under the hood:</p>
 <ol>
@@ -5873,7 +5873,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ol>
 <p>This declarative approach means you describe what you want, not how to achieve it. The Operator handles all the complex orchestration, ensuring your database cluster always matches your specifications.</p>
 <p><a class="md-button" href="architecture.html">Explore the architecture <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg></span></a></p>
-<h2 id="whats-next">What’s next?<a class="headerlink" href="#whats-next" title="Permanent link">¶</a></h2>
+<h2 id="whats-next">What’s next?<a data-markdown-ignore class="headerlink" href="#whats-next" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="quickstart.html">Quickstart guides</a> - Get up and running in minutes</li>
 <li><a href="kubernetes.html">Installation options</a> - Deploy on your preferred platform  </li>

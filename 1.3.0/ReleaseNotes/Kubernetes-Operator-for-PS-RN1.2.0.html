@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6281,12 +6281,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="percona-operator-for-mysql-120-2026-07-03">Percona Operator for MySQL 1.2.0 (2026-07-03)<a class="headerlink" href="#percona-operator-for-mysql-120-2026-07-03" title="Permanent link">¶</a></h1>
+<h1 id="percona-operator-for-mysql-120-2026-07-03">Percona Operator for MySQL 1.2.0 (2026-07-03)<a data-markdown-ignore class="headerlink" href="#percona-operator-for-mysql-120-2026-07-03" title="Permanent link">¶</a></h1>
 <p><a class="md-button" href="../System-Requirements.html#installation-guidelines">Installation</a></p>
 <p>Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router, and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.</p>
-<h2 id="release-highlights">Release highlights<a class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
+<h2 id="release-highlights">Release highlights<a data-markdown-ignore class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
 <p>This release delivers key features such as cross-site replication, encrypted backups, and automated storage resizing, which harden the Operator for production use. Additionally, it improves security with Orchestrator API authentication and Vault encryption secret validation, and includes a bunch of improvements for day-to-day operations.</p>
-<h3 id="cross-site-replication-for-group-replication-clusters">Cross-site replication for Group Replication clusters<a class="headerlink" href="#cross-site-replication-for-group-replication-clusters" title="Permanent link">¶</a></h3>
+<h3 id="cross-site-replication-for-group-replication-clusters">Cross-site replication for Group Replication clusters<a data-markdown-ignore class="headerlink" href="#cross-site-replication-for-group-replication-clusters" title="Permanent link">¶</a></h3>
 <p>Until now, each Percona Server for MySQL cluster stood on its own. That worked well for high availability within a cluster where group replication keeps cluster nodes in sync. But to scale and span MySQL geographically for disaster recovery, migration or read distribution, you had to build and maintain custom tooling outside the Operator to interconnect sites and replicate data between them.</p>
 <p>Cross-site replication closes that gap by linking Group Replication clusters into a <a href="https://dev.mysql.com/doc/mysql-shell/8.4/en/innodb-clusterset.html">MySQL InnoDB ClusterSet <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>. You manage the topology declaratively from Kubernetes with a new <code>PerconaServerMySQLClusterSet</code> Custom Resource where you declare which clusters participate, which one is the primary, and how replicas receive data when they join the ClusterSet.</p>
 <p>The Operator automates the ClusterSet provisioning and lifecycle
@@ -6301,14 +6301,14 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <li>Unified operations — one Custom Resource and the same declarative model you already use for a single cluster.</li>
 </ul>
 <p>Learn more about the workflow, setup and usage in the <a href="../replication.html">cross-cluster replication documentation</a>.</p>
-<h3 id="encrypted-backups">Encrypted backups<a class="headerlink" href="#encrypted-backups" title="Permanent link">¶</a></h3>
+<h3 id="encrypted-backups">Encrypted backups<a data-markdown-ignore class="headerlink" href="#encrypted-backups" title="Permanent link">¶</a></h3>
 <p>You can now encrypt your backup data with Percona Operator for MySQL, so backup files stored in S3, GCS, or Azure are protected at rest. This helps you meet compliance requirements without adding external encryption tools or changing how you run scheduled and on-demand backups.</p>
 <p>Encrypted backups are supported for both Group Replication and asynchronous replication cluster types.</p>
 <p>The Operator uses Percona XtraBackup’s native encryption and automates the full workflow for you. You create a Kubernetes Secret with the encryption key and reference it in the cluster Custom Resource either on the global level or per storage. The storage-level setting takes precedence. The Operator uses that Secret to encrypt the backup stream during backup and to decrypt it automatically during in-place restore on the same cluster. </p>
 <p>For a restore on a new cluster or in a different Kubernetes environment, provide the same encryption key in the restore resource, because the Operator has no access to Secrets from the source cluster. <strong>The key used for the restore must match the key used to encrypt the backup</strong>. If the key is lost, the backup cannot be recovered.</p>
 <p>The default encryption algorithm is <strong>AES256</strong>. If your security policy requires a different cipher or you want to tune performance, you can override the algorithm and related settings through Percona XtraBackup options in <code>containerOptions.args.xtrabackup</code>.</p>
 <p>To learn more about encrypted backups, read our <a href="../backups-encrypted.html">documentation</a>.</p>
-<h3 id="automatic-storage-resizing">Automatic storage resizing<a class="headerlink" href="#automatic-storage-resizing" title="Permanent link">¶</a></h3>
+<h3 id="automatic-storage-resizing">Automatic storage resizing<a data-markdown-ignore class="headerlink" href="#automatic-storage-resizing" title="Permanent link">¶</a></h3>
 <p>Starting with version 1.2.0, the Operator can automatically resize Persistent Volume Claims (PVCs) for Percona Server for MySQL Pods based on your configured thresholds. The Operator monitors storage usage and when it exceeds the defined threshold, triggers resizing until it reaches the maximum storage size. </p>
 <p>This improvement gives you:</p>
 <ul>
@@ -6329,26 +6329,26 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <span class="w">      </span><span class="nt">maxSize</span><span class="p">:</span><span class="w"> </span><span class="s">"10Gi"</span>
 </code></pre></div>
 <p>Learn more about the workflow and troubleshooting tips in our <a href="../scaling.html#automatic-storage-resizing">documentation</a>.</p>
-<h3 id="delegate-pvc-resizing-to-an-external-autoscaler">Delegate PVC resizing to an external autoscaler<a class="headerlink" href="#delegate-pvc-resizing-to-an-external-autoscaler" title="Permanent link">¶</a></h3>
+<h3 id="delegate-pvc-resizing-to-an-external-autoscaler">Delegate PVC resizing to an external autoscaler<a data-markdown-ignore class="headerlink" href="#delegate-pvc-resizing-to-an-external-autoscaler" title="Permanent link">¶</a></h3>
 <p>You can now configure the Operator to use an external storage autoscaler instead of its own resizing logic. This ability may be useful for organizations needing centralized, advanced, or cross-application scaling policies.</p>
 <p>To use an external autoscaler, set the <code>spec.storageScaling.enableExternalAutoscaling</code> option to <code>true</code> in the Custom Resource manifest.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">storageScaling</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enableExternalAutoscaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
-<h3 id="connection-details-exposed-in-the-user-secret">Connection details exposed in the user Secret<a class="headerlink" href="#connection-details-exposed-in-the-user-secret" title="Permanent link">¶</a></h3>
+<h3 id="connection-details-exposed-in-the-user-secret">Connection details exposed in the user Secret<a data-markdown-ignore class="headerlink" href="#connection-details-exposed-in-the-user-secret" title="Permanent link">¶</a></h3>
 <p>Connecting applications to your cluster no longer means hunting down endpoints and credentials across Services and Secrets. With this release, the Operator creates and maintains a dedicated Secret for a <code>root</code> user that gives your application developers and administrators a single, reliable source of connection information. The Secret name follows the format <code>&lt;cluster-name&gt;-psuser-root</code> (<code>ps-cluster1-psuser-root</code> by default).</p>
 <p>The Secret is owned by the Operator and updated on every reconciliation, so you always get current values without manual upkeep. The <code>host</code>, <code>port</code>, and <code>uri</code> fields point to the direct MySQL primary Service and are automatically updated when failover moves the primary to another Pod.</p>
 <p>If you have enabled HAProxy or MySQL Router, the Secret also includes <code>proxy-host</code>, <code>proxy-port</code>, and <code>proxy-uri</code> values, so applications can connect through your proxy without extra configuration. These fields are generic — they do not reveal which proxy technology is in use.</p>
 <p>When you expose the proxy with a <code>LoadBalancer</code> Service type and an external IP is assigned, the Secret adds <code>proxy-external-host</code>, <code>proxy-external-port</code>, and <code>proxy-external-uri</code> for connections from outside the cluster.</p>
 <p>You can mount this Secret in your application Pods, reference it in your CI/CD pipeline, or use it with External Secrets. However you consume credentials today, you now have everything in one place.</p>
-<h3 id="configure-binlog-settings-in-the-restore-object-for-point-in-time-recovery">Configure binlog settings in the restore object for point-in-time recovery<a class="headerlink" href="#configure-binlog-settings-in-the-restore-object-for-point-in-time-recovery" title="Permanent link">¶</a></h3>
+<h3 id="configure-binlog-settings-in-the-restore-object-for-point-in-time-recovery">Configure binlog settings in the restore object for point-in-time recovery<a data-markdown-ignore class="headerlink" href="#configure-binlog-settings-in-the-restore-object-for-point-in-time-recovery" title="Permanent link">¶</a></h3>
 <p>You can now specify binlog storage directly in the <code>PerconaServerMySQLRestore</code> object when performing point-in-time recovery to a new cluster. Instead of configuring Binlog Server on the target cluster just to replay binary logs from the source environment, you define the binlog location alongside your existing <code>backupSource</code> settings. This simplifies the cross-cluster point-in-time recovery configuration as a single restore manifest carries everything needed for the operation.</p>
 <p>When you trigger the restore, the Operator starts a temporary Binlog Server using those settings, uses it to locate and fetch the required binlogs from the object storage, and removes it when the restore completes. </p>
 <p>This improvement makes the restore path straightforward. By separating binlog collection on the source cluster from binlog access during restore on the target, the Operator makes disaster recovery and migration scenarios much easier to plan and execute.</p>
 <p>Point-in-time recovery remains a tech preview feature. We do not recommend using it in production environments yet, but we encourage you to try this workflow in staging or test clusters and share your feedback.</p>
 <p>Read more about point-in-time recovery and restore to a new cluster in our <a href="../backups-restore-pitr.html#restore-on-a-new-cluster">documentation</a>.</p>
-<h3 id="disable-nodeport-allocation-for-loadbalancer-services">Disable NodePort allocation for LoadBalancer Services<a class="headerlink" href="#disable-nodeport-allocation-for-loadbalancer-services" title="Permanent link">¶</a></h3>
+<h3 id="disable-nodeport-allocation-for-loadbalancer-services">Disable NodePort allocation for LoadBalancer Services<a data-markdown-ignore class="headerlink" href="#disable-nodeport-allocation-for-loadbalancer-services" title="Permanent link">¶</a></h3>
 <p>By default, Kubernetes assigns a <code>NodePort</code> behind every <code>LoadBalancer</code> Service, even when the underlying load balancer does not require it.</p>
 <p>With this release, you can now turn off <code>NodePort</code> allocation for the <code>LoadBalancer</code> Services created by the Operator. Update your cluster Custom Resource with the following configuration:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
@@ -6362,7 +6362,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <li>You want to reduce the attack surface by avoiding unintended node level exposure</li>
 <li>You run many LoadBalancer services and want to avoid port exhaustion</li>
 </ul>
-<h3 id="independent-resource-configuration-for-haproxy-sidecar-containers">Independent resource configuration for HAProxy sidecar containers<a class="headerlink" href="#independent-resource-configuration-for-haproxy-sidecar-containers" title="Permanent link">¶</a></h3>
+<h3 id="independent-resource-configuration-for-haproxy-sidecar-containers">Independent resource configuration for HAProxy sidecar containers<a data-markdown-ignore class="headerlink" href="#independent-resource-configuration-for-haproxy-sidecar-containers" title="Permanent link">¶</a></h3>
 <p>HAProxy Pods include the <code>mysql-monit</code> sidecar, a lightweight DNS-polling container that monitors MySQL endpoints. Previously, it inherited resource requests and limits from the main HAProxy container. Since the sidecar needs far fewer resources than HAProxy itself, it was over-provisioned.</p>
 <p>Now you can configure the resource requests and limits for each HAProxy sidecar container independently. Use the <code>spec.proxy.haproxy.sidecarResources</code> subsection in the Custom Resource and specify the required values for each sidecar:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">proxy</span><span class="p">:</span>
@@ -6377,22 +6377,22 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">128Mi</span>
 </code></pre></div>
 <p>This improvement helps you use cluster resources more efficiently and thereby lower your infrastructure costs.</p>
-<h3 id="vault-encryption-secret-validation">Vault encryption secret validation<a class="headerlink" href="#vault-encryption-secret-validation" title="Permanent link">¶</a></h3>
+<h3 id="vault-encryption-secret-validation">Vault encryption secret validation<a data-markdown-ignore class="headerlink" href="#vault-encryption-secret-validation" title="Permanent link">¶</a></h3>
 <p>The Operator now validates the Vault Secret when you enable data-at-rest encryption with HashiCorp Vault. If the Secret is missing or invalid, you see a clear error in the cluster status right away, so you can fix the configuration without digging through Pod logs.</p>
 <p>With this validation, you can now deploy Vault and the database cluster together, such as using Helm integration charts. You can define the Secret reference up front and let the Operator wait until the Secret is present and valid before continuing cluster setup.</p>
 <p>Read more about <a href="../encryption-setup.html">configuring data-at-rest encryption with Vault</a>.</p>
-<h3 id="improve-operational-efficiency-with-the-support-for-concurrent-cluster-reconciliation">Improve operational efficiency with the support for concurrent cluster reconciliation<a class="headerlink" href="#improve-operational-efficiency-with-the-support-for-concurrent-cluster-reconciliation" title="Permanent link">¶</a></h3>
+<h3 id="improve-operational-efficiency-with-the-support-for-concurrent-cluster-reconciliation">Improve operational efficiency with the support for concurrent cluster reconciliation<a data-markdown-ignore class="headerlink" href="#improve-operational-efficiency-with-the-support-for-concurrent-cluster-reconciliation" title="Permanent link">¶</a></h3>
 <p>Reconciliation is a Kubernetes mechanism to keep your cluster in sync with its desired state. Previously, the Operator ran only one reconciliation loop at a time. This sequential processing meant that other clusters managed by the same Operator had to wait for the current reconciliation to complete before receiving updates.</p>
 <p>With this release, the Operator supports concurrent reconciling and can process several clusters simultaneously. You can define the maximum number of concurrent reconciles with the <code>MAX_CONCURRENT_RECONCILES</code> environment variable for the Operator deployment.</p>
 <p>This enhancement significantly improves scalability and responsiveness, especially in multi-cluster environments.</p>
-<h3 id="configurable-dns-suffix-for-operator-connections">Configurable DNS suffix for Operator connections<a class="headerlink" href="#configurable-dns-suffix-for-operator-connections" title="Permanent link">¶</a></h3>
+<h3 id="configurable-dns-suffix-for-operator-connections">Configurable DNS suffix for Operator connections<a data-markdown-ignore class="headerlink" href="#configurable-dns-suffix-for-operator-connections" title="Permanent link">¶</a></h3>
 <p>You can now specify a custom DNS suffix that the Operator uses when it generates service names. This is useful when the Operator runs in a vcluster or in a cluster with a custom DNS configuration. In those setups, the default <code>cluster.local</code> suffix can cause incorrect domain name resolution and, as a result, failed connections to external services such as PMM. By setting the <code>clusterServiceDNSSuffix</code> in the Custom Resource to your cluster’s DNS suffix, the Operator generates hostnames that match your DNS configuration. This ensures the service discoverability and correct communication between workloads.</p>
-<h3 id="secure-orchestrator-api-access-with-authentication">Secure Orchestrator API access with authentication<a class="headerlink" href="#secure-orchestrator-api-access-with-authentication" title="Permanent link">¶</a></h3>
+<h3 id="secure-orchestrator-api-access-with-authentication">Secure Orchestrator API access with authentication<a data-markdown-ignore class="headerlink" href="#secure-orchestrator-api-access-with-authentication" title="Permanent link">¶</a></h3>
 <p>The Orchestrator HTTP API is the control plane for your MySQL clusters with asynchronous replication. It handles failovers, topology changes, and other critical operations.</p>
 <p>Starting with this release, the Orchestrator API requires authentication. Clients must present valid user credentials to connect, and unauthenticated requests are rejected. </p>
 <p>The Operator handles authentication automatically for its own API calls, reading credentials from the mounted secret, so day-to-day cluster management continues to work as before. For custom integrations or scripts that call the Orchestrator API directly, you will need to include the appropriate credentials.</p>
 <p>This change hardens your deployment by ensuring only authorized callers can initiate failover or topology operations. As a result, you have a stronger protection against accidental or malicious disruption of your MySQL cluster.</p>
-<h3 id="fine-tune-orchestrator-failover-behavior">Fine-tune Orchestrator failover behavior<a class="headerlink" href="#fine-tune-orchestrator-failover-behavior" title="Permanent link">¶</a></h3>
+<h3 id="fine-tune-orchestrator-failover-behavior">Fine-tune Orchestrator failover behavior<a data-markdown-ignore class="headerlink" href="#fine-tune-orchestrator-failover-behavior" title="Permanent link">¶</a></h3>
 <p>Until now, you could not adjust the Orchestrator behavior beyond the Operator defaults. This release makes the <code>spec.orchestrator.configuration</code> field effective, so you can tune failover settings per cluster directly in the Custom Resource.</p>
 <p>Provide Orchestrator options as a JSON string. For example, with the <code>FailMasterPromotionOnLagMinutes</code> option, you can control how long Orchestrator waits before promoting a new primary when replication is lagging. Using the <code>RecoveryPeriodBlockSeconds</code> option, define how long to block recovery after a failover. </p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
@@ -6402,25 +6402,25 @@ when you change the primary. Because management runs over the MySQL protocol, re
 </code></pre></div>
 <p>The Operator merges your settings into the Orchestrator configuration. When you change the <code>spec.orchestrator.configuration</code> field, Orchestrator Pods restart in a rolling fashion to apply the new settings.</p>
 <p>Options that the Operator manages itself such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths are reserved and ignored if you set them, so cluster automation continues to work reliably.</p>
-<h3 id="improved-monitoring-for-clusters-in-multi-region-or-multi-namespace-deployments-in-pmm">Improved monitoring for clusters in multi-region or multi-namespace deployments in PMM<a class="headerlink" href="#improved-monitoring-for-clusters-in-multi-region-or-multi-namespace-deployments-in-pmm" title="Permanent link">¶</a></h3>
+<h3 id="improved-monitoring-for-clusters-in-multi-region-or-multi-namespace-deployments-in-pmm">Improved monitoring for clusters in multi-region or multi-namespace deployments in PMM<a data-markdown-ignore class="headerlink" href="#improved-monitoring-for-clusters-in-multi-region-or-multi-namespace-deployments-in-pmm" title="Permanent link">¶</a></h3>
 <p>Now you can define a custom name for your clusters deployed in different data centers. This name helps Percona Management and Monitoring (PMM) Server to correctly recognize clusters as connected and monitor them as one deployment. Similarly, PMM Server identifies clusters deployed with the same names in different namespaces as separate ones and correctly displays performance metrics for you on dashboards.</p>
 <p>To assign a custom name, define this configuration in the Custom Resource manifest for your cluster:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">pmm</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">customClusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testClusterName</span>
 </code></pre></div>
-<h3 id="percona-server-for-mysql-clusters-84-have-numa-disabled-by-default">Percona Server for MySQL clusters 8.4 have NUMA disabled by default<a class="headerlink" href="#percona-server-for-mysql-clusters-84-have-numa-disabled-by-default" title="Permanent link">¶</a></h3>
+<h3 id="percona-server-for-mysql-clusters-84-have-numa-disabled-by-default">Percona Server for MySQL clusters 8.4 have NUMA disabled by default<a data-markdown-ignore class="headerlink" href="#percona-server-for-mysql-clusters-84-have-numa-disabled-by-default" title="Permanent link">¶</a></h3>
 <p><code>innodb_numa_interleave</code> is a MySQL configuration variable that spreads memory allocation across multiple NUMA (Non Uniform Memory Access) nodes. MySQL 8.4 turns this setting on by default to improve performance on servers with NUMA architecture, particularly when using a large InnoDB buffer pool.</p>
 <p>In Kubernetes, containers are not allowed to modify memory allocation policies due to common security restrictions. When MySQL tries to enable NUMA interleaving, Kubernetes blocks the request, which can lead to warnings or confusing log messages.</p>
 <p>Because most cloud servers for Kubernetes use servers with only a single NUMA node, this MySQL setting provides no performance benefit in containerized environments. To keep MySQL behavior predictable and reduce unnecessary noise, the Operator now sets <code>innodb_numa_interleave</code> to <code>OFF</code> by default when it deploys Percona Server for MySQL 8.4. This reduces false alarms, and ensures MySQL runs smoothly in hardened Kubernetes environments.</p>
 <p>You can still enable NUMA interleaving for your Percona Server for MySQL by passing custom MySQL options through the Operator. Be sure you understand the implications, as this requires a Kubernetes environment that allows NUMA policies.</p>
-<h3 id="documentation-updates">Documentation updates<a class="headerlink" href="#documentation-updates" title="Permanent link">¶</a></h3>
+<h3 id="documentation-updates">Documentation updates<a data-markdown-ignore class="headerlink" href="#documentation-updates" title="Permanent link">¶</a></h3>
 <p>Updated the README in the Helm chart to include the all available options.</p>
-<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
-<h3 id="deprecated-options">Deprecated options<a class="headerlink" href="#deprecated-options" title="Permanent link">¶</a></h3>
+<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a data-markdown-ignore class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
+<h3 id="deprecated-options">Deprecated options<a data-markdown-ignore class="headerlink" href="#deprecated-options" title="Permanent link">¶</a></h3>
 <p>The <code>spec.enableVolumeExpansion</code> option is deprecated. It remains working for backward compatibility but it will be removed in version 1.5.0. Use the <code>spec.storageScaling.enableVolumeScaling</code> option instead.</p>
-<h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
-<h3 id="binlog-server-image-incompatibility-notice">Binlog Server image incompatibility notice<a class="headerlink" href="#binlog-server-image-incompatibility-notice" title="Permanent link">¶</a></h3>
+<h2 id="known-limitations">Known limitations<a data-markdown-ignore class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
+<h3 id="binlog-server-image-incompatibility-notice">Binlog Server image incompatibility notice<a data-markdown-ignore class="headerlink" href="#binlog-server-image-incompatibility-notice" title="Permanent link">¶</a></h3>
 <p>The new version of the Binlog Server image included in this release is not compatible with the previous version. </p>
 <p>To upgrade the Binlog Server you must start a fresh binlog collection. Here’s how to do it:</p>
 <ol>
@@ -6430,7 +6430,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <li>Update the Binlog Server image</li>
 <li>Re-enable point-in-time recovery</li>
 </ol>
-<h3 id="considerations-for-using-openshift-422">Considerations for using OpenShift 4.22<a class="headerlink" href="#considerations-for-using-openshift-422" title="Permanent link">¶</a></h3>
+<h3 id="considerations-for-using-openshift-422">Considerations for using OpenShift 4.22<a data-markdown-ignore class="headerlink" href="#considerations-for-using-openshift-422" title="Permanent link">¶</a></h3>
 <p>Starting with OpenShift 4.22, the way images with not fully qualified names are pulled has changed for repositories that share the same repository name on DockerHub and Red Hat Marketplace. By default the tags are pulled from Red Hat Marketplace. Specifying not fully qualified image names may result in the <code>ImagePullBackOff</code> error.</p>
 <ul>
 <li><strong>OLM installation:</strong> Images are provided with the fully qualified names and are pulled from the Red Hat Marketplace/DockerHub registry.</li>
@@ -6465,12 +6465,12 @@ when you change the primary. Because management runs over the MySQL protocol, re
 </li>
 </ol>
 <p>For the upgrade steps, follow the <a href="../update-openshift.html#update-via-the-command-line-interface">Update documentation</a>.</p>
-<h2 id="crd-changes">CRD changes<a class="headerlink" href="#crd-changes" title="Permanent link">¶</a></h2>
+<h2 id="crd-changes">CRD changes<a data-markdown-ignore class="headerlink" href="#crd-changes" title="Permanent link">¶</a></h2>
 <ul>
 <li>A new CRD <code>PerconaServerMySQLClusterSet</code> is added</li>
 </ul>
-<h2 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
-<h3 id="new-features">New Features<a class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
+<h2 id="changelog">Changelog<a data-markdown-ignore class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
+<h3 id="new-features">New Features<a data-markdown-ignore class="headerlink" href="#new-features" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-127">K8SPS-127</a> - Added automatic storage scaling that monitors PVC usage and triggers resizing when usage crosses your configured threshold. This helps prevent outages from full disks and reduces manual capacity planning by expanding storage only when it is needed.</p>
@@ -6494,7 +6494,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-689">K8SPS-689</a> - Added a dedicated root user Secret that exposes connection details for your cluster in a single, operator-maintained resource. </p>
 </li>
 </ul>
-<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
+<h3 id="improvements">Improvements<a data-markdown-ignore class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-19">K8SPS-19</a> - Enabled authentication for the Orchestrator HTTP API so only authorized clients can trigger failovers or topology changes. The Operator handles credentials automatically for its own calls, while custom scripts that access the API directly must provide valid credentials.</p>
@@ -6524,7 +6524,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-742">K8SPS-742</a> - Added independent resource configuration for the <code>mysql-monit</code> sidecar container in HAProxy Pods via <code>spec.proxy.haproxy.sidecarResources</code>. You can set appropriate CPU and memory limits for the lightweight monitoring sidecar without over-provisioning it and save on infrastructure costs.</p>
 </li>
 </ul>
-<h3 id="bug-fixes">Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permanent link">¶</a></h3>
+<h3 id="bug-fixes">Bug Fixes<a data-markdown-ignore class="headerlink" href="#bug-fixes" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-296">K8SPS-296</a> - Improved the logging behavior for unhandled errors and stack traces that appeared when changing passwords in asynchronous replication clusters. Password rotation now completes cleanly without noisy reconciler errors in the Operator logs.</p>
@@ -6578,7 +6578,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-760">K8SPS-760</a> - Fixed an Operator panic when <code>spec.backup</code> was omitted from the Custom Resource entirely. Clusters without a backup section now reconcile normally instead of crashing the controller. (Thank you Wilfried ROSET for contributing to this issue)</p>
 </li>
 </ul>
-<h2 id="supported-software">Supported software<a class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
+<h2 id="supported-software">Supported software<a data-markdown-ignore class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
 <p>The Operator was developed and tested with the following software:</p>
 <ul>
 <li>Percona Server for MySQL 8.4.10-10.1</li>
@@ -6595,7 +6595,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <li>Percona Binlog Server 0.3.1</li>
 </ul>
 <p>Other options may also work but have not been tested.</p>
-<h2 id="supported-platforms">Supported platforms<a class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
+<h2 id="supported-platforms">Supported platforms<a data-markdown-ignore class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
 <p>Percona Operators are designed for compatibility with all <a href="https://www.cncf.io/training/certification/software-conformance/">CNCF-certified <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> Kubernetes distributions. Our release process includes targeted testing and validation on major cloud provider platforms and OpenShift, as detailed below:</p>
 <ul>
 <li><a href="https://cloud.google.com/kubernetes-engine">Google Kubernetes Engine (GKE) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.33 - 1.35</li>
@@ -6604,7 +6604,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <li><a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.38.1 with Kubernetes v1.35.1</li>
 </ul>
 <p>This list only includes the platforms on which the Percona Operators are specifically tested as part of the release process. Compatibility with other Kubernetes flavors and versions depends on the backward compatibility provided by Kubernetes itself.</p>
-<h2 id="percona-certified-images">Percona certified images<a class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
+<h2 id="percona-certified-images">Percona certified images<a data-markdown-ignore class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
 <p>Find Percona’s certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:</p>
 <table>
 <thead>

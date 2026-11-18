@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5861,15 +5861,15 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="percona-operator-for-mysql-100-2025-11-17">Percona Operator for MySQL 1.0.0 (2025-11-17)<a class="headerlink" href="#percona-operator-for-mysql-100-2025-11-17" title="Permanent link">¶</a></h1>
+<h1 id="percona-operator-for-mysql-100-2025-11-17">Percona Operator for MySQL 1.0.0 (2025-11-17)<a data-markdown-ignore class="headerlink" href="#percona-operator-for-mysql-100-2025-11-17" title="Permanent link">¶</a></h1>
 <p><a class="md-button" href="../System-Requirements.html#installation-guidelines">Installation</a></p>
 <p>Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.</p>
-<h2 id="release-highlights">Release highlights<a class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
+<h2 id="release-highlights">Release highlights<a data-markdown-ignore class="headerlink" href="#release-highlights" title="Permanent link">¶</a></h2>
 <p>This release marks the <strong>General Availability (GA) of Percona Operator for MySQL using Percona Server for MySQL with the group replication type</strong>. The asynchronous replication has the tech preview status and we don’t recommend using it in production yet.</p>
 <p>With the GA status of the Operator, you can confidently deploy and run it in production environments, benefiting from long-term maintenance and enterprise-grade reliability.</p>
 <p>Alternatively, you may opt for <a href="https://www.percona.com/doc/kubernetes-operator-for-pxc/index.html">Percona Operator for MySQL based on Percona XtraDB Cluster</a>, which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.</p>
 <p>This release focuses on stability and bug fixing, ensuring the Operator is ready for production use. Additionally, it introduces these improvements:</p>
-<h3 id="seamless-operator-lifecycle-management-on-openshift-olm">Seamless Operator lifecycle management on OpenShift OLM<a class="headerlink" href="#seamless-operator-lifecycle-management-on-openshift-olm" title="Permanent link">¶</a></h3>
+<h3 id="seamless-operator-lifecycle-management-on-openshift-olm">Seamless Operator lifecycle management on OpenShift OLM<a data-markdown-ignore class="headerlink" href="#seamless-operator-lifecycle-management-on-openshift-olm" title="Permanent link">¶</a></h3>
 <p>The Operator images are passing official certification for OpenShift. When passed, this unlocks full support for the Operator Lifecycle Manager (OLM) so that you can install, upgrade and manage the Operator’s lifecycle directly from the OpenShift console.</p>
 <p>What this means for you:</p>
 <ul>
@@ -5880,11 +5880,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Scalable operations: Simplify cluster-wide rollouts and reduce manual overhead.</li>
 </ul>
 <p>All OpenShift-related features will become available to users as soon as certification is confirmed. Whether you’re a platform engineer, DBA, or architect, this advancement will bring you closer to a secure, scalable, and policy-driven infrastructure.</p>
-<h3 id="streamlined-custom-configuration-usage-for-backup-and-restore-processes">Streamlined custom configuration usage for backup and restore processes<a class="headerlink" href="#streamlined-custom-configuration-usage-for-backup-and-restore-processes" title="Permanent link">¶</a></h3>
+<h3 id="streamlined-custom-configuration-usage-for-backup-and-restore-processes">Streamlined custom configuration usage for backup and restore processes<a data-markdown-ignore class="headerlink" href="#streamlined-custom-configuration-usage-for-backup-and-restore-processes" title="Permanent link">¶</a></h3>
 <p>In previous version we have added the ability to fine-tune backups and restores by defining <code>xtrabackup</code>, <code>xbstream</code> and <code>xbcloud</code> settings globally via the Custom Resource manifest, or individually via a specific backup / restore manifest. </p>
 <p>In this release we improved how the Operator applies these settings: now individual configuration always takes precedence over global settings. </p>
 <p>With this improvement you have maximum flexibility: you can define consistent default settings for the entire cluster, but still tailor individual backup or restore operations as needed. This way you can optimize performance, troubleshoot, or customize specific scenarios without affecting the global configuration.</p>
-<h3 id="increased-timeouts-for-read-write-and-clone-operations-inside-mysql-cluster">Increased timeouts for read, write and clone operations inside MySQL cluster<a class="headerlink" href="#increased-timeouts-for-read-write-and-clone-operations-inside-mysql-cluster" title="Permanent link">¶</a></h3>
+<h3 id="increased-timeouts-for-read-write-and-clone-operations-inside-mysql-cluster">Increased timeouts for read, write and clone operations inside MySQL cluster<a data-markdown-ignore class="headerlink" href="#increased-timeouts-for-read-write-and-clone-operations-inside-mysql-cluster" title="Permanent link">¶</a></h3>
 <p>To improve reliability of clone operations in asynchronous MySQL clusters, especially when transferring large datasets, we’ve increased the default timeouts for read, write and clone operations to 3600 seconds. This change helps prevent premature failures caused by network delays or slow disk I/O during large data transfers.</p>
 <p>The following timeouts are now set to 3600s by default:</p>
 <ul>
@@ -5904,12 +5904,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"3600"</span>
 </code></pre></div>
 <p>This update ensures smoother provisioning and bootstrapping of new database nodes, especially in environments with large datasets or variable network conditions.</p>
-<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
+<h2 id="deprecation-rename-and-removal">Deprecation, rename and removal<a data-markdown-ignore class="headerlink" href="#deprecation-rename-and-removal" title="Permanent link">¶</a></h2>
 <ul>
 <li>Changed paths for example configuration files for backups and restores. They are now stored in the <code>deploy/backup/</code> folder. Adjust your automation workflow with this new path, if needed.</li>
 <li>The Custom Resource options <code>spec.pmm.readinessProbes</code> and <code>spec.pmm.livenessProbes</code> have been renamed to the singular <code>spec.pmm.readinessProbe</code> and <code>spec.pmm.livenessProbe</code>, respectively. Please update your application configurations to use these new field names as needed.</li>
 </ul>
-<h2 id="known-limitations">Known limitations<a class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
+<h2 id="known-limitations">Known limitations<a data-markdown-ignore class="headerlink" href="#known-limitations" title="Permanent link">¶</a></h2>
 <p>If you defined several schedules for the same remote backup storage, be aware of the following limitations:</p>
 <ol>
 <li>
@@ -5920,14 +5920,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 </ol>
 <p>To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the <a href="../backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage">documentation</a> for more information and  configuration steps.</p>
-<h2 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
-<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
+<h2 id="changelog">Changelog<a data-markdown-ignore class="headerlink" href="#changelog" title="Permanent link">¶</a></h2>
+<h3 id="improvements">Improvements<a data-markdown-ignore class="headerlink" href="#improvements" title="Permanent link">¶</a></h3>
 <ul>
 <li><a href="https://perconadev.atlassian.net/browse/K8SPS-469">K8SPS-469</a> - Improved log message to display clearer and more informative error messages in case of authorization issues to a backup storage.</li>
 <li><a href="https://perconadev.atlassian.net/browse/K8SPS-537">K8SPS-537</a> - Extended the test suite for the automatic update process to include MySQL version 8.4.</li>
 <li><a href="https://perconadev.atlassian.net/browse/K8SPS-574">K8SPS-574</a> - Align readiness and liveness probe naming to be in the singular form to correspond to  to the Kubernetes API structure</li>
 </ul>
-<h3 id="fixed-bugs">Fixed bugs<a class="headerlink" href="#fixed-bugs" title="Permanent link">¶</a></h3>
+<h3 id="fixed-bugs">Fixed bugs<a data-markdown-ignore class="headerlink" href="#fixed-bugs" title="Permanent link">¶</a></h3>
 <ul>
 <li>
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-491">K8SPS-491</a> - Percona Operator for MySQL  now automatically generates the secrets object in the format <code>&lt;cluster-name&gt;-secrets</code>, if it’s not explicitly defined in the Custom resource, preventing common startup errors.</p>
@@ -5987,7 +5987,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><a href="https://perconadev.atlassian.net/browse/K8SPS-598">K8SPS-598</a> - Fixed the issue with unneeded cluster restart after the Operator image update. The Operator now prevents these restarts by adding the logic to compare the Operator’s new image version with the Custom Resource version, ensuring the init container image in the StatefulSet is only updated when necessary.</p>
 </li>
 </ul>
-<h2 id="supported-software">Supported software<a class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
+<h2 id="supported-software">Supported software<a data-markdown-ignore class="headerlink" href="#supported-software" title="Permanent link">¶</a></h2>
 <p>The Operator was developed and tested with the following software:</p>
 <ul>
 <li>Percona Server for MySQL 8.4.6-6.1</li>
@@ -6003,7 +6003,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li>Cert Manager 1.19.1</li>
 </ul>
 <p>Other options may also work but have not been tested.</p>
-<h2 id="supported-platforms">Supported platforms<a class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
+<h2 id="supported-platforms">Supported platforms<a data-markdown-ignore class="headerlink" href="#supported-platforms" title="Permanent link">¶</a></h2>
 <p>Percona Operators are designed for compatibility with all <a href="https://www.cncf.io/training/certification/software-conformance/">CNCF-certified <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> Kubernetes distributions. Our release process includes targeted testing and validation on major cloud provider platforms and OpenShift, as detailed below:</p>
 <ul>
 <li><a href="https://cloud.google.com/kubernetes-engine">Google Kubernetes Engine (GKE) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.31 - 1.33</li>
@@ -6012,7 +6012,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><a href="https://minikube.sigs.k8s.io/docs/">Minikube <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> 1.37.0 with Kubernetes v1.34.0</li>
 </ul>
 <p>This list only includes the platforms on which the Percona Operators are specifically tested as part of the release process. Compatibility with other Kubernetes flavors and versions depends on the backward compatibility provided by Kubernetes itself.</p>
-<h2 id="percona-certified-images">Percona certified images<a class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
+<h2 id="percona-certified-images">Percona certified images<a data-markdown-ignore class="headerlink" href="#percona-certified-images" title="Permanent link">¶</a></h2>
 <p>Find Percona’s certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL in the following table:</p>
 <table>
 <thead>

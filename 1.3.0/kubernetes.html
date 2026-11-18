@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5595,7 +5595,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="install-percona-server-for-mysql-on-kubernetes">Install Percona Server for MySQL on Kubernetes<a class="headerlink" href="#install-percona-server-for-mysql-on-kubernetes" title="Permanent link">¶</a></h1>
+<h1 id="install-percona-server-for-mysql-on-kubernetes">Install Percona Server for MySQL on Kubernetes<a data-markdown-ignore class="headerlink" href="#install-percona-server-for-mysql-on-kubernetes" title="Permanent link">¶</a></h1>
 <ol>
 <li>
 <p>First of all, clone the percona-server-mysql-operator repository:</p>
@@ -5684,7 +5684,7 @@ percona-server-for-mysql-operator-54c5c87988-xfmlf   1/1     Running   0        
 </code></pre></div>
 </li>
 </ol>
-<h2 id="verify-the-cluster-operation">Verify the cluster operation<a class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">¶</a></h2>
+<h2 id="verify-the-cluster-operation">Verify the cluster operation<a data-markdown-ignore class="headerlink" href="#verify-the-cluster-operation" title="Permanent link">¶</a></h2>
 <p>To connect to Percona Server for MySQL, use the connection Secret that the Operator creates for the <code>root</code> user. It is named <code>&lt;cluster_name&gt;-psuser-root</code> (by default, <code>ps-cluster1-psuser-root</code>) and contains hostnames, ports, credentials, and ready-to-use connection URIs. Read <a href="connection-secrets.html">Connection secrets</a> for the full reference.</p>
 <p>Here’s how to connect:</p>
 <ol>
@@ -5722,7 +5722,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
     The command will look different depending on whether the cluster uses load
     balancing with <a href="haproxy-conf.html">HAProxy</a> (the default behavior) or uses
     <a href="router-conf.html">MySQL Router</a> (can be used with Group Replication clusters):</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;

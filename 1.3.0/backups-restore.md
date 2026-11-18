@@ -1,0 +1,114 @@
+> For the complete documentation index, see [llms.txt](https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt).
+
+# Restore the cluster from a previously saved backup
+
+You can restore from a backup as follows:
+
+- On the same Kubernetes cluster and in the same namespace where you made the backup
+- On a [new cluster deployed in a different Kubernetes-based environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html).
+
+This document focuses on the restore to the same cluster.
+
+## Restore scenarios
+
+To restore a backup on this cluster, follow the steps below.
+
+To restore to a timestamp or GTID, use [Restore with point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#restore-on-the-same-cluster).
+
+If this cluster already verifies S3 with a [custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage), the Operator reads the `caBundle` defined on the cluster Custom Resource. You do not add `caBundle` to the restore object when you restore with `backupName`.
+
+To restore from a backup, you create a Restore object using a special restore configuration file. The example of such file is [deploy/backup/restore.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/backup/restore.yaml) .
+
+You can check available options in the [restore options reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.html).
+
+## Before you begin
+
+To restore from a backup on the same cluster and namespace, do the following:
+
+1. Export the namespace as an environment variable. Replace the `<namespace>` placeholder with your value:
+
+   ```
+   export NAMESPACE = <namespace>
+   ```
+
+1. Make sure that the cluster is running. Use this command to check it:
+
+   ```
+   kubectl get ps <cluster-name> -n $NAMESPACE
+   ```
+
+1. List backups with the following command:
+
+   ```
+   kubectl get ps-backup -n $NAMESPACE
+   ```
+
+## Restore from a backup
+
+When the correct names for the backup and the cluster are known,configure the `PerconaServerMySQLRestore` Custom Resource. Specify the following keys:
+
+- set `spec.clusterName` key to the name of the target cluster to restore the backup on
+- set `spec.backupName` key to the name of your backup. This is the value from the output of the `kubectl get ps-backup` command.
+
+Pass this information to the Operator
+
+**via the YAML manifest**
+
+1. Edit the `deploy/backup/restore.yaml` file:
+
+   ```
+   apiVersion: ps.percona.com/v1
+   kind: PerconaServerMySQLRestore
+   metadata:
+     name: restore1
+   spec: 
+     clusterName: ps-cluster1
+     backupName: backup1
+   ```
+
+1. Start the restore process:
+
+   ```
+   kubectl apply -f deploy/backup/restore.yaml -n $NAMESPACE
+   ```
+
+**via the command line**
+
+Instead of storing restore settings in a separate file, you can pass them directly to the `kubectl apply` command as follows:
+
+```
+cat <<EOF | kubectl apply -n $NAMESPACE  -f-
+apiVersion: "ps.percona.com/v1"
+kind: "PerconaServerMySQLRestore"
+metadata:
+  name: "restore1"
+spec:
+  clusterName: "ps-cluster1"
+  backupName: "backup1"
+EOF
+```
+
+## View restore details
+
+When you start the restore, the Operator creates a Job. Check it with:
+
+```
+kubectl get job -n $NAMESPACE
+```
+
+Sample output
+
+```
+xb-restore-restore2                                Running    0/1                      0s
+xb-restore-restore2                                Complete             1/1           25s        25s
+```
+
+You can check the restore progress with this command:
+
+```
+kubectl get ps-restore -n $NAMESPACE
+```
+
+## Troubleshooting
+
+If you face issues with restore, refer to [Troubleshoot backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html#restores).

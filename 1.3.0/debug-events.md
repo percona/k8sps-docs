@@ -1,0 +1,137 @@
+> For the complete documentation index, see [llms.txt](https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt).
+
+# Check the Events
+
+[Kubernetes Events](https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/) always provide a wealth of information and should always be checked while troubleshooting issues.
+
+Events can be checked by the following command
+
+```
+kubectl get events
+```
+
+Expected output
+
+```
+LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
+3s          Normal    Provisioning             persistentvolumeclaim/datadir-ps-cluster1-mysql-2        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-2"
+3s          Normal    ProvisioningSucceeded    persistentvolumeclaim/datadir-ps-cluster1-mysql-2        Successfully provisioned volume pvc-fbd347c2-adf7-413b-86bb-b5e381313cc0
+...
+```
+
+Events capture many information happening at Kubernetes level and provide valuable information. By default, the ordering of events cannot be guaranteed. Use the following command to sort the output in a reverse chronological fashion.
+
+```
+kubectl get events --sort-by=".lastTimestamp"
+```
+
+Expected output
+
+```
+LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
+33m         Warning   FailedScheduling           pod/ps-cluster1-mysql-0                                  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
+33m         Normal    Provisioning               persistentvolumeclaim/datadir-ps-cluster1-mysql-0        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-0"
+33m         Normal    ProvisioningSucceeded      persistentvolumeclaim/datadir-ps-cluster1-mysql-0        Successfully provisioned volume pvc-aad3d7cf-2bd4-4823-8e6f-38b9a8528aaa
+...
+```
+
+When there are too many events and there is a need of filtering output, tools like [yq](https://github.com/mikefarah/yq) , [jq](https://github.com/jqlang/jq) can be used to filter specific items or know the structure of the events.
+
+Example:
+
+```
+kubectl get events -o yaml | yq '.items[11]'
+```
+
+Expected output
+
+```
+apiVersion: v1
+count: 1
+eventTime: null
+firstTimestamp: "2024-07-16T08:57:32Z"
+involvedObject:
+  apiVersion: v1
+  kind: Pod
+  name: ps-cluster1-mysql-0
+  namespace: default
+  resourceVersion: "623"
+  uid: 689338c7-d5f7-4bfb-9f7e-ca1d13e782a3
+kind: Event
+lastTimestamp: "2024-07-16T08:57:32Z"
+message: '0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.'
+metadata:
+  creationTimestamp: "2024-07-16T08:57:32Z"
+  name: ps-cluster1-mysql-0.17e2a5c04f66588f
+  namespace: default
+  resourceVersion: "625"
+  uid: 6d4a0eeb-8eea-4e1d-91f5-91fb795bd743
+reason: FailedScheduling
+reportingComponent: default-scheduler
+reportingInstance: ""
+source:
+  component: default-scheduler
+type: Warning
+```
+
+Flag `--field-selector` can be used to filter out the output as well. For example, the following command provides events of Pod only:
+
+```
+kubectl get events --field-selector involvedObject.kind=Pod
+```
+
+See the full list of supported `involvedObject` fields [here](https://kubernetes.io/docs/reference/kubernetes-api/common-definitions/object-reference/#ObjectReference).
+
+More fields can be added to the field-selector flag for filtering events further. For example, the following command provides events of the `ps-cluster1-mysql-0` Pod:
+
+```
+kubectl get events --field-selector involvedObject.kind=Pod,involvedObject.name=ps-cluster1-mysql-0
+```
+
+Expected output
+
+```
+LAST SEEN   TYPE      REASON            OBJECT                 MESSAGE
+53m         Normal    Created           pod/ps-cluster1-mysql-0   Created container mysql
+53m         Normal    Started           pod/ps-cluster1-mysql-0   Started container mysql
+53m         Normal    Pulling           pod/ps-cluster1-mysql-0   Pulling image "percona/percona-server-mysql-operator:0.8.0-backup"
+...
+```
+
+Same way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.) to investigate any problems to them:
+
+```
+kubectl get events --field-selector involvedObject.kind=PerconaServerMySQL,involvedObject.name=ps-cluster1
+```
+
+Expected output
+
+```
+LAST SEEN   TYPE      REASON                     OBJECT                        MESSAGE
+10m         Warning   AsyncReplicationNotReady   perconaservermysql/ps-cluster1   ps-cluster1-mysql-1: [not_replicating]
+...
+```
+
+Alternatively, you can see events for a specific object in the output of `kubectl describe` command:
+
+```
+kubectl describe ps ps-cluster1
+```
+
+Expected output
+
+```
+Name:         ps-cluster1
+...
+Events:
+  Type     Reason                    Age                From           Message
+  ----     ------                    ----               ----           -------
+  Warning  AsyncReplicationNotReady  10m (x23 over 13m)    ps-controller  ps-cluster1-mysql-1: [not_replicating]
+...
+```
+
+Check `kubectl get events --help` to know about more options.
+
+Note
+
+It is important to note that events are stored in the [etcd](https://kubernetes.io/docs/concepts/overview/components/#etcd) for only 60 minutes. Ensure that events are checked within 60 minutes of the issue. Kubernetes cluster administrators might also use event exporters for storing the events.

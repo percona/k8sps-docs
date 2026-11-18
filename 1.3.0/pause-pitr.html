@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5532,7 +5532,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="pause-a-point-in-time-recovery">Pause a point-in-time recovery<a class="headerlink" href="#pause-a-point-in-time-recovery" title="Permanent link">¶</a></h1>
+<h1 id="pause-a-point-in-time-recovery">Pause a point-in-time recovery<a data-markdown-ignore class="headerlink" href="#pause-a-point-in-time-recovery" title="Permanent link">¶</a></h1>
 <p>To debug a <a href="backups-restore-pitr.html">point-in-time recovery</a>, pause it after the base backup is restored and before the binary logs are applied. Use this only for debugging, not for regular restores. If the recovery fails, see <a href="debug-backup-restore.html#point-in-time-recovery">Point-in-time recovery</a> in Troubleshoot backups and restores.</p>
 <p>The restore Job creates the <a href="datadir-special-files.html#sleep-forever"><code>sleep-forever</code></a> file on the restored data directory and waits until you remove it.</p>
 <ol>

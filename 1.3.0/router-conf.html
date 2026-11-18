@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5619,10 +5619,10 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="mysql-router-configuration">MySQL Router Configuration<a class="headerlink" href="#mysql-router-configuration" title="Permanent link">¶</a></h1>
+<h1 id="mysql-router-configuration">MySQL Router Configuration<a data-markdown-ignore class="headerlink" href="#mysql-router-configuration" title="Permanent link">¶</a></h1>
 <p><a href="https://dev.mysql.com/doc/mysql-router/8.0/en/">MySQL Router <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> is lightweight middleware that provides transparent routing between your application and back-end MySQL servers. <a href="architecture.html#components">MySQL Router is part of the Operator</a> and is deployed during the installation. MySQL Router can be used as an alternative to <a href="haproxy-conf.html">HAProxy based load balancing</a> when group replication between MySQL instances is turned on.</p>
 <p>To use the Router, enable it and make sure that HAProxy is disabled. </p>
-<h2 id="enable-mysql-router">Enable MySQL Router<a class="headerlink" href="#enable-mysql-router" title="Permanent link">¶</a></h2>
+<h2 id="enable-mysql-router">Enable MySQL Router<a data-markdown-ignore class="headerlink" href="#enable-mysql-router" title="Permanent link">¶</a></h2>
 <ol>
 <li>
 <p>Edit the <code>deploy/cr.yaml</code> file</p>
@@ -5655,7 +5655,7 @@ ps-cluster1   group-replication   ps-cluster1-router.default   ready   3        
 </details>
 </li>
 </ol>
-<h2 id="configure-mysql-router">Configure MySQL Router<a class="headerlink" href="#configure-mysql-router" title="Permanent link">¶</a></h2>
+<h2 id="configure-mysql-router">Configure MySQL Router<a data-markdown-ignore class="headerlink" href="#configure-mysql-router" title="Permanent link">¶</a></h2>
 <p>When enabled, the MySQL Router operates with the reasonable default settings and can be used in a variety of use cases such as high-availability and scalability.</p>
 <p>If you need to fine-tune the Router for the needs of your application and/or usage scenario, you can do this using the following methods:</p>
 <ul>
@@ -5664,7 +5664,7 @@ ps-cluster1   group-replication   ps-cluster1-router.default   ready   3        
 </ul>
 <p>To illustrate this, let’s override the verbosity level and set it to <code>INFO</code>.</p>
 <p>Before you start, check that you have <a href="#enable-mysql-router">enabled the MySQL Router</a> for the Operator. </p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div class="tabbed-labels"><label for="__tabbed_1_1">deploy/cr.yaml</label><label for="__tabbed_1_2">ConfigMap</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">deploy/cr.yaml</label><label for="__tabbed_1_2">ConfigMap</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>The <code>router.configuration</code> subsection of the <code>deploy.cr.yaml</code> file contains the MySQL Router configuration. </p>

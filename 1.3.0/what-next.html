@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5839,58 +5839,58 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="whats-next">What’s next?<a class="headerlink" href="#whats-next" title="Permanent link">¶</a></h1>
+<h1 id="whats-next">What’s next?<a data-markdown-ignore class="headerlink" href="#whats-next" title="Permanent link">¶</a></h1>
 <p>Congratulations! You’ve successfully completed the getting started guide. Your MySQL cluster is up and running. Now it’s time to prepare it for production use and learn the essential day-to-day operations.</p>
-<h2 id="immediate-next-steps">Immediate next steps<a class="headerlink" href="#immediate-next-steps" title="Permanent link">¶</a></h2>
+<h2 id="immediate-next-steps">Immediate next steps<a data-markdown-ignore class="headerlink" href="#immediate-next-steps" title="Permanent link">¶</a></h2>
 <p>These are the most important tasks to tackle right away:</p>
-<h3 id="1-set-up-automated-backups">1. Set up automated backups<a class="headerlink" href="#1-set-up-automated-backups" title="Permanent link">¶</a></h3>
+<h3 id="1-set-up-automated-backups">1. Set up automated backups<a data-markdown-ignore class="headerlink" href="#1-set-up-automated-backups" title="Permanent link">¶</a></h3>
 <p>You’ve created a single backup, but production workloads need automated backup schedules to protect your data continuously.</p>
 <ul>
 <li><a href="backups-scheduled.html">Schedule automatic backups</a> - Configure daily, weekly, or custom backup schedules with retention policies</li>
 <li><a href="backups-restore.html">Restore from a backup</a> - Learn how to restore your data when needed</li>
 </ul>
-<h3 id="2-create-application-users">2. Create application users<a class="headerlink" href="#2-create-application-users" title="Permanent link">¶</a></h3>
+<h3 id="2-create-application-users">2. Create application users<a data-markdown-ignore class="headerlink" href="#2-create-application-users" title="Permanent link">¶</a></h3>
 <p>Your cluster is currently using the root user. For production, you’ll want to create dedicated users for your applications with appropriate permissions.</p>
 <ul>
 <li><a href="users.html">Create application and system users</a> - Set up unprivileged users for your applications with fine-grained access control</li>
 </ul>
-<h3 id="3-enable-high-availability">3. Enable high availability<a class="headerlink" href="#3-enable-high-availability" title="Permanent link">¶</a></h3>
+<h3 id="3-enable-high-availability">3. Enable high availability<a data-markdown-ignore class="headerlink" href="#3-enable-high-availability" title="Permanent link">¶</a></h3>
 <p>Ensure your cluster can survive node failures by distributing pods across different nodes.</p>
 <ul>
 <li><a href="constraints.html">Configure anti-affinity and tolerations</a> - Control pod placement to prevent single points of failure</li>
 </ul>
-<h2 id="production-preparation">Production preparation<a class="headerlink" href="#production-preparation" title="Permanent link">¶</a></h2>
+<h2 id="production-preparation">Production preparation<a data-markdown-ignore class="headerlink" href="#production-preparation" title="Permanent link">¶</a></h2>
 <p>Once you’ve covered the basics, prepare your cluster for production workloads:</p>
-<h3 id="security">Security<a class="headerlink" href="#security" title="Permanent link">¶</a></h3>
+<h3 id="security">Security<a data-markdown-ignore class="headerlink" href="#security" title="Permanent link">¶</a></h3>
 <ul>
 <li><a href="TLS.html">Enable TLS/SSL encryption</a> - Secure connections between your applications and the database</li>
 <li><a href="encryption.html">Configure data-at-rest encryption</a> - Protect your data at rest with encryption keys</li>
 <li><a href="backups-encrypted.html">Configure encrypted backups</a> - Protect backup files stored in cloud object storage</li>
 </ul>
-<h3 id="configure-access-to-your-cluster-for-external-applications">Configure access to your cluster for external applications<a class="headerlink" href="#configure-access-to-your-cluster-for-external-applications" title="Permanent link">¶</a></h3>
+<h3 id="configure-access-to-your-cluster-for-external-applications">Configure access to your cluster for external applications<a data-markdown-ignore class="headerlink" href="#configure-access-to-your-cluster-for-external-applications" title="Permanent link">¶</a></h3>
 <ul>
 <li><a href="haproxy-conf.html">Configure HAProxy</a> or <a href="router-conf.html">MySQL Router</a> - Customize load balancing behavior</li>
 <li><a href="expose.html">Expose your cluster</a> - Configure external access if your applications need it</li>
 </ul>
-<h3 id="performance-and-reliability">Performance and reliability<a class="headerlink" href="#performance-and-reliability" title="Permanent link">¶</a></h3>
+<h3 id="performance-and-reliability">Performance and reliability<a data-markdown-ignore class="headerlink" href="#performance-and-reliability" title="Permanent link">¶</a></h3>
 <ul>
 <li><a href="scaling.html">Scale your cluster</a> - Add more nodes for better performance or increase resources for existing nodes</li>
 <li><a href="options.html">Configure MySQL options</a> - Tune MySQL settings for your workload requirements</li>
 <li><a href="autoconfig.html">Let the Operator tune MySQL automatically</a> - Calculate a full configuration from your cluster’s resources and workload instead of tuning by hand</li>
 <li><a href="backups-fine-tune.html">Fine-tune backups and restores</a> - Optimize backup performance and customize restore operations</li>
 </ul>
-<h3 id="monitoring-and-observability">Monitoring and observability<a class="headerlink" href="#monitoring-and-observability" title="Permanent link">¶</a></h3>
+<h3 id="monitoring-and-observability">Monitoring and observability<a data-markdown-ignore class="headerlink" href="#monitoring-and-observability" title="Permanent link">¶</a></h3>
 <ul>
 <li><a href="monitoring.html">Monitor with Percona Monitoring and Management (PMM)</a> - Set up comprehensive monitoring, alerts, and performance insights beyond the basic setup</li>
 <li><a href="persistent-logging.html">Persistent logging</a> - Retain and rotate logs for troubleshooting.</li>
 </ul>
-<h2 id="advanced-operations">Advanced operations<a class="headerlink" href="#advanced-operations" title="Permanent link">¶</a></h2>
+<h2 id="advanced-operations">Advanced operations<a data-markdown-ignore class="headerlink" href="#advanced-operations" title="Permanent link">¶</a></h2>
 <p>As you become more comfortable with the Operator, explore these advanced features:</p>
 <ul>
 <li><a href="sidecar.html">Add sidecar containers</a> - Extend functionality with custom containers</li>
 <li><a href="cluster-wide.html">Multi-namespace deployment</a> - Configure Operator-wide or namespace-specific deployments</li>
 </ul>
-<h2 id="learn-more">Learn more<a class="headerlink" href="#learn-more" title="Permanent link">¶</a></h2>
+<h2 id="learn-more">Learn more<a data-markdown-ignore class="headerlink" href="#learn-more" title="Permanent link">¶</a></h2>
 <ul>
 <li><a href="architecture.html">Understand the architecture</a> - Deep dive into how the Operator works and its components</li>
 <li><a href="operator.html">Review all configuration options</a> - Complete reference for Custom Resource settings</li>

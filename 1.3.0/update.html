@@ -140,7 +140,7 @@ Server for MySQL to newer versions.">
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5676,7 +5676,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   
 
 
-<h1 id="upgrade-database-and-operator">Upgrade Database and Operator<a class="headerlink" href="#upgrade-database-and-operator" title="Permanent link">¶</a></h1>
+<h1 id="upgrade-database-and-operator">Upgrade Database and Operator<a data-markdown-ignore class="headerlink" href="#upgrade-database-and-operator" title="Permanent link">¶</a></h1>
 <p>You can upgrade Percona Operator for MySQL based on Percona
 Server for MySQL to newer versions. </p>
 <p>The upgrade process consists of these steps:</p>
@@ -5686,9 +5686,9 @@ Server for MySQL to newer versions. </p>
 <li>upgrade the database (Percona Server for MySQL)</li>
 </ul>
 <p>To apply a security build for the Operator version you already run, see <a href="security-builds.html">Use Operator security builds</a>.</p>
-<h2 id="update-scenarios">Update scenarios<a class="headerlink" href="#update-scenarios" title="Permanent link">¶</a></h2>
+<h2 id="update-scenarios">Update scenarios<a data-markdown-ignore class="headerlink" href="#update-scenarios" title="Permanent link">¶</a></h2>
 <p>You can either upgrade both the Operator and the database, or you can upgrade only the database. To decide which scenario to choose, read on.</p>
-<h3 id="full-upgrade-crd-operator-and-the-database">Full upgrade (CRD, Operator, and the database)<a class="headerlink" href="#full-upgrade-crd-operator-and-the-database" title="Permanent link">¶</a></h3>
+<h3 id="full-upgrade-crd-operator-and-the-database">Full upgrade (CRD, Operator, and the database)<a data-markdown-ignore class="headerlink" href="#full-upgrade-crd-operator-and-the-database" title="Permanent link">¶</a></h3>
 <p>When to use this scenario:</p>
 <ul>
 <li>The new Operator version has changes that are required for new features of the database to work</li>
@@ -5696,7 +5696,7 @@ Server for MySQL to newer versions. </p>
 <li>Compatibility improvements between the Operator and the database require synchronized updates.</li>
 </ul>
 <p>When going on with this scenario, make sure to test it in a staging or testing environment first. Upgrading the Operator may cause performance degradation.</p>
-<h3 id="upgrade-only-the-database">Upgrade only the database<a class="headerlink" href="#upgrade-only-the-database" title="Permanent link">¶</a></h3>
+<h3 id="upgrade-only-the-database">Upgrade only the database<a data-markdown-ignore class="headerlink" href="#upgrade-only-the-database" title="Permanent link">¶</a></h3>
 <p>When to use this scenario:</p>
 <ul>
 <li>The new version of the database has new features or fixes that are not related to the Operator or other components of your infrastructure</li>
@@ -5707,7 +5707,7 @@ Server for MySQL to newer versions. </p>
 <li>Check that the current Operator version supports the new database version.</li>
 <li>Some features may require an Operator upgrade later for full functionality.</li>
 </ul>
-<h2 id="update-strategies">Update strategies<a class="headerlink" href="#update-strategies" title="Permanent link">¶</a></h2>
+<h2 id="update-strategies">Update strategies<a data-markdown-ignore class="headerlink" href="#update-strategies" title="Permanent link">¶</a></h2>
 <p>The Operator supports the <em>Smart Update</em> strategy. This is the automated way to update the database cluster. The Operator controls how objects are updated. It restarts Pods in a specific order, with the primary instance updated last to avoid connection issues until the whole cluster is updated to the new settings.</p>
 <p>This update method applies during database upgrades and when making changes like updating a ConfigMap, rotating passwords, or changing resource values. </p>
 <hr>
