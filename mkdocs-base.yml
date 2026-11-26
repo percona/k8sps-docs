@@ -1,7 +1,7 @@
 # MkDocs configuration
 # Used as base - look for .yml files with INHERIT
 site_name: Percona Operator for MySQL based on Percona Server for MySQL
-site_description: Documentation
+site_description: "Percona Operator for MySQL based on Percona Server for MySQL, a Kubernetes operator that automates deployment, scaling, backups, updates and failover of MySQL clusters with group replication or asynchronous replication"
 site_author: Percona LLC
 site_url: ""
 copyright: Percona LLC and/or its affiliates, &#169; 2009 - 2026
