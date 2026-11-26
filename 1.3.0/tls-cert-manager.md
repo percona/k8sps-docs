@@ -15,14 +15,16 @@ You can use cert-manager in these ways:
 
 If cert-manager is not installed or not ready and you have not set `tls.issuerConf`, the Operator falls back to its built-in certificate generation.
 
-See [Transport Layer Security (TLS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.html) for a comparison of cert-manager integration with manual certificate generation.
+*Image: image*
+
+See [Transport Layer Security (TLS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md) for a comparison of cert-manager integration with manual certificate generation.
 
 ## Prerequisites
 
 To use cert-manager with the Operator, ensure the following:
 
 1. You have deployed the Operator. Check if it runs with `kubectl get deploy -n <namespace>`.
-1. Your Custom Resource does **not** already include a user-provided TLS Secret in [`sslSecretName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#sslsecretname). If that Secret exists and was created by you, the Operator uses it and does not create cert-manager resources.
+1. Your Custom Resource does **not** already include a user-provided TLS Secret in [`sslSecretName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#sslsecretname). If that Secret exists and was created by you, the Operator uses it and does not create cert-manager resources.
 
 ## Install the cert-manager
 
@@ -30,7 +32,7 @@ The cert-manager requires its own namespace. By default, this is the `cert-manag
 
 **with kubectl**
 
-```
+```bash
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.21.2/cert-manager.yaml
 ```
 
@@ -40,14 +42,14 @@ This creates the dedicated `cert-manager` namespace and installs cert-manager De
 
 1. Add the Helm chart and update the repositories:
 
-   ```
+   ```bash
    helm repo add jetstack https://charts.jetstack.io --force-update
    helm repo update
    ```
 
 1. Install cert-manager with default parameters:
 
-   ```
+   ```bash
    helm install cert-manager jetstack/cert-manager \
      --namespace cert-manager \
      --create-namespace \
@@ -57,20 +59,20 @@ This creates the dedicated `cert-manager` namespace and installs cert-manager De
 
 Verify that cert-manager is running:
 
-```
+```bash
 kubectl get pods -n cert-manager
 ```
 
 Expected output
 
-```
+```text
 NAME                                       READY   STATUS    RESTARTS   AGE
 cert-manager-7d59dd4888-tmjqq              1/1     Running   0          3m8s
 cert-manager-cainjector-85899d45d9-8ncw9   1/1     Running   0          3m8s
 cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
 ```
 
-At this point you are ready to [deploy a Percona Server for MySQL cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.html).
+At this point you are ready to [deploy a Percona Server for MySQL cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.md).
 
 See the sections below for how you can fine-tune the Operator and cert-manager when managing TLS for your cluster:
 
@@ -80,7 +82,7 @@ Once you create the database with the Operator and cert-manager is running, the 
 
 - a self-signed CA `Issuer` (`<cluster-name>-ps-ca-issuer`) and CA `Certificate` (`<cluster-name>-ca-cert`) in the database namespace,
 - a signing `Issuer` (`<cluster-name>-ps-issuer`) that references the CA,
-- a leaf TLS `Certificate` (`<cluster-name>-ssl`) whose Secret is stored as [`sslSecretName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#sslsecretname). The default name is `<cluster-name>-ssl`.
+- a leaf TLS `Certificate` (`<cluster-name>-ssl`) whose Secret is stored as [`sslSecretName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#sslsecretname). The default name is `<cluster-name>-ssl`.
 
 cert-manager issues short-lived certificates and renews them on schedule. The default certificate duration is 90 days. The CA certificate is valid for 1 year.
 
@@ -96,7 +98,7 @@ The Operator does not create or manage `ClusterIssuer` resources. You must creat
 
 1. Edit the `deploy/cr.yaml` and set `tls.issuerConf` to the existing `ClusterIssuer`:
 
-   ```
+   ```yaml
    spec:
    tls:
        issuerConf:
@@ -109,7 +111,7 @@ The Operator does not create or manage `ClusterIssuer` resources. You must creat
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -121,9 +123,9 @@ You can also add `tls.issuerConf` to a running cluster. The Operator updates the
 
 ## Use an existing namespace-scoped Issuer
 
-To use a cert-manager `Issuer` that already exists in the database namespace, set [`tls.issuerConf.name`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#tlsissuerconfname) to that issuer’s name. You can leave `kind` at the default value (`Issuer`).
+To use a cert-manager `Issuer` that already exists in the database namespace, set [`tls.issuerConf.name`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#tlsissuerconfname) to that issuer’s name. You can leave `kind` at the default value (`Issuer`).
 
-```
+```yaml
 spec:
   tls:
     issuerConf:
@@ -136,9 +138,9 @@ When `tls.issuerConf` is set, the Operator creates only the leaf TLS `Certificat
 
 ## Add extra domains to the certificate
 
-Use [`tls.SANs`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#tlssans) to add extra DNS names to the certificate that cert-manager issues. This is useful when clients connect through hostnames that are not part of the default Service DNS names.
+Use [`tls.SANs`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#tlssans) to add extra DNS names to the certificate that cert-manager issues. This is useful when clients connect through hostnames that are not part of the default Service DNS names.
 
-```
+```yaml
 spec:
   tls:
     SANs:
@@ -155,7 +157,7 @@ After the cluster is created, inspect the cert-manager resources:
 
 **Namespace-scoped Issuer (default)**
 
-```
+```bash
 # List Issuers
 kubectl get issuers -n <namespace>
 
@@ -170,7 +172,7 @@ The Operator creates Issuers and Certificates in the same namespace as the clust
 
 **Existing ClusterIssuer**
 
-```
+```bash
 # List cluster-scoped issuers
 kubectl get clusterissuer
 
@@ -187,7 +189,7 @@ If the cluster previously used the default Operator-managed issuers (`<cluster-n
 
 **Existing Issuer**
 
-```
+```bash
 # List Issuers
 kubectl get issuers -n <namespace>
 
@@ -199,6 +201,6 @@ Your `Issuer` remains in the database namespace. The Operator creates the `<clus
 
 If the cluster previously used the default Operator-managed issuers, `<cluster-name>-ps-ca-issuer`, `<cluster-name>-ps-issuer`, and `<cluster-name>-ca-cert` remain in the namespace. The Operator does not delete them when you switch to an external issuer.
 
-You can also [check certificates for expiration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.html#check-your-certificates-for-expiration) at any time.
+You can also [check certificates for expiration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.md#check-your-certificates-for-expiration) at any time.
 
-For more details on all cert-manager-related Custom Resource options, see the [`tls.issuerConf` options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-issuerconf-section) in the Operator spec reference.
+For more details on all cert-manager-related Custom Resource options, see the [`tls.issuerConf` options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-issuerconf-section) in the Operator spec reference.

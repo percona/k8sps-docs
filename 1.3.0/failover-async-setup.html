@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5674,7 +5674,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><code>timeout</code> - How long the cluster tries to recover transactions that exist only on the failed primary. The time covers every retry and starts at the first attempt for that primary.</li>
 <li><code>onTimeout</code> - What happens when timeout expires. The values are <code>Abort</code> and <code>ForceWithPossibleDataLoss</code>. See <a href="failover-async.html#understand-failover-timeout-and-recovery-policy">Understand failover timeout and recovery policy</a> to learn more</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">failover</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1h</span>
@@ -5683,21 +5683,21 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 <li>
 <p>Apply the configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 </ol>
 <h2 id="set-the-replication-lag-limit-for-a-planned-switchover">Set the replication lag limit for a planned switchover<a data-markdown-ignore class="headerlink" href="#set-the-replication-lag-limit-for-a-planned-switchover" title="Permanent link">¶</a></h2>
 <p>A planned switchover is allowed only when the candidate replica is close enough to the primary. Orchestrator rejects a candidate whose replication lag exceeds the <code>ReasonableMaintenanceReplicationLagSeconds</code> setting. The default is 120 seconds, which is twice the <code>ReasonableReplicationLagSeconds</code> value of 60 seconds. For how the switchover works, see <a href="failover-async.html#promote-the-candidate">Promote the candidate</a>.</p>
 <p>To change the limit, set <code>ReasonableMaintenanceReplicationLagSeconds</code> in the <code>spec.orchestrator.configuration</code> key. The value is a JSON object passed as a string:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="s">'{"ReasonableMaintenanceReplicationLagSeconds":</span><span class="nv"> </span><span class="s">180}'</span>
 </code></pre></div>
 <p>Apply the change with <code>kubectl apply -f deploy/cr.yaml -n &lt;namespace&gt;</code>. Updating <code>orchestrator.configuration</code> triggers a rolling restart of the Orchestrator Pods. See <a href="operator.html#orchestratorconfiguration"><code>orchestrator.configuration</code></a> for the full description of the option.</p>
 <h2 id="see-whether-a-failover-is-blocked">See whether a failover is blocked<a data-markdown-ignore class="headerlink" href="#see-whether-a-failover-is-blocked" title="Permanent link">¶</a></h2>
 <p>The Operator reports whether the cluster currently has a writable primary in the <code>AsyncFailoverBlocked</code> condition:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[?(@.type=="AsyncFailoverBlocked")]}{.status}{": "}{.reason}{"\n"}{end}'</span>
 </code></pre></div>
 <p>A <code>status: "True"</code> with <code>reason: NoWritablePrimary</code> means writes are currently blocked. See <a href="cr-statuses.html#conditions">Conditions</a> and <a href="cr-statuses.html#events">Events</a> for the full list of condition and event reasons this feature adds.</p>
@@ -5747,7 +5747,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Orchestrator retries a blocked recovery every few seconds. After one <code>FailoverWaiting</code>, <code>FailoverBlocked</code>, <code>FailoverFailed</code> or <code>FailoverUnprotected</code> event for a primary, the same event stays quiet for five minutes. <code>FailoverForced</code> is recorded each time.</p>
 <h2 id="force-a-promotion">Force a promotion<a data-markdown-ignore class="headerlink" href="#force-a-promotion" title="Permanent link">¶</a></h2>
 <p>When the old primary’s binary logs cannot be recovered, and you accept losing the transactions that never reached a replica, annotate the cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>percona.com/force-promote-with-possible-data-loss<span class="o">=</span>&lt;value&gt;
 </code></pre></div>
 <p><code>&lt;value&gt;</code> is one of the following:</p>

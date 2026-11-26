@@ -6,7 +6,7 @@
 
 Export your namespace as an environment variable to simplify the configuration:
 
-```
+```bash
 export NAMESPACE=<my-namespace>
 ```
 
@@ -16,26 +16,26 @@ The upgrade includes the following steps.
 
 1. Update the Custom Resource Definition for the Operator and the Role-based access control. Take the latest versions from the official repository on GitHub with the following commands:
 
-   ```
+   ```bash
    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/crd.yaml
    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/rbac.yaml
    ```
 
-1. Next, update the Percona Server for MySQL Operator Deployment in Kubernetes by changing the container image of the Operator Pod to the latest version. Find the image name for the current Operator release [in the list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.html). Use the following command to update the Operator to the `1.3.0` version:
+1. Next, update the Percona Server for MySQL Operator Deployment in Kubernetes by changing the container image of the Operator Pod to the latest version. Find the image name for the current Operator release [in the list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.md). Use the following command to update the Operator to the `1.3.0` version:
 
    **For single-namespace deployment**
 
    Use the following command if you deploy both the Operator and the database cluster in the same namespace:
 
-   ```
+   ```bash
    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/operator.yaml -n $NAMESPACE
    ```
 
    **For cluster-wide deployment**
 
-   If you deployed the Operator to manage several clusters in different namespaces (the so-called [cluster-wide mode](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.html)), use the following command:
+   If you deployed the Operator to manage several clusters in different namespaces (the so-called [cluster-wide mode](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md)), use the following command:
 
-   ```
+   ```bash
    kubectl apply --server-side -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/cw-operator.yaml -n $NAMESPACE
    ```
 
@@ -43,7 +43,7 @@ The upgrade includes the following steps.
 
 1. The deployment rollout will be automatically triggered. You can track the rollout process in real time with the `kubectl rollout status` command with the name of your cluster:
 
-   ```
+   ```bash
    kubectl rollout status deployments percona-server-mysql-operator -n $NAMESPACE
    ```
 
@@ -59,14 +59,14 @@ The upgrade includes the following steps.
 
 Before updating the database, complete the following preparation steps:
 
-1. Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the [Operator upgrade guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.html).
+1. Check the version of the Operator you have in your Kubernetes environment. If you need to update it, refer to the [Operator upgrade guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.md).
 
-1. Check the [Custom Resource](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html) manifest configuration to ensure the following:
+1. Check the [Custom Resource](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md) manifest configuration to ensure the following:
 
    - `spec.updateStrategy` option is set to `SmartUpdate`
    - `spec.upgradeOptions.apply` option is set to `Never` or `Disabled` (this means that the Operator will not carry on upgrades automatically)
 
-   ```
+   ```yaml
    ...
    spec:
      updateStrategy: SmartUpdate
@@ -87,13 +87,13 @@ Before updating the database, complete the following preparation steps:
 
 #### If you upgrade an asynchronous cluster
 
-Version 1.3.0 requires backups for the [failover on asynchronous clusters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html). After the Operator upgrade, reconciliation stops because status updates fail validation:
+Version 1.3.0 requires backups for the [failover on asynchronous clusters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md). After the Operator upgrade, reconciliation stops because status updates fail validation:
 
-```
+```text
 PerconaServerMySQL.ps.percona.com "ps-cluster1" is invalid: spec: Invalid value: "object": no such key: unsafeFlags evaluating rule: Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
 ```
 
-Before you upgrade, [enable and configure backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html). To let reconciliation continue without backups, set [`unsafeFlags.asyncFailoverWithPossibleDataLoss`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#unsafeflagsasyncfailoverwithpossibledataloss) to `true`. Make sure you understand the tradeoffs.
+Before you upgrade, [enable and configure backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md). To let reconciliation continue without backups, set [`unsafeFlags.asyncFailoverWithPossibleDataLoss`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#unsafeflagsasyncfailoverwithpossibledataloss) to `true`. Make sure you understand the tradeoffs.
 
 Without backups, a failover cannot recover transactions that remain on the old primary.
 
@@ -101,7 +101,7 @@ Without backups, a failover cannot recover transactions that remain on the old p
 
 Update the Custom Resource, the database, backup, proxy and PMM Client image names with a newer version tag. This step ensures all new features and improvements of the latest release work well within your environment.
 
-Find the image names [in the list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.html).
+Find the image names [in the list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.md).
 
 We recommend to update the PMM Server **before** the upgrade of PMM Client. If you haven’t updated your PMM Server yet, exclude PMM Client from the list of images to update.
 
@@ -117,7 +117,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
 
 - **With PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -134,7 +134,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
 
 - **Without PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -150,7 +150,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
 
 - **With Binlog Server**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -167,7 +167,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
      }}'
   ```
 
-  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#enable-binlog-collection).
+  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#enable-binlog-collection).
 
 **Group replication with HAProxy**
 
@@ -175,7 +175,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
 
 - **With PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -191,7 +191,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
 
 - **Without PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -206,7 +206,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
 
 - **With Binlog Server**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -222,7 +222,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
      }}'
   ```
 
-  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#enable-binlog-collection).
+  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#enable-binlog-collection).
 
 **Group replication with MySQL Router**
 
@@ -230,7 +230,7 @@ Group replication with MySQL Router uses MySQL Router only. It does not use HAPr
 
 - **With PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -246,7 +246,7 @@ Group replication with MySQL Router uses MySQL Router only. It does not use HAPr
 
 - **Without PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -261,7 +261,7 @@ Group replication with MySQL Router uses MySQL Router only. It does not use HAPr
 
 - **With Binlog Server**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -277,7 +277,7 @@ Group replication with MySQL Router uses MySQL Router only. It does not use HAPr
      }}'
   ```
 
-  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#enable-binlog-collection).
+  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#enable-binlog-collection).
 
 **MySQL 8.0**
 
@@ -287,7 +287,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
 
 - **With PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -304,7 +304,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
 
 - **Without PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -320,7 +320,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
 
 - **With Binlog Server**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -337,7 +337,7 @@ Asynchronous replication uses HAProxy and Orchestrator. It does not use MySQL Ro
      }}'
   ```
 
-  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#enable-binlog-collection).
+  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#enable-binlog-collection).
 
 **Group replication with HAProxy**
 
@@ -345,7 +345,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
 
 - **With PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -361,7 +361,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
 
 - **Without PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -376,7 +376,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
 
 - **With Binlog Server**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -392,7 +392,7 @@ Group replication with HAProxy uses HAProxy only. It does not use MySQL Router o
      }}'
   ```
 
-  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#enable-binlog-collection).
+  After the upgrade, [enable point-in-time binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#enable-binlog-collection).
 
 **Group replication with MySQL Router**
 
@@ -400,7 +400,7 @@ Group replication with MySQL Router uses MySQL Router only. It does not use HAPr
 
 - **With PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -416,7 +416,7 @@ Group replication with MySQL Router uses MySQL Router only. It does not use HAPr
 
 - **Without PMM Client**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",
@@ -431,7 +431,7 @@ Group replication with MySQL Router uses MySQL Router only. It does not use HAPr
 
 - **With Binlog Server**
 
-  ```
+  ```bash
   kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
          "crVersion":"1.3.0",

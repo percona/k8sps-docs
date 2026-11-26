@@ -2,7 +2,7 @@
 
 # Percona Operator for MySQL 0.10.0 (2025-06-06)
 
-[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.10.0 of the Percona Operator for MySQL is still **a tech preview release**, and it is **not recommended for production environments**.
 
@@ -17,14 +17,14 @@ The Operator is natively integrated with PMM 3, enabling you to monitor the heal
 Note that the support for PMM2 is dropped. This means you must do the following to monitor your deployment further:
 
 - transition to PMM 3 if you had PMM 2 to. The PMM documentation explains how to upgrade.
-- run the Operator version 0.10.0. Check the [Upgrade the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.html) tutorial for the update steps.
+- run the Operator version 0.10.0. Check the [Upgrade the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.md) tutorial for the update steps.
 - ensure that PMM 3 Server version must be equal to or newer than the PMM Client.
 
 ### Support for deployments on OpenShift
 
 OpenShift is a fully integrated Kubernetes-based platform enhanced with automation, security, and developer-friendly tools. You can now deploy Percona Operator for MySQL based on Percona Server for MySQL on OpenShift and benefit from its portability across hybrid clouds. The Operator also fully supports the Red Hat OpenShift lifecycle which ensures its security and reliability.
 
-Follow our [installation guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.html) to install the Operator on OpenShift.
+Follow our [installation guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.md) to install the Operator on OpenShift.
 
 ### Added labels to identify the version of the Operator
 

@@ -4,7 +4,7 @@
 
 To update the Operator, you need to update the Custom Resource Definition (CRD) and the Operator deployment. Also we recommend to update the Kubernetes database cluster configuration by updating the Custom Resource and the database components to the latest version. This step ensures that all new features that come with the Operator release work in your environment.
 
-This page covers how to upgrade to a new Operator version. If you wish to stay on your current version and only apply security fixes, see [Use Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.html).
+This page covers how to upgrade to a new Operator version. If you wish to stay on your current version and only apply security fixes, see [Use Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.md).
 
 ## Considerations for Kubernetes Cluster versions and upgrades
 
@@ -12,7 +12,7 @@ This page covers how to upgrade to a new Operator version. If you wish to stay o
 
 1. Plan your Kubernetes cluster or Operator upgrades with version compatibility in mind.
 
-   The Operator is supported and tested on specific Kubernetes versions. Always refer to the Operator’s [release notes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html) to verify the supported Kubernetes platforms.
+   The Operator is supported and tested on specific Kubernetes versions. Always refer to the Operator’s [release notes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md) to verify the supported Kubernetes platforms.
 
    Note that while the Operator might run on unsupported or untested Kubernetes versions, this is not recommended. Doing so can cause various issues, and in some cases, the Operator may fail if deprecated API versions have been removed.
 
@@ -34,7 +34,7 @@ This page covers how to upgrade to a new Operator version. If you wish to stay o
 
    If the current Operator version and the version you want to upgrade to differ by more than one minor version, you need to upgrade step by step. For example, if your current version is `1.0.0` and you want to move to `1.2.0`, first upgrade to `1.1.0`, then to `1.2.0`.
 
-   Check the [Release notes index](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html) for the list of the Operator versions.
+   Check the [Release notes index](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md) for the list of the Operator versions.
 
 1. CRD supports the **last 3 minor versions of the Operator**. This means it is compatible with the newest Operator version and the two older minor versions.
 
@@ -48,4 +48,4 @@ This page covers how to upgrade to a new Operator version. If you wish to stay o
 
 Choose the upgrade instructions below based on how you originally deployed the Operator:
 
-[Manual upgrade](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-manual.html) [Upgrade via Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-helm.html) [Upgrade on OpenShift](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-openshift.html)
+[Manual upgrade](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-manual.md) [Upgrade via Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-helm.md) [Upgrade on OpenShift](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-openshift.md)

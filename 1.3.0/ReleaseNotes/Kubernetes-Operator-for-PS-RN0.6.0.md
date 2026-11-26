@@ -8,13 +8,13 @@
 
 - **Installation**
 
-  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.6.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
 ## Highlights
 
-- The [Smart Upgrade functionality](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-db.html#automated-upgrade) allows users to automatically get the latest version of the software compatible with the Operator and apply it safely
+- The [Smart Upgrade functionality](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-db.md#automated-upgrade) allows users to automatically get the latest version of the software compatible with the Operator and apply it safely
 - The role of the HAProxy load balancer, which was previously used for asynchronous replication between MySQL instances, has been extended. Now HAProxy can also be used with group replication as an alternative to MySQL Router
 - Starting from this release, semi-synchronous replication is not supported by the Operator in favor of using safer options: either group replication, or asynchronous replication (see [this blog post](https://www.percona.com/blog/face-to-face-with-semi-synchronous-replication/) for details on how asynchronous replication may cause data loss in case of a node crash)
 

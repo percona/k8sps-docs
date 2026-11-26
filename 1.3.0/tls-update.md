@@ -12,7 +12,7 @@ How your TLS certificates are updated depends on how they were created:
 
 Export the namespace, cluster name, and TLS Secret name. Replace the placeholders with your values. If you set `spec.sslSecretName`, use that name for `SSL_SECRET_NAME`:
 
-```
+```bash
 export NAMESPACE=<namespace>
 export CLUSTER_NAME=<cluster-name>
 export SSL_SECRET_NAME=${CLUSTER_NAME}-ssl
@@ -20,17 +20,17 @@ export SSL_SECRET_NAME=${CLUSTER_NAME}-ssl
 
 ## Check your certificates for expiration
 
-If you [use cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html):
+If you [use cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md):
 
 1. Check the certificate and Secret names (`ps-cluster1-ssl` and `ps-cluster1-ca-cert` by default):
 
-   ```
+   ```bash
    kubectl get certificate -n $NAMESPACE
    ```
 
    Sample output
 
-   ```
+   ```text
    ps-cluster1-ca-cert   True    ps-cluster1-ca-cert   45m
    ps-cluster1-ssl       True    ps-cluster1-ssl       43m
    ```
@@ -39,21 +39,21 @@ If you [use cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.
 
    If the Operator manages issuers in the database namespace:
 
-   ```
+   ```bash
    kubectl get issuer -n $NAMESPACE
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME                       READY   AGE
    ps-cluster1-ps-ca-issuer   True    40m
    ps-cluster1-ps-issuer      True    38m
    ```
 
-   If you [use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html#use-an-existing-clusterissuer):
+   If you [use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-clusterissuer):
 
-   ```
+   ```bash
    kubectl get clusterissuer
    ```
 
@@ -61,7 +61,7 @@ If you [use cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.
 
    If you don’t use cert-manager, list your secrets:
 
-   ```
+   ```bash
    kubectl get secrets -n $NAMESPACE
    ```
 
@@ -69,7 +69,7 @@ If you [use cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.
 
 1. Use the following command to find out the certificates validity dates, substituting Secret names if necessary:
 
-   ```
+   ```bash
    {
    kubectl get secret/${CLUSTER_NAME}-ca-cert -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -noout -dates
    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode | openssl x509 -noout -dates
@@ -78,7 +78,7 @@ If you [use cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.
 
    Sample output
 
-   ```
+   ```text
    notBefore=Nov  7 10:54:00 2025 GMT
    notAfter=Nov  7 10:54:00 2026 GMT
    ```
@@ -97,25 +97,25 @@ To force a renewal before expiry, refer to the [cert-manager renewal documentati
 
 If you created the certificates yourself, replace only the leaf in the existing Secret. Keep `ca.crt` unchanged.
 
-You need the current CA certificate **and** the CA private key to sign a new leaf. The TLS Secret stores the CA certificate as `ca.crt`. It does not store the CA private key. Use the `ca-key.pem` file you saved when you [generated the CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.html).
+You need the current CA certificate **and** the CA private key to sign a new leaf. The TLS Secret stores the CA certificate as `ca.crt`. It does not store the CA private key. Use the `ca-key.pem` file you saved when you [generated the CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.md).
 
 1. Extract the current CA certificate from the Secret. You put this same file back in the Secret later so the CA does not change:
 
-   ```
+   ```bash
    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode > ca.pem
    ```
 
 1. Copy your saved `ca-key.pem` into the same directory as `ca.pem`. Confirm both files are present:
 
-   ```
+   ```bash
    ls ca.pem ca-key.pem
    ```
 
-1. Generate a new server certificate (`server.pem`) and key (`server-key.pem`) signed by that CA. Do not create a new CA. Use the server certificate command in [Generate certificates manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.html).
+1. Generate a new server certificate (`server.pem`) and key (`server-key.pem`) signed by that CA. Do not create a new CA. Use the server certificate command in [Generate certificates manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.md).
 
 1. Apply the new leaf to the TLS Secret:
 
-   ```
+   ```bash
    kubectl create secret generic ${SSL_SECRET_NAME} \
    --from-file=tls.crt=server.pem \
    --from-file=tls.key=server-key.pem \
@@ -129,7 +129,7 @@ To confirm the reload:
 
 1. List MySQL Pod unique identifiers (UIDs) before you apply the Secret and again after. The names and UIDs stay the same:
 
-   ```
+   ```bash
    kubectl get pods -n $NAMESPACE \
      -l app.kubernetes.io/instance=${CLUSTER_NAME},app.kubernetes.io/name=mysql \
      -o custom-columns=NAME:.metadata.name,UID:.metadata.uid --sort-by=.metadata.name
@@ -137,7 +137,7 @@ To confirm the reload:
 
 1. Check the certificate start date that `mysqld` currently serves. Repeat for each MySQL Pod. The date changes after the reload:
 
-   ```
+   ```bash
    kubectl exec -n $NAMESPACE ${CLUSTER_NAME}-mysql-0 -c mysql -- \
      bash -c 'mysql -uroot -p"$(cat /etc/mysql/mysql-users-secret/root)" -NB -e "SHOW GLOBAL STATUS LIKE \"Ssl_server_not_before\""'
    ```
@@ -148,11 +148,11 @@ Use this procedure when you replace the CA, not only the server certificate.
 
 If the current certificates are still valid, follow these steps. For already expired certificates, see [Replace expired certificates](#replace-expired-certificates).
 
-1. Generate a new CA certificate (`ca.pem`), a new TLS certificate (`server.pem`), and a key for it (`server-key.pem`). See [Generate certificates manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.html).
+1. Generate a new CA certificate (`ca.pem`), a new TLS certificate (`server.pem`), and a key for it (`server-key.pem`). See [Generate certificates manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.md).
 
 1. Get the current CA (`ca.pem.old`) and TLS (`tls.pem.old`) certificates and the TLS certificate key (`tls.key.old`):
 
-   ```
+   ```bash
    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.ca\.crt}' | base64 --decode > ca.pem.old
    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.pem.old
    kubectl get secret/${SSL_SECRET_NAME} -n $NAMESPACE -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key.old
@@ -160,13 +160,13 @@ If the current certificates are still valid, follow these steps. For already exp
 
 1. Combine the new and current CA certificates into a `ca.pem.combined` file:
 
-   ```
+   ```bash
    cat ca.pem ca.pem.old > ca.pem.combined
    ```
 
 1. Create a new Secrets object with the *old* TLS certificate (`tls.pem.old`) and key (`tls.key.old`), but a *new combined* CA (`ca.pem.combined`):
 
-   ```
+   ```bash
    kubectl create secret generic ${SSL_SECRET_NAME} \
    --from-file=tls.crt=tls.pem.old \
    --from-file=tls.key=tls.key.old \
@@ -178,7 +178,7 @@ If the current certificates are still valid, follow these steps. For already exp
 
 1. Create a new Secrets object again. This time use a new TLS certificate (`server.pem`) and a new TLS key (`server-key.pem`), and again the combined CA certificate (`ca.pem.combined`):
 
-   ```
+   ```bash
    kubectl create secret generic ${SSL_SECRET_NAME} \
    --from-file=tls.crt=server.pem \
    --from-file=tls.key=server-key.pem \
@@ -190,7 +190,7 @@ If the current certificates are still valid, follow these steps. For already exp
 
 1. Create a final Secrets object: use the new TLS certificate (`server.pem`) and its key (`server-key.pem`), and only the new CA certificate (`ca.pem`):
 
-   ```
+   ```bash
    kubectl create secret generic ${SSL_SECRET_NAME} \
    --from-file=tls.crt=server.pem \
    --from-file=tls.key=server-key.pem \
@@ -204,24 +204,24 @@ If the current certificates are still valid, follow these steps. For already exp
 
 If the certificates have already expired, nodes cannot verify each other. Do not use the CA rotation procedure. Pause the cluster, replace the Secret, then unpause.
 
-1. [Pause the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.html) and wait until it reaches the paused state.
+1. [Pause the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.md) and wait until it reaches the paused state.
 
 1. If you use cert-manager, delete the issuer and certificates so they can be recreated:
 
-   ```
+   ```bash
    kubectl delete issuer/${CLUSTER_NAME}-ps-ca-issuer issuer/${CLUSTER_NAME}-ps-issuer -n $NAMESPACE
    kubectl delete certificate/${CLUSTER_NAME}-ssl certificate/${CLUSTER_NAME}-ca-cert -n $NAMESPACE
    ```
 
 1. Delete the TLS Secrets to force reconciliation:
 
-   ```
+   ```bash
    kubectl delete secret/${SSL_SECRET_NAME} secret/${CLUSTER_NAME}-ca-cert -n $NAMESPACE
    ```
 
    If you manage certificates yourself, apply a new Secret with a valid CA, server certificate, and key instead of deleting:
 
-   ```
+   ```bash
    kubectl create secret generic "${SSL_SECRET_NAME}" \
      --from-file=tls.crt=server.pem \
      --from-file=tls.key=server-key.pem \
@@ -231,4 +231,4 @@ If the certificates have already expired, nodes cannot verify each other. Do not
 
 1. Check that new certificates exist and are valid. See [Check your certificates for expiration](#check-your-certificates-for-expiration).
 
-1. [Unpause the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.html) and wait until it reaches the ready state. MySQL Pods start with the new CA and leaf.
+1. [Unpause the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.md) and wait until it reaches the ready state. MySQL Pods start with the new CA and leaf.

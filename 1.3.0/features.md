@@ -18,13 +18,13 @@ Never lose sleep over database downtime again. The Operator provides robust high
 - Health monitoring with automatic recovery from node failures
 - Zero-downtime upgrades with rolling update strategies
 
-Choose between [group replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#group-replication) (GA) for stronger consistency or [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#asynchronous-replication-tech-preview) (tech preview) for lower latency—both with automatic failover capabilities.
+Choose between [group replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#group-replication) (GA) for stronger consistency or [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#asynchronous-replication-tech-preview) (tech preview) for lower latency—both with automatic failover capabilities.
 
 ### Cross-site replication
 
 Link Group Replication clusters across regions, availability zones, or Kubernetes environments into the InnoDB ClusterSet managed by the Operator. Instead of building custom replication tooling between sites, you apply a `PerconaServerMySQLClusterSet` Custom Resource and let the Operator handle topology lifecycle.
 
-Cross-site replication requires Percona Operator for MySQL 1.2.0 or later and Group Replication clusters on Percona Server for MySQL 8.0.27+ or 8.4. Learn more in the [cross-site replication documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html).
+Cross-site replication requires Percona Operator for MySQL 1.2.0 or later and Group Replication clusters on Percona Server for MySQL 8.0.27+ or 8.4. Learn more in the [cross-site replication documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md).
 
 ### Automated backup and restore flows
 
@@ -32,7 +32,7 @@ Protect your data with Percona XtraBackup - an enterprise-grade backup solution 
 
 - Scheduled backups with configurable retention policies
 - On-demand backups for critical operations
-- [Encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html) for compliance-ready protection in cloud object storage
+- [Encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) for compliance-ready protection in cloud object storage
 
 ### Automated scaling and resource management
 
@@ -46,7 +46,7 @@ Scale your database infrastructure effortlessly:
 
 ### Automatic MySQL configuration tuning
 
-Get your cluster production-ready without deep MySQL tuning expertise. Specify the CPU and memory you allocate to MySQL, your workload profile, and the MySQL version. The Operator [automatically calculates and applies the MySQL configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html) for you and recalculates it whenever those resources change, so you pay only for the resources you actually use.
+Get your cluster production-ready without deep MySQL tuning expertise. Specify the CPU and memory you allocate to MySQL, your workload profile, and the MySQL version. The Operator [automatically calculates and applies the MySQL configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md) for you and recalculates it whenever those resources change, so you pay only for the resources you actually use.
 
 ### Security and compliance
 
@@ -55,7 +55,7 @@ Keep your data secure with built-in security features:
 - Transport encryption with TLS/SSL support
 - Data-at-rest encryption with key management integration
 - Encrypted backups for object storage
-- [Encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption) for point-in-time recovery, without depending on S3 server-side encryption
+- [Encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption) for point-in-time recovery, without depending on S3 server-side encryption
 - Additional trusted CA certificates from your PKI for TLS verification with S3-compatible backup storage (available starting with Operator version 1.3.0)
 - Role-based access control with fine-grained permissions
 - Secret management with Kubernetes-native secrets
@@ -67,7 +67,7 @@ Gain deep insights into your database performance:
 
 - Percona Monitoring and Management (PMM) integration for comprehensive monitoring
 - Custom metrics and alerting capabilities
-- Logging — Gain insights into MySQL logs even after Pod restarts with [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html). Configure [log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.html) for optimized storage usage.
+- Logging — Gain insights into MySQL logs even after Pod restarts with [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md). Configure [log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md) for optimized storage usage.
 - Performance insights with query analysis
 - Health dashboards for operational visibility
 
@@ -85,13 +85,13 @@ Here’s what happens under the hood:
 
 This declarative approach means you describe what you want, not how to achieve it. The Operator handles all the complex orchestration, ensuring your database cluster always matches your specifications.
 
-[Explore the architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html)
+[Explore the architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md)
 
 ## What’s next?
 
-- [Quickstart guides](https://docs.percona.com/percona-operator-for-mysql/1.3.0/quickstart.html) - Get up and running in minutes
-- [Installation options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.html) - Deploy on your preferred platform
-- [Backup and restore](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html) - Protect your data with automated backups
-- [Monitoring setup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.html) - Gain visibility into your database performance
-- [Security configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.html) - Secure your database communications
-- [Cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html) - Link Group Replication clusters across regions and sites
+- [Quickstart guides](https://docs.percona.com/percona-operator-for-mysql/1.3.0/quickstart.md) - Get up and running in minutes
+- [Installation options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.md) - Deploy on your preferred platform
+- [Backup and restore](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md) - Protect your data with automated backups
+- [Monitoring setup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.md) - Gain visibility into your database performance
+- [Security configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md) - Secure your database communications
+- [Cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md) - Link Group Replication clusters across regions and sites

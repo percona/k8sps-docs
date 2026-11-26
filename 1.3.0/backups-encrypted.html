@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5825,10 +5825,10 @@ you tailor backup security to your unique requirements.</p>
 <h3 id="create-an-encryption-key-secret">Create an encryption key Secret<a data-markdown-ignore class="headerlink" href="#create-an-encryption-key-secret" title="Permanent link">¶</a></h3>
 <p>Create a Kubernetes Secret that holds the encryption key. The encryption key must be base64-encoded.</p>
 <p>Generate the encryption key using the following command:</p>
-<div class="highlight"><pre><span></span><code>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">24</span>
+<div class="language-bash highlight"><pre><span></span><code>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">24</span>
 </code></pre></div>
 <p>Create a Secret configuration file and specify the generated string within. Here’s the example of the file <code>encryption-key.yaml</code>:</p>
-<div class="highlight"><span class="filename">encryption-key.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<div class="language-yaml highlight"><span class="filename">encryption-key.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
@@ -5836,7 +5836,7 @@ you tailor backup security to your unique requirements.</p>
 <span class="w">  </span><span class="nt">encryptionKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;encryption-key-string&gt;</span>
 </code></pre></div>
 <p>Create the Secret object:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>encryption-key.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>encryption-key.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <p>The Operator encodes the key when it creates the Secret.</p>
 <p>Store this Secret securely and back it up separately from your database backups. If you lose the key, encrypted backups cannot be restored.</p>
@@ -5845,7 +5845,7 @@ you tailor backup security to your unique requirements.</p>
 <li>Edit the <code>deploy/cr.yaml</code> cluster Custom Resource and reference the Secret under <code>spec.backup.encryptionKeySecret</code>. Specify the name. The <code>key</code> field is optional and defaults to <code>encryptionKey</code>. The Operator never stores the key value, it only references it via the Secret.</li>
 </ol>
 <p>Here’s the sample configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
@@ -5862,7 +5862,7 @@ you tailor backup security to your unique requirements.</p>
 <ol>
 <li>
 <p>Apply the new configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 </ol>
@@ -5871,7 +5871,7 @@ you tailor backup security to your unique requirements.</p>
 <p>To use a different key for a particular storage location, create a new Secret that stores this key. </p>
 <p>Next, configure the <code>encryptionKeySecret</code> subsection in the Custom Resource under that storage entry. </p>
 <p>This example configuration shows how to override encryption settings for the S3 storage. The new encryption key is stored within the Secret named <code>my-encryption-key-s3</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">encryptionKeySecret</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-encryption-key</span>
@@ -5891,7 +5891,7 @@ you tailor backup security to your unique requirements.</p>
 <h3 id="tune-the-encryption-algorithm-and-performance">Tune the encryption algorithm and performance<a data-markdown-ignore class="headerlink" href="#tune-the-encryption-algorithm-and-performance" title="Permanent link">¶</a></h3>
 <p>The Operator uses <strong>AES256</strong> by default. To use a different cipher or adjust encryption performance, pass Percona XtraBackup options through <code>containerOptions.args.xtrabackup</code> in the cluster Custom Resource or in a specific backup or restore manifest. See <a href="backups-fine-tune.html">Fine-tuning backup and restore operations</a> for how global and per-job settings interact.</p>
 <p>The example configuration shows how to tune Percona XtraBackup globally on the cluster level.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>

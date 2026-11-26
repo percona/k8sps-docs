@@ -21,7 +21,9 @@ Cross-site replication is implemented via a separate `PerconaServerMySQLClusterS
 
 You declare which clusters participate, which one is the primary, and how replicas receive the data when they join the ClusterSet in the `PerconaServerMySQLClusterSet` Custom Resource manifest. The Operator automates the ClusterSet provisioning and lifecycle management in a similar way it does for a standalone Percona Server for MySQL cluster. It bootstraps the ClusterSet, adds or removes replica sites, refreshes status, and runs switchover when you change the primary.
 
-The Operator uses a dedicated `clusterset` [system user](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#system-users) with the grants required for ClusterSet AdminAPI operations. Each cluster must share this user’s credentials.
+The Operator uses a dedicated `clusterset` [system user](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#system-users) with the grants required for ClusterSet AdminAPI operations. Each cluster must share this user’s credentials.
+
+*Image: Cross-site replication architecture*
 
 - The **primary cluster** accepts writes and replicates changes asynchronously to replica clusters over a dedicated replication channel.
 - Each **replica cluster** is a full Group Replication cluster (read-only at the ClusterSet level) that receives async replication from the primary cluster’s PRIMARY member.
@@ -56,7 +58,7 @@ When a replica cluster joins the ClusterSet, it must receive the data from the p
 
 Cross-site replication data flows over asynchronous replication channels between the primary and replica clusters. To secure those channels, configure TLS as follows:
 
-1. **Enable TLS on each participating cluster** — Set up transport encryption on every `PerconaServerMySQL` cluster as described in [Transport Layer Security (TLS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.html). Each site uses its own certificates and Secrets.
+1. **Enable TLS on each participating cluster** — Set up transport encryption on every `PerconaServerMySQL` cluster as described in [Transport Layer Security (TLS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md). Each site uses its own certificates and Secrets.
 1. **Set `spec.sslMode` on the ClusterSet CR** — This tells MySQL Shell how to configure TLS on the ClusterSet replication channels.
 
 ### Supported SSL modes
@@ -71,13 +73,13 @@ For cross-region links, prefer `REQUIRED` or a stricter mode over the default `A
 
 ## Availability
 
-| Requirement                  | Supported versions                                                                                                                     |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Operator**                 | Percona Operator for MySQL **1.2.0** and later                                                                                         |
-| **Percona Server for MySQL** | **8.0.27** and later, **8.4** (tested with 8.0.46-37.1 and 8.4.10-10.1)                                                                |
-| **MySQL Shell**              | `mysqlsh` version must match MySQL endpoints it talks to                                                                               |
-| **Cluster type**             | `group-replication` only                                                                                                               |
-| **Kubernetes**               | Same platforms as the Operator — see [Versions compatibility](https://docs.percona.com/percona-operator-for-mysql/1.3.0/versions.html) |
+| Requirement                  | Supported versions                                                                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Operator**                 | Percona Operator for MySQL **1.2.0** and later                                                                                       |
+| **Percona Server for MySQL** | **8.0.27** and later, **8.4** (tested with 8.0.46-37.1 and 8.4.10-10.1)                                                              |
+| **MySQL Shell**              | `mysqlsh` version must match MySQL endpoints it talks to                                                                             |
+| **Cluster type**             | `group-replication` only                                                                                                             |
+| **Kubernetes**               | Same platforms as the Operator — see [Versions compatibility](https://docs.percona.com/percona-operator-for-mysql/1.3.0/versions.md) |
 
 ## Requirements
 
@@ -96,13 +98,13 @@ Before you create a ClusterSet, ensure the following:
 - **Long operations as Jobs** — `createReplicaCluster`, switchover, cluster removal, and rejoin run as Kubernetes Jobs so the reconcile loop is not blocked for hours during CLONE.
 - **Finalizer on delete** — The `percona.com/clusterset-dissolve` finalizer dissolves the ClusterSet when you delete the `PerconaServerMySQLClusterSet` Custom Resource. Data in the underlying clusters is preserved.
 - **ClusterSet members are protected from deletion** - The Operator version 1.3.0 protects the ClusterSet members from deletion. It sets the `percona.com/clusterset-protection` finalizer on each member while the ClusterSet has at least one replica. Remove the cluster from the ClusterSet or delete the ClusterSet before you delete the cluster. If you delete a member earlier, the cluster stays in `Terminating` until that finalizer is removed.
-- **Replica recovery after pause or crash** — The Operator recovers a ClusterSet replica through full cluster crash recovery. It runs `dba.rebootClusterFromCompleteOutage()`, which restores the local Group Replication group and rejoins the replica to the ClusterSet. If only the ClusterSet channel is down, you trigger rejoin with an annotation. See [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster).
+- **Replica recovery after pause or crash** — The Operator recovers a ClusterSet replica through full cluster crash recovery. It runs `dba.rebootClusterFromCompleteOutage()`, which restores the local Group Replication group and rejoins the replica to the ClusterSet. If only the ClusterSet channel is down, you trigger rejoin with an annotation. See [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster).
 - **Finalizer on delete** — The `percona.com/clusterset-dissolve` finalizer ensures that the ClusterSet dissolves when the `PerconaServerMySQLClusterSet` Custom Resource is removed. Data in underlying clusters is preserved.
 - **No automatic switchover** — All switchovers are user-initiated. You must edit the ClusterSet Custom Resource for a planned or a forced failover.
 
 ## Known limitations
 
-- **No automatic rejoin when only the ClusterSet channel is down** — After a pause, stop, or crash, the Operator recovers the replica and rejoins it to the ClusterSet. If the replica is already healthy but ClusterSet replication is down (for example after a long primary outage), the Operator does not rejoin it automatically. You must choose a safe window and [trigger rejoin](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster).
+- **No automatic rejoin when only the ClusterSet channel is down** — After a pause, stop, or crash, the Operator recovers the replica and rejoins it to the ClusterSet. If the replica is already healthy but ClusterSet replication is down (for example after a long primary outage), the Operator does not rejoin it automatically. You must choose a safe window and [trigger rejoin](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster).
 - **No adopting existing ClusterSets** — The controller only bootstraps a new ClusterSet or refuses if the metadata is inconsistent. You cannot adopt into management any ClusterSet that was created manually with `mysqlsh`.
 - **Backups taken on a ClusterSet cannot be restored on a fresh cluster** — Backups include the ClusterSet metadata that is tied to the specific topology and identities of the clusters within that ClusterSet. Restoring such a backup onto a new, unrelated cluster will lead to inconsistencies or errors, since the metadata will not match the new environment or cluster configuration.
 - **Removal is one-way** — After a cluster is removed from a ClusterSet, it cannot be added back to the same ClusterSet.
@@ -112,4 +114,4 @@ Before you create a ClusterSet, ensure the following:
 
 ## Deployment
 
-For step-by-step instructions, see [Cross-site replication: setup and use](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html).
+For step-by-step instructions, see [Cross-site replication: setup and use](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md).

@@ -23,4 +23,4 @@ The features available in this release are the following:
 
 ## Installation
 
-Installation is performed by following the documentation installation instructions for [Kubernetes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.html), [Amazon Elastic Kubernetes Service](https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.html) and [Minikube](https://docs.percona.com/percona-operator-for-mysql/1.3.0/minikube.html).
+Installation is performed by following the documentation installation instructions for [Kubernetes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.md), [Amazon Elastic Kubernetes Service](https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.md) and [Minikube](https://docs.percona.com/percona-operator-for-mysql/1.3.0/minikube.md).

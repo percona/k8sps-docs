@@ -2,7 +2,7 @@
 
 # Automatic configuration tuning
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 The Operator can calculate a full MySQL configuration in addition to `innodb_buffer_pool_size` and `max_connections`. The calculation is based on the CPU and memory you allocate to the MySQL container, the workload you run, and the MySQL version. You set those resources and the Operator sizes the database settings to match them. When the resources change, the Operator recalculates the settings accordingly.
 
@@ -27,7 +27,7 @@ The Operator can calculate MySQL settings for these Percona Server for MySQL ver
 - 8.4.x (all patch releases)
 - 8.0.46 and later
 
-On 8.0.45 or older, the Operator falls back to [basic buffer-pool and `max_connections` tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.html#auto-tuning-mysql-options). See [AutoConfigFallback warning](#autoconfigfallback-warning) if you weren’t expecting it.
+On 8.0.45 or older, the Operator falls back to [basic buffer-pool and `max_connections` tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.md#auto-tuning-mysql-options). See [AutoConfigFallback warning](#autoconfigfallback-warning) if you weren’t expecting it.
 
 ## Turn on automatic configuration tuning
 
@@ -43,7 +43,7 @@ Configure the `spec.mysql.autoConfig.` section in the Custom Resource.
 - `mysql.resources` with both CPU and memory, set in `requests` or `limits`. CPU must be greater than 0 and memory must be at least 12Mi.
 - `mysql.autoConfig.version`, in the `<major>.<minor>.<patch>` format.
 
-```
+```yaml
 spec:
   mysql:
     autoConfig:
@@ -59,7 +59,7 @@ spec:
         memory: 8Gi
 ```
 
-See the [Custom Resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-mysql-section) for the full field list.
+See the [Custom Resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-mysql-section) for the full field list.
 
 ### Choose a workload profile
 
@@ -103,7 +103,7 @@ The Operator calculates the full configuration once you’ve [turned it on](#tur
 
 The Operator includes a variable only when `mysql.autoConfig.version` falls inside that variable’s supported range. Read the ConfigMap to see the variables and values for your cluster:
 
-```
+```bash
 kubectl get configmap auto-<cluster-name>-mysql -o jsonpath='{.data.my\.cnf}' -n <namespace>
 ```
 
@@ -148,15 +148,15 @@ The Operator applies calculated values after all MySQL Pods are ready:
 - Variables that MySQL accepts at runtime are applied with `SET GLOBAL` on each Pod, with no restart.
 - The buffer pool, redo log settings and variables that MySQL accepts only at startup cause a rolling restart of the MySQL StatefulSet. Removing a variable from the configuration also causes a rolling restart.
 
-Changing `mysql.resources` changes the buffer pool and the redo log. This change usually restarts the MySQL Pods. Plan a resize of `mysql.resources` as a change-management event. See [Scale compute resources](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#scale-compute-resources).
+Changing `mysql.resources` changes the buffer pool and the redo log. This change usually restarts the MySQL Pods. Plan a resize of `mysql.resources` as a change-management event. See [Scale compute resources](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#scale-compute-resources).
 
 Before the Operator writes the configuration, it checks the calculated redo log against the data volume. When the redo log would exceed 25% of that volume, reconciliation stops. See [AutoConfigInsufficientStorage warning](#autoconfiginsufficientstorage-warning).
 
 ## Troubleshoot automatic configuration tuning
 
-Check the cluster events first. See [Check the Events](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-events.html).
+Check the cluster events first. See [Check the Events](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-events.md).
 
-```
+```bash
 kubectl get events --field-selector involvedObject.name=<cluster-name>
 ```
 
@@ -170,7 +170,7 @@ The Operator uses the capacity of the smallest existing MySQL data volume in the
 
 **Fix.** Do one of the following, then let the Operator reconcile again:
 
-- [Increase the storage size](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#scale-storage) of the MySQL data volume.
+- [Increase the storage size](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#scale-storage) of the MySQL data volume.
 - Lower the memory in `mysql.resources` so the Operator sizes a smaller buffer pool and redo log.
 
 ### AutoConfigFallback warning

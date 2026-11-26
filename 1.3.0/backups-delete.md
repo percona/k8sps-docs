@@ -29,11 +29,11 @@ In the cluster Custom Resource, each entry under `backup.schedule` with the type
 | `keep: N` (positive integer) | Keep the **N** newest backups for that schedule; older ones are removed automatically.          |
 | `keep: 0` or **omit** `keep` | **No automatic deletion** for that schedule. Backups accumulate until you delete them manually. |
 
-Configure schedules in the [`deploy/cr.yaml`](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) as described in [Make scheduled backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html).
+Configure schedules in the [`deploy/cr.yaml`](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) as described in [Make scheduled backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md).
 
 This example configuration instructs the Operator to keep the last three full backups from a weekly job:
 
-```
+```yaml
 backup:
   schedule:
     - name: "weekly-full-backup"
@@ -43,16 +43,16 @@ backup:
       storageName: s3-us-west
 ```
 
-See also [`backup.schedule.keep`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupschedulekeep) in the Custom Resource reference.
+See also [`backup.schedule.keep`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupschedulekeep) in the Custom Resource reference.
 
 ### Full vs incremental backup schedules
 
-- Retention policy applies to **scheduled full backups** in the usual way: the Operator keeps only the specified number of newest full backups for that schedule. Note that retention is subject to the [limitations when multiple schedules share one storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage).
+- Retention policy applies to **scheduled full backups** in the usual way: the Operator keeps only the specified number of newest full backups for that schedule. Note that retention is subject to the [limitations when multiple schedules share one storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md#managing-multiple-backup-schedules-in-the-same-storage).
 - **For scheduled incremental backups**, `keep` is ignored. There is no automatic retention that trims old increments. You can delete **only the latest increment** or **the whole chain** by deleting the base full backup.
 
 ## Deleting incremental backup chains
 
-Incremental backups depend on a **chain**: one **full** backup plus **increments** on the same storage. See [Incremental backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.html) for how chains are built.
+Incremental backups depend on a **chain**: one **full** backup plus **increments** on the same storage. See [Incremental backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md) for how chains are built.
 
 Retention works differently than for standalone full backups, if the `percona.com/delete-backup` finalizer exists in the backup object:
 
@@ -67,13 +67,13 @@ If you use scheduled incremental jobs, plan cleanup: either rotate by deleting t
 
 1. List backups in the namespace:
 
-   ```
+   ```bash
    kubectl get ps-backup -n <namespace>
    ```
 
 1. When you know the name, delete the `PerconaServerMySQLBackup` object:
 
-   ```
+   ```bash
    kubectl delete ps-backup <backup-name> -n <namespace>
    ```
 

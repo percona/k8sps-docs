@@ -22,7 +22,7 @@ To apply settings globally, modify the `containerOptions` subsection within the 
 
 You can set custom command-line arguments and environment variables for the backup binaries.
 
-```
+```yaml
 spec:
   backup:
     storages:
@@ -37,7 +37,7 @@ spec:
               value: "some-value"
 ```
 
-- **`xtrabackup`**: This tool handles the core backup process, interacting directly with the database. You can pass arguments like `--compress` to override the default compression mechanism, or `--encrypt`, `--encrypt-threads`, and `--encrypt-chunk-size` to tune [encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html). Read more about xtrabackup options in [The xtrabackup command-line options reference](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-option-reference.html)
+- **`xtrabackup`**: This tool handles the core backup process, interacting directly with the database. You can pass arguments like `--compress` to override the default compression mechanism, or `--encrypt`, `--encrypt-threads`, and `--encrypt-chunk-size` to tune [encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md). Read more about xtrabackup options in [The xtrabackup command-line options reference](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-option-reference.html)
 - **`xbcloud`**: This binary is used for transferring backup data to and from cloud storage. An example configuration is to define the number of retries after the failure. Read more about available options in [The xbcloud command-line options reference](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-options.html)
 - **`xbstream`**: This binary is for streaming and decompressing backup data during restore. Arguments here, like `--parallel`, can help accelerate the process. Read more about available options in [The xbstream command-line options reference](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-options.html) .
 
@@ -51,7 +51,7 @@ For on-demand backups and restores, you can provide specific `containerOptions` 
 
 To apply specific settings for a single backup job, edit the `deploy/backup/backup.yaml` manifest.
 
-```
+```yaml
 apiVersion: ps.percona.com/v1alpha1
 kind: PerconaServerMySQLBackup
 metadata:
@@ -76,7 +76,7 @@ Note that the settings you specify here are used, overriding any global configur
 
 Similarly, for a restore operation, you can define options in the `deploy/backup/restore.yaml` manifest.
 
-```
+```yaml
 apiVersion: ps.percona.com/v1alpha1
 kind: PerconaServerMySQLRestore
 metadata:
@@ -104,6 +104,6 @@ The Percona Operator for MySQL provides a flexible and powerful way to manage ba
 1. If you pass storage-specific parameters (like `--s3-region`) directly to the `xtrabackup`, `xbcloud`, and `xbstream` binaries, they will be overridden by the configuration in the storage section of the Custom Resource.
 1. If you define environment variables for a backup job, they are passed to both the `xtrabackup` and `xbcloud` processes running within the `xtrabackup` sidecar container. You can verify this by inspecting the process environment variables inside the container during a backup.
 1. Environment variables for a restore job are set for the `xtrabackup` container in the restore Pod.
-1. The `VERIFY_TLS` environment variable currently applies only to restore operations and is ignored for backups. To ensure TLS verification for backups, set the `backup.storages.*.verifyTLS` option in the Custom Resource. To use your custom certificates, supply the CA with [`s3.caBundle`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage). To learn more, see [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+1. The `VERIFY_TLS` environment variable currently applies only to restore operations and is ignored for backups. To ensure TLS verification for backups, set the `backup.storages.*.verifyTLS` option in the Custom Resource. To use your custom certificates, supply the CA with [`s3.caBundle`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage). To learn more, see [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 1. If the same binary is configured globally and individually for backups or restores, individual settings take precedence.
 1. You cannot pass the `--defaults-extra-file` option to `xtrabackup` in a `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` object. Use the `--defaults-file` option if you need to pass your custom settings.

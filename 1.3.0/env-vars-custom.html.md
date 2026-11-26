@@ -1,0 +1,227 @@
+> For the complete documentation index, see [llms.txt](https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt).
+
+# Define environment variables for cluster components
+
+Tuning through environment variables helps when you need to:
+
+- **Change timeouts and limits** for bootstrap, replication, or health checks without building a new image.
+- **Match your platform** using standard names such as time zone or locale.
+- **Feed flags or paths** into scripts and binaries that already read `getenv`-style configuration.
+- **Keep secrets out of the CR** by loading keys from a Kubernetes Secret instead of plain YAML.
+
+You declare this configuration in the Custom Resource. The Operator reconciles the cluster and updates Pod specs so containers receive the variables you specify.
+
+## How to tune cluster components
+
+You can tune cluster components in the following ways:
+
+- Using existing environment variables
+- Passing custom environment variables
+
+You use the same Custom Resource fields for either way: `env` for explicit name/value pairs, and `envFrom` to load many variables from a ConfigMap or Secret. All values must be strings. Note that default values or behaviors may change between Operator versions. Check the sample [`deploy/cr.yaml`](https://github.com/percona/percona-server-mysql-operator/blob/main/deploy/cr.yaml) for reference.
+
+You can combine both approaches for a single component: use existing environment variables where available, and add your own custom names as needed.
+
+## Existing environment variables for cluster components
+
+### Percona Server for MySQL environment variable
+
+The following environment variables are available to tune Percona Server for MySQL
+
+| Variable                        | Description                                                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BOOTSTRAP_READ_TIMEOUT`        | Non-negative integer (seconds). Read/write timeout for bootstrap and related MySQL client operations.                                                                                                                                                                                                                                                                  |
+| `BOOTSTRAP_CLONE_STALL_TIMEOUT` | Non-negative integer (seconds). Starting with `crVersion` 1.3.0, how long an asynchronous clone can make no progress before bootstrap stops it. The default is 900. Set to `0` to turn the check off. See [Set the clone stall timeout](#set-the-clone-stall-timeout).                                                                                                 |
+| `BOOTSTRAP_CLONE_TIMEOUT`       | Non-negative integer (seconds). Upper bound for a clone during asynchronous bootstrap when `crVersion` is older than 1.3.0. Starting with `crVersion` 1.3.0, the Operator ignores this variable.                                                                                                                                                                       |
+| `ASYNC_SOURCE_RETRY_COUNT`      | Non-negative integer. Used when configuring asynchronous replication.                                                                                                                                                                                                                                                                                                  |
+| `ASYNC_SOURCE_CONNECT_RETRY`    | Non-negative integer. Used when configuring asynchronous replication.                                                                                                                                                                                                                                                                                                  |
+| `POD_IP_EXCLUDE_REGEX`          | Custom `grep -E` filter for Pod IP addresses that the MySQL entrypoint excludes when it picks the Pod IP to bind MySQL `admin-address`. Default: `^169\.254\.`. If every address matches the filter, the entrypoint uses the first unfiltered IP. Use this only if the default exclusion is too broad or too narrow for your CNI. Most clusters do not need to set it. |
+
+### Set the clone stall timeout
+
+An asynchronous replica copies its data with the [MySQL clone plugin](https://dev.mysql.com/doc/refman/8.4/en/clone-plugin.html) when it joins the cluster or rebuilds its data volume. Starting with `crVersion` 1.3.0, the clone keeps running while it makes progress.
+
+Bootstrap reads `performance_schema.clone_progress` and stops the clone when that view shows no change for `BOOTSTRAP_CLONE_STALL_TIMEOUT` seconds. No change means both of the following:
+
+- No additional bytes are transferred
+- No clone stage finishes
+
+The default is 900 seconds (15 minutes). A stage that transfers no bytes, such as file sync or recovery, can run longer than this window. Increase the value for a large database, or set it to `0` to turn the check off.
+
+If bootstrap cannot read clone progress for the whole window, it stops the clone. The MySQL container restarts, and the clone starts again.
+
+The MySQL startup probe is the hard limit on how long the clone can run. When you leave `spec.mysql.startupProbe.timeoutSeconds` unset and `spec.crVersion` is `1.3.0` or higher, the Operator sets that timeout to 604800 seconds (7 days). Set [`mysql.startupProbe.timeoutSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlstartupprobetimeoutseconds) when you want a shorter limit.
+
+When `spec.crVersion` is older than 1.3.0, `BOOTSTRAP_CLONE_TIMEOUT` is the upper bound for the clone. The Operator ignores `BOOTSTRAP_CLONE_TIMEOUT` when `crVersion` is 1.3.0 or higher.
+
+Set the stall timeout in `spec.mysql.env`. The value is a string:
+
+```yaml
+spec:
+  mysql:
+    env:
+      - name: BOOTSTRAP_CLONE_STALL_TIMEOUT
+        value: "1800"
+```
+
+### HAProxy environment variables
+
+The following environment variables are available for HAProxy
+
+| Variable                | Description                                                                                                                                                                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `HA_CONNECTION_TIMEOUT` | Sets the timeout (in milliseconds) for HAProxy health checks on MySQL nodes. The default is 10000 milliseconds (10 seconds), but you can increase this value for unstable Kubernetes networking or if you experience soft lockups on nodes. |
+| `HA_RLIMIT_NOFILE`      | Sets the soft file descriptor limit in the entrypoint before HAProxy container starts. The default value is 1048576. If the set value is invalid, the Operator falls back to the default one.                                               |
+| `HA_SERVER_OPTIONS`     | Extra server options passed into generated HAProxy server lines ([`haproxy_add_mysql_nodes.sh`](https://github.com/percona/percona-server-mysql-operator/blob/main/build/haproxy_add_mysql_nodes.sh) ).                                     |
+
+## Custom environment variables
+
+Apart from existing environment variables, you can also pass your custom configurations in these ways:
+
+- [Set variables directly in the Custom Resource](#set-variables-directly-in-the-custom-resource) — Under `spec.<component>.env` as a list of `name` and `value` pairs.
+- [Load variables from a ConfigMap](#load-variables-from-a-configmap) — Under `envFrom` with `configMapRef`; each key becomes an environment variable name.
+- [Load variables from a Secret](#load-variables-from-a-secret) — Under `envFrom` with `secretRef`; use for sensitive values.
+
+### Supported components
+
+Custom env and envFrom are supported for these components:
+
+| Component                  | Custom Resource options                                |
+| -------------------------- | ------------------------------------------------------ |
+| MySQL                      | `spec.mysql.env`, `spec.mysql.envFrom`                 |
+| HAProxy                    | `spec.proxy.haproxy.env`, `spec.proxy.haproxy.envFrom` |
+| MySQL Router               | `spec.proxy.router.env`, `spec.proxy.router.envFrom`   |
+| Orchestrator               | `spec.orchestrator.env`, `spec.orchestrator.envFrom`   |
+| Backup storage (per entry) | `spec.backup.storages.<name>.containerOptions.env`     |
+
+Full field definitions are in [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md).
+
+### Set variables directly in the Custom Resource
+
+Use this method when you have a small number of non-sensitive values and you want everything in a single file.
+
+For example, you want to override the soft file descriptor limit for HAProxy.
+
+1. Edit the `deploy/cr.yaml` Custom Resource manifest:
+
+   ```yaml
+   spec:
+     proxy:
+       haproxy:
+         env:
+           - name: HA_CONNECTION_TIMEOUT
+             value: "30"
+   ```
+
+1. Apply the changes:
+
+   ```text
+   kubectl apply -f deploy/cr.yaml -n <namespace>
+   ```
+
+### Load variables from a ConfigMap
+
+Use this when you want to share the same variables across multiple clusters or update them without editing the Custom Resource.
+
+1. Export the namespace where your cluster is running as an environment variable. Replace `<my-namespace>` with your value:
+
+   ```bash
+   export NAMESPACE = my-namespace
+   ```
+
+1. Create a ConfigMap file. For example, `haproxy-configmap.yaml`. Specify the variables within:
+
+   haproxy-configmap.yaml
+
+   ```yaml
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: ps-haproxy-env
+   data:
+     HA_CONNECTION_TIMEOUT: "30"
+   ```
+
+1. Create a ConfigMap object:
+
+   ```bash
+   kubectl apply -f haproxy-configmap.yaml -n $NAMESPACE
+   ```
+
+1. Reference the ConfigMap in the Custom Resource:
+
+   ```yaml
+   spec:
+     mysql:
+       envFrom:
+         - configMapRef:
+             name: ps-haproxy-env
+   ```
+
+1. Apply the changes:
+
+   ```bash
+   kubectl apply -f deploy/cr.yaml -n $NAMESPACE
+   ```
+
+### Load variables from a Secret
+
+Use Secrets when you need to supply sensitive values (tokens, passwords, keys).
+
+For example, you need to provide a token used by a custom sidecar container.
+
+1. Encode your sensitive values before adding them to a Secret, as Kubernetes stores Secret data in base64-encoded form. This helps prevent accidental exposure of sensitive information in plaintext, even though it is not a secure encryption method.
+
+   To encode an API token, run:
+
+   ```bash
+   echo -n "your-token" | base64
+   ```
+
+   Copy the encoded string for use in your Secret manifest
+
+1. Export the namespace where your cluster is running as an environment variable. Replace my-namespace with your value:
+
+   ```bash
+   export NAMESPACE=my-namespace
+   ```
+
+1. Create a Secret configuration file, for example, `integration-token.yaml`. Specify your encoded value within:
+
+   integration-token.yaml
+
+   ```yaml
+   apiVersion: v1
+   kind: Secret
+   metadata:
+     name: ps-app-env
+   type: Opaque
+   data:
+     MY_INTEGRATION_TOKEN: "your-base64-encoded-token"
+   ```
+
+1. Create the Secret object:
+
+   ```bash
+   kubectl apply -f integration-token.yaml
+   ```
+
+1. Reference the Secret in your Custom Resource:
+
+   ```yaml
+   spec:
+     mysql:
+       envFrom:
+         - secretRef:
+             name: ps-app-env
+   ```
+
+1. Apply the changes:
+
+   ```bash
+   kubectl apply -f deploy/cr.yaml -n $NAMESPACE
+   ```
+
+### Combining `env` and `envFrom`
+
+You can use both on one component. If a name appears in multiple sources, Kubernetes resolution rules apply: later explicit `env` entries override earlier values (see the [Kubernetes documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) ).

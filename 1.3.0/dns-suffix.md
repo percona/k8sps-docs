@@ -16,7 +16,7 @@ To address this, you can set your custom DNS suffix for the Operator to use when
 
 Add `clusterServiceDNSSuffix` under `spec` in your `PerconaServerMySQL` Custom Resource. Set it to your cluster’s DNS suffix. For example, `cluster.local` for a standard cluster, or the host cluster’s suffix when the Operator runs in a vcluster:
 
-```
+```yaml
 spec:
   ...
   clusterServiceDNSSuffix: cluster.local
@@ -25,6 +25,6 @@ spec:
 
 Apply the change:
 
-```
+```bash
 kubectl apply -f deploy/cr.yaml -n <namespace>
 ```

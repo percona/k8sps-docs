@@ -8,7 +8,7 @@
 
 - **Installation**
 
-  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Note
 
@@ -17,8 +17,8 @@ Version 0.2.0 of the Percona Operator for MySQL is **a tech preview release** an
 ## Release Highlights
 
 - With this release, the Operator turns to a simplified naming convention and changes its official name to **Percona Operator for MySQL**
-- This release brings initial [implementation of Group Replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#mysqlclustertype) between Percona Server for MySQL instances. Group Replication works in conjunction with MySQL Router, which is used instead of Orchestrator and also provides load balancing
-- Now the Operator [is capable of making backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html). Backups are stored on the cloud outside the Kubernetes cluster: [Amazon S3, or S3-compatible storage](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services) is supported, as well as [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs) . Currently, backups work with asynchronous replication; support for backups with Group Replication is coming
+- This release brings initial [implementation of Group Replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlclustertype) between Percona Server for MySQL instances. Group Replication works in conjunction with MySQL Router, which is used instead of Orchestrator and also provides load balancing
+- Now the Operator [is capable of making backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md). Backups are stored on the cloud outside the Kubernetes cluster: [Amazon S3, or S3-compatible storage](https://en.wikipedia.org/wiki/Amazon_S3#S3_API_and_competing_services) is supported, as well as [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs) . Currently, backups work with asynchronous replication; support for backups with Group Replication is coming
 
 ## New Features
 

@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6319,7 +6319,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <li>A more predictable environment so teams can focus on delivery</li>
 </ul>
 <p>To enable automatic storage resizing, edit the Custom Resource manifest as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">storageScaling</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enableVolumeScaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">autoscaling</span><span class="p">:</span>
@@ -6332,7 +6332,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <h3 id="delegate-pvc-resizing-to-an-external-autoscaler">Delegate PVC resizing to an external autoscaler<a data-markdown-ignore class="headerlink" href="#delegate-pvc-resizing-to-an-external-autoscaler" title="Permanent link">¶</a></h3>
 <p>You can now configure the Operator to use an external storage autoscaler instead of its own resizing logic. This ability may be useful for organizations needing centralized, advanced, or cross-application scaling policies.</p>
 <p>To use an external autoscaler, set the <code>spec.storageScaling.enableExternalAutoscaling</code> option to <code>true</code> in the Custom Resource manifest.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">storageScaling</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enableExternalAutoscaling</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div>
@@ -6351,7 +6351,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <h3 id="disable-nodeport-allocation-for-loadbalancer-services">Disable NodePort allocation for LoadBalancer Services<a data-markdown-ignore class="headerlink" href="#disable-nodeport-allocation-for-loadbalancer-services" title="Permanent link">¶</a></h3>
 <p>By default, Kubernetes assigns a <code>NodePort</code> behind every <code>LoadBalancer</code> Service, even when the underlying load balancer does not require it.</p>
 <p>With this release, you can now turn off <code>NodePort</code> allocation for the <code>LoadBalancer</code> Services created by the Operator. Update your cluster Custom Resource with the following configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">expose</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LoadBalancer</span>
 <span class="w">    </span><span class="nt">allocateLoadBalancerNodePorts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
@@ -6365,7 +6365,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <h3 id="independent-resource-configuration-for-haproxy-sidecar-containers">Independent resource configuration for HAProxy sidecar containers<a data-markdown-ignore class="headerlink" href="#independent-resource-configuration-for-haproxy-sidecar-containers" title="Permanent link">¶</a></h3>
 <p>HAProxy Pods include the <code>mysql-monit</code> sidecar, a lightweight DNS-polling container that monitors MySQL endpoints. Previously, it inherited resource requests and limits from the main HAProxy container. Since the sidecar needs far fewer resources than HAProxy itself, it was over-provisioned.</p>
 <p>Now you can configure the resource requests and limits for each HAProxy sidecar container independently. Use the <code>spec.proxy.haproxy.sidecarResources</code> subsection in the Custom Resource and specify the required values for each sidecar:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">proxy</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">proxy</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">haproxy</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">sidecarResources</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">mysql-monit</span><span class="p">:</span>
@@ -6395,7 +6395,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <h3 id="fine-tune-orchestrator-failover-behavior">Fine-tune Orchestrator failover behavior<a data-markdown-ignore class="headerlink" href="#fine-tune-orchestrator-failover-behavior" title="Permanent link">¶</a></h3>
 <p>Until now, you could not adjust the Orchestrator behavior beyond the Operator defaults. This release makes the <code>spec.orchestrator.configuration</code> field effective, so you can tune failover settings per cluster directly in the Custom Resource.</p>
 <p>Provide Orchestrator options as a JSON string. For example, with the <code>FailMasterPromotionOnLagMinutes</code> option, you can control how long Orchestrator waits before promoting a new primary when replication is lagging. Using the <code>RecoveryPeriodBlockSeconds</code> option, define how long to block recovery after a failover. </p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="s">'{"FailMasterPromotionOnLagMinutes":</span><span class="nv"> </span><span class="s">30,</span><span class="nv"> </span><span class="s">"RecoveryPeriodBlockSeconds":</span><span class="nv"> </span><span class="s">300}'</span>
@@ -6405,7 +6405,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <h3 id="improved-monitoring-for-clusters-in-multi-region-or-multi-namespace-deployments-in-pmm">Improved monitoring for clusters in multi-region or multi-namespace deployments in PMM<a data-markdown-ignore class="headerlink" href="#improved-monitoring-for-clusters-in-multi-region-or-multi-namespace-deployments-in-pmm" title="Permanent link">¶</a></h3>
 <p>Now you can define a custom name for your clusters deployed in different data centers. This name helps Percona Management and Monitoring (PMM) Server to correctly recognize clusters as connected and monitor them as one deployment. Similarly, PMM Server identifies clusters deployed with the same names in different namespaces as separate ones and correctly displays performance metrics for you on dashboards.</p>
 <p>To assign a custom name, define this configuration in the Custom Resource manifest for your cluster:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">pmm</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">customClusterName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">testClusterName</span>
 </code></pre></div>
@@ -6440,7 +6440,7 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <ol>
 <li>
 <p>Clone the Operator repository:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.2.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.2.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 <span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
 </code></pre></div>
 </li>
@@ -6450,17 +6450,17 @@ when you change the primary. Because management runs over the MySQL protocol, re
 <li>Locate the Deployment custom resource for the Operator.</li>
 <li>Update the <code>spec.image</code> field to</li>
 </ul>
-<div class="highlight"><pre><span></span><code>docker.io/percona/percona-server-mysql-operator:1.2.0
+<div class="language-text highlight"><pre><span></span><code>docker.io/percona/percona-server-mysql-operator:1.2.0
 </code></pre></div>
 </li>
 <li>
 <p>Apply the updated <code>deploy/bundle.yaml</code> file:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml
 </code></pre></div>
 </li>
 <li>
 <p>Install Percona Server for MySQL:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
 </code></pre></div>
 </li>
 </ol>

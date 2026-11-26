@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5733,25 +5733,25 @@ e.g. for testing purposes.</p>
 <li>
 <p>Create a namespace and set the context for the namespace. The resource names must be unique within the namespace and provide a way to divide cluster resources between users spread across multiple projects.</p>
 <p>So, create the namespace and save it in the namespace context for subsequent commands as follows (replace the <code>&lt;namespace name&gt;</code> placeholder with some descriptive name):</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>&lt;namespace<span class="w"> </span>name&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>&lt;namespace<span class="w"> </span>name&gt;
 kubectl<span class="w"> </span>config<span class="w"> </span>set-context<span class="w"> </span><span class="k">$(</span>kubectl<span class="w"> </span>config<span class="w"> </span>current-context<span class="k">)</span><span class="w"> </span>--namespace<span class="o">=</span>&lt;namespace<span class="w"> </span>name&gt;
 </code></pre></div>
 <p>At success, you will see the message that namespace/<namespace name=""> was created, and the context was modified.</namespace></p>
 </li>
 <li>
 <p>Use the following <code>git clone</code> command to download the correct branch of the percona-server-mysql-operator repository:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 </code></pre></div>
 <p>After the repository is downloaded, change the directory to run the rest of the commands in this document:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
 </code></pre></div>
 </li>
 <li>
 <p>Deploy the Operator <a href="https://kubernetes.io/docs/reference/using-api/server-side-apply/">using <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml
 </code></pre></div>
 <p>The following confirmation is returned:</p>
-<div class="no-copy highlight"><pre><span></span><code>customresourcedefinition.apiextensions.k8s.io/perconaserverformysqlbackups.ps.percona.com created
+<div class="language-text no-copy highlight"><pre><span></span><code>customresourcedefinition.apiextensions.k8s.io/perconaserverformysqlbackups.ps.percona.com created
 customresourcedefinition.apiextensions.k8s.io/perconaserverformysqlrestores.ps.percona.com created
 customresourcedefinition.apiextensions.k8s.io/perconaserverformysqls.ps.percona.com created
 serviceaccount/percona-server-for-mysql-operator created
@@ -5769,7 +5769,7 @@ deployment.apps/percona-server-for-mysql-operator created
 <p class="admonition-title">Warning</p>
 <p>Starting with 1.30, Amazon EKS no longer automatically applies the default annotation for the <code>gp2</code> StorageClass to newly created clusters.</p>
 <p>You need to specify the storageClassName explicitly in <code>deploy/cr.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code>mysql:
+<div class="language-text highlight"><pre><span></span><code>mysql:
   ...
   volumeSpec:
     persistentVolumeClaim:
@@ -5779,11 +5779,11 @@ deployment.apps/percona-server-for-mysql-operator created
           storage: 20Gi
 </code></pre></div>
 </div>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
 </code></pre></div>
 <p>The process could take some time.
 The return statement confirms the creation:</p>
-<div class="no-copy highlight"><pre><span></span><code>perconaserverformysql.ps.percona.com/ps-cluster1 created
+<div class="language-text no-copy highlight"><pre><span></span><code>perconaserverformysql.ps.percona.com/ps-cluster1 created
 </code></pre></div>
 </li>
 </ol>
@@ -5793,7 +5793,7 @@ The return statement confirms the creation:</p>
 <ol>
 <li>
 <p>Export the namespace, cluster name and the Secret name as environment variables:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>my-namespace
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>my-namespace
 <span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=</span>ps-cluster1
 <span class="nb">export</span><span class="w"> </span><span class="nv">SECRET_NAME</span><span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-psuser-root
 </code></pre></div>
@@ -5801,13 +5801,13 @@ The return statement confirms the creation:</p>
 </li>
 <li>
 <p>List the Secrets objects.</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <p>Look for the Secret named <code>&lt;cluster_name&gt;-psuser-root</code>. By default, it is <code>ps-cluster1-psuser-root</code>.</p>
 </li>
 <li>
 <p>Retrieve the user credentials from the Secret:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 -o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.user}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
 kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 -o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
@@ -5815,7 +5815,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 </li>
 <li>
 <p>Run a container with the <code>mysql</code> tool and connect its console output to your terminal:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-i<span class="w"> </span>--rm<span class="w"> </span>--tty<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-i<span class="w"> </span>--rm<span class="w"> </span>--tty<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
 </code></pre></div>
 <p>It may require some time to execute the command and deploy the corresponding Pod.</p>
 </li>
@@ -5828,18 +5828,18 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+<div class="language-bash highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-router<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+<div class="language-bash highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-router<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </div>
 </div>
 </div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>mysql: [Warning] Using a password on the command line interface can be insecure.
+<div class="language-text no-copy highlight"><pre><span></span><code>mysql: [Warning] Using a password on the command line interface can be insecure.
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 1665
 Server version: 8.4.11-11.1 Percona Server (GPL), Release 6, Revision dbba4396
@@ -5858,11 +5858,11 @@ mysql&gt;
 </details>
 <p>The following example uses the MySQL prompt to check the
 <code>max_connections</code> variable:</p>
-<div class="highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
+<div class="language-sql highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>+-----------------+-------+
+<div class="language-text no-copy highlight"><pre><span></span><code>+-----------------+-------+
 | Variable_name   | Value |
 +-----------------+-------+
 | max_connections | 158   |
@@ -5876,7 +5876,7 @@ mysql&gt;
 <li>
 <p>You can also check whether you can connect to MySQL from the outside
     with the help of the <code>kubectl port-forward</code> command as follows:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>port-forward<span class="w"> </span>svc/ps-cluster1-mysql-primary<span class="w"> </span><span class="m">3306</span>:3306<span class="w"> </span><span class="p">&amp;</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>port-forward<span class="w"> </span>svc/ps-cluster1-mysql-primary<span class="w"> </span><span class="m">3306</span>:3306<span class="w"> </span><span class="p">&amp;</span>
 mysql<span class="w"> </span>-h<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-P<span class="w"> </span><span class="m">3306</span><span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </li>

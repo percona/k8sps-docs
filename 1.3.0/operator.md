@@ -5,11 +5,11 @@
 Percona Operator for MySQL uses [Custom Resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) to manage options for the various components of the cluster.
 
 - `PerconaServerMySQL` Custom Resource with options for the cluster,
-- `PerconaServerMySQLClusterSet` Custom Resource with options for InnoDB ClusterSet — see [ClusterSet Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.html) and [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html),
+- `PerconaServerMySQLClusterSet` Custom Resource with options for InnoDB ClusterSet — see [ClusterSet Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.md) and [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md),
 - `PerconaServerMySQLBackup` Custom Resource contains options for Percona XtraBackup used to backup Percona Server for MySQL
 - `PerconaServerMySQLRestore` Custom Resource contains options for restoring Percona Server for MySQL from backups.
 
-For status fields and conditions, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html).
+For status fields and conditions, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md).
 
 ## PerconaServerMySQL Custom Resource options
 
@@ -23,7 +23,7 @@ The metadata part of PerconaServerMySQL Custom Resource contains the following k
 
   - `percona.com/delete-mysql-pods-in-order` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
   - `percona.com/delete-mysql-pvc` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [Persistent Volume Claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for Percona Server for MySQL Pods after the cluster deletion event (off by default). It also triggers deletion of user Secrets.
-  - `percona.com/delete-ssl` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.html) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
+  - `percona.com/delete-ssl` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
 
 The top-level spec elements of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) are the following ones:
 
@@ -65,7 +65,7 @@ Pause/resume: setting it to `true` gracefully stops the cluster, and setting it 
 
 ### `enableVolumeExpansion`
 
-Enables or disables [storage resizing with volume expansion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#storage-resizing-with-volume-expansion-capability).
+Enables or disables [storage resizing with volume expansion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#storage-resizing-with-volume-expansion-capability).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -75,11 +75,11 @@ This option is deprecated and will be removed in version 1.5.0. Use the [`storag
 
 ## Storage scaling section
 
-The `storageScaling` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file controls volume expansion and automatic storage resizing for MySQL PVCs. See [Scale storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#scale-storage) for usage details.
+The `storageScaling` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file controls volume expansion and automatic storage resizing for MySQL PVCs. See [Scale storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#scale-storage) for usage details.
 
 ### `storageScaling.enableVolumeScaling`
 
-Enables or disables [storage scaling / volume expansion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#storage-resizing-with-volume-expansion-capability) with Volume Expansion capability.
+Enables or disables [storage scaling / volume expansion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#storage-resizing-with-volume-expansion-capability) with Volume Expansion capability.
 
 | Value type | Example |
 | ---------- | ------- |
@@ -95,7 +95,7 @@ Enables or disables the use of external volume autoscaler. When disabled, the Op
 
 ### `storageScaling.autoscaling.enabled`
 
-Enables automatic storage resizing based on user-defined thresholds. Read more about this feature in [Automatic storage resizing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#automatic-storage-resizing).
+Enables automatic storage resizing based on user-defined thresholds. Read more about this feature in [Automatic storage resizing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#automatic-storage-resizing).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -175,7 +175,7 @@ The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configurati
 
 ### `secretsName`
 
-A name for [users secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#users). When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets`. Otherwise, it uses the provided name.
+A name for [users secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#users). When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets`. Otherwise, it uses the provided name.
 
 | Value type | Example               |
 | ---------- | --------------------- |
@@ -183,7 +183,7 @@ A name for [users secrets](https://docs.percona.com/percona-operator-for-mysql/1
 
 ### `clusterServiceDNSSuffix`
 
-A custom cluster domain suffix the Operator uses when constructing internal service hostnames. Use this when the Operator runs in a vcluster or in a cluster with a custom DNS domain so it can correctly resolve services. See [Configure DNS suffix for service discovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/dns-suffix.html) for details.
+A custom cluster domain suffix the Operator uses when constructing internal service hostnames. Use this when the Operator runs in a vcluster or in a cluster with a custom DNS domain so it can correctly resolve services. See [Configure DNS suffix for service discovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/dns-suffix.md) for details.
 
 | Value type | Example         |
 | ---------- | --------------- |
@@ -191,7 +191,7 @@ A custom cluster domain suffix the Operator uses when constructing internal serv
 
 ### `sslSecretName`
 
-A secret with the TLS certificate used by the cluster, see [Transport Layer Security (TLS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.html) for details. When undefined, the Operator creates the Secrets object named `<cluster-name>-ssl`. Otherwise, it uses the provided name. If this Secret already exists and was created by you, the Operator uses it and does not request a certificate from cert-manager.
+A secret with the TLS certificate used by the cluster, see [Transport Layer Security (TLS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md) for details. When undefined, the Operator creates the Secrets object named `<cluster-name>-ssl`. Otherwise, it uses the provided name. If this Secret already exists and was created by you, the Operator uses it and does not request a certificate from cert-manager.
 
 | Value type | Example           |
 | ---------- | ----------------- |
@@ -199,7 +199,7 @@ A secret with the TLS certificate used by the cluster, see [Transport Layer Secu
 
 ### `ignoreAnnotations`
 
-The list of annotations [to be ignored](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.html#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
+The list of annotations [to be ignored](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
 
 | Value type | Example                                                         |
 | ---------- | --------------------------------------------------------------- |
@@ -207,7 +207,7 @@ The list of annotations [to be ignored](https://docs.percona.com/percona-operato
 
 ### `ignoreLabels`
 
-The list of labels [to be ignored](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.html#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
+The list of labels [to be ignored](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
 
 | Value type | Example |
 | ---------- | ------- |
@@ -215,7 +215,7 @@ The list of labels [to be ignored](https://docs.percona.com/percona-operator-for
 
 ### `updateStrategy`
 
-A strategy the Operator uses for [upgrades](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update.html).
+A strategy the Operator uses for [upgrades](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update.md).
 
 | Value type | Example       |
 | ---------- | ------------- |
@@ -247,7 +247,7 @@ Once unsafe configurations are enabled, you cannot revert these settings simply 
 
 ### `unsafeFlags.asyncFailoverWithPossibleDataLoss`
 
-Allows users to disable backups in a cluster with asynchronous replication. Without this flag, the Operator rejects such a Custom Resource, because a [zero-data-loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html) reads the failed primary’s binary logs from the `xtrabackup` sidecar, and the sidecar runs only when backups are enabled. With backups disabled, a failover promotes a replica without recovering the transactions that the failed primary has not yet replicated. The Operator records the `FailoverUnprotected` [event](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#events).
+Allows users to disable backups in a cluster with asynchronous replication. Without this flag, the Operator rejects such a Custom Resource, because a [zero-data-loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md) reads the failed primary’s binary logs from the `xtrabackup` sidecar, and the sidecar runs only when backups are enabled. With backups disabled, a failover promotes a replica without recovering the transactions that the failed primary has not yet replicated. The Operator records the `FailoverUnprotected` [event](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#events).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -306,7 +306,7 @@ Allows users to set [orchestrator.size](#orchestratorsize) option to a value les
 
 ## Extended cert-manager configuration section
 
-The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains options that control how the Operator requests TLS certificates from [cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html).
+The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains options that control how the Operator requests TLS certificates from [cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md).
 
 ### `tls.SANs`
 
@@ -320,7 +320,7 @@ Additional DNS names (subject alternative names) to add to the TLS certificate t
 
 The name of the cert-manager issuer that signs the cluster TLS certificate.
 
-When set, the Operator creates a `Certificate` that references this issuer and does not create its own CA chain. Use this to integrate with an existing organizational PKI. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html#use-an-existing-clusterissuer) and [Use an existing namespace-scoped Issuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html#use-an-existing-namespace-scoped-issuer).
+When set, the Operator creates a `Certificate` that references this issuer and does not create its own CA chain. Use this to integrate with an existing organizational PKI. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-clusterissuer) and [Use an existing namespace-scoped Issuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-namespace-scoped-issuer).
 
 | Value type | Example                     |
 | ---------- | --------------------------- |
@@ -333,7 +333,7 @@ The cert-manager issuer type referenced by the cluster `Certificate`.
 Supported values:
 
 - `Issuer` (default) — namespace-scoped issuer in the database namespace.
-- `ClusterIssuer` — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html#use-an-existing-clusterissuer).
+- `ClusterIssuer` — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-clusterissuer).
 
 | Value type | Example         |
 | ---------- | --------------- |
@@ -375,7 +375,7 @@ The `mysql` section in the [deploy/cr.yaml](https://github.com/percona/percona-s
 
 The cluster type: `async` for [Asynchronous replication](https://dev.mysql.com/doc/refman/8.4/en/replication.html) , `group-replication` for [Group Replication](https://dev.mysql.com/doc/refman/8.4/en/group-replication.html) .
 
-Starting with Operator version 1.3.0, you can change this value on a running cluster. The Operator converts the topology in place. The switch causes downtime. See [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.html) to learn more.
+Starting with Operator version 1.3.0, you can change this value on a running cluster. The Operator converts the topology in place. The switch causes downtime. See [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md) to learn more.
 
 | Value type | Example             |
 | ---------- | ------------------- |
@@ -383,7 +383,7 @@ Starting with Operator version 1.3.0, you can change this value on a running clu
 
 ### `mysql.bootstrap.mode`
 
-Controls whether the Operator forms a Group Replication cluster automatically on first start. Use `manual` for replica sites in [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html).
+Controls whether the Operator forms a Group Replication cluster automatically on first start. Use `manual` for replica sites in [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md).
 
 | Value type | Example  |
 | ---------- | -------- |
@@ -398,7 +398,7 @@ Supported values:
 
 ### `mysql.autoRecovery`
 
-Enables the Operator to recover the cluster automatically after a full cluster crash. Applies to clusters with Group Replication. If you omit the option, the Operator treats it as `false`. See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html) and [the `full-cluster-crash` file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.html#full-cluster-crash).
+Enables the Operator to recover the cluster automatically after a full cluster crash. Applies to clusters with Group Replication. If you omit the option, the Operator treats it as `false`. See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md) and [the `full-cluster-crash` file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.md#full-cluster-crash).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -406,7 +406,7 @@ Enables the Operator to recover the cluster automatically after a full cluster c
 
 ### `mysql.vaultSecretName`
 
-Specifies the secret for the [HashiCorp Vault](https://developer.hashicorp.com/vault) to carry on [Data at Rest Encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.html).
+Specifies the secret for the [HashiCorp Vault](https://developer.hashicorp.com/vault) to carry on [Data at Rest Encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.md).
 
 | Value type | Example             |
 | ---------- | ------------------- |
@@ -424,7 +424,7 @@ The safe range depends on `mysql.clusterType`. For `async`, use 2 or more instan
 
 ### `mysql.image`
 
-The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.html)).
+The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.md)).
 
 | Value type | Example                              |
 | ---------- | ------------------------------------ |
@@ -608,7 +608,7 @@ The number of seconds after which the [startup probe](https://kubernetes.io/docs
 
 The startup probe runs MySQL bootstrap. On an asynchronous replica, bootstrap includes the clone, so this value limits how long that clone can run.
 
-When `spec.crVersion` is `1.3.0` or higher, the default is 604800 seconds (7 days). A `crVersion` older than 1.3.0 keeps the previous default of 43200 seconds (12 hours). A value you set here replaces the default. See [Set the clone stall timeout](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.html#set-the-clone-stall-timeout).
+When `spec.crVersion` is `1.3.0` or higher, the default is 604800 seconds (7 days). A `crVersion` older than 1.3.0 keeps the previous default of 43200 seconds (12 hours). A value you set here replaces the default. See [Set the clone stall timeout](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.md#set-the-clone-stall-timeout).
 
 | Value type | Example  |
 | ---------- | -------- |
@@ -720,7 +720,7 @@ The number of failed probes required to mark the container unhealthy.
 
 ### `mysql.env.name`
 
-Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster. The `BOOTSTRAP_CLONE_STALL_TIMEOUT` sets how long an asynchronous clone can go without progress before bootstrap stops it for clusters with `crVersion` set to 1.3.0 or higher. See [Set the clone stall timeout](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.html#set-the-clone-stall-timeout).
+Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster. The `BOOTSTRAP_CLONE_STALL_TIMEOUT` sets how long an asynchronous clone can go without progress before bootstrap stops it for clusters with `crVersion` set to 1.3.0 or higher. See [Set the clone stall timeout](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.md#set-the-clone-stall-timeout).
 
 Read more about defining environment variables in [Kubernetes documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) .
 
@@ -980,7 +980,7 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 The `my.cnf` file options to be passed to Percona Server for MySQL instances.
 
-The Operator does not validate these options against your replication type. See [Configuration compatibility considerations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.html#configuration-compatibility-considerations).
+The Operator does not validate these options against your replication type. See [Configuration compatibility considerations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.md#configuration-compatibility-considerations).
 
 | Value type | Example                        |
 | ---------- | ------------------------------ |
@@ -988,7 +988,7 @@ The Operator does not validate these options against your replication type. See 
 
 ### `mysql.autoConfig.enabled`
 
-Enables [automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html). The Operator calculates a full MySQL configuration based on the Pod resources, database workload profile, and MySQL version. Requires `mysql.resources` (CPU and memory) and `mysql.autoConfig.version` to be set.
+Enables [automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md). The Operator calculates a full MySQL configuration based on the Pod resources, database workload profile, and MySQL version. Requires `mysql.resources` (CPU and memory) and `mysql.autoConfig.version` to be set.
 
 | Value type | Example |
 | ---------- | ------- |
@@ -998,7 +998,7 @@ Enables [automatic configuration tuning](https://docs.percona.com/percona-operat
 
 The workload profile used to calculate the configuration. If not set, the Operator defaults to `someWrites`.
 
-See [Choose a workload profile](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html#choose-a-workload-profile) for what each value means.
+See [Choose a workload profile](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md#choose-a-workload-profile) for what each value means.
 
 | Value type | Allowed values                                                 | Example      |
 | ---------- | -------------------------------------------------------------- | ------------ |
@@ -1006,7 +1006,7 @@ See [Choose a workload profile](https://docs.percona.com/percona-operator-for-my
 
 ### `mysql.autoConfig.version`
 
-The MySQL version the configuration is calculated for, in the `<major>.<minor>.<patch>` format. This option controls the parameters set for the selected Percona Server for MySQL version. The [`mysql.image`](#mysqlimage) option controls the image version to be deployed. The Operator reads these two values separately. You must keep `mysql.autoConfig.version` and [`mysql.image`](#mysqlimage) values in sync yourself. Read more in the [Keep the MySQL version in sync](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html#keep-the-mysql-version-in-sync).
+The MySQL version the configuration is calculated for, in the `<major>.<minor>.<patch>` format. This option controls the parameters set for the selected Percona Server for MySQL version. The [`mysql.image`](#mysqlimage) option controls the image version to be deployed. The Operator reads these two values separately. You must keep `mysql.autoConfig.version` and [`mysql.image`](#mysqlimage) values in sync yourself. Read more in the [Keep the MySQL version in sync](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md#keep-the-mysql-version-in-sync).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -1014,7 +1014,7 @@ The MySQL version the configuration is calculated for, in the `<major>.<minor>.<
 
 ### `mysql.sidecars.image`
 
-Image for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) for Percona Server for MySQL Pods.
+Image for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) for Percona Server for MySQL Pods.
 
 | Value type | Example   |
 | ---------- | --------- |
@@ -1022,7 +1022,7 @@ Image for the [custom sidecar container](https://docs.percona.com/percona-operat
 
 ### `mysql.sidecars.command`
 
-Command for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) for Percona Server for MySQL Pods.
+Command for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) for Percona Server for MySQL Pods.
 
 | Value type | Example            |
 | ---------- | ------------------ |
@@ -1030,7 +1030,7 @@ Command for the [custom sidecar container](https://docs.percona.com/percona-oper
 
 ### `mysql.sidecars.name`
 
-Name of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) for Percona Server for MySQL Pods.
+Name of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) for Percona Server for MySQL Pods.
 
 | Value type | Example        |
 | ---------- | -------------- |
@@ -1038,7 +1038,7 @@ Name of the [custom sidecar container](https://docs.percona.com/percona-operator
 
 ### `mysql.sidecars.volumeMounts.mountPath`
 
-Mount path of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) volume for Replica Set Pods.
+Mount path of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Replica Set Pods.
 
 | Value type | Example    |
 | ---------- | ---------- |
@@ -1054,7 +1054,7 @@ The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configurati
 
 ### `mysql.sidecars.volumeMounts.name`
 
-Name of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) volume for Replica Set Pods.
+Name of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Replica Set Pods.
 
 | Value type | Example                |
 | ---------- | ---------------------- |
@@ -1062,7 +1062,7 @@ Name of the [custom sidecar container](https://docs.percona.com/percona-operator
 
 ### `mysql.sidecarVolumes`
 
-[Volume specification](https://kubernetes.io/docs/concepts/storage/volumes/) for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) volume for Percona Server for MySQL Pods.
+[Volume specification](https://kubernetes.io/docs/concepts/storage/volumes/) for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Percona Server for MySQL Pods.
 
 | Value type | Example |
 | ---------- | ------- |
@@ -1070,7 +1070,7 @@ Name of the [custom sidecar container](https://docs.percona.com/percona-operator
 
 ### `mysql.sidecarPVCs`
 
-[Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) volume for Replica Set Pods |
+[Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Replica Set Pods |
 
 | Value type | Example |
 | ---------- | ------- |
@@ -1090,7 +1090,7 @@ Enables or disables [load balancing with HAProxy](https://haproxy.org) [Services
 
 ### `proxy.haproxy.size`
 
-The number of the HAProxy Pods [to provide load balancing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.html#use-haproxy). Safe configuration should have 2 or more. This setting is required.
+The number of the HAProxy Pods [to provide load balancing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md#use-haproxy). Safe configuration should have 2 or more. This setting is required.
 
 | Value type | Example |
 | ---------- | ------- |
@@ -1390,7 +1390,7 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 ### `proxy.haproxy.configuration`
 
-The [custom HAProxy configuration file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html#passing-custom-configuration-options-to-haproxy) contents.
+The [custom HAProxy configuration file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md#passing-custom-configuration-options-to-haproxy) contents.
 
 | Value type | Example |
 | ---------- | ------- |
@@ -1868,7 +1868,7 @@ The `orchestrator` section in the [deploy/cr.yaml](https://github.com/percona/pe
 
 Enables or disables the Orchestrator.
 
-Orchestrator is used with asynchronous replication. Disable it when you [switch from async to group replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.html#switch-from-async-to-group-replication). Enable it when you [switch from group replication to async](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.html#switch-from-group-replication-to-async).
+Orchestrator is used with asynchronous replication. Disable it when you [switch from async to group replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md#switch-from-async-to-group-replication). Enable it when you [switch from group replication to async](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md#switch-from-group-replication-to-async).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -1880,7 +1880,7 @@ How long the cluster tries to recover the transactions from the failed primary�
 
 The timeout is measured from the moment Orchestrator first detects the failure and covers every retry, not a single attempt. If the Orchestrator Raft leader changes while a failover is running, the timeout restarts. This delays the decision what to do when the timeout expires.
 
-Only applies to [async](#mysqlclustertype) clusters, and only takes effect starting with `crVersion` 1.3.0. With an older `crVersion`, the Operator validates this field but ignores it. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html#understand-failover-timeout-and-recovery-policy).
+Only applies to [async](#mysqlclustertype) clusters, and only takes effect starting with `crVersion` 1.3.0. With an older `crVersion`, the Operator validates this field but ignores it. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#understand-failover-timeout-and-recovery-policy).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -1890,10 +1890,10 @@ Only applies to [async](#mysqlclustertype) clusters, and only takes effect start
 
 What the Operator does once [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) expires without recovering the transactions stranded on a failed primary:
 
-- `Abort` (default) — leaves the cluster without a writable primary until you intervene. No transactions are lost, but writes stay blocked. Promote a replica yourself with the [`percona.com/force-promote-with-possible-data-loss`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.html#force-a-promotion) annotation.
+- `Abort` (default) — leaves the cluster without a writable primary until you intervene. No transactions are lost, but writes stay blocked. Promote a replica yourself with the [`percona.com/force-promote-with-possible-data-loss`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md#force-a-promotion) annotation.
 - `ForceWithPossibleDataLoss` — promotes the best available candidate anyway. Transactions the old primary committed and never replicated are lost.
 
-Only applies to async clusters, and only takes effect starting with `crVersion` 1.3.0. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html#understand-failover-timeout-and-recovery-policy).
+Only applies to async clusters, and only takes effect starting with `crVersion` 1.3.0. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#understand-failover-timeout-and-recovery-policy).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -2215,7 +2215,7 @@ Specifies the maximum time, in seconds, the Operator allows for a pod to shut do
 
 The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used to expose the Orchestrator HTTP API (port `3000`). The default `ClusterIP` keeps the API reachable only inside the cluster.
 
-When you change this option to `LoadBalancer` or `NodePort`, the Orchestrator API becomes reachable from outside the cluster. Starting with Operator version 1.2.0, when `spec.crVersion` is `1.2.0` or higher, all API requests must authenticate. To learn more about authentication, refer to the [Orchestrator HTTP API authentication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#orchestrator-http-api-authentication) section.
+When you change this option to `LoadBalancer` or `NodePort`, the Orchestrator API becomes reachable from outside the cluster. Starting with Operator version 1.2.0, when `spec.crVersion` is `1.2.0` or higher, all API requests must authenticate. To learn more about authentication, refer to the [Orchestrator HTTP API authentication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#orchestrator-http-api-authentication) section.
 
 | Value type | Example     |
 | ---------- | ----------- |
@@ -2349,9 +2349,9 @@ The [Kubernetes PersistentVolumeClaim](https://kubernetes.io/docs/concepts/stora
 
 Custom [Orchestrator](https://github.com/percona/orchestrator) options to merge into the Orchestrator configuration. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.
 
-Starting with Custom Resource version 1.3.0, the Operator sets `ReasonableReplicationLagSeconds` to `60` by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the [`ReplicationLagging` condition](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#conditions). You can override this value here.
+Starting with Custom Resource version 1.3.0, the Operator sets `ReasonableReplicationLagSeconds` to `60` by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the [`ReplicationLagging` condition](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#conditions). You can override this value here.
 
-For an async cluster with `crVersion` 1.3.0 or later, the Operator also derives and pins the settings the [zero-data-loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html) mechanism depends on, and ignores any override of them here:
+For an async cluster with `crVersion` 1.3.0 or later, the Operator also derives and pins the settings the [zero-data-loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md) mechanism depends on, and ignores any override of them here:
 
 | Orchestrator key                                                                          | Derived from                                                                         |
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -2363,7 +2363,7 @@ For an async cluster with `crVersion` 1.3.0 or later, the Operator also derives 
 
 The following setting is not pinned, and you can override it:
 
-- `ReasonableMaintenanceReplicationLagSeconds` is the maximum replication lag, in seconds, that a candidate replica can have for Orchestrator to allow a planned switchover. Orchestrator rejects any replica that lags more. After the primary becomes read-only, Orchestrator also waits at most this long for the candidate to catch up. With `crVersion` 1.3.0 or later, the default is 120, twice `ReasonableReplicationLagSeconds`, which is 60 by default. With an older `crVersion`, the value from the Orchestrator image applies, which is 300. See [Set the replication lag limit for a planned switchover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.html#set-the-replication-lag-limit-for-a-planned-switchover).
+- `ReasonableMaintenanceReplicationLagSeconds` is the maximum replication lag, in seconds, that a candidate replica can have for Orchestrator to allow a planned switchover. Orchestrator rejects any replica that lags more. After the primary becomes read-only, Orchestrator also waits at most this long for the candidate to catch up. With `crVersion` 1.3.0 or later, the default is 120, twice `ReasonableReplicationLagSeconds`, which is 60 by default. With an older `crVersion`, the value from the Orchestrator image applies, which is 300. See [Set the replication lag limit for a planned switchover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md#set-the-replication-lag-limit-for-a-planned-switchover).
 
 Updating this field triggers a rolling restart of the Orchestrator Pods.
 
@@ -2373,7 +2373,7 @@ Updating this field triggers a rolling restart of the Orchestrator Pods.
 
 ## Users section
 
-The `users` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options [to create custom MySQL users via the Custom Resource](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#create-users-in-the-custom-resource).
+The `users` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options [to create custom MySQL users via the Custom Resource](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#create-users-in-the-custom-resource).
 
 ### `users.name`
 
@@ -2437,7 +2437,7 @@ The `pmm` section in the [deploy/cr.yaml](https://github.com/percona/percona-ser
 
 ### `pmm.enabled`
 
-Enables or disables [monitoring Percona Server for MySQL with PMM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.html).
+Enables or disables [monitoring Percona Server for MySQL with PMM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.md).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -2612,13 +2612,13 @@ A custom name to define for a cluster. PMM Server uses this name to properly par
 
 ## Log collector section
 
-The `logcollector` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file configures the Fluent Bit and `logrotate` sidecars on MySQL Pods. Available starting with Operator version 1.3.0. See [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html) and [Log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.html).
+The `logcollector` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file configures the Fluent Bit and `logrotate` sidecars on MySQL Pods. Available starting with Operator version 1.3.0. See [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md) and [Log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md).
 
 The Operator adds the sidecars only when `crVersion` is 1.3.0 or later and `logcollector.enabled` is `true`. `resources` and `containerSecurityContext` apply to both the `logs` and `logrotate` containers. `image` is required when the `logcollector` section is present.
 
 ### `logcollector.enabled`
 
-Enables or disables [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html).
+Enables or disables [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -2786,7 +2786,7 @@ Extra [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) on the MyS
 
 ### `logcollector.logRotate.configuration`
 
-Replaces the default `logrotate` configuration. You must provide the full configuration. An invalid snippet is ignored and the sidecar uses the built-in rules. See [Override the default configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.html#override-the-default-configuration).
+Replaces the default `logrotate` configuration. You must provide the full configuration. An invalid snippet is ignored and the sidecar uses the built-in rules. See [Override the default configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md#override-the-default-configuration).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -2794,7 +2794,7 @@ Replaces the default `logrotate` configuration. You must provide the full config
 
 ### `logcollector.logRotate.extraConfig.name`
 
-Name of a ConfigMap in the same namespace that holds extra `logrotate` rules. Each key must end with `.conf`. Do not use `mysql.conf` as the name. That name is reserved for the Operator-managed configuration. See [Add extra rules from a ConfigMap](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.html#add-extra-rules-from-a-configmap).
+Name of a ConfigMap in the same namespace that holds extra `logrotate` rules. Each key must end with `.conf`. Do not use `mysql.conf` as the name. That name is reserved for the Operator-managed configuration. See [Add extra rules from a ConfigMap](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md#add-extra-rules-from-a-configmap).
 
 | Value type | Example              |
 | ---------- | -------------------- |
@@ -2870,7 +2870,7 @@ Enables or disables making backups.
 
 ### `backup.encryptionKeySecret.name`
 
-The name of the Kubernetes Secret that stores the key used to [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html) before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage.
+The name of the Kubernetes Secret that stores the key used to [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage.
 
 | Value type | Example             |
 | ---------- | ------------------- |
@@ -2894,7 +2894,7 @@ Enables or disables point-in-time recovery functionality.
 
 ### `backup.pitr.binlogServer.size`
 
-Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. The Custom Resource allows only `1` (larger values are rejected). To learn more, see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html).
+Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. The Custom Resource allows only `1` (larger values are rejected). To learn more, see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -2974,7 +2974,7 @@ The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 
 ### `backup.pitr.binlogServer.storage.s3.caBundle.name`
 
-The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible binlog storage. This setting is independent from [`backup.storages.STORAGE-NAME.s3.caBundle`](#backupstoragesstorage-names3cabundlename). To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#update-the-ca-bundle).
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible binlog storage. This setting is independent from [`backup.storages.STORAGE-NAME.s3.caBundle`](#backupstoragesstorage-names3cabundlename). To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#update-the-ca-bundle).
 
 | Value type | Example           |
 | ---------- | ----------------- |
@@ -2990,7 +2990,7 @@ The key in the Secret that holds the CA certificate. If you omit this field, the
 
 ### `backup.pitr.binlogServer.storage.encryption.cipher`
 
-The cipher used to [encrypt binlog data](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption) before Percona Binlog Server writes files to object storage. Only CTR mode is supported.
+The cipher used to [encrypt binlog data](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption) before Percona Binlog Server writes files to object storage. Only CTR mode is supported.
 
 Allowed values: `AES-128-CTR`, `AES-192-CTR`, `AES-256-CTR`. Defaults to `AES-256-CTR`.
 
@@ -3000,7 +3000,7 @@ Allowed values: `AES-128-CTR`, `AES-192-CTR`, `AES-256-CTR`. Defaults to `AES-25
 
 ### `backup.pitr.binlogServer.storage.encryption.kekId`
 
-The `id` of the key encryption key (KEK) in the keyring Secret used to wrap the per-file data encryption key. If omitted, Percona Binlog Server uses the first key in the keyring. Changing this value affects only new binlogs. See [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption).
+The `id` of the key encryption key (KEK) in the keyring Secret used to wrap the per-file data encryption key. If omitted, Percona Binlog Server uses the first key in the keyring. Changing this value affects only new binlogs. See [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -3008,7 +3008,7 @@ The `id` of the key encryption key (KEK) in the keyring Secret used to wrap the 
 
 ### `backup.pitr.binlogServer.keyringSecret.name`
 
-The name of the Kubernetes Secret that stores the binlog keyring file. Required when `storage.encryption` is set. Keep this Secret configured after you disable encryption if the bucket still contains encrypted binlogs. See [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#disable-binlog-encryption).
+The name of the Kubernetes Secret that stores the binlog keyring file. Required when `storage.encryption` is set. Keep this Secret configured after you disable encryption if the bucket still contains encrypted binlogs. See [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#disable-binlog-encryption).
 
 | Value type | Example                             |
 | ---------- | ----------------------------------- |
@@ -3328,7 +3328,7 @@ The number of retries to make a backup (by default, 6 retries are made).
 
 ### `backup.startingDeadlineSeconds`
 
-The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. The backup can wait if the cluster isn’t ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.html#startingdeadlineseconds).
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. The backup can wait if the cluster isn’t ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.md#startingdeadlineseconds).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -3336,9 +3336,9 @@ The maximum time, in seconds, a backup can wait to start before the Operator mar
 
 ### `backup.suspendedDeadlineSeconds`
 
-The maximum time, in seconds, a [suspended](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline.
+The maximum time, in seconds, a [suspended](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline.
 
-Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.html#suspendeddeadlineseconds).
+Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.md#suspendeddeadlineseconds).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -3356,7 +3356,7 @@ The cloud storage type used for backups. The following types are supported: `s3`
 
 Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate.
 
-Starting with version 1.3.0, the Operator supports TLS verification with your organization’s CA. Keep this option enabled and use the CA your company already trusts. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+Starting with version 1.3.0, the Operator supports TLS verification with your organization’s CA. Keep this option enabled and use the CA your company already trusts. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -3364,7 +3364,7 @@ Starting with version 1.3.0, the Operator supports TLS verification with your or
 
 ### `backup.storages.STORAGE-NAME.encryptionKeySecret.name`
 
-The name of the Kubernetes Secret that contains the key used to [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html) for this storage location. When set, it takes precedence over [`backup.encryptionKeySecret.name`](#backupencryptionkeysecretname).
+The name of the Kubernetes Secret that contains the key used to [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) for this storage location. When set, it takes precedence over [`backup.encryptionKeySecret.name`](#backupencryptionkeysecretname).
 
 | Value type | Example             |
 | ---------- | ------------------- |
@@ -3580,7 +3580,7 @@ The endpoint URL of the S3-compatible storage to be used (not needed for the ori
 
 ### `backup.storages.STORAGE-NAME.s3.caBundle.name`
 
-The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#update-the-ca-bundle).
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#update-the-ca-bundle).
 
 | Value type | Example           |
 | ---------- | ----------------- |
@@ -3676,7 +3676,7 @@ Scheduled time of the backup, specified in the [crontab format](https://en.wikip
 
 ### `backup.schedule.keep`
 
-The amount of most recent backups to store. Older backups are automatically deleted. Set `keep` to zero or completely remove it to disable automatic deletion of backups. Note that `keep` is ignored for [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-delete.html#full-vs-incremental-backup-schedules) backups.
+The amount of most recent backups to store. Older backups are automatically deleted. Set `keep` to zero or completely remove it to disable automatic deletion of backups. Note that `keep` is ignored for [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-delete.md#full-vs-incremental-backup-schedules) backups.
 
 | Value type | Example |
 | ---------- | ------- |

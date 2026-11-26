@@ -2,9 +2,9 @@
 
 # Retrieve Percona certified images
 
-When preparing for the upgrade, you must have the list of compatible images for a specific Operator version and the database version you wish to update to. You can either manually find the images in the [list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.html) or you can get this list by querying the **Version Service** server.
+When preparing for the upgrade, you must have the list of compatible images for a specific Operator version and the database version you wish to update to. You can either manually find the images in the [list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.md) or you can get this list by querying the **Version Service** server.
 
-Security builds use numbered tags that the Version Service doesn’t list. See [Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.html) to find and use those tags.
+Security builds use numbered tags that the Version Service doesn’t list. See [Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.md) to find and use those tags.
 
 ### What is the Version Service?
 
@@ -14,7 +14,7 @@ The **Version Service** is a centralized repository that the Percona Operator fo
 
 You can manually query the Version Service using the `curl` command. The basic syntax is:
 
-```
+```bash
 curl https://check.percona.com/versions/v1/ps-operator/<operator-version>/<ps-version> | jq -r '.versions[].matrix'
 ```
 
@@ -25,13 +25,13 @@ where:
 
 For example, to retrieve the list of images for the Operator version `0.11.0` and the latest version of Percona Server for MySQL 8.4, use the following command:
 
-```
+```bash
 curl https://check.percona.com/versions/v1/ps-operator/0.11.0/8.4-latest | jq -r '.versions[].matrix'
 ```
 
 Sample output
 
-```
+```text
 "pmm": {
     "3.3.1": {
       "imagePath": "percona/pmm-client:3.3.1",
@@ -108,13 +108,13 @@ Sample output
 
 To narrow down the search and check the Percona Server for MySQL images available for a specific Operator version (`0.11.0` in the following example), use the following command:
 
-```
+```bash
 curl -s https://check.percona.com/versions/v1/ps-operator/0.11.0 | jq -r '.versions[0].matrix.mysql | to_entries[] | "\(.key)\t\(.value.imagePath)\t\(.value.status)"'
 ```
 
 Sample output
 
-```
+```text
 8.0.32-24   percona/percona-server:8.0.32-24    available
 8.0.33-25   percona/percona-server:8.0.33-25    available
 8.0.36-28   percona/percona-server:8.0.36-28    available

@@ -4,9 +4,9 @@
 
 This guide walks you through creating a MySQL InnoDB ClusterSet, verifying replication, performing switchover and failover, and removing replica clusters or the entire ClusterSet.
 
-In this setup both source and replica clusters run Percona Server for MySQL version 8.4 in Kubernetes. Refer to [Implementation specifics](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html#implementation-specifics) section for more information about running different Percona Server for MySQL versions and their compatibility for replication.
+In this setup both source and replica clusters run Percona Server for MySQL version 8.4 in Kubernetes. Refer to [Implementation specifics](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md#implementation-specifics) section for more information about running different Percona Server for MySQL versions and their compatibility for replication.
 
-Before you start, read [Cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html) for architecture, requirements, and limitations.
+Before you start, read [Cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md) for architecture, requirements, and limitations.
 
 ## Prerequisites
 
@@ -24,31 +24,31 @@ This guides uses the following software versions:
 
 1. Clone the repository with all manifests and source code by executing the following command:
 
-   ```
+   ```bash
    git clone -b v1.3.0 https://github.com/percona/percona-server-mysql-operator
    ```
 
 1. Export the namespaces of the source and replica clusters:
 
-   ```
+   ```bash
    export SOURCE_NS=source
    export REPLICA_NS=replica
    ```
 
 1. Create namespaces:
 
-   ```
+   ```bash
    kubectl create namespace source
    kubectl create namespace replica
    ```
 
 ## Step 1. Deploy the primary cluster
 
-1. Follow the [quickstart guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.html) to install the Operator 1.2.0 deployment, if you haven’t done it, and deploy Percona Server for MySQL cluster with replication type `group replication`. Let’s rename the cluster to `source-cluster` to differentiate them.
+1. Follow the [quickstart guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.md) to install the Operator 1.2.0 deployment, if you haven’t done it, and deploy Percona Server for MySQL cluster with replication type `group replication`. Let’s rename the cluster to `source-cluster` to differentiate them.
 
    Here’s the example configuration:
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQL
    metadata:
@@ -69,31 +69,31 @@ This guides uses the following software versions:
 
 1. Apply the configuration and wait until the cluster is ready:
 
-   ```
+   ```bash
    kubectl get ps source-cluster -n $SOURCE_NS
    ```
 
 1. Note the InnoDB cluster name from status — you need it for the ClusterSet CR:
 
-   ```
+   ```bash
    kubectl get ps source-cluster -n $SOURCE_NS -o jsonpath='{.status.innodbClusterName}{"\n"}'
    ```
 
    Sample output
 
-   ```
+   ```text
    sourcecluster
    ```
 
 1. Note a reachable endpoint for the primary cluster (Service DNS name, load balancer hostname, or external address). We will use the Primary service.
 
-   ```
+   ```bash
    kubectl get services -n $SOURCE_NS
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
    source-cluster-haproxy         ClusterIP   34.118.234.124   <none>        3306/TCP,3307/TCP,3309/TCP,33060/TCP,33062/TCP    26m
    source-cluster-mysql           ClusterIP   None             <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   26m
@@ -106,13 +106,13 @@ This guides uses the following software versions:
 
    - List the Secrets:
 
-     ```
+     ```bash
      kubectl get secrets -n $SOURCE_NS
      ```
 
      Sample output
 
-     ```
+     ```text
      internal-source-cluster      Opaque              8      25m
      source-cluster-psuser-root   Opaque              11     25m
      source-cluster-secrets       Opaque              8      25m
@@ -123,7 +123,7 @@ This guides uses the following software versions:
 
    - Export the Secret:
 
-     ```
+     ```bash
      kubectl get secret source-cluster-secrets -n $SOURCE_NS -o yaml > source-secret.yaml
      ```
 
@@ -131,7 +131,7 @@ This guides uses the following software versions:
 
      Use the following scripts:
 
-     ```
+     ```bash
      yq eval 'del(.metadata.ownerReferences, .metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid)' source-secret.yaml > replica-secret.yaml
      yq eval '.metadata.namespace = "replica"' -i replica-secret.yaml
      sed -i '' 's/source-cluster/replica-cluster/g' replica-secret.yaml
@@ -139,11 +139,11 @@ This guides uses the following software versions:
 
 ## Step 2. Deploy the replica cluster
 
-1. Follow the [quickstart guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.html) to install the Operator deployment in the `replica` namespace.
+1. Follow the [quickstart guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.md) to install the Operator deployment in the `replica` namespace.
 
 1. Create the Secret from the secret file you prepared from the primary cluster:
 
-   ```
+   ```bash
    kubectl apply -f replica-secret.yaml -n $REPLICA_NS
    ```
 
@@ -156,7 +156,7 @@ This guides uses the following software versions:
 
    cr-replica.yaml
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQL
    metadata:
@@ -174,7 +174,7 @@ This guides uses the following software versions:
 
 1. Apply the configuration to create the replica cluster:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr-replica.yaml -n $REPLICA_NS
    ```
 
@@ -182,32 +182,32 @@ This guides uses the following software versions:
 
 1. Verify the cluster status:
 
-   ```
+   ```bash
    kubectl get ps replica-cluster -n $REPLICA_NS
    kubectl get pods -l app.kubernetes.io/instance=replica-cluster -n $REPLICA_NS
    ```
 
 1. Note the InnoDB cluster name from status — you need it for the ClusterSet CR:
 
-   ```
+   ```bash
    kubectl get ps replica-cluster -n $REPLICA_NS -o jsonpath='{.status.innodbClusterName}{"\n"}'
    ```
 
    Sample output
 
-   ```
+   ```text
    replicacluster
    ```
 
 1. Note a reachable endpoint for the replica cluster. We will use the Primary service:
 
-   ```
+   ```bash
    kubectl get service -n $REPLICA_NS
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
    replica-cluster-mysql           ClusterIP   None             <none>        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   5m31s
    ```
@@ -220,7 +220,7 @@ For large datasets, a full clone can last long, add load to the `Donor` node and
 
 Instead of using the `clone` method, make a backup on the primary cluster and restore it on the replica. Then when the replica joins the ClusterSet, it already has the data and the GTID history from the source. So it only receives the binlog changes.
 
-Refer to the [make a backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html) and [restore from a backup on a new cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html) tutorials for step-by-step instructions.
+Refer to the [make a backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md) and [restore from a backup on a new cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md) tutorials for step-by-step instructions.
 
 ## Step 4. Create the ClusterSet
 
@@ -239,7 +239,7 @@ Now it’s time to link clusters. To do this, configure a `PerconaServerMySQLClu
 
    **Clone recovery**
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQLClusterSet
    metadata:
@@ -269,7 +269,7 @@ Now it’s time to link clusters. To do this, configure a `PerconaServerMySQLClu
 
    **Incremental recovery**
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQLClusterSet
    metadata:
@@ -299,7 +299,7 @@ Now it’s time to link clusters. To do this, configure a `PerconaServerMySQLClu
 
 1. Apply the manifest:
 
-   ```
+   ```bash
    kubectl apply -f clusterset.yaml -n $SOURCE_NS
    ```
 
@@ -312,7 +312,7 @@ Now it’s time to link clusters. To do this, configure a `PerconaServerMySQLClu
 
 1. Monitor progress:
 
-   ```
+   ```bash
    kubectl get ps-clusterset my-cluster-set -n $SOURCE_NS
    kubectl get ps-clusterset my-cluster-set -n $SOURCE_NS -o yaml
    kubectl get jobs -n $SOURCE_NS | grep my-cluster-set
@@ -327,20 +327,20 @@ When the Job completes, Pod-0 on the replica cluster becomes Ready and Pod-1, Po
 
 1. Check ClusterSet status:
 
-   ```
+   ```bash
    kubectl get ps-clusterset my-cluster-set -n $SOURCE_NS
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME             PRIMARY     ENDPOINT                              READY   AGE
    my-cluster-set   sourcecluster  source-cluster-mysql-0:3306              True    15m
    ```
 
 1. Inspect full status:
 
-   ```
+   ```bash
    kubectl describe ps-clusterset my-cluster-set -n $SOURCE_NS
    ```
 
@@ -356,32 +356,32 @@ A replica cluster may lag behind the primary.
 
 To see how far a replica cluster is behind the primary, run:
 
-```
+```bash
 kubectl get ps-clusterset my-cluster-set -n $SOURCE_NS \
   -o jsonpath='{.status.clusters.replicacluster.replicationLagSeconds}{"\n"}'
 ```
 
 Sample output
 
-```
+```text
 121
 ```
 
 An empty result means either this cluster is the primary, or the replica is caught up (or lag could not be determined). A growing value means the replica is falling behind. Wait for the lag to drop before you promote the replica or rely on it for reads.
 
-For field details, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#per-member-cluster-status).
+For field details, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#per-member-cluster-status).
 
 ### Check per-cluster status
 
 Run on the replica cluster:
 
-```
+```bash
 kubectl get ps replica-cluster -n $REPLICA_NS -o jsonpath='{range .status.conditions[*]}{.type}{": "}{.status}{"\n"}{end}'
 ```
 
 Expected output
 
-```
+```text
 Initializing: False
 Ready: True
 ClusterSetMember: True
@@ -396,34 +396,34 @@ InnoDBClusterBootstrapped: True
 
    1. Identify the primary Pod:
 
-      ```
+      ```bash
       export PRIMARY=$(kubectl get pods -n $SOURCE_NS -l mysql.percona.com/primary=true -o jsonpath='{.items[0].metadata.name}')
       ```
 
    1. Connect to the primary Pod:
 
-      ```
+      ```bash
       kubectl exec -it $PRIMARY -n $SOURCE_NS -c mysql -- \
         mysql -uroot -p$(kubectl get secret source-cluster-secrets -n $SOURCE_NS -o jsonpath='{.data.root}' | base64 -d)
       ```
 
    1. Write some data:
 
-      ```
+      ```sql
       CREATE DATABASE IF NOT EXISTS test; 
       CREATE TABLE IF NOT EXISTS test.t1 (id INT PRIMARY KEY); INSERT INTO test.t1 VALUES (1);
       ```
 
 1. Connect to the replica cluster:
 
-   ```
+   ```bash
    kubectl exec -it replica-cluster-mysql-0 -n $REPLICA_NS -c mysql -- \
      mysql -uroot -p$(kubectl get secret replica-cluster-secrets -n $REPLICA_NS -o jsonpath='{.data.root}' | base64 -d)
    ```
 
 1. Verify that the data is replicated by querying it:
 
-   ```
+   ```sql
    SELECT * FROM test.t1;
    ```
 
@@ -435,7 +435,7 @@ InnoDBClusterBootstrapped: True
 
 To promote a replica cluster to primary, edit `spec.primaryCluster`:
 
-```
+```bash
 kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS \
   --type=merge -p '{"spec":{"primaryCluster":"replicacluster"}}'
 ```
@@ -449,7 +449,7 @@ The controller:
 
 To monitor the progress, run:
 
-```
+```bash
 kubectl get ps-clusterset my-cluster-set -n $SOURCE_NS -w
 kubectl get jobs -n $SOURCE_NS | grep switchover
 ```
@@ -463,7 +463,7 @@ Use forced failover only when the current primary cluster is **unreachable** and
 1. Confirm the primary is unreachable from the controller’s perspective (the `ErrorReconcile: True` condition with the reason `PrimaryUnreachable` may be set).
 1. Enable forced failover and change the primary:
 
-```
+```bash
 kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=merge -p '{
   "spec": {
     "primaryCluster": "replicacluster",
@@ -500,7 +500,7 @@ Do not rejoin while a switchover or failover is running, and do not target the c
 
 1. Annotate the ClusterSet. Use the replica’s InnoDB cluster name — in this tutorial, `replicacluster`:
 
-   ```
+   ```bash
    kubectl annotate ps-clusterset my-cluster-set -n $SOURCE_NS \
      percona.com/clusterset-rejoin-cluster=replicacluster
    ```
@@ -514,7 +514,7 @@ Do not rejoin while a switchover or failover is running, and do not target the c
 
 1. Monitor progress:
 
-   ```
+   ```bash
    kubectl describe ps-clusterset my-cluster-set -n $SOURCE_NS
    kubectl get jobs -n $SOURCE_NS | grep rejoin
    ```
@@ -535,7 +535,7 @@ Run the following command to remove a cluster:
 
 Remove the replica by patching the ClusterSet:
 
-```
+```bash
 kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=json \
   -p='[{"op": "remove", "path": "/spec/clusters/1"}]'
 ```
@@ -552,7 +552,7 @@ The controller:
 
 If the replica cluster is **offline or unreachable**, simply deleting its entry from `spec.clusters[]` is not enough, as this will not remove it. You must enable forced removal by also setting the `spec.unsafeFlags.forcedClusterRemoval` option to `true`:
 
-```
+```bash
 kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=json -p='[
   {"op": "remove", "path": "/spec/clusters/1"},
   {"op": "add", "path": "/spec/unsafeFlags/forcedClusterRemoval", "value": true}
@@ -571,19 +571,19 @@ In this case, you must first **delete the failed Job** before retrying:
 
 1. Find the removal job:
 
-   ```
+   ```bash
    kubectl get jobs -n $SOURCE_NS | grep clusterset-remove
    ```
 
 1. Delete the failed removal job:
 
-   ```
+   ```bash
    kubectl delete job <remove-job-name> -n $SOURCE_NS
    ```
 
 1. Retry the patch command to remove the cluster:
 
-   ```
+   ```bash
    kubectl patch ps-clusterset my-cluster-set -n $SOURCE_NS --type=json \
      -p='[{"op": "remove", "path": "/spec/clusters/1"}]'
    ```
@@ -594,7 +594,7 @@ Only then the Operator recognizes the unsafe flag and retries forced removal.
 
 Delete the ClusterSet Custom Resource to stop cross-site replication and dissolve ClusterSet metadata:
 
-```
+```bash
 kubectl delete ps-clusterset my-cluster-set -n $SOURCE_NS
 ```
 
@@ -626,4 +626,4 @@ To delete the primary and replica clusters, delete their `PerconaServerMySQL` Cu
 | `ReplicaManagementFailure`                                                                   | One or more replicas could not be added or removed. See the condition message for exact details. Make sure that your replicas are reachable before removing them.                                                                              |
 | Member cluster stays `Terminating`                                                           | The `percona.com/clusterset-protection` finalizer is still set. Remove the cluster from the ClusterSet. Or, delete the ClusterSet and then delete the cluster.                                                                                 |
 
-For status field reference, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html).
+For status field reference, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md).

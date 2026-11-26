@@ -13,7 +13,7 @@ PMM Server and PMM Client are installed separately.
 ## Considerations
 
 1. Starting with the version 0.10.0, the Operator supports only PMM 3.x versions. The support for PMM 2.x is dropped.
-1. You must run the Operator version 0.10.0 and later to monitor your database with PMM 3.x. Check the [Upgrade the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.html) tutorial for the update steps.
+1. You must run the Operator version 0.10.0 and later to monitor your database with PMM 3.x. Check the [Upgrade the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.md) tutorial for the update steps.
 1. To use PMM3, PMM Server version must be equal to or newer than the PMM Client.
 1. Query Analytics (QAN) reads MySQL queries from Performance Schema, which the Operator configures for each node. If your applications use server-side prepared statements (common with drivers such as JDBC), expect QAN to show query examples as placeholders (`?`) rather than literal values, and EXPLAIN to be unavailable for them. This is how upstream MySQL exposes prepared statements to Performance Schema. This is expected behavior, not a limitation of PMM or the Operator.
 
@@ -37,17 +37,17 @@ PMM Client is installed as a sidecar container in the database Pods in your Kube
 
       When you create a service account token, you can select its lifetime: it can be either a permanent token that never expires or the one with the expiration date. PMM server cannot rotate service account tokens after they expire. So you must take care of reconfiguring PMM Client in this case.
 
-   1. Add the service account token to the `pmmservertoken` option in the [users Secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#system-users) object. Use the following command and replace the `<my-token>` placeholder with your value:
+   1. Add the service account token to the `pmmservertoken` option in the [users Secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#system-users) object. Use the following command and replace the `<my-token>` placeholder with your value:
 
       **in Linux**
 
-      ```
+      ```bash
       kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n <my-token> | base64 --wrap=0)'"}}')"
       ```
 
       **in macOS**
 
-      ```
+      ```bash
       kubectl patch secret/ps-cluster1-secrets -p "$(echo -n '{"data":{"pmmservertoken":"'$(echo -n new_key | base64)'"}}')"
       ```
 
@@ -56,7 +56,7 @@ PMM Client is installed as a sidecar container in the database Pods in your Kube
    - Set `pmm.enabled`=`true`.
    - Specify your PMM Server hostname or an IP address for the `pmm.serverHost` option. The PMM Server IP address should be resolvable and reachable from within your cluster.
 
-   ```
+   ```yaml
    pmm:
       enabled: true
       image: percona/pmm-client:3.10.0
@@ -65,7 +65,7 @@ PMM Client is installed as a sidecar container in the database Pods in your Kube
 
 1. Apply the changes:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -73,7 +73,7 @@ PMM Client is installed as a sidecar container in the database Pods in your Kube
 
 1. Check that corresponding Pods are not in a cycle of stopping and restarting. This cycle occurs if there are errors on the previous steps:
 
-   ```
+   ```bash
    kubectl get pods -n <namespace>
    kubectl logs  <cluster-name>-mysql-0 -c pmm-client -n <namespace>
    ```
@@ -91,4 +91,4 @@ Let’s see how the collected data is visualized in PMM.
 
 ## Next steps
 
-[What’s next](https://docs.percona.com/percona-operator-for-mysql/1.3.0/what-next.html)
+[What’s next](https://docs.percona.com/percona-operator-for-mysql/1.3.0/what-next.md)

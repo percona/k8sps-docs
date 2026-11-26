@@ -4,9 +4,9 @@
 
 This page lists Percona’s certified Docker images that you can use with Percona Operator for MySQL based on Percona Server for MySQL 1.3.0.
 
-To find images for a specific Operator version, see [Retrieve Percona certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.html).
+To find images for a specific Operator version, see [Retrieve Percona certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.md).
 
-Starting with version 1.3.0, a release also has security-build tags. See [Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.html).
+Starting with version 1.3.0, a release also has security-build tags. See [Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.md).
 
 Images released with the Operator version 1.3.0:
 

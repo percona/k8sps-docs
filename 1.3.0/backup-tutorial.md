@@ -2,7 +2,7 @@
 
 # Make a backup
 
-In this tutorial, you will learn how to make a logical backup of your data manually. To learn more about backups, see the [Backup and restore](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html) section.
+In this tutorial, you will learn how to make a logical backup of your data manually. To learn more about backups, see the [Backup and restore](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md) section.
 
 ## Considerations and prerequisites
 
@@ -13,11 +13,11 @@ In this tutorial, we use the [AWS S3](https://aws.amazon.com/s3/) as the backup 
 - the region - the location of the bucket
 - the S3 credentials to be used to access the storage.
 
-If you don’t have access to AWS, you can use any S3-compatible storage like [MinIO](https://min.io/docs/minio/linux/index.html) . Also [check the list of supported storages](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html).
+If you don’t have access to AWS, you can use any S3-compatible storage like [MinIO](https://min.io/docs/minio/linux/index.html) . Also [check the list of supported storages](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md).
 
 Also, we will use some files from the Operator repository for setting up backups. So, clone the percona-server-mysql-operator repository:
 
-```
+```bash
 git clone -b v1.3.0 https://github.com/percona/percona-server-mysql-operator
 cd percona-server-mysql-operator
 ```
@@ -32,14 +32,14 @@ It is important to specify the right branch with `-b` option while cloning the c
 
    **on Linux**
 
-   ```
+   ```bash
    echo -n 'AWS_ACCESS_KEY_ID' | base64 --wrap=0
    echo -n 'AWS_SECRET_ACCESS_KEY' | base64 --wrap=0
    ```
 
    **on MacOS**
 
-   ```
+   ```bash
    echo -n 'AWS_ACCESS_KEY_ID' | base64 
    echo -n 'AWS_SECRET_ACCESS_KEY' | base64
    ```
@@ -51,7 +51,7 @@ It is important to specify the right branch with `-b` option while cloning the c
 
    deploy/backup/backup-secret-s3.yaml
 
-   ```
+   ```yaml
    apiVersion: v1
    kind: Secret
    metadata:
@@ -64,7 +64,7 @@ It is important to specify the right branch with `-b` option while cloning the c
 
 1. Create the Secrets object from this yaml file. Specify your namespace instead of the `<namespace>` placeholder:
 
-   ```
+   ```bash
    kubectl apply -f deploy/backup/backup-secret-s3.yaml -n <namespace>
    ```
 
@@ -75,7 +75,7 @@ It is important to specify the right branch with `-b` option while cloning the c
    - specify the S3 bucket name for the `storages.<NAME>.s3.bucket` option
    - specify the region in the `storages.<NAME>.s3.region` option. Also you can use the `storages.<NAME>.s3.prefix` option to specify the path (a sub-folder) to the backups inside the S3 bucket. If prefix is not set, backups are stored in the root directory.
 
-   ```
+   ```yaml
    ...
    backup:
      enabled: true
@@ -92,13 +92,13 @@ It is important to specify the right branch with `-b` option while cloning the c
 
    If you use a different S3-compatible storage instead of AWS S3, add the `endpointURL` key in the `s3` subsection, which should point to the actual cloud used for backups. This value is specific to the cloud provider. For example, using Google Cloud involves the following `endpointUrl`:
 
-   ```
+   ```text
    endpointUrl: https://storage.googleapis.com
    ```
 
 1. Apply the configuration. Specify your namespace instead of the `<namespace>` placeholder:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -116,7 +116,7 @@ Now that you have the [configured storage](#configure-backup-storage) in your Cu
 
    deploy/backup/backup.yaml
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQLBackup
    metadata:
@@ -130,19 +130,19 @@ Now that you have the [configured storage](#configure-backup-storage) in your Cu
 
 1. Apply the configuration. This instructs the Operator to start a backup. Specify your namespace instead of the `<namespace>` placeholder:
 
-   ```
+   ```bash
    kubectl apply -f deploy/backup/backup.yaml -n <namespace>
    ```
 
 1. Track the backup progress.
 
-   ```
+   ```bash
    kubectl get ps-backup -n <namespace>
    ```
 
    Output
 
-   ```
+   ```text
    NAME      CLUSTER       STORAGE      DESTINATION                                      STATUS    COMPLETED   AGE
    backup1   ps-cluster1      s3-us-west   s3://ps-operator-testing/2023-10-10T16:36:46Z   Running               43s
    ```
@@ -155,18 +155,18 @@ You may face issues with the backup. To identify the issue, you can do the follo
 
 1. View the information about the backup with the following command:
 
-   ```
+   ```bash
    kubectl get ps-backup <backup-name> -n <namespace> -o yaml
    ```
 
-1. [View the backup-agent logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-logs.html). Use the command from step 1 to find the name of the pod where the backup was made. Check for the information in the `.status.backupSource` field to find the Pod where the backup process was run. To view the logs, run the following command:
+1. [View the backup-agent logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-logs.md). Use the command from step 1 to find the name of the pod where the backup was made. Check for the information in the `.status.backupSource` field to find the Pod where the backup process was run. To view the logs, run the following command:
 
-   ```
+   ```bash
    kubectl logs pod/<pod-name> -c xtrabackup -n <namespace>
    ```
 
-Congratulations! You have made the first backup manually. Want to learn more about backups? See the [Backup and restore](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html) section for how to [restore from a previously saved backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html).
+Congratulations! You have made the first backup manually. Want to learn more about backups? See the [Backup and restore](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md) section for how to [restore from a previously saved backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md).
 
 ## Next steps
 
-[Monitor the database](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring-tutorial.html)
+[Monitor the database](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring-tutorial.md)

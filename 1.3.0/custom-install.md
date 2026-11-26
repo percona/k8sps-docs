@@ -4,11 +4,11 @@
 
 You can customize the configuration of Percona Server for MySQL and install it with customized parameters.
 
-To check available configuration options, see [deploy/cr.yaml](https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/cr.yaml) and [Custom Resource Options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html).
+To check available configuration options, see [deploy/cr.yaml](https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/cr.yaml) and [Custom Resource Options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md).
 
 Note
 
-Deploy the Operator in your namespace before you apply a customized cluster manifest. If you have not installed it yet, follow [Install with kubectl](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.html) or [Install with Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/helm.html).
+Deploy the Operator in your namespace before you apply a customized cluster manifest. If you have not installed it yet, follow [Install with kubectl](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.md) or [Install with Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/helm.md).
 
 **kubectl**
 
@@ -16,13 +16,13 @@ To customize the configuration when installing with `kubectl`, do the following:
 
 1. Clone the repository with all manifests and source code by executing the following command:
 
-   ```
+   ```bash
    git clone -b v1.3.0 https://github.com/percona/percona-server-mysql-operator
    ```
 
 1. Edit the required options and apply your modified `deploy/cr.yaml` file as follows:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -38,7 +38,7 @@ To pass a custom parameter to Helm, use the `--set key=value` flag with the `hel
 
 For example, to enable [Percona Monitoring and Management (PMM)](https://docs.percona.com/percona-monitoring-and-management/3/index.html) for the database cluster, run:
 
-```
+```bash
 helm install my-db percona/ps-db --version 1.3.0 --namespace my-namespace \
   --set mysql.image.tag=8.4.11-11.1 \
   --set pmm.enabled=true
@@ -48,13 +48,13 @@ helm install my-db percona/ps-db --version 1.3.0 --namespace my-namespace \
 
 Create a `values.yaml` file with your custom parameters and pass it to `helm install` with the `-f` or `--values` flag:
 
-```
+```bash
 helm install my-db percona/ps-db --version 1.3.0 --namespace my-namespace -f values.yaml
 ```
 
 Example `values.yaml`:
 
-```
+```yaml
 mysql:
   image:
     tag: 8.4.11-11.1
@@ -75,14 +75,14 @@ You can override the default naming with the `nameOverride` or `fullnameOverride
 
 *Using `nameOverride`* — replaces the chart name but keeps the release name:
 
-```
+```bash
 helm install my-operator percona/ps-operator --namespace my-namespace \
   --set nameOverride=mysql-operator
 ```
 
 Deployment name: `my-operator-mysql-operator`.
 
-```
+```bash
 helm install cluster1 percona/ps-db -n my-namespace \
   --set nameOverride=mysql
 ```
@@ -91,14 +91,14 @@ Cluster name: `cluster1-mysql`.
 
 *Using `fullnameOverride`* — replaces the full resource name:
 
-```
+```bash
 helm install my-operator percona/ps-operator --namespace my-namespace \
   --set fullnameOverride=percona-server-mysql-operator
 ```
 
 Deployment name: `percona-server-mysql-operator`.
 
-```
+```bash
 helm install cluster1 percona/ps-db -n my-namespace \
   --set fullnameOverride=my-db
 ```
@@ -113,9 +113,9 @@ Use names that satisfy [Kubernetes naming rules](https://kubernetes.io/docs/conc
 
 The following table lists commonly used values for the Operator and database charts. For the full list of options, see the chart values files.
 
-| Value                | Charts                                                                                                                                                                                             | Description                                                                                                                         |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `nameOverride`       | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml), [ps-db](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-db/values.yaml) | Replaces the chart name in generated resource names                                                                                 |
-| `fullnameOverride`   | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml), [ps-db](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-db/values.yaml) | Replaces the entire generated resource name                                                                                         |
-| `watchAllNamespaces` | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml)                                                                                             | Deploy the Operator in cluster-wide mode to watch all namespaces                                                                    |
-| `disableTelemetry`   | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml)                                                                                             | Disable telemetry collection. See [Telemetry](https://docs.percona.com/percona-operator-for-mysql/1.3.0/telemetry.html) for details |
+| Value                | Charts                                                                                                                                                                                             | Description                                                                                                                       |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `nameOverride`       | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml), [ps-db](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-db/values.yaml) | Replaces the chart name in generated resource names                                                                               |
+| `fullnameOverride`   | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml), [ps-db](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-db/values.yaml) | Replaces the entire generated resource name                                                                                       |
+| `watchAllNamespaces` | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml)                                                                                             | Deploy the Operator in cluster-wide mode to watch all namespaces                                                                  |
+| `disableTelemetry`   | [ps-operator](https://github.com/percona/percona-helm-charts/blob/main/charts/ps-operator/values.yaml)                                                                                             | Disable telemetry collection. See [Telemetry](https://docs.percona.com/percona-operator-for-mysql/1.3.0/telemetry.md) for details |

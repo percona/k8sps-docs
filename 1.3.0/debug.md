@@ -9,30 +9,30 @@ Percona Operator for MySQL uses [Custom Resources](https://kubernetes.io/docs/co
 
 The first thing you can check for the Custom Resource is to query it with `kubectl get` command:
 
-```
+```bash
 kubectl get ps
 ```
 
 Expected output
 
-```
+```text
 NAME       REPLICATION         ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
 ps-cluster1   group-replication   ps-cluster1-haproxy.default   ready   3                                3        20m
 ```
 
-The Custom Resource should have the `ready` state. See [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html) for other possible values.
+The Custom Resource should have the `ready` state. See [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md) for other possible values.
 
 Note
 
 You can check which Percona’s Custom Resources are present and get some information about them as follows:
 
-```
+```bash
 kubectl api-resources | grep -i percona
 ```
 
 Expected output
 
-```
+```text
 perconaservermysqlbackups         ps-backup,ps-backups   ps.percona.com/v1alpha1                true         PerconaServerMySQLBackup
 perconaservermysqlrestores        ps-restore             ps.percona.com/v1alpha1                true         PerconaServerMySQLRestore
 perconaservermysqls               ps                     ps.percona.com/v1alpha1                true         PerconaServerMySQL
@@ -42,13 +42,13 @@ perconaservermysqls               ps                     ps.percona.com/v1alpha1
 
 If Custom Resource is not getting `ready` state, it makes sense to check individual Pods. You can do it as follows:
 
-```
+```bash
 kubectl get pods
 ```
 
 Expected output
 
-```
+```text
 NAME                                            READY   STATUS    RESTARTS      AGE
 cluster1-haproxy-0                              2/2     Running   0             44m
 cluster1-haproxy-1                              2/2     Running   0             44m
@@ -71,13 +71,13 @@ The above command provides the following insights:
 
 You can find more details about a specific Pod using the `kubectl describe pods <pod-name>` command.
 
-```
+```bash
 kubectl describe pods ps-cluster1-mysql-0
 ```
 
 Expected output
 
-```
+```text
 ...
 Name:         ps-cluster1-mysql-0
 Namespace:    default

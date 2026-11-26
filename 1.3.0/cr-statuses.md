@@ -14,7 +14,7 @@ To check the status of your Percona Custom Resources, use the `kubectl get <reso
 
 List your resources and check their high-level status:
 
-```
+```bash
 kubectl get ps -n <namespace>
 kubectl get ps-clusterset -n <namespace>
 kubectl get ps-backup -n <namespace>
@@ -23,7 +23,7 @@ kubectl get ps-restore -n <namespace>
 
 Sample output for PerconaServerMySQL
 
-```
+```text
 NAME          REPLICATION          ENDPOINT                              STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
 ps-cluster1   group-replication    ps-cluster1-haproxy.default           ready   3                      3                 27m
 ```
@@ -32,7 +32,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default           ready  
 
 See all status details, conditions, and events:
 
-```
+```bash
 kubectl get ps <cluster-name> -n <namespace> -o yaml
 kubectl describe ps <cluster-name> -n <namespace>
 
@@ -51,40 +51,40 @@ You can extract specific status fields using `jsonpath`.
 
 **Example 1. Get the InnoDB cluster name (for ClusterSet configuration):**
 
-```
+```bash
 kubectl get ps <cluster-name> -n <namespace> \
   -o jsonpath='{.status.innodbClusterName}{"\n"}'
 ```
 
 Sample output
 
-```
+```text
 pscluster1
 ```
 
 **Example 2. Check whether the ClusterSet is ready:**
 
-```
+```bash
 kubectl get ps-clusterset <clusterset-name> -n <namespace> \
   -o jsonpath='{range .status.conditions[?(@.type=="Ready")]}{.status}{": "}{.reason}{"\n"}{end}'
 ```
 
 Sample output
 
-```
+```text
 True: ClusterSetHealthy
 ```
 
 **Example 3. Get replication lag for ClusterSet members:**
 
-```
+```bash
 kubectl get ps-clusterset <clusterset-name> -n <namespace> \
   -o jsonpath='{range .status.clusters.*}{.clusterRole}{": "}{.replicationLagSeconds}{"\n"}{end}'
 ```
 
 Sample output
 
-```
+```text
 PRIMARY: 
 REPLICA: 121
 ```
@@ -93,34 +93,34 @@ The field appears only on replica clusters when MySQL Shell reports the lag. The
 
 **Example 4. Get the backup destination path:**
 
-```
+```bash
 kubectl get ps-backup <backup-name> -n <namespace> \
   -o jsonpath='{.status.destination}{"\n"}'
 ```
 
 Sample output
 
-```
+```text
 s3://<my-bucket>/ps-cluster1-2026-06-29-08:06:10-full
 ```
 
 **Example 4. Get the backup size:**
 
-```
+```bash
 kubectl get ps-backup <backup-name> -n <namespace> \
   -o jsonpath='{.status.size}{"\n"}{.status.uncompressedSize}{"\n"}{.status.compressed}{"\n"}'
 ```
 
 Sample output for an uncompressed backup
 
-```
+```text
 4.2MiB
 4.2MiB
 ```
 
 Sample output for a compressed backup
 
-```
+```text
 1.1MiB
 4.2MiB
 true
@@ -133,13 +133,13 @@ The main cluster state is recorded in `status.state`. Component-level states are
 Common fields:
 
 - `status.state` — overall cluster state
-- `status.clusterType` — replication type the Operator has applied (`group-replication` or `async`). It stays on the current type while a [replication type switch](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.html) is waiting to start, then changes after the Operator tears down the previous topology. It can differ from `spec.mysql.clusterType` until the switch finishes. The `REPLICATION` column of `kubectl get ps` shows `spec.mysql.clusterType`.
+- `status.clusterType` — replication type the Operator has applied (`group-replication` or `async`). It stays on the current type while a [replication type switch](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md) is waiting to start, then changes after the Operator tears down the previous topology. It can differ from `spec.mysql.clusterType` until the switch finishes. The `REPLICATION` column of `kubectl get ps` shows `spec.mysql.clusterType`.
 - `status.host` — connection endpoint (proxy Service, LoadBalancer address, or MySQL Service)
-- `status.innodbClusterName` — InnoDB cluster name derived from the Custom Resource name (non-alphanumeric characters stripped). Use this value in the [ClusterSet Custom Resource](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.html#specclustersinnodbclustername)
+- `status.innodbClusterName` — InnoDB cluster name derived from the Custom Resource name (non-alphanumeric characters stripped). Use this value in the [ClusterSet Custom Resource](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.md#specclustersinnodbclustername)
 - `status.mysql.ready` / `status.mysql.size` — number of ready MySQL Pods and the desired size
 - `status.mysql.state` — MySQL component state
 - `status.haproxy` / `status.router` / `status.orchestrator` / `status.binlogserver` — the same `ready`, `size`, `state`, and `version` fields for each component
-- `status.storageAutoscaling` — per-PVC autoscaling progress when [automatic storage scaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#scale-storage) is enabled
+- `status.storageAutoscaling` — per-PVC autoscaling progress when [automatic storage scaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#scale-storage) is enabled
 - `status.conditions` — detailed condition list with reason and message. See [Conditions](#conditions)
 
 The overall `status.state` stays `initializing` until:
@@ -179,18 +179,18 @@ Common condition fields:
 
 `status.conditions[].type` values:
 
-| Value                          | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Initializing`                 | The cluster or a component is starting up.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `Ready`                        | The cluster or a component is ready.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `Error`                        | The Operator detected an error (for example, a reconcile failure or a full cluster crash).                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `InnoDBClusterBootstrapped`    | The InnoDB Cluster metadata exists and Group Replication is formed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `AwaitingExternalBootstrap`    | The cluster is configured with `spec.mysql.bootstrap.mode: manual` and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication.                                                                                                                                                                                                                                                                                                                                                                               |
-| `ClusterSetMember`             | The cluster is a primary or a replica in an InnoDB ClusterSet that has at least one replica. `reason` is `Primary` or `Replica`. A ClusterSet that contains only the primary has no `ClusterSetMember` condition.                                                                                                                                                                                                                                                                                                                                      |
-| `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `ClusterTypeSwitchInProgress`  | A replication type switch is in progress. The Operator removes this condition only after `status.state` is `ready` under the new type.                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `ReplicationLagging`           | For `async` clusters, this condition is `True` when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the `ReasonableReplicationLagSeconds` value). This threshold is defined via the [`orchestrator.configuration`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#orchestratorconfiguration) option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be `ready` while this condition is `True`. |
-| `AsyncFailoverBlocked`         | Whether an async cluster currently has a writable primary. Not set for a single-Pod cluster, while Orchestrator can’t be read, or while the primary is deliberately read-only for a graceful switchover. See reasons below.                                                                                                                                                                                                                                                                                                                            |
+| Value                          | Meaning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Initializing`                 | The cluster or a component is starting up.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `Ready`                        | The cluster or a component is ready.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `Error`                        | The Operator detected an error (for example, a reconcile failure or a full cluster crash).                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `InnoDBClusterBootstrapped`    | The InnoDB Cluster metadata exists and Group Replication is formed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `AwaitingExternalBootstrap`    | The cluster is configured with `spec.mysql.bootstrap.mode: manual` and waits for an external actor (typically the ClusterSet controller) to bootstrap Group Replication.                                                                                                                                                                                                                                                                                                                                                                             |
+| `ClusterSetMember`             | The cluster is a primary or a replica in an InnoDB ClusterSet that has at least one replica. `reason` is `Primary` or `Replica`. A ClusterSet that contains only the primary has no `ClusterSetMember` condition.                                                                                                                                                                                                                                                                                                                                    |
+| `ClusterSetReplicationRunning` | The cluster is a `REPLICA` member of an InnoDB ClusterSet and async replication from the primary cluster is active.                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `ClusterTypeSwitchInProgress`  | A replication type switch is in progress. The Operator removes this condition only after `status.state` is `ready` under the new type.                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `ReplicationLagging`           | For `async` clusters, this condition is `True` when one or more replicas lag behind the primary by more than the lag Orchestrator still considers reasonable (the `ReasonableReplicationLagSeconds` value). This threshold is defined via the [`orchestrator.configuration`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#orchestratorconfiguration) option and is 60 seconds by default. The message lists the lagging replicas and their lag in seconds. The cluster can still be `ready` while this condition is `True`. |
+| `AsyncFailoverBlocked`         | Whether an async cluster currently has a writable primary. Not set for a single-Pod cluster, while Orchestrator can’t be read, or while the primary is deliberately read-only for a graceful switchover. See reasons below.                                                                                                                                                                                                                                                                                                                          |
 
 `status.conditions[].status` values:
 
@@ -204,18 +204,18 @@ The Operator sets `reason` and `message` as free-form strings. Common reasons in
 
 - `Initializing`, `Ready` (matching the cluster state)
 - `ErrorReconcile` — cluster reconciliation failed; see the condition message
-- `FullClusterCrashDetected` — at least one `Ready` Group Replication member has the `/var/lib/mysql/full-cluster-crash` file. See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html)
+- `FullClusterCrashDetected` — at least one `Ready` Group Replication member has the `/var/lib/mysql/full-cluster-crash` file. See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md)
 - `ManualBootstrapRequested` — the cluster is waiting for external bootstrap
 - `ClusterSetMember` - reports the ClusterSet membership starting the with the Operator version 1.3.0. The condition has the reason `Primary` for the primary cluster and `Replica` for the replica cluster. A cluster created with the Operator 1.2.0 can still show `ClusterSetReplicationRunning: True` after the upgrade. Use the `ClusterSetMember` to see whether the cluster is the primary or a replica.
 - `InnoDBClusterBootstrapped` — InnoDB Cluster metadata exists
 - `TeardownStarted` — the Operator started switching `mysql.clusterType`. The message names the previous type and the new type. Used with `ClusterTypeSwitchInProgress`.
-- `NoWritablePrimary` — the cluster’s primary is read-only, or Orchestrator’s last check of it failed. A failover may have aborted because the transactions stranded on the old primary couldn’t be recovered. See the cluster’s events. [Force a promotion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.html#force-a-promotion) to promote a replica anyway.
+- `NoWritablePrimary` — the cluster’s primary is read-only, or Orchestrator’s last check of it failed. A failover may have aborted because the transactions stranded on the old primary couldn’t be recovered. See the cluster’s events. [Force a promotion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md#force-a-promotion) to promote a replica anyway.
 - `PrimaryWritable` — the primary is writable and Orchestrator’s last check of it succeeded.
 - `ReplicationLagDetected` / `NoReplicationLag` — whether any `async` replica lags behind the primary (used by the `ReplicationLagging` condition)
 
 ### Storage autoscaling status
 
-When you enable [storage autoscaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#scale-storage), the Operator records per-PVC progress in `status.storageAutoscaling.<pvc-name>`:
+When you enable [storage autoscaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#scale-storage), the Operator records per-PVC progress in `status.storageAutoscaling.<pvc-name>`:
 
 | Field            | Meaning                         |
 | ---------------- | ------------------------------- |
@@ -238,7 +238,7 @@ The cluster controller emits Kubernetes events you can view with `kubectl descri
 | `ReplicationLagging`          | A Warning event emitted when replicas start lagging behind the primary. The `ReplicationLagging` condition becomes `True`.                                                                                                                                                                                                                                                                                                                                                                                                                |
 | `StorageAutoscalingTriggered` | Storage autoscaling started a PVC resize.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `FailoverWaiting`             | The first recovery attempt for a failed primary. The cluster has no writable primary until recovery finishes or the failover timeout defined in `orchestrator.failover.timeout` expires. The message names the `onTimeout` policy that applies next.                                                                                                                                                                                                                                                                                      |
-| `FailoverBlocked`             | `orchestrator.failover.timeout` expired with `onTimeout: Abort`. The cluster stays without a writable primary. See [Force a promotion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.html#force-a-promotion).                                                                                                                                                                                                                                                                                            |
+| `FailoverBlocked`             | `orchestrator.failover.timeout` expired with `onTimeout: Abort`. The cluster stays without a writable primary. See [Force a promotion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md#force-a-promotion).                                                                                                                                                                                                                                                                                              |
 | `FailoverForced`              | A replica was promoted without full recovery of the data from the failed primary. The event is emitted when the `orchestrator.failover.timeout` expired and the `onTimeout` behavior is `ForceWithPossibleDataLoss`. The `percona.com/force-promote-with-possible-data-loss` annotation produces the same event when it promotes a replica, fails, or is refused. The message says what triggered the event and whether a replica was promoted. A successful promotion loses transactions the old primary committed and never replicated. |
 | `FailoverFailed`              | Orchestrator gave up on recovering the transactions stranded on the failed primary.                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | `FailoverUnprotected`         | Backups are disabled, so the Operator cannot recover the transactions stranded on the failed primary. Orchestrator promotes a replica without them, and the cluster loses every transaction the failed primary committed and never replicated. The `orchestrator.failover.timeout` and `onTimeout` settings do not apply.                                                                                                                                                                                                                 |
@@ -247,7 +247,7 @@ Orchestrator retries a blocked recovery every few seconds, so `FailoverWaiting`,
 
 ## PerconaServerMySQLClusterSet status
 
-ClusterSet progress and topology are reflected in `status.primaryCluster`, `status.clusters`, and `status.conditions`. Each member `PerconaServerMySQL` cluster reports its own role with the `ClusterSetMember` condition. See [PerconaServerMySQL conditions](#conditions). For configuration options, see [ClusterSet Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.html). For setup, see [Set up cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html).
+ClusterSet progress and topology are reflected in `status.primaryCluster`, `status.clusters`, and `status.conditions`. Each member `PerconaServerMySQL` cluster reports its own role with the `ClusterSetMember` condition. See [PerconaServerMySQL conditions](#conditions). For configuration options, see [ClusterSet Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.md). For setup, see [Set up cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md).
 
 Common fields:
 
@@ -273,28 +273,28 @@ Each entry in `status.clusters[<innodbClusterName>]` contains:
 
 `globalStatus` values (from MySQL Shell):
 
-| Value                | Meaning                                                                                                                                                                                                                                                                                        |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OK`                 | Cluster is healthy and replicating as expected.                                                                                                                                                                                                                                                |
-| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists after the replica is `Ready`, [rejoin the replica](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster).                     |
-| `NOT_OK`             | Cluster has a problem; check MySQL Shell status and events.                                                                                                                                                                                                                                    |
-| `INVALIDATED`        | Cluster was fenced off after forced failover; it may have divergent GTIDs. [Rejoin it](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster) if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
-| `UNKNOWN`            | Status could not be determined (for example, the primary is unreachable).                                                                                                                                                                                                                      |
+| Value                | Meaning                                                                                                                                                                                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OK`                 | Cluster is healthy and replicating as expected.                                                                                                                                                                                                                                              |
+| `OK_NOT_REPLICATING` | Cluster is reachable but not currently replicating (transitional or misconfigured). If this status persists after the replica is `Ready`, [rejoin the replica](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster).                     |
+| `NOT_OK`             | Cluster has a problem; check MySQL Shell status and events.                                                                                                                                                                                                                                  |
+| `INVALIDATED`        | Cluster was fenced off after forced failover; it may have divergent GTIDs. [Rejoin it](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster) if GTIDs are compatible. Otherwise remove and recreate the cluster to rejoin the ClusterSet. |
+| `UNKNOWN`            | Status could not be determined (for example, the primary is unreachable).                                                                                                                                                                                                                    |
 
 ### Conditions
 
 `status.conditions[].type` values:
 
-| Value                      | Meaning                                                                                                                                                                           |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Ready`                    | ClusterSet is formed and replicas are replicating from the specified primary.                                                                                                     |
-| `ClusterSetBootstrapped`   | The primary cluster is configured as a ClusterSet.                                                                                                                                |
-| `MySQLShellRunnerReady`    | The `mysqlshell-runner` Pod is running and ready.                                                                                                                                 |
-| `SwitchoverInProgress`     | `spec.primaryCluster` differs from the observed primary and a switchover Job is running, pending, or failed.                                                                      |
-| `RejoinClusterInProgress`  | A rejoin Job is running or has failed. See [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster). |
-| `ErrorReconcile`           | An error occurred during reconciliation.                                                                                                                                          |
-| `ReplicaManagementFailure` | A replica add or remove Job failed; see the Job logs.                                                                                                                             |
-| `ClusterSetDissolving`     | The Custom Resource is being deleted and the dissolve finalizer is running.                                                                                                       |
+| Value                      | Meaning                                                                                                                                                                         |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Ready`                    | ClusterSet is formed and replicas are replicating from the specified primary.                                                                                                   |
+| `ClusterSetBootstrapped`   | The primary cluster is configured as a ClusterSet.                                                                                                                              |
+| `MySQLShellRunnerReady`    | The `mysqlshell-runner` Pod is running and ready.                                                                                                                               |
+| `SwitchoverInProgress`     | `spec.primaryCluster` differs from the observed primary and a switchover Job is running, pending, or failed.                                                                    |
+| `RejoinClusterInProgress`  | A rejoin Job is running or has failed. See [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster). |
+| `ErrorReconcile`           | An error occurred during reconciliation.                                                                                                                                        |
+| `ReplicaManagementFailure` | A replica add or remove Job failed; see the Job logs.                                                                                                                           |
+| `ClusterSetDissolving`     | The Custom Resource is being deleted and the dissolve finalizer is running.                                                                                                     |
 
 Common `Ready` condition reasons:
 
@@ -378,7 +378,7 @@ Common fields:
 | `Error`     | Backup failed to start (for example, backups are disabled, the storage name is missing, or `startingDeadlineSeconds` expired while waiting for the cluster to be ready or for another backup to complete). Check `status.stateDescription`. This state is terminal; fix the cause and create a new backup.                                    |
 | `Failed`    | Backup started but failed during execution — for example, a suspended backup did not resume before `suspendedDeadlineSeconds` expired (`stateDescription: backup did not resume before suspendedDeadlineSeconds expired`). Check `status.stateDescription` and the backup Job logs.                                                           |
 
-For troubleshooting steps, see [Troubleshoot backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html).
+For troubleshooting steps, see [Troubleshoot backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md).
 
 ### Backup conditions
 
@@ -420,7 +420,7 @@ If another restore holds the cluster lease, or a backup is still running, `statu
 
 When a restore is in `Error`, inspect the message:
 
-```
+```bash
 kubectl get ps-restore <restore-name> -n <namespace> \
   -o jsonpath='{.status.state}{"\n"}{.status.stateDescription}{"\n"}'
 ```

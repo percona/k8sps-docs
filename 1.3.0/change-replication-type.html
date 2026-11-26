@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5936,17 +5936,17 @@ Group Replication, Orchestrator for async.</p>
 <ol>
 <li>
 <p>Export the namespace and cluster name:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>&lt;namespace&gt;
 <span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=</span>ps-cluster1
 </code></pre></div>
 </li>
 <li>
 <p>Confirm the cluster is <code>ready</code>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME          REPLICATION          ENDPOINT                     STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME          REPLICATION          ENDPOINT                     STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
 ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3                      3                 27m
 </code></pre></div>
 </details>
@@ -5963,7 +5963,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">kubectl patch</label><label for="__tabbed_1_2">Edit the Custom Resource</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">  "spec": {</span>
 <span class="s1">    "mysql": {</span>
 <span class="s1">      "clusterType": "async"</span>
@@ -5987,7 +5987,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <ol>
 <li>
 <p>Edit <code>deploy/cr.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
@@ -6001,7 +6001,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </li>
 <li>
 <p>Apply the change:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </li>
 </ol>
@@ -6009,7 +6009,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </div>
 </div>
 <p>Wait until the cluster is <code>ready</code> and the <code>status.clusterType</code> is <code>async</code>. Orchestrator and HAProxy report ready replicas. </p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <p>See <a href="#verify-the-switch">Verify the switch</a>.</p>
 <h3 id="switch-from-async-to-group-replication">Switch from async to group replication<a data-markdown-ignore class="headerlink" href="#switch-from-async-to-group-replication" title="Permanent link">¶</a></h3>
@@ -6026,7 +6026,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </li>
 <li>
 <p>Set the root password and find the primary. The primary Pod prints no replica status:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ROOT_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-psuser-root<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ROOT_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-psuser-root<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
 
 <span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
 <span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"== </span><span class="nv">$CLUSTER_NAME</span><span class="s2">-mysql-</span><span class="nv">$i</span><span class="s2">"</span>
@@ -6039,13 +6039,13 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </li>
 <li>
 <p>Read the executed GTID set of the primary. Replace <code>&lt;primary-index&gt;</code> with the ordinal of the primary Pod:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">GTID_PRIMARY</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-&lt;primary-index&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">GTID_PRIMARY</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-&lt;primary-index&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$ROOT_PASSWORD</span><span class="s2">"</span><span class="w"> </span>-N<span class="w"> </span>-B<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT REPLACE(@@GLOBAL.gtid_executed, '\n', '');"</span><span class="k">)</span>
 </code></pre></div>
 </li>
 <li>
 <p>Check that every Pod has applied all transactions of the primary:</p>
-<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
 <span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$CLUSTER_NAME</span><span class="s2">-mysql-</span><span class="nv">$i</span><span class="s2">: "</span>
 <span class="w">  </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-<span class="nv">$i</span><span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$ROOT_PASSWORD</span><span class="s2">"</span><span class="w"> </span>-N<span class="w"> </span>-B<span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT GTID_SUBSET('</span><span class="nv">$GTID_PRIMARY</span><span class="s2">', @@GLOBAL.gtid_executed);"</span>
@@ -6057,7 +6057,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <h4 id="take-a-backup-from-the-primary">Take a backup from the primary<a data-markdown-ignore class="headerlink" href="#take-a-backup-from-the-primary" title="Permanent link">¶</a></h4>
 <p>By default, the Operator takes a backup of an asynchronous cluster from a replica. A lagging replica does not contain the transactions that exist only on the primary, so such a backup does not protect them.</p>
 <p>Set the <code>spec.sourcePod</code> option of the backup to the primary Pod:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">before-switch</span>
@@ -6072,7 +6072,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_2_1">kubectl patch</label><label for="__tabbed_2_2">Edit the Custom Resource</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">  "spec": {</span>
 <span class="s1">    "mysql": {</span>
 <span class="s1">      "clusterType": "group-replication"</span>
@@ -6088,7 +6088,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <ol>
 <li>
 <p>Edit <code>deploy/cr.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">group-replication</span>
 <span class="w">  </span><span class="nt">orchestrator</span><span class="p">:</span>
@@ -6097,7 +6097,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </li>
 <li>
 <p>Apply the change:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </li>
 </ol>
@@ -6107,34 +6107,34 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <p>Wait until the cluster is <code>ready</code> and the <code>status.clusterType</code> is <code>group-replication</code>. The Orchestrator column is empty. See <a href="#verify-the-switch">Verify the switch</a>.</p>
 <h3 id="verify-the-switch">Verify the switch<a data-markdown-ignore class="headerlink" href="#verify-the-switch" title="Permanent link">¶</a></h3>
 <p>Confirm the applied type and the cluster state:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.state}{" "}{.status.clusterType}{"\n"}'</span>
 </code></pre></div>
 <p>The output is <code>ready</code> and the type you switched to (<code>async</code> or <code>group-replication</code>).</p>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>ready async
+<div class="language-text no-copy highlight"><pre><span></span><code>ready async
 </code></pre></div>
 </details>
 <p>Check whether the switch is still in progress:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[?(@.type=="ClusterTypeSwitchInProgress")]}{.type}{": "}{.status}{"\n"}{end}'</span>
 </code></pre></div>
 <p>A finished switch returns no output.</p>
 <p>Connect through HAProxy as described in <a href="connect.html">Connect to Percona Server for MySQL</a> and query a known table.</p>
 <p>Optional. Confirm the new topology from inside a MySQL Pod.</p>
 <p>Inspect the connection secret and extract the password:</p>
-<div class="highlight"><pre><span></span><code><span class="nv">PWD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-psuser-root<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="nv">PWD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-psuser-root<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
 </code></pre></div>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio"><input id="__tabbed_3_2" name="__tabbed_3" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_3_1">Group replication</label><label for="__tabbed_3_2">Asynchronous replication</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SELECT member_host, member_state, member_role FROM performance_schema.replication_group_members;"</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>+-----------------------------------------------+--------------+-------------+
+<div class="language-text no-copy highlight"><pre><span></span><code>+-----------------------------------------------+--------------+-------------+
 | member_host                                   | member_state | member_role |
 +-----------------------------------------------+--------------+-------------+
 | ps-cluster1-mysql-1.ps-cluster1-mysql.psmysql | ONLINE       | SECONDARY   |
@@ -6145,7 +6145,7 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </details>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">"SHOW REPLICA STATUS\G"</span>
 </code></pre></div>
 <p>On the primary, replica status is empty. On replicas, the IO and SQL threads should report <code>Yes</code>.</p>
@@ -6172,12 +6172,12 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 <ol>
 <li>
 <p><a href="pause.html">Pause</a> the cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">'[{"op":"add","path":"/spec/pause","value":true}]'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">'[{"op":"add","path":"/spec/pause","value":true}]'</span>
 </code></pre></div>
 </li>
 <li>
 <p>Edit <code>deploy/cr.yaml</code> and set <code>mysql.clusterType</code> to <code>async</code>. Keep HAProxy enabled.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="nt">proxy</span><span class="p">:</span>
@@ -6188,13 +6188,13 @@ ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3       
 </li>
 <li>
 <p>Apply the configuration and unpause the cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span><span class="nv">$CLUSTER_NAME</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">'[{"op":"add","path":"/spec/pause","value":false}]'</span>
 </code></pre></div>
 </li>
 <li>
 <p>Wait until the cluster is resumed:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </li>
 </ol>

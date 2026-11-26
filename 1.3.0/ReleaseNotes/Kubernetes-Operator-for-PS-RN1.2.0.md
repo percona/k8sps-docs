@@ -2,7 +2,7 @@
 
 # Percona Operator for MySQL 1.2.0 (2026-07-03)
 
-[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router, and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.
 
@@ -24,7 +24,7 @@ With cross-site replication, you gain:
 - Regional read scaling — serve read traffic locally while writes stay on the primary.
 - Unified operations — one Custom Resource and the same declarative model you already use for a single cluster.
 
-Learn more about the workflow, setup and usage in the [cross-cluster replication documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html).
+Learn more about the workflow, setup and usage in the [cross-cluster replication documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md).
 
 ### Encrypted backups
 
@@ -38,7 +38,7 @@ For a restore on a new cluster or in a different Kubernetes environment, provide
 
 The default encryption algorithm is **AES256**. If your security policy requires a different cipher or you want to tune performance, you can override the algorithm and related settings through Percona XtraBackup options in `containerOptions.args.xtrabackup`.
 
-To learn more about encrypted backups, read our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html).
+To learn more about encrypted backups, read our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md).
 
 ### Automatic storage resizing
 
@@ -54,7 +54,7 @@ This improvement gives you:
 
 To enable automatic storage resizing, edit the Custom Resource manifest as follows:
 
-```
+```yaml
 spec:
   storageScaling:
     enableVolumeScaling: true
@@ -65,7 +65,7 @@ spec:
       maxSize: "10Gi"
 ```
 
-Learn more about the workflow and troubleshooting tips in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#automatic-storage-resizing).
+Learn more about the workflow and troubleshooting tips in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#automatic-storage-resizing).
 
 ### Delegate PVC resizing to an external autoscaler
 
@@ -73,7 +73,7 @@ You can now configure the Operator to use an external storage autoscaler instead
 
 To use an external autoscaler, set the `spec.storageScaling.enableExternalAutoscaling` option to `true` in the Custom Resource manifest.
 
-```
+```yaml
 spec:
   storageScaling:
     enableExternalAutoscaling: true
@@ -101,7 +101,7 @@ This improvement makes the restore path straightforward. By separating binlog co
 
 Point-in-time recovery remains a tech preview feature. We do not recommend using it in production environments yet, but we encourage you to try this workflow in staging or test clusters and share your feedback.
 
-Read more about point-in-time recovery and restore to a new cluster in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#restore-on-a-new-cluster).
+Read more about point-in-time recovery and restore to a new cluster in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md#restore-on-a-new-cluster).
 
 ### Disable NodePort allocation for LoadBalancer Services
 
@@ -109,7 +109,7 @@ By default, Kubernetes assigns a `NodePort` behind every `LoadBalancer` Service,
 
 With this release, you can now turn off `NodePort` allocation for the `LoadBalancer` Services created by the Operator. Update your cluster Custom Resource with the following configuration:
 
-```
+```yaml
 spec:
   expose:
     type: LoadBalancer
@@ -128,7 +128,7 @@ HAProxy Pods include the `mysql-monit` sidecar, a lightweight DNS-polling contai
 
 Now you can configure the resource requests and limits for each HAProxy sidecar container independently. Use the `spec.proxy.haproxy.sidecarResources` subsection in the Custom Resource and specify the required values for each sidecar:
 
-```
+```yaml
 proxy:
   haproxy:
     sidecarResources:
@@ -149,7 +149,7 @@ The Operator now validates the Vault Secret when you enable data-at-rest encrypt
 
 With this validation, you can now deploy Vault and the database cluster together, such as using Helm integration charts. You can define the Secret reference up front and let the Operator wait until the Secret is present and valid before continuing cluster setup.
 
-Read more about [configuring data-at-rest encryption with Vault](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.html).
+Read more about [configuring data-at-rest encryption with Vault](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.md).
 
 ### Improve operational efficiency with the support for concurrent cluster reconciliation
 
@@ -179,7 +179,7 @@ Until now, you could not adjust the Orchestrator behavior beyond the Operator de
 
 Provide Orchestrator options as a JSON string. For example, with the `FailMasterPromotionOnLagMinutes` option, you can control how long Orchestrator waits before promoting a new primary when replication is lagging. Using the `RecoveryPeriodBlockSeconds` option, define how long to block recovery after a failover.
 
-```
+```yaml
 spec:
   orchestrator:
     enabled: true
@@ -196,7 +196,7 @@ Now you can define a custom name for your clusters deployed in different data ce
 
 To assign a custom name, define this configuration in the Custom Resource manifest for your cluster:
 
-```
+```yaml
 spec:
   pmm:
     customClusterName: testClusterName
@@ -247,7 +247,7 @@ For manual installation or update, follow the instructions below:
 
 1. Clone the Operator repository:
 
-   ```
+   ```bash
    git clone -b v1.2.0 https://github.com/percona/percona-server-mysql-operator
    cd percona-server-mysql-operator
    ```
@@ -257,23 +257,23 @@ For manual installation or update, follow the instructions below:
    - Locate the Deployment custom resource for the Operator.
    - Update the `spec.image` field to
 
-   ```
+   ```text
    docker.io/percona/percona-server-mysql-operator:1.2.0
    ```
 
 1. Apply the updated `deploy/bundle.yaml` file:
 
-   ```
+   ```bash
    oc apply --server-side -f deploy/bundle.yaml
    ```
 
 1. Install Percona Server for MySQL:
 
-   ```
+   ```bash
    oc create -f deploy/cr.yaml
    ```
 
-For the upgrade steps, follow the [Update documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-openshift.html#update-via-the-command-line-interface).
+For the upgrade steps, follow the [Update documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-openshift.md#update-via-the-command-line-interface).
 
 ## CRD changes
 

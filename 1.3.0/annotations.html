@@ -131,7 +131,7 @@ are used to attach additional metadata information to Kubernetes resources.">
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md"></head>
   
   
     
@@ -141,7 +141,7 @@ are used to attach additional metadata information to Kubernetes resources.">
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6052,7 +6052,7 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <p>You can define both Labels and Annotations as <code>key-value</code> pairs in the metadata section of a YAML manifest for a specific resource.</p>
 <h3 id="set-labels-and-annotations-for-pods">Set labels and annotations for Pods<a data-markdown-ignore class="headerlink" href="#set-labels-and-annotations-for-pods" title="Permanent link">¶</a></h3>
 <p>You can set labels and annotations for Percona XtraBackup Pods, specific to the backup storage you use. To do this, use the <code>.spec.backup.storages.&lt;STORAGE_NAME&gt;.annotations</code>/<code>.spec.backup.storages.&lt;STORAGE_NAME&gt;.labels</code> keys in the Custom Resource manifest.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">s3-us-west</span><span class="p">:</span>
@@ -6072,7 +6072,7 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <li><code>.spec.orchestrator.expose.annotations</code>/<code>.spec.orchestrator.expose.labels</code> -  for the Orchestrator Service</li>
 </ul>
 <p>The following example shows how to set labels and annotations for a <code>&lt;CLUSTER-NAME&gt;-mysql-primary</code> service:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">exposePrimary</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -6088,7 +6088,7 @@ are used to attach additional metadata information to Kubernetes resources.</p>
 <p>You can also use the top-level spec <code>metadata.annotations</code> and <code>metadata.labels</code>
 options to set annotations and labels at a global level, for all resources
 created by the Operator:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQL</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1</span>
@@ -6100,23 +6100,23 @@ created by the Operator:</p>
 <h2 id="querying-labels-and-annotations">Querying labels and annotations<a data-markdown-ignore class="headerlink" href="#querying-labels-and-annotations" title="Permanent link">¶</a></h2>
 <p>To check which <strong>labels</strong> are attached to a specific object, use the additional <code>--show-labels</code> option of the <code>kubectl get</code> command.</p>
 <p>For example, to see the Operator version associated with a Custom Resource Definition, use the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>crd<span class="w"> </span>perconaservermysqls.ps.percona.com<span class="w"> </span>--show-labels
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>crd<span class="w"> </span>perconaservermysqls.ps.percona.com<span class="w"> </span>--show-labels
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME                                 CREATED AT             LABELS
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME                                 CREATED AT             LABELS
 perconaservermysqls.ps.percona.com   2025-05-23T10:40:54Z   mysql.percona.com/version=v1.3.0
 </code></pre></div>
 </details>
 <p>To check <strong>annotations</strong> associated with an object, use the following command: </p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>&lt;resource&gt;<span class="w"> </span>&lt;resource-name&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.metadata.annotations}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>&lt;resource&gt;<span class="w"> </span>&lt;resource-name&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.metadata.annotations}'</span>
 </code></pre></div>
 <p>For example, this command lists annotations assigned to a <code>ps-cluster1-mysql-0</code> Pod:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.metadata.annotations}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.metadata.annotations}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"percona.com/last-applied-tls"</span><span class="p">:</span><span class="s2">"c8dfc846cb62b75ba8eab61b7e86a46c"</span><span class="p">}</span>
+<div class="language-json no-copy highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"percona.com/last-applied-tls"</span><span class="p">:</span><span class="s2">"c8dfc846cb62b75ba8eab61b7e86a46c"</span><span class="p">}</span>
 </code></pre></div>
 </details>
 <h2 id="specifying-labels-and-annotations-ignored-by-the-operator">Specifying labels and annotations ignored by the Operator<a data-markdown-ignore class="headerlink" href="#specifying-labels-and-annotations-ignored-by-the-operator" title="Permanent link">¶</a></h2>
@@ -6142,7 +6142,7 @@ nothing if a new label or an annotation is added to the Service object.</p>
 </ul>
 <p>You can still specify which annotations and labels the Operator should keep. It is useful if a cloud provider adds own labels and annotations to Services. Or you may have custom automation tools that add own labels or annotations and you need to keep them.</p>
 <p>List these labels and annotations in the <code>spec.ignoreAnnotations</code> or <code>spec.ignoreLabels</code> fields of the <code>deploy/cr.yaml</code>, as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">ignoreAnnotations</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">some.custom.cloud.annotation/smth</span>
 <span class="w">  </span><span class="nt">ignoreLabels</span><span class="p">:</span>
@@ -6156,13 +6156,13 @@ nothing if a new label or an annotation is added to the Service object.</p>
 <ul>
 <li>For labels:</li>
 </ul>
-<div class="highlight"><pre><span></span><code>kubectl label &lt;resource&gt; &lt;name&gt; &lt;label-key&gt;-
+<div class="language-text highlight"><pre><span></span><code>kubectl label &lt;resource&gt; &lt;name&gt; &lt;label-key&gt;-
 </code></pre></div>
 <p>where <code>&lt;label-key&gt;</code> is the label you want to delete.</p>
 <ul>
 <li>For annotations:</li>
 </ul>
-<div class="highlight"><pre><span></span><code>kubectl annotate &lt;resource&gt; &lt;name&gt; &lt;annotation-key&gt;-
+<div class="language-text highlight"><pre><span></span><code>kubectl annotate &lt;resource&gt; &lt;name&gt; &lt;annotation-key&gt;-
 </code></pre></div>
 <p>where <code>&lt;annotation-key&gt;</code> is the annotation you want to delete.</p>
 <hr>

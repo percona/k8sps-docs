@@ -2,7 +2,7 @@
 
 # Percona Operator for MySQL 1.0.0 (2025-11-17)
 
-[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.
 
@@ -50,7 +50,7 @@ The following timeouts are now set to 3600s by default:
 
 You can fine-tune the timeout for cloning in your custom resource (CR) using environment variables:
 
-```
+```yaml
 spec:
   mysql:
     env:
@@ -76,7 +76,7 @@ If you defined several schedules for the same remote backup storage, be aware of
 1. **Retention policy conflicts.** The Operator applies retention policies only to the first schedule in your configuration. For example, if you set daily backups to keep 5 copies and monthly backups to keep 3 copies, the Operator will only keep 5 total backups in storage, not 8 as you might expect. However, all backup objects will still appear in `kubectl get ps-backup` output.
 1. **Concurrent backup conflicts.** When multiple schedules run simultaneously and write to the same storage path, backups can overwrite each other, resulting in incomplete or corrupted data.
 
-To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage) for more information and configuration steps.
+To avoid these issues and ensure each schedule maintains its own retention policy, configure separate storage locations for each schedule. Refer to the [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md#managing-multiple-backup-schedules-in-the-same-storage) for more information and configuration steps.
 
 ## Changelog
 

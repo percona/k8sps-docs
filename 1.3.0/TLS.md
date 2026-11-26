@@ -21,9 +21,9 @@ You can configure TLS in these ways:
 
 The following sections provide guidelines on how to:
 
-- [Configure TLS using cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html)
-- [Generate certificates manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.html)
-- [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.html)
+- [Configure TLS using cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md)
+- [Generate certificates manually](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-manual.md)
+- [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.md)
 
 ## Rotate certificates
 
@@ -62,4 +62,4 @@ When the Operator sees a new leaf signed by the same CA, it does the following:
 
 HAProxy, MySQL Router, and Orchestrator read certificates once at startup, so their Pod-template hash still covers the whole Secret. They restart.
 
-See [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.html) for how to rotate the leaf and how to rotate the CA.
+See [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.md) for how to rotate the leaf and how to rotate the CA.

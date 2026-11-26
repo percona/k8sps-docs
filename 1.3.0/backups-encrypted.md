@@ -2,7 +2,7 @@
 
 # Encrypted backups
 
-Version added: [1.2.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.html)
+Version added: [1.2.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md)
 
 Percona Operator for MySQL uses [Percona XtraBackup](https://docs.percona.com/percona-xtrabackup/latest/) to create physical backups. By default, backups are unencrypted. To add an extra security layer, you can encrypt backup files before they are stored in your cloud object storage. Encryption is applied inline during the backup stream, so files in the storage stay protected at rest even if the storage account is shared or accessed without authorization. This helps you meet compliance requirements without adding external encryption tools or changing how you run scheduled and on-demand backups.
 
@@ -10,7 +10,7 @@ Encryption is available for the Group Replication and asynchronous replication c
 
 ## Backup flow
 
-You can encrypt both full and [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.html) backups, whether they are [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html) or [on-demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html). When encrypting incremental backups, the key must be the same for every backup in an incremental chain.
+You can encrypt both full and [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md) backups, whether they are [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md) or [on-demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md). When encrypting incremental backups, the key must be the same for every backup in an incremental chain.
 
 You can enable encryption globally for all backups, or set different encryption options for each storage. The setting you configure for a specific storage overrides the global setting. This flexibility lets you tailor backup security to your unique requirements.
 
@@ -30,7 +30,7 @@ Create a Kubernetes Secret that holds the encryption key. The encryption key mus
 
 Generate the encryption key using the following command:
 
-```
+```bash
 openssl rand -base64 24
 ```
 
@@ -38,7 +38,7 @@ Create a Secret configuration file and specify the generated string within. Here
 
 encryption-key.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -49,7 +49,7 @@ stringData:
 
 Create the Secret object:
 
-```
+```bash
 kubectl apply -f encryption-key.yaml -n <namespace>
 ```
 
@@ -63,7 +63,7 @@ Store this Secret securely and back it up separately from your database backups.
 
 Here’s the sample configuration:
 
-```
+```yaml
 spec:
   backup:
     enabled: true
@@ -81,7 +81,7 @@ spec:
 
 1. Apply the new configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -95,7 +95,7 @@ Next, configure the `encryptionKeySecret` subsection in the Custom Resource unde
 
 This example configuration shows how to override encryption settings for the S3 storage. The new encryption key is stored within the Secret named `my-encryption-key-s3`:
 
-```
+```yaml
 spec:
   backup:
     encryptionKeySecret:
@@ -117,11 +117,11 @@ After you apply the configuration, the storage-level encryption settings take pr
 
 ### Tune the encryption algorithm and performance
 
-The Operator uses **AES256** by default. To use a different cipher or adjust encryption performance, pass Percona XtraBackup options through `containerOptions.args.xtrabackup` in the cluster Custom Resource or in a specific backup or restore manifest. See [Fine-tuning backup and restore operations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.html) for how global and per-job settings interact.
+The Operator uses **AES256** by default. To use a different cipher or adjust encryption performance, pass Percona XtraBackup options through `containerOptions.args.xtrabackup` in the cluster Custom Resource or in a specific backup or restore manifest. See [Fine-tuning backup and restore operations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md) for how global and per-job settings interact.
 
 The example configuration shows how to tune Percona XtraBackup globally on the cluster level.
 
-```
+```yaml
 spec:
   backup:
     storages:
@@ -136,13 +136,13 @@ spec:
 
 ## Make an encrypted backup
 
-You don’t need any additional configuration to make an encrypted backup. The Operator uses the encryption settings from the Custom Resource for both [on-demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html) and [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html) backups.
+You don’t need any additional configuration to make an encrypted backup. The Operator uses the encryption settings from the Custom Resource for both [on-demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md) and [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md) backups.
 
 ## Restore from an encrypted backup on the same cluster
 
-When you restore using [`backupName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.html#backupname) on the same cluster where the backup was created, the Operator reads the encryption key from the cluster Custom Resource automatically. No extra configuration is required as long as the same `encryptionKeySecret` is still defined in the cluster.
+When you restore using [`backupName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.md#backupname) on the same cluster where the backup was created, the Operator reads the encryption key from the cluster Custom Resource automatically. No extra configuration is required as long as the same `encryptionKeySecret` is still defined in the cluster.
 
-See [Restore the cluster from a previously saved backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html).
+See [Restore the cluster from a previously saved backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md).
 
 ## Restore from an encrypted backup on a new cluster
 
@@ -150,10 +150,10 @@ When you restore from a backup on a different cluster or in a different Kubernet
 
 The key used for restore **must match** the key that was used to encrypt the backup.
 
-See [Restore from a backup to a new Kubernetes-based environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html#restore-from-an-encrypted-backup) for the full cross-cluster restore workflow.
+See [Restore from a backup to a new Kubernetes-based environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md#restore-from-an-encrypted-backup) for the full cross-cluster restore workflow.
 
 Keep your backup encryption keys safe
 
 To restore from an encrypted backup, you **must have the original encryption key**. If the key is lost or rotated, your backups are irrecoverable. Always ensure you have a secure and reliable process for managing and backing up encryption keys separately from your database backups.
 
-Binlogs collected for point-in-time recovery are stored separately from these backups. To encrypt those files in object storage, see [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption).
+Binlogs collected for point-in-time recovery are stored separately from these backups. To encrypt those files in object storage, see [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption).

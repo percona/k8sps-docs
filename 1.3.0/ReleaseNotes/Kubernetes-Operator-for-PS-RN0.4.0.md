@@ -8,7 +8,7 @@
 
 - **Installation**
 
-  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Note
 
@@ -17,18 +17,18 @@ Version 0.4.0 of the Percona Operator for MySQL is **a tech preview release** an
 ## Release Highlights
 
 - This is maintenance release, where we fixed 15 bugs and focused on improving existing features like backups and support for various replication topologies
-- Starting from now it [becomes possible](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html) to restore backups to a new cluster, which means bootstrapping the new cluster without an existing backup object.
+- Starting from now it [becomes possible](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md) to restore backups to a new cluster, which means bootstrapping the new cluster without an existing backup object.
 - This release also includes fixes to the following CVEs (Common Vulnerabilities and Exposures): CVE-2022-40897 (the denial of service vulnerability in Python Packaging Authority setuptools, the operator and mysql-router images are affected), as well as CVE-2022-32149 and CVE-2022-27664 (the denial of service vulnerability in golang binaries, percona-toolkit image used by the Operator is affected). Users of previous Operator versions are advised to upgrade to the version 0.4.0.
 
 ## New Features
 
-- [K8SPS-113](https://jira.percona.com/browse/K8SPS-113): Allow [using templates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.html) to define `innodb_buffer_pool_size` when the Operator performs auto-tuning based on container memory limits
+- [K8SPS-113](https://jira.percona.com/browse/K8SPS-113): Allow [using templates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.md) to define `innodb_buffer_pool_size` when the Operator performs auto-tuning based on container memory limits
 
 ## Improvements
 
 - [K8SPS-90](https://jira.percona.com/browse/K8SPS-90): Add sanity checks for backups: make sure that there is no pre-existing backup with the same name in the cloud storage and that the created backup is not empty
-- [K8SPS-130](https://jira.percona.com/browse/K8SPS-130): Standardize cluster and components service [exposure](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.html) to have unification of the expose configuration across all Percona Operators
-- [K8SPS-95](https://jira.percona.com/browse/K8SPS-95): With [backupSource support](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html) for restores users are now able to restore database from object storage directly without the need to have ps-backup Custom Resource
+- [K8SPS-130](https://jira.percona.com/browse/K8SPS-130): Standardize cluster and components service [exposure](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md) to have unification of the expose configuration across all Percona Operators
+- [K8SPS-95](https://jira.percona.com/browse/K8SPS-95): With [backupSource support](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md) for restores users are now able to restore database from object storage directly without the need to have ps-backup Custom Resource
 - [K8SPS-207](https://jira.percona.com/browse/K8SPS-207): Allow to disable both Orchestrator and HAProxy, starting only a single-node Percona Server for MySQL without replication. Can be useful for development and testing purposes
 
 ## Bugs Fixed

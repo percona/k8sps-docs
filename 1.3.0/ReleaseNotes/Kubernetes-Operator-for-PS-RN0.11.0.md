@@ -2,7 +2,7 @@
 
 # Percona Operator for MySQL 0.11.0 (2025-09-01)
 
-[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.11.0 of the Percona Operator for MySQL is still **a tech preview release**, and it is **not recommended for production environments**.
 
@@ -18,7 +18,7 @@ This release introduces support for Percona Server for MySQL 8.4.x. The Operator
 
 Data-at-rest encryption provides robust data protection by encrypting your database files on disk. Data is encrypted automatically, in real time, prior to writing to storage and decrypted when read from storage. The Operator uses the `keyring_vault` plugin to encrypt tablespace files and binlog. It integrates directly with HashiCorp Vault, giving you a secure and automated solution for managing encryption keys.
 
-With this feature, you can meet your compliance requirements and protect sensitive data without the operational complexity. Learn how to configure it in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.html)
+With this feature, you can meet your compliance requirements and protect sensitive data without the operational complexity. Learn how to configure it in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.md)
 
 Note that data-at-rest encryption is currently not supported for Percona Server for MySQL 8.4.x. We plan to add it in future releases.
 

@@ -24,19 +24,19 @@ The general recommendation is to set the number of concurrent workers equal to t
 
 1. Check the current value of the `MAX_CONCURRENT_RECONCILES` environment variable:
 
-   ```
+   ```bash
    kubectl get deployment percona-server-mysql-operator -o jsonpath='{.spec.template.spec.containers[0].env[?(@.name=="MAX_CONCURRENT_RECONCILES")].value}'
    ```
 
    Sample output
 
-   ```
+   ```text
    1
    ```
 
 1. Set a new value with `kubectl set env`. The following command sets the number of workers to `2`:
 
-   ```
+   ```bash
    kubectl set env deployment/percona-server-mysql-operator MAX_CONCURRENT_RECONCILES=2
    ```
 
@@ -44,13 +44,13 @@ The general recommendation is to set the number of concurrent workers equal to t
 
 1. Verify the change by re-running the command from step 1:
 
-   ```
+   ```bash
    kubectl get deployment percona-server-mysql-operator -o jsonpath='{.spec.template.spec.containers[0].env[?(@.name=="MAX_CONCURRENT_RECONCILES")].value}'
    ```
 
    Sample output
 
-   ```
+   ```text
    2
    ```
 

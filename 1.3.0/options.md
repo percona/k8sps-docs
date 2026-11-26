@@ -6,7 +6,7 @@ The Operator can tune MySQL for you, or you can pass your own options from a [my
 
 ## Choose automatic tuning or your own configuration
 
-These settings aren’t independent. **Setting any configuration of your own disables the Operator’s [automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html)**, even if you only set one unrelated option:
+These settings aren’t independent. **Setting any configuration of your own disables the Operator’s [automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md)**, even if you only set one unrelated option:
 
 | Approach                                                       | What controls the configuration                                                         |
 | -------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
@@ -14,7 +14,7 @@ These settings aren’t independent. **Setting any configuration of your own dis
 | `spec.mysql.autoConfig.enabled: true`, no manual configuration | The Operator calculates a full configuration from your resources and workload profile   |
 | `spec.mysql.configuration`, a ConfigMap, or a Secret           | Your values only                                                                        |
 
-To let the Operator tune MySQL for you, see [Automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html).
+To let the Operator tune MySQL for you, see [Automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md).
 
 ## Configuration compatibility considerations
 
@@ -60,7 +60,7 @@ For example, Group Replication requires `log_replica_updates=ON` so members reco
 
 You can add options from the [my.cnf](https://dev.mysql.com/doc/refman/8.0/en/option-files.html) configuration file by editing the configuration section of the `deploy/cr.yaml`. Here is an example:
 
-```
+```yaml
 spec:
   secretsName: ps-cluster1-secrets
   mysql:
@@ -69,7 +69,7 @@ spec:
         max_connections=250
 ```
 
-See the [Custom Resource options, MySQL section](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-mysql-section) for more details.
+See the [Custom Resource options, MySQL section](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-mysql-section) for more details.
 
 ## Use a ConfigMap
 
@@ -79,7 +79,7 @@ Use the `kubectl` command to create the ConfigMap from external resources, for m
 
 For example, let’s suppose that your application requires more connections. To increase your `max_connections` setting in MySQL, you define a `my.cnf` configuration file with the following setting:
 
-```
+```text
 max_connections=250
 ```
 
@@ -87,25 +87,25 @@ You can create a configmap from the `my.cnf` file with the `kubectl create confi
 
 You should use the combination of the cluster name with the `-mysql` suffix as the naming convention for the configmap. To find the cluster name, you can use the following command:
 
-```
+```bash
 kubectl get ps
 ```
 
 The syntax for `kubectl create configmap` command is:
 
-```
+```bash
 kubectl create configmap <cluster-name>-mysql <resource-type=resource-name>
 ```
 
 The following example defines `ps-cluster1-mysql` as the configmap name and the `my.cnf` file as the data source:
 
-```
+```bash
 kubectl create configmap ps-cluster1-mysql --from-file=my.cnf
 ```
 
 To view the created configmap, use the following command:
 
-```
+```bash
 kubectl describe configmaps ps-cluster1-mysql
 ```
 
@@ -119,7 +119,7 @@ Note
 
 To find the cluster name, you can use the following command:
 
-```
+```bash
 kubectl get ps
 ```
 
@@ -129,7 +129,7 @@ Actual options should be encoded with [Base64](https://en.wikipedia.org/wiki/Bas
 
 For example, let’s define a `my.cnf` configuration file and put there a pair of MySQL options we used in the previous example:
 
-```
+```text
 max_connections=250
 ```
 
@@ -137,13 +137,13 @@ You can get a Base64 encoded string from your options via the command line as fo
 
 **in Linux**
 
-```
+```bash
 cat my.cnf | base64 --wrap=0
 ```
 
 **in macOS**
 
-```
+```bash
 cat my.cnf | base64
 ```
 
@@ -151,13 +151,13 @@ Note
 
 Similarly, you can read the list of options from a Base64 encoded string:
 
-```
+```bash
 echo "bWF4X2Nvbm5lY3Rpb25zPTI1MAo" | base64 --decode
 ```
 
 Finally, use a yaml file to create the Secret object. For example, you can create a `deploy/mysql-secret.yaml` file with the following contents:
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -168,7 +168,7 @@ data:
 
 When ready, apply it with the following command:
 
-```
+```bash
 kubectl create -f deploy/mysql-secret.yaml
 ```
 
@@ -178,7 +178,7 @@ The Operator applies Secret changes automatically. [Dynamic variables](#dynamic-
 
 ## Dynamic configuration
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 Some MySQL system are [dynamic](https://dev.mysql.com/doc/refman/8.4/en/dynamic-system-variables.html) and you can change them at runtime while the server is running.
 
@@ -217,7 +217,7 @@ The Operator doesn’t auto-tune an option you set yourself in `spec.mysql.confi
 
 Also, starting from the Operator 0.4.0, there is another way of auto-tuning. You can use `"{{ containerMemoryLimit }}"` as a value in `spec.mysql.configuration` as follows:
 
-```
+```yaml
 mysql:
     configuration: |
     [mysqld]
@@ -225,6 +225,6 @@ mysql:
     ...
 ```
 
-Starting with Operator 1.3.0, a more comprehensive form of automatic tuning is available. See [Automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html).
+Starting with Operator 1.3.0, a more comprehensive form of automatic tuning is available. See [Automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md).
 
 The tuning of the buffer pool and `max_connections` is what the Operator continues to use whenever that feature is disabled (`spec.mysql.autoConfig.enabled: false` or unset). This behavior remains and applies to any cluster that doesn’t opt in.

@@ -12,20 +12,20 @@ These are the most important tasks to tackle right away:
 
 You’ve created a single backup, but production workloads need automated backup schedules to protect your data continuously.
 
-- [Schedule automatic backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html) - Configure daily, weekly, or custom backup schedules with retention policies
-- [Restore from a backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html) - Learn how to restore your data when needed
+- [Schedule automatic backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md) - Configure daily, weekly, or custom backup schedules with retention policies
+- [Restore from a backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md) - Learn how to restore your data when needed
 
 ### 2. Create application users
 
 Your cluster is currently using the root user. For production, you’ll want to create dedicated users for your applications with appropriate permissions.
 
-- [Create application and system users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html) - Set up unprivileged users for your applications with fine-grained access control
+- [Create application and system users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md) - Set up unprivileged users for your applications with fine-grained access control
 
 ### 3. Enable high availability
 
 Ensure your cluster can survive node failures by distributing pods across different nodes.
 
-- [Configure anti-affinity and tolerations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/constraints.html) - Control pod placement to prevent single points of failure
+- [Configure anti-affinity and tolerations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/constraints.md) - Control pod placement to prevent single points of failure
 
 ## Production preparation
 
@@ -33,35 +33,35 @@ Once you’ve covered the basics, prepare your cluster for production workloads:
 
 ### Security
 
-- [Enable TLS/SSL encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.html) - Secure connections between your applications and the database
-- [Configure data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.html) - Protect your data at rest with encryption keys
-- [Configure encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html) - Protect backup files stored in cloud object storage
+- [Enable TLS/SSL encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md) - Secure connections between your applications and the database
+- [Configure data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.md) - Protect your data at rest with encryption keys
+- [Configure encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) - Protect backup files stored in cloud object storage
 
 ### Configure access to your cluster for external applications
 
-- [Configure HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html) or [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.html) - Customize load balancing behavior
-- [Expose your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.html) - Configure external access if your applications need it
+- [Configure HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md) or [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md) - Customize load balancing behavior
+- [Expose your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md) - Configure external access if your applications need it
 
 ### Performance and reliability
 
-- [Scale your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html) - Add more nodes for better performance or increase resources for existing nodes
-- [Configure MySQL options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.html) - Tune MySQL settings for your workload requirements
-- [Let the Operator tune MySQL automatically](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html) - Calculate a full configuration from your cluster’s resources and workload instead of tuning by hand
-- [Fine-tune backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.html) - Optimize backup performance and customize restore operations
+- [Scale your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md) - Add more nodes for better performance or increase resources for existing nodes
+- [Configure MySQL options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.md) - Tune MySQL settings for your workload requirements
+- [Let the Operator tune MySQL automatically](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md) - Calculate a full configuration from your cluster’s resources and workload instead of tuning by hand
+- [Fine-tune backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md) - Optimize backup performance and customize restore operations
 
 ### Monitoring and observability
 
-- [Monitor with Percona Monitoring and Management (PMM)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.html) - Set up comprehensive monitoring, alerts, and performance insights beyond the basic setup
-- [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html) - Retain and rotate logs for troubleshooting.
+- [Monitor with Percona Monitoring and Management (PMM)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.md) - Set up comprehensive monitoring, alerts, and performance insights beyond the basic setup
+- [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md) - Retain and rotate logs for troubleshooting.
 
 ## Advanced operations
 
 As you become more comfortable with the Operator, explore these advanced features:
 
-- [Add sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) - Extend functionality with custom containers
-- [Multi-namespace deployment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.html) - Configure Operator-wide or namespace-specific deployments
+- [Add sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) - Extend functionality with custom containers
+- [Multi-namespace deployment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md) - Configure Operator-wide or namespace-specific deployments
 
 ## Learn more
 
-- [Understand the architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html) - Deep dive into how the Operator works and its components
-- [Review all configuration options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html) - Complete reference for Custom Resource settings
+- [Understand the architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md) - Deep dive into how the Operator works and its components
+- [Review all configuration options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md) - Complete reference for Custom Resource settings

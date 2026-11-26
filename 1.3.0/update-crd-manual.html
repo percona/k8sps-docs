@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation">
+        <meta name="description" content="Percona Operator for MySQL based on Percona Server for MySQL, a Kubernetes operator that automates deployment, scaling, backups, updates and failover of MySQL clusters with group replication or asynchronous replication">
       
       
         <meta name="author" content="Percona LLC">
@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-manual.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-manual.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-crd-manual.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5758,14 +5758,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h1 id="upgrade-the-operator-and-crd-manually">Upgrade the Operator and CRD manually<a data-markdown-ignore class="headerlink" href="#upgrade-the-operator-and-crd-manually" title="Permanent link">¶</a></h1>
 <h2 id="before-you-start">Before you start<a data-markdown-ignore class="headerlink" href="#before-you-start" title="Permanent link">¶</a></h2>
 <p>Export your namespace as an environment variable to simplify the configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>&lt;my-namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>&lt;my-namespace&gt;
 </code></pre></div>
 <h2 id="upgrade-the-crd-and-operator-deployment">Upgrade the CRD and Operator Deployment<a data-markdown-ignore class="headerlink" href="#upgrade-the-crd-and-operator-deployment" title="Permanent link">¶</a></h2>
 <p>The upgrade includes the following steps.</p>
 <ol>
 <li>
 <p>Update the Custom Resource Definition for the Operator and the Role-based access control. Take the latest versions from the official repository on GitHub with the following commands:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/crd.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/crd.yaml
 kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/rbac.yaml
 </code></pre></div>
 </li>
@@ -5775,12 +5775,12 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Use the following command if you deploy both the Operator and the database cluster in the same namespace:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/operator.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/operator.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <p>If you deployed the Operator to manage several clusters in different namespaces (the so-called <a href="cluster-wide.html">cluster-wide mode</a>), use the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/cw-operator.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/cw-operator.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </div>
 </div>
@@ -5791,7 +5791,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <p>The deployment rollout will be automatically triggered.
     You can track the rollout process in real time with the
     <code>kubectl rollout status</code> command with the name of your cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployments<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployments<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -5815,7 +5815,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <li><code>spec.updateStrategy</code> option is set to <code>SmartUpdate</code></li>
 <li><code>spec.upgradeOptions.apply</code> option is set to <code>Never</code> or <code>Disabled</code> (this means that the Operator will not carry on upgrades automatically)</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="nn">...</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nn">...</span>
 <span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">updateStrategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SmartUpdate</span>
 <span class="w">  </span><span class="nt">upgradeOptions</span><span class="p">:</span>
@@ -5838,7 +5838,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </ol>
 <h4 id="if-you-upgrade-an-asynchronous-cluster">If you upgrade an asynchronous cluster<a data-markdown-ignore class="headerlink" href="#if-you-upgrade-an-asynchronous-cluster" title="Permanent link">¶</a></h4>
 <p>Version 1.3.0 requires backups for the <a href="failover-async.html">failover on asynchronous clusters</a>. After the Operator upgrade, reconciliation stops because status updates fail validation:</p>
-<div class="no-copy highlight"><pre><span></span><code>PerconaServerMySQL.ps.percona.com "ps-cluster1" is invalid: spec: Invalid value: "object": no such key: unsafeFlags evaluating rule: Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
+<div class="language-text no-copy highlight"><pre><span></span><code>PerconaServerMySQL.ps.percona.com "ps-cluster1" is invalid: spec: Invalid value: "object": no such key: unsafeFlags evaluating rule: Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
 </code></pre></div>
 <p>Before you upgrade, <a href="backups-storage.html">enable and configure backups</a>. To let reconciliation continue without backups, set <a href="operator.html#unsafeflagsasyncfailoverwithpossibledataloss"><code>unsafeFlags.asyncFailoverWithPossibleDataLoss</code></a> to <code>true</code>. Make sure you understand the tradeoffs.</p>
 <p>Without backups, a failover cannot recover transactions that remain on the old primary.</p>
@@ -5858,7 +5858,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5874,7 +5874,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5889,7 +5889,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5913,7 +5913,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5928,7 +5928,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5942,7 +5942,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5965,7 +5965,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5980,7 +5980,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -5994,7 +5994,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.4.11-11.1" },</span>
@@ -6023,7 +6023,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6039,7 +6039,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6054,7 +6054,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6078,7 +6078,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6093,7 +6093,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6107,7 +6107,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6130,7 +6130,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 <ul>
 <li>
 <p><strong>With PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6145,7 +6145,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>Without PMM Client</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>
@@ -6159,7 +6159,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span c
 </li>
 <li>
 <p><strong>With Binlog Server</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>--patch<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">   "spec": {</span>
 <span class="s1">       "crVersion":"1.3.0",</span>
 <span class="s1">       "mysql":{ "image": "percona/percona-server:8.0.46-37.1" },</span>

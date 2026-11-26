@@ -12,7 +12,7 @@ The overall troubleshooting workflow looks like this:
 1. Check source pod logs. For backups, review logs from the `xtrabackup` container in the source pod. For restores, view logs of the Pod created by the restore Job.
 1. Verify configuration. Ensure storage configurations, credentials, and cluster settings are correct.
 
-Refer to the following sections for details. For status field reference, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html).
+Refer to the following sections for details. For status field reference, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md).
 
 ## Backups
 
@@ -20,7 +20,7 @@ Refer to the following sections for details. For status field reference, see [Cu
 
 Start by checking the status of your backup objects:
 
-```
+```bash
 kubectl get ps-backup -n <namespace>
 ```
 
@@ -28,7 +28,7 @@ This shows you all backup objects with their current state. The `STATE` column i
 
 Example output
 
-```
+```text
 NAME                                           STORAGE      DESTINATION                                                  STATE       COMPLETED   AGE
 backup1                                        aws-s3       s3://operator-testing/ps-cluster1-2025-11-07-20:59:28-full   Succeeded   11m         11m
 backup2                                        azure                                                                     Error                   10m
@@ -42,7 +42,7 @@ cron-ps-cluster1-aws-s3-20251107211029-45srk   aws-s3       s3://operator-testin
 
 When a backup fails, use `kubectl describe` to get detailed error information:
 
-```
+```bash
 kubectl describe ps-backup <backup-name> -n <namespace>
 ```
 
@@ -50,7 +50,7 @@ The `Status` section contains the `State` and `State Description` fields that ex
 
 Example error output
 
-```
+```text
 Name:         backup2
 Namespace:    default
 ...
@@ -66,13 +66,13 @@ Common error scenarios include:
 - **Authentication failures**: Invalid credentials for accessing cloud storage
 - **Network issues**: Problems connecting to the storage service
 - **Insufficient permissions**: The backup job doesn’t have permission to write to the storage location
-- **TLS certificate errors**: The storage endpoint uses a private CA and the Operator cannot verify it. Typical Job or sidecar log messages include `x509: certificate signed by unknown authority` or `certificate verify failed`. Keep `verifyTLS` enabled, confirm `crVersion` is `1.3.0` or later, and supply the CA with [`s3.caBundle`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+- **TLS certificate errors**: The storage endpoint uses a private CA and the Operator cannot verify it. Typical Job or sidecar log messages include `x509: certificate signed by unknown authority` or `certificate verify failed`. Keep `verifyTLS` enabled, confirm `crVersion` is `1.3.0` or later, and supply the CA with [`s3.caBundle`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 ### Check backup Jobs
 
 When a backup runs, the Operator creates a Kubernetes Job to execute it. You can view these Jobs to see which backups are running or have completed:
 
-```
+```bash
 kubectl get jobs -n <namespace>
 ```
 
@@ -83,7 +83,7 @@ Backup jobs follow this naming pattern:
 
 Example output
 
-```
+```text
 NAME                                                     STATUS     COMPLETIONS   DURATION   AGE
 xb-backup1-aws-s3                                        Complete   1/1           14s        11m
 xb-backup3-azure-blob                                    Complete   1/1           12s        10m
@@ -96,7 +96,7 @@ xb-cron-ps-cluster1-aws-s3-20251107211029-45srk-aws-s3   Complete   1/1         
 
 To see detailed logs from a backup job, use the job name:
 
-```
+```bash
 kubectl logs job/<job-name> -n <namespace>
 ```
 
@@ -104,7 +104,7 @@ Find the name using the steps from the [Check backup Jobs](#check-backup-jobs) s
 
 For example, to view logs from the `xb-backup1-aws-s3` job:
 
-```
+```bash
 kubectl logs job/xb-backup1-aws-s3 -n <namespace>
 ```
 
@@ -112,7 +112,7 @@ These logs show the backup process execution, including Percona XtraBackup opera
 
 Example output
 
-```
+```text
 Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
 Trying to run backup backup1 on ps-cluster1-mysql-1.ps-cluster1-mysql.default
 2025-11-07T20:59:33.889841-00:00 0 [Note] [MY-011825] [Xtrabackup] recognized server arguments: --datadir=/var/lib/mysql 
@@ -128,13 +128,13 @@ xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision 
 
 You can also view logs from the Pod created by the Job:
 
-```
+```bash
 kubectl logs <pod-name> -n <namespace>
 ```
 
 To find the Pod name, list pods and look for pods with names matching your backup job:
 
-```
+```bash
 kubectl get pods -n <namespace> | grep xb-
 ```
 
@@ -142,13 +142,13 @@ kubectl get pods -n <namespace> | grep xb-
 
 Each backup object contains information about which MySQL Pod was used as the backup source. You can retrieve this information using:
 
-```
+```bash
 kubectl get ps-backup <backup-name> -o jsonpath='{.status.backupSource}' -n <namespace>
 ```
 
 For example:
 
-```
+```bash
 kubectl get ps-backup backup1 -o jsonpath='{.status.backupSource}'
 ```
 
@@ -158,13 +158,13 @@ This returns the fully qualified domain name (FQDN) of the source pod, such as `
 
 The `xtrabackup` container in the source pod also contains backup logs. To view them, run:
 
-```
+```bash
 kubectl logs <source-pod-name> -c xtrabackup -n <namespace>
 ```
 
 For example, if the backup source is `ps-cluster1-mysql-1`:
 
-```
+```bash
 kubectl logs ps-cluster1-mysql-1 -c xtrabackup -n <namespace>
 ```
 
@@ -172,7 +172,7 @@ These logs show the backup request received by the sidecar container, including 
 
 Example output
 
-```
+```text
 2025-11-07T20:44:11Z    INFO    startServer     starting http server
 2025-11-07T20:59:33Z    INFO    sidecar.create backup   Checking if backup exists       {"namespace": "default", "name": "backup1"}
 2025-11-07T20:59:33Z    INFO    sidecar.create backup   Backup starting {"namespace": "default", "name": "backup1", "destination": "ps-cluster1-2025-11-07-20:59:28-full", "storage": "s3", "xtrabackupCmd": "/usr/bin/xtrabackup --backup --stream=xbstream --safe-slave-backup --slave-info --target-dir=/backup/ --user=xtrabackup ", "xbcloudCmd": "/usr/bin/xbcloud put --parallel=10 --curl-retriable-errors=7 --md5 --storage=s3 --s3-bucket=operator-testing --s3-region=us-east-1   ps-cluster1-2025-11-07-20:59:28-full"}
@@ -191,7 +191,7 @@ xtrabackup version 8.4.0-4 based on MySQL server 8.4.0 Linux (x86_64) (revision 
 
 To check the status of restore operations, run:
 
-```
+```bash
 kubectl get ps-restore -n <namespace>
 ```
 
@@ -199,7 +199,7 @@ This shows all restore objects with their current state.
 
 Example output
 
-```
+```text
 NAME       STATE       AGE
 restore1   Error       5m56s
 restore2   Succeeded   5m37s
@@ -209,7 +209,7 @@ restore2   Succeeded   5m37s
 
 When a restore fails, use the `kubectl describe` command to get detailed error information:
 
-```
+```bash
 kubectl describe ps-restore <restore-name> -n <namespace>
 ```
 
@@ -217,7 +217,7 @@ The `Status` section contains the `State` and `State Description` fields that ex
 
 Example error output
 
-```
+```text
 Name:         restore1
 Namespace:    default
 ...
@@ -229,7 +229,7 @@ Events:               <none>
 
 Example success output
 
-```
+```text
 Name:         restore2
 Namespace:    default
 ...
@@ -250,7 +250,7 @@ Common restore error scenarios include:
 
 When a restore runs, the Operator creates a Kubernetes Job to execute it. View these Jobs:
 
-```
+```bash
 kubectl get jobs -n <namespace>
 ```
 
@@ -258,7 +258,7 @@ Restore jobs follow the naming pattern `xb-restore-<restore-name>`.
 
 Example output
 
-```
+```text
 NAME                                                     STATUS     COMPLETIONS   DURATION   AGE
 xb-restore-restore2                                      Complete   1/1           23s        5m42s
 ```
@@ -267,19 +267,19 @@ xb-restore-restore2                                      Complete   1/1         
 
 To see detailed logs from a restore Job, run:
 
-```
+```bash
 kubectl logs job/<restore-job-name> -n <namespace>
 ```
 
 For example:
 
-```
+```bash
 kubectl logs job/xb-restore-restore2 -n <namespace>
 ```
 
 Sample output
 
-```
+```text
 Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
 ++ awk '/^xtrabackup version/{print $3}'
 ++ awk -F. '{print $1"."$2}'
@@ -297,19 +297,19 @@ Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
 
 You can also view logs from the Pod created by the restore Job. To find the Pod name, list pods and look for pods with names matching your restore job:
 
-```
+```bash
 kubectl get pods -n <namespace> | grep xb-restore
 ```
 
 Then check the logs:
 
-```
+```bash
 kubectl logs <restore-pod-name> -n <namespace>
 ```
 
 Example output
 
-```
+```text
 Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
 ++ awk '/^xtrabackup version/{print $3}'
 ++ awk -F. '{print $1"."$2}'
@@ -327,7 +327,7 @@ Defaulted container "xtrabackup" out of: xtrabackup, xtrabackup-init (init)
 
 Point-in-time recovery adds a Binlog Server Pod and a PITR Job (`pitr-restore-<restore-name>`) on top of the base restore Job (`xb-restore-<restore-name>`). Check both Jobs and the Binlog Server Pod, not only `xb-restore-*`.
 
-To inspect the restored base backup before the binary logs are applied, see [Pause a point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.html).
+To inspect the restored base backup before the binary logs are applied, see [Pause a point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.md).
 
 ### Binlog Server is in CrashLoopBackOff
 
@@ -345,7 +345,7 @@ Set `spec.backup.backoffLimit=0` in the cluster Custom Resource so the Job does 
 
 Updates made by `mysql-shell` can produce errors such as `Error_code: 1032` / `HA_ERR_KEY_NOT_FOUND` on `mysql_innodb_cluster_metadata.instances`.
 
-If you choose to ignore SQL errors, add `force: true` under `spec.pitr` in the restore object. This passes `--force` to the MySQL client and silently ignores **all** SQL errors during replay, which can hide data loss. See [Ignore SQL errors during binlog replay](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#ignore-sql-errors-during-binlog-replay).
+If you choose to ignore SQL errors, add `force: true` under `spec.pitr` in the restore object. This passes `--force` to the MySQL client and silently ignores **all** SQL errors during replay, which can hide data loss. See [Ignore SQL errors during binlog replay](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md#ignore-sql-errors-during-binlog-replay).
 
 ### Encrypted binlogs fail to decrypt
 
@@ -357,7 +357,7 @@ Typical causes:
 - Keys rotated into another Secret, but the restore still uses the cluster keyring
 - A KEK removed from `keyring.json`
 
-Check the PITR Job logs (`pitr-restore-<restore-name>`) for KEK / keyring errors. To copy the Secret and set `keyringSecret`, see [Restore with encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#restore-with-encrypted-binlogs). Lost keys cannot be recovered.
+Check the PITR Job logs (`pitr-restore-<restore-name>`) for KEK / keyring errors. To copy the Secret and set `keyringSecret`, see [Restore with encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md#restore-with-encrypted-binlogs). Lost keys cannot be recovered.
 
 ### Operator user password changed after the backup
 
@@ -376,4 +376,4 @@ Do not set `verifyTLS: false` or `VERIFY_TLS=false` to work around this. Instead
 
 On the same cluster with `backupName`, the Operator can use `caBundle` already set on the cluster Custom Resource.
 
-See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage), [Restore from S3 storage that uses a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html#restore-from-s3-storage-that-uses-a-custom-ca), and [Use a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#use-a-custom-ca) for point-in-time recovery.
+See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage), [Restore from S3 storage that uses a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca), and [Use a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md#use-a-custom-ca) for point-in-time recovery.

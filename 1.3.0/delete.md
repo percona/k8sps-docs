@@ -26,19 +26,19 @@ The steps are the following:
 
 1. List the Custom Resources. Replace the `<namespace>` placeholder with your value
 
-   ```
+   ```bash
    kubectl get ps -n <namespace>
    ```
 
 1. Delete the Custom Resource with the name of your cluster
 
-   ```
+   ```bash
    kubectl delete ps <cluster_name> -n <namespace>
    ```
 
    Sample output
 
-   ```
+   ```text
    perconaservermysql.ps.percona.com "ps-cluster1" deleted
    ```
 
@@ -46,13 +46,13 @@ The steps are the following:
 
 1. Check that the cluster is deleted by listing the Custom Resources again:
 
-   ```
+   ```bash
    kubectl get ps -n <namespace>
    ```
 
    Sample output
 
-   ```
+   ```text
    No resources found in <namespace> namespace.
    ```
 
@@ -66,38 +66,38 @@ To uninstall the Operator, delete the [Deployments](https://kubernetes.io/docs/c
 
 1. List the deployments. Replace the `<namespace>` placeholder with your namespace.
 
-   ```
+   ```bash
    kubectl get deploy -n <namespace>
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
    percona-server-mysql-operator   1/1     1            1           42m
    ```
 
 1. Delete the `percona-*` deployment
 
-   ```
+   ```bash
    kubectl delete deploy percona-server-mysql-operator -n <namespace>
    ```
 
    Sample output
 
-   ```
+   ```text
    deployment.apps "percona-server-mysql-operator" deleted
    ```
 
 1. Check that the Operator is deleted by listing the Pods. As a result you should have no Pods related to it.
 
-   ```
+   ```bash
    kubectl get pods -n <namespace>
    ```
 
    Sample output
 
-   ```
+   ```text
    No resources found in <namespace> namespace.
    ```
 
@@ -107,13 +107,13 @@ To uninstall the Operator, delete the [Deployments](https://kubernetes.io/docs/c
 
    Get the list of CRDs.
 
-   ```
+   ```bash
    kubectl get crd
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME                                        CREATED AT
    perconaservermysqlbackups.ps.percona.com    2025-02-07T20:10:42Z
    perconaservermysqlrestores.ps.percona.com   2025-02-07T20:10:42Z
@@ -122,13 +122,13 @@ To uninstall the Operator, delete the [Deployments](https://kubernetes.io/docs/c
 
 1. Delete the `percona*.ps.percona.com` CRDs
 
-   ```
+   ```bash
    kubectl delete crd perconaservermysqlbackups.ps.percona.com perconaservermysqlrestores.ps.percona.com perconaservermysqls.ps.percona.com
    ```
 
    Sample output
 
-   ```
+   ```text
    customresourcedefinition.apiextensions.k8s.io "perconaservermysqlbackups.ps.percona.com" deleted
    customresourcedefinition.apiextensions.k8s.io "perconaservermysqlrestores.ps.percona.com" deleted
    customresourcedefinition.apiextensions.k8s.io "perconaservermysqls.ps.percona.com" deleted
@@ -140,26 +140,26 @@ To delete the Operator, do the following:
 
 1. List the Helm charts:
 
-   ```
+   ```bash
    helm list -n <namespace>
    ```
 
    Sample output
 
-   ```
+   ```text
    ps-cluster1    <namespace>         1           2023-10-31 10:18:10.763049 +0100 CET    deployed    ps-db-1.3.0        1.3.0
    my-op       <namespace>         1           2023-10-31 10:15:18.41444 +0100 CET     deployed    ps-operator-1.3.0   1.3.0
    ```
 
 1. Delete the [release object](https://helm.sh/docs/intro/using_helm/#three-big-concepts) for Percona XtraDB Cluster
 
-   ```
+   ```bash
    helm uninstall ps-cluster1 --namespace <namespace>
    ```
 
 1. Delete the [release object](https://helm.sh/docs/intro/using_helm/#three-big-concepts) for the Operator
 
-   ```
+   ```bash
    helm uninstall my-op --namespace <namespace>
    ```
 
@@ -167,7 +167,7 @@ To delete the Operator, do the following:
 
 By default, TLS-related objects, user Secrets and data volumes remain in Kubernetes environment after you delete the cluster to allow you to recreate it without losing the data.
 
-You can automate resource cleanup by turning on `percona.com/delete-mysql-pvc` and/or `percona.com/delete-ssl` [finalizers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#metadata-name)). You can also delete TLS-related objects and PVCs manually.
+You can automate resource cleanup by turning on `percona.com/delete-mysql-pvc` and/or `percona.com/delete-ssl` [finalizers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#metadata-name)). You can also delete TLS-related objects and PVCs manually.
 
 To manually clean up resources, do the following:
 
@@ -175,13 +175,13 @@ To manually clean up resources, do the following:
 
    1. List PVCs. Replace the `<namespace>` placeholder with your namespace:
 
-      ```
+      ```bash
       kubectl get pvc -n <namespace>
       ```
 
       Sample output
 
-      ```
+      ```text
       NAME                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
       datadir-ps-cluster1-mysql-0   Bound    pvc-8683d0ab-7ed4-48cb-93a9-bc6ceb6ec285   2G         RWO            standard       <unset>                 47m
       datadir-ps-cluster1-mysql-1   Bound    pvc-fbc5a8a4-94ff-4259-9d15-f798c97e0788   2G         RWO            standard       <unset>                 45m
@@ -190,13 +190,13 @@ To manually clean up resources, do the following:
 
    1. Delete PVCs related to your cluster. The following command deletes PVCs for the `ps-cluster1` cluster:
 
-      ```
+      ```bash
       kubectl delete pvc datadir-ps-cluster1-mysql-0 datadir-ps-cluster1-mysql-1 datadir-ps-cluster1-mysql-2 -n <namespace>
       ```
 
       Sample output
 
-      ```
+      ```text
       persistentvolumeclaim "datadir-ps-cluster1-mysql-0" deleted
       persistentvolumeclaim "datadir-ps-cluster1-mysql-1" deleted
       persistentvolumeclaim "datadir-ps-cluster1-mysql-2" deleted
@@ -206,12 +206,12 @@ To manually clean up resources, do the following:
 
    1. List Secrets:
 
-      ```
+      ```bash
       kubectl get secrets -n <namespace>
       ```
 
    1. Delete the Secret:
 
-      ```
+      ```bash
       kubectl delete secret <secret_name> -n <namespace>
       ```

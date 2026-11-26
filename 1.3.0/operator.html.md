@@ -1,0 +1,3751 @@
+> For the complete documentation index, see [llms.txt](https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt).
+
+# Custom Resource options reference
+
+Percona Operator for MySQL uses [Custom Resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) to manage options for the various components of the cluster.
+
+- `PerconaServerMySQL` Custom Resource with options for the cluster,
+- `PerconaServerMySQLClusterSet` Custom Resource with options for InnoDB ClusterSet — see [ClusterSet Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/clusterset-cr.md) and [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md),
+- `PerconaServerMySQLBackup` Custom Resource contains options for Percona XtraBackup used to backup Percona Server for MySQL
+- `PerconaServerMySQLRestore` Custom Resource contains options for restoring Percona Server for MySQL from backups.
+
+For status fields and conditions, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md).
+
+## PerconaServerMySQL Custom Resource options
+
+Percona Server for MySQL managed by the Operator is configured via the spec section of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file.
+
+The metadata part of PerconaServerMySQL Custom Resource contains the following keys:
+
+- `name` (`ps-cluster1` by default) sets the name of your Percona Server for MySQL cluster; it should include only [URL-compatible characters](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3) , not exceed 22 characters, start with an alphabetic character, and end with an alphanumeric character;
+
+- `finalizers` subsection:
+
+  - `percona.com/delete-mysql-pods-in-order` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which controls the proper Pods deletion order in case of the cluster deletion event (on by default).
+  - `percona.com/delete-mysql-pvc` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [Persistent Volume Claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for Percona Server for MySQL Pods after the cluster deletion event (off by default). It also triggers deletion of user Secrets.
+  - `percona.com/delete-ssl` if present, activates the [Finalizer](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#finalizers) which deletes [objects, created for SSL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md) (Secret, certificate, and issuer) after the cluster deletion event (off by default).
+
+The top-level spec elements of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) are the following ones:
+
+## Toplevel `spec` elements
+
+The spec part of the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains the following:
+
+### `crVersion`
+
+Version of the Operator the Custom Resource belongs to.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `1.3.0` |
+
+### `metadata.annotations`
+
+The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) metadata that you can set at a global level for all resources created by the Operator.
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| label      | `example-annotation: value` |
+
+### `metadata.labels`
+
+The [Kubernetes labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) metadata that you can set at a global level for all resources created by the Operator.
+
+| Value type | Example                |
+| ---------- | ---------------------- |
+| label      | `example-label: value` |
+
+### `pause`
+
+Pause/resume: setting it to `true` gracefully stops the cluster, and setting it to `false` after shut down starts the cluster back.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `enableVolumeExpansion`
+
+Enables or disables [storage resizing with volume expansion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#storage-resizing-with-volume-expansion-capability).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+This option is deprecated and will be removed in version 1.5.0. Use the [`storageScaling.enableVolumeScaling`](#storagescalingenablevolumescaling) option instead.
+
+## Storage scaling section
+
+The `storageScaling` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file controls volume expansion and automatic storage resizing for MySQL PVCs. See [Scale storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#scale-storage) for usage details.
+
+### `storageScaling.enableVolumeScaling`
+
+Enables or disables [storage scaling / volume expansion](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#storage-resizing-with-volume-expansion-capability) with Volume Expansion capability.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `storageScaling.enableExternalAutoscaling`
+
+Enables or disables the use of external volume autoscaler. When disabled, the Operator uses its own expansion logic with Volume Expansion capability.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `storageScaling.autoscaling.enabled`
+
+Enables automatic storage resizing based on user-defined thresholds. Read more about this feature in [Automatic storage resizing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#automatic-storage-resizing).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `storageScaling.autoscaling.triggerThresholdPercent`
+
+The percentage of the storage usage that triggers automatic resizing. Valid values are from 50 to 95. Default value is 80.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `80`    |
+
+### `storageScaling.autoscaling.growthStep`
+
+The amount to increase the storage during automatic resizing. Default value is `2Gi`.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `2Gi`   |
+
+### `storageScaling.autoscaling.maxSize`
+
+The maximum size to which storage can be automatically resized. Autoscaling stops when storage reaches this limit. Must be at least `1Gi`.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `10Gi`  |
+
+### `initContainer.Image`
+
+An alternative init image for the Operator.
+
+| Value type | Example                                          |
+| ---------- | ------------------------------------------------ |
+| string     | `perconalab/percona-server-mysql-operator:1.3.0` |
+
+### `initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the initial Operator installation.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100M`  |
+
+### `initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `initContainer.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the initial Operator installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `secretsName`
+
+A name for [users secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#users). When undefined, the Operator creates the Secrets object named in the format `<cluster-name>-secrets`. Otherwise, it uses the provided name.
+
+| Value type | Example               |
+| ---------- | --------------------- |
+| string     | `ps-cluster1-secrets` |
+
+### `clusterServiceDNSSuffix`
+
+A custom cluster domain suffix the Operator uses when constructing internal service hostnames. Use this when the Operator runs in a vcluster or in a cluster with a custom DNS domain so it can correctly resolve services. See [Configure DNS suffix for service discovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/dns-suffix.md) for details.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `cluster.local` |
+
+### `sslSecretName`
+
+A secret with the TLS certificate used by the cluster, see [Transport Layer Security (TLS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/TLS.md) for details. When undefined, the Operator creates the Secrets object named `<cluster-name>-ssl`. Otherwise, it uses the provided name. If this Secret already exists and was created by you, the Operator uses it and does not request a certificate from cert-manager.
+
+| Value type | Example           |
+| ---------- | ----------------- |
+| string     | `ps-cluster1-ssl` |
+
+### `ignoreAnnotations`
+
+The list of annotations [to be ignored](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
+
+| Value type | Example                                                         |
+| ---------- | --------------------------------------------------------------- |
+| subdoc     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol` |
+
+### `ignoreLabels`
+
+The list of labels [to be ignored](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md#specifying-labels-and-annotations-ignored-by-the-operator) by the Operator.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     | `rack`  |
+
+### `updateStrategy`
+
+A strategy the Operator uses for [upgrades](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update.md).
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `SmartUpdate` |
+
+### `pause`
+
+Pause/resume: setting it to `true` gracefully stops the cluster, and setting it to `false` after shut down starts the cluster back.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `allowUnsafeConfigurations`
+
+Prevents users from configuring a cluster with unsafe parameters such as starting a group replication cluster with less than 3 or more than 9 Percona Server for MySQL instances. **This option is deprecated and will be removed in future releases**. Use `unsafeFlags` subsection instead. Setting `allowUnsafeConfigurations` won’t have any effect with the Operator version 0.8.0 and newer, and upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under the [unsafeFlags](#operator-unsafeflags-section) subsection set to `true`.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+## Unsafe flags section
+
+The `unsafeFlags` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains various configuration options to prevent users from configuring a cluster with unsafe parameters. \*
+
+Warning
+
+Once unsafe configurations are enabled, you cannot revert these settings simply by setting the same keys back to `false`. Any such changes will be ignored, so enable these options with caution.
+
+### `unsafeFlags.asyncFailoverWithPossibleDataLoss`
+
+Allows users to disable backups in a cluster with asynchronous replication. Without this flag, the Operator rejects such a Custom Resource, because a [zero-data-loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md) reads the failed primary’s binary logs from the `xtrabackup` sidecar, and the sidecar runs only when backups are enabled. With backups disabled, a failover promotes a replica without recovering the transactions that the failed primary has not yet replicated. The Operator records the `FailoverUnprotected` [event](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#events).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `unsafeFlags.backupNonReadyCluster`
+
+Allows the Operator to run a backup from a healthy MySQL Pod when the cluster is not yet ready.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `unsafeFlags.mysqlSize`
+
+Allows a cluster size that is outside the safe defaults for the replication type:
+
+- **Asynchronous (`async`):** a single MySQL instance (`mysql.size: 1`). Size 2 or greater is allowed without this flag starting with Operator 1.3.0, including even counts.
+- **Group Replication (`group-replication`):** an even instance count, or more than 9 instances.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `unsafeFlags.proxy`
+
+Allows users to configure a cluster with disabled proxy (both HAProxy and Router).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `unsafeFlags.proxySize`
+
+Allows users to set proxy (HAProxy or Router) size to a value less than 2 Pods.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `unsafeFlags.orchestrator`
+
+Allows users to configure a cluster with disabled Orchestrator even if asynchronous replication is turned on.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `unsafeFlags.orchestratorSize`
+
+Allows users to set [orchestrator.size](#orchestratorsize) option to a value less than the minimum safe size (3).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+## Extended cert-manager configuration section
+
+The `tls` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains options that control how the Operator requests TLS certificates from [cert-manager](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md).
+
+### `tls.SANs`
+
+Additional DNS names (subject alternative names) to add to the TLS certificate that cert-manager issues.
+
+| Value type | Example               |
+| ---------- | --------------------- |
+| subdoc     | `mysql-1.example.com` |
+
+### `tls.issuerConf.name`
+
+The name of the cert-manager issuer that signs the cluster TLS certificate.
+
+When set, the Operator creates a `Certificate` that references this issuer and does not create its own CA chain. Use this to integrate with an existing organizational PKI. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-clusterissuer) and [Use an existing namespace-scoped Issuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-namespace-scoped-issuer).
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| string     | `special-selfsigned-issuer` |
+
+### `tls.issuerConf.kind`
+
+The cert-manager issuer type referenced by the cluster `Certificate`.
+
+Supported values:
+
+- `Issuer` (default) — namespace-scoped issuer in the database namespace.
+- `ClusterIssuer` — cluster-scoped issuer. Use this when your platform team manages a cluster-wide issuer. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-clusterissuer).
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `ClusterIssuer` |
+
+### `tls.issuerConf.group`
+
+The cert-manager API group for the issuer referenced in `issuerConf`. Use `cert-manager.io` for built-in cert-manager issuers.
+
+| Value type | Example           |
+| ---------- | ----------------- |
+| string     | `cert-manager.io` |
+
+## Upgrade options section
+
+The `upgradeOptions` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains various configuration options to control Percona Server for MySQL version choice at the deployment time and during upgrades.
+
+### `upgradeOptions.versionServiceEndpoint`
+
+The Version Service URL used to check versions compatibility for upgrade.
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| string     | `https://check.percona.com` |
+
+### `upgradeOptions.apply`
+
+Specifies how images are picked up from the version service on initial start by the Operator. `Never` or `Disabled` will completely disable querying version service for images, otherwise it can be set to `Latest` or `Recommended` or to a specific version string of Percona Server for MySQL (e.g. `8.0.32-24`) that is wished to be version-locked (so that the user can control the version running) |
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `Disabled` |
+
+## Percona Server for MySQL section
+
+The `mysql` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains general configuration options for the Percona Server for MySQL.
+
+### `mysql.clusterType`
+
+The cluster type: `async` for [Asynchronous replication](https://dev.mysql.com/doc/refman/8.4/en/replication.html) , `group-replication` for [Group Replication](https://dev.mysql.com/doc/refman/8.4/en/group-replication.html) .
+
+Starting with Operator version 1.3.0, you can change this value on a running cluster. The Operator converts the topology in place. The switch causes downtime. See [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md) to learn more.
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| int        | `group-replication` |
+
+### `mysql.bootstrap.mode`
+
+Controls whether the Operator forms a Group Replication cluster automatically on first start. Use `manual` for replica sites in [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md).
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `manual` |
+
+Supported values:
+
+| Value            | Meaning                                                                                                                                                                                                                                                                                                                                                                           |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `auto` (default) | Pod-0 runs the `dba.createCluster()` function when no peers exist. The same behavior is when the value for `bootstrap` is not set.                                                                                                                                                                                                                                                |
+| `manual`         | Pod-0 configures MySQL for Group Replication but does not create a cluster. Pod-0 stays in the `NotReady` state until the ClusterSet controller runs `createReplicaCluster()`. Pod-1 and above do not start until Pod-0 is `Ready`. The Percona Server for MySQL cluster reports the `Initializing` state and the Operator sets the `AwaitingExternalBootstrap` status condition. |
+
+### `mysql.autoRecovery`
+
+Enables the Operator to recover the cluster automatically after a full cluster crash. Applies to clusters with Group Replication. If you omit the option, the Operator treats it as `false`. See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md) and [the `full-cluster-crash` file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.md#full-cluster-crash).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `mysql.vaultSecretName`
+
+Specifies the secret for the [HashiCorp Vault](https://developer.hashicorp.com/vault) to carry on [Data at Rest Encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.md).
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| string     | `ps-cluster1-vault` |
+
+### `mysql.size`
+
+The number of the Percona Server for MySQL instances. This setting is required.
+
+The safe range depends on `mysql.clusterType`. For `async`, use 2 or more instances (even counts are allowed). Size `1` requires [`unsafeFlags.mysqlSize`](#unsafeflagsmysqlsize). For `group-replication`, use an odd count between 3 and 9 unless you set that flag.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `mysql.image`
+
+The Docker image of the Percona Server for MySQL used (actual image names for Percona Server for MySQL 8.0 and Percona Server for MySQL 5.7 can be found [in the list of certified images](https://docs.percona.com/percona-operator-for-mysql/1.3.0/images.md)).
+
+| Value type | Example                              |
+| ---------- | ------------------------------------ |
+| string     | `percona/percona-server:8.0.46-37.1` |
+
+### `mysql.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `mysql.runtimeClassName`
+
+Specifies the name of the [RuntimeClass](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `image-rc` |
+
+### `mysql.schedulerName`
+
+The name of a [Kubernetes scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign MySQL Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| string     | `default-scheduler` |
+
+### `mysql.priorityClassName`
+
+The name of the Kubernetes [PriorityClass](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) , which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `high-priority` |
+
+### `mysql.nodeSelector`
+
+[Kubernetes nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `disktype: ssd` |
+
+### `mysql.serviceAccountName`
+
+The [Kubernetes Service Account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the MySQL Pods.
+
+| Value type | Example                                      |
+| ---------- | -------------------------------------------- |
+| string     | `percona-server-mysql-operator-orchestrator` |
+
+### `mysql.tolerations`
+
+Specifies the [Kubernetes tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to MySQL Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type | Example                                |
+| ---------- | -------------------------------------- |
+| subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `mysql.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the MySQL image.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `my-secret-1` |
+
+### `mysql.initContainer.image`
+
+An alternative init image for Percona Server for MySQL.
+
+| Value type | Example                                          |
+| ---------- | ------------------------------------------------ |
+| string     | `perconalab/percona-server-mysql-operator:1.3.0` |
+
+### `mysql.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the MySQL installation.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `mysql.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100M`  |
+
+### `mysql.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `mysql.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `mysql.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for the MySQL installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `mysql.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `mysql.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 0       |
+
+### `mysql.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `512M`  |
+
+### `mysql.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for a Percona Server for MySQL container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `mysql.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `1G`    |
+
+### `mysql.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `mysql.startupProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `mysql.startupProbe.timeoutSeconds`
+
+The number of seconds after which the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+The startup probe runs MySQL bootstrap. On an asynchronous replica, bootstrap includes the clone, so this value limits how long that clone can run.
+
+When `spec.crVersion` is `1.3.0` or higher, the default is 604800 seconds (7 days). A `crVersion` older than 1.3.0 keeps the previous default of 43200 seconds (12 hours). A value you set here replaces the default. See [Set the clone stall timeout](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.md#set-the-clone-stall-timeout).
+
+| Value type | Example  |
+| ---------- | -------- |
+| int        | `604800` |
+
+### `mysql.startupProbe.periodSeconds`
+
+How often to perform the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) . Measured in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `mysql.startupProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `mysql.startupProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `mysql.readinessProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `mysql.readinessProbe.timeoutSeconds`
+
+The number of seconds after which the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `mysql.readinessProbe.periodSeconds`
+
+How often to perform the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) . Measured in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `mysql.readinessProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `mysql.readinessProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `mysql.livenessProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `mysql.livenessProbe.timeoutSeconds`
+
+The number of seconds after which the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `mysql.livenessProbe.periodSeconds`
+
+How often to perform the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) . Measured in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `mysql.livenessProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `mysql.livenessProbe.failureThreshold`
+
+The number of failed probes required to mark the container unhealthy.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `mysql.env.name`
+
+Name of an environment variable for MySQL Pods. The `BOOTSTRAP_READ_TIMEOUT` variable controls the timeout for bootstrapping the cluster. The `BOOTSTRAP_CLONE_STALL_TIMEOUT` sets how long an asynchronous clone can go without progress before bootstrap stops it for clusters with `crVersion` set to 1.3.0 or higher. See [Set the clone stall timeout](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.md#set-the-clone-stall-timeout).
+
+Read more about defining environment variables in [Kubernetes documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) .
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `BOOTSTRAP_READ_TIMEOUT` |
+
+### `mysql.env.value`
+
+The value you set for the environment variables for a MySQL container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `"600"` |
+
+### `mysql.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for MySQL Pods.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `my-env-secret` |
+
+### `mysql.affinity.antiAffinityTopologyKey`
+
+The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `mysql.affinity.advanced`
+
+In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `mysql.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                                  |
+| ---------- | ---------------------------------------- |
+| label      | `app.kubernetes.io/name: percona-server` |
+
+### `mysql.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `mysql.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `mysql.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn’t satisfy the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `DoNotSchedule` |
+
+### `mysql.exposePrimary.enabled`
+
+Enable or disable exposing Percona Server for MySQL primary node with dedicated IP addresses.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `mysql.exposePrimary.type`
+
+The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `ClusterIP` |
+
+### `mysql.exposePrimary.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `mysql.exposePrimary.annotations`
+
+The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) .
+
+| Value type | Example                                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp`, `service.beta.kubernetes.io/aws-load-balancer-type: nlb` |
+
+### `mysql.exposePrimary.externalTrafficPolicy`
+
+Specifies whether Service should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `mysql.exposePrimary.internalTrafficPolicy`
+
+Specifies whether Service should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `mysql.exposePrimary.labels`
+
+[Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `rack: rack-22` |
+
+### `mysql.exposePrimary.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there are no limitations).
+
+| Value type | Example      |
+| ---------- | ------------ |
+| string     | `10.0.0.0/8` |
+
+### `mysql.expose.enabled`
+
+Enable or disable exposing Percona Server for MySQL nodes with dedicated IP addresses. This setting exposes every Pod in your cluster.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `mysql.expose.type`
+
+The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for exposure.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `ClusterIP` |
+
+### `mysql.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `mysql.expose.annotations`
+
+The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) .
+
+| Value type | Example                                                              |
+| ---------- | -------------------------------------------------------------------- |
+| string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `mysql.expose.externalTrafficPolicy`
+
+Specifies whether Service should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `mysql.expose.internalTrafficPolicy`
+
+Specifies whether Service should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `mysql.expose.labels`
+
+[Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `rack: rack-22` |
+
+### `mysql.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there are no limitations).
+
+| Value type | Example      |
+| ---------- | ------------ |
+| string     | `10.0.0.0/8` |
+
+### `mysql.volumeSpec.emptyDir`
+
+Starts a Pod with an empty temporary directory on the Kubernetes node. This directory exists as long as the Pod runs. Data is deleted when the Pod is deleted or moved to another node.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `{}`    |
+
+### `mysql.volumeSpec.hostPath.path`
+
+Specifies a path on the host node’s filesystem that will be mounted into your Pod when the Pod starts. Enables Pods to share files or access the host resources. Data persists as long as it exists on the host, independent of the Pod. Using the [hostPath](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath) volume type presents many security risks.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `/data` |
+
+### `mysql.volumeSpec.hostPath.type`
+
+Specifies a [type](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath-volume-types) for the hostPath volume.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `Directory` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.storageClassName`
+
+Requests a specific storage class for the Persistent Volume Claim. This will cause the PVC to match the right storage class if the cluster has StorageClasses enabled by the admin.
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `standard` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.accessModes`
+
+Specify a specific [access mode](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) for a Persistent Volume. Kubernetes uses volume access modes to match PersistentVolumeClaims and PersistentVolumes.
+
+| Value type | Example           |
+| ---------- | ----------------- |
+| string     | `"ReadWriteOnce"` |
+
+### `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage`
+
+The [Kubernetes PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Percona Server for MySQL.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `2Gi`   |
+
+### `mysql.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `600`   |
+
+### `mysql.configuration`
+
+The `my.cnf` file options to be passed to Percona Server for MySQL instances.
+
+The Operator does not validate these options against your replication type. See [Configuration compatibility considerations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.md#configuration-compatibility-considerations).
+
+| Value type | Example                        |
+| ---------- | ------------------------------ |
+| string     | `[mysqld] max_connections=250` |
+
+### `mysql.autoConfig.enabled`
+
+Enables [automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md). The Operator calculates a full MySQL configuration based on the Pod resources, database workload profile, and MySQL version. Requires `mysql.resources` (CPU and memory) and `mysql.autoConfig.version` to be set.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `mysql.autoConfig.loadType`
+
+The workload profile used to calculate the configuration. If not set, the Operator defaults to `someWrites`.
+
+See [Choose a workload profile](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md#choose-a-workload-profile) for what each value means.
+
+| Value type | Allowed values                                                 | Example      |
+| ---------- | -------------------------------------------------------------- | ------------ |
+| string     | `mostlyReads`, `someWrites`, `equalReadsWrites`, `heavyWrites` | `someWrites` |
+
+### `mysql.autoConfig.version`
+
+The MySQL version the configuration is calculated for, in the `<major>.<minor>.<patch>` format. This option controls the parameters set for the selected Percona Server for MySQL version. The [`mysql.image`](#mysqlimage) option controls the image version to be deployed. The Operator reads these two values separately. You must keep `mysql.autoConfig.version` and [`mysql.image`](#mysqlimage) values in sync yourself. Read more in the [Keep the MySQL version in sync](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md#keep-the-mysql-version-in-sync).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `8.4.8` |
+
+### `mysql.sidecars.image`
+
+Image for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) for Percona Server for MySQL Pods.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `busybox` |
+
+### `mysql.sidecars.command`
+
+Command for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) for Percona Server for MySQL Pods.
+
+| Value type | Example            |
+| ---------- | ------------------ |
+| array      | `["sleep", "30d"]` |
+
+### `mysql.sidecars.name`
+
+Name of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) for Percona Server for MySQL Pods.
+
+| Value type | Example        |
+| ---------- | -------------- |
+| string     | `my-sidecar-1` |
+
+### `mysql.sidecars.volumeMounts.mountPath`
+
+Mount path of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Replica Set Pods.
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `/volume1` |
+
+### `mysql.sidecars.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Server for MySQL sidecar container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `16M`   |
+
+### `mysql.sidecars.volumeMounts.name`
+
+Name of the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Replica Set Pods.
+
+| Value type | Example                |
+| ---------- | ---------------------- |
+| string     | `sidecar-volume-claim` |
+
+### `mysql.sidecarVolumes`
+
+[Volume specification](https://kubernetes.io/docs/concepts/storage/volumes/) for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Percona Server for MySQL Pods.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `mysql.sidecarPVCs`
+
+[Persistent Volume Claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) for the [custom sidecar container](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) volume for Replica Set Pods |
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+## HAProxy subsection
+
+The `proxy.haproxy` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options for the HAProxy service.
+
+### `proxy.haproxy.enabled`
+
+Enables or disables [load balancing with HAProxy](https://haproxy.org) [Services](https://kubernetes.io/docs/concepts/services-networking/service/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `proxy.haproxy.size`
+
+The number of the HAProxy Pods [to provide load balancing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md#use-haproxy). Safe configuration should have 2 or more. This setting is required.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `proxy.haproxy.image`
+
+HAProxy Docker image to use.
+
+| Value type | Example                                                    |
+| ---------- | ---------------------------------------------------------- |
+| string     | `percona/perconalab-xtradb-cluster-operator:1.3.0-haproxy` |
+
+### `proxy.haproxy.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `proxy.haproxy.schedulerName`
+
+The name of a [Kubernetes scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign HAProxy Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| string     | `default-scheduler` |
+
+### `proxy.haproxy.priorityClassName`
+
+The name of the Kubernetes [PriorityClass](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) , which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `high-priority` |
+
+### `proxy.haproxy.nodeSelector`
+
+[Kubernetes nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) . It enables you to define node labels thereby ensuring that Pods will be scheduled onto nodes that have each of the labels you specify.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `disktype: ssd` |
+
+### `proxy.haproxy.serviceAccountName`
+
+The [Kubernetes Service Account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the HAProxy Pods.
+
+| Value type | Example                                      |
+| ---------- | -------------------------------------------- |
+| string     | `percona-server-mysql-operator-orchestrator` |
+
+### `proxy.haproxy.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `proxy.haproxy.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 0       |
+
+### `proxy.haproxy.runtimeClassName`
+
+Specifies the name of the [RuntimeClass](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `image-rc` |
+
+### `proxy.haproxy.tolerations`
+
+Specifies the [Kubernetes tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to HAProxy Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as resource constraints being temporary unreachable, without being evicted immediately.
+
+| Value type | Example                                |
+| ---------- | -------------------------------------- |
+| subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `proxy.haproxy.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the HAProxy image.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `my-secret-1` |
+
+### `proxy.haproxy.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `1G`    |
+
+### `proxy.haproxy.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `600m`  |
+
+### `proxy.haproxy.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `1G`    |
+
+### `proxy.haproxy.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the main HAProxy container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `700m`  |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `64Mi`  |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `50m`   |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `128Mi` |
+
+### `proxy.haproxy.sidecarResources.CONTAINER-NAME.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an HAProxy sidecar container (for example, `mysql-monit`).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `proxy.haproxy.env.name`
+
+Name of an environment variable for HAProxy.
+
+| Value type | Example                 |
+| ---------- | ----------------------- |
+| string     | `HA_CONNECTION_TIMEOUT` |
+
+### `proxy.haproxy.env.value`
+
+Value of an environment variable for HAProxy.
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `"1000"` |
+
+### `proxy.haproxy.envFrom.secretRef.name`
+
+Name of a Secret with environment variables for HAProxy.
+
+| Value type | Example              |
+| ---------- | -------------------- |
+| string     | `haproxy-env-secret` |
+
+### `proxy.haproxy.startupProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `proxy.haproxy.startupProbe.timeoutSeconds`
+
+The number of seconds after which the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `43200` |
+
+### `proxy.haproxy.startupProbe.periodSeconds`
+
+How often to perform the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) . Measured in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `proxy.haproxy.startupProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `proxy.haproxy.startupProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `proxy.haproxy.readinessProbe.timeoutSeconds`
+
+Number of seconds after which the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `proxy.haproxy.readinessProbe.periodSeconds`
+
+How often (in seconds) to perform the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `proxy.haproxy.readinessProbe.successThreshold`
+
+Minimum consecutive successes for the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `proxy.haproxy.readinessProbe.failureThreshold`
+
+When the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `proxy.haproxy.livenessProbe.timeoutSeconds`
+
+Number of seconds after which the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `proxy.haproxy.livenessProbe.periodSeconds`
+
+How often (in seconds) to perform the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `proxy.haproxy.livenessProbe.successThreshold`
+
+Minimum consecutive successes for the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `proxy.haproxy.livenessProbe.failureThreshold`
+
+When the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `proxy.haproxy.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `proxy.haproxy.configuration`
+
+The [custom HAProxy configuration file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md#passing-custom-configuration-options-to-haproxy) contents.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     |         |
+
+### `proxy.haproxy.antiAffinityTopologyKey`
+
+The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `proxy.haproxy.affinity.advanced`
+
+If available it makes a [topologyKey](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#inter-pod-affinity-and-anti-affinity-beta-feature) node affinity constraint to be ignored.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `proxy.haproxy.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                                  |
+| ---------- | ---------------------------------------- |
+| label      | `app.kubernetes.io/name: percona-server` |
+
+### `proxy.haproxy.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `proxy.haproxy.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `proxy.haproxy.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn’t satisfy the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `DoNotSchedule` |
+
+### `proxy.haproxy.expose.type`
+
+The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for HAProxy exposure.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `ClusterIP` |
+
+### `proxy.haproxy.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `proxy.haproxy.expose.annotations`
+
+The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HAProxy.
+
+| Value type | Example                                                              |
+| ---------- | -------------------------------------------------------------------- |
+| string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `proxy.haproxy.expose.externalTrafficPolicy`
+
+Specifies whether Service for HAProxy should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `proxy.haproxy.expose.internalTrafficPolicy`
+
+Specifies whether Service for HAProxy should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `proxy.haproxy.expose.labels`
+
+[Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for HAProxy.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `rack: rack-22` |
+
+### `proxy.haproxy.expose.loadBalancerIP`
+
+The static IP-address for the load balancer. This field is deprecated in Kubernetes 1.24+ and removed from the Operator starting with version 0.10.0. If you have defined it, refer to the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) for recommendations.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `127.0.0.1` |
+
+### `proxy.haproxy.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
+
+| Value type | Example      |
+| ---------- | ------------ |
+| string     | `10.0.0.0/8` |
+
+### `proxy.haproxy.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the HAProxy installation.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `proxy.haproxy.podSecurityContext`
+
+A custom [Kubernetes Security Context for a Pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type | Example                                                |
+| ---------- | ------------------------------------------------------ |
+| subdoc     | `fsGroup: 1001 supplementalGroups: [1001, 1002, 1003]` |
+
+## Router subsection
+
+The `proxy.router` subsection in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options for the [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) , which can act as a proxy for Group replication.
+
+### `proxy.router.enabled`
+
+Enables or disables MySQL Router.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `proxy.router.size`
+
+The number of the Router Pods to provide routing to MySQL Servers. This setting is required.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `proxy.router.image`
+
+Router Docker image to use.
+
+| Value type | Example                                                 |
+| ---------- | ------------------------------------------------------- |
+| string     | `perconalab/percona-server-mysql-operator:1.3.0-router` |
+
+### `proxy.router.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `proxy.router.runtimeClassName`
+
+Specifies the name of the [RuntimeClass](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `image-rc` |
+
+### `proxy.router.tolerations`
+
+Specifies the [Kubernetes tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to Router Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type | Example                                |
+| ---------- | -------------------------------------- |
+| subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `proxy.router.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the Router image.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `my-secret-1` |
+
+### `proxy.router.initContainer.image`
+
+An alternative init image for MySQL Router Pods.
+
+| Value type | Example                                          |
+| ---------- | ------------------------------------------------ |
+| string     | `perconalab/percona-server-mysql-operator:1.3.0` |
+
+### `proxy.router.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the image used for MySQL Router Pods installation.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `proxy.router.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100M`  |
+
+### `proxy.router.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `proxy.router.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `proxy.router.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for MySQL Router Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `proxy.router.env.name`
+
+Name of an environment variable for MySQL Router Pods. Read more about defining environment variables in [Kubernetes documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `MY_ENV` |
+
+### `proxy.router.env.value`
+
+Value of an environment variable for MySQL Router Pods.
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `"1000"` |
+
+### `proxy.router.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for MySQL Router Pods.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `my-env-secret` |
+
+### `proxy.router.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `proxy.router.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 0       |
+
+### `proxy.router.ports.name`
+
+The name for a custom or an existing port for the MySQL Router Service.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `http`  |
+
+### `proxy.router.ports.port`
+
+The port exposed by the MySQL Router service to the outside world or other components.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `8443`  |
+
+### `proxy.router.ports.targetPort`
+
+The port inside the Pod/container where MySQL Router is actually listening. When a client connects to the external port, Kubernetes forwards that traffic to the `targetPort` value on the backend Pod. A zero (0) value means Kubernetes uses the default internal port or does not do the remapping.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `0`     |
+
+### `proxy.router.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `256M`  |
+
+### `proxy.router.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `proxy.router.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `256M`  |
+
+### `proxy.router.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for MySQL Router container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `proxy.router.affinity.antiAffinityTopologyKey`
+
+The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `proxy.router.affinity.advanced`
+
+In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `proxy.router.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                                  |
+| ---------- | ---------------------------------------- |
+| label      | `app.kubernetes.io/name: percona-server` |
+
+### `proxy.router.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `proxy.router.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `proxy.router.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn’t satisfy the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `DoNotSchedule` |
+
+### `proxy.router.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `proxy.router.configuration`
+
+Custom configuration options to be passed to MySQL Router.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | \`\`\`  |
+
+### `proxy.router.expose.type`
+
+The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used for MySQL Router instances exposure.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `ClusterIP` |
+
+### `proxy.router.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `proxy.router.expose.annotations`
+
+The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for MySQL Router.
+
+| Value type | Example                                                              |
+| ---------- | -------------------------------------------------------------------- |
+| string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `proxy.router.expose.externalTrafficPolicy`
+
+Specifies whether Service for MySQL Router should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `proxy.router.expose.internalTrafficPolicy`
+
+Specifies whether Service for MySQL Router should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `proxy.router.expose.labels`
+
+[Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for MySQL Router.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `rack: rack-22` |
+
+### `proxy.router.expose.loadBalancerIP`
+
+The static IP-address for the load balancer. This field is deprecated in Kubernetes 1.24+ and removed from the Operator starting with version 0.10.0. If you have defined it, refer to the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) for recommendations.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `127.0.0.1` |
+
+### `proxy.router.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations) |
+
+| Value type | Example      |
+| ---------- | ------------ |
+| string     | `10.0.0.0/8` |
+
+## Orchestrator section
+
+The `orchestrator` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options for the Orchestrator - a replication topology manager, used if asynchronous replication is turned on.
+
+### `orchestrator.enabled`
+
+Enables or disables the Orchestrator.
+
+Orchestrator is used with asynchronous replication. Disable it when you [switch from async to group replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md#switch-from-async-to-group-replication). Enable it when you [switch from group replication to async](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md#switch-from-group-replication-to-async).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `orchestrator.failover.timeout`
+
+How long the cluster tries to recover the transactions from the failed primary’s binlog. Default is `1h`.
+
+The timeout is measured from the moment Orchestrator first detects the failure and covers every retry, not a single attempt. If the Orchestrator Raft leader changes while a failover is running, the timeout restarts. This delays the decision what to do when the timeout expires.
+
+Only applies to [async](#mysqlclustertype) clusters, and only takes effect starting with `crVersion` 1.3.0. With an older `crVersion`, the Operator validates this field but ignores it. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#understand-failover-timeout-and-recovery-policy).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `1h`    |
+
+### `orchestrator.failover.onTimeout`
+
+What the Operator does once [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) expires without recovering the transactions stranded on a failed primary:
+
+- `Abort` (default) — leaves the cluster without a writable primary until you intervene. No transactions are lost, but writes stay blocked. Promote a replica yourself with the [`percona.com/force-promote-with-possible-data-loss`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md#force-a-promotion) annotation.
+- `ForceWithPossibleDataLoss` — promotes the best available candidate anyway. Transactions the old primary committed and never replicated are lost.
+
+Only applies to async clusters, and only takes effect starting with `crVersion` 1.3.0. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#understand-failover-timeout-and-recovery-policy).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `Abort` |
+
+### `orchestrator.size`
+
+The number of the Orchestrator Pods to provide load balancing. This setting is required.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `orchestrator.image`
+
+Orchestrator Docker image to use.
+
+| Value type | Example                                                       |
+| ---------- | ------------------------------------------------------------- |
+| string     | `perconalab/percona-server-mysql-operator:1.3.0-orchestrator` |
+
+### `orchestrator.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `orchestrator.runtimeClassName`
+
+Specifies the name of the [RuntimeClass](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration.
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `image-rc` |
+
+### `orchestrator.schedulerName`
+
+The name of a [Kubernetes scheduler](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) used to assign Orchestrator Pods to Kubernetes nodes. The `default-scheduler` means `kube-scheduler` is used. You can define your custom schedulers here.
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| string     | `default-scheduler` |
+
+### `orchestrator.priorityClassName`
+
+The name of the Kubernetes [PriorityClass](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) , which is a way to assign priority levels to pods, helping the scheduler decide which pods to schedule first and which ones to evict last when resources are tight.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `high-priority` |
+
+### `orchestrator.nodeSelector`
+
+[Kubernetes nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) . It enables you to define node labels thereby ensuring that Pods will be scheduled onto nodes that have each of the labels you specify.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `disktype: ssd` |
+
+### `orchestrator.startupProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `orchestrator.startupProbe.timeoutSeconds`
+
+The number of seconds after which the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `43200` |
+
+### `orchestrator.startupProbe.periodSeconds`
+
+How often to perform the [startup probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) . Measured in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `orchestrator.startupProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `orchestrator.startupProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `orchestrator.readinessProbe.timeoutSeconds`
+
+Number of seconds after which the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `orchestrator.readinessProbe.periodSeconds`
+
+How often (in seconds) to perform the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `orchestrator.readinessProbe.successThreshold`
+
+Minimum consecutive successes for the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `orchestrator.readinessProbe.failureThreshold`
+
+When the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `orchestrator.livenessProbe.timeoutSeconds`
+
+Number of seconds after which the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `orchestrator.livenessProbe.periodSeconds`
+
+How often (in seconds) to perform the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `orchestrator.livenessProbe.successThreshold`
+
+Minimum consecutive successes for the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) to be considered successful after having failed.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `orchestrator.livenessProbe.failureThreshold`
+
+When the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) fails, Kubernetes will try this number of times before marking the Pod Unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `orchestrator.env.name`
+
+Name of an environment variable for Orchestrator Pods. Read more about defining environment variables in [Kubernetes documentation](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `MY_ENV` |
+
+### `orchestrator.env.value`
+
+Value of an environment variable for Orchestrator Pods.
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `"1000"` |
+
+### `orchestrator.envFrom.secretRef.name`
+
+Name of a Secret or a ConfigMap, key/values of which are used as environment variables for Orchestrator Pods.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `my-env-secret` |
+
+### `orchestrator.tolerations`
+
+Specifies the [Kubernetes tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) applied to Orchestrator Pods allowing them to be scheduled on nodes with matching taints. Tolerations enable the Pod to tolerate specific node conditions, such as temporary unreachability or resource constraints, without being evicted immediately.
+
+| Value type | Example                                |
+| ---------- | -------------------------------------- |
+| subdoc     | `node.alpha.kubernetes.io/unreachable` |
+
+### `orchestrator.imagePullSecrets.name`
+
+Specifies the Kubernetes [imagePullSecrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) for the Orchestrator image.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `my-secret-1` |
+
+### `orchestrator.serviceAccountName`
+
+The [Kubernetes Service Account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) for the Orchestrator Pods.
+
+| Value type | Example                                      |
+| ---------- | -------------------------------------------- |
+| string     | `percona-server-mysql-operator-orchestrator` |
+
+### `orchestrator.initContainer.image`
+
+An alternative init image for Orchestrator Pods.
+
+| Value type | Example                                          |
+| ---------- | ------------------------------------------------ |
+| string     | `perconalab/percona-server-mysql-operator:1.3.0` |
+
+### `orchestrator.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the image used for Orchestrator Pods installation.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `orchestrator.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100M`  |
+
+### `orchestrator.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `orchestrator.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `orchestrator.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Orchestrator Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `orchestrator.affinity.antiAffinityTopologyKey`
+
+The Operator [topology key](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) node anti-affinity constraint.
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `orchestrator.affinity.advanced`
+
+In cases where the Pods require complex tuning the advanced option turns off the `topologyKey` effect. This setting allows the [standard Kubernetes affinity constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) of any complexity to be used.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `orchestrator.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                                  |
+| ---------- | ---------------------------------------- |
+| label      | `app.kubernetes.io/name: percona-server` |
+
+### `orchestrator.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `orchestrator.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `orchestrator.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn’t satisfy the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `DoNotSchedule` |
+
+### `orchestrator.gracePeriod`
+
+Specifies the maximum time, in seconds, the Operator allows for a pod to shut down gracefully after receiving a termination signal before it is forcefully killed. This ensures critical cleanup tasks, like flushing data, can complete.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `orchestrator.expose.type`
+
+The [Kubernetes Service Type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) used to expose the Orchestrator HTTP API (port `3000`). The default `ClusterIP` keeps the API reachable only inside the cluster.
+
+When you change this option to `LoadBalancer` or `NodePort`, the Orchestrator API becomes reachable from outside the cluster. Starting with Operator version 1.2.0, when `spec.crVersion` is `1.2.0` or higher, all API requests must authenticate. To learn more about authentication, refer to the [Orchestrator HTTP API authentication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#orchestrator-http-api-authentication) section.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `ClusterIP` |
+
+### `orchestrator.expose.allocateLoadBalancerNodePorts`
+
+Determines if Kubernetes should allocate NodePorts for the LoadBalancer Service. This option is relevant only when the Service type is set to `LoadBalancer`.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `orchestrator.expose.annotations`
+
+The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the Orchestrator.
+
+| Value type | Example                                                              |
+| ---------- | -------------------------------------------------------------------- |
+| string     | `service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp` |
+
+### `orchestrator.expose.externalTrafficPolicy`
+
+Specifies whether Service for the Orchestrator should [route external traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `orchestrator.expose.internalTrafficPolicy`
+
+Specifies whether Service for the Orchestrator should [route internal traffic](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) to cluster-wide (`Cluster`) or node-local (`Local`) endpoints; it can influence the load balancing effectiveness.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `Cluster` |
+
+### `orchestrator.expose.labels`
+
+[Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for the Orchestrator.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `rack: rack-22` |
+
+### `orchestrator.expose.loadBalancerSourceRanges`
+
+The range of client IP addresses from which the load balancer should be reachable (if not set, there is no limitations).
+
+| Value type | Example      |
+| ---------- | ------------ |
+| string     | `10.0.0.0/8` |
+
+### `orchestrator.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) used for the Orchestrator installation.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `orchestrator.podSecurityContext`
+
+A custom [Kubernetes Security Context for a Pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type | Example                                                |
+| ---------- | ------------------------------------------------------ |
+| subdoc     | `fsGroup: 1001 supplementalGroups: [1001, 1002, 1003]` |
+
+### `orchestrator.podDisruptionBudget.maxUnavailable`
+
+The number of unavailable Pods your cluster can tolerate during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `orchestrator.podDisruptionBudget.minAvailable`
+
+The number of Pods that must remain available during voluntary disruption. It can be either an absolute value or a percentage.
+
+To learn more, see [podDisruptionBudgets](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 0       |
+
+### `orchestrator.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `128M`  |
+
+### `orchestrator.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `orchestrator.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `256M`  |
+
+### `orchestrator.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an Orchestrator container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `orchestrator.volumeSpec.persistentVolumeClaim.resources.requests.storage`
+
+The [Kubernetes PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) size for the Orchestrator |
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `1Gi`   |
+
+### `orchestrator.configuration`
+
+Custom [Orchestrator](https://github.com/percona/orchestrator) options to merge into the Orchestrator configuration. The value must be a JSON object passed as a string. You cannot override keys managed by the Operator, such as Raft topology, topology TLS, HTTP authentication, failover hooks, alias detection queries, and storage paths. Changing them is silently ignored.
+
+Starting with Custom Resource version 1.3.0, the Operator sets `ReasonableReplicationLagSeconds` to `60` by default. Orchestrator reports a replica that lags behind the primary by more than this value, and the Operator reflects it in the [`ReplicationLagging` condition](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#conditions). You can override this value here.
+
+For an async cluster with `crVersion` 1.3.0 or later, the Operator also derives and pins the settings the [zero-data-loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md) mechanism depends on, and ignores any override of them here:
+
+| Orchestrator key                                                                          | Derived from                                                                         |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `FailMasterPromotionOnLagMinutes`                                                         | Always `0`                                                                           |
+| `DelayMasterPromotionIfSQLThreadNotUpToDate`, `FailMasterPromotionIfSQLThreadNotUpToDate` | Always `false`                                                                       |
+| `PreFailoverProcesses`, `PostFailoverProcesses`, `PostUnsuccessfulFailoverProcesses`      | The failover mechanism itself                                                        |
+| `RecoveryPeriodBlockSeconds`                                                              | [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) + 1 hour             |
+| `UnseenInstanceForgetHours`                                                               | [`orchestrator.failover.timeout`](#orchestratorfailovertimeout) + 1 hour, rounded up |
+
+The following setting is not pinned, and you can override it:
+
+- `ReasonableMaintenanceReplicationLagSeconds` is the maximum replication lag, in seconds, that a candidate replica can have for Orchestrator to allow a planned switchover. Orchestrator rejects any replica that lags more. After the primary becomes read-only, Orchestrator also waits at most this long for the candidate to catch up. With `crVersion` 1.3.0 or later, the default is 120, twice `ReasonableReplicationLagSeconds`, which is 60 by default. With an older `crVersion`, the value from the Orchestrator image applies, which is 300. See [Set the replication lag limit for a planned switchover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async-setup.md#set-the-replication-lag-limit-for-a-planned-switchover).
+
+Updating this field triggers a rolling restart of the Orchestrator Pods.
+
+| Value type | Example                            |
+| ---------- | ---------------------------------- |
+| string     | `'{"ReplicationLagQuery": "..."}'` |
+
+## Users section
+
+The `users` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options [to create custom MySQL users via the Custom Resource](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#create-users-in-the-custom-resource).
+
+### `users.name`
+
+The username of the MySQL user. This field is required.
+
+| Value type | Example   |
+| ---------- | --------- |
+| string     | `my-user` |
+
+### `users.dbs`
+
+Databases that the user can access. If a specified database does not exist, the Operator creates it. When you omit this field and set `grants`, privileges apply to all databases (`*.*`). Omit this field when you set administrative (global) grants such as `SHUTDOWN`, because those privileges apply at the global level.
+
+| Value type | Example          |
+| ---------- | ---------------- |
+| array      | `["db1", "db2"]` |
+
+### `users.hosts`
+
+Hosts that the user can connect from. If not specified, defaults to `'%'`, enabling the user to connect from any host.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| array      | `["localhost"]` |
+
+### `users.passwordSecretRef.name`
+
+Name of the Secret that contains the user’s password. If not provided, the Operator generates a password and stores it in a Secret named `<cluster-name>-user-<username>` (for example, `ps-cluster1-user-my-user`).
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `my-user-pwd` |
+
+### `users.passwordSecretRef.key`
+
+Key in the Secret that holds the user’s password (`password` by default).
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `password` |
+
+### `users.withGrantOption`
+
+When `true`, the user can grant their own privileges to other users. The default is `false`.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `users.grants`
+
+Privileges granted to the user. If omitted, the Operator creates the user without additional `GRANT` statements.
+
+| Value type | Example                          |
+| ---------- | -------------------------------- |
+| array      | `["SELECT", "DELETE", "INSERT"]` |
+
+## PMM section
+
+The `pmm` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options for Percona Monitoring and Management.
+
+### `pmm.enabled`
+
+Enables or disables [monitoring Percona Server for MySQL with PMM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.md).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `false` |
+
+### `pmm.image`
+
+PMM client Docker image to use.
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| string     | `percona/pmm-client:3.10.0` |
+
+### `pmm.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `pmm.mysqlParams`
+
+Enables to pass MySQL parameters to PMM. For example, to change the number of tables (from the default of 1000) beyond which per-table statistics collection is disabled.
+
+| Value type | Example                             |
+| ---------- | ----------------------------------- |
+| string     | `"--disable-tablestats-limit=2000"` |
+
+### `pmm.haproxyParams`
+
+Additional parameters passed to the `pmm-admin add haproxy` command for HAProxy Pods. Use this to add custom labels, skip the connection check, or change the metrics listen port.
+
+See the [PMM documentation](https://docs.percona.com/percona-monitoring-and-management/3/install-pmm/install-pmm-client/connect-database/haproxy.html) for the list of available flags.
+
+Note the following:
+
+- The Operator registers HAProxy with `--listen-port=8404` by default. If you pass `--listen-port=<value>`, it replaces the default `8404`.
+- Any other flags you pass are appended to the `pmm-admin add haproxy` command.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| string     | `"--custom-labels=env=prod --skip-connection-check"` |
+
+### `pmm.readinessProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `pmm.readinessProbe.timeoutSeconds`
+
+The number of seconds after which the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `pmm.readinessProbe.periodSeconds`
+
+How often to perform the [readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) . Measured in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `pmm.readinessProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `pmm.readinessProbe.failureThreshold`
+
+The number of failed probes required to mark the container unready.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `pmm.livenessProbe.initialDelaySeconds`
+
+The number of seconds to wait before performing the first [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `300`   |
+
+### `pmm.livenessProbe.timeoutSeconds`
+
+The number of seconds after which the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) times out.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `pmm.livenessProbe.periodSeconds`
+
+How often to perform the [liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) . Measured in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `pmm.livenessProbe.successThreshold`
+
+The number of successful probes required to mark the container successful.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `pmm.livenessProbe.failureThreshold`
+
+The number of failed probes required to mark the container unhealthy.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `pmm.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `150M`  |
+
+### `pmm.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `300m`  |
+
+### `pmm.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `256M`  |
+
+### `pmm.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a PMM container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `400m`  |
+
+### `pmm.serverHost`
+
+Address of the PMM Server to collect data from the cluster.
+
+| Value type | Example              |
+| ---------- | -------------------- |
+| string     | `monitoring-service` |
+
+### `pmm.customClusterName`
+
+A custom name to define for a cluster. PMM Server uses this name to properly parse the metrics and display them on dashboards. Using a custom name is useful for clusters deployed in different data centers - PMM Server connects them and monitors them as one deployment. Another use case is for clusters deployed with the same name in different namespaces - PMM treats each cluster separately.
+
+| Value type | Example           |
+| ---------- | ----------------- |
+| string     | `cluster1-custom` |
+
+## Log collector section
+
+The `logcollector` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file configures the Fluent Bit and `logrotate` sidecars on MySQL Pods. Available starting with Operator version 1.3.0. See [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md) and [Log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md).
+
+The Operator adds the sidecars only when `crVersion` is 1.3.0 or later and `logcollector.enabled` is `true`. `resources` and `containerSecurityContext` apply to both the `logs` and `logrotate` containers. `image` is required when the `logcollector` section is present.
+
+### `logcollector.enabled`
+
+Enables or disables [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `logcollector.image`
+
+Fluent Bit Docker image to use.
+
+| Value type | Example                        |
+| ---------- | ------------------------------ |
+| string     | `perconalab/fluentbit:5.1.4-1` |
+
+### `logcollector.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) for the `logs` and `logrotate` containers. Valid values are `Always`, `IfNotPresent`, and `Never`.
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `logcollector.configuration`
+
+Additional Fluent Bit rules. You cannot override the default configuration. Must be in [Fluent Bit YAML](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/) format. The classic `.conf` format is not supported. An invalid snippet is ignored when the `logs` container starts. Changing this field restarts the MySQL Pods.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `logcollector.env.name`
+
+Name of an environment variable for the `logs` container.
+
+| Value type | Example      |
+| ---------- | ------------ |
+| string     | `AWS_REGION` |
+
+### `logcollector.env.value`
+
+Value of an environment variable for the `logs` container.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `us-east-1` |
+
+### `logcollector.envFrom.configMapRef.name`
+
+Name of a ConfigMap whose keys are loaded as environment variables for the `logs` container.
+
+| Value type | Example                   |
+| ---------- | ------------------------- |
+| string     | `my-log-collector-config` |
+
+### `logcollector.envFrom.secretRef.name`
+
+Name of a Secret whose keys are loaded as environment variables for the `logs` container. Use this for credentials of a remote Fluent Bit output.
+
+| Value type | Example                   |
+| ---------- | ------------------------- |
+| string     | `my-log-collector-secret` |
+
+### `logcollector.resources.requests.memory`
+
+[Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `150M`  |
+
+### `logcollector.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `300m`  |
+
+### `logcollector.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `logcollector.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the `logs` and `logrotate` containers.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `350m`  |
+
+### `logcollector.containerSecurityContext`
+
+A custom [Kubernetes Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the `logs` and `logrotate` containers.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `logcollector.livenessProbe`
+
+A custom [Kubernetes liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logs` container. When unset, the container has no liveness probe. The built-in Fluent Bit configuration listens on port `2020`, so a `tcpSocket` probe on that port works without extra configuration.
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| subdoc     | `tcpSocket: { port: 2020 }` |
+
+### `logcollector.livenessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logs` container starts before the first liveness probe.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `logcollector.livenessProbe.periodSeconds`
+
+How often to run the liveness probe, in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `logcollector.readinessProbe`
+
+A custom [Kubernetes readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logs` container. When unset, the container has no readiness probe. The built-in Fluent Bit configuration listens on port `2020`.
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| subdoc     | `tcpSocket: { port: 2020 }` |
+
+### `logcollector.readinessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logs` container starts before the first readiness probe.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `logcollector.readinessProbe.periodSeconds`
+
+How often to run the readiness probe, in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+### `logcollector.volumeMounts`
+
+Extra [volume mounts](https://kubernetes.io/docs/concepts/storage/volumes/) for the `logs` and `logrotate` containers. Use these with `logcollector.volumes`. For example, to mount a CA bundle for an S3 output.
+
+| Value type | Example                                                          |
+| ---------- | ---------------------------------------------------------------- |
+| subdoc     | `- name: s3-ca   mountPath: /etc/fluentbit/tls   readOnly: true` |
+
+### `logcollector.volumes`
+
+Extra [volumes](https://kubernetes.io/docs/concepts/storage/volumes/) on the MySQL Pod for the log collector sidecars.
+
+| Value type | Example                                            |
+| ---------- | -------------------------------------------------- |
+| subdoc     | `- name: s3-ca   secret:     secretName: my-s3-ca` |
+
+### `logcollector.logRotate.configuration`
+
+Replaces the default `logrotate` configuration. You must provide the full configuration. An invalid snippet is ignored and the sidecar uses the built-in rules. See [Override the default configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md#override-the-default-configuration).
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `logcollector.logRotate.extraConfig.name`
+
+Name of a ConfigMap in the same namespace that holds extra `logrotate` rules. Each key must end with `.conf`. Do not use `mysql.conf` as the name. That name is reserved for the Operator-managed configuration. See [Add extra rules from a ConfigMap](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md#add-extra-rules-from-a-configmap).
+
+| Value type | Example              |
+| ---------- | -------------------- |
+| string     | `my-logrotate-extra` |
+
+### `logcollector.logRotate.schedule`
+
+Cron expression of five fields for the `logrotate` sidecar. The default is `0 0 * * *` (once a day at midnight). The Operator rejects a value that is not valid cron or that contains a newline.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `0 */6 * * *` |
+
+### `logcollector.logRotate.livenessProbe`
+
+A custom [Kubernetes liveness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logrotate` container. When unset, the container has no liveness probe.
+
+| Value type | Example                          |
+| ---------- | -------------------------------- |
+| subdoc     | `exec: { command: [/bin/true] }` |
+
+### `logcollector.logRotate.livenessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logrotate` container starts before the first liveness probe.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `logcollector.logRotate.livenessProbe.periodSeconds`
+
+How often to run the liveness probe, in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `15`    |
+
+### `logcollector.logRotate.readinessProbe`
+
+A custom [Kubernetes readiness probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) for the `logrotate` container. When unset, the container has no readiness probe.
+
+| Value type | Example                          |
+| ---------- | -------------------------------- |
+| subdoc     | `exec: { command: [/bin/true] }` |
+
+### `logcollector.logRotate.readinessProbe.initialDelaySeconds`
+
+Number of seconds to wait after the `logrotate` container starts before the first readiness probe.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `5`     |
+
+### `logcollector.logRotate.readinessProbe.periodSeconds`
+
+How often to run the readiness probe, in seconds.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `10`    |
+
+## Backup section
+
+The `backup` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains the following configuration options for the regular Percona XtraDB Cluster backups.
+
+### `backup.enabled`
+
+Enables or disables making backups.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `backup.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that stores the key used to [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) before they are stored in object storage. When set, all backup storages use this key unless you specify a different Secret for a specific storage.
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| string     | `my-encryption-key` |
+
+### `backup.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. This is a global setting and applies to all storages unless overridden for a specific storage.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `encryptionKey` |
+
+### `backup.pitr.enabled`
+
+Enables or disables point-in-time recovery functionality.
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `backup.pitr.binlogServer.size`
+
+Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. The Custom Resource allows only `1` (larger values are rejected). To learn more, see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md).
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `1`     |
+
+### `backup.pitr.binlogServer.image`
+
+The Docker image to use to deploy Percona Binarylog Server.
+
+| Value type | Example                                  |
+| ---------- | ---------------------------------------- |
+| string     | `perconalab/percona-binlog-server:0.2.1` |
+
+### `backup.pitr.binlogServer.imagePullPolicy`
+
+The [policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) the `kubelet` uses to pull the Percona Binarylog Server image.
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `backup.pitr.binlogServer.imagePullSecrets.name`
+
+The name of a Secret the `kubelet` uses to authenticate to a private image registry. You can list several Secrets as an array of objects with the `name` key.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `my-secret-1` |
+
+### `backup.pitr.binlogServer.serverId`
+
+The unique server ID that Percona Binarylog Server uses when connecting to MySQL as a replication client for binlog collection.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `100`   |
+
+### `backup.pitr.binlogServer.storage.s3.bucket`
+
+The name of the bucket on AWS S3 or S3-compatible storage where binlogs are streamed.
+
+| Value type | Example                      |
+| ---------- | ---------------------------- |
+| string     | `S3-BACKUP-BUCKET-NAME-HERE` |
+
+### `backup.pitr.binlogServer.storage.s3.credentialsSecret`
+
+The Kubernetes Secret for binlog storage. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
+
+| Value type | Example                      |
+| ---------- | ---------------------------- |
+| string     | `ps-cluster1-s3-credentials` |
+
+### `backup.pitr.binlogServer.storage.s3.endpointUrl`
+
+The URL to access the bucket on S3-compatible storage. Not needed for AWS S3.
+
+| Value type | Example                    |
+| ---------- | -------------------------- |
+| string     | `https://s3.amazonaws.com` |
+
+### `backup.pitr.binlogServer.storage.s3.prefix`
+
+The path prefix (folder) in the bucket where binlogs are stored. You cannot change the prefix after you configured the Binlog Server.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `PREFIX_NAME` |
+
+### `backup.pitr.binlogServer.storage.s3.region`
+
+The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `us-west-2` |
+
+### `backup.pitr.binlogServer.storage.s3.caBundle.name`
+
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible binlog storage. This setting is independent from [`backup.storages.STORAGE-NAME.s3.caBundle`](#backupstoragesstorage-names3cabundlename). To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#update-the-ca-bundle).
+
+| Value type | Example           |
+| ---------- | ----------------- |
+| string     | `minio-ca-bundle` |
+
+### `backup.pitr.binlogServer.storage.s3.caBundle.key`
+
+The key in the Secret that holds the CA certificate. If you omit this field, the Operator defaults to `ca.crt`.
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `ca.crt` |
+
+### `backup.pitr.binlogServer.storage.encryption.cipher`
+
+The cipher used to [encrypt binlog data](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption) before Percona Binlog Server writes files to object storage. Only CTR mode is supported.
+
+Allowed values: `AES-128-CTR`, `AES-192-CTR`, `AES-256-CTR`. Defaults to `AES-256-CTR`.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `AES-256-CTR` |
+
+### `backup.pitr.binlogServer.storage.encryption.kekId`
+
+The `id` of the key encryption key (KEK) in the keyring Secret used to wrap the per-file data encryption key. If omitted, Percona Binlog Server uses the first key in the keyring. Changing this value affects only new binlogs. See [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption).
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `alpha` |
+
+### `backup.pitr.binlogServer.keyringSecret.name`
+
+The name of the Kubernetes Secret that stores the binlog keyring file. Required when `storage.encryption` is set. Keep this Secret configured after you disable encryption if the bucket still contains encrypted binlogs. See [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#disable-binlog-encryption).
+
+| Value type | Example                             |
+| ---------- | ----------------------------------- |
+| string     | `ps-cluster1-binlog-server-keyring` |
+
+### `backup.pitr.binlogServer.keyringSecret.key`
+
+The key within the Secret that holds the keyring JSON. Defaults to `keyring.json`.
+
+| Value type | Example        |
+| ---------- | -------------- |
+| string     | `keyring.json` |
+
+### `backup.pitr.binlogServer.connectTimeout`
+
+Timeout in seconds for establishing a connection to MySQL.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `backup.pitr.binlogServer.readTimeout`
+
+The maximum time in seconds the Binlog Server waits to read data from the MySQL instance.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `backup.pitr.binlogServer.writeTimeout`
+
+The maximum time in seconds the Binlog Server waits to write data to a remote server.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `backup.pitr.binlogServer.idleTime`
+
+The maximum time in seconds the Binlog Server stays in idle mode before trying to reconnect.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `30`    |
+
+### `backup.pitr.binlogServer.affinity.antiAffinityTopologyKey`
+
+The Kubernetes [topologyKey](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) constraint for node anti-affinity on Percona Binarylog Server Pods.
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `backup.pitr.binlogServer.affinity.advanced`
+
+In cases where the pods require complex tuning the advanced option turns off the topologykey effect. This setting allows the standard Kubernetes affinity constraints of any complexity to be used.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `backup.pitr.binlogServer.checkpointInterval`
+
+How often the Binlog Server writes checkpoints - the snapshot of its state.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `30s`   |
+
+### `backup.pitr.binlogServer.checkpointSize`
+
+Defines the size threshold for checkpoints. Default is 16M.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `16M`   |
+
+### `backup.pitr.binlogServer.containerSecurityContext`
+
+A custom [Kubernetes security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the Percona Binlog Server container.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `backup.pitr.binlogServer.env`
+
+Custom [environment variables](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the Percona Binarylog Server container.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     | `[]`    |
+
+### `backup.pitr.binlogServer.envFrom`
+
+The source for the bulk-import of all key-value pairs from a ConfigMap or Secret as environment variables for the Percona Binarylog Server container.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     | `[]`    |
+
+### `backup.pitr.binlogServer.initContainer.image`
+
+The container image for the Binlog Server init container.
+
+| Value type | Example                                         |
+| ---------- | ----------------------------------------------- |
+| string     | `perconalab/percona-server-mysql-operator:main` |
+
+### `backup.pitr.binlogServer.initContainer.containerSecurityContext`
+
+A custom [Kubernetes security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the Binlog Server init container.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `backup.pitr.binlogServer.initContainer.resources.requests.memory`
+
+[Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `backup.pitr.binlogServer.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `backup.pitr.binlogServer.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100M`  |
+
+### `backup.pitr.binlogServer.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Binlog Server init container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `backup.pitr.binlogServer.initImage`
+
+An alternative init image for the Percona Binarylog Server Pod. Leave empty to use the default one.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `""`    |
+
+### `backup.pitr.binlogServer.logLevel`
+
+Log level for the Percona Binarylog Server. Defaults to `info`.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `info`  |
+
+### `backup.pitr.binlogServer.podSecurityContext`
+
+A custom [Kubernetes Pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for Percona Binarylog Server Pods.
+
+| Value type | Example                                      |
+| ---------- | -------------------------------------------- |
+| subdoc     | `fsGroup: 1001 supplementalGroups:   - 1001` |
+
+### `backup.pitr.binlogServer.resources.requests.memory`
+
+[Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `backup.pitr.binlogServer.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `backup.pitr.binlogServer.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100M`  |
+
+### `backup.pitr.binlogServer.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for the Percona Binarylog Server container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `backup.pitr.binlogServer.rewriteFileSize`
+
+Specifies the maximum binlog file size for rewrite. Defaults to `128M`. Set to an empty string to use the default.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `128M`  |
+
+### `backup.pitr.binlogServer.sslMode`
+
+The TLS mode for the Binlog Server connection to MySQL. Defaults to `verify_identity`.
+
+| Value type | Example           |
+| ---------- | ----------------- |
+| string     | `verify_identity` |
+
+### `backup.sourcePod`
+
+Specifies the MySQL instance Pod to take a backup from. When defined, takes precedence, regardless of the cluster type (async or group-replication) and topology. Applies both to scheduled and on-demand backups.
+
+Asynchronous replication clusters that consist of more than one Pod and have the Orchestrator disabled must have the `sourcePod` defined for the Operator to make backups. Otherwise, the Operator fails to start a backup and reports an error.
+
+| Value type | Example               |
+| ---------- | --------------------- |
+| string     | `ps-cluster1-mysql-0` |
+
+### `backup.image`
+
+The Percona XtraBackup Docker image to use for the backup.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| string     | `percona/percona-server-mysql-operator:1.3.0-backup` |
+
+### `backup.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) .
+
+| **Value** | string | | **Example** | `Always` |
+
+### `backup.imagePullSecrets.name`
+
+The [Kubernetes ImagePullSecret](https://kubernetes.io/docs/concepts/configuration/secret/#using-imagepullsecrets) .
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `my-secret-1` |
+
+### `backup.initContainer.image`
+
+An alternative init image for Percona XtraBackup Pods.
+
+| Value type | Example                                          |
+| ---------- | ------------------------------------------------ |
+| string     | `perconalab/percona-server-mysql-operator:1.3.0` |
+
+### `backup.initContainer.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the image used for Percona XtraBackup Pods installation.
+
+| Value type | Example                                              |
+| ---------- | ---------------------------------------------------- |
+| subdoc     | `privileged: false runAsUser: 1001 runAsGroup: 1001` |
+
+### `backup.initContainer.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100M`  |
+
+### `backup.initContainer.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `backup.initContainer.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200M`  |
+
+### `backup.initContainer.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for an image used for Percona XtraBackup Pods installation.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `200m`  |
+
+### `backup.containerSecurityContext`
+
+A custom [Kubernetes Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the `xtrabackup` container to be used instead of the default one.
+
+| Value type | Example            |
+| ---------- | ------------------ |
+| subdoc     | `privileged: true` |
+
+### `backup.backoffLimit`
+
+The number of retries to make a backup (by default, 6 retries are made).
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `6`     |
+
+### `backup.startingDeadlineSeconds`
+
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. The backup can wait if the cluster isn’t ready yet or another backup for this cluster is still running. The default is `0`, which means the Operator does not enforce a start deadline. Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.startingDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.md#startingdeadlineseconds).
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `900`   |
+
+### `backup.suspendedDeadlineSeconds`
+
+The maximum time, in seconds, a [suspended](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline.
+
+Applies to all backups for this cluster. Overridable per backup with [`PerconaServerMySQLBackup.spec.suspendedDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.md#suspendeddeadlineseconds).
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `900`   |
+
+### `backup.storages.STORAGE-NAME.type`
+
+The cloud storage type used for backups. The following types are supported: `s3`, `gcs` and `azure`.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `s3`    |
+
+### `backup.storages.STORAGE-NAME.verifyTLS`
+
+Enable or disable verification of the storage server TLS certificate. Disabling it may be useful e.g. to skip TLS verification for private S3-compatible storage with a self-issued certificate.
+
+Starting with version 1.3.0, the Operator supports TLS verification with your organization’s CA. Keep this option enabled and use the CA your company already trusts. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
+
+| Value type | Example |
+| ---------- | ------- |
+| boolean    | `true`  |
+
+### `backup.storages.STORAGE-NAME.encryptionKeySecret.name`
+
+The name of the Kubernetes Secret that contains the key used to [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) for this storage location. When set, it takes precedence over [`backup.encryptionKeySecret.name`](#backupencryptionkeysecretname).
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| string     | `my-encryption-key` |
+
+### `backup.storages.STORAGE-NAME.encryptionKeySecret.key`
+
+The key within the Secret that holds the encryption key value. Defaults to `encryptionKey`. It takes precedence over the [`backup.encryptionKeySecret.key`](#backupencryptionkeysecretkey) setting.
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `encryptionKey` |
+
+### `backup.storages.STORAGE-NAME.nodeSelector`
+
+[Kubernetes nodeSelector](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| label      | `disktype: ssd` |
+
+### `backup.storages.STORAGE-NAME.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `1G`    |
+
+### `backup.storages.STORAGE-NAME.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona XtraBackup container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `600m`  |
+
+### `backup.storages.STORAGE-NAME.affinity.nodeAffinity`
+
+The Operator [node affinity](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity) constraint.
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.labelSelector.matchLabels`
+
+The Label selector for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                                  |
+| ---------- | ---------------------------------------- |
+| label      | `app.kubernetes.io/name: percona-server` |
+
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.maxSkew`
+
+The degree to which Pods may be unevenly distributed under the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | 1       |
+
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.topologyKey`
+
+The key of node labels for the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example                  |
+| ---------- | ------------------------ |
+| string     | `kubernetes.io/hostname` |
+
+### `backup.storages.STORAGE-NAME.topologySpreadConstraints.whenUnsatisfiable`
+
+What to do with a Pod if it doesn’t satisfy the [Kubernetes Pod Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `DoNotSchedule` |
+
+### `backup.storages.STORAGE-NAME.tolerations`
+
+[Kubernetes Pod tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) .
+
+| Value type | Example |
+| ---------- | ------- |
+| subdoc     |         |
+
+### `backup.storages.STORAGE-NAME.schedulerName`
+
+The [Kubernetes Scheduler](https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers) .
+
+| Value type | Example              |
+| ---------- | -------------------- |
+| string     | `mycustom-scheduler` |
+
+### `backup.storages.STORAGE-NAME.priorityClassName`
+
+The [Kubernetes Pod priority class](https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass) .
+
+| Value type | Example         |
+| ---------- | --------------- |
+| string     | `high-priority` |
+
+### `backup.storages.STORAGE-NAME.containerSecurityContext`
+
+A custom [Kubernetes Security Context for a Container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type | Example            |
+| ---------- | ------------------ |
+| subdoc     | `privileged: true` |
+
+### `backup.storages.STORAGE-NAME.podSecurityContext`
+
+A custom [Kubernetes Security Context for a Pod](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) to be used instead of the default one.
+
+| Value type | Example                                                |
+| ---------- | ------------------------------------------------------ |
+| subdoc     | `fsGroup: 1001 supplementalGroups: [1001, 1002, 1003]` |
+
+### `backup.storages.STORAGE-NAME.runtimeClassName`
+
+Specifies the name of the [RuntimeClass](https://kubernetes.io/docs/concepts/containers/runtime-class/) resource used to define and select the container runtime configuration for backup and restore jobs associated with the specific storage.
+
+| Value type | Example    |
+| ---------- | ---------- |
+| string     | `image-rc` |
+
+### `backup.storages.STORAGE-NAME.containerOptions.env`
+
+The [environment variables set as key-value pairs](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/) for the backup container.
+
+| Value type | Example                                    |
+| ---------- | ------------------------------------------ |
+| subdoc     | `- name: CUSTOM_ENV   value: “some-value”` |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xtrabackup`
+
+Custom [command line options](https://docs.percona.com/percona-xtrabackup/latest/xtrabackup-option-reference.html) for the [`xtrabackup` Percona XtraBackup tool](https://docs.percona.com/percona-xtrabackup/8.0/xtrabackup-binary-overview.html) .
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| subdoc     | `- “–someflag=abc”` |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xbcloud`
+
+Custom [command line options](https://docs.percona.com/percona-xtrabackup/latest/xbcloud-options.html) for the [`xbcloud` Percona XtraBackup tool](https://docs.percona.com/percona-xtrabackup/8.0/xbcloud-binary-overview.html) .
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| subdoc     | `- “–someflag=abc”` |
+
+### `backup.storages.STORAGE-NAME.containerOptions.args.xbstream`
+
+Custom [command line options](https://docs.percona.com/percona-xtrabackup/latest/xbstream-options.html) for the [`xbstream` Percona XtraBackup tool](https://docs.percona.com/percona-xtrabackup/8.0/xbstream-binary-overview.html)
+
+| Value type | Example             |
+| ---------- | ------------------- |
+| subdoc     | `- “–someflag=abc”` |
+
+### `backup.storages.STORAGE-NAME.annotations`
+
+The [Kubernetes annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) .
+
+| Value type | Example                      |
+| ---------- | ---------------------------- |
+| label      | `testName: scheduled-backup` |
+
+### `backup.storages.STORAGE-NAME.labels`
+
+[Labels are key-value pairs attached to objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) .
+
+| Value type | Example                |
+| ---------- | ---------------------- |
+| label      | `backupWorker: 'True'` |
+
+### `backup.storages.STORAGE-NAME.s3.bucket`
+
+The [Amazon S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) name for backups.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     |         |
+
+### `backup.storages.STORAGE-NAME.s3.region`
+
+The [AWS region](https://docs.aws.amazon.com/general/latest/gr/rande.html) to use. Please note **this option is mandatory** for Amazon and all S3-compatible storages.
+
+| Value type | Example     |
+| ---------- | ----------- |
+| string     | `us-west-2` |
+
+### `backup.storages.STORAGE-NAME.s3.prefix`
+
+The path (sub-folder) to the backups inside the [bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) .
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `""`    |
+
+### `backup.storages.STORAGE-NAME.s3.credentialsSecret`
+
+The [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` keys.
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| string     | `my-cluster-name-backup-s3` |
+
+### `backup.storages.STORAGE-NAME.s3.endpointUrl`
+
+The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud)
+
+| Value type | Example |
+| ---------- | ------- |
+| string     |         |
+
+### `backup.storages.STORAGE-NAME.s3.caBundle.name`
+
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. To change the bundle, create a new Secret and set this field to its name. See [Update the CA bundle](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#update-the-ca-bundle).
+
+| Value type | Example           |
+| ---------- | ----------------- |
+| string     | `minio-ca-bundle` |
+
+### `backup.storages.STORAGE-NAME.s3.caBundle.key`
+
+The key in the Secret that holds the CA certificate. If you omit this field, the Operator uses `ca.crt`. The Operator mounts only this key from the Secret.
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `ca.crt` |
+
+### `backup.storages.STORAGE-NAME.azure.container`
+
+The name of the [Microsoft Azure blob container](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal#create-a-container) for backups.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `""`    |
+
+### `backup.storages.STORAGE-NAME.azure.prefix`
+
+The path (sub-folder) to the backups inside the [container](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal) .
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `""`    |
+
+### `backup.storages.STORAGE-NAME.azure.endpointUrl`
+
+The endpoint URL of the S3-compatible storage to be used (not needed for the original Amazon S3 cloud)
+
+| Value type | Example                                     |
+| ---------- | ------------------------------------------- |
+| string     | `https://accountName.blob.core.windows.net` |
+
+### `backup.storages.STORAGE-NAME.azure.credentialsSecret`
+
+The [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain the `AZURE_STORAGE_ACCOUNT_NAME` and the `AZURE_STORAGE_ACCOUNT_KEY` keys.
+
+| Value type | Example                        |
+| ---------- | ------------------------------ |
+| string     | `my-cluster-name-backup-azure` |
+
+### `backup.storages.STORAGE-NAME.gcs.bucket`
+
+The name of the storage bucket.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `bucket-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.prefix`
+
+The path to the data directory in the bucket. If undefined, backups are stored in the bucket’s root directory.
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `prefix-name` |
+
+### `backup.storages.STORAGE-NAME.gcs.endpointUrl`
+
+The URL to access the data in Google Cloud Storage.
+
+| Value type | Example                            |
+| ---------- | ---------------------------------- |
+| string     | `"https://storage.googleapis.com"` |
+
+### `backup.storages.STORAGE-NAME.gcs.credentialsSecret`
+
+The [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) for backups. It should contain the `ACCESS_KEY_ID` and the `SECRET_ACCESS_KEY` keys.
+
+| Value type | Example                       |
+| ---------- | ----------------------------- |
+| string     | `ps-cluster1-gcp-credentials` |
+
+### `backup.schedule.name`
+
+Name of the scheduled backup.
+
+| Value type | Example            |
+| ---------- | ------------------ |
+| string     | `sat-night-backup` |
+
+### `backup.schedule.schedule`
+
+Scheduled time of the backup, specified in the [crontab format](https://en.wikipedia.org/wiki/Cron) .
+
+| Value type | Example       |
+| ---------- | ------------- |
+| string     | `0 0 \* \* 6` |
+
+### `backup.schedule.keep`
+
+The amount of most recent backups to store. Older backups are automatically deleted. Set `keep` to zero or completely remove it to disable automatic deletion of backups. Note that `keep` is ignored for [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-delete.md#full-vs-incremental-backup-schedules) backups.
+
+| Value type | Example |
+| ---------- | ------- |
+| int        | `3`     |
+
+### `backup.schedule.storageName`
+
+The name of the storage for the backups configured in the `storages` subsection.
+
+| Value type | Example      |
+| ---------- | ------------ |
+| string     | `s3-us-west` |
+
+### `backup.schedule.type`
+
+The backup type. Supported values: `full`, `incremental`. When undefined, defaults to `full`.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `full`  |
+
+## Percona Toolkit section
+
+The `toolkit` section in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file contains configuration options for [Percona Toolkit](https://docs.percona.com/percona-toolkit/) .
+
+### `toolkit.image`
+
+Percona Toolkit client Docker image to use.
+
+| Value type | Example                     |
+| ---------- | --------------------------- |
+| string     | `percona/pmm-client:3.10.0` |
+
+### `toolkit.imagePullPolicy`
+
+The [policy used to update images](https://kubernetes.io/docs/concepts/containers/images/#updating-images) .
+
+| Value type | Example  |
+| ---------- | -------- |
+| string     | `Always` |
+
+### `toolkit.resources.requests.memory`
+
+The [Kubernetes memory requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `150M`  |
+
+### `toolkit.resources.requests.cpu`
+
+[Kubernetes CPU requests](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `100m`  |
+
+### `toolkit.resources.limits.memory`
+
+[Kubernetes memory limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container.
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `256M`  |
+
+### `toolkit.resources.limits.cpu`
+
+[Kubernetes CPU limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for a Percona Toolkit container
+
+| Value type | Example |
+| ---------- | ------- |
+| string     | `400m`  |

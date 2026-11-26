@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN0.12.0.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5941,7 +5941,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>With this release, you can now configure PodDisruptionBudgets for MySQL, HAProxy, MySQL Router, and Orchestrator Pods, thus ensuring your cluster remains available, even during disruptions or planned maintenance.</p>
 <h3 id="fine-tune-backup-and-restore-operations">Fine-tune backup and restore operations<a data-markdown-ignore class="headerlink" href="#fine-tune-backup-and-restore-operations" title="Permanent link">¶</a></h3>
 <p>The Operator sets sensible defaults for backups and restores to ensure their smooth flow. If you need more control, you can fine-tune <code>xtrabackup</code>, <code>xbstream</code>, and <code>xbcloud</code> settings. You can do this globally via the <code>deploy/cr.yaml</code> Custom resource manifest or individually for a specific backup / restore operation via the respective <code>deploy/backup.yaml</code> or <code>deploy/restore.yaml</code> manifests. In either case, define your configuration in the <code>spec.containerOptions</code> subsection. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">&lt;STORAGE-NAME&gt;</span><span class="p">:</span>
@@ -5962,7 +5962,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Percona Monitoring and Management (PMM) is a great tool to monitor the health of your database cluster. Now you can also learn if PMM itself is healthy using probes - a Kubernetes diagnostics mechanism to check the health and status of containers. Use the <code>spec.pmm.readinessProbes.*</code> and <code>spec.pmm.livenessProbes.*</code> Custom Resource options to fine-tune Readiness and Liveness probes for PMM Client.</p>
 <h3 id="define-a-source-pod-for-backups">Define a source Pod for backups<a data-markdown-ignore class="headerlink" href="#define-a-source-pod-for-backups" title="Permanent link">¶</a></h3>
 <p>You can now explicitly define from what MySQL instance Pod the Operator should make a backup. You can specify the Pod in the deploy/cr.yaml to apply it for all backups, both scheduled and on-demand. You can also override it for an on-demand backup in its resource manifest.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">sourcePod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps-cluster1-mysql-1</span>
 </code></pre></div>

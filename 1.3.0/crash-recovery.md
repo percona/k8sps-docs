@@ -2,15 +2,15 @@
 
 # Recover from a full cluster crash
 
-A full cluster crash happens when the majority of members in a cluster with [Group Replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#group-replication) (GR) are down and the group loses quorum. Even if the primary is among the survivors, the group can’t vote, so after a short timeout, the primary enters the error state too. A power loss in the data center, deletion of MySQL Pods, or an out-of-memory kill can take down enough members to cause this. After the Pods restart, no member can form the group on its own, because none of them knows if it has the most recent data.
+A full cluster crash happens when the majority of members in a cluster with [Group Replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#group-replication) (GR) are down and the group loses quorum. Even if the primary is among the survivors, the group can’t vote, so after a short timeout, the primary enters the error state too. A power loss in the data center, deletion of MySQL Pods, or an out-of-memory kill can take down enough members to cause this. After the Pods restart, no member can form the group on its own, because none of them knows if it has the most recent data.
 
 The Operator detects this situation and recovers the cluster automatically if the `spec.mysql.autoRecovery` is set to `true`. This page explains how to recognize a full cluster crash, how to track the recovery, what to do when you disable automatic recovery or when it doesn’t succeed, and how the recovery works.
 
-This page applies to clusters with Group Replication, the default replication type. Clusters with [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#asynchronous-replication-tech-preview) don’t use this mechanism, and the `mysql.autoRecovery` option has no effect on them. After all MySQL Pods restart, Orchestrator restores the replication topology without manual steps. For details, see [Zero data loss failover in async clusters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html).
+This page applies to clusters with Group Replication, the default replication type. Clusters with [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#asynchronous-replication-tech-preview) don’t use this mechanism, and the `mysql.autoRecovery` option has no effect on them. After all MySQL Pods restart, Orchestrator restores the replication topology without manual steps. For details, see [Zero data loss failover in async clusters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md).
 
 Note
 
-Pausing a cluster with Group Replication and starting it again goes through the same recovery, because all members stop at the same time. See [Pause/resume the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.html). Keep automatic recovery enabled, or be ready to follow the [manual steps](#recover-the-cluster-manually) after every resume.
+Pausing a cluster with Group Replication and starting it again goes through the same recovery, because all members stop at the same time. See [Pause/resume the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.md). Keep automatic recovery enabled, or be ready to follow the [manual steps](#recover-the-cluster-manually) after every resume.
 
 ## Symptoms
 
@@ -25,7 +25,7 @@ A cluster is in a full cluster crash when you see the following:
 
 Check whether automatic recovery is enabled:
 
-```
+```bash
 kubectl get ps <cluster-name> -n <namespace> -o jsonpath='{.spec.mysql.autoRecovery}'
 ```
 
@@ -41,7 +41,7 @@ An empty output means that the option isn’t set, and the Operator treats it as
 
 The `mysql.autoRecovery` option in the Custom Resource controls the automatic recovery. The `deploy/cr.yaml` and `deploy/cr-minimal.yaml` files set it to `true`. If you omit the option in your own Custom Resource, the Operator treats it as `false`, so set it explicitly:
 
-```
+```yaml
 spec:
   mysql:
     clusterType: group-replication
@@ -56,7 +56,7 @@ For the steps that the Operator takes, see [What the Operator does during the au
 
 1. Check the cluster state and conditions:
 
-   ```
+   ```bash
    kubectl get ps <cluster-name> -n <namespace>
    kubectl get ps <cluster-name> -n <namespace> -o jsonpath='{.status.conditions}'
    ```
@@ -65,15 +65,15 @@ For the steps that the Operator takes, see [What the Operator does during the au
 
 1. List the events of the cluster:
 
-   ```
+   ```bash
    kubectl describe ps <cluster-name> -n <namespace>
    ```
 
-   Look for the `FullClusterCrashDetected` warning event (`Full cluster crash detected`) and the `FullClusterCrashRecovered` normal event (`Cluster recovered from full cluster crash`). See [Events](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#events) for all events.
+   Look for the `FullClusterCrashDetected` warning event (`Full cluster crash detected`) and the `FullClusterCrashRecovered` normal event (`Cluster recovered from full cluster crash`). See [Events](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#events) for all events.
 
 1. Check the Operator logs. The following messages show the progress:
 
-   ```
+   ```bash
    kubectl logs deploy/percona-server-mysql-operator -n <namespace> | grep -i "crash recovery"
    ```
 
@@ -88,7 +88,7 @@ For the steps that the Operator takes, see [What the Operator does during the au
 
 Recover the cluster manually when `mysql.autoRecovery` is `false`, or when the automatic recovery doesn’t succeed. In the `false` case, the Operator only writes the following error to its log on every reconciliation:
 
-```
+```text
 Full cluster crash detected but auto recovery is not enabled.
 Enable .spec.mysql.autoRecovery or recover cluster manually
 (connect to one of the pods using mysql-shell and run 'dba.rebootClusterFromCompleteOutage() and delete /var/lib/mysql/full-cluster-crash in each pod.').
@@ -98,13 +98,13 @@ To recover the cluster, do the following:
 
 1. Make sure that all MySQL Pods are running and are `Ready`:
 
-   ```
+   ```bash
    kubectl get pods -n <namespace> -l app.kubernetes.io/component=database
    ```
 
 1. Optionally, check the `GTID_EXECUTED` value saved in each Pod. The Pod with the most transactions has the most recent data:
 
-   ```
+   ```bash
    kubectl exec <cluster-name>-mysql-0 -n <namespace> -c mysql -- cat /var/lib/mysql/full-cluster-crash
    kubectl exec <cluster-name>-mysql-1 -n <namespace> -c mysql -- cat /var/lib/mysql/full-cluster-crash
    kubectl exec <cluster-name>-mysql-2 -n <namespace> -c mysql -- cat /var/lib/mysql/full-cluster-crash
@@ -114,13 +114,13 @@ To recover the cluster, do the following:
 
 1. Get the password of the `root` user from the Secret that you set in the `spec.secretsName` option (`<cluster-name>-secrets` by default):
 
-   ```
+   ```bash
    kubectl get secret <cluster-name>-secrets -n <namespace> -o jsonpath='{.data.root}' | base64 --decode
    ```
 
 1. Connect to a MySQL Pod using MySQL Shell in JavaScript mode:
 
-   ```
+   ```bash
    kubectl exec -it <cluster-name>-mysql-0 -n <namespace> -c mysql -- mysqlsh --js -u root -p
    ```
 
@@ -128,7 +128,7 @@ To recover the cluster, do the following:
 
 1. Reboot the cluster:
 
-   ```
+   ```javascript
    dba.rebootClusterFromCompleteOutage()
    ```
 
@@ -136,7 +136,7 @@ To recover the cluster, do the following:
 
 1. Check that all members are `ONLINE`:
 
-   ```
+   ```javascript
    dba.getCluster().status()
    ```
 
@@ -144,7 +144,7 @@ To recover the cluster, do the following:
 
 1. Delete the `full-cluster-crash` file in every Pod. The cluster stays in the `error` state until the file is gone:
 
-   ```
+   ```bash
    kubectl exec <cluster-name>-mysql-0 -n <namespace> -c mysql -- rm /var/lib/mysql/full-cluster-crash
    kubectl exec <cluster-name>-mysql-1 -n <namespace> -c mysql -- rm /var/lib/mysql/full-cluster-crash
    kubectl exec <cluster-name>-mysql-2 -n <namespace> -c mysql -- rm /var/lib/mysql/full-cluster-crash
@@ -154,7 +154,7 @@ To recover the cluster, do the following:
 
 1. Wait until the cluster reaches the `ready` state:
 
-   ```
+   ```bash
    kubectl get ps <cluster-name> -n <namespace>
    ```
 
@@ -166,7 +166,7 @@ The recovery doesn’t start:
 
 - Check that all MySQL Pods exist and are `Ready`. The Operator doesn’t act on a partially started cluster and doesn’t log anything about the recovery while a Pod is missing. Because Pods start one at a time, a single Pod that can’t start blocks all Pods after it. If a Pod is missing, check the events of the StatefulSet:
 
-  ```
+  ```bash
   kubectl describe statefulset <cluster-name>-mysql -n <namespace>
   ```
 
@@ -199,7 +199,7 @@ When automatic recovery is enabled and all MySQL Pods are `Ready`, the Operator 
 
 ## Related options and events
 
-- [`mysql.autoRecovery`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#mysqlautorecovery) - enables or disables the automatic recovery.
-- [`FullClusterCrashDetected` condition reason and event](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#conditions)
-- [`FullClusterCrashRecovered` event](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#events)
-- [The `full-cluster-crash` file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.html#full-cluster-crash) and other special files in the data directory
+- [`mysql.autoRecovery`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlautorecovery) - enables or disables the automatic recovery.
+- [`FullClusterCrashDetected` condition reason and event](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#conditions)
+- [`FullClusterCrashRecovered` event](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#events)
+- [The `full-cluster-crash` file](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.md#full-cluster-crash) and other special files in the data directory

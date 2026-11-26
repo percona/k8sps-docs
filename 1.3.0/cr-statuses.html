@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6060,20 +6060,20 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>To check the status of your Percona Custom Resources, use the <code>kubectl get &lt;resource-type&gt;</code> or <code>kubectl describe &lt;resource-type&gt;</code> commands. See how to use them to get the quick overview, in-depth details, and targeted queries.</p>
 <h3 id="get-a-quick-overview">Get a quick overview<a data-markdown-ignore class="headerlink" href="#get-a-quick-overview" title="Permanent link">¶</a></h3>
 <p>List your resources and check their high-level status:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output for PerconaServerMySQL</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME          REPLICATION          ENDPOINT                              STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME          REPLICATION          ENDPOINT                              STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
 ps-cluster1   group-replication    ps-cluster1-haproxy.default           ready   3                      3                 27m
 </code></pre></div>
 </details>
 <h3 id="view-full-details">View full details<a data-markdown-ignore class="headerlink" href="#view-full-details" title="Permanent link">¶</a></h3>
 <p>See all status details, conditions, and events:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml
 kubectl<span class="w"> </span>describe<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 
 kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span>yaml
@@ -6086,56 +6086,56 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class=
 <h3 id="query-a-status-field-directly">Query a status field directly<a data-markdown-ignore class="headerlink" href="#query-a-status-field-directly" title="Permanent link">¶</a></h3>
 <p>You can extract specific status fields using <code>jsonpath</code>.</p>
 <p><strong>Example 1. Get the InnoDB cluster name (for ClusterSet configuration):</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.innodbClusterName}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>pscluster1
+<div class="language-text no-copy highlight"><pre><span></span><code>pscluster1
 </code></pre></div>
 </details>
 <p><strong>Example 2. Check whether the ClusterSet is ready:</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[?(@.type=="Ready")]}{.status}{": "}{.reason}{"\n"}{end}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>True: ClusterSetHealthy
+<div class="language-text no-copy highlight"><pre><span></span><code>True: ClusterSetHealthy
 </code></pre></div>
 </details>
 <p><strong>Example 3. Get replication lag for ClusterSet members:</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>&lt;clusterset-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.clusters.*}{.clusterRole}{": "}{.replicationLagSeconds}{"\n"}{end}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>PRIMARY: 
+<div class="language-text no-copy highlight"><pre><span></span><code>PRIMARY: 
 REPLICA: 121
 </code></pre></div>
 </details>
 <p>The field appears only on replica clusters when MySQL Shell reports the lag. The primary cluster and caught-up replicas omit it.</p>
 <p><strong>Example 4. Get the backup destination path:</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.destination}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>s3://&lt;my-bucket&gt;/ps-cluster1-2026-06-29-08:06:10-full
+<div class="language-text no-copy highlight"><pre><span></span><code>s3://&lt;my-bucket&gt;/ps-cluster1-2026-06-29-08:06:10-full
 </code></pre></div>
 </details>
 <p><strong>Example 4. Get the backup size:</strong></p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.size}{"\n"}{.status.uncompressedSize}{"\n"}{.status.compressed}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output for an uncompressed backup</summary>
-<div class="no-copy highlight"><pre><span></span><code>4.2MiB
+<div class="language-text no-copy highlight"><pre><span></span><code>4.2MiB
 4.2MiB
 </code></pre></div>
 </details>
 <details class="example">
 <summary>Sample output for a compressed backup</summary>
-<div class="no-copy highlight"><pre><span></span><code>1.1MiB
+<div class="language-text no-copy highlight"><pre><span></span><code>1.1MiB
 4.2MiB
 true
 </code></pre></div>
@@ -6761,7 +6761,7 @@ true
 <li><strong><code>Failed</code></strong> — Terminal. The restore, prepare, or point-in-time recovery Job failed. Inspect the Job logs, fix the cause, and create a new Restore Custom Resource.</li>
 </ul>
 <p>When a restore is in <code>Error</code>, inspect the message:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>&lt;restore-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>&lt;restore-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.state}{"\n"}{.status.stateDescription}{"\n"}'</span>
 </code></pre></div>
 <hr>

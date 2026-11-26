@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5685,7 +5685,7 @@ concepts/services-networking/service/">Service objects <span class="twemoji"><sv
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">Asynchronous replication (tech preview)</label><label for="__tabbed_1_2">Group replication</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">....</span>
 <span class="w">  </span><span class="nt">haproxy</span><span class="p">:</span><span class="w"> </span>
@@ -5695,7 +5695,7 @@ concepts/services-networking/service/">Service objects <span class="twemoji"><sv
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">group-replication</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">....</span>
 <span class="w">  </span><span class="nt">haproxy</span><span class="p">:</span>
@@ -5713,11 +5713,11 @@ concepts/services-networking/service/">Service objects <span class="twemoji"><sv
 <li><code>3309</code>: <a href="https://www.haproxy.com/blog/haproxy/proxy-protocol/">Proxy protocol <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a></li>
 </ul>
 <p>To find your HAProxy endpoint, run:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>ps-cluster1-haproxy
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>ps-cluster1-haproxy
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                      AGE
 ps-cluster1-haproxy   ClusterIP   10.76.2.102   &lt;none&gt;        3306/TCP,3307/TCP,3309/TCP   2m32s
 </code></pre></div>
 </details>
@@ -5726,7 +5726,7 @@ ps-cluster1-haproxy   ClusterIP   10.76.2.102   &lt;none&gt;        3306/TCP,330
 <p>You can expose the cluster through a <code>&lt;CLUSTER_NAME&gt;-router</code> Kubernetes Service.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/exposure-gr.svg" data-desc-position="bottom"><img alt="image" src="assets/images/exposure-gr.svg"></a></p>
 <p>To configure MySQL Router with the LoadBalancer expose type, modify the <code>spec.router</code> section in <code>deploy/cr.yaml</code> manifest:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">group-replication</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="nt">router</span><span class="p">:</span>
@@ -5734,11 +5734,11 @@ ps-cluster1-haproxy   ClusterIP   10.76.2.102   &lt;none&gt;        3306/TCP,330
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LoadBalancer</span>
 </code></pre></div>
 <p>To find your MySQL Router endpoint, run:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>ps-cluster1-router
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>ps-cluster1-router
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME                TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)                                                       AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME                TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)                                                       AGE
 my-cluster-router   LoadBalancer   10.20.22.90   35.223.42.238   6446:30852/TCP,6447:31694/TCP,6448:31515/TCP,6449:31686/TCP   18h
 </code></pre></div>
 </details>
@@ -5760,7 +5760,7 @@ useful for operations such as asynchronous calls.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_2_1">Asynchronous replication</label><label for="__tabbed_2_2">Group replication</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">async</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="w">  </span><span class="nt">exposePrimary</span><span class="p">:</span>
@@ -5769,7 +5769,7 @@ useful for operations such as asynchronous calls.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">group-replication</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="w">  </span><span class="nt">exposePrimary</span><span class="p">:</span>
@@ -5780,11 +5780,11 @@ useful for operations such as asynchronous calls.</p>
 </div>
 </div>
 <p>To find your primary service endpoint, run:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>ps-cluster1-mysql-primary
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>ps-cluster1-mysql-primary
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
 ps-cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:32146/TCP,33062:31062/TCP,33060:32026/TCP,6033:30521/TCP   3m31s
 </code></pre></div>
 </details>
@@ -5801,17 +5801,17 @@ ps-cluster1-mysql-primary   LoadBalancer   10.40.37.98    35.192.172.85   3306:3
 <p>Sometimes you need to expose each MySQL instance with its own IP address. This is useful when implementing load balancing at the application level.</p>
 <p><a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="assets/images/exposure-all.svg" data-desc-position="bottom"><img alt="image" src="assets/images/exposure-all.svg"></a></p>
 <p>To expose individual pods, configure the following in your <code>deploy/cr.yaml</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">expose</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LoadBalancer</span>
 </code></pre></div>
 <p>To find all exposed services, run:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>services
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>services
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
+<div class="language-text highlight"><pre><span></span><code>NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                         AGE
 ...
 ps-cluster1-mysql-0         LoadBalancer   10.40.44.110   104.198.16.21   3306:31009/TCP,33062:31319/TCP,33060:30737/TCP,6033:30660/TCP   75s
 ps-cluster1-mysql-1         LoadBalancer   10.40.42.5     34.70.170.187   3306:30601/TCP,33062:30273/TCP,33060:30910/TCP,6033:30847/TCP   75s

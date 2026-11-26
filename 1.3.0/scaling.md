@@ -4,7 +4,7 @@
 
 One of the great advantages brought by Kubernetes platform is the ease of an application scaling. Scaling an application results in adding or removing the Pods and scheduling them to available Kubernetes nodes.
 
-Scaling can be [vertical](#vertical-scaling) and [horizontal](#horizontal-scaling). Vertical scaling adds more compute or storage resources to MySQL nodes; horizontal scaling is about adding more nodes to the cluster. [High availability](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#high-availability) looks technically similar, because it also involves additional nodes, but the reason is maintaining liveness of the system in case of server or network failures.
+Scaling can be [vertical](#vertical-scaling) and [horizontal](#horizontal-scaling). Vertical scaling adds more compute or storage resources to MySQL nodes; horizontal scaling is about adding more nodes to the cluster. [High availability](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#high-availability) looks technically similar, because it also involves additional nodes, but the reason is maintaining liveness of the system in case of server or network failures.
 
 ## Vertical scaling
 
@@ -14,7 +14,7 @@ The Operator deploys and manages multiple components, such as Percona Server for
 
 For example, you can add more resources to your HAProxy nodes by editing the following section in the Custom Resource:
 
-```
+```yaml
 spec:
   ...
   proxy:
@@ -29,11 +29,11 @@ spec:
           cpu: 2
 ```
 
-Use our reference documentation for the [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html) for more details about other components.
+Use our reference documentation for the [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md) for more details about other components.
 
 Note
 
-Changing compute resources for MySQL Pods (`mysql.resources`) triggers a recalculation of the MySQL configuration, when the [automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html) is enabled (`mysql.autoConfig.enabled: true`). The settings that usually change because of that are buffer pool and redo log. Since they can only be set at startup, this causes a rolling restart of the MySQL StatefulSet. Plan a resize of `mysql.resources` as a change-management event.
+Changing compute resources for MySQL Pods (`mysql.resources`) triggers a recalculation of the MySQL configuration, when the [automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md) is enabled (`mysql.autoConfig.enabled: true`). The settings that usually change because of that are buffer pool and redo log. Since they can only be set at startup, this causes a rolling restart of the MySQL StatefulSet. Plan a resize of `mysql.resources` as a change-management event.
 
 ### Scale storage
 
@@ -58,13 +58,13 @@ For either option, the volume type must support PVCs expansion.
 
 Certain volume types support PVCs expansion by default. You can run the following command to check if your storage supports the expansion capability:
 
-```
+```bash
 kubectl describe sc <storage class name> | grep AllowVolumeExpansion
 ```
 
 Expected output
 
-```
+```text
 AllowVolumeExpansion: true
 ```
 
@@ -92,7 +92,7 @@ To enable automatic storage resizing, edit the `deploy/cr.yaml` Custom Resource 
 
    Example:
 
-   ```
+   ```yaml
    spec:
      mysql:
        volumeSpec:
@@ -102,7 +102,7 @@ To enable automatic storage resizing, edit the `deploy/cr.yaml` Custom Resource 
                storage: 6Gi
    ```
 
-1. Configure autoscaling thresholds in the [`storageScaling`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#storage-scaling-section) subsection:
+1. Configure autoscaling thresholds in the [`storageScaling`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#storage-scaling-section) subsection:
 
    - `enableVolumeScaling` - set to `true`.
    - `autoscaling.enabled` - set to `true`
@@ -112,7 +112,7 @@ To enable automatic storage resizing, edit the `deploy/cr.yaml` Custom Resource 
 
    Example configuration:
 
-   ```
+   ```yaml
    spec:
      storageScaling:
        enableVolumeScaling: true
@@ -125,7 +125,7 @@ To enable automatic storage resizing, edit the `deploy/cr.yaml` Custom Resource 
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -141,13 +141,13 @@ When the Operator changes the storage size, it updates the Custom Resource statu
 
 - Check the current cluster state:
 
-  ```
+  ```text
   kubectl get ps <cluster-name> -o yaml -n <namespace>
   ```
 
   Sample output
 
-  ```
+  ```text
   storageAutoscaling:
     datadir-ps-cluster1-mysql-0:
       currentSize: 4194304Ki
@@ -155,9 +155,9 @@ When the Operator changes the storage size, it updates the Custom Resource statu
       resizeCount: 2
   ```
 
-The `storageAutoscaling` section appears under the `.status` in the Custom Resource. See [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#storage-autoscaling-status) for field meanings.
+The `storageAutoscaling` section appears under the `.status` in the Custom Resource. See [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#storage-autoscaling-status) for field meanings.
 
-When the storage size reaches the limit, no further resizing is done and this event is recorded in the logs. You can either clean up the data or set a new limit based on your organization’s policies and requirements. For help with common issues, see [Operator logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-logs.html).
+When the storage size reaches the limit, no further resizing is done and this event is recorded in the logs. You can either clean up the data or set a new limit based on your organization’s policies and requirements. For help with common issues, see [Operator logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-logs.md).
 
 #### Storage resizing with Volume Expansion capability
 
@@ -165,13 +165,13 @@ In this document we’re using the default Percona Server for MySQL cluster name
 
 To enable storage resizing via volume expansion, do the following:
 
-1. Set the [`storageScaling.enableVolumeScaling`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#storagescalingenablevolumescaling) Custom Resource option to `true` (it is turned off by default). When enabled, the Operator automatically expands storage when you increase the size in the Custom Resource
+1. Set the [`storageScaling.enableVolumeScaling`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#storagescalingenablevolumescaling) Custom Resource option to `true` (it is turned off by default). When enabled, the Operator automatically expands storage when you increase the size in the Custom Resource
 
 1. Change the `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage` option in the `deploy/cr.yaml` file to the desired storage size.
 
    Here’s the example configuration:
 
-   ```
+   ```yaml
    spec:
      ...
      storageScaling:
@@ -188,7 +188,7 @@ To enable storage resizing via volume expansion, do the following:
 
 1. Apply the new configuration:
 
-   ```
+   ```bash
    kubectl apply -f cr.yaml
    ```
 
@@ -200,7 +200,7 @@ To increase the storage size manually, do the following:
 
 1. Extract and backup the cluster configuration
 
-   ```
+   ```bash
    kubectl get ps ps-cluster1 -o yaml > CR_backup.yaml
    ```
 
@@ -208,19 +208,19 @@ To increase the storage size manually, do the following:
 
    You can use the following command to delete the cluster:
 
-   ```
+   ```bash
    kubectl delete ps ps-cluster1
    ```
 
 1. For each node, edit the yaml to resize the PVC object.
 
-   ```
+   ```bash
    kubectl edit pvc datadir-ps-cluster1-mysql-0
    ```
 
    In the yaml, edit the spec.resources.requests.storage value.
 
-   ```
+   ```yaml
    spec:
      accessModes:
      - ReadWriteOnce
@@ -231,20 +231,20 @@ To increase the storage size manually, do the following:
 
    Perform the same operation on the other nodes.
 
-   ```
+   ```bash
    kubectl edit pvc datadir-ps-cluster1-mysql-1
    kubectl edit pvc datadir-ps-cluster1-mysql-2
    ```
 
 1. In the CR configuration file, use vim or another text editor to edit the PVC size.
 
-   ```
+   ```bash
    vim CR_backup.yaml
    ```
 
 1. Set the new storage size for the `mysql.volumeSpec.persistentVolumeClaim.resources.requests.storage` option:
 
-   ```
+   ```yaml
    mysql:
    volumeSpec:
      persistentVolumeClaim:
@@ -257,7 +257,7 @@ To increase the storage size manually, do the following:
 
 1. Apply the updated configuration to the cluster.
 
-   ```
+   ```bash
    kubectl apply -f CR_backup.yaml
    ```
 
@@ -265,12 +265,12 @@ The storage size change takes some time. When it starts, the Operator automatica
 
 ## Horizontal scaling
 
-Size of the cluster is controlled by a [size key](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#mysqlsize) in the [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html) configuration. That’s why scaling the cluster needs nothing more but changing this option and applying the updated configuration file. This may be done in a specifically saved config, or on the fly, using the following command:
+Size of the cluster is controlled by a [size key](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlsize) in the [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md) configuration. That’s why scaling the cluster needs nothing more but changing this option and applying the updated configuration file. This may be done in a specifically saved config, or on the fly, using the following command:
 
-```
+```bash
 kubectl patch ps ps-cluster1 --type='json' -p='[{"op": "replace", "path": "/spec/mysql/size", "value": 5 }]'
 ```
 
 In this example we have changed the size of the Percona Server for MySQL Cluster to `5` instances.
 
-The Operator validates `mysql.size` against the cluster type. For **asynchronous** replication, you can scale to 2, 4, 6, or any larger count without extra flags. Scaling to **1** requires [`unsafeFlags.mysqlSize: true`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#unsafeflagsmysqlsize). For **group replication**, keep an odd count between 3 and 9. ,Setting an even count or for more than 9 instances is not recommended and requires setting [`unsafeFlags.mysqlSize: true`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#unsafeflagsmysqlsize).
+The Operator validates `mysql.size` against the cluster type. For **asynchronous** replication, you can scale to 2, 4, 6, or any larger count without extra flags. Scaling to **1** requires [`unsafeFlags.mysqlSize: true`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#unsafeflagsmysqlsize). For **group replication**, keep an odd count between 3 and 9. ,Setting an even count or for more than 9 instances is not recommended and requires setting [`unsafeFlags.mysqlSize: true`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#unsafeflagsmysqlsize).

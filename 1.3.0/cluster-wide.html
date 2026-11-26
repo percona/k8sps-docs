@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5716,24 +5716,24 @@ create one during the installation (like it is shown in the
 <ol>
 <li>
 <p>Clone <code>percona-server-mysql-operator</code> repository:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 <span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
 </code></pre></div>
 </li>
 <li>
 <p>Create your <code>percona-db-1</code> Namespace (if it doesn’t yet exist) as follows:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>percona-db-1
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>percona-db-1
 </code></pre></div>
 </li>
 <li>
 <p>Deploy the Operator <a href="https://kubernetes.io/docs/reference/using-api/server-side-apply/">using <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>
     the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-1
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-1
 </code></pre></div>
 </li>
 <li>
 <p>Once Operator is up and running, deploy the database cluster itself:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-1
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-1
 </code></pre></div>
 </li>
 </ol>
@@ -5743,17 +5743,17 @@ create one during the installation (like it is shown in the
 <ol>
 <li>
 <p>Create your <code>percona-db-2</code> namespace (if it doesn’t yet exist) as follows:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>percona-db-2
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>percona-db-2
 </code></pre></div>
 </li>
 <li>
 <p>Deploy the Operator:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-2
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-2
 </code></pre></div>
 </li>
 <li>
 <p>Once Operator is up and running deploy the database cluster itself:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-2
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-2
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -5788,21 +5788,21 @@ Kubernetes.</p>
 <ol>
 <li>
 <p>Clone <code>percona-server-mysql-operator</code> repository:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 <span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
 </code></pre></div>
 </li>
 <li>
 <p>Let’s say you will use <code>ps-operator</code> namespace for the Operator, and <code>percona-db-1</code>
     namespace for the cluster. Create these namespaces, if needed:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>ps-operator
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>ps-operator
 kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>percona-db-1
 </code></pre></div>
 </li>
 <li>
 <p>Edit the <code>deploy/cw-bundle.yaml</code> configuration file to make sure it
     contains proper namespace name for the Operator:</p>
-<div class="highlight"><pre><span></span><code><span class="nn">...</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nn">...</span>
 <span class="nt">subjects</span><span class="p">:</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceAccount</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona-server-mysql-operator</span>
@@ -5820,14 +5820,14 @@ kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span clas
 </li>
 <li>
 <p>Apply the <code>deploy/cw-bundle.yaml</code> file with the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/cw-bundle.yaml<span class="w"> </span>-n<span class="w"> </span>ps-operator
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/cw-bundle.yaml<span class="w"> </span>-n<span class="w"> </span>ps-operator
 </code></pre></div>
 <p>Right now the operator deployed in cluster-wide mode will monitor all
 namespaces in the cluster, either already existing or newly created ones.</p>
 </li>
 <li>
 <p>Deploy the cluster in the namespace of your choice:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-1
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>percona-db-1
 </code></pre></div>
 </li>
 </ol>
@@ -5838,7 +5838,7 @@ namespaces in the cluster, either already existing or newly created ones.</p>
 <ol>
 <li>
 <p>Export the namespace, cluster name and the Secret name as environment variables:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>my-namespace
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>my-namespace
 <span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=</span>ps-cluster1
 <span class="nb">export</span><span class="w"> </span><span class="nv">SECRET_NAME</span><span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-psuser-root
 </code></pre></div>
@@ -5846,13 +5846,13 @@ namespaces in the cluster, either already existing or newly created ones.</p>
 </li>
 <li>
 <p>List the Secrets objects.</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <p>Look for the Secret named <code>&lt;cluster_name&gt;-psuser-root</code>. By default, it is <code>ps-cluster1-psuser-root</code>.</p>
 </li>
 <li>
 <p>Retrieve the user credentials from the Secret:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 -o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.user}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
 kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 -o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
@@ -5860,7 +5860,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 </li>
 <li>
 <p>Run a container with the <code>mysql</code> tool and connect its console output to your terminal:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-i<span class="w"> </span>--rm<span class="w"> </span>--tty<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>run<span class="w"> </span>-i<span class="w"> </span>--rm<span class="w"> </span>--tty<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
 </code></pre></div>
 <p>It may require some time to execute the command and deploy the corresponding Pod.</p>
 </li>
@@ -5873,18 +5873,18 @@ kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w">
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+<div class="language-bash highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-router<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+<div class="language-bash highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-router<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </div>
 </div>
 </div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>mysql: [Warning] Using a password on the command line interface can be insecure.
+<div class="language-text no-copy highlight"><pre><span></span><code>mysql: [Warning] Using a password on the command line interface can be insecure.
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 1665
 Server version: 8.4.11-11.1 Percona Server (GPL), Release 6, Revision dbba4396
@@ -5903,11 +5903,11 @@ mysql&gt;
 </details>
 <p>The following example uses the MySQL prompt to check the
 <code>max_connections</code> variable:</p>
-<div class="highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
+<div class="language-sql highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>+-----------------+-------+
+<div class="language-text no-copy highlight"><pre><span></span><code>+-----------------+-------+
 | Variable_name   | Value |
 +-----------------+-------+
 | max_connections | 158   |
@@ -5928,7 +5928,7 @@ across the needed Namespaces. Following the above example, you would need
 to allow ingress traffic for the <code>ps-operator</code> Namespace from the <code>percona-db-1</code>
 Namespace, and also from the <code>default</code> Namespace. You can do it with the
 NetworkPolicy resource, specified in the YAML file as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NetworkPolicy</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">percona</span>
@@ -5962,7 +5962,7 @@ command.</p>
 <li>
 <p>Update the <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resource Definition <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>
     for the Operator, and do the same for the Role-based access control:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/crd.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/crd.yaml
 kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cw-rbac.yaml
 </code></pre></div>
 </li>
@@ -5972,7 +5972,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> <
     image name for the current Operator release <a href="images.html">in the list of certified images</a>.
     For example, updating to the <code>1.3.0</code> version in the <code>ps-operator</code> namespace should look as
     follows.</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>deployment<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-p<span class="s1">'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"percona/percona-server-mysql-operator:1.3.0"}]}}}}'</span><span class="w"> </span>-n<span class="w"> </span>ps-operator
 </code></pre></div>
 </li>
@@ -5980,7 +5980,7 @@ kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> <
 <p>The deployment rollout will be automatically triggered by the applied patch.
     You can track the rollout process in real time with the
     <code>kubectl rollout status</code> command with the name of your cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployments<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>ps-operator
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deployments<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>ps-operator
 </code></pre></div>
 </li>
 </ol>

@@ -20,7 +20,7 @@ You can create these unprivileged users in the following ways:
 
 ### Create users in the Custom Resource
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 You can create users in Percona Server for MySQL via the `spec.users` subsection in the Custom Resource. This is called declarative user management.
 
@@ -34,7 +34,7 @@ You can change the `spec.users` section in the `deploy/cr.yaml` configuration fi
 
 Here is an example configuration of the Custom Resource:
 
-```
+```yaml
 spec:
   users:
     - dbs:
@@ -58,15 +58,15 @@ spec:
       withGrantOption: true
 ```
 
-For detailed information about all available options, see the [Custom Resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-users-section).
+For detailed information about all available options, see the [Custom Resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-users-section).
 
-The Operator applies custom users after the cluster reaches the [ready](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html) state.
+The Operator applies custom users after the cluster reaches the [ready](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md) state.
 
 #### Generate user passwords manually
 
 You can create the Secret containing the user password yourself and reference it in the `users.passwordSecretRef.name` option in the Custom Resource. The Secret should follow this format:
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -125,29 +125,29 @@ Instead of using the Custom Resource, you can create unprivileged users directly
 
 1. List the Secrets in the namespace and find the cluster Secret. The default name is `ps-cluster1-secrets`. This name is the value of `spec.secretsName` in the Custom Resource:
 
-   ```
+   ```bash
    kubectl get secrets
    kubectl get ps ps-cluster1 -o jsonpath='{.spec.secretsName}' && echo
    ```
 
 1. Get the `root` user password from that Secret. The password is stored under the `root` key. Replace `ps-cluster1-secrets` if your cluster uses a different Secret name:
 
-   ```
+   ```bash
    ROOT_PASSWORD=$(kubectl get secret ps-cluster1-secrets -o jsonpath='{.data.root}' | base64 --decode)
    echo "$ROOT_PASSWORD"
    ```
 
-   The same password is also in the `<cluster-name>-psuser-root` [connection Secret](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connection-secrets.html), under the `password` key.
+   The same password is also in the `<cluster-name>-psuser-root` [connection Secret](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connection-secrets.md), under the `password` key.
 
 1. Start a temporary client Pod and connect to MySQL. Replace `root_password` with the password from the previous step:
 
-   ```
+   ```bash
    kubectl run -it --rm percona-client --image=percona/percona-server:8.4 --restart=Never -- mysql -hps-cluster1-mysql -uroot -p"$ROOT_PASSWORD"
    ```
 
 1. Create the user. This statement creates `user1` with the password `password1` and grants all privileges on `database1`. The `'%'` host lets the user connect from any host:
 
-   ```
+   ```sql
    CREATE USER 'user1'@'%' IDENTIFIED BY 'password1';
    GRANT ALL PRIVILEGES ON database1.* TO 'user1'@'%';
    FLUSH PRIVILEGES;
@@ -159,7 +159,7 @@ Instead of using the Custom Resource, you can create unprivileged users directly
 
 1. Confirm that the user can log in, then run a simple SQL statement to confirm the grants:
 
-   ```
+   ```bash
    kubectl run -it --rm percona-client --image=percona/percona-server:8.4 --restart=Never -- bash -il
    percona-client:/$ mysql -h ps-cluster1-mysql-primary -uuser1 -ppassword1
    mysql> SELECT * FROM database1.table1 LIMIT 1;
@@ -171,7 +171,7 @@ For the `root` user, the Operator creates a Secret named `<cluster_name>-psuser-
 
 For example, the `root` user on a cluster named `ps-cluster1` gets a Secret called `ps-cluster1-psuser-root`. Application Pods can mount this Secret directly instead of assembling connection parameters manually.
 
-See [Connection secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connection-secrets.html) for the full field reference, read-only connection guidance, and application integration examples.
+See [Connection secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connection-secrets.md) for the full field reference, read-only connection guidance, and application integration examples.
 
 ## System Users
 
@@ -191,17 +191,17 @@ Warning
 
 These users should not be used to run an application.
 
-| User Purpose     | Username     | Password Secret Key | Description                                                                                                                                                                                                                         |
-| ---------------- | ------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Admin            | root         | root                | Database administrative user, can be used by the application if needed                                                                                                                                                              |
-| Orchestrator     | orchestrator | orchestrator        | Orchestrator administrative user and credentials for read/write access to the Orchestrator HTTP API (from Operator version 1.2.0 when `spec.crVersion` is `1.2.0` or higher)                                                        |
-| Backup           | xtrabackup   | xtrabackup          | [User to run backups](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)                                                                                                                          |
-| Cluster Check    | clustercheck | clustercheck        | [User for liveness checks and readiness checks](http://galeracluster.com/library/documentation/monitoring-cluster.html)                                                                                                             |
-| Monitoring       | monitor      | monitor             | User for internal monitoring purposes and [PMM agent](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html)                                                                                    |
-| Operator Admin   | operator     | operator            | Database administrative user, should be used only by the Operator                                                                                                                                                                   |
-| Replication      | replication  | replication         | Administrative user needed for replication                                                                                                                                                                                          |
-| ClusterSet       | clusterset   | clusterset          | Administrative user for InnoDB ClusterSet AdminAPI operations and [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html); should be used only by the Operator’s ClusterSet controller |
-| PMM Server token |              | pmmservertoken      | [The service token used to access PMM Server](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html)                                                                                                 |
+| User Purpose     | Username     | Password Secret Key | Description                                                                                                                                                                                                                       |
+| ---------------- | ------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Admin            | root         | root                | Database administrative user, can be used by the application if needed                                                                                                                                                            |
+| Orchestrator     | orchestrator | orchestrator        | Orchestrator administrative user and credentials for read/write access to the Orchestrator HTTP API (from Operator version 1.2.0 when `spec.crVersion` is `1.2.0` or higher)                                                      |
+| Backup           | xtrabackup   | xtrabackup          | [User to run backups](https://www.percona.com/doc/percona-xtrabackup/2.4/using_xtrabackup/privileges.html)                                                                                                                        |
+| Cluster Check    | clustercheck | clustercheck        | [User for liveness checks and readiness checks](http://galeracluster.com/library/documentation/monitoring-cluster.html)                                                                                                           |
+| Monitoring       | monitor      | monitor             | User for internal monitoring purposes and [PMM agent](https://docs.percona.com/percona-monitoring-and-management/2/setting-up/server/index.html)                                                                                  |
+| Operator Admin   | operator     | operator            | Database administrative user, should be used only by the Operator                                                                                                                                                                 |
+| Replication      | replication  | replication         | Administrative user needed for replication                                                                                                                                                                                        |
+| ClusterSet       | clusterset   | clusterset          | Administrative user for InnoDB ClusterSet AdminAPI operations and [cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md); should be used only by the Operator’s ClusterSet controller |
+| PMM Server token |              | pmmservertoken      | [The service token used to access PMM Server](https://docs.percona.com/percona-monitoring-and-management/3/api/authentication.html)                                                                                               |
 
 ### Orchestrator HTTP API authentication
 
@@ -209,7 +209,7 @@ Starting with Operator version 1.2.0, the Orchestrator HTTP API on port `3000` r
 
 The Operator authenticates its own API calls automatically using the `orchestrator` system user from the cluster Secret. You do not need to configure anything for normal cluster operation.
 
-If you call the Orchestrator API yourself (for example from a custom script or when [Orchestrator is exposed](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#orchestratorexposetype) outside the cluster), use one of the following:
+If you call the Orchestrator API yourself (for example from a custom script or when [Orchestrator is exposed](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#orchestratorexposetype) outside the cluster), use one of the following:
 
 - **`orchestrator` user** — read and write access. Use the password stored under the `orchestrator` key in the cluster Secret (`spec.secretsName`).
 - **`readonly` user** — read-only access. Orchestrator accepts any password for this built-in user.
@@ -220,7 +220,7 @@ Unauthenticated requests receive HTTP `401`. Upgrading the Operator alone does n
 
 The default name of the Secrets object for these users is `ps-cluster1-secrets` and can be set in the CR for your cluster in `spec.secretName` to something different. When you create the object yourself, it should match the following simple format:
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -242,13 +242,13 @@ As you can see, because we use the `stringData` type when creating the Secrets o
 
 **in Linux**
 
-```
+```bash
 kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64 --wrap=0)'"}}'
 ```
 
 **in macOS**
 
-```
+```bash
 kubectl patch secret/ps-cluster1-secrets -p '{"data":{"root": "'$(echo -n new_password | base64)'"}}'
 ```
 

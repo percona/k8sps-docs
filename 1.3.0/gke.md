@@ -16,20 +16,20 @@ If you would like to use *your local shell*, install the following:
 
 1. [kubectl](https://cloud.google.com/kubernetes-engine/docs/quickstart#choosing_a_shell) . It is the Kubernetes command-line tool you will use to manage and deploy applications. To install the tool, run the following command:
 
-   ```
+   ```bash
    gcloud auth login
    gcloud components install kubectl
    ```
 
 ## Before you start
 
-Check the [System Requirements](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html) to ensure your environment meets the necessary prerequisites.
+Check the [System Requirements](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md) to ensure your environment meets the necessary prerequisites.
 
 ## Create and configure the GKE cluster
 
 You can configure the settings using the `gcloud` tool. You can run it either in the [Cloud Shell](https://cloud.google.com/shell/docs/quickstart) or in your local shell (if you have installed Google Cloud SDK locally on the previous step). The following command will create a cluster named `ps-cluster1`:
 
-```
+```bash
 gcloud container clusters create ps-cluster1 --project <project ID> --zone us-central1-a --cluster-version 1.36 --machine-type n1-standard-4 --num-nodes=3
 ```
 
@@ -43,23 +43,25 @@ When the process is over, you can see it listed in the Google Cloud console
 
 Select *Kubernetes Engine* → *Clusters* in the left menu panel:
 
+*Image: image*
+
 Now you should configure the command-line access to your newly created cluster to make `kubectl` be able to use it.
 
 In the Google Cloud Console, select your cluster and then click the *Connect* shown on the above image. You will see the connect statement which configures the command-line access. After you have edited the statement, you may run the command in your local shell:
 
-```
+```bash
 gcloud container clusters get-credentials ps-cluster1 --zone us-central1-a --project <project name>
 ```
 
 Finally, use your [Cloud Identity and Access Management (Cloud IAM)](https://cloud.google.com/iam) to control access to the cluster. The following command will give you the ability to create Roles and RoleBindings:
 
-```
+```bash
 kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user $(gcloud config get-value core/account)
 ```
 
 Expected output
 
-```
+```text
 clusterrolebinding.rbac.authorization.k8s.io/cluster-admin-binding created
 ```
 
@@ -67,7 +69,7 @@ clusterrolebinding.rbac.authorization.k8s.io/cluster-admin-binding created
 
 1. Deploy the Operator. By default deployment will be done in the `default` namespace. If that’s not the desired one, you can create a new namespace and/or set the context for the namespace as follows (replace the `<namespace name>` placeholder with some descriptive name):
 
-   ```
+   ```bash
    kubectl create namespace <namespace name>
    kubectl config set-context $(kubectl config current-context) --namespace=<namespace name>
    ```
@@ -76,13 +78,13 @@ clusterrolebinding.rbac.authorization.k8s.io/cluster-admin-binding created
 
    Deploy the Operator using the following command:
 
-   ```
+   ```bash
    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/bundle.yaml
    ```
 
    Expected output
 
-   ```
+   ```text
    customresourcedefinition.apiextensions.k8s.io/perconaservermysqlbackups.ps.percona.com created
    customresourcedefinition.apiextensions.k8s.io/perconaservermysqlrestores.ps.percona.com created
    customresourcedefinition.apiextensions.k8s.io/perconaservermysqls.ps.percona.com created
@@ -97,39 +99,39 @@ clusterrolebinding.rbac.authorization.k8s.io/cluster-admin-binding created
 
 1. The operator has been started, and you can deploy your MySQL cluster:
 
-   ```
+   ```bash
    kubectl apply -f https://raw.githubusercontent.com/percona/percona-server-mysql-operator/v1.3.0/deploy/cr.yaml
    ```
 
    Expected output
 
-   ```
+   ```text
    perconaservermysql.ps.percona.com/ps-cluster1 created
    ```
 
    Note
 
-   This deploys default MySQL cluster configuration. Please see [deploy/cr.yaml](https://raw.githubusercontent.com/percona/percona-server-MySQL-operator/v1.3.0/deploy/cr.yaml) and [Custom Resource Options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html) for the configuration options. You can clone the repository with all manifests and source code by executing the following command:
+   This deploys default MySQL cluster configuration. Please see [deploy/cr.yaml](https://raw.githubusercontent.com/percona/percona-server-MySQL-operator/v1.3.0/deploy/cr.yaml) and [Custom Resource Options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md) for the configuration options. You can clone the repository with all manifests and source code by executing the following command:
 
-   ```
+   ```bash
    git clone -b v1.3.0 https://github.com/percona/percona-server-mysql-operator
    ```
 
    After editing the needed options, apply your modified `deploy/cr.yaml` file as follows:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml
    ```
 
    The creation process may take some time. When the process is over your cluster will obtain the `ready` status. You can check it with the following command:
 
-   ```
+   ```bash
    kubectl get ps
    ```
 
    Expected output
 
-   ```
+   ```text
    NAME       REPLICATION   ENDPOINT                   STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
    ps-cluster1   async         ps-cluster1-haproxy.default   ready   3       3              3                  5m50s
    ```
@@ -138,27 +140,29 @@ You can also track the creation process in Google Cloud console via the Object B
 
 When the creation process is finished, it will look as follows:
 
+*Image: image*
+
 ## Verifying the cluster operation
 
 It may take ten minutes to get the cluster started. When `kubectl get ps` command finally shows you the cluster status as `ready`, you can try to connect to the cluster.
 
-To connect to Percona Server for MySQL, use the connection Secret that the Operator creates for the `root` user. It is named `<cluster_name>-psuser-root` (by default, `ps-cluster1-psuser-root`) and contains hostnames, ports, credentials, and ready-to-use connection URIs. Read [Connection secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connection-secrets.html) for the full reference.
+To connect to Percona Server for MySQL, use the connection Secret that the Operator creates for the `root` user. It is named `<cluster_name>-psuser-root` (by default, `ps-cluster1-psuser-root`) and contains hostnames, ports, credentials, and ready-to-use connection URIs. Read [Connection secrets](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connection-secrets.md) for the full reference.
 
 Here’s how to connect:
 
 1. Export the namespace, cluster name and the Secret name as environment variables:
 
-   ```
+   ```bash
    export NAMESPACE=my-namespace
    export CLUSTER_NAME=ps-cluster1
    export SECRET_NAME=${CLUSTER_NAME}-psuser-root
    ```
 
-   Replace `ps-cluster1` with the [name of your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#metadata-name) if you changed it during installation.
+   Replace `ps-cluster1` with the [name of your cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#metadata-name) if you changed it during installation.
 
 1. List the Secrets objects.
 
-   ```
+   ```bash
    $ kubectl get secrets -n $NAMESPACE
    ```
 
@@ -166,7 +170,7 @@ Here’s how to connect:
 
 1. Retrieve the user credentials from the Secret:
 
-   ```
+   ```bash
    kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" \
    -o jsonpath='{.data.user}' | base64 --decode && echo
    kubectl get secret "$SECRET_NAME" -n "$NAMESPACE" \
@@ -175,29 +179,29 @@ Here’s how to connect:
 
 1. Run a container with the `mysql` tool and connect its console output to your terminal:
 
-   ```
+   ```bash
    kubectl run -i --rm --tty percona-client --image=percona/percona-server:8.4 --restart=Never -- bash -il
    ```
 
    It may require some time to execute the command and deploy the corresponding Pod.
 
-1. Now run `mysql` tool in the `percona-client` command shell using the password obtained from the Secret instead of the `<root password>` placeholder. The command will look different depending on whether the cluster uses load balancing with [HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html) (the default behavior) or uses [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.html) (can be used with Group Replication clusters):
+1. Now run `mysql` tool in the `percona-client` command shell using the password obtained from the Secret instead of the `<root password>` placeholder. The command will look different depending on whether the cluster uses load balancing with [HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md) (the default behavior) or uses [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md) (can be used with Group Replication clusters):
 
    **If using HAProxy (default)**
 
-   ```
+   ```bash
    mysql -h ps-cluster1-haproxy -uroot -p<root password>
    ```
 
    **If using MySQL Router**
 
-   ```
+   ```bash
    mysql -h ps-cluster1-router -uroot -p<root password>
    ```
 
    Expected output
 
-   ```
+   ```text
    mysql: [Warning] Using a password on the command line interface can be insecure.
    Welcome to the MySQL monitor.  Commands end with ; or \g.
    Your MySQL connection id is 1665
@@ -217,13 +221,13 @@ Here’s how to connect:
 
    The following example uses the MySQL prompt to check the `max_connections` variable:
 
-   ```
+   ```sql
    SHOW VARIABLES LIKE "max_connections";
    ```
 
    Expected output
 
-   ```
+   ```text
    +-----------------+-------+
    | Variable_name   | Value |
    +-----------------+-------+
@@ -238,13 +242,13 @@ Here’s how to connect:
 
 If `kubectl get ps` command doesn’t show `ready` status too long, you can check the creation process with the `kubectl get pods` command:
 
-```
+```bash
 kubectl get pods
 ```
 
 Expected output
 
-```
+```text
 NAME                                            READY   STATUS    RESTARTS      AGE
 ps-cluster1-haproxy-0                              2/2     Running   0             44m
 ps-cluster1-haproxy-1                              2/2     Running   0             44m
@@ -260,7 +264,7 @@ percona-server-mysql-operator-7c984f7c9-mgwh4   1/1     Running   0             
 
 If the command output had shown some errors, you can examine the problematic Pod with the `kubectl describe <pod name>` command as follows:
 
-```
+```bash
 kubectl describe pod ps-cluster1-mysql-2
 ```
 
@@ -272,7 +276,11 @@ Alternatively, you can examine your Pods via the object browser
 
 The errors will look as follows:
 
+*Image: image*
+
 Clicking the problematic Pod will bring you to the details page with the same warning:
+
+*Image: image*
 
 ## Removing the GKE cluster
 
@@ -280,7 +288,7 @@ There are several ways that you can delete the cluster.
 
 You can clean up the cluster with the `gcloud container clusters delete <cluster name> --zone <zone location>` command. The return statement requests your confirmation of the deletion. Type `y` to confirm.
 
-```
+```bash
 gcloud container clusters delete ps-cluster1 --zone us-central1-a --project <project ID>
 ```
 
@@ -289,6 +297,8 @@ The return statement requests your confirmation of the deletion. Type `y` to con
 Also, you can delete your cluster via the Google Cloud console
 
 Just click the `Delete` popup menu item in the clusters list:
+
+*Image: image*
 
 The cluster deletion may take time.
 

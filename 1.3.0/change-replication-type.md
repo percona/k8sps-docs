@@ -2,13 +2,13 @@
 
 # Change replication type
 
-The Operator deploys Percona Server for MySQL with [group-replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#group-replication) and HAProxy by default.
+The Operator deploys Percona Server for MySQL with [group-replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#group-replication) and HAProxy by default.
 
 Starting with Operator 1.3.0, you can change the replication type on a running cluster. The Operator tears down the current topology, recreates the MySQL and proxy workloads, and bootstraps the new type on the existing PersistentVolumeClaims. Users, Secrets, and the HAProxy Service stay in place, so applications keep the same endpoint if they already use HAProxy.
 
 Changing the replication type on a running cluster is a tech preview. The behavior can change in future releases. Do not use it in production yet. Try it in a test or staging cluster first.
 
-To compare the two types, see [Replication types](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#replication-types).
+To compare the two types, see [Replication types](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#replication-types).
 
 In Operator 1.2.0 and earlier, you cannot change the type on a running cluster. [Pause the cluster, change the type, then unpause it](#operator-120-and-earlier).
 
@@ -20,7 +20,7 @@ The switch causes downtime while Pods are deleted and the new topology comes up.
 
 HAProxy works with either replication type and is recommended. MySQL Router works only with Group Replication.
 
-You can change from one proxy to another. See [HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html) and [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.html) for the steps.
+You can change from one proxy to another. See [HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md) and [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md) for the steps.
 
 ## Change the replication type
 
@@ -34,7 +34,7 @@ You can change from one proxy to another. See [HAProxy](https://docs.percona.com
 
 ### How it works
 
-When you change `mysql.clusterType` and apply the Custom Resource, the Operator compares the new value with the current cluster type in the [`status.clusterType`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#perconaservermysql-status) field.
+When you change `mysql.clusterType` and apply the Custom Resource, the Operator compares the new value with the current cluster type in the [`status.clusterType`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#perconaservermysql-status) field.
 
 If the cluster is paused or not `ready`, the Operator waits. `status.clusterType` stays on the current type, and proxies and Orchestrator keep the existing topology.
 
@@ -59,27 +59,27 @@ After the switch, failover works through the new topology: group membership for 
 
 1. Export the namespace and cluster name:
 
-   ```
+   ```bash
    export NAMESPACE=<namespace>
    export CLUSTER_NAME=ps-cluster1
    ```
 
 1. Confirm the cluster is `ready`:
 
-   ```
+   ```bash
    kubectl get ps $CLUSTER_NAME -n $NAMESPACE
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME          REPLICATION          ENDPOINT                     STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
    ps-cluster1   group-replication    ps-cluster1-haproxy.default  ready   3                      3                 27m
    ```
 
-1. Take an [on-demand backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html) so you can restore if the switch does not complete. If you are switching from async replication, [take the backup from the primary](#take-a-backup-from-the-primary), not from a replica.
+1. Take an [on-demand backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md) so you can restore if the switch does not complete. If you are switching from async replication, [take the backup from the primary](#take-a-backup-from-the-primary), not from a replica.
 
-1. If you are switching to async and the cluster uses MySQL Router, [enable HAProxy and disable Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html) first. Wait until the cluster is `ready` again.
+1. If you are switching to async and the cluster uses MySQL Router, [enable HAProxy and disable Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md) first. Wait until the cluster is `ready` again.
 
 ### Switch from group replication to async
 
@@ -87,7 +87,7 @@ Enable Orchestrator in the same change. Keep HAProxy enabled and disable MySQL R
 
 **kubectl patch**
 
-```
+```bash
 kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type=merge --patch '{
   "spec": {
     "mysql": {
@@ -112,7 +112,7 @@ kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type=merge --patch '{
 
 1. Edit `deploy/cr.yaml`:
 
-   ```
+   ```yaml
    spec:
      mysql:
        clusterType: async
@@ -127,13 +127,13 @@ kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type=merge --patch '{
 
 1. Apply the change:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n $NAMESPACE
    ```
 
 Wait until the cluster is `ready` and the `status.clusterType` is `async`. Orchestrator and HAProxy report ready replicas.
 
-```
+```bash
 kubectl get ps $CLUSTER_NAME -n $NAMESPACE
 ```
 
@@ -155,7 +155,7 @@ Before you switch, [verify that all replicas are caught up](#verify-that-all-rep
 
 1. Set the root password and find the primary. The primary Pod prints no replica status:
 
-   ```
+   ```bash
    export ROOT_PASSWORD=$(kubectl -n $NAMESPACE get secret $CLUSTER_NAME-psuser-root -o jsonpath='{.data.password}' | base64 -d)
 
    for i in 0 1 2; do
@@ -170,14 +170,14 @@ Before you switch, [verify that all replicas are caught up](#verify-that-all-rep
 
 1. Read the executed GTID set of the primary. Replace `<primary-index>` with the ordinal of the primary Pod:
 
-   ```
+   ```bash
    export GTID_PRIMARY=$(kubectl exec -n $NAMESPACE $CLUSTER_NAME-mysql-<primary-index> -c mysql -- \
      mysql -uroot -p"$ROOT_PASSWORD" -N -B -e "SELECT REPLACE(@@GLOBAL.gtid_executed, '\n', '');")
    ```
 
 1. Check that every Pod has applied all transactions of the primary:
 
-   ```
+   ```bash
    for i in 0 1 2; do
      echo -n "$CLUSTER_NAME-mysql-$i: "
      kubectl exec -n $NAMESPACE $CLUSTER_NAME-mysql-$i -c mysql -- \
@@ -193,7 +193,7 @@ By default, the Operator takes a backup of an asynchronous cluster from a replic
 
 Set the `spec.sourcePod` option of the backup to the primary Pod:
 
-```
+```yaml
 apiVersion: ps.percona.com/v1
 kind: PerconaServerMySQLBackup
 metadata:
@@ -204,7 +204,7 @@ spec:
   sourcePod: ps-cluster1-mysql-<primary-index>
 ```
 
-For all backup options, see the [Backup resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.html). Wait until the backup reaches the `Succeeded` state before you continue.
+For all backup options, see the [Backup resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-cr.md). Wait until the backup reaches the `Succeeded` state before you continue.
 
 #### Run the switch
 
@@ -212,7 +212,7 @@ Disable Orchestrator in the same change. The Operator refuses the switch while O
 
 **kubectl patch**
 
-```
+```bash
 kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type=merge --patch '{
   "spec": {
     "mysql": {
@@ -229,7 +229,7 @@ kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type=merge --patch '{
 
 1. Edit `deploy/cr.yaml`:
 
-   ```
+   ```yaml
    spec:
      mysql:
        clusterType: group-replication
@@ -239,7 +239,7 @@ kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type=merge --patch '{
 
 1. Apply the change:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n $NAMESPACE
    ```
 
@@ -249,7 +249,7 @@ Wait until the cluster is `ready` and the `status.clusterType` is `group-replica
 
 Confirm the applied type and the cluster state:
 
-```
+```bash
 kubectl get ps $CLUSTER_NAME -n $NAMESPACE \
   -o jsonpath='{.status.state}{" "}{.status.clusterType}{"\n"}'
 ```
@@ -258,39 +258,39 @@ The output is `ready` and the type you switched to (`async` or `group-replicatio
 
 Sample output
 
-```
+```text
 ready async
 ```
 
 Check whether the switch is still in progress:
 
-```
+```bash
 kubectl get ps $CLUSTER_NAME -n $NAMESPACE \
   -o jsonpath='{range .status.conditions[?(@.type=="ClusterTypeSwitchInProgress")]}{.type}{": "}{.status}{"\n"}{end}'
 ```
 
 A finished switch returns no output.
 
-Connect through HAProxy as described in [Connect to Percona Server for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connect.html) and query a known table.
+Connect through HAProxy as described in [Connect to Percona Server for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connect.md) and query a known table.
 
 Optional. Confirm the new topology from inside a MySQL Pod.
 
 Inspect the connection secret and extract the password:
 
-```
+```bash
 PWD=$(kubectl -n $NAMESPACE get secret $CLUSTER_NAME-psuser-root -o jsonpath='{.data.password}' | base64 -d)
 ```
 
 **Group replication**
 
-```
+```bash
 kubectl exec -it -n $NAMESPACE $CLUSTER_NAME-mysql-0 -c mysql -- \
   mysql -uroot -p"$PWD" -e "SELECT member_host, member_state, member_role FROM performance_schema.replication_group_members;"
 ```
 
 Sample output
 
-```
+```text
 +-----------------------------------------------+--------------+-------------+
 | member_host                                   | member_state | member_role |
 +-----------------------------------------------+--------------+-------------+
@@ -302,7 +302,7 @@ Sample output
 
 **Asynchronous replication**
 
-```
+```bash
 kubectl exec -it -n $NAMESPACE $CLUSTER_NAME-mysql-0 -c mysql -- \
   mysql -uroot -p"$PWD" -e "SHOW REPLICA STATUS\G"
 ```
@@ -317,7 +317,7 @@ On the primary, replica status is empty. On replicas, the IO and SQL threads sho
 
    The Operator sets `status.clusterType` to `async` when it deletes the old workloads, before it finishes that bootstrap. If the bootstrap fails, the MySQL Pods cannot accept the connections the Operator needs to tear the async setup down. Setting `mysql.clusterType` back to `group-replication` does not restore the previous topology, and the cluster stays out of `ready`.
 
-   This limitation is known and will be fixed in a later release. [Restore the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html) from the backup you took before the switch.
+   This limitation is known and will be fixed in a later release. [Restore the cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md) from the backup you took before the switch.
 
 ## Operator 1.2.0 and earlier
 
@@ -327,15 +327,15 @@ Warning
 
 The data loss risk described for [the switch from async to group replication](#switch-from-async-to-group-replication) applies to this procedure too. Complete the checks in [Verify that all replicas are caught up](#verify-that-all-replicas-are-caught-up) and [Take a backup from the primary](#take-a-backup-from-the-primary) before you pause the cluster.
 
-1. [Pause](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.html) the cluster:
+1. [Pause](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause.md) the cluster:
 
-   ```
+   ```bash
    kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type json -p='[{"op":"add","path":"/spec/pause","value":true}]'
    ```
 
 1. Edit `deploy/cr.yaml` and set `mysql.clusterType` to `async`. Keep HAProxy enabled.
 
-   ```
+   ```yaml
    mysql:
      clusterType: async
      ...
@@ -347,13 +347,13 @@ The data loss risk described for [the switch from async to group replication](#s
 
 1. Apply the configuration and unpause the cluster:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n $NAMESPACE
    kubectl patch ps $CLUSTER_NAME -n $NAMESPACE --type json -p='[{"op":"add","path":"/spec/pause","value":false}]'
    ```
 
 1. Wait until the cluster is resumed:
 
-   ```
+   ```bash
    kubectl get ps -n $NAMESPACE
    ```

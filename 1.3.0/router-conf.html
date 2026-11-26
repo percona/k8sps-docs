@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5626,7 +5626,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Edit the <code>deploy/cr.yaml</code> file</p>
-<div class="highlight"><pre><span></span><code><span class="nn">...</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nn">...</span>
 <span class="nt">mysql</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">group-replication</span>
 <span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
@@ -5641,15 +5641,15 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 <li>
 <p>Update the cluster to apply the new configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
 </code></pre></div>
 <p>When the process is over your cluster will obtain the <code>ready</code> status. You
 can check it with the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME       REPLICATION         ENDPOINT                  STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME       REPLICATION         ENDPOINT                  STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
 ps-cluster1   group-replication   ps-cluster1-router.default   ready   3                                3        53m
 </code></pre></div>
 </details>
@@ -5671,7 +5671,7 @@ ps-cluster1   group-replication   ps-cluster1-router.default   ready   3        
 <ol>
 <li>
 <p>To change the verbosity level, edit the configuration file as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w"> </span><span class="no">[default]</span>
 <span class="w"> </span><span class="no">logging_folder=/tmp/router/log</span>
 <span class="w"> </span><span class="no">[logger]</span>
@@ -5680,7 +5680,7 @@ ps-cluster1   group-replication   ps-cluster1-router.default   ready   3        
 </li>
 <li>
 <p>Update the cluster to apply the new configuration</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy.cr.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy.cr.yaml
 </code></pre></div>
 </li>
 </ol>
@@ -5692,24 +5692,24 @@ ps-cluster1   group-replication   ps-cluster1-router.default   ready   3        
 <ol>
 <li>
 <p>Create the <code>mysqlrouter.conf</code> configuration file and specify the new verbosity level within. </p>
-<div class="highlight"><pre><span></span><code><span class="k">[logger]</span>
+<div class="language-ini highlight"><pre><span></span><code><span class="k">[logger]</span>
 <span class="na">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">INFO</span>
 </code></pre></div>
 </li>
 <li>
 <p>Get the name of your cluster to pass the configuration</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps
 </code></pre></div>
 </li>
 <li>
 <p>Create the ConfigMap. You should use the combination of the cluster name with the <code>-router</code> suffix as the naming convention for the ConfigMap. For example, to create the ConfigMap for the cluster <code>ps-cluster1</code>, the command is the following:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>ps-cluster1-router<span class="w"> </span>--from-file<span class="o">=</span>mysqlrouter.conf
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>configmap<span class="w"> </span>ps-cluster1-router<span class="w"> </span>--from-file<span class="o">=</span>mysqlrouter.conf
 </code></pre></div>
 <p>Replace the <code>ps-cluster1</code> with the corresponding name of your cluster.</p>
 </li>
 <li>
 <p>View the created ConfigMap using the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>configmaps<span class="w"> </span>ps-cluster1-mysql
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>configmaps<span class="w"> </span>ps-cluster1-mysql
 </code></pre></div>
 </li>
 </ol>

@@ -12,4 +12,4 @@ Ready to get started with the Percona Operator for MySQL? In this section, you w
 
 ## Next steps
 
-[Install the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.html)
+[Install the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubectl.md)

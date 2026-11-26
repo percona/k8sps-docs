@@ -8,7 +8,7 @@
 
 - **Installation**
 
-  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.8.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
@@ -16,7 +16,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ### Supporting cluster-wide Operator installation
 
-Starting from now, the Operator [can be installed](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.html) in multi-namespace (so-called “cluster-wide”) mode, enabling management of Percona Server for MySQL clusters across multiple namespaces from a single Operator. This functionality, already available for other Percona Operators, brings greater flexibility and efficiency to managing MySQL databases on Kubernetes.
+Starting from now, the Operator [can be installed](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md) in multi-namespace (so-called “cluster-wide”) mode, enabling management of Percona Server for MySQL clusters across multiple namespaces from a single Operator. This functionality, already available for other Percona Operators, brings greater flexibility and efficiency to managing MySQL databases on Kubernetes.
 
 ### Fixing the overloaded allowUnsafeConfigurations flag
 
@@ -24,7 +24,7 @@ In the previous Operator versions `allowUnsafeConfigurations` Custom Resource op
 
 With this release, a separate `unsafeFlags` Custom Resource section is introduced for the fine-grained control of the safety loosening features:
 
-```
+```yaml
 unsafeFlags:
   mysqlSize: true
   proxy: true
@@ -35,15 +35,15 @@ unsafeFlags:
 
 ## New features
 
-- [K8SPS-149](https://jira.percona.com/browse/K8SPS-149): Custom Resource options now include [customizable health checks and timeouts](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#proxyhaproxylivenessprobetimeoutseconds) for HAProxy
+- [K8SPS-149](https://jira.percona.com/browse/K8SPS-149): Custom Resource options now include [customizable health checks and timeouts](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#proxyhaproxylivenessprobetimeoutseconds) for HAProxy
 - [K8SPS-186](https://jira.percona.com/browse/K8SPS-186) and [K8SPS-370](https://jira.percona.com/browse/K8SPS-370): Removing `allowUnsafeConfigurations` Custom Resource option in favor of fine-grained safety control in the `unsafeFlags` subsection
-- [K8SPS-241](https://jira.percona.com/browse/K8SPS-241): Support for the [cluster-wide Operator mode](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.html) allowing one Operator to watch for Percona Server for MySQL Custom Resources in several namespaces
+- [K8SPS-241](https://jira.percona.com/browse/K8SPS-241): Support for the [cluster-wide Operator mode](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md) allowing one Operator to watch for Percona Server for MySQL Custom Resources in several namespaces
 
 ## Improvements
 
 - [K8SPS-334](https://jira.percona.com/browse/K8SPS-334): Finalizers were renamed to contain fully qualified domain names (FQDNs), avoiding potential conflicts with other finalizer names in the same Kubernetes environment
 - [K8SPS-333](https://jira.percona.com/browse/K8SPS-333): improve `delete-mysql-pods-in-order` finalizer to take into account possible change of the primary instance in group replication
-- [K8SPS-340](https://jira.percona.com/browse/K8SPS-340): A `securityContext` of the `xtrabackup` container [can now be configured](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupcontainersecuritycontext) allowing administrators to define security profiles for the container
+- [K8SPS-340](https://jira.percona.com/browse/K8SPS-340): A `securityContext` of the `xtrabackup` container [can now be configured](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupcontainersecuritycontext) allowing administrators to define security profiles for the container
 - [K8SPS-43](https://jira.percona.com/browse/K8SPS-43): Custom Resource status obtained with the `kubectl get ps` command now takes into account both group and asynchronous replication, and doesn’t report the cluster as ready if the replication is broken
 
 ## Bugs Fixed
@@ -57,7 +57,7 @@ unsafeFlags:
 
 ## Deprecation and removal
 
-- Starting from now, `allowUnsafeConfigurations` Custom Resource option is deprecated in favor of a number of options under the `unsafeFlags` subsection. Setting `allowUnsafeConfigurations` won’t have any effect; upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under [unsafeFlags](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-unsafeflags-section) set to true
+- Starting from now, `allowUnsafeConfigurations` Custom Resource option is deprecated in favor of a number of options under the `unsafeFlags` subsection. Setting `allowUnsafeConfigurations` won’t have any effect; upgrading existing clusters with `allowUnsafeConfigurations=true` will cause everything under [unsafeFlags](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-unsafeflags-section) set to true
 
 - Finalizers were renamed to contain fully qualified domain names:
 

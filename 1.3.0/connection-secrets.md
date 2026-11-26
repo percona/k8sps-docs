@@ -10,11 +10,11 @@ The Secret is owned by the Operator and updated on every reconciliation, so valu
 
 The connection Secret follows this naming pattern:
 
-```
+```text
 <cluster_name>-psuser-<username>
 ```
 
-`<cluster_name>` is the [name of your Percona Server for MySQL cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#metadata-name). `<username>` is the MySQL user name. Currently, the Operator creates this Secret only for the `root` user.
+`<cluster_name>` is the [name of your Percona Server for MySQL cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#metadata-name). `<username>` is the MySQL user name. Currently, the Operator creates this Secret only for the `root` user.
 
 For a cluster named `ps-cluster1`, the Secret name is `ps-cluster1-psuser-root`.
 
@@ -22,7 +22,7 @@ For a cluster named `ps-cluster1`, the Secret name is `ps-cluster1-psuser-root`.
 
 The following example shows the fields the Operator populates in the connection Secret:
 
-```
+```yaml
 stringData:
   host: ps-cluster1-mysql-primary.default.svc
   port: "3306"
@@ -63,20 +63,20 @@ The `proxy-*` and `proxy-readonly-*` fields are generic. They do not indicate wh
 
 Note
 
-Passwords for system users used by the Operator itself (backup, monitoring, replication, and so on) remain in the separate Secrets object configured with `spec.secretsName` (for example, `ps-cluster1-secrets`). See [System users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#system-users) for details.
+Passwords for system users used by the Operator itself (backup, monitoring, replication, and so on) remain in the separate Secrets object configured with `spec.secretsName` (for example, `ps-cluster1-secrets`). See [System users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#system-users) for details.
 
 ## View connection details
 
 To inspect the connection Secret, list Secrets in your namespace and look for the `<cluster_name>-psuser-root` object:
 
-```
+```bash
 kubectl get secrets -n <namespace>
 kubectl get secret ps-cluster1-psuser-root -n <namespace> -o yaml
 ```
 
 To decode individual fields:
 
-```
+```bash
 kubectl get secret ps-cluster1-psuser-root -n <namespace> \
   -o jsonpath="{.data['proxy-uri']}" | base64 --decode && echo
 ```
@@ -89,9 +89,9 @@ Choose the connection fields based on how your application reaches the database.
 
 ### Read/write through the proxy (default)
 
-Most clusters run with [HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html) or [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.html) enabled. For connections from inside the Kubernetes cluster, use the `proxy-*` fields or `proxy-uri`:
+Most clusters run with [HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md) or [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md) enabled. For connections from inside the Kubernetes cluster, use the `proxy-*` fields or `proxy-uri`:
 
-```
+```bash
 mysql -h $(kubectl get secret ps-cluster1-psuser-root -n <namespace> \
   -o jsonpath="{.data['proxy-host']}" | base64 --decode) \
   -u$(kubectl get secret ps-cluster1-psuser-root -n <namespace> \
@@ -104,16 +104,16 @@ mysql -h $(kubectl get secret ps-cluster1-psuser-root -n <namespace> \
 
 Or parse the ready-made URI:
 
-```
+```bash
 kubectl get secret ps-cluster1-psuser-root -n <namespace> \
   -o jsonpath="{.data['proxy-uri']}" | base64 --decode && echo
 ```
 
 ### Read-only through the proxy
 
-Use the `proxy-readonly-*` fields to send read queries to replica nodes. With HAProxy, read-only traffic is routed on port `3307`. See [Configure HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html) for details.
+Use the `proxy-readonly-*` fields to send read queries to replica nodes. With HAProxy, read-only traffic is routed on port `3307`. See [Configure HAProxy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md) for details.
 
-```
+```bash
 mysql -h $(kubectl get secret ps-cluster1-psuser-root -n <namespace> \
   -o jsonpath="{.data['proxy-readonly-host']}" | base64 --decode) \
   -u$(kubectl get secret ps-cluster1-psuser-root -n <namespace> \
@@ -132,7 +132,7 @@ Setting only `proxy-readonly-host` without `proxy-readonly-port` does **not** ro
 
 To bypass the proxy and connect directly to the current primary Pod, use the `host`, `port`, `user`, and `password` fields, or the `uri` field:
 
-```
+```bash
 mysql -h $(kubectl get secret ps-cluster1-psuser-root -n <namespace> \
   -o jsonpath='{.data.host}' | base64 --decode) \
   -u$(kubectl get secret ps-cluster1-psuser-root -n <namespace> \
@@ -145,9 +145,9 @@ The `host` value always points to the direct MySQL primary Service and is update
 
 ### External connections
 
-If you have [exposed the proxy with a LoadBalancer Service](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.html) and an external IP is assigned, use the `proxy-external-*` fields:
+If you have [exposed the proxy with a LoadBalancer Service](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md) and an external IP is assigned, use the `proxy-external-*` fields:
 
-```
+```bash
 kubectl get secret ps-cluster1-psuser-root -n <namespace> \
   -o jsonpath="{.data['proxy-external-uri']}" | base64 --decode && echo
 ```
@@ -158,7 +158,7 @@ These fields appear only after the LoadBalancer receives an external IP address.
 
 Mount the connection Secret into your application Pod to inject connection details as environment variables. To avoid naming conflicts, add a `prefix`:
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -175,7 +175,7 @@ spec:
 
 All Secret keys are exposed as environment variables with the same names and your prefix. For example, `MYSQL_host`, `MYSQL_proxy-host`, `MYSQL_proxy-readonly-port` and so on. Your application can read them directly:
 
-```
+```python
 import os
 import pymysql
 
@@ -191,7 +191,7 @@ connection = pymysql.connect(
 
 When connecting to read-only nodes, pass both the read-only host and port:
 
-```
+```python
 connection = pymysql.connect(
     host=os.environ["MYSQL_proxy-readonly-host"],
     user=os.environ["MYSQL_user"],

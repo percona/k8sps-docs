@@ -8,7 +8,7 @@
 
 - **Installation**
 
-  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Note
 
@@ -16,8 +16,8 @@ Version 0.3.0 of the Percona Operator for MySQL is **a tech preview release** an
 
 ## Release Highlights
 
-- You can now use the [HAProxy load balancer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.html#use-haproxy) in front of the cluster configured for the asynchronous replication. The feature is turned on by default, allowing HAProxy to route traffic and monitor the health of the nodes
-- Starting from this release, the Operator [automatically generates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html) TLS certificates and turns on transport encryption by default at cluster creation time. This includes both external certificates which allow users to connect to a cluster via the encrypted channel, and internal ones used for communication between MySQL nodes
+- You can now use the [HAProxy load balancer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/expose.md#use-haproxy) in front of the cluster configured for the asynchronous replication. The feature is turned on by default, allowing HAProxy to route traffic and monitor the health of the nodes
+- Starting from this release, the Operator [automatically generates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md) TLS certificates and turns on transport encryption by default at cluster creation time. This includes both external certificates which allow users to connect to a cluster via the encrypted channel, and internal ones used for communication between MySQL nodes
 
 ## New Features
 
@@ -27,19 +27,19 @@ Version 0.3.0 of the Percona Operator for MySQL is **a tech preview release** an
 
 ## Improvements
 
-- [K8SPS-23](https://jira.percona.com/browse/K8SPS-23) Add [cert-manager support](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html) to generate and update TLS certificates automatically
+- [K8SPS-23](https://jira.percona.com/browse/K8SPS-23) Add [cert-manager support](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md) to generate and update TLS certificates automatically
 - [K8SPS-31](https://jira.percona.com/browse/K8SPS-31) Show `ready` state in the custom resource output produced by the `kubectl get ps` command only after all LoadBalancers are ready
 - [K8SPS-59](https://jira.percona.com/browse/K8SPS-59) Add `mysql.primaryServiceType` Custom Resource option to configure the primary exposure type in one place instead of exposing all Pods with specific Service type
-- [K8SPS-88](https://jira.percona.com/browse/K8SPS-88) Allow configuring `prefix` field for backup storages via the [backup.s3.prefix](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupstoragesstorage-names3prefix) Custom Resource option
+- [K8SPS-88](https://jira.percona.com/browse/K8SPS-88) Allow configuring `prefix` field for backup storages via the [backup.s3.prefix](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupstoragesstorage-names3prefix) Custom Resource option
 - [K8SPS-93](https://jira.percona.com/browse/K8SPS-93) Avoid running multiple backups on the same Pod by either scheduling new backup to another Node or blocking it until the running one finishes
-- [K8SPS-97](https://jira.percona.com/browse/K8SPS-97) [S3 backup finalizer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html) now triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object
+- [K8SPS-97](https://jira.percona.com/browse/K8SPS-97) [S3 backup finalizer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md) now triggers the actual deletion of backup files from the S3 bucket when there is a manual or scheduled removal of the corresponding backup object
 - [K8SPS-103](https://jira.percona.com/browse/K8SPS-103) Show MySQL Router and Orchestrator statuses in the Custom Resource through the `kubectl` command
 - [K8SPS-104](https://jira.percona.com/browse/K8SPS-104) Avoid using the root user in backup containers to run XtraBackup with the lowest possible privileges for higher security and isolation of the cluster components
-- [K8SPS-115](https://jira.percona.com/browse/K8SPS-115) Make it possible [to use API Key](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.html#install-pmm-client) to authorize within Percona Monitoring and Management Server as a more convenient and modern alternative password-based authentication
+- [K8SPS-115](https://jira.percona.com/browse/K8SPS-115) Make it possible [to use API Key](https://docs.percona.com/percona-operator-for-mysql/1.3.0/monitoring.md#install-pmm-client) to authorize within Percona Monitoring and Management Server as a more convenient and modern alternative password-based authentication
 - [K8SPS-119](https://jira.percona.com/browse/K8SPS-119) and [K8SPS-150](https://jira.percona.com/browse/K8SPS-150) Allow to specify custom init images for the cluster components (MySQL, Orchestrator, Router, HAProxy, etc.) to simplify customizing images by the end users
 - [K8SPS-138](https://jira.percona.com/browse/K8SPS-138) Expose MySQL default and administrative connection ports via MySQL Router
 - [K8SPS-145](https://jira.percona.com/browse/K8SPS-145) Add `delete-mysql-pods-in-order` finalizer to control the proper Pods deletion order in case of the cluster deletion event
-- [K8SPS-152](https://jira.percona.com/browse/K8SPS-152) Allow configuring the Orchestrator exposure via the [orchestrator.expose.type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#orchestratorexposetype) option in Custom Resource
+- [K8SPS-152](https://jira.percona.com/browse/K8SPS-152) Allow configuring the Orchestrator exposure via the [orchestrator.expose.type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#orchestratorexposetype) option in Custom Resource
 
 ## Bugs Fixed
 

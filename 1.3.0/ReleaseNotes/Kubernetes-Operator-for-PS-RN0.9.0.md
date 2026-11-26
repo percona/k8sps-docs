@@ -8,7 +8,7 @@
 
 - **Installation**
 
-  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.9.0 of the Percona Operator for MySQL is still **a tech preview release**, and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
@@ -18,7 +18,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 Starting from now, the Operator supports scheduled backups, moving towards the upcoming general availability status. You can configure scheduled backups in the Custom Resource, as you do with other Percona Operators, in the `backup.schedule` subsection, setting the `name` of the backup, `schedule` in [crontab format](https://en.wikipedia.org/wiki/Cron) , as well as the backup `storage`, and, optionally, the retention (the number of backups to `keep`):
 
-```
+```yaml
 backup:
   ...
   schedule:
@@ -28,12 +28,12 @@ backup:
       storageName: s3-us-west
 ```
 
-See more detailed instructions on configuring scheduled backups in [our documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html).
+See more detailed instructions on configuring scheduled backups in [our documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md).
 
 ## New features
 
-- [K8SPS-348](https://jira.percona.com/browse/K8SPS-348): [Scheduled backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html) are now supported in addition to on-demand ones
-- [K8SPS-367](https://jira.percona.com/browse/K8SPS-367): A new [percona.com/delete-mysql-pvc](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#metadata-name) Finalizer can be used to automatically delete Persistent Volume Claims for the database cluster Pods after the cluster deletion event (off by default)
+- [K8SPS-348](https://jira.percona.com/browse/K8SPS-348): [Scheduled backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md) are now supported in addition to on-demand ones
+- [K8SPS-367](https://jira.percona.com/browse/K8SPS-367): A new [percona.com/delete-mysql-pvc](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#metadata-name) Finalizer can be used to automatically delete Persistent Volume Claims for the database cluster Pods after the cluster deletion event (off by default)
 
 ## Improvements
 

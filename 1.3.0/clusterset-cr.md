@@ -4,7 +4,7 @@
 
 The `PerconaServerMySQLClusterSet` Custom Resource defines cross-site replication between Group Replication clusters as a MySQL InnoDB ClusterSet. Use the short name `ps-clusterset`.
 
-This document describes all available options. For status fields and conditions, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html).
+This document describes all available options. For status fields and conditions, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md).
 
 ## `apiVersion`
 
@@ -28,7 +28,7 @@ The metadata section identifies the ClusterSet object. It includes the following
 - `percona.com/clusterset-dissolve` — Runs `.dissolve()` on the InnoDB ClusterSet before the Custom Resource is deleted. Underlying clusters continue as standalone InnoDB Clusters.
 - `percona.com/clusterset-protection` - Blocks deletion of the ClusterSet member cluster while the ClusterSet has at least one replica. The finalizer is set on both the primary and the replica clusters starting with Operator version 1.3.0.
 - `annotations` — Kubernetes annotations on the ClusterSet object. The Operator uses the following annotation:
-- `percona.com/clusterset-rejoin-cluster` — Set this to a replica’s InnoDB cluster name (`spec.clusters[].innodbClusterName`) when the replica is healthy but ClusterSet replication is down. Do not set it to the current primary. The Operator removes the annotation after the rejoin attempt, whether it succeeds or fails. See [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster).
+- `percona.com/clusterset-rejoin-cluster` — Set this to a replica’s InnoDB cluster name (`spec.clusters[].innodbClusterName`) when the replica is healthy but ClusterSet replication is down. Do not set it to the current primary. The Operator removes the annotation after the rejoin attempt, whether it succeeds or fails. See [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster).
 
 ## `spec`
 

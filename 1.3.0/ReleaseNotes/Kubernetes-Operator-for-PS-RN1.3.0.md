@@ -2,7 +2,7 @@
 
 # Percona Operator for MySQL 1.3.0 (2026-10-29)
 
-[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router, and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.
 
@@ -50,7 +50,7 @@ This release adds automatic MySQL configuration tuning, a replication type switc
 
 ## Important upgrade notes
 
-Check the following before you upgrade the Operator to 1.3.0. The upgrade steps are in the [upgrade guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.html).
+Check the following before you upgrade the Operator to 1.3.0. The upgrade steps are in the [upgrade guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.md).
 
 ### Leader election is enabled by default
 
@@ -60,17 +60,17 @@ See [Configurable leader election for the Operator](#configurable-leader-electio
 
 ### Enable backups on asynchronous clusters
 
-Version 1.3.0 requires backups so a failover on an [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#asynchronous-replication-tech-preview) cluster can recover transactions from the old primary. An asynchronous cluster with [`backup.enabled`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupenabled) set to `false` fails validation, and reconciliation stops.
+Version 1.3.0 requires backups so a failover on an [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#asynchronous-replication-tech-preview) cluster can recover transactions from the old primary. An asynchronous cluster with [`backup.enabled`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupenabled) set to `false` fails validation, and reconciliation stops.
 
 The status shows an error like this:
 
-```
+```text
 Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
 ```
 
 A cluster that was valid on Operator 1.2.0 hits this check after the upgrade. Before you upgrade, do one of the following:
 
-- [Enable and configure backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html#configuring-backups), and set `backup.enabled` to `true`.
+- [Enable and configure backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md#configuring-backups), and set `backup.enabled` to `true`.
 - Set `unsafeFlags.asyncFailoverWithPossibleDataLoss` to `true` to continue without backups. A failover then cannot recover transactions that remain on the old primary.
 
 Group Replication clusters are not part of this check.
@@ -79,7 +79,7 @@ Group Replication clusters are not part of this check.
 
 If point-in-time recovery (PITR) is enabled, a recovery from a backup taken before the upgrade can fail with the following error:
 
-```
+```text
 54edf529-d2cc-11f1-aebd-668621c1d52d:1-94 --stop-datetime=2026-10-28T13:50:49]
 2026-10-28T13:52:40.183741217Z 0 [Info] [Recovery] streaming binlog binlogs1/binlog.000001
 2026-10-28T13:52:40.692443772Z 0 [Info] [Recovery] pitr failed: apply binlogs: mysql failed: exit status 1, stderr: ERROR 1396 (HY000) at line 1907: Operation ALTER USER failed for 'configurator'@'%'
@@ -88,7 +88,7 @@ If point-in-time recovery (PITR) is enabled, a recovery from a backup taken befo
 Do one of the following:
 
 - Take a new base backup after the upgrade. Use that backup as the starting point for later point-in-time recovery. This is the recommended option.
-- Force the restore. Set [`pitr.force`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.html#pitrforce) to `true` on the restore object. This passes `--force` to the MySQL client and ignores SQL errors during binlog replay, which can hide data loss. See [Ignore SQL errors during binlog replay](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#ignore-sql-errors-during-binlog-replay).
+- Force the restore. Set [`pitr.force`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.md#pitrforce) to `true` on the restore object. This passes `--force` to the MySQL client and ignores SQL errors during binlog replay, which can hide data loss. See [Ignore SQL errors during binlog replay](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md#ignore-sql-errors-during-binlog-replay).
 
 ## Release highlights
 
@@ -108,7 +108,7 @@ With MySQL configuration calculated automatically, you:
 
 If you define MySQL settings in `spec.mysql.configuration`, a ConfigMap, or a Secret, the Operator applies those settings and skips automatic tuning.
 
-Read [Automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.html) for the workflow, setup, and gotchas.
+Read [Automatic configuration tuning](https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md) for the workflow, setup, and gotchas.
 
 ### Apply dynamic MySQL configuration without restarts
 
@@ -118,7 +118,7 @@ The Operator now applies dynamic variables at runtime. Update `mysql.configurati
 
 Static variables, runtime-blocked changes, and removed options still trigger a rolling restart. You can tune a busy cluster and respond to an incident without a configuration restart.
 
-Learn more in the [dynamic configuration documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.html#dynamic-configuration).
+Learn more in the [dynamic configuration documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/options.md#dynamic-configuration).
 
 ### Zero data loss failover for asynchronous clusters
 
@@ -137,7 +137,7 @@ With zero data loss failover, you gain:
 
 This feature requires backups to be enabled for the cluster. Asynchronous replication is a tech preview, so we don’t recommend it for production environments yet.
 
-To learn more, read our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html).
+To learn more, read our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md).
 
 ### Switch replication type on a running cluster (tech preview)
 
@@ -149,20 +149,20 @@ Switching the replication type on a running cluster is in tech preview stage. Tr
 
 Use the switch when you need to:
 
-- Move to Group Replication for stronger consistency, native failover, or [InnoDB ClusterSet](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html). Before you switch from asynchronous replication to Group Replication, confirm every replica is caught up and take a backup from the primary. The Operator can overwrite transactions that exist only outside `mysql-0`.
+- Move to Group Replication for stronger consistency, native failover, or [InnoDB ClusterSet](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md). Before you switch from asynchronous replication to Group Replication, confirm every replica is caught up and take a backup from the primary. The Operator can overwrite transactions that exist only outside `mysql-0`.
 - Move to asynchronous replication for lower write latency, more than nine MySQL instances, or to avoid Group Replication limits on large transactions.
 
 If a switch from Group Replication to asynchronous replication fails during bootstrap, you cannot switch back. Make sure to make a backup before the switch. This way you can restore the cluster from that backup.
 
 The switch causes downtime while Pods restart. It applies to the entire cluster.
 
-Learn more in the [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.html) documentation.
+Learn more in the [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md) documentation.
 
 ### Rejoin ClusterSet replicas automatically or by annotation
 
 With this release, the Operator automates ClusterSet replica rejoin. If the replica is paused, stopped, or crashed, the Operator reboots and rejoins it. If the replica is healthy but the ClusterSet replication channel is down after a long primary outage, choose a safe window and trigger rejoin by annotating the ClusterSet Custom Resource. The Operator then creates a rejoin Job, tracks its progress, and removes the annotation. On failure, it deletes the job and emits the `ClusterSetMemberRejoinFailed` warning. After you fix the cause, you can retry.
 
-You decide when to rejoin, and the Operator runs the Job. For the steps, see [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster).
+You decide when to rejoin, and the Operator runs the Job. For the steps, see [Rejoin a replica cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster).
 
 ### Track replication lag for InnoDB ClusterSet
 
@@ -172,7 +172,7 @@ You can now see how far a ClusterSet replica is behind the primary in ClusterSet
 - Keep read traffic off a site that is still behind
 - Spot growing lag as it happens
 
-Learn more in [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#per-member-cluster-status).
+Learn more in [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#per-member-cluster-status).
 
 ### Size asynchronous clusters the way you use them
 
@@ -180,11 +180,11 @@ Asynchronous replication uses a primary and replicas. The nodes do not form a vo
 
 You can now set `mysql.size` to 2, 4, 6, or any larger even count on an asynchronous cluster without `unsafeFlags.mysqlSize`. A single-instance cluster (`mysql.size: 1`) still requires the flag, because there is no replica to fail over to.
 
-Use the replica count that fits your workload. Orchestrator still requires an odd size of 3 or greater. Set [`unsafeFlags.orchestratorSize`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#unsafeflagsorchestratorsize) to run fewer than 3 Orchestrator Pods.
+Use the replica count that fits your workload. Orchestrator still requires an odd size of 3 or greater. Set [`unsafeFlags.orchestratorSize`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#unsafeflagsorchestratorsize) to run fewer than 3 Orchestrator Pods.
 
 Asynchronous replication remains a tech preview feature.
 
-Learn more in [Architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#asynchronous-replication-tech-preview) and [Horizontal scaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#horizontal-scaling).
+Learn more in [Architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#asynchronous-replication-tech-preview) and [Horizontal scaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#horizontal-scaling).
 
 ### Improved bootstrapping behavior for async replication clusters
 
@@ -195,7 +195,7 @@ When a replica joins or rejoins an asynchronous cluster, MySQL copies the data w
 
 This behavior applies to clusters with `crVersion` set to 1.3.0. The Operator ignores `BOOTSTRAP_CLONE_TIMEOUT` for those clusters. The fixed timeout remains only for clusters with `crVersion` older than 1.3.0.
 
-To turn off the stall check, set `BOOTSTRAP_CLONE_STALL_TIMEOUT` to `0`. See [Define environment variables for cluster components](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.html) for guidelines.
+To turn off the stall check, set `BOOTSTRAP_CLONE_STALL_TIMEOUT` to `0`. See [Define environment variables for cluster components](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.md) for guidelines.
 
 ### Encrypted binlogs for point-in-time recovery
 
@@ -207,13 +207,13 @@ During key rotation, keep all previous keys in the Secret. Keep the Secret in th
 
 Point-in-time recovery remains a tech preview feature.
 
-To learn more, read [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption).
+To learn more, read [Binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption).
 
 ### Point-in-time recovery for encrypted clusters
 
 You can now restore an encrypted cluster to a specific point in time. The Operator uses your existing Vault Secret during restore, so tablespaces and binlogs stay encrypted, and you can still roll the database forward to the GTID or time you need.
 
-Point-in-time recovery remains a tech preview. Read more in the [point-in-time recovery documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html).
+Point-in-time recovery remains a tech preview. Read more in the [point-in-time recovery documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md).
 
 ### Backup options for start and suspend deadlines
 
@@ -225,14 +225,14 @@ This release adds options for how long a backup can wait.
 
 The default for both options is `0`, which means the Operator does not enforce a deadline. Set them in the cluster Custom Resource for every backup, or on a `PerconaServerMySQLBackup` object for one backup. The value on the backup object takes precedence.
 
-```
+```yaml
 spec:
   backup:
     startingDeadlineSeconds: 900
     suspendedDeadlineSeconds: 900
 ```
 
-Read [Set a waiting time for a backup to start](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html#set-a-waiting-time-for-a-backup-to-start) and [Suspend backups on an unhealthy cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html#suspend-backups-on-an-unhealthy-cluster) to learn more.
+Read [Set a waiting time for a backup to start](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md#set-a-waiting-time-for-a-backup-to-start) and [Suspend backups on an unhealthy cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md#suspend-backups-on-an-unhealthy-cluster) to learn more.
 
 ### Use your existing cert-manager ClusterIssuer for TLS
 
@@ -240,7 +240,7 @@ If you already run cert-manager with a cluster-wide issuer, you can point Percon
 
 To use a `ClusterIssuer`, configure the cluster as follows:
 
-```
+```yaml
 spec:
   tls:
     issuerConf:
@@ -253,7 +253,7 @@ The Operator resolves the issuer by kind, creates the leaf `Certificate`, and le
 
 MySQL TLS then follows the same issuer, renewal, and trust policy as your other workloads. You keep one source of truth for certificates instead of an Operator-managed CA in every database namespace.
 
-Learn more in the [cert-manager TLS documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html#use-an-existing-clusterissuer).
+Learn more in the [cert-manager TLS documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-clusterissuer).
 
 ### Use your own CA to verify TLS with S3-compatible storage
 
@@ -261,7 +261,7 @@ You can now verify TLS to S3-compatible storage with the certificate authority (
 
 Create a Secret with the CA and reference it in the storage configuration. Keep TLS verification enabled. The Operator uses that CA for backups and restores. You can also use the same CA for point-in-time recovery (tech preview) by referencing it in the Binlog Server storage configuration.
 
-```
+```yaml
 spec:
   backup:
     enabled: true
@@ -298,13 +298,13 @@ With this configuration you get:
 - The CA your organization already trusts
 - The same check for backups, restores, and point-in-time recovery
 
-Read more in [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+Read more in [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 ### Rotate TLS certificates without restarting MySQL Pods
 
 When you update the server certificate (the leaf) in the TLS Secret, the Operator reloads the updated leaf into running `mysqld` processes when the certificate authority (CA) stays the same. MySQL Pods stay up. Existing connections keep the previous certificate until they reconnect. New connections use the new one.
 
-HAProxy, MySQL Router, and Orchestrator still restart, because they read certificates once at startup. Changing the CA still restarts MySQL Pods. If you replace the CA, follow the CA rotation procedure in the [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.html) documentation.
+HAProxy, MySQL Router, and Orchestrator still restart, because they read certificates once at startup. Changing the CA still restarts MySQL Pods. If you replace the CA, follow the CA rotation procedure in the [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.md) documentation.
 
 This change gives you:
 
@@ -329,7 +329,7 @@ Only the Operator image is updated. Database cluster components stay on the vers
 
 To apply a security build, patch the Operator Deployment and set the image to the security tag you chose. This restarts the Operator Pod. The cluster keeps running.
 
-Read more in the [security builds documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.html).
+Read more in the [security builds documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.md).
 
 ### Manage application users from the Custom Resource
 
@@ -339,7 +339,7 @@ For each user, set the name. Optionally, set the hosts they can connect from, th
 
 You can create users when you provision the cluster and update them the same way you update any other configuration.
 
-Learn more in [Manage users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#create-users-in-the-custom-resource).
+Learn more in [Manage users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#create-users-in-the-custom-resource).
 
 ### Configurable leader election for the Operator
 
@@ -351,7 +351,7 @@ Leader election is enabled by default. When you upgrade, you can turn it off wit
 - Set `PSO_LEADER_ELECTION_ENABLED` to turn leader election on or off.
 - Set `PSO_LEADER_ELECTION_LEASE_NAME` to use a custom Lease for the leader lock.
 
-Learn more about these environment variables in the [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-operator.html).
+Learn more about these environment variables in the [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-operator.md).
 
 ### Persistent logging
 
@@ -361,13 +361,13 @@ Each MySQL Pod runs two sidecars. The `logs` container uses Fluent Bit to collec
 
 Persistent logging is on by default for a cluster with `crVersion` 1.3.0 or later. It covers MySQL Pods only. HAProxy, MySQL Router, Orchestrator, and Percona Binlog Server still write only to standard output.
 
-Read [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html) and [Log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.html) to learn more.
+Read [Persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md) and [Log rotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/logrotate.md) to learn more.
 
 ### Official support for DigitalOcean Kubernetes Service (DOKS)
 
 DigitalOcean Kubernetes Service (DOKS) is now a supported platform. Every Operator release is tested on DOKS, so you can run the Operator on DigitalOcean-managed Kubernetes clusters.
 
-To install the Operator on DOKS, read the [installation guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/doks.html).
+To install the Operator on DOKS, read the [installation guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/doks.md).
 
 ### Support for MySQL 9.7
 
@@ -382,10 +382,10 @@ These are the Custom Resource changes since Operator 1.2.0.
 New fields:
 
 - `spec.mysql.autoConfig` sets automatic MySQL configuration tuning with `enabled`, `loadType`, and `version`. When tuning is on, the Pod needs CPU and memory resources, and `version` is required.
-- `spec.users` declares application users with `name`, `hosts`, `dbs`, `grants`, `passwordSecretRef`, and `withGrantOption`. See [Manage users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.html#create-users-in-the-custom-resource).
+- `spec.users` declares application users with `name`, `hosts`, `dbs`, `grants`, `passwordSecretRef`, and `withGrantOption`. See [Manage users](https://docs.percona.com/percona-operator-for-mysql/1.3.0/users.md#create-users-in-the-custom-resource).
 - `spec.logcollector` adds persistent logging and log rotation. `logRotate.schedule` defaults to `0 0 * * *`. `image` is required when the section is set.
-- `spec.backup.startingDeadlineSeconds` and `spec.backup.suspendedDeadlineSeconds` set how long a backup can wait to start or to resume. The same fields exist on `PerconaServerMySQLBackup`. See [Set a waiting time for a backup to start](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html#set-a-waiting-time-for-a-backup-to-start).
-- `spec.backup.storages.<name>.s3.caBundle` and `spec.backup.pitr.binlogServer.storage.s3.caBundle` name the Secret that holds your CA. `key` defaults to `ca.crt`. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+- `spec.backup.startingDeadlineSeconds` and `spec.backup.suspendedDeadlineSeconds` set how long a backup can wait to start or to resume. The same fields exist on `PerconaServerMySQLBackup`. See [Set a waiting time for a backup to start](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md#set-a-waiting-time-for-a-backup-to-start).
+- `spec.backup.storages.<name>.s3.caBundle` and `spec.backup.pitr.binlogServer.storage.s3.caBundle` name the Secret that holds your CA. `key` defaults to `ca.crt`. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 - `spec.backup.pitr.binlogServer.storage.encryption` sets binlog encryption. `cipher` defaults to `AES-256-CTR`. `spec.backup.pitr.binlogServer.keyringSecret` is required when encryption is set. `key` defaults to `keyring.json`.
 - `spec.orchestrator.failover` sets asynchronous failover behavior. `timeout` defaults to `1h`. `onTimeout` is `Abort` or `ForceWithPossibleDataLoss` and defaults to `Abort`. This section is valid only when `mysql.clusterType` is `async`.
 - `spec.pmm.haproxyParams` passes HAProxy parameters to the PMM client.
@@ -398,14 +398,14 @@ Validation changes:
 - Group Replication rejects an even `mysql.size` unless `unsafeFlags.mysqlSize` is `true`. The minimum stays 3, and a size above 9 still requires the flag.
 - An asynchronous cluster requires `backup.enabled: true` unless `unsafeFlags.asyncFailoverWithPossibleDataLoss` is `true`.
 - When you switch from asynchronous replication to Group Replication, `spec.orchestrator.enabled` must be `false`.
-- `spec.tls.issuerConf` is an issuer reference with `name`, `kind`, and `group`, so you can point at a cert-manager `ClusterIssuer`. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.html#use-an-existing-clusterissuer).
+- `spec.tls.issuerConf` is an issuer reference with `name`, `kind`, and `group`, so you can point at a cert-manager `ClusterIssuer`. See [Use an existing ClusterIssuer](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md#use-an-existing-clusterissuer).
 - `spec.backup.storages` accepts at most 100 entries.
 - `containerOptions.args.xtrabackup` accepts at most 100 arguments, and each argument can be at most 1024 characters. `--defaults-file` must be the first argument and use `--defaults-file=<path>`. `--defaults-extra-file` is rejected.
 
 ### PerconaServerMySQLBackup
 
 - `spec.startingDeadlineSeconds` and `spec.suspendedDeadlineSeconds` override the cluster deadlines for one backup.
-- `status.size` and `status.uncompressedSize` report the backup size after it succeeds. See [PerconaServerMySQLBackup status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#perconaservermysqlbackup-status).
+- `status.size` and `status.uncompressedSize` report the backup size after it succeeds. See [PerconaServerMySQLBackup status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#perconaservermysqlbackup-status).
 
 ### PerconaServerMySQLRestore
 
@@ -415,7 +415,7 @@ Validation changes:
 
 ### PerconaServerMySQLClusterSet
 
-- `status.clusters.<name>.replicationLagSeconds` reports how far a replica cluster is behind the primary. See [Per-member cluster status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#per-member-cluster-status).
+- `status.clusters.<name>.replicationLagSeconds` reports how far a replica cluster is behind the primary. See [Per-member cluster status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#per-member-cluster-status).
 
 ## Changelog
 
@@ -475,8 +475,8 @@ Validation changes:
 
 ### Documentation updates
 
-- Added the [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html) page. It explains how the Operator detects a full cluster crash on Group Replication, how recovery runs, and what to do when automatic recovery is off or does not succeed.
-- Added troubleshooting pages for marker files in the MySQL data directory. [Special files in the data directory](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.html) describes each file. Use them to [pause a MySQL Pod](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.html), [pause a point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.html), or [unblock a stuck rolling update](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.html#unblock-a-stuck-rolling-update).
+- Added the [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md) page. It explains how the Operator detects a full cluster crash on Group Replication, how recovery runs, and what to do when automatic recovery is off or does not succeed.
+- Added troubleshooting pages for marker files in the MySQL data directory. [Special files in the data directory](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.md) describes each file. Use them to [pause a MySQL Pod](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.md), [pause a point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.md), or [unblock a stuck rolling update](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.md#unblock-a-stuck-rolling-update).
 
 ## Supported software
 

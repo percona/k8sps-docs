@@ -1,0 +1,118 @@
+> For the complete documentation index, see [llms.txt](https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt).
+
+# Architecture
+
+Percona Operator for MySQL automates deploying and operating Percona Server for MySQL clusters on Kubernetes. This document explains what components the Operator uses and how they work together to provide a highly available MySQL database. Also, read more about [How the Operator works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/how-it-works.md).
+
+## Components
+
+The [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) deployed with the Operator includes the following components:
+
+- [Percona Server for MySQL](https://www.percona.com/doc/percona-server/LATEST/index.html) - a free, fully compatible, enhanced, and open source drop-in replacement for any MySQL database
+- [Percona XtraBackup](https://www.percona.com/doc/percona-xtrabackup/8.0/index.html) - a hot backup utility for MySQL based servers that doesn’t lock your database during the backup
+- [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) between MySQL instances [is turned on](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlclustertype),
+- [HAProxy](https://haproxy.org) - a proxy and load balancing service serving as the entry point to your database cluster. It is compatible with both [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) and [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) between MySQL instances,
+- [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) - a proxy solution which can be used instead of HAProxy for MySQL clusters with [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) is turned on,
+- [Percona Toolkit](https://docs.percona.com/percona-toolkit/) - a set of tools for debugging MySQL Pods.
+
+It can also include sidecar containers such as PMM Client, the [log collector](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md), or your custom ones. This depends on how you further fine-tune your cluster. Learn more about [sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md).
+
+## Replication types
+
+Each MySQL node in your cluster contains a complete copy of your data, replicated across all nodes.
+
+The Operator supports two replication types, each with different characteristics for performance, consistency, and availability. You [choose the replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlclustertype) when configuring your cluster.
+
+### Asynchronous replication (tech preview)
+
+With asynchronous replication, writes complete on the primary instance without waiting for replicas. After a write completes, the primary records the change in its binary log, and replicas apply these changes independently.
+
+**Characteristics:**
+
+- **Performance** - Asynchronous replication provides faster write operations with lower latency.
+- **Read scaling** - You can distribute application read requests to different replica instances, improving read throughput.
+- **Consistency** - Eventual consistency: replicas may lag behind the primary instance, which can affect applications requiring real-time data. There is a risk that some transactions committed on the primary may be lost if it fails before replicas catch up.
+- **Write scaling** - Does not allow for horizontal write scaling; scaling writes relies on vertical scaling, which is increasing the resources (RAM, CPU) of the primary instance, rather than on adding more write nodes.
+- **Failover** - Orchestrator handles automatic primary election and replication topology recovery.
+- **Cluster size** - You can run 2 or more MySQL instances, including an even count. The recommended size is 3 instances. The Operator takes backups from a replica and stops replication for the duration of the backup. With 2 instances, a long backup leaves the replica behind the primary until replication resumes.
+- **Status** - Currently in tech preview and not recommended for production use.
+
+### Group replication
+
+With group replication, write transactions require consensus from the group before completing. Read transactions can execute on any instance, while writes only occur on the primary.
+
+**Characteristics:**
+
+- **Consistency** – Provides strong consistency, and when set to a high transaction consistency level, helps prevent stale reads.
+- **Read scaling** – Enables horizontal scaling of reads without stale reads when set with a high transaction consistency level.
+- **Performance** – Write operations are slower than asynchronous replication due to the group consensus mechanism.
+- **Failover** – Built-in native group membership protocol automatically handles member recovery and primary election.
+- **Limitations** – Group replication limits the cluster to a maximum of 9 MySQL instances per group. Large transactions can noticeably slow down the system, and especially large transactions may even trigger a replication member fault if the transaction message cannot be copied between group members within a 5-second network window.
+- **Status** – General Availability (GA) and recommended for production use.
+
+Note
+
+MySQL documentation may also use the terms “source/replica” instead of “primary/replica”.
+
+## Proxy solutions
+
+The proxy you use depends on your replication type and requirements:
+
+- **HAProxy** - Works with both asynchronous replication and group replication. Provides load balancing, health checks, and connection pooling.
+- **MySQL Router** - Available only for group replication. Offers intelligent routing, connection pooling, and read-write splitting capabilities.
+
+### Replication type and proxy comparison
+
+| Feature       | Asynchronous replication + HAProxy | Group Replication + HAProxy/MySQL Router                                                                                                              |
+| ------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Writes        | Single primary                     | Single primary                                                                                                                                        |
+| Read scaling  | Yes                                | Yes                                                                                                                                                   |
+| Write scaling | No                                 | No                                                                                                                                                    |
+| Consistency   | Eventual on replicas               | Stronger (depending the [Transaction Consistency](https://dev.mysql.com/doc/refman/8.4/en/group-replication-configuring-consistency-guarantees.html)) |
+| Latency       | Low                                | Higher (due to sync)                                                                                                                                  |
+| Failover      | Orchestrator elects new primary    | Native group membership                                                                                                                               |
+| Max nodes     | Higher (practical limits)          | 9 per group                                                                                                                                           |
+| Proxy         | HAProxy                            | HAProxy or MySQL Router                                                                                                                               |
+
+**Tip:** Choose Group Replication for stronger consistency and read scaling; choose asynchronous replication for lower write latency and simpler topology when it reaches GA status.
+
+You can change the replication type if needed. Refer to the [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md) guide for step-by-step instructions. Starting with Operator 1.3.0, you can switch the type on a running cluster. The switch causes downtime.
+
+## High availability
+
+The Operator provides high availability through multiple layers of protection:
+
+### Pod distribution
+
+The Operator uses [node affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) to distribute Percona Server for MySQL instances across separate worker nodes when possible. This prevents a single node failure from taking down multiple database instances.
+
+### Automatic recovery
+
+If a node fails, Kubernetes automatically reschedules the affected Pod on another healthy node. Inside your cluster, automatic recovery is handled as follows:
+
+- In **asynchronous replication** clusters, the Orchestrator detects the failure, promotes a healthy replica to primary, and updates the replication topology.
+
+*Image: image*
+
+- In **group replication** clusters, the native group membership protocol automatically handles member removal, primary election and topology recovery. If the majority of members go down at the same time, the group can’t recover on its own. The cluster enters the `error` state with the `FullClusterCrashDetected` reason. The Operator reboots it as described in [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md).
+
+*Image: image*
+
+### Client connectivity
+
+Clients connect through HAProxy or MySQL Router, which automatically route traffic to healthy MySQL instances. These proxies detect failures and redirect connections away from failed nodes, ensuring your applications always connect to available database instances.
+
+For configuration details, see:
+
+- [HAProxy configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md)
+- [MySQL Router configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md)
+
+## What to read next
+
+Now that you understand the architecture, explore these topics:
+
+- [Backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md) - Understand backup and restore operations
+- [Scaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md) - Scale your cluster horizontally or vertically
+- [High availability configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/constraints.md) - Configure anti-affinity and pod distribution
+- [Updating and upgrades](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update.md) - Keep your cluster up to date
+- [Operator Custom Resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md) - Description of available configuration options

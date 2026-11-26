@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5795,26 +5795,26 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Find the secret name. Run this command on the <strong>cluster where you made the backup</strong>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.secretsName}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>ps-cluster1<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.secretsName}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>ps-cluster1-secrets
+<div class="language-text no-copy highlight"><pre><span></span><code>ps-cluster1-secrets
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>Export the secret to a file:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>ps-cluster1-secrets<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>ps-cluster1-secrets.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>ps-cluster1-secrets<span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>ps-cluster1-secrets.yaml
 </code></pre></div>
 </li>
 <li>
 <p>Remove the <code>annotations</code>, <code>labels</code>, <code>creationTimestamp</code>, <code>resourceVersion</code>, <code>selfLink</code>, <code>uid</code> and <code>namespace</code> metadata fields from the resulting file to make it ready for the source cluster. Use the following script to do it:</p>
-<div class="highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)'</span><span class="w"> </span>ps-cluster1-secrets.yaml<span class="w"> </span>&gt;<span class="w"> </span>ps-cluster1-secrets-target.yaml
+<div class="language-bash highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)'</span><span class="w"> </span>ps-cluster1-secrets.yaml<span class="w"> </span>&gt;<span class="w"> </span>ps-cluster1-secrets-target.yaml
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>apiVersion: v1
+<div class="language-text no-copy highlight"><pre><span></span><code>apiVersion: v1
 data:
   heartbeat: MUBra1Z2IWRNVjNFe0lJM3o=
   monitor: b1k3IyxyWns8eGxVSmFfTiU=
@@ -5832,7 +5832,7 @@ type: Opaque
 </li>
 <li>
 <p><strong>On the target cluster</strong>, create the Secrets object. Replace the <code>&lt;namespace&gt;</code> with your value:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>ps-cluster1-secrets-target.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>ps-cluster1-secrets-target.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 </ol>
@@ -5840,17 +5840,17 @@ type: Opaque
 <ol>
 <li>
 <p>Export the namespace as an environment variable. Replace the <code>&lt;namespace&gt;</code> placeholder with your value:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 <li>
 <p>Make sure that the cluster is running. Use this command to check it:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </li>
 <li>
 <p>List backups on the source cluster with the following command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </li>
 </ol>
@@ -5867,7 +5867,7 @@ type: Opaque
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">S3-compatible storage</label><label for="__tabbed_1_2">Google Cloud Storage</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
@@ -5887,7 +5887,7 @@ type: Opaque
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
@@ -5910,7 +5910,7 @@ type: Opaque
 </li>
 </ul>
 <p>Start the restore: </p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <h2 id="restore-from-an-encrypted-backup">Restore from an encrypted backup<a data-markdown-ignore class="headerlink" href="#restore-from-an-encrypted-backup" title="Permanent link">¶</a></h2>
 <p>Configure the <code>PerconaServerMySQLRestore</code> Custom Resource. Specify the following keys:</p>
@@ -5918,7 +5918,7 @@ type: Opaque
 <li><code>spec.clusterName</code> — the target cluster</li>
 <li><code>spec.backupSource</code> — destination and storage for the backup, including <code>encryptionKeySecret</code> with the same key that encrypted the backup</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
@@ -5937,7 +5937,7 @@ type: Opaque
 <span class="w">        </span><span class="nt">region</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">us-west-2</span>
 </code></pre></div>
 <p>Start the restore:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <h2 id="restore-from-s3-storage-that-uses-a-custom-ca">Restore from S3 storage that uses a custom CA<a data-markdown-ignore class="headerlink" href="#restore-from-s3-storage-that-uses-a-custom-ca" title="Permanent link">¶</a></h2>
 <p>If the source cluster verified S3-compatible storage with a <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">custom CA</a>, keep <code>verifyTLS</code> enabled and set <code>caBundle</code> in the restore resource.</p>
@@ -5945,7 +5945,7 @@ type: Opaque
 <ol>
 <li>
 <p>Create a CA Secret on the <strong>target</strong> cluster from the same CA file you used on the source. See <a href="backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage">Create a CA Secret</a>.</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>generic<span class="w"> </span>minio-ca-bundle<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--from-file<span class="o">=</span>ca.crt<span class="o">=</span>/path/to/ca.crt<span class="w"> </span>-n<span class="w"> </span>&lt;target-namespace&gt;
 </code></pre></div>
 </li>
@@ -5953,7 +5953,7 @@ type: Opaque
 <p>Edit the <code>deploy/backup/restore.yaml</code> manifest and set <code>caBundle</code> on <code>spec.backupSource.storage.s3</code> to that Secret.</p>
 </li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restore1</span>
@@ -5975,20 +5975,20 @@ type: Opaque
 <span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ca.crt</span>
 </code></pre></div>
 <p>Start the restore:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/restore.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <h2 id="view-restore-details">View restore details<a data-markdown-ignore class="headerlink" href="#view-restore-details" title="Permanent link">¶</a></h2>
 <p>When you start the restore, the restore job is created. You can check the job details using these commands:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>job
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>xb-restore-restore2                                Running    0/1                      0s
+<div class="language-text highlight"><pre><span></span><code>xb-restore-restore2                                Running    0/1                      0s
 xb-restore-restore2                                Complete             1/1           25s        25s
 </code></pre></div>
 </details>
 <p>You can check the restore progress with this command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-restore<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <h2 id="post-restore-steps">Post-restore steps<a data-markdown-ignore class="headerlink" href="#post-restore-steps" title="Permanent link">¶</a></h2>
 <p>Make a fresh base backup to start a new timeline for subsequent restores.</p>

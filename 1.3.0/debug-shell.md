@@ -8,25 +8,25 @@ In the following examples we will access the container `mysql` of the `ps-cluste
 
 - Run `date` command:
 
-  ```
+  ```bash
   kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- date
   ```
 
   Expected output
 
-  ```
+  ```text
   Thu Nov 24 10:01:17 UTC 2023
   ```
 
   You will see an error if the command is not present in a container. For example, trying to run the `time` command, which is not present in the container, by executing `kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- time` would show the following result:
 
-  ```
+  ```text
   OCI runtime exec failed: exec failed: unable to start container process: exec: "time": executable file not found in $PATH: unknown command terminated with exit code 126
   ```
 
 - Print `/var/log/mysqld.log` file to a terminal:
 
-  ```
+  ```bash
   kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- cat /var/log/mysqld.log
   ```
 
@@ -34,23 +34,23 @@ In the following examples we will access the container `mysql` of the `ps-cluste
 
   1. Start an interactive shell session inside the container:
 
-     ```
+     ```bash
      kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- bash
      ```
 
   1. Inside the shell, you can run commands such as:
 
-     ```
+     ```bash
      hostname
      ```
 
-     ```
+     ```bash
      ls /var/log/mysqld.log
      ```
 
   1. To exit the container shell, use:
 
-     ```
+     ```bash
      exit
      ```
 
@@ -62,10 +62,10 @@ You can prevent such infinite boot loop by putting the Percona Server for MySQL 
 
 For example, you can do it for the `mysql` container of an appropriate Percona Server for MySQL instance as follows:
 
-```
+```bash
 kubectl exec -it ps-cluster1-mysql-0 -c mysql -- sh -c 'touch /var/lib/mysql/sleep-forever'
 ```
 
 The instance will restart automatically and run in its usual way as soon as you remove this file (you can do it with a command similar to the one you have used to create the file, just substitute `touch` to `rm` in it).
 
-See [Pause a Pod for debugging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.html#pause-a-pod-for-debugging) for the full steps and [Special files in the data directory](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.html) for other files that change how the container starts.
+See [Pause a Pod for debugging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.md#pause-a-pod-for-debugging) for the full steps and [Special files in the data directory](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.md) for other files that change how the container starts.

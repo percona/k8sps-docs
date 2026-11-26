@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/autoconfig.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5951,7 +5951,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 <li><code>mysql.autoConfig.version</code>, in the <code>&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</code> format.</li>
 </ul>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">autoConfig</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -6037,7 +6037,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The Operator calculates the full configuration once you’ve <a href="#turn-on-automatic-configuration-tuning">turned it on</a> and cleared <code>spec.mysql.configuration</code> and removed MySQL settings from your own ConfigMap or Secret.</p>
 <h3 id="full-list-of-tunable-variables">Full list of tunable variables<a data-markdown-ignore class="headerlink" href="#full-list-of-tunable-variables" title="Permanent link">¶</a></h3>
 <p>The Operator includes a variable only when <code>mysql.autoConfig.version</code> falls inside that variable’s supported range. Read the ConfigMap to see the variables and values for your cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>configmap<span class="w"> </span>auto-&lt;cluster-name&gt;-mysql<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.my\.cnf}'</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>configmap<span class="w"> </span>auto-&lt;cluster-name&gt;-mysql<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.my\.cnf}'</span><span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="note">
 <summary>InnoDB, connections, binlog, replication, and Group Replication variables</summary>
@@ -6084,7 +6084,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Before the Operator writes the configuration, it checks the calculated redo log against the data volume. When the redo log would exceed 25% of that volume, reconciliation stops. See <a href="#autoconfiginsufficientstorage-warning">AutoConfigInsufficientStorage warning</a>.</p>
 <h2 id="troubleshoot-automatic-configuration-tuning">Troubleshoot automatic configuration tuning<a data-markdown-ignore class="headerlink" href="#troubleshoot-automatic-configuration-tuning" title="Permanent link">¶</a></h2>
 <p>Check the cluster events first. See <a href="debug-events.html">Check the Events</a>.</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>--field-selector<span class="w"> </span>involvedObject.name<span class="o">=</span>&lt;cluster-name&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>events<span class="w"> </span>--field-selector<span class="w"> </span>involvedObject.name<span class="o">=</span>&lt;cluster-name&gt;
 </code></pre></div>
 <h3 id="autoconfiginsufficientstorage-warning">AutoConfigInsufficientStorage warning<a data-markdown-ignore class="headerlink" href="#autoconfiginsufficientstorage-warning" title="Permanent link">¶</a></h3>
 <p><strong>Symptom.</strong> Reconciliation is stuck. <code>kubectl get events</code> shows a warning with reason <code>AutoConfigInsufficientStorage</code>. The message names the calculated redo log size, the data volume size, and the minimum volume size needed.</p>

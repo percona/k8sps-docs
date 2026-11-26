@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation">
+        <meta name="description" content="Percona Operator for MySQL based on Percona Server for MySQL, a Kubernetes operator that automates deployment, scaling, backups, updates and failover of MySQL clusters with group replication or asynchronous replication">
       
       
         <meta name="author" content="Percona LLC">
@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-cert-manager.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5778,7 +5778,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">with kubectl</label><label for="__tabbed_1_2">with Helm</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/cert-manager/cert-manager/releases/download/v1.21.2/cert-manager.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://github.com/cert-manager/cert-manager/releases/download/v1.21.2/cert-manager.yaml
 </code></pre></div>
 <p>This creates the dedicated <code>cert-manager</code> namespace and installs cert-manager Deployments, Pods, and Services. It also creates cluster-wide resources such as Custom Resource Definitions and RBAC so you can use cert-manager in any namespace.</p>
 </div>
@@ -5786,13 +5786,13 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Add the Helm chart and update the repositories:</p>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>jetstack<span class="w"> </span>https://charts.jetstack.io<span class="w"> </span>--force-update
+<div class="language-bash highlight"><pre><span></span><code>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>jetstack<span class="w"> </span>https://charts.jetstack.io<span class="w"> </span>--force-update
 helm<span class="w"> </span>repo<span class="w"> </span>update
 </code></pre></div>
 </li>
 <li>
 <p>Install cert-manager with default parameters:</p>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>cert-manager<span class="w"> </span>jetstack/cert-manager<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>helm<span class="w"> </span>install<span class="w"> </span>cert-manager<span class="w"> </span>jetstack/cert-manager<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--namespace<span class="w"> </span>cert-manager<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--create-namespace<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--version<span class="w"> </span>v1.21.2<span class="w"> </span><span class="se">\</span>
@@ -5804,11 +5804,11 @@ helm<span class="w"> </span>repo<span class="w"> </span>update
 </div>
 </div>
 <p>Verify that cert-manager is running:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>cert-manager
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>cert-manager
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME                                       READY   STATUS    RESTARTS   AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME                                       READY   STATUS    RESTARTS   AGE
 cert-manager-7d59dd4888-tmjqq              1/1     Running   0          3m8s
 cert-manager-cainjector-85899d45d9-8ncw9   1/1     Running   0          3m8s
 cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
@@ -5834,7 +5834,7 @@ cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
 <ol>
 <li>
 <p>Edit the <code>deploy/cr.yaml</code> and set <code>tls.issuerConf</code> to the existing <code>ClusterIssuer</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="nt">tls</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">issuerConf</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-org-issuer</span><span class="w">        </span><span class="c1"># name of your existing ClusterIssuer</span>
@@ -5845,7 +5845,7 @@ cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
 </li>
 <li>
 <p>Apply the configuration:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 </ol>
@@ -5854,7 +5854,7 @@ cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
 <p>You can also add <code>tls.issuerConf</code> to a running cluster. The Operator updates the existing <code>Certificate</code> to use your <code>ClusterIssuer</code>.</p>
 <h2 id="use-an-existing-namespace-scoped-issuer">Use an existing namespace-scoped Issuer<a data-markdown-ignore class="headerlink" href="#use-an-existing-namespace-scoped-issuer" title="Permanent link">¶</a></h2>
 <p>To use a cert-manager <code>Issuer</code> that already exists in the database namespace, set <a href="operator.html#tlsissuerconfname"><code>tls.issuerConf.name</code></a> to that issuer’s name. You can leave <code>kind</code> at the default value (<code>Issuer</code>).</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">issuerConf</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-org-issuer</span><span class="w">        </span><span class="c1"># name of your existing Issuer</span>
@@ -5864,7 +5864,7 @@ cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
 <p>When <code>tls.issuerConf</code> is set, the Operator creates only the leaf TLS <code>Certificate</code> and does not create its own CA chain. The referenced <code>Issuer</code> must already exist and be ready in the same namespace as the cluster. If it is missing, the Operator fails reconciliation and asks you to check <code>.spec.tls.issuerConf</code>.</p>
 <h2 id="add-extra-domains-to-the-certificate">Add extra domains to the certificate<a data-markdown-ignore class="headerlink" href="#add-extra-domains-to-the-certificate" title="Permanent link">¶</a></h2>
 <p>Use <a href="operator.html#tlssans"><code>tls.SANs</code></a> to add extra DNS names to the certificate that cert-manager issues. This is useful when clients connect through hostnames that are not part of the default Service DNS names.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">SANs</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql-1.example.com</span>
@@ -5877,7 +5877,7 @@ cert-manager-webhook-84fcdcd5d-697k4       1/1     Running   0          3m8s
 <div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio"><input id="__tabbed_2_2" name="__tabbed_2" type="radio"><input id="__tabbed_2_3" name="__tabbed_2" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_2_1">Namespace-scoped Issuer (default)</label><label for="__tabbed_2_2">Existing ClusterIssuer</label><label for="__tabbed_2_3">Existing Issuer</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># List Issuers</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="c1"># List Issuers</span>
 kubectl<span class="w"> </span>get<span class="w"> </span>issuers<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 
 <span class="c1"># List Certificates</span>
@@ -5889,7 +5889,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>certificate<span class
 <p>The Operator creates Issuers and Certificates in the same namespace as the cluster. Default names are <code>&lt;cluster-name&gt;-ps-ca-issuer</code>, <code>&lt;cluster-name&gt;-ps-issuer</code>, <code>&lt;cluster-name&gt;-ca-cert</code>, and <code>&lt;cluster-name&gt;-ssl</code>.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># List cluster-scoped issuers</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="c1"># List cluster-scoped issuers</span>
 kubectl<span class="w"> </span>get<span class="w"> </span>clusterissuer
 
 <span class="c1"># List Certificates in the database namespace</span>
@@ -5902,7 +5902,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>certificate<span class
 <p>If the cluster previously used the default Operator-managed issuers (<code>&lt;cluster-name&gt;-ps-ca-issuer</code>, <code>&lt;cluster-name&gt;-ps-issuer</code>, and <code>&lt;cluster-name&gt;-ca-cert</code>), they remain in the namespace. The Operator does not delete them when you switch to an external issuer.</p>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1"># List Issuers</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="c1"># List Issuers</span>
 kubectl<span class="w"> </span>get<span class="w"> </span>issuers<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 
 <span class="c1"># List Certificates</span>

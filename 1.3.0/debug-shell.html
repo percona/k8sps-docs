@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-shell.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-shell.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-shell.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5601,23 +5601,23 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ul>
 <li>
 <p>Run <code>date</code> command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>date
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>date
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>Thu Nov 24 10:01:17 UTC 2023
+<div class="language-text no-copy highlight"><pre><span></span><code>Thu Nov 24 10:01:17 UTC 2023
 </code></pre></div>
 </details>
 <p>You will see an error if the command is not present in a container. For
 example, trying to run the <code>time</code> command, which is not present in the
 container, by executing <code>kubectl exec -ti ps-cluster1-mysql-0 -c mysql -- time</code>
 would show the following result:</p>
-<div class="no-copy highlight"><pre><span></span><code>OCI runtime exec failed: exec failed: unable to start container process: exec: "time": executable file not found in $PATH: unknown command terminated with exit code 126
+<div class="language-text no-copy highlight"><pre><span></span><code>OCI runtime exec failed: exec failed: unable to start container process: exec: "time": executable file not found in $PATH: unknown command terminated with exit code 126
 </code></pre></div>
 </li>
 <li>
 <p>Print <code>/var/log/mysqld.log</code> file to a terminal:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/log/mysqld.log
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/log/mysqld.log
 </code></pre></div>
 </li>
 <li>
@@ -5625,19 +5625,19 @@ would show the following result:</p>
 <ol>
 <li>
 <p>Start an interactive shell session inside the container:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>bash
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>bash
 </code></pre></div>
 </li>
 <li>
 <p>Inside the shell, you can run commands such as:</p>
-<div class="highlight"><pre><span></span><code>hostname
+<div class="language-bash highlight"><pre><span></span><code>hostname
 </code></pre></div>
-<div class="highlight"><pre><span></span><code>ls<span class="w"> </span>/var/log/mysqld.log
+<div class="language-bash highlight"><pre><span></span><code>ls<span class="w"> </span>/var/log/mysqld.log
 </code></pre></div>
 </li>
 <li>
 <p>To exit the container shell, use:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">exit</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">exit</span>
 </code></pre></div>
 </li>
 </ol>
@@ -5654,7 +5654,7 @@ of the container entry point is triggered by the presence of the
 <code>/var/lib/mysql/sleep-forever</code> file.</p>
 <p>For example, you can do it for the <code>mysql</code> container of an appropriate Percona
 Server for MySQL instance as follows:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'touch /var/lib/mysql/sleep-forever'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>ps-cluster1-mysql-0<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'touch /var/lib/mysql/sleep-forever'</span>
 </code></pre></div>
 <p>The instance will restart automatically and run in its usual way as soon as you
 remove this file (you can do it with a command similar to the one you have used

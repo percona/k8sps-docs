@@ -12,11 +12,11 @@ Starting with OpenShift 4.22, the way images with not fully qualified names are 
 The upgrade on OpenShift consists of two steps:
 
 - Upgrade the Operator Deployment
-- [Upgrade the database cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-db.html)
+- [Upgrade the database cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-db.md)
 
 ## Upgrade the Operator via Operator Lifecycle Manager (OLM)
 
-You can upgrade the Operator Deployment for MySQL that was [installed on the OpenShift platform using OLM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.html#install-percona-server-for-mysql-on-openshift) directly through the Operator Lifecycle Manager.
+You can upgrade the Operator Deployment for MySQL that was [installed on the OpenShift platform using OLM](https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.md#install-percona-server-for-mysql-on-openshift) directly through the Operator Lifecycle Manager.
 
 If you know the OLM upgrade workflow, jump to the [update Deployment steps](#upgrade-the-operator).
 
@@ -39,7 +39,7 @@ When a new Operator version is available and the upgrade is approved, OLM instal
 
 If you previously customized the Operator Deployment manually, these changes are overwritten during the upgrade.
 
-The CRD may be updated too, if the new Operator version introduces schema changes. However, OLM doesn’t modify the `PerconaServerMySQL` Custom Resource. It remains unchanged and continues running with its current configuration. For how to update it, refer to [Update Percona Server for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-db.html).
+The CRD may be updated too, if the new Operator version introduces schema changes. However, OLM doesn’t modify the `PerconaServerMySQL` Custom Resource. It remains unchanged and continues running with its current configuration. For how to update it, refer to [Update Percona Server for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-db.md).
 
 #### Persisting custom Operator configuration
 
@@ -49,7 +49,7 @@ A Subscription is the OLM resource that defines which operator you want to insta
 
 Here’s how you can customize the Operator Deployment. This example command sets an environment variable for the Operator:
 
-```
+```bash
 kubectl patch subscription percona-server-mysql-operator -n <namespace> \
   --type merge \
   -p '{"spec":{"config":{"env":[{"name":"LOG_LEVEL","value":"DEBUG"}]}}}'
@@ -71,6 +71,9 @@ These overrides are applied on top of the CSV and persist across upgrades. All o
 ### Upgrade the Operator
 
 1. Log in to the OpenShift web console and check the list of installed Operators in your namespace to see if upgrades are available.
+
+   *Image: image*
+
 1. Click the “Upgrade available” link to review details, click “Preview InstallPlan,” and then click “Approve” to upgrade the Operator.
 
 ### Update via the command-line interface
@@ -84,7 +87,7 @@ The following steps apply if you plan to use OpenShift 4.22. See the [Considerat
 
 1. Apply a patch to the clusters with undefined `initContainer.image` to define this image with the `docker.io` registry in the image path:
 
-   ```
+   ```bash
    kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
        "initContainer": {
@@ -98,7 +101,7 @@ The following steps apply if you plan to use OpenShift 4.22. See the [Considerat
 
 1. Update the Operator deployment and specify the `docker.io` registry name in the image path:
 
-   ```
+   ```bash
    kubectl patch deployment percona-server-mysql-operator \
    -p'{"spec":{"template":{"spec":{"containers":[{"name":"percona-server-mysql-operator","image":"docker.io/percona/percona-server-mysql-operator:1.3.0"}]}}}}'
    ```
@@ -107,7 +110,7 @@ The following steps apply if you plan to use OpenShift 4.22. See the [Considerat
 
    The following example shows how to update Percona Server for MySQL cluster 8.4 with Group Replication and HAProxy:
 
-   ```
+   ```bash
    kubectl patch ps ps-cluster1 --type=merge --patch '{
      "spec": {
        "crVersion": "1.3.0",

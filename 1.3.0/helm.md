@@ -12,14 +12,14 @@ Install Helm v3 and above following its [official installation instructions](htt
 
 1. Add the Percona Helm charts repository and make your Helm client up to date with it:
 
-   ```
+   ```bash
    helm repo add percona https://percona.github.io/percona-helm-charts/
    helm repo update
    ```
 
 1. Install the Percona Operator for MySQL. It is a good practice to isolate workloads in Kubernetes by installing the Operator in a custom namespace. Replace the `my-namespace` value with your desired namespace in the following command:
 
-   ```
+   ```bash
    helm install my-op percona/ps-operator --namespace my-namespace --create-namespace
    ```
 
@@ -27,7 +27,7 @@ Install Helm v3 and above following its [official installation instructions](htt
 
    Expected output
 
-   ```
+   ```text
    NAME: my-op
    LAST DEPLOYED: Sun Nov  9 10:23:13 2025
    NAMESPACE: my-namespace
@@ -38,7 +38,7 @@ Install Helm v3 and above following its [official installation instructions](htt
 
 1. Install Percona Server for MySQL:
 
-   ```
+   ```bash
    helm install my-db percona/ps-db --namespace my-namespace
    ```
 
@@ -46,7 +46,7 @@ Install Helm v3 and above following its [official installation instructions](htt
 
    Expected output
 
-   ```
+   ```text
    NAME: my-db
    LAST DEPLOYED: Sun Nov  9 10:26:41 2025
    NAMESPACE: my-namespace
@@ -56,11 +56,11 @@ Install Helm v3 and above following its [official installation instructions](htt
    NOTES:
    ```
 
-The command above installs Percona Server for MySQL with [default parameters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html). Custom options can be passed to a `helm install` command as a `--set key=value[,key=value]` argument. The options passed with a chart can be any of the [Custom Resource options](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-db#installing-the-chart) .
+The command above installs Percona Server for MySQL with [default parameters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md). Custom options can be passed to a `helm install` command as a `--set key=value[,key=value]` argument. The options passed with a chart can be any of the [Custom Resource options](https://github.com/percona/percona-helm-charts/tree/main/charts/ps-db#installing-the-chart) .
 
 The following example will deploy a Percona Server for MySQL in the `my-namespace` namespace, with disabled backups and 20 Gi storage:
 
-```
+```bash
 helm install my-db percona/ps-db \
   --set mysql.volumeSpec.pvc.resources.requests.storage=20Gi \
   --set backup.enabled=false
@@ -70,4 +70,4 @@ You can find in the documentation for the charts which [Operator](https://github
 
 ## Next steps
 
-[Connect to Percona Server for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connect.html)
+[Connect to Percona Server for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connect.md)

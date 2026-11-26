@@ -6,13 +6,13 @@
 
 Events can be checked by the following command
 
-```
+```bash
 kubectl get events
 ```
 
 Expected output
 
-```
+```text
 LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
 3s          Normal    Provisioning             persistentvolumeclaim/datadir-ps-cluster1-mysql-2        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-2"
 3s          Normal    ProvisioningSucceeded    persistentvolumeclaim/datadir-ps-cluster1-mysql-2        Successfully provisioned volume pvc-fbd347c2-adf7-413b-86bb-b5e381313cc0
@@ -21,13 +21,13 @@ LAST SEEN   TYPE      REASON                   OBJECT                           
 
 Events capture many information happening at Kubernetes level and provide valuable information. By default, the ordering of events cannot be guaranteed. Use the following command to sort the output in a reverse chronological fashion.
 
-```
+```bash
 kubectl get events --sort-by=".lastTimestamp"
 ```
 
 Expected output
 
-```
+```text
 LAST SEEN   TYPE      REASON                   OBJECT                                                MESSAGE
 33m         Warning   FailedScheduling           pod/ps-cluster1-mysql-0                                  0/1 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.
 33m         Normal    Provisioning               persistentvolumeclaim/datadir-ps-cluster1-mysql-0        External provisioner is provisioning volume for claim "default/datadir-ps-cluster1-mysql-0"
@@ -39,13 +39,13 @@ When there are too many events and there is a need of filtering output, tools li
 
 Example:
 
-```
+```bash
 kubectl get events -o yaml | yq '.items[11]'
 ```
 
 Expected output
 
-```
+```text
 apiVersion: v1
 count: 1
 eventTime: null
@@ -76,7 +76,7 @@ type: Warning
 
 Flag `--field-selector` can be used to filter out the output as well. For example, the following command provides events of Pod only:
 
-```
+```bash
 kubectl get events --field-selector involvedObject.kind=Pod
 ```
 
@@ -84,13 +84,13 @@ See the full list of supported `involvedObject` fields [here](https://kubernetes
 
 More fields can be added to the field-selector flag for filtering events further. For example, the following command provides events of the `ps-cluster1-mysql-0` Pod:
 
-```
+```bash
 kubectl get events --field-selector involvedObject.kind=Pod,involvedObject.name=ps-cluster1-mysql-0
 ```
 
 Expected output
 
-```
+```text
 LAST SEEN   TYPE      REASON            OBJECT                 MESSAGE
 53m         Normal    Created           pod/ps-cluster1-mysql-0   Created container mysql
 53m         Normal    Started           pod/ps-cluster1-mysql-0   Started container mysql
@@ -100,13 +100,13 @@ LAST SEEN   TYPE      REASON            OBJECT                 MESSAGE
 
 Same way you can query events for other Kubernetes object (StatefulSet, Custom Resource, etc.) to investigate any problems to them:
 
-```
+```bash
 kubectl get events --field-selector involvedObject.kind=PerconaServerMySQL,involvedObject.name=ps-cluster1
 ```
 
 Expected output
 
-```
+```text
 LAST SEEN   TYPE      REASON                     OBJECT                        MESSAGE
 10m         Warning   AsyncReplicationNotReady   perconaservermysql/ps-cluster1   ps-cluster1-mysql-1: [not_replicating]
 ...
@@ -114,13 +114,13 @@ LAST SEEN   TYPE      REASON                     OBJECT                        M
 
 Alternatively, you can see events for a specific object in the output of `kubectl describe` command:
 
-```
+```bash
 kubectl describe ps ps-cluster1
 ```
 
 Expected output
 
-```
+```text
 Name:         ps-cluster1
 ...
 Events:

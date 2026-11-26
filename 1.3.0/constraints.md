@@ -36,7 +36,7 @@ Use the `antiAffinityTopologyKey` option with these values:
 
 This configuration forces Percona Server for MySQL Pods to avoid reside on the same node:
 
-```
+```yaml
 affinity:
   antiAffinityTopologyKey: "kubernetes.io/hostname"
 ```
@@ -45,7 +45,7 @@ affinity:
 
 For complex scheduling requirements, use the `advanced` option. This disables the `antiAffinityTopologyKey` effect and allows the use of standard Kubernetes affinity constraints:
 
-```
+```yaml
 affinity:
    advanced:
      podAffinity:
@@ -107,7 +107,7 @@ A toleration includes these fields:
 
 This is the example configuration of a toleration:
 
-```
+```yaml
 tolerations:
 - key: "node.alpha.kubernetes.io/unreachable"
   operator: "Exists"
@@ -130,7 +130,7 @@ Pods may belong to some *priority classes*. Priority classes help the scheduler 
 1. Create PriorityClasses in your Kubernetes cluster
 1. Specify `PriorityClassName` in the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file:
 
-```
+```yaml
 priorityClassName: high-priority
 ```
 
@@ -144,7 +144,7 @@ You can configure Pod disruption budget for Percona Server for MySQL, HAProxy, M
 
 This is the example configuration for Percona Server for MySQL Pods:
 
-```
+```yaml
 mysql:
   podDisruptionBudget:
       maxUnavailable: 1

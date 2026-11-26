@@ -47,9 +47,9 @@ A cluster running an officially supported platform contains at least three Nodes
 
 Choose how you wish to install the Operator:
 
-- [with Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/helm.html)
-- [on Minikube](https://docs.percona.com/percona-operator-for-mysql/1.3.0/minikube.html)
-- [on Google Kubernetes Engine (GKE)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/gke.html)
-- [on Amazon Elastic Kubernetes Service (AWS EKS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.html)
-- [on DigitalOcean Kubernetes (DOKS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/doks.html)
-- [in a Kubernetes-based environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.html)
+- [with Helm](https://docs.percona.com/percona-operator-for-mysql/1.3.0/helm.md)
+- [on Minikube](https://docs.percona.com/percona-operator-for-mysql/1.3.0/minikube.md)
+- [on Google Kubernetes Engine (GKE)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/gke.md)
+- [on Amazon Elastic Kubernetes Service (AWS EKS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/eks.md)
+- [on DigitalOcean Kubernetes (DOKS)](https://docs.percona.com/percona-operator-for-mysql/1.3.0/doks.md)
+- [in a Kubernetes-based environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/kubernetes.md)

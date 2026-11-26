@@ -4,7 +4,7 @@
 
 Scheduled backups run automatically at times you specify. You configure them in the `backup` section of your Custom Resource using the [deploy/cr.yaml](https://github.com/percona/percona-server-mysql-operator/blob/v1.3.0/deploy/cr.yaml) file.
 
-Before setting up scheduled backups, make sure you have at least one [configured storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html) in the `backup.storages` subsection.
+Before setting up scheduled backups, make sure you have at least one [configured storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md) in the `backup.storages` subsection.
 
 ## Configure a backup schedule
 
@@ -16,13 +16,13 @@ To schedule backups, specify the following configuration in your Custom Resource
 
    - `name` - a unique name for this backup schedule
    - `schedule` - the backup schedule in [crontab format](https://en.wikipedia.org/wiki/Cron) . For example, `"0 0 * * 6"` runs every Saturday at midnight.
-   - `storageName` - the name of your [configured storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html) where backups will be stored
-   - `type` (optional) - the backup type: `full` (default) or [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.html)
+   - `storageName` - the name of your [configured storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md) where backups will be stored
+   - `type` (optional) - the backup type: `full` (default) or [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md)
    - `keep` (optional) - the number of backups to keep in storage. Older backups are automatically deleted when this limit is reached. Note that this option is ignored for incremental backups.
 
 Here’s an example configuration that creates a **full backup** every Sunday at 2:00 AM and incremental backups **every day** at 3:00 AM. The configuration keeps the last 3 full backups and incremental chains derived from them:
 
-```
+```yaml
 ...
 backup:
   enabled: true
@@ -48,18 +48,18 @@ backup:
 
 ## View backup size
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 After a backup succeeds, the Operator records its size on the Backup object.
 
 The Backup object has two fields:
 
 - `status.size` is the stored size in IEC units (`KiB`, `MiB`, `GiB`).
-- `status.uncompressedSize` is the size before compression. The two values differ only for [compressed backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-compressed.html).
+- `status.uncompressedSize` is the size before compression. The two values differ only for [compressed backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-compressed.md).
 
 To view the backup size, run:
 
-```
+```bash
 kubectl get ps-backup <backup-name> -n $NAMESPACE \
   -o jsonpath='{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'
 ```
@@ -71,7 +71,7 @@ Size reporting requires:
 - the Operator and the Custom Resource (`spec.crVersion`) version 1.3.0 or higher.
 - Percona XtraBackup 8.4.0-6 and later
 
-For the full field list, see [Backup status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#perconaservermysqlbackup-status).
+For the full field list, see [Backup status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#perconaservermysqlbackup-status).
 
 ## Managing multiple backup schedules in the same storage
 
@@ -90,7 +90,7 @@ To avoid these issues and ensure each schedule maintains its own retention polic
 
 Here’s an example configuration that uses separate storage locations for daily and monthly backups:
 
-```
+```yaml
 storages:
   minio1:
     type: s3
@@ -129,13 +129,13 @@ In this example, daily backups are stored in `minio1` and monthly backups are st
 
 When a scheduled backup runs, the Operator creates a Kubernetes Job to execute the backup. You can view these jobs to monitor backup execution:
 
-```
+```bash
 kubectl get jobs -n <namespace>
 ```
 
 Example output
 
-```
+```text
 NAME                                                      COMPLETIONS   DURATION   AGE
 xb-cron-ps-cluster2-gcp-20251107152047-9mgo5-gcp         1/1           9s         21s
 ```
@@ -144,16 +144,16 @@ To find all backups created by a specific schedule, use the `percona.com/backup-
 
 For example, to find all backups created by the `sat-night-backup` schedule:
 
-```
+```bash
 kubectl get ps-backup -l percona.com/backup-ancestor -n <namespace>
 ```
 
 Or to filter for a specific schedule:
 
-```
+```bash
 kubectl get ps-backup -l percona.com/backup-ancestor=0ed1d-sat-night-backup -n <namespace>
 ```
 
 ## Troubleshooting
 
-If you face issues with backups, refer to our [Backup troubleshooting guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html) for help.
+If you face issues with backups, refer to our [Backup troubleshooting guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md) for help.

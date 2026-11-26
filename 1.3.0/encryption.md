@@ -23,11 +23,11 @@ Read more about key rotation in the [Rotate the master key](https://docs.percona
 
 ## Backups and encryption
 
-Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up [encrypted](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.html) tablespaces. When your database uses the `keyring_vault` plugin, backup files retain that encryption layer as part of the physical backup data.
+Percona Operator for MySQL uses Percona XtraBackup for backups and fully supports backing up [encrypted](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.md) tablespaces. When your database uses the `keyring_vault` plugin, backup files retain that encryption layer as part of the physical backup data.
 
-Starting with Operator 1.2.0, you can also [encrypt backup files in the object storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html) independently of database encryption. This protects backup data even when live database encryption is not enabled.
+Starting with Operator 1.2.0, you can also [encrypt backup files in the object storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) independently of database encryption. This protects backup data even when live database encryption is not enabled.
 
-Data-at-rest encryption on the server does not encrypt the binlog files required for point-in-time recovery. To protect those files, enable [binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption).
+Data-at-rest encryption on the server does not encrypt the binlog files required for point-in-time recovery. To protect those files, enable [binlog encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption).
 
 Keep your encryption keys safe
 
@@ -37,4 +37,4 @@ If either key is lost or rotated, your backups will be irrecoverable. Always ens
 
 ## Next steps
 
-[Configure data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.html)
+[Configure data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.md)

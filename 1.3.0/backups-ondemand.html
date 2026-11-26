@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation">
+        <meta name="description" content="Percona Operator for MySQL based on Percona Server for MySQL, a Kubernetes operator that automates deployment, scaling, backups, updates and failover of MySQL clusters with group replication or asynchronous replication">
       
       
         <meta name="author" content="Percona LLC">
@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5690,7 +5690,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Export the namespace as an environment variable. Replace the <code>&lt;namespace&gt;</code> placeholder with your value:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 <li>
@@ -5698,7 +5698,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ul>
 <li>Check that the <code>backup.enabled</code> key is set to <code>true</code>. Use the following command:</li>
 </ul>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.backup.enabled}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.backup.enabled}'</span>
 </code></pre></div>
 <ul>
 <li>Verify that you have <a href="backups-storage.html">configured backup storage</a> and specified its configuration in the <code>backup.storages</code> subsection of the Custom Resource.</li>
@@ -5728,7 +5728,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Edit the <code>deploy/backup/backup.yaml</code> file:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>
@@ -5741,14 +5741,14 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </li>
 <li>
 <p>Start the backup process:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/backup.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/backup/backup.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 </li>
 </ol>
 </div>
 <div class="tabbed-block">
 <p>Instead of storing backup settings in a separate file, you can pass them directly to the <code>kubectl apply</code> command as follows:</p>
-<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -n $NAMESPACE -f-</span>
+<div class="language-bash highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -n $NAMESPACE -f-</span>
 <span class="s">apiVersion: ps.percona.com/v1</span>
 <span class="s">kind: PerconaServerMySQLBackup</span>
 <span class="s">metadata:</span>
@@ -5764,7 +5764,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </div>
 </div>
 <p>List backups with this command:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <h2 id="view-backup-size">View backup size<a data-markdown-ignore class="headerlink" href="#view-backup-size" title="Permanent link">¶</a></h2>
 <div class="admonition note">
@@ -5777,7 +5777,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><code>status.uncompressedSize</code> is the size before compression. The two values differ only for <a href="backups-compressed.html">compressed backups</a>.</li>
 </ul>
 <p>To view the backup size, run:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-backup<span class="w"> </span>&lt;backup-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'</span>
 </code></pre></div>
 <p>These fields stay empty while the backup is running or if it failed. </p>
@@ -5789,11 +5789,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>For the full field list, see <a href="cr-statuses.html#perconaservermysqlbackup-status">Backup status</a>.</p>
 <h2 id="specifying-the-backup-source">Specifying the backup source<a data-markdown-ignore class="headerlink" href="#specifying-the-backup-source" title="Permanent link">¶</a></h2>
 <p>When you create a backup object, the Operator selects a Pod to take the backup from. You can see the backup source pod in the backup object’s status:</p>
-<div class="highlight"><pre><span></span><code>kubectl get ps-backup backup1 -o yaml
+<div class="language-text highlight"><pre><span></span><code>kubectl get ps-backup backup1 -o yaml
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>apiVersion: ps.percona.com/v1
+<div class="language-text no-copy highlight"><pre><span></span><code>apiVersion: ps.percona.com/v1
 kind: PerconaServerMySQLBackup
 metadata:
   name: backup1
@@ -5804,7 +5804,7 @@ status:
 </code></pre></div>
 </details>
 <p>You can specify the source pod in the backup object to run the backup on this specific pod:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backup1</span>

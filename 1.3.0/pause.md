@@ -6,7 +6,7 @@ There may be external situations when it is needed to shutdown the Percona Serve
 
 The `deploy/cr.yaml` file contains a special `spec.pause` key for this. Setting it to `true` gracefully stops the cluster:
 
-```
+```yaml
 spec:
   .......
   pause: true
@@ -14,7 +14,7 @@ spec:
 
 Pausing the cluster may take some time, and when the process is over, you will see only the Operator Pod running:
 
-```
+```bash
 kubectl get pods
 NAME                                             READY   STATUS    RESTARTS   AGE
 percona-server-mysql-operator-7ff9cff46f-6dtgs   1/1     Running   0          9m19s
@@ -24,7 +24,7 @@ To start the cluster after it was shut down just revert the `spec.pause` key to 
 
 Starting the cluster will take time. The process is over when all Pods have reached their Running status:
 
-```
+```text
 NAME                                             READY   STATUS    RESTARTS   AGE
 ps-cluster1-mysql-0                                 2/2     Running   0          3m43s
 ps-cluster1-mysql-1                                 2/2     Running   0          3m3s
@@ -39,6 +39,6 @@ Note
 
 Clusters with Group Replication undergo crash recovery on each unpause. This is caused by the specifics of Group Replication, which supposes continuous availability of the database service by design. See [upstream documentation](https://dev.mysql.com/doc/refman/8.0/en/group-replication-restarting-group.html) for more details.
 
-The Operator recovers the cluster automatically if [`mysql.autoRecovery`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#mysqlautorecovery) is `true`. If it’s `false`, the cluster stays in the `error` state after you unpause it until you recover it manually. See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html).
+The Operator recovers the cluster automatically if [`mysql.autoRecovery`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlautorecovery) is `true`. If it’s `false`, the cluster stays in the `error` state after you unpause it until you recover it manually. See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md).
 
-If this cluster is a replica in a ClusterSet, the Operator recovers the local group on unpause and rejoins it to the ClusterSet. If the primary was down long enough to break the replication channel, you must [rejoin the replica](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.html#rejoin-a-replica-cluster).
+If this cluster is a replica in a ClusterSet, the Operator recovers the local group on unpause and rejoins it to the ClusterSet. If the primary was down long enough to break the replication channel, you must [rejoin the replica](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md#rejoin-a-replica-cluster).

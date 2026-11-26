@@ -4,7 +4,7 @@
 
 Percona Operator for MySQL uses Percona XtraBackup (PXB) to create backups. The Operator exposes this capability too, supporting compression using the `zstd` compression algorithm.
 
-Compression works for both full and [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.html) backups. You can configure it for [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html) and [on‑demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html) backups.
+Compression works for both full and [incremental](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md) backups. You can configure it for [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md) and [on‑demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md) backups.
 
 With this ability to compress backups, you can reduce the size of your backups, and lower storage and data‑transfer costs.
 
@@ -12,7 +12,7 @@ With this ability to compress backups, you can reduce the size of your backups, 
 
 You can configure compression using the MySQL configuration file. This setting applies to both scheduled and on-demand backups for all backup storages that you use.
 
-```
+```yaml
 spec:
   mysql:
     image: percona/percona-server:8.4.11-11.1
@@ -29,7 +29,7 @@ You can override the compression [for scheduled backups per specific storage](#c
 
 In the cluster Custom Resource, add compression flags under the storage entry your schedules use:
 
-```
+```yaml
 spec:
   backup:
     storages:
@@ -44,7 +44,7 @@ spec:
 
 For on‑demand backups, define the compression settings directly in the configuration file for the `PerconaServerMySQLBackup` object:
 
-```
+```yaml
 apiVersion: ps.percona.com/v1
 kind: PerconaServerMySQLBackup
 metadata:
@@ -60,7 +60,7 @@ spec:
         - "--compress"
 ```
 
-It’s important to understand how the Operator prioritizes compression and other backup tool settings when they’re defined both globally in your cluster’s Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see [Fine-tuning backup and restore operations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.html).
+It’s important to understand how the Operator prioritizes compression and other backup tool settings when they’re defined both globally in your cluster’s Custom Resource (CR) and individually for a specific backup or restore job. Percona Operator gives precedence to the settings in an individual `PerconaServerMySQLBackup` or `PerconaServerMySQLRestore` object, allowing you to override cluster-wide defaults on a per-job basis. For a detailed explanation of how these options apply, see [Fine-tuning backup and restore operations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md).
 
 ## Compare compressed and uncompressed size
 
@@ -71,15 +71,15 @@ After a compressed backup succeeds, compare `status.size` and `status.uncompress
 
 Run this command to compare the sizes:
 
-```
+```bash
 kubectl get ps-backup backup1-compressed -n <namespace> \
   -o jsonpath='{.status.size}{" / uncompressed "}{.status.uncompressedSize}{"\n"}'
 ```
 
-See [Backup status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#perconaservermysqlbackup-status) for the full field list.
+See [Backup status](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#perconaservermysqlbackup-status) for the full field list.
 
 ## Restore from a compressed backup
 
-You can make a restore either using the [`backupName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.html#backupname) or the [`backupSource`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.html#the-backupsource-subsection) options.
+You can make a restore either using the [`backupName`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.md#backupname) or the [`backupSource`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/restore-cr.md#the-backupsource-subsection) options.
 
 The Operator detects if this backup is compressed and automatically decompresses during the preparation stage for the restore.

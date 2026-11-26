@@ -2,13 +2,13 @@
 
 # Log rotation
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 `logrotate` limits how large log files grow. Without rotation, the MySQL error log can fill the data volume.
 
-`logrotate` runs in a `logrotate` sidecar on every MySQL Pod when [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html) is enabled. By default, it rotates MySQL logs under `/var/lib/mysql/log/*.log`, including `mysqld-error.log`. The rule uses the `nocreate` directive, so `logrotate` does not create a new log file. The `postrotate` script flushes the logs, and MySQL creates the new file.
+`logrotate` runs in a `logrotate` sidecar on every MySQL Pod when [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md) is enabled. By default, it rotates MySQL logs under `/var/lib/mysql/log/*.log`, including `mysqld-error.log`. The rule uses the `nocreate` directive, so `logrotate` does not create a new log file. The `postrotate` script flushes the logs, and MySQL creates the new file.
 
-The Operator does not rotate Percona XtraBackup logs. Those files do not survive a restart of the MySQL Pod. See [Collect MySQL and backup logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html#collect-mysql-and-backup-logs).
+The Operator does not rotate Percona XtraBackup logs. Those files do not survive a restart of the MySQL Pod. See [Collect MySQL and backup logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md#collect-mysql-and-backup-logs).
 
 The default rules are:
 
@@ -41,7 +41,7 @@ An override replaces the whole default file.
 
 This example runs every hour and keeps three copies of the MySQL logs:
 
-```
+```yaml
 spec:
   logcollector:
     enabled: true
@@ -65,7 +65,7 @@ spec:
 
 Apply the Custom Resource:
 
-```
+```bash
 kubectl apply -f deploy/cr.yaml -n <namespace>
 ```
 
@@ -79,7 +79,7 @@ This example rotates a slow query log that you have pointed at `/var/lib/mysql/l
 
    custom-logrotate.yaml
 
-   ```
+   ```yaml
    apiVersion: v1
    kind: ConfigMap
    metadata:
@@ -100,13 +100,13 @@ This example rotates a slow query log that you have pointed at `/var/lib/mysql/l
 
 1. Create the ConfigMap:
 
-   ```
+   ```bash
    kubectl apply -f custom-logrotate.yaml -n <namespace>
    ```
 
 1. Reference it in the Custom Resource:
 
-   ```
+   ```yaml
    spec:
      logcollector:
        enabled: true
@@ -118,7 +118,7 @@ This example rotates a slow query log that you have pointed at `/var/lib/mysql/l
 
 1. Apply the Custom Resource:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -128,7 +128,7 @@ Set `spec.logcollector.logRotate.schedule` to a [cron](https://en.wikipedia.org/
 
 This example runs log rotation every six hours:
 
-```
+```yaml
 spec:
   logcollector:
     enabled: true
@@ -139,8 +139,8 @@ spec:
 
 Apply the Custom Resource:
 
-```
+```bash
 kubectl apply -f deploy/cr.yaml -n <namespace>
 ```
 
-See [`logcollector.logRotate`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#logcollectorlogrotateconfiguration) for these fields.
+See [`logcollector.logRotate`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#logcollectorlogrotateconfiguration) for these fields.

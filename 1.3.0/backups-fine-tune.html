@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5713,7 +5713,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h2 id="configuring-through-the-custom-resource">Configuring through the Custom Resource<a data-markdown-ignore class="headerlink" href="#configuring-through-the-custom-resource" title="Permanent link">¶</a></h2>
 <p>To apply settings globally, modify the <code>containerOptions</code> subsection within the <code>backup.storages</code> section of your <code>deploy/cr.yaml</code> file. This is useful for defining a consistent baseline for all backup and restore jobs.</p>
 <p>You can set custom command-line arguments and environment variables for the backup binaries.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">storages</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">&lt;storage-name&gt;</span><span class="p">:</span>
@@ -5736,7 +5736,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>For on-demand backups and restores, you can provide specific <code>containerOptions</code> for the <code>PerconaServerMySQLBackup</code> or <code>PerconaServerMySQLRestore</code> objects in the respective <code>deploy/backup/backup.yaml</code> and  <code>deploy/backup/restore.yaml</code> custom resources. This is helpful when you need a one-off task with unique settings that you don’t want to apply globally.</p>
 <h3 id="example-for-an-on-demand-backup">Example for an on-demand backup<a data-markdown-ignore class="headerlink" href="#example-for-an-on-demand-backup" title="Permanent link">¶</a></h3>
 <p>To apply specific settings for a single backup job, edit the <code>deploy/backup/backup.yaml</code> manifest.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLBackup</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-special-backup</span>
@@ -5755,7 +5755,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Note that the settings you specify here are used, overriding any global configuration from the <code>deploy/cr.yaml</code> file.</p>
 <h3 id="example-for-a-restore">Example for a Restore<a data-markdown-ignore class="headerlink" href="#example-for-a-restore" title="Permanent link">¶</a></h3>
 <p>Similarly, for a restore operation, you can define options in the <code>deploy/backup/restore.yaml</code> manifest.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1alpha1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLRestore</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-special-restore</span>

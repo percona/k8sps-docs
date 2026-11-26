@@ -2,7 +2,7 @@
 
 # Configure and orchestrate zero-data-loss failover in async clusters
 
-This page covers the setup and management of the zero-data-loss failover for clusters with [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#asynchronous-replication-tech-preview). For background on how the failover mechanism works and the explanation of the timeouts and Orchestrator behavior when timeout expires, see [About zero data loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html).
+This page covers the setup and management of the zero-data-loss failover for clusters with [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#asynchronous-replication-tech-preview). For background on how the failover mechanism works and the explanation of the timeouts and Orchestrator behavior when timeout expires, see [About zero data loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md).
 
 ## Configure failover
 
@@ -11,9 +11,9 @@ Configure the `spec.orchestrator.failover` subsection in the Custom Resource.
 1. Set the following keys:
 
    - `timeout` - How long the cluster tries to recover transactions that exist only on the failed primary. The time covers every retry and starts at the first attempt for that primary.
-   - `onTimeout` - What happens when timeout expires. The values are `Abort` and `ForceWithPossibleDataLoss`. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html#understand-failover-timeout-and-recovery-policy) to learn more
+   - `onTimeout` - What happens when timeout expires. The values are `Abort` and `ForceWithPossibleDataLoss`. See [Understand failover timeout and recovery policy](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#understand-failover-timeout-and-recovery-policy) to learn more
 
-   ```
+   ```yaml
    spec:
      orchestrator:
        failover:
@@ -23,34 +23,34 @@ Configure the `spec.orchestrator.failover` subsection in the Custom Resource.
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
 ## Set the replication lag limit for a planned switchover
 
-A planned switchover is allowed only when the candidate replica is close enough to the primary. Orchestrator rejects a candidate whose replication lag exceeds the `ReasonableMaintenanceReplicationLagSeconds` setting. The default is 120 seconds, which is twice the `ReasonableReplicationLagSeconds` value of 60 seconds. For how the switchover works, see [Promote the candidate](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html#promote-the-candidate).
+A planned switchover is allowed only when the candidate replica is close enough to the primary. Orchestrator rejects a candidate whose replication lag exceeds the `ReasonableMaintenanceReplicationLagSeconds` setting. The default is 120 seconds, which is twice the `ReasonableReplicationLagSeconds` value of 60 seconds. For how the switchover works, see [Promote the candidate](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#promote-the-candidate).
 
 To change the limit, set `ReasonableMaintenanceReplicationLagSeconds` in the `spec.orchestrator.configuration` key. The value is a JSON object passed as a string:
 
-```
+```yaml
 spec:
   orchestrator:
     configuration: '{"ReasonableMaintenanceReplicationLagSeconds": 180}'
 ```
 
-Apply the change with `kubectl apply -f deploy/cr.yaml -n <namespace>`. Updating `orchestrator.configuration` triggers a rolling restart of the Orchestrator Pods. See [`orchestrator.configuration`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#orchestratorconfiguration) for the full description of the option.
+Apply the change with `kubectl apply -f deploy/cr.yaml -n <namespace>`. Updating `orchestrator.configuration` triggers a rolling restart of the Orchestrator Pods. See [`orchestrator.configuration`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#orchestratorconfiguration) for the full description of the option.
 
 ## See whether a failover is blocked
 
 The Operator reports whether the cluster currently has a writable primary in the `AsyncFailoverBlocked` condition:
 
-```
+```bash
 kubectl get ps <cluster-name> -n <namespace> \
   -o jsonpath='{range .status.conditions[?(@.type=="AsyncFailoverBlocked")]}{.status}{": "}{.reason}{"\n"}{end}'
 ```
 
-A `status: "True"` with `reason: NoWritablePrimary` means writes are currently blocked. See [Conditions](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#conditions) and [Events](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#events) for the full list of condition and event reasons this feature adds.
+A `status: "True"` with `reason: NoWritablePrimary` means writes are currently blocked. See [Conditions](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#conditions) and [Events](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#events) for the full list of condition and event reasons this feature adds.
 
 The Operator leaves the condition unchanged when:
 
@@ -74,7 +74,7 @@ Orchestrator retries a blocked recovery every few seconds. After one `FailoverWa
 
 When the old primary’s binary logs cannot be recovered, and you accept losing the transactions that never reached a replica, annotate the cluster:
 
-```
+```bash
 kubectl annotate ps <cluster-name> -n <namespace> \
   percona.com/force-promote-with-possible-data-loss=<value>
 ```

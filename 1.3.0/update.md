@@ -10,7 +10,7 @@ The upgrade process consists of these steps:
 - upgrade the Operator
 - upgrade the database (Percona Server for MySQL)
 
-To apply a security build for the Operator version you already run, see [Use Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.html).
+To apply a security build for the Operator version you already run, see [Use Operator security builds](https://docs.percona.com/percona-operator-for-mysql/1.3.0/security-builds.md).
 
 ## Update scenarios
 

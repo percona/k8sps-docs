@@ -2,7 +2,7 @@
 
 # Percona Operator for MySQL 0.12.0 (2025-09-23)
 
-[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.12.0 of the Percona Operator for MySQL is still **a tech preview release**, and it is **not recommended for production environments**.
 
@@ -14,7 +14,7 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 With this release, data-at-rest encryption is now supported for Percona Server for MySQL 8.4.
 
-In the previous release, we have added support for Percona Server for MySQL 8.4 within the Operator. However, data-at-rest encryption was not yet available. That limitation has now been lifted, unlocking the full potential of Percona Server for MySQL’s latest major version. Check our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.html) for Percona Server for MySQL 8.4-specific setup instructions.
+In the previous release, we have added support for Percona Server for MySQL 8.4 within the Operator. However, data-at-rest encryption was not yet available. That limitation has now been lifted, unlocking the full potential of Percona Server for MySQL’s latest major version. Check our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption-setup.md) for Percona Server for MySQL 8.4-specific setup instructions.
 
 This improvement empowers you to take full advantage of Percona Server for MySQL 8.4’s features while benefiting from seamless, automated lifecycle management provided by the Operator. Percona Server for MySQL 8.4 is now the default version for deploying a database cluster.
 
@@ -28,7 +28,7 @@ With this release, you can now configure PodDisruptionBudgets for MySQL, HAProxy
 
 The Operator sets sensible defaults for backups and restores to ensure their smooth flow. If you need more control, you can fine-tune `xtrabackup`, `xbstream`, and `xbcloud` settings. You can do this globally via the `deploy/cr.yaml` Custom resource manifest or individually for a specific backup / restore operation via the respective `deploy/backup.yaml` or `deploy/restore.yaml` manifests. In either case, define your configuration in the `spec.containerOptions` subsection. For example:
 
-```
+```yaml
 spec:
   backup:
     storages:
@@ -46,7 +46,7 @@ spec:
              - "--someflag=abc"
 ```
 
-Note that individual settings take precedence over the global ones. Read more about fine-tuning backups and restores and how the settings are applied in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.html).
+Note that individual settings take precedence over the global ones. Read more about fine-tuning backups and restores and how the settings are applied in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md).
 
 ### Monitor PMM Client health and status
 
@@ -56,7 +56,7 @@ Percona Monitoring and Management (PMM) is a great tool to monitor the health of
 
 You can now explicitly define from what MySQL instance Pod the Operator should make a backup. You can specify the Pod in the deploy/cr.yaml to apply it for all backups, both scheduled and on-demand. You can also override it for an on-demand backup in its resource manifest.
 
-```
+```yaml
 spec:
   backup:
       sourcePod: ps-cluster1-mysql-1

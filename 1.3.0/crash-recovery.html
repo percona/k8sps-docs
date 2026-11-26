@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5835,7 +5835,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </ul>
 <h2 id="choose-what-to-do">Choose what to do<a data-markdown-ignore class="headerlink" href="#choose-what-to-do" title="Permanent link">¶</a></h2>
 <p>Check whether automatic recovery is enabled:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.mysql.autoRecovery}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.spec.mysql.autoRecovery}'</span>
 </code></pre></div>
 <p>An empty output means that the option isn’t set, and the Operator treats it as <code>false</code>.</p>
 <table>
@@ -5862,7 +5862,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </table>
 <h2 id="recover-the-cluster-automatically">Recover the cluster automatically<a data-markdown-ignore class="headerlink" href="#recover-the-cluster-automatically" title="Permanent link">¶</a></h2>
 <p>The <code>mysql.autoRecovery</code> option in the Custom Resource controls the automatic recovery. The <code>deploy/cr.yaml</code> and <code>deploy/cr-minimal.yaml</code> files set it to <code>true</code>. If you omit the option in your own Custom Resource, the Operator treats it as <code>false</code>, so set it explicitly:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">mysql</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">clusterType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">group-replication</span>
 <span class="w">    </span><span class="nt">autoRecovery</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -5873,20 +5873,20 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Check the cluster state and conditions:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.conditions}'</span>
 </code></pre></div>
 <p>The state is <code>error</code> with the reason <code>FullClusterCrashDetected</code> while the crash is detected. After the reboot, the state changes to <code>initializing</code> while the secondary members restart and rejoin, and then to <code>ready</code>.</p>
 </li>
 <li>
 <p>List the events of the cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <p>Look for the <code>FullClusterCrashDetected</code> warning event (<code>Full cluster crash detected</code>) and the <code>FullClusterCrashRecovered</code> normal event (<code>Cluster recovered from full cluster crash</code>). See <a href="cr-statuses.html#events">Events</a> for all events.</p>
 </li>
 <li>
 <p>Check the Operator logs. The following messages show the progress:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>deploy/percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">"crash recovery"</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>logs<span class="w"> </span>deploy/percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">"crash recovery"</span>
 </code></pre></div>
 <ul>
 <li><code>Pod is waiting for recovery</code> - the Operator found the <code>full-cluster-crash</code> file in the Pod. The message includes the Pod name and its <code>GTID_EXECUTED</code> value.</li>
@@ -5900,7 +5900,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </s
 </ol>
 <h2 id="recover-the-cluster-manually">Recover the cluster manually<a data-markdown-ignore class="headerlink" href="#recover-the-cluster-manually" title="Permanent link">¶</a></h2>
 <p>Recover the cluster manually when <code>mysql.autoRecovery</code> is <code>false</code>, or when the automatic recovery doesn’t succeed. In the <code>false</code> case, the Operator only writes the following error to its log on every reconciliation:</p>
-<div class="no-copy highlight"><pre><span></span><code>Full cluster crash detected but auto recovery is not enabled.
+<div class="language-text no-copy highlight"><pre><span></span><code>Full cluster crash detected but auto recovery is not enabled.
 Enable .spec.mysql.autoRecovery or recover cluster manually
 (connect to one of the pods using mysql-shell and run 'dba.rebootClusterFromCompleteOutage() and delete /var/lib/mysql/full-cluster-crash in each pod.').
 </code></pre></div>
@@ -5908,12 +5908,12 @@ Enable .spec.mysql.autoRecovery or recover cluster manually
 <ol>
 <li>
 <p>Make sure that all MySQL Pods are running and are <code>Ready</code>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/component<span class="o">=</span>database
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/component<span class="o">=</span>database
 </code></pre></div>
 </li>
 <li>
 <p>Optionally, check the <code>GTID_EXECUTED</code> value saved in each Pod. The Pod with the most transactions has the most recent data:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/full-cluster-crash
 kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/full-cluster-crash
 kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-2<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>cat<span class="w"> </span>/var/lib/mysql/full-cluster-crash
 </code></pre></div>
@@ -5921,30 +5921,30 @@ kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </sp
 </li>
 <li>
 <p>Get the password of the <code>root</code> user from the Secret that you set in the <code>spec.secretsName</code> option (<code>&lt;cluster-name&gt;-secrets</code> by default):</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>&lt;cluster-name&gt;-secrets<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.root}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>&lt;cluster-name&gt;-secrets<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.root}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode
 </code></pre></div>
 </li>
 <li>
 <p>Connect to a MySQL Pod using MySQL Shell in JavaScript mode:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>mysqlsh<span class="w"> </span>--js<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>mysqlsh<span class="w"> </span>--js<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>-p
 </code></pre></div>
 <p>Enter the password from the previous step when MySQL Shell asks for it. The <code>--js</code> flag is required, because MySQL Shell in the container starts in SQL mode by default. Don’t pass the password in a <code>root:&lt;password&gt;@localhost</code> URI: the generated passwords contain special characters that MySQL Shell rejects in a URI.</p>
 </li>
 <li>
 <p>Reboot the cluster:</p>
-<div class="highlight"><pre><span></span><code><span class="nx">dba</span><span class="p">.</span><span class="nx">rebootClusterFromCompleteOutage</span><span class="p">()</span>
+<div class="language-javascript highlight"><pre><span></span><code><span class="nx">dba</span><span class="p">.</span><span class="nx">rebootClusterFromCompleteOutage</span><span class="p">()</span>
 </code></pre></div>
 <p>MySQL Shell prints <code>The Cluster was successfully rebooted.</code> when it finishes. If you run the command on a Pod that doesn’t have the most transactions, MySQL Shell reports that it switches over to the instance with the highest GTID set and uses it to start the group. If the command fails with an error, exit and repeat steps 4 and 5 on another Pod.</p>
 </li>
 <li>
 <p>Check that all members are <code>ONLINE</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="nx">dba</span><span class="p">.</span><span class="nx">getCluster</span><span class="p">().</span><span class="nx">status</span><span class="p">()</span>
+<div class="language-javascript highlight"><pre><span></span><code><span class="nx">dba</span><span class="p">.</span><span class="nx">getCluster</span><span class="p">().</span><span class="nx">status</span><span class="p">()</span>
 </code></pre></div>
 <p>Then exit MySQL Shell with <code>\quit</code>.</p>
 </li>
 <li>
 <p>Delete the <code>full-cluster-crash</code> file in every Pod. The cluster stays in the <code>error</code> state until the file is gone:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>rm<span class="w"> </span>/var/lib/mysql/full-cluster-crash
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-0<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>rm<span class="w"> </span>/var/lib/mysql/full-cluster-crash
 kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-1<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>rm<span class="w"> </span>/var/lib/mysql/full-cluster-crash
 kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>&lt;cluster-name&gt;-mysql-2<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span>rm<span class="w"> </span>/var/lib/mysql/full-cluster-crash
 </code></pre></div>
@@ -5952,7 +5952,7 @@ kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </sp
 </li>
 <li>
 <p>Wait until the cluster reaches the <code>ready</code> state:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>&lt;cluster-name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 </ol>
@@ -5962,7 +5962,7 @@ kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </sp
 <ul>
 <li>
 <p>Check that all MySQL Pods exist and are <code>Ready</code>. The Operator doesn’t act on a partially started cluster and doesn’t log anything about the recovery while a Pod is missing. Because Pods start one at a time, a single Pod that can’t start blocks all Pods after it. If a Pod is missing, check the events of the StatefulSet:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>statefulset<span class="w"> </span>&lt;cluster-name&gt;-mysql<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>statefulset<span class="w"> </span>&lt;cluster-name&gt;-mysql<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 <li>

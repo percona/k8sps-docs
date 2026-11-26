@@ -50,13 +50,13 @@ The default is 900 seconds (15 minutes). A stage that transfers no bytes, such a
 
 If bootstrap cannot read clone progress for the whole window, it stops the clone. The MySQL container restarts, and the clone starts again.
 
-The MySQL startup probe is the hard limit on how long the clone can run. When you leave `spec.mysql.startupProbe.timeoutSeconds` unset and `spec.crVersion` is `1.3.0` or higher, the Operator sets that timeout to 604800 seconds (7 days). Set [`mysql.startupProbe.timeoutSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#mysqlstartupprobetimeoutseconds) when you want a shorter limit.
+The MySQL startup probe is the hard limit on how long the clone can run. When you leave `spec.mysql.startupProbe.timeoutSeconds` unset and `spec.crVersion` is `1.3.0` or higher, the Operator sets that timeout to 604800 seconds (7 days). Set [`mysql.startupProbe.timeoutSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlstartupprobetimeoutseconds) when you want a shorter limit.
 
 When `spec.crVersion` is older than 1.3.0, `BOOTSTRAP_CLONE_TIMEOUT` is the upper bound for the clone. The Operator ignores `BOOTSTRAP_CLONE_TIMEOUT` when `crVersion` is 1.3.0 or higher.
 
 Set the stall timeout in `spec.mysql.env`. The value is a string:
 
-```
+```yaml
 spec:
   mysql:
     env:
@@ -94,7 +94,7 @@ Custom env and envFrom are supported for these components:
 | Orchestrator               | `spec.orchestrator.env`, `spec.orchestrator.envFrom`   |
 | Backup storage (per entry) | `spec.backup.storages.<name>.containerOptions.env`     |
 
-Full field definitions are in [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html).
+Full field definitions are in [Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md).
 
 ### Set variables directly in the Custom Resource
 
@@ -104,7 +104,7 @@ For example, you want to override the soft file descriptor limit for HAProxy.
 
 1. Edit the `deploy/cr.yaml` Custom Resource manifest:
 
-   ```
+   ```yaml
    spec:
      proxy:
        haproxy:
@@ -115,7 +115,7 @@ For example, you want to override the soft file descriptor limit for HAProxy.
 
 1. Apply the changes:
 
-   ```
+   ```text
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -125,7 +125,7 @@ Use this when you want to share the same variables across multiple clusters or u
 
 1. Export the namespace where your cluster is running as an environment variable. Replace `<my-namespace>` with your value:
 
-   ```
+   ```bash
    export NAMESPACE = my-namespace
    ```
 
@@ -133,7 +133,7 @@ Use this when you want to share the same variables across multiple clusters or u
 
    haproxy-configmap.yaml
 
-   ```
+   ```yaml
    apiVersion: v1
    kind: ConfigMap
    metadata:
@@ -150,7 +150,7 @@ Use this when you want to share the same variables across multiple clusters or u
 
 1. Reference the ConfigMap in the Custom Resource:
 
-   ```
+   ```yaml
    spec:
      mysql:
        envFrom:
@@ -160,7 +160,7 @@ Use this when you want to share the same variables across multiple clusters or u
 
 1. Apply the changes:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n $NAMESPACE
    ```
 
@@ -174,7 +174,7 @@ For example, you need to provide a token used by a custom sidecar container.
 
    To encode an API token, run:
 
-   ```
+   ```bash
    echo -n "your-token" | base64
    ```
 
@@ -182,7 +182,7 @@ For example, you need to provide a token used by a custom sidecar container.
 
 1. Export the namespace where your cluster is running as an environment variable. Replace my-namespace with your value:
 
-   ```
+   ```bash
    export NAMESPACE=my-namespace
    ```
 
@@ -190,7 +190,7 @@ For example, you need to provide a token used by a custom sidecar container.
 
    integration-token.yaml
 
-   ```
+   ```yaml
    apiVersion: v1
    kind: Secret
    metadata:
@@ -202,13 +202,13 @@ For example, you need to provide a token used by a custom sidecar container.
 
 1. Create the Secret object:
 
-   ```
+   ```bash
    kubectl apply -f integration-token.yaml
    ```
 
 1. Reference the Secret in your Custom Resource:
 
-   ```
+   ```yaml
    spec:
      mysql:
        envFrom:
@@ -218,7 +218,7 @@ For example, you need to provide a token used by a custom sidecar container.
 
 1. Apply the changes:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n $NAMESPACE
    ```
 

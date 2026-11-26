@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/openshift.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6169,27 +6169,27 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p class="admonition-title">Important</p>
 <p>You must specify the correct branch with the <code>-b</code> option while cloning the code on this step. Please be careful.</p>
 </div>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 <span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
 </code></pre></div>
 </li>
 <li>
 <p>Create the Kubernetes namespace for your cluster. It is a good practice to isolate workloads in Kubernetes by installing the Operator in a custom namespace. Replace the <code>&lt;namespace&gt;</code> placeholder with your value.</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>namespace/&lt;namespace&gt; was created
+<div class="language-text no-copy highlight"><pre><span></span><code>namespace/&lt;namespace&gt; was created
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>A <code>bundle.yaml</code> is a Kubernetes manifest that packages Operator metadata and resources. By applying this file, Kubernetes creates the Custom Resource Definition, sets up role-based access control and installs the Operator in one single action. Replace the <code>&lt;namespace&gt;</code> placeholder with your value:</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight" data-prompt="$"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/bundle.yaml<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>customresourcedefinition.apiextensions.k8s.io/perconaservermysqlbackups.ps.percona.com serverside-applied
+<div class="language-text no-copy highlight"><pre><span></span><code>customresourcedefinition.apiextensions.k8s.io/perconaservermysqlbackups.ps.percona.com serverside-applied
 customresourcedefinition.apiextensions.k8s.io/perconaservermysqlrestores.ps.percona.com serverside-applied
 customresourcedefinition.apiextensions.k8s.io/perconaservermysqls.ps.percona.com serverside-applied
 serviceaccount/percona-server-mysql-operator serverside-applied
@@ -6211,7 +6211,7 @@ deployment.apps/percona-server-mysql-operator serverside-applied
 <p class="admonition-title">Important</p>
 <p>You must specify the correct branch with the <code>-b</code> option while cloning the code on this step. Please be careful.</p>
 </div>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 <span class="nb">cd</span><span class="w"> </span>percona-server-mysql-operator
 </code></pre></div>
 <h4 id="step-2-create-the-custom-resource-definition">Step 2: Create the Custom Resource Definition<a data-markdown-ignore class="headerlink" href="#step-2-create-the-custom-resource-definition" title="Permanent link">¶</a></h4>
@@ -6219,7 +6219,7 @@ deployment.apps/percona-server-mysql-operator serverside-applied
 <p>The Custom Resource Definition extends the standard set of resources which Kubernetes “knows” about with new items.</p>
 <p>You create the Custom Resource Definition only once. It is not bound to a specific namespace and all other deployments will use this Custom Resource Definition. </p>
 <p>Use the following command to create the Custom Resource Definition:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/crd.yaml
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>--server-side<span class="w"> </span>-f<span class="w"> </span>deploy/crd.yaml
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -6227,7 +6227,7 @@ deployment.apps/percona-server-mysql-operator serverside-applied
 </div>
 <h4 id="step-3-optional-set-up-user-permissions">Step 3: (optional) Set up user permissions<a data-markdown-ignore class="headerlink" href="#step-3-optional-set-up-user-permissions" title="Permanent link">¶</a></h4>
 <p>If you’re using a non-privileged user, grant the required permissions by applying the following clusterrole:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>ps-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>perconaservermysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>ps-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>perconaservermysqls.ps.percona.com,perconaservermysqls.ps.percona.com/status,perconaservermysqlbackups.ps.percona.com,perconaservermysqlbackups.ps.percona.com/status,perconaservermysqlrestores.ps.percona.com,perconaservermysqlrestores.ps.percona.com/status
 oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </span>add-cluster-role-to-user<span class="w"> </span>ps-admin<span class="w"> </span>&lt;some-user&gt;
 </code></pre></div>
 <p>If you have a <a href="https://
@@ -6236,12 +6236,12 @@ oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </sp
     html">cert-manager<br>
 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> installed, add these permissions to manage certificates with a 
     non-privileged user:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>cert-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>clusterrole<span class="w"> </span>cert-admin<span class="w"> </span>--verb<span class="o">=</span><span class="s2">"*"</span><span class="w"> </span>--resource<span class="o">=</span>issuers.certmanager.k8s.io,certificates.certmanager.k8s.io
 oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </span>add-cluster-role-to-user<span class="w"> </span>cert-admin<span class="w"> </span>&lt;some-user&gt;
 </code></pre></div>
 <h4 id="step-4-create-a-project">Step 4: Create a project<a data-markdown-ignore class="headerlink" href="#step-4-create-a-project" title="Permanent link">¶</a></h4>
 <p>A project in OpenShift corresponds to a Kubernetes namespace. When you create a new project, you isolate workloads in it. </p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>new-project<span class="w"> </span>ps
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>new-project<span class="w"> </span>ps
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
@@ -6250,11 +6250,11 @@ oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </sp
 <p>The command automatically sets context to this project so that all further resources are created in it.</p>
 <h4 id="step-5-configure-rbac">Step 5: Configure RBAC<a data-markdown-ignore class="headerlink" href="#step-5-configure-rbac" title="Permanent link">¶</a></h4>
 <p>Role-Based Access Control (RBAC) manages resource access in OpenShift. The Operator needs specific permissions to run Percona Server for MySQL properly. These permissions are defined within roles. </p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/rbac.yaml
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/rbac.yaml
 </code></pre></div>
 <h4 id="step-6-deploy-the-operator">Step 6: Deploy the Operator<a data-markdown-ignore class="headerlink" href="#step-6-deploy-the-operator" title="Permanent link">¶</a></h4>
 <p>Now you can deploy the Operator with the following command:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/operator.yaml
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/operator.yaml
 </code></pre></div>
 <h3 id="install-percona-server-for-mysql">Install Percona Server for MySQL<a data-markdown-ignore class="headerlink" href="#install-percona-server-for-mysql" title="Permanent link">¶</a></h3>
 <p>After installing the Operator, you can deploy Percona Server for MySQL. This section guides you through the process of setting up secrets, certificates, and creating your first cluster.</p>
@@ -6263,7 +6263,7 @@ oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </sp
 <ol>
 <li>
 <p>Edit the <code>deploy/secrets.yaml</code> file to set up your MySQL users and passwords:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-cluster-secrets</span>
@@ -6279,7 +6279,7 @@ oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </sp
 </li>
 <li>
 <p>Apply the secrets:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>deploy/secrets.yaml
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>deploy/secrets.yaml
 </code></pre></div>
 </li>
 </ol>
@@ -6296,21 +6296,21 @@ oc<span class="w"> </span>adm<span class="w"> </span>policy<span class="w"> </sp
 <li>
 <p>To deploy Percona Server for MySQL cluster means to create a Custom Resource for it in OpenShift. This Custom Resource uses the Percona Server for MySQL Operator, which automates the deployment, scaling, and management of MySQL clusters.</p>
 <p>The Custom Resource is described by the <code>deploy/cr.yaml</code> file. So to create it, you need to apply this file as follows:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr.yaml
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>perconaservermysql.ps.percona.com/ps-cluster1 created
+<div class="language-text no-copy highlight"><pre><span></span><code>perconaservermysql.ps.percona.com/ps-cluster1 created
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>It may take up to 10 minutes to complete the cluster deployment. Use this command to monitor the deployment:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>get<span class="w"> </span>ps
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>get<span class="w"> </span>ps
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME       REPLICATION         ENDPOINT                    STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME       REPLICATION         ENDPOINT                    STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
 ps-cluster1   group-replication   ps-cluster1-haproxy.nastena1   ready   3                      3                  6m
 </code></pre></div>
 </details>
@@ -6323,7 +6323,7 @@ ps-cluster1   group-replication   ps-cluster1-haproxy.nastena1   ready   3      
 <ol>
 <li>
 <p>Export the namespace, cluster name and the Secret name as environment variables:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>my-namespace
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NAMESPACE</span><span class="o">=</span>my-namespace
 <span class="nb">export</span><span class="w"> </span><span class="nv">CLUSTER_NAME</span><span class="o">=</span>ps-cluster1
 <span class="nb">export</span><span class="w"> </span><span class="nv">SECRET_NAME</span><span class="o">=</span><span class="si">${</span><span class="nv">CLUSTER_NAME</span><span class="si">}</span>-psuser-root
 </code></pre></div>
@@ -6331,13 +6331,13 @@ ps-cluster1   group-replication   ps-cluster1-haproxy.nastena1   ready   3      
 </li>
 <li>
 <p>List the Secrets objects.</p>
-<div class="highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>oc<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
+<div class="language-bash highlight" data-prompt="$"><pre><span></span><code>$<span class="w"> </span>oc<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$NAMESPACE</span>
 </code></pre></div>
 <p>Look for the Secret named <code>&lt;cluster_name&gt;-psuser-root</code>. By default, it is <code>ps-cluster1-psuser-root</code>.</p>
 </li>
 <li>
 <p>Retrieve the user credentials from the Secret:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 -o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.user}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
 oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span><span class="s2">"</span><span class="nv">$SECRET_NAME</span><span class="s2">"</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">"</span><span class="nv">$NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 -o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.password}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>--decode<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span>
@@ -6345,7 +6345,7 @@ oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </sp
 </li>
 <li>
 <p>Run a container with the <code>mysql</code> tool and connect its console output to your terminal:</p>
-<div class="highlight"><pre><span></span><code>oc<span class="w"> </span>run<span class="w"> </span>-i<span class="w"> </span>--rm<span class="w"> </span>--tty<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
+<div class="language-bash highlight"><pre><span></span><code>oc<span class="w"> </span>run<span class="w"> </span>-i<span class="w"> </span>--rm<span class="w"> </span>--tty<span class="w"> </span>percona-client<span class="w"> </span>--image<span class="o">=</span>percona/percona-server:8.4<span class="w"> </span>--restart<span class="o">=</span>Never<span class="w"> </span>--<span class="w"> </span>bash<span class="w"> </span>-il
 </code></pre></div>
 <p>It may require some time to execute the command and deploy the corresponding Pod.</p>
 </li>
@@ -6358,18 +6358,18 @@ oc<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </sp
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">If using HAProxy (default)</label><label for="__tabbed_1_2">If using MySQL Router</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+<div class="language-bash highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-haproxy<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-router<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
+<div class="language-bash highlight"><pre><span></span><code>mysql<span class="w"> </span>-h<span class="w"> </span>ps-cluster1-router<span class="w"> </span>-uroot<span class="w"> </span>-p&lt;root<span class="w"> </span>password&gt;
 </code></pre></div>
 </div>
 </div>
 </div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>mysql: [Warning] Using a password on the command line interface can be insecure.
+<div class="language-text no-copy highlight"><pre><span></span><code>mysql: [Warning] Using a password on the command line interface can be insecure.
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 1665
 Server version: 8.4.11-11.1 Percona Server (GPL), Release 6, Revision dbba4396
@@ -6388,11 +6388,11 @@ mysql&gt;
 </details>
 <p>The following example uses the MySQL prompt to check the
 <code>max_connections</code> variable:</p>
-<div class="highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
+<div class="language-sql highlight"><pre><span></span><code><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="ss">"max_connections"</span><span class="p">;</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="no-copy highlight"><pre><span></span><code>+-----------------+-------+
+<div class="language-text no-copy highlight"><pre><span></span><code>+-----------------+-------+
 | Variable_name   | Value |
 +-----------------+-------+
 | max_connections | 158   |

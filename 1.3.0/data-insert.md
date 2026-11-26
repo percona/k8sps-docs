@@ -4,25 +4,25 @@
 
 In this tutorial you will learn how to insert sample data into Percona Server for MySQL.
 
-We will enter SQL statements via the same MySQL shell we used to [connect to the database](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connect.html).
+We will enter SQL statements via the same MySQL shell we used to [connect to the database](https://docs.percona.com/percona-operator-for-mysql/1.3.0/connect.md).
 
 1. Let’s create a separate database for our experiments:
 
-   ```
+   ```mysql
    CREATE DATABASE mydb;
    use mydb;
    ```
 
    Output
 
-   ```
+   ```text
    Query OK, 1 row affected (0.01 sec)
    Database changed
    ```
 
 1. Now let’s create a table which we will later fill with some sample data:
 
-   ```
+   ```mysql
    CREATE TABLE extraordinary_gentlemen (
        id int NOT NULL AUTO_INCREMENT,
        name varchar(255) NOT NULL,
@@ -33,13 +33,13 @@ We will enter SQL statements via the same MySQL shell we used to [connect to the
 
    Output
 
-   ```
+   ```text
    Query OK, 0 rows affected (0.04 sec)
    ```
 
 1. Adding data to the newly created table will look as follows:
 
-   ```
+   ```mysql
    INSERT INTO extraordinary_gentlemen (name, occupation)
      VALUES
      ("Allan Quartermain","hunter"),
@@ -50,21 +50,21 @@ We will enter SQL statements via the same MySQL shell we used to [connect to the
 
    Output
 
-   ```
+   ```text
    Query OK, 4 rows affected (0.01 sec)
    Records: 4  Duplicates: 0  Warnings: 0
    ```
 
 1. Query the database to verify the data insertion
 
-   ```
+   ```mysql
    SELECT *
    FROM extraordinary_gentlemen;
    ```
 
    Output
 
-   ```
+   ```text
    +----+-------------------+----------------------+
    | id | name              | occupation           |
    +----+-------------------+----------------------+
@@ -77,7 +77,7 @@ We will enter SQL statements via the same MySQL shell we used to [connect to the
 
 1. To update data in the database, execute the following statement:
 
-   ```
+   ```sql
    UPDATE  extraordinary_gentlemen
       SET occupation = "submariner"
    WHERE name = "Nemo";
@@ -85,21 +85,21 @@ We will enter SQL statements via the same MySQL shell we used to [connect to the
 
    Output
 
-   ```
+   ```text
    Query OK, 1 row affected (0.00 sec)
    Rows matched: 1  Changed: 1  Warnings: 0
    ```
 
 1. Now if you repeat the SQL statement from step 4, you will see the changes take effect:
 
-   ```
+   ```mysql
    SELECT *
    FROM extraordinary_gentlemen;
    ```
 
    Output
 
-   ```
+   ```text
    +----+-------------------+----------------------+
    | id | name              | occupation           |
    +----+-------------------+----------------------+
@@ -112,4 +112,4 @@ We will enter SQL statements via the same MySQL shell we used to [connect to the
 
 ## Next steps
 
-[Make a backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-tutorial.html)
+[Make a backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backup-tutorial.md)

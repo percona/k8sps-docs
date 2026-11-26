@@ -2,7 +2,7 @@
 
 # MySQL Router Configuration
 
-[MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) is lightweight middleware that provides transparent routing between your application and back-end MySQL servers. [MySQL Router is part of the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#components) and is deployed during the installation. MySQL Router can be used as an alternative to [HAProxy based load balancing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html) when group replication between MySQL instances is turned on.
+[MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) is lightweight middleware that provides transparent routing between your application and back-end MySQL servers. [MySQL Router is part of the Operator](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#components) and is deployed during the installation. MySQL Router can be used as an alternative to [HAProxy based load balancing](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md) when group replication between MySQL instances is turned on.
 
 To use the Router, enable it and make sure that HAProxy is disabled.
 
@@ -10,7 +10,7 @@ To use the Router, enable it and make sure that HAProxy is disabled.
 
 1. Edit the `deploy/cr.yaml` file
 
-   ```
+   ```yaml
    ...
    mysql:
      clusterType: group-replication
@@ -26,19 +26,19 @@ To use the Router, enable it and make sure that HAProxy is disabled.
 
 1. Update the cluster to apply the new configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml
    ```
 
    When the process is over your cluster will obtain the `ready` status. You can check it with the following command:
 
-   ```
+   ```bash
    kubectl get ps
    ```
 
    Expected output
 
-   ```
+   ```text
    NAME       REPLICATION         ENDPOINT                  STATE   MYSQL   ORCHESTRATOR   HAPROXY   ROUTER   AGE
    ps-cluster1   group-replication   ps-cluster1-router.default   ready   3                                3        53m
    ```
@@ -62,7 +62,7 @@ The `router.configuration` subsection of the `deploy.cr.yaml` file contains the 
 
 1. To change the verbosity level, edit the configuration file as follows:
 
-   ```
+   ```yaml
    configuration: |
     [default]
     logging_folder=/tmp/router/log
@@ -72,7 +72,7 @@ The `router.configuration` subsection of the `deploy.cr.yaml` file contains the 
 
 1. Update the cluster to apply the new configuration
 
-   ```
+   ```bash
    kubectl apply -f deploy.cr.yaml
    ```
 
@@ -86,20 +86,20 @@ To pass the new verbosity level of MySQL Router to the Operator using the Config
 
 1. Create the `mysqlrouter.conf` configuration file and specify the new verbosity level within.
 
-   ```
+   ```ini
    [logger]
    level = INFO
    ```
 
 1. Get the name of your cluster to pass the configuration
 
-   ```
+   ```bash
    kubectl get ps
    ```
 
 1. Create the ConfigMap. You should use the combination of the cluster name with the `-router` suffix as the naming convention for the ConfigMap. For example, to create the ConfigMap for the cluster `ps-cluster1`, the command is the following:
 
-   ```
+   ```bash
    kubectl create configmap ps-cluster1-router --from-file=mysqlrouter.conf
    ```
 
@@ -107,6 +107,6 @@ To pass the new verbosity level of MySQL Router to the Operator using the Config
 
 1. View the created ConfigMap using the following command:
 
-   ```
+   ```bash
    kubectl describe configmaps ps-cluster1-mysql
    ```

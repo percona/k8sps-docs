@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5626,7 +5626,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>The <strong>Version Service</strong> is a centralized repository that the Percona Operator for MySQL connects to at scheduled times to get the latest information on compatible versions and valid image paths. This service is a crucial part of the automatic upgrade process, and it is enabled by default. Its landing page, <code>check.percona.com</code>, provides more details about the service itself.</p>
 <h3 id="how-to-query-the-version-service">How to query the Version Service<a data-markdown-ignore class="headerlink" href="#how-to-query-the-version-service" title="Permanent link">¶</a></h3>
 <p>You can manually query the Version Service using the <code>curl</code> command. The basic syntax is:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/&lt;operator-version&gt;/&lt;ps-version&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[].matrix'</span>
+<div class="language-bash highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/&lt;operator-version&gt;/&lt;ps-version&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[].matrix'</span>
 </code></pre></div>
 <p>where:</p>
 <ul>
@@ -5634,11 +5634,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <li><strong><code>&lt;ps-version&gt;</code></strong> is the version of Percona Server for MySQL you want to get images for. This part is optional and helps filter the results. It can be a specific Percona Server for MySQL version (e.g. 8.4), a recommended version (e.g. 8.4-recommended), or the latest available version (e.g. 8.4-latest).</li>
 </ul>
 <p>For example, to retrieve the list of images for the Operator version <code>0.11.0</code> and the latest version of Percona Server for MySQL 8.4, use the following command:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0/8.4-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[].matrix'</span>
+<div class="language-bash highlight"><pre><span></span><code>curl<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0/8.4-latest<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[].matrix'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>"pmm": {
+<div class="language-text no-copy highlight"><pre><span></span><code>"pmm": {
     "3.3.1": {
       "imagePath": "percona/pmm-client:3.3.1",
       "imageHash": "29a9bb1c69fef8bedc4d4a9ed0ae8224a8623fd3eb8676ef40b13fd044188cb4",
@@ -5713,11 +5713,11 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 </code></pre></div>
 </details>
 <p>To narrow down the search and check the Percona Server for MySQL images available for a specific Operator version (<code>0.11.0</code> in the following example), use the following command:</p>
-<div class="highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[0].matrix.mysql | to_entries[] | "\(.key)\t\(.value.imagePath)\t\(.value.status)"'</span>
+<div class="language-bash highlight"><pre><span></span><code>curl<span class="w"> </span>-s<span class="w"> </span>https://check.percona.com/versions/v1/ps-operator/0.11.0<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.versions[0].matrix.mysql | to_entries[] | "\(.key)\t\(.value.imagePath)\t\(.value.status)"'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>8.0.32-24   percona/percona-server:8.0.32-24    available
+<div class="language-text no-copy highlight"><pre><span></span><code>8.0.32-24   percona/percona-server:8.0.32-24    available
 8.0.33-25   percona/percona-server:8.0.33-25    available
 8.0.36-28   percona/percona-server:8.0.36-28    available
 8.0.40-31   percona/percona-server:8.0.40-31    available

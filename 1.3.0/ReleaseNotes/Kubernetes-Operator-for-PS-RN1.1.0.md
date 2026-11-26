@@ -2,7 +2,7 @@
 
 # Percona Operator for MySQL 1.1.0 (2026-04-17)
 
-[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+[Installation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL brings production-grade automation to MySQL deployments on Kubernetes. It handles provisioning, scaling, backups, failover, and upgrades using declarative Custom Resources, thus reducing manual effort and human error. With built-in support for Percona XtraBackup, proxies such as HAProxy or MySQL Router and Percona Toolkit, it ensures resilient, secure, and performant MySQL clusters.
 
@@ -14,17 +14,17 @@ This release focuses on backups improvements enabling more efficient and flexibl
 
 This release introduces point-in-time recovery, giving you precise control over how far back you restore your MySQL cluster. Instead of recovering only to the moment a backup was taken, you can now roll the database forward to a specific transaction or timestamp. This is invaluable when you need to undo a bad migration, recover right before someone dropped the wrong table, or meet tighter RPO requirements with minimal data loss.
 
-Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona Binlog Server to collect binary logs and the `mysqlbinlog` client to apply them during the restore. Read more about the workflow in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html).
+Point-in-time recovery works the same way in both asynchronous and group replication clusters, ensuring consistent recovery behavior regardless of your topology. It uses the Percona Binlog Server to collect binary logs and the `mysqlbinlog` client to apply them during the restore. Read more about the workflow in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md).
 
 Point-in-time recovery is released as a **tech preview**. We do not recommend using it in production environments yet. However, we strongly encourage you to try it out in staging or test clusters and share your feedback. Your input will directly shape how we refine and finalize this capability in future releases.
 
 ### Incremental backups (tech preview)
 
-This release introduces incremental backups for MySQL clusters, giving you a faster, more efficient, and more cost effective way to protect your data. Instead of creating a full backup every time, the Operator now captures only the changes since the previous backup, significantly reducing backup size, storage usage, and data transfer overhead. Incremental backups also lower the load on your cluster, helping you maintain performance even during frequent backup operations. This feature works seamlessly with all [supported backup storages](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html) and integrates with both [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html) and [on-demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html) backup jobs.
+This release introduces incremental backups for MySQL clusters, giving you a faster, more efficient, and more cost effective way to protect your data. Instead of creating a full backup every time, the Operator now captures only the changes since the previous backup, significantly reducing backup size, storage usage, and data transfer overhead. Incremental backups also lower the load on your cluster, helping you maintain performance even during frequent backup operations. This feature works seamlessly with all [supported backup storages](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md) and integrates with both [scheduled](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md) and [on-demand](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md) backup jobs.
 
 Incremental backups are released as a **tech preview** feature and we don’t recommend them for production environments yet. However, we encourage you to try them out and leave your feedback. This will help us shape the future of this functionality.
 
-Learn more about incremental backups in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.html).
+Learn more about incremental backups in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md).
 
 ### Backup compression
 
@@ -38,7 +38,7 @@ During the restore, the Operator automatically detects whether a backup is compr
 
 Currently the Operator supports only the `zstd` compression algorithm. There is a known limitation for the `lz4` compression algorithm and it will be lifted after the [PXB-3568](https://perconadev.atlassian.net/browse/PXB-3568) is resolved.
 
-To learn more about compressed backups, read our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-compressed.html).
+To learn more about compressed backups, read our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-compressed.md).
 
 ### Configure file descriptor limit for HAProxy
 
@@ -57,7 +57,7 @@ In some cases, the default number of attempts for a replica to reconnect to its 
 
 Specify new values directly in the Custom Resource to match your environment’s needs.
 
-Read more about other environment variables in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.html).
+Read more about other environment variables in our [documentation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/env-vars-custom.md).
 
 This makes cluster management more predictable and avoids unexpected stalls during replication interruptions.
 

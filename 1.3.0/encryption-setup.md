@@ -2,19 +2,19 @@
 
 # Configure data-at-rest encryption with HashiCorp Vault
 
-This guide walks you through deploying and configuring HashiCorp Vault to work with Percona Operator for MySQL to enable [data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.html).
+This guide walks you through deploying and configuring HashiCorp Vault to work with Percona Operator for MySQL to enable [data-at-rest encryption](https://docs.percona.com/percona-operator-for-mysql/1.3.0/encryption.md).
 
 ## Create the namespace
 
 It is a good practice to isolate workloads in Kubernetes using namespaces. Create a namespace with the following command:
 
-```
+```bash
 kubectl create namespace vault
 ```
 
 Export the namespace as an environment variable to simplify further configuration and management
 
-```
+```bash
 NAMESPACE="vault"
 ```
 
@@ -24,20 +24,20 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
 1. Add and update the Vault Helm repository.
 
-   ```
+   ```bash
    helm repo add hashicorp https://helm.releases.hashicorp.com
    helm repo update
    ```
 
 1. Install Vault
 
-   ```
+   ```bash
    helm upgrade --install vault hashicorp/vault --namespace $NAMESPACE
    ```
 
    Sample output
 
-   ```
+   ```text
    NAME: vault
    LAST DEPLOYED: Wed Aug 20 12:55:38 2025
    NAMESPACE: vault
@@ -54,19 +54,19 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
 1. Retrieve the Pod name where Vault is running:
 
-   ```
+   ```bash
    $(kubectl -n $NAMESPACE get pod -l app.kubernetes.io/name=vault -o jsonpath='{.items[0].metadata.name}')
    ```
 
    Sample output
 
-   ```
+   ```text
    vault-0
    ```
 
 1. After Vault is installed, you need to initialize it. Run the following command:
 
-   ```
+   ```bash
    kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator init -key-shares=1 -key-threshold=1 -format=json > /tmp/vault-init
    ```
 
@@ -81,19 +81,19 @@ For this setup, we install Vault in Kubernetes using the [Helm 3 package manager
 
    Retrieve the unseal key from the file:
 
-   ```
+   ```bash
    unsealKey=$(jq -r ".unseal_keys_b64[]" < /tmp/vault-init)
    ```
 
    Now, unseal Vault. Run the following command on every Pod where Vault is running:
 
-   ```
+   ```bash
    kubectl exec -it pod/vault-0 -n $NAMESPACE -- vault operator unseal "$unsealKey"
    ```
 
    Sample output
 
-   ```
+   ```text
    Key             Value
    ---             -----
    Seal Type       shamir
@@ -121,37 +121,37 @@ For the purposes of this tutorial we use the root token in further sections. For
 
 1. Extract the Vault root token from the file where you saved the init response output:
 
-   ```
+   ```bash
    cat /tmp/vault-init | jq -r ".root_token"
    ```
 
    Sample output
 
-   ```
+   ```text
    hvs.*************Jg9r
    ```
 
 1. Connect to Vault Pod:
 
-   ```
+   ```bash
    kubectl exec -it vault-0 -n $NAMESPACE -- /bin/sh
    ```
 
 1. Authenticate in Vault with this token:
 
-   ```
+   ```bash
    vault login hvs.*************Jg9r
    ```
 
 1. Enable the secrets engine at the mount path. The following command enables KV secrets engine v2 at the `ps-secret` mount-path:
 
-   ```
+   ```bash
    vault secrets enable --version=2 -path=ps-secret kv
    ```
 
    Sample output
 
-   ```
+   ```text
    Success! Enabled the kv secrets engine at: ps-secret/
    ```
 
@@ -176,7 +176,7 @@ You can modify the example `deploy/vault-secret.yaml` configuration file:
 
 **HTTP access without TLS**
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -191,7 +191,7 @@ stringData:
 
 **HTTPS access with TLS**
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -215,7 +215,7 @@ stringData:
 
 **HTTP access without TLS**
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -232,7 +232,7 @@ stringData:
 
 **HTTPS access with TLS**
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -258,7 +258,7 @@ Note that you must either specify the certificate value or don’t declare it at
 
 Now create a Secret object. Replace the `<namespace>` placeholder with the namespace where your database cluster is deployed:
 
-```
+```bash
 kubectl apply -f deploy/vault-secret.yaml -n <namespace>
 ```
 
@@ -272,7 +272,7 @@ Now, reference the Vault Secret in the Operator Custom Resource manifest. Note t
 
 1. Export the namespace where the cluster is deployed as an environment variable:
 
-   ```
+   ```bash
    export ps-cluster-namespace = <cluster-namespace>
    ```
 
@@ -282,7 +282,7 @@ Now, reference the Vault Secret in the Operator Custom Resource manifest. Note t
 
    1. Pause the cluster:
 
-      ```
+      ```bash
       kubectl patch ps ps-cluster1 \
         --namespace $<ps-cluster-namespace> \
         --type=merge \
@@ -291,7 +291,7 @@ Now, reference the Vault Secret in the Operator Custom Resource manifest. Note t
 
    1. Apply the patch referencing your Secret. Note for MySQL 8.0 the default Secret name is `ps-cluster1-vault` and for MySQL 8.4 - `ps-cluster1-vault-84`. Use the following command as an example and specify the Secret name for the MySQL version you’re using:
 
-      ```
+      ```bash
       kubectl patch ps ps-cluster1 \
         --namespace $<ps-cluster-namespace> \
         --type=merge \
@@ -300,7 +300,7 @@ Now, reference the Vault Secret in the Operator Custom Resource manifest. Note t
 
    1. Unpause the cluster:
 
-      ```
+      ```bash
       kubectl patch ps ps-cluster1 \
         --namespace $<ps-cluster-namespace> \
         --type=merge \
@@ -311,7 +311,7 @@ Now, reference the Vault Secret in the Operator Custom Resource manifest. Note t
 
    Apply the patch referencing your Secret. Note for MySQL 8.0 the default Secret name is `ps-cluster1-vault` and for MySQL 8.4 - `ps-cluster1-vault-84`. Use the following command as an example and specify the Secret name for the MySQL version you’re using:
 
-   ```
+   ```bash
    kubectl patch ps ps-cluster1 \
      --namespace $<ps-cluster-namespace> \
      --type=merge \
@@ -324,14 +324,14 @@ To use encryption, you can:
 
 - turn it on for every table you create with the \`ENCRYPTION=’Y’ clause in your SQL statement. For example,
 
-```
+```sql
 CREATE TABLE t1 (c1 INT, PRIMARY KEY pk(c1)) ENCRYPTION='Y';
 CREATE TABLESPACE foo ADD DATAFILE 'foo.ibd' ENCRYPTION='Y';
 ```
 
 - turn on default encryption of a schema or a general tablespace. Then all tables you create will have encryption enabled. To turn on default encryption, use the following SQL statement:
 
-```
+```sql
 SET default_table_encryption=ON;
 ```
 

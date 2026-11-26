@@ -8,10 +8,10 @@ This page describes known limitations of Percona Operator for MySQL based on Per
 
 The following features are in tech preview. Behavior can change in future releases. Do not use them in production yet. We encourage you to try them in test or staging clusters and share feedback.
 
-- [Asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#asynchronous-replication-tech-preview) (`spec.mysql.clusterType: async`)
-- [Replication type switch on a running cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.html) (Operator 1.3.0 and later)
-- [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html)
-- [Incremental backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.html)
+- [Asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#asynchronous-replication-tech-preview) (`spec.mysql.clusterType: async`)
+- [Replication type switch on a running cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md) (Operator 1.3.0 and later)
+- [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md)
+- [Incremental backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md)
 
 Group replication is generally available and is the recommended topology for production.
 
@@ -19,9 +19,9 @@ Group replication is generally available and is the recommended topology for pro
 
 - Semi-synchronous replication is not supported. Use group replication or asynchronous replication.
 
-- Group replication supports a maximum of **9** MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See [Architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#group-replication).
+- Group replication supports a maximum of **9** MySQL instances per group. Large transactions can slow the cluster, and especially large transactions can trigger a member fault if the group cannot copy the transaction within a 5-second network window. See [Architecture](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#group-replication).
 
-- Safe defaults for the cluster depend on the replication type. You must set the matching [`unsafeFlags`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-unsafeflags-section) option to go outside these limits:
+- Safe defaults for the cluster depend on the replication type. You must set the matching [`unsafeFlags`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-unsafeflags-section) option to go outside these limits:
 
   - **Group replication:** at least **3** MySQL instances and an **odd** replica count with the maximum of **9** members. To exceed this number or to configure an even number of members requires setting the `unsafeFlags.mysqlSize` option.
 
@@ -39,16 +39,16 @@ Group replication is generally available and is the recommended topology for pro
 
 - The Operator stores backups in cloud object storage only. These object storages are supported: AWS S3 and S3-compatible storages, Microsoft Azure Blob Storage, Google Cloud Storage. Local filesystem backups are not supported.
 
-- In clusters with [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.html#asynchronous-replication-tech-preview), the Operator takes backups from a replica and stops replication while the backup runs. With `mysql.size: 2`, that replica is the only standby. See [Replication and topology](#replication-and-topology).
+- In clusters with [asynchronous replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/architecture.md#asynchronous-replication-tech-preview), the Operator takes backups from a replica and stops replication while the backup runs. With `mysql.size: 2`, that replica is the only standby. See [Replication and topology](#replication-and-topology).
 
 - Backup compression supports only the `zstd` algorithm. `lz4` is not supported yet.
 
-- When several [scheduled backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html#managing-multiple-backup-schedules-in-the-same-storage) use the **same storage location**:
+- When several [scheduled backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md#managing-multiple-backup-schedules-in-the-same-storage) use the **same storage location**:
 
   - Retention (`keep`) applies only to the first schedule in the list, not independently per schedule.
   - Overlapping runs that write to the same path can overwrite each other. Use a separate storage name (different bucket or prefix) for each schedule.
 
-- For [incremental backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.html):
+- For [incremental backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-incremental.md):
 
   - Retention applies to the whole chain. You cannot set a separate retention policy for increments. Deleting the base full backup deletes the entire chain.
   - You cannot delete an increment in the middle of a chain. Delete only the last increment, or delete the base backup to remove the chain.
@@ -63,7 +63,7 @@ Point-in-time recovery is in tech preview. Additional constraints:
 - Point-in-time recovery Job retries are not idempotent. If recovery fails after the base backup is restored, a retry does not restore the full backup again. Set `spec.backup.backoffLimit: 0` in the cluster Custom Resource to disable automatic Job retries.
 - Binlog storage for point-in-time recovery is separate from base backup storage. Configure it under `spec.backup.pitr.binlogServer` for in-place restore, or under `spec.pitr.backupSource.binlogServer` on the Restore object for a cross-cluster restore.
 
-See [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#known-limitations) for details, including `force: true` behavior during binlog replay.
+See [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#known-limitations) for details, including `force: true` behavior during binlog replay.
 
 ## Cross-site replication
 
@@ -71,7 +71,7 @@ Cross-site replication (InnoDB ClusterSet) requires Operator 1.2.0 or later and 
 
 Additional constraints include: no automatic rejoin after replication stops, no support of ClusterSets created outside the Operator, no restore onto a ClusterSet replica, backups from a ClusterSet cannot be restored onto a fresh unrelated cluster, and a removed member cannot rejoin the same ClusterSet.
 
-See [Cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.html#known-limitations) for the full list and recovery steps.
+See [Cross-site replication](https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication.md#known-limitations) for the full list and recovery steps.
 
 ## Zero-data-loss failover (asynchronous clusters)
 
@@ -79,36 +79,36 @@ Zero-data-loss failover requires Operator 1.3.0 or later and `crVersion` 1.3.0 o
 
 Additional constraints include:
 
-- backups are required. Set `backup.enabled` to `true`. The candidate reads the old primary’s binary logs from the `xtrabackup` sidecar, and that sidecar starts only when backups are enabled. To run without backups, set `unsafeFlags.asyncFailoverWithPossibleDataLoss` to `true`. Failover then promotes a replica without those logs, and transactions that exist only on the old primary are lost. An asynchronous cluster upgraded from Operator 1.2.0 with backups disabled fails validation until you enable backups or set this flag. See [Requirements](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html#requirements).
+- backups are required. Set `backup.enabled` to `true`. The candidate reads the old primary’s binary logs from the `xtrabackup` sidecar, and that sidecar starts only when backups are enabled. To run without backups, set `unsafeFlags.asyncFailoverWithPossibleDataLoss` to `true`. Failover then promotes a replica without those logs, and transactions that exist only on the old primary are lost. An asynchronous cluster upgraded from Operator 1.2.0 with backups disabled fails validation until you enable backups or set this flag. See [Requirements](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#requirements).
 - recovery depends on durable commits on the primary (`sync_binlog=1`, `innodb_flush_log_at_trx_commit=1`) and durable relay logs on the candidate, neither of which the Operator enforces.
 - a primary whose binary logs were already purged or whose data volume is gone, can’t be recovered from;
-- starting `crVersion` 1.3.0, the Operator pins several Orchestrator settings the mechanism depends on and ignores conflicting overrides in [`orchestrator.configuration`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#orchestratorconfiguration).
+- starting `crVersion` 1.3.0, the Operator pins several Orchestrator settings the mechanism depends on and ignores conflicting overrides in [`orchestrator.configuration`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#orchestratorconfiguration).
 
-See [About zero data loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.html#known-limitations) for the full list.
+See [About zero data loss failover](https://docs.percona.com/percona-operator-for-mysql/1.3.0/failover-async.md#known-limitations) for the full list.
 
 ## Scaling and storage
 
-- You cannot shrink an existing Persistent Volume Claim. You can only increase storage size. See [Scale storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html#scale-storage).
+- You cannot shrink an existing Persistent Volume Claim. You can only increase storage size. See [Scale storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md#scale-storage).
 - Using the Operator’s storage autoscaling together with an external PVC autoscaler is not supported. Choose one method.
 - Some storage providers limit volume expansion. Check your provider’s documentation before you rely on resize.
 
 ## TLS certificates
 
 - Starting with version 1.3.0, rotating a server certificate (leaf) signed by the same CA does not restart MySQL Pods. HAProxy, MySQL Router, and Orchestrator still restart because they read certificates once at startup.
-- Rotating the CA still restarts MySQL Pods. The Operator does not yet add a new CA to every trust store before it presents a leaf signed by that CA. Use the [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.html#rotate-the-ca-certificate) guide to rotate the CA.
+- Rotating the CA still restarts MySQL Pods. The Operator does not yet add a new CA to every trust store before it presents a leaf signed by that CA. Use the [Update certificates](https://docs.percona.com/percona-operator-for-mysql/1.3.0/tls-update.md#rotate-the-ca-certificate) guide to rotate the CA.
 - Deleting TLS Secrets so the Operator can recreate them issues a new CA and restarts MySQL Pods. Do not use Secret deletion to rotate a still-valid leaf.
 
 ## Sidecars, labels, and annotations
 
-- You can attach PVCs to [sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html) only when you deploy a new cluster. Updating sidecar volume claims on a running cluster is not supported.
-- The Operator can add custom [labels and annotations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.html) to objects it manages. It cannot delete them. Remove unused labels and annotations manually.
+- You can attach PVCs to [sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md) only when you deploy a new cluster. Updating sidecar volume claims on a running cluster is not supported.
+- The Operator can add custom [labels and annotations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/annotations.md) to objects it manages. It cannot delete them. Remove unused labels and annotations manually.
 
 ## Upgrades
 
 ### Binlog Server image in Operator 1.2.0
 
-The Binlog Server image in Operator 1.2.0 is not compatible with the previous image. To upgrade it, start a fresh binlog collection: stop point-in-time recovery, take a new full backup, change the binlog bucket or prefix, update the image, then re-enable point-in-time recovery. See the [1.2.0 release notes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.html#binlog-server-image-incompatibility-notice).
+The Binlog Server image in Operator 1.2.0 is not compatible with the previous image. To upgrade it, start a fresh binlog collection: stop point-in-time recovery, take a new full backup, change the binlog bucket or prefix, update the image, then re-enable point-in-time recovery. See the [1.2.0 release notes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md#binlog-server-image-incompatibility-notice).
 
 ### OpenShift 4.22 image pull
 
-Starting with OpenShift 4.22, unqualified image names can resolve to Red Hat Marketplace instead of Docker Hub and fail with `ImagePullBackOff`. For a manual install or update, prefix Operator images with `docker.io`. OLM installs already use fully qualified names. See [Update on OpenShift](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-openshift.html) and the [1.2.0 release notes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.html#considerations-for-using-openshift-422).
+Starting with OpenShift 4.22, unqualified image names can resolve to Red Hat Marketplace instead of Docker Hub and fail with `ImagePullBackOff`. For a manual install or update, prefix Operator images with `docker.io`. OLM installs already use fully qualified names. See [Update on OpenShift](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-openshift.md) and the [1.2.0 release notes](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.2.0.md#considerations-for-using-openshift-422).

@@ -2,7 +2,7 @@
 
 # Incremental backups
 
-Version added: [1.1.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.html)
+Version added: [1.1.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.1.0.md)
 
 This feature is in the tech preview stage. The behavior can change in future releases.
 
@@ -22,11 +22,11 @@ flowchart LR
 
 By default, the Operator uses the **latest full backup** as the base. For on-demand backups, you can set a different base with `spec.incrementalBaseBackupName`.
 
-You can use any [supported storage type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html).
+You can use any [supported storage type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md).
 
 ## How an incremental backup runs
 
-1. You [make an on-demand backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.html) with type **incremental**, or you [configure a schedule](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.html) that creates incremental backups.
+1. You [make an on-demand backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-ondemand.md) with type **incremental**, or you [configure a schedule](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-scheduled.md) that creates incremental backups.
 1. The Operator confirms that a valid **full** backup exists on the same storage. Unless you specify another backup, it uses the most recent full backup.
 1. The Operator marks that full backup as the chain base and streams the increment to the same storage.
 1. Later increments use the previous increment’s `to_lsn` as `from_lsn` so the chain stays continuous.
@@ -37,15 +37,15 @@ The Operator sets the `percona.com/base-backup-name` annotation on the base back
 
 ## Restore from an incremental backup
 
-The restore flow is the same for full and incremental backups. Follow [Restore the cluster from a previously saved backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html) or [Restore from a backup to a new Kubernetes-based environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html).
+The restore flow is the same for full and incremental backups. Follow [Restore the cluster from a previously saved backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md) or [Restore from a backup to a new Kubernetes-based environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md).
 
 The Operator identifies the backup type by name or destination. Incremental destinations use an `.incr` path segment so the Operator can reconstruct the chain. It downloads the full backup and all related increments, restores the full backup first, then applies each increment.
 
-If you make a [point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html), the Operator applies binlogs after the chain. See [How it works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#how-it-works).
+If you make a [point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md), the Operator applies binlogs after the chain. See [How it works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#how-it-works).
 
 Incremental objects in storage use an `.incr` path segment so the Operator can tell them apart from full backups:
 
-```
+```text
 s3://bucket/prefix/
 my-cluster-2026-04-06-full/           # base full backup
 my-cluster-2026-04-06-full.incr/      # incremental chain directory
@@ -56,7 +56,7 @@ my-cluster-2026-04-06-full.incr/      # incremental chain directory
 
 ## Speed up incremental backups with page tracking
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 Page tracking lets Percona XtraBackup copy only the InnoDB pages that changed since the last backup, instead of scanning every data file. The Operator installs the `mysqlbackup` component that this feature needs. For details, see [Take an incremental backup using page tracking](https://docs.percona.com/percona-xtrabackup/latest/page-tracking.html) .
 
@@ -64,7 +64,7 @@ Enable page tracking by passing the `--page-tracking` flag in the `xtrabackup` c
 
 deploy/cr.yaml
 
-```
+```yaml
 spec:
   backup:
     storages:
@@ -79,7 +79,7 @@ Override it for a single on-demand backup:
 
 deploy/backup/backup.yaml
 
-```
+```yaml
 spec:
   clusterName: ps-cluster1
   storageName: s3-us-west
@@ -94,7 +94,7 @@ Pass the `--page-tracking` flag on the **base** backup to start tracking for the
 
 If you set the `--page-tracking` flag only on an incremental job, that job still scans all pages because the previous full backup did not start tracking.
 
-For how cluster-level and per-job options interact, see [Fine-tuning backup and restore operations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.html).
+For how cluster-level and per-job options interact, see [Fine-tuning backup and restore operations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-fine-tune.md).
 
 ## Implementation specifics and rules
 
@@ -110,7 +110,7 @@ For how cluster-level and per-job options interact, see [Fine-tuning backup and 
 
 ### Restore rules
 
-1. [Restore in place](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html) with `backupName`, or [restore across clusters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html) with `backupSource.destination`.
+1. [Restore in place](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md) with `backupName`, or [restore across clusters](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md) with `backupSource.destination`.
 1. `backupSource` restores work across clusters and namespaces when the storage path is reachable. The `.incr` layout keeps incremental paths discoverable.
 1. Restore always needs the full chain: full backup first, then increments in order, up to the backup you selected.
 

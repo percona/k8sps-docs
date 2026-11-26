@@ -12,7 +12,7 @@ Custom sidecar containers [can easily access other components of your cluster](h
 
 You can add sidecar containers to Percona Server for MySQL Pods. Just use `sidecars` subsection in the `mysql` section of the `deploy/cr.yaml` configuration file. In this subsection, you should specify the name and image of your container and possibly a command to run:
 
-```
+```yaml
 spec:
   mysql:
     ....
@@ -25,13 +25,13 @@ spec:
 
 Apply your modifications as usual:
 
-```
+```bash
 kubectl apply -f deploy/cr.yaml
 ```
 
 Running `kubectl describe` command for the appropriate Pod can bring you the information about the newly created container:
 
-```
+```bash
 kubectl describe pod ps-cluster1-mysql-0
 ....
 Containers:
@@ -59,7 +59,7 @@ my-sidecar-1:
 
 You can login to your sidecar container as follows:
 
-```
+```bash
 kubectl exec -it ps-cluster1-mysql-0 -c my-sidecar-1 -- sh
 / #
 ```
@@ -82,7 +82,7 @@ You can use PVCs with sidecar containers only when you deploy a new cluster. Upd
 
 The following example requests 1G storage with `sidecar-volume-claim` PersistentVolumeClaim, and mounts the correspondent Persistent Volume to the `my-sidecar-1` container’s filesystem under the `/volume1` directory:
 
-```
+```yaml
 ...
   sidecars:
   - image: busybox
@@ -108,7 +108,7 @@ You can use a [secret volume](https://kubernetes.io/docs/concepts/storage/volume
 
 You can mount a secret volume as follows:
 
-```
+```yaml
 ...
   sidecars:
   - image: busybox
@@ -135,7 +135,7 @@ You can use a [configMap volume](https://kubernetes.io/docs/concepts/storage/vol
 
 You can mount a configMap volume as follows:
 
-```
+```yaml
 ...
   sidecars:
   - image: busybox

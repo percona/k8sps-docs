@@ -48,7 +48,7 @@ Specifies the name of the Percona Server for MySQL cluster to back up.
 
 Specifies the name of the storage where to save a backup. It must match the name you specified in the `spec.backup.storages` subsection of the `deploy/cr.yaml` file.
 
-If the cluster or the matching storage entry defines [`encryptionKeySecret`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupencryptionkeysecretname), the Operator encrypts this backup automatically. See [Encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html).
+If the cluster or the matching storage entry defines [`encryptionKeySecret`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupencryptionkeysecretname), the Operator encrypts this backup automatically. See [Encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md).
 
 | Value type | Example      |
 | ---------- | ------------ |
@@ -72,7 +72,7 @@ Specifies the **full backup** to serve as the base for the incremental chain. Th
 
 ### `startingDeadlineSeconds`
 
-The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. When defined, takes precedence over the cluster-level [`backup.startingDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupstartingdeadlineseconds).
+The maximum time, in seconds, a backup can wait to start before the Operator marks it as `Error`. When defined, takes precedence over the cluster-level [`backup.startingDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupstartingdeadlineseconds).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -80,9 +80,9 @@ The maximum time, in seconds, a backup can wait to start before the Operator mar
 
 ### `suspendedDeadlineSeconds`
 
-The maximum time, in seconds, a [suspended](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline.
+The maximum time, in seconds, a [suspended](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#backup-state-values) backup can wait to resume before the Operator marks it as failed. The default is `0`, which means the Operator does not enforce a resume deadline.
 
-When defined, takes precedence over the cluster-level [`backup.suspendedDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupsuspendeddeadlineseconds).
+When defined, takes precedence over the cluster-level [`backup.suspendedDeadlineSeconds`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupsuspendeddeadlineseconds).
 
 | Value type | Example |
 | ---------- | ------- |

@@ -4,7 +4,7 @@
 
 A Restore resource is a Kubernetes object that tells the Operator how to restore your database from a specific backup. The `deploy/backup/restore.yaml` file is a template for creating restore resources. It defines the `PerconaServerMySQLRestore` resource.
 
-This document describes all available options that you can use to customize a restore. For status fields, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.html#perconaservermysqlrestore-status).
+This document describes all available options that you can use to customize a restore. For status fields, see [Custom resource statuses](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cr-statuses.md#perconaservermysqlrestore-status).
 
 ## `apiVersion`
 
@@ -36,7 +36,7 @@ Specifies the name of the Percona Server for MySQL cluster to restore.
 
 Specifies the name of a backup to be used for a restore. This backup should be from the same cluster.
 
-When the backup was [encrypted](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html), the Operator uses the `encryptionKeySecret` from the cluster Custom Resource automatically. The key used for the restore must match the key used to encrypt the backup.
+When the backup was [encrypted](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md), the Operator uses the `encryptionKeySecret` from the cluster Custom Resource automatically. The key used for the restore must match the key used to encrypt the backup.
 
 | Value type | Example   |
 | ---------- | --------- |
@@ -44,7 +44,7 @@ When the backup was [encrypted](https://docs.percona.com/percona-operator-for-my
 
 ### `pitr` section
 
-This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup (from `backupName` or `backupSource.destination`) and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a Binlog Server in the cluster; see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html) for details.
+This subsection contains configuration options for **point-in-time recovery**. When present, the Operator restores the base backup (from `backupName` or `backupSource.destination`) and then replays binary logs until the requested **GTID** or **timestamp**. You must enable point-in-time recovery and configure a Binlog Server in the cluster; see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md) for details.
 
 #### `pitr.type`
 
@@ -87,7 +87,7 @@ Forces the `mysql` client to run with the `--force` flag and this silently ignor
 
 #### `pitr.keyringSecret`
 
-Optional reference to a Kubernetes Secret that contains the keyring to [decrypt encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption) during point-in-time recovery. By default the Operator uses the keyring configured on the cluster. Set this field when keys have been rotated into a different Secret, or when you restore to a cluster that does not have the source keyring.
+Optional reference to a Kubernetes Secret that contains the keyring to [decrypt encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption) during point-in-time recovery. By default the Operator uses the keyring configured on the cluster. Set this field when keys have been rotated into a different Secret, or when you restore to a cluster that does not have the source keyring.
 
 | Value type | Example                                                     |
 | ---------- | ----------------------------------------------------------- |
@@ -111,11 +111,11 @@ The key within the Secret that holds the keyring JSON. Defaults to `keyring.json
 
 ### The `pitr.backupSource` subsection
 
-This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#restore-on-a-new-cluster). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
+This subsection contains the Binlog Server settings that the Operator uses for point-in-time recovery when restoring to a cluster that does not have its own Binlog Server — for example, when [restoring to a new Kubernetes environment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md#restore-on-a-new-cluster). When specified, the Operator starts a temporary Binlog Server from these settings, uses it to locate the required binlogs, and removes it when the restore completes.
 
 #### `pitr.backupSource.binlogServer.size`
 
-Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. This is the only allowed number. All greater values will be rejected. To learn more, see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html).
+Controls the number of Percona Binarylog Server Pods for binlog collection. Defaults to 1. This is the only allowed number. All greater values will be rejected. To learn more, see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md).
 
 | Value type | Example |
 | ---------- | ------- |
@@ -182,7 +182,7 @@ The region of the bucket. Required for Amazon S3 and for S3-compatible storage.
 
 #### `pitr.backupSource.binlogServer.storage.s3.caBundle.name`
 
-The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage for Binlog Server. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage for Binlog Server. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 | Value type | Example           |
 | ---------- | ----------------- |
@@ -250,7 +250,7 @@ Specifies the path to the backup on the storage
 
 ### `backupSource.storage.encryptionKeySecret`
 
-References a Kubernetes Secret that contains the key used to decrypt an [encrypted backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html). Required when restoring an encrypted backup from object storage on a cluster that does not have access to the source cluster’s encryption key Secret. The key used for the restore must match the key used to encrypt the backup.
+References a Kubernetes Secret that contains the key used to decrypt an [encrypted backup](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md). Required when restoring an encrypted backup from object storage on a cluster that does not have access to the source cluster’s encryption key Secret. The key used for the restore must match the key used to encrypt the backup.
 
 | Value type | Example                                      |
 | ---------- | -------------------------------------------- |
@@ -314,7 +314,7 @@ The path (sub-folder) inside the bucket where the backup is stored.
 
 ### `backupSource.storage.s3.caBundle.name`
 
-The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+The name of the Secret that stores the CA certificate used to verify TLS communication with S3-compatible storage. See [Configure TLS verification with custom certificates for S3 storage](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
 | Value type | Example           |
 | ---------- | ----------------- |

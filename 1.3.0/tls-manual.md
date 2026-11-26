@@ -27,14 +27,14 @@ Before you start, make sure you have:
 
 1. Replace `ps-cluster1` and `my-namespace` with your actual cluster name and namespace in the commands below:
 
-   ```
+   ```bash
    CLUSTER_NAME=ps-cluster1
    NAMESPACE=my-namespace
    ```
 
 1. Generate a Certificate Authority (CA). You will use it to sign your server certificates.
 
-   ```
+   ```bash
    cat <<EOF | cfssl gencert -initca - | cfssljson -bare ca
    {
      "CN": "Root CA",
@@ -50,7 +50,7 @@ Before you start, make sure you have:
 
 1. Generate the Server Certificate using the CA. This command generates a server certificate and key, signed by your newly-created CA. The certificate will be valid for all hosts required by your cluster components.
 
-   ```
+   ```bash
    cat <<EOF | cfssl gencert -ca=ca.pem  -ca-key=ca-key.pem - | cfssljson -bare server
    {
      "hosts": [
@@ -79,7 +79,7 @@ Before you start, make sure you have:
 
 This command packages the generated certificate and key files into a Kubernetes secret named `my-cluster-ssl` in your chosen namespace.
 
-```
+```bash
 kubectl create secret generic my-cluster-ssl -n $NAMESPACE \
   --from-file=tls.crt=server.pem \
   --from-file=tls.key=server-key.pem \
@@ -91,14 +91,14 @@ kubectl create secret generic my-cluster-ssl -n $NAMESPACE \
 
 After creating the Secret, reference it in your cluster configuration in the deploy/cr.yaml.
 
-```
+```yaml
 spec:
   sslSecretName: my-cluster-ssl
 ```
 
 Apply the configuration to update the cluster:
 
-```
+```bash
 kubectl apply -f deploy/cr.yaml -n $NAMESPACE
 ```
 

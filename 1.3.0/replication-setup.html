@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/replication-setup.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6015,18 +6015,18 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>Clone the repository with all manifests and source code by executing the following command:</p>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
+<div class="language-bash highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v1.3.0<span class="w"> </span>https://github.com/percona/percona-server-mysql-operator
 </code></pre></div>
 </li>
 <li>
 <p>Export the namespaces of the source and replica clusters:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_NS</span><span class="o">=</span><span class="nb">source</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_NS</span><span class="o">=</span><span class="nb">source</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">REPLICA_NS</span><span class="o">=</span>replica
 </code></pre></div>
 </li>
 <li>
 <p>Create namespaces:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span><span class="nb">source</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span><span class="nb">source</span>
 kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>replica
 </code></pre></div>
 </li>
@@ -6036,7 +6036,7 @@ kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span clas
 <li>
 <p>Follow the <a href="kubectl.html">quickstart guide</a> to install the Operator 1.2.0 deployment, if you haven’t done it, and deploy Percona Server for MySQL cluster with replication type <code>group replication</code>. Let’s rename the cluster to <code>source-cluster</code> to differentiate them.</p>
 <p>Here’s the example configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQL</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">source-cluster</span>
@@ -6056,26 +6056,26 @@ kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span clas
 </li>
 <li>
 <p>Apply the configuration and wait until the cluster is ready:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>source-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>source-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
 </li>
 <li>
 <p>Note the InnoDB cluster name from status — you need it for the ClusterSet CR:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>source-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.innodbClusterName}{"\n"}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>source-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.innodbClusterName}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>sourcecluster
+<div class="language-text highlight"><pre><span></span><code>sourcecluster
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>Note a reachable endpoint for the primary cluster (Service DNS name, load balancer hostname, or external address). We will use the Primary service. </p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>services<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>services<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
+<div class="language-text highlight"><pre><span></span><code>NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
 source-cluster-haproxy         ClusterIP   34.118.234.124   &lt;none&gt;        3306/TCP,3307/TCP,3309/TCP,33060/TCP,33062/TCP    26m
 source-cluster-mysql           ClusterIP   None             &lt;none&gt;        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   26m
 source-cluster-mysql-primary   ClusterIP   34.118.232.78    &lt;none&gt;        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   26m
@@ -6089,11 +6089,11 @@ source-cluster-mysql-unready   ClusterIP   None             &lt;none&gt;        
 <ul>
 <li>
 <p>List the Secrets:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>internal-source-cluster      Opaque              8      25m
+<div class="language-text no-copy highlight"><pre><span></span><code>internal-source-cluster      Opaque              8      25m
 source-cluster-psuser-root   Opaque              11     25m
 source-cluster-secrets       Opaque              8      25m
 source-cluster-ssl           kubernetes.io/tls   3      25m
@@ -6103,13 +6103,13 @@ source-cluster-ssl           kubernetes.io/tls   3      25m
 </li>
 <li>
 <p>Export the Secret:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>source-cluster-secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>source-secret.yaml
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>source-cluster-secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-o<span class="w"> </span>yaml<span class="w"> </span>&gt;<span class="w"> </span>source-secret.yaml
 </code></pre></div>
 </li>
 <li>
 <p>Edit the file. Remove the <code>annotations</code>, <code>creationTimestamp</code>, <code>resourceVersion</code>, <code>selfLink</code>, and <code>uid</code> metadata fields from the resulting file to make it ready for the replica site. Also change the <code>namespace</code> to the namespace of your replica site.</p>
 <p>Use the following scripts:</p>
-<div class="highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'del(.metadata.ownerReferences, .metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid)'</span><span class="w"> </span>source-secret.yaml<span class="w"> </span>&gt;<span class="w"> </span>replica-secret.yaml
+<div class="language-bash highlight"><pre><span></span><code>yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'del(.metadata.ownerReferences, .metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid)'</span><span class="w"> </span>source-secret.yaml<span class="w"> </span>&gt;<span class="w"> </span>replica-secret.yaml
 yq<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s1">'.metadata.namespace = "replica"'</span><span class="w"> </span>-i<span class="w"> </span>replica-secret.yaml
 sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">''</span><span class="w"> </span><span class="s1">'s/source-cluster/replica-cluster/g'</span><span class="w"> </span>replica-secret.yaml
 </code></pre></div>
@@ -6122,7 +6122,7 @@ sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">''</span><
 <li>Follow the <a href="kubectl.html">quickstart guide</a> to install the Operator deployment in the <code>replica</code> namespace. </li>
 <li>
 <p>Create the Secret from the secret file you prepared from the primary cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>replica-secret.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>replica-secret.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
 </code></pre></div>
 </li>
 <li>
@@ -6132,7 +6132,7 @@ sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">''</span><
 <li>Reference the Secret you created in the <code>spec.secretsName</code> </li>
 </ul>
 <p>Here’s the example configuration:</p>
-<div class="highlight"><span class="filename">cr-replica.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><span class="filename">cr-replica.yaml</span><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQL</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">replica-cluster</span>
@@ -6149,33 +6149,33 @@ sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">''</span><
 </li>
 <li>
 <p>Apply the configuration to create the replica cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr-replica.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>deploy/cr-replica.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
 </code></pre></div>
 <p>After you apply the Custom Resource manifest, Pod-0 starts but stays <strong>NotReady</strong> — this is expected. The cluster reports the <code>Initializing</code> state and the <code>AwaitingExternalBootstrap</code> condition appears in its status. Pod-1 and Pod-2 do not start until Pod-0 joins a Group Replication group.</p>
 </li>
 <li>
 <p>Verify the cluster status:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
 kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/instance<span class="o">=</span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
 </code></pre></div>
 </li>
 <li>
 <p>Note the InnoDB cluster name from status — you need it for the ClusterSet CR:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.innodbClusterName}{"\n"}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.innodbClusterName}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>replicacluster
+<div class="language-text highlight"><pre><span></span><code>replicacluster
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>Note a reachable endpoint for the replica cluster. We will use the Primary service:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>service<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
+<div class="language-text highlight"><pre><span></span><code>NAME                            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                           AGE
 replica-cluster-mysql           ClusterIP   None             &lt;none&gt;        3306/TCP,33062/TCP,33060/TCP,6450/TCP,33061/TCP   5m31s
 </code></pre></div>
 </details>
@@ -6203,7 +6203,7 @@ replica-cluster-mysql           ClusterIP   None             &lt;none&gt;       
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio"><input id="__tabbed_1_2" name="__tabbed_1" type="radio"><div data-markdown-ignore class="tabbed-labels"><label for="__tabbed_1_1">Clone recovery</label><label for="__tabbed_1_2">Incremental recovery</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLClusterSet</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-cluster-set</span>
@@ -6231,7 +6231,7 @@ replica-cluster-mysql           ClusterIP   None             &lt;none&gt;       
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ps.percona.com/v1</span>
 <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PerconaServerMySQLClusterSet</span>
 <span class="nt">metadata</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-cluster-set</span>
@@ -6263,7 +6263,7 @@ replica-cluster-mysql           ClusterIP   None             &lt;none&gt;       
 </li>
 <li>
 <p>Apply the manifest:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>clusterset.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>clusterset.yaml<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
 <p>After you apply the manifest, the controller:</p>
 <ol>
@@ -6275,7 +6275,7 @@ replica-cluster-mysql           ClusterIP   None             &lt;none&gt;       
 </li>
 <li>
 <p>Monitor progress:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-o<span class="w"> </span>yaml
 kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>my-cluster-set
 kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </span>job-name<span class="o">=</span>&lt;job-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
@@ -6288,18 +6288,18 @@ kubectl<span class="w"> </span>logs<span class="w"> </span>-l<span class="w"> </
 <ol>
 <li>
 <p>Check ClusterSet status:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>NAME             PRIMARY     ENDPOINT                              READY   AGE
+<div class="language-text highlight"><pre><span></span><code>NAME             PRIMARY     ENDPOINT                              READY   AGE
 my-cluster-set   sourcecluster  source-cluster-mysql-0:3306              True    15m
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>Inspect full status:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>
 </code></pre></div>
 <p>Confirm that:</p>
 <ul>
@@ -6312,23 +6312,23 @@ my-cluster-set   sourcecluster  source-cluster-mysql-0:3306              True   
 <h3 id="check-replication-lag">Check replication lag<a data-markdown-ignore class="headerlink" href="#check-replication-lag" title="Permanent link">¶</a></h3>
 <p>A replica cluster may lag behind the primary.</p>
 <p>To see how far a replica cluster is behind the primary, run:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.status.clusters.replicacluster.replicationLagSeconds}{"\n"}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="highlight"><pre><span></span><code>121
+<div class="language-text highlight"><pre><span></span><code>121
 </code></pre></div>
 </details>
 <p>An empty result means either this cluster is the primary, or the replica is caught up (or lag could not be determined). A growing value means the replica is falling behind. Wait for the lag to drop before you promote the replica or rely on it for reads.</p>
 <p>For field details, see <a href="cr-statuses.html#per-member-cluster-status">Custom resource statuses</a>.</p>
 <h3 id="check-per-cluster-status">Check per-cluster status<a data-markdown-ignore class="headerlink" href="#check-per-cluster-status" title="Permanent link">¶</a></h3>
 <p>Run on the replica cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[*]}{.type}{": "}{.status}{"\n"}{end}'</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>replica-cluster<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{range .status.conditions[*]}{.type}{": "}{.status}{"\n"}{end}'</span>
 </code></pre></div>
 <details class="example">
 <summary>Expected output</summary>
-<div class="highlight"><pre><span></span><code>Initializing: False
+<div class="language-text highlight"><pre><span></span><code>Initializing: False
 Ready: True
 ClusterSetMember: True
 InnoDBClusterBootstrapped: True
@@ -6342,18 +6342,18 @@ InnoDBClusterBootstrapped: True
 <ol>
 <li>
 <p>Identify the primary Pod:</p>
-<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PRIMARY</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-l<span class="w"> </span>mysql.percona.com/primary<span class="o">=</span><span class="nb">true</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.items[0].metadata.name}'</span><span class="k">)</span>
+<div class="language-bash highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PRIMARY</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-l<span class="w"> </span>mysql.percona.com/primary<span class="o">=</span><span class="nb">true</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.items[0].metadata.name}'</span><span class="k">)</span>
 </code></pre></div>
 </li>
 <li>
 <p>Connect to the primary Pod:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="nv">$PRIMARY</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="nv">$PRIMARY</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>source-cluster-secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.root}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
 </code></pre></div>
 </li>
 <li>
 <p>Write some data:</p>
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test</span><span class="p">;</span><span class="w"> </span>
+<div class="language-sql highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test</span><span class="p">;</span><span class="w"> </span>
 <span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">test</span><span class="p">.</span><span class="n">t1</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">INT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">);</span><span class="w"> </span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">test</span><span class="p">.</span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </code></pre></div>
 </li>
@@ -6361,13 +6361,13 @@ InnoDBClusterBootstrapped: True
 </li>
 <li>
 <p>Connect to the replica cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>replica-cluster-mysql-0<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>replica-cluster-mysql-0<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-c<span class="w"> </span>mysql<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>mysql<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>replica-cluster-secrets<span class="w"> </span>-n<span class="w"> </span><span class="nv">$REPLICA_NS</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">'{.data.root}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span><span class="w"> </span>
 </code></pre></div>
 </li>
 <li>
 <p>Verify that the data is replicated by querying it:</p>
-<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test</span><span class="p">.</span><span class="n">t1</span><span class="p">;</span>
+<div class="language-sql highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">test</span><span class="p">.</span><span class="n">t1</span><span class="p">;</span>
 </code></pre></div>
 <p>You should see the same data that you inserted.</p>
 </li>
@@ -6375,7 +6375,7 @@ InnoDBClusterBootstrapped: True
 <h2 id="usage-scenarios">Usage scenarios<a data-markdown-ignore class="headerlink" href="#usage-scenarios" title="Permanent link">¶</a></h2>
 <h3 id="planned-switchover">Planned switchover<a data-markdown-ignore class="headerlink" href="#planned-switchover" title="Permanent link">¶</a></h3>
 <p>To promote a replica cluster to primary, edit <code>spec.primaryCluster</code>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>--type<span class="o">=</span>merge<span class="w"> </span>-p<span class="w"> </span><span class="s1">'{"spec":{"primaryCluster":"replicacluster"}}'</span>
 </code></pre></div>
 <p>The controller:</p>
@@ -6386,7 +6386,7 @@ InnoDBClusterBootstrapped: True
 <li>Updates <code>status.primaryCluster</code> when complete</li>
 </ol>
 <p>To monitor the progress, run:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-w
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>-w
 kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>switchover
 </code></pre></div>
 <p>After switchover, writes go to the new primary cluster. The former primary becomes a replica.</p>
@@ -6396,7 +6396,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <li>Confirm the primary is unreachable from the controller’s perspective (the <code>ErrorReconcile: True</code> condition with the reason <code>PrimaryUnreachable</code> may be set).</li>
 <li>Enable forced failover and change the primary:</li>
 </ol>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>-p<span class="w"> </span><span class="s1">'{</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>merge<span class="w"> </span>-p<span class="w"> </span><span class="s1">'{</span>
 <span class="s1">  "spec": {</span>
 <span class="s1">    "primaryCluster": "replicacluster",</span>
 <span class="s1">    "unsafeFlags": {</span>
@@ -6427,7 +6427,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <ol>
 <li>
 <p>Annotate the ClusterSet. Use the replica’s InnoDB cluster name — in this tutorial, <code>replicacluster</code>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>annotate<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>percona.com/clusterset-rejoin-cluster<span class="o">=</span>replicacluster
 </code></pre></div>
 <p>The Operator then:</p>
@@ -6440,7 +6440,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </li>
 <li>
 <p>Monitor progress:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>describe<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>rejoin
 </code></pre></div>
 <p>Confirm that the replica’s <code>globalStatus</code> is <code>OK</code> and that <code>ClusterSetReplicationRunning</code> is <code>True</code> on the replica cluster. If you see the <code>RejoinFailed</code> condition or a <code>ClusterSetMemberRejoinFailed</code> event, read the condition message and Job logs (the Job may have succeeded while the replica stayed <code>OK_NOT_REPLICATING</code>). Fix the cause, then annotate again.</p>
@@ -6457,7 +6457,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>Remove the replica by patching the ClusterSet:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-p<span class="o">=</span><span class="s1">'[{"op": "remove", "path": "/spec/clusters/1"}]'</span>
 </code></pre></div>
 <p>Adjust the index in <code>"path": "/spec/clusters/1"</code> to match the cluster you want to remove.</p>
@@ -6470,7 +6470,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </div>
 <div class="tabbed-block">
 <p>If the replica cluster is <strong>offline or unreachable</strong>, simply deleting its entry from <code>spec.clusters[]</code> is not enough, as this will not remove it. You must enable forced removal by also setting the <code>spec.unsafeFlags.forcedClusterRemoval</code> option to <code>true</code>:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">'[</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span>-p<span class="o">=</span><span class="s1">'[</span>
 <span class="s1">  {"op": "remove", "path": "/spec/clusters/1"},</span>
 <span class="s1">  {"op": "add", "path": "/spec/unsafeFlags/forcedClusterRemoval", "value": true}</span>
 <span class="s1">]'</span>
@@ -6485,17 +6485,17 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 <ol>
 <li>
 <p>Find the removal job:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>clusterset-remove
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>clusterset-remove
 </code></pre></div>
 </li>
 <li>
 <p>Delete the failed removal job:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>job<span class="w"> </span>&lt;remove-job-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>job<span class="w"> </span>&lt;remove-job-name&gt;<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
 </li>
 <li>
 <p>Retry the patch command to remove the cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>patch<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span><span class="w"> </span>--type<span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-p<span class="o">=</span><span class="s1">'[{"op": "remove", "path": "/spec/clusters/1"}]'</span>
 </code></pre></div>
 </li>
@@ -6506,7 +6506,7 @@ kubectl<span class="w"> </span>get<span class="w"> </span><span class="nb">jobs<
 </div>
 <h3 id="delete-the-clusterset">Delete the ClusterSet<a data-markdown-ignore class="headerlink" href="#delete-the-clusterset" title="Permanent link">¶</a></h3>
 <p>Delete the ClusterSet Custom Resource to stop cross-site replication and dissolve ClusterSet metadata:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>ps-clusterset<span class="w"> </span>my-cluster-set<span class="w"> </span>-n<span class="w"> </span><span class="nv">$SOURCE_NS</span>
 </code></pre></div>
 <p>The <code>percona.com/clusterset-dissolve</code> finalizer:</p>
 <ol>

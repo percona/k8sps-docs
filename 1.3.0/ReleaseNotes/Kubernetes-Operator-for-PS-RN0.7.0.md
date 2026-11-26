@@ -8,7 +8,7 @@
 
 - **Installation**
 
-  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.html#installation-guidelines)
+  [Installing Percona Operator for MySQL](https://docs.percona.com/percona-operator-for-mysql/1.3.0/System-Requirements.md#installation-guidelines)
 
 Percona Operator for MySQL allows users to deploy MySQL clusters with both asynchronous and group replication topology. This release includes various stability improvements and bug fixes, getting the Operator closer to the General Availability stage. Version 0.7.0 of the Percona Operator for MySQL is still **a tech preview release** and it is **not recommended for production environments**. **As of today, we recommend using** [Percona Operator for MySQL based on Percona XtraDB Cluster](https://docs.percona.com/percona-operator-for-mysql/pxc/index.html), which is production-ready and contains everything you need to quickly and consistently deploy and scale MySQL clusters in a Kubernetes-based environment, on-premises or in the cloud.
 
@@ -16,11 +16,11 @@ Percona Operator for MySQL allows users to deploy MySQL clusters with both async
 
 ### Documentation improvements
 
-Within this release, a [Quickstart guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/quickstart.html) was added to the Operator docs, that’ll set you up and running in no time! Taking a look at this guide you’ll be guided step by step through quick installation (multiple options), connecting to the database, inserting data, making a backup, and even integrating with Percona Monitoring and Management (PMM) to monitor your cluster.
+Within this release, a [Quickstart guide](https://docs.percona.com/percona-operator-for-mysql/1.3.0/quickstart.md) was added to the Operator docs, that’ll set you up and running in no time! Taking a look at this guide you’ll be guided step by step through quick installation (multiple options), connecting to the database, inserting data, making a backup, and even integrating with Percona Monitoring and Management (PMM) to monitor your cluster.
 
 ### Fine-tuning backups
 
-This release brings a number of improvements for backups, making them more stable and robust. The new [backup.backoffLimit](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupbackofflimit) Custom Resource option allows customizing the number of attempts the Operator should take to create the backup (the default is making 6 retries after the first backup attempt fails for some reason, such as faulty network connection or the cloud outage). Also, the Operator now makes a number of checks before starting the restore process to make sure that there are needed cloud credentials and the actual backup. This allows to avoid faulty restore that would leave the database cluster in non-functional state.
+This release brings a number of improvements for backups, making them more stable and robust. The new [backup.backoffLimit](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupbackofflimit) Custom Resource option allows customizing the number of attempts the Operator should take to create the backup (the default is making 6 retries after the first backup attempt fails for some reason, such as faulty network connection or the cloud outage). Also, the Operator now makes a number of checks before starting the restore process to make sure that there are needed cloud credentials and the actual backup. This allows to avoid faulty restore that would leave the database cluster in non-functional state.
 
 ### Other improvements
 
@@ -39,7 +39,7 @@ With our latest release, we put an all-hands-on-deck approach towards fine-tunin
 
 ## Bugs Fixed
 
-- [K8SPS-124](https://jira.percona.com/browse/K8SPS-124): Parametrize the number of attempts the Operator should make for backup through a [Custom Resource option](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupbackofflimit)
+- [K8SPS-124](https://jira.percona.com/browse/K8SPS-124): Parametrize the number of attempts the Operator should make for backup through a [Custom Resource option](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupbackofflimit)
 - [K8SPS-146](https://jira.percona.com/browse/K8SPS-146): Log messages were incorrectly mentioning semi-synchronous replication regardless of the actual replication type
 - [K8SPS-173](https://jira.percona.com/browse/K8SPS-173): Fix a bug due to which the Operator was silently resetting a component size to the minimum size allowed when `allowUnsafeConfig` was turned off, without any messages in the log
 - [K8SPS-185](https://jira.percona.com/browse/K8SPS-185): Fix a bug due to which the Orchestrator-MySQL (topology instances) connections were not encrypted

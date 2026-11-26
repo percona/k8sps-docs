@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/delete.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/delete.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/delete.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -5664,27 +5664,27 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>List the Custom Resources. Replace the <code>&lt;namespace&gt;</code> placeholder with your value</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 <li>
 <p>Delete the Custom Resource with the name of your cluster</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>ps<span class="w"> </span>&lt;cluster_name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>ps<span class="w"> </span>&lt;cluster_name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>perconaservermysql.ps.percona.com "ps-cluster1" deleted
+<div class="language-text no-copy highlight"><pre><span></span><code>perconaservermysql.ps.percona.com "ps-cluster1" deleted
 </code></pre></div>
 </details>
 <p>It may take a while to stop and delete the cluster. </p>
 </li>
 <li>
 <p>Check that the cluster is deleted by listing the Custom Resources again:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>ps<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>No resources found in &lt;namespace&gt; namespace.
+<div class="language-text no-copy highlight"><pre><span></span><code>No resources found in &lt;namespace&gt; namespace.
 </code></pre></div>
 </details>
 </li>
@@ -5698,32 +5698,32 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <ol>
 <li>
 <p>List the deployments. Replace the <code>&lt;namespace&gt;</code> placeholder with your namespace.</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deploy<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>deploy<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME                            READY   UP-TO-DATE   AVAILABLE   AGE
 percona-server-mysql-operator   1/1     1            1           42m
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>Delete the <code>percona-*</code> deployment</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>deploy<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>deploy<span class="w"> </span>percona-server-mysql-operator<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>deployment.apps "percona-server-mysql-operator" deleted
+<div class="language-text no-copy highlight"><pre><span></span><code>deployment.apps "percona-server-mysql-operator" deleted
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>Check that the Operator is deleted by listing the Pods. As a result you should have no Pods related to it.</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>No resources found in &lt;namespace&gt; namespace.
+<div class="language-text no-copy highlight"><pre><span></span><code>No resources found in &lt;namespace&gt; namespace.
 </code></pre></div>
 </details>
 </li>
@@ -5731,11 +5731,11 @@ percona-server-mysql-operator   1/1     1            1           42m
 <p>If you are not just deleting the Operator and Percona Server for MySQL from a specific namespace, but want to clean up your entire Kubernetes environment, you can also delete the <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions">CustomResourceDefinitions (CRDs) <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a>.</p>
 <p><i warning=""><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14h-2V9h2m0 9h-2v-2h2M1 21h22L12 2z"></path></svg></span> Warning:</i> CRDs in Kubernetes are non-namespaced but are available to the whole environment. This means that you shouldn’t delete CRDs if you still have the Operator and database cluster in some namespace.</p>
 <p>Get the list of CRDs. </p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>crd
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>crd
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME                                        CREATED AT
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME                                        CREATED AT
 perconaservermysqlbackups.ps.percona.com    2025-02-07T20:10:42Z
 perconaservermysqlrestores.ps.percona.com   2025-02-07T20:10:42Z
 perconaservermysqls.ps.percona.com          2025-02-07T20:10:42Z
@@ -5744,11 +5744,11 @@ perconaservermysqls.ps.percona.com          2025-02-07T20:10:42Z
 </li>
 <li>
 <p>Delete the <code>percona*.ps.percona.com</code> CRDs</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>crd<span class="w"> </span>perconaservermysqlbackups.ps.percona.com<span class="w"> </span>perconaservermysqlrestores.ps.percona.com<span class="w"> </span>perconaservermysqls.ps.percona.com
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>crd<span class="w"> </span>perconaservermysqlbackups.ps.percona.com<span class="w"> </span>perconaservermysqlrestores.ps.percona.com<span class="w"> </span>perconaservermysqls.ps.percona.com
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>customresourcedefinition.apiextensions.k8s.io "perconaservermysqlbackups.ps.percona.com" deleted
+<div class="language-text no-copy highlight"><pre><span></span><code>customresourcedefinition.apiextensions.k8s.io "perconaservermysqlbackups.ps.percona.com" deleted
 customresourcedefinition.apiextensions.k8s.io "perconaservermysqlrestores.ps.percona.com" deleted
 customresourcedefinition.apiextensions.k8s.io "perconaservermysqls.ps.percona.com" deleted
 </code></pre></div>
@@ -5761,23 +5761,23 @@ customresourcedefinition.apiextensions.k8s.io "perconaservermysqls.ps.percona.co
 <ol>
 <li>
 <p>List the Helm charts:</p>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>list<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>helm<span class="w"> </span>list<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>ps-cluster1    &lt;namespace&gt;         1           2023-10-31 10:18:10.763049 +0100 CET    deployed    ps-db-1.3.0        1.3.0
+<div class="language-text no-copy highlight"><pre><span></span><code>ps-cluster1    &lt;namespace&gt;         1           2023-10-31 10:18:10.763049 +0100 CET    deployed    ps-db-1.3.0        1.3.0
 my-op       &lt;namespace&gt;         1           2023-10-31 10:15:18.41444 +0100 CET     deployed    ps-operator-1.3.0   1.3.0
 </code></pre></div>
 </details>
 </li>
 <li>
 <p>Delete the <a href="https://helm.sh/docs/intro/using_helm/#three-big-concepts">release object <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> for Percona XtraDB Cluster </p>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>ps-cluster1<span class="w"> </span>--namespace<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>ps-cluster1<span class="w"> </span>--namespace<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 <li>
 <p>Delete the <a href="https://helm.sh/docs/intro/using_helm/#three-big-concepts">release object <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"></path></svg></span></a> for the Operator </p>
-<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>my-op<span class="w"> </span>--namespace<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>helm<span class="w"> </span>uninstall<span class="w"> </span>my-op<span class="w"> </span>--namespace<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 </ol>
@@ -5794,11 +5794,11 @@ my-op       &lt;namespace&gt;         1           2023-10-31 10:15:18.41444 +010
 <ol>
 <li>
 <p>List PVCs. Replace the <code>&lt;namespace&gt;</code> placeholder with your namespace:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pvc<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>pvc<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>NAME                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+<div class="language-text no-copy highlight"><pre><span></span><code>NAME                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 datadir-ps-cluster1-mysql-0   Bound    pvc-8683d0ab-7ed4-48cb-93a9-bc6ceb6ec285   2G         RWO            standard       &lt;unset&gt;                 47m
 datadir-ps-cluster1-mysql-1   Bound    pvc-fbc5a8a4-94ff-4259-9d15-f798c97e0788   2G         RWO            standard       &lt;unset&gt;                 45m
 datadir-ps-cluster1-mysql-2   Bound    pvc-4c164ff3-a4f5-431c-9aa8-e5c7eb71a31b   2G         RWO            standard       &lt;unset&gt;                 44m
@@ -5807,11 +5807,11 @@ datadir-ps-cluster1-mysql-2   Bound    pvc-4c164ff3-a4f5-431c-9aa8-e5c7eb71a31b 
 </li>
 <li>
 <p>Delete PVCs related to your cluster. The following command deletes PVCs for the <code>ps-cluster1</code> cluster:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>pvc<span class="w"> </span>datadir-ps-cluster1-mysql-0<span class="w"> </span>datadir-ps-cluster1-mysql-1<span class="w"> </span>datadir-ps-cluster1-mysql-2<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>pvc<span class="w"> </span>datadir-ps-cluster1-mysql-0<span class="w"> </span>datadir-ps-cluster1-mysql-1<span class="w"> </span>datadir-ps-cluster1-mysql-2<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 <details class="example">
 <summary>Sample output</summary>
-<div class="no-copy highlight"><pre><span></span><code>persistentvolumeclaim "datadir-ps-cluster1-mysql-0" deleted
+<div class="language-text no-copy highlight"><pre><span></span><code>persistentvolumeclaim "datadir-ps-cluster1-mysql-0" deleted
 persistentvolumeclaim "datadir-ps-cluster1-mysql-1" deleted
 persistentvolumeclaim "datadir-ps-cluster1-mysql-2" deleted
 </code></pre></div>
@@ -5824,12 +5824,12 @@ persistentvolumeclaim "datadir-ps-cluster1-mysql-2" deleted
 <ol>
 <li>
 <p>List Secrets:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>secrets<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 <li>
 <p>Delete the Secret:</p>
-<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>secret<span class="w"> </span>&lt;secret_name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
+<div class="language-bash highlight"><pre><span></span><code>kubectl<span class="w"> </span>delete<span class="w"> </span>secret<span class="w"> </span>&lt;secret_name&gt;<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;
 </code></pre></div>
 </li>
 </ol>

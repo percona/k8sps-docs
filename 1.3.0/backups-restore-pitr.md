@@ -6,18 +6,18 @@ Use this guide to restore your database up to a specific moment or a transaction
 
 You can restore in place on the [same cluster](#restore-on-the-same-cluster) or onto a [new cluster](#restore-on-a-new-cluster). In both cases the Operator restores a base backup and then replays binary logs up to a timestamp or a GTID.
 
-To restore from a base backup without replaying binlogs, see [Restore on the same cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.html) or [Restore on a new cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html).
+To restore from a base backup without replaying binlogs, see [Restore on the same cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore.md) or [Restore on a new cluster](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md).
 
 Warning
 
-During point-in-time recovery, the Operator pauses the cluster, restores the base backup, applies binlogs up to your target, then brings the cluster back online. Binlog Server must be running so the Operator can find the required binlogs before it pauses. For more information about the workflow, see [How it works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#how-it-works).
+During point-in-time recovery, the Operator pauses the cluster, restores the base backup, applies binlogs up to your target, then brings the cluster back online. Binlog Server must be running so the Operator can find the required binlogs before it pauses. For more information about the workflow, see [How it works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#how-it-works).
 
 ## Before you begin
 
-- [Enable binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#enable-binlog-collection) on the source cluster
+- [Enable binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#enable-binlog-collection) on the source cluster
 - Make a base backup **before** the target time or transaction
 - Choose a target timestamp (`type: date`) or a GTID set (`type: gtid`)
-- Set the `spec.backup.backoffLimit=0` in the cluster Custom Resource so a failed PITR Job does not retry automatically ([known limitations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#known-limitations))
+- Set the `spec.backup.backoffLimit=0` in the cluster Custom Resource so a failed PITR Job does not retry automatically ([known limitations](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#known-limitations))
 - If the source verified S3 with a custom CA, follow [Use a custom CA](#use-a-custom-ca)
 - If the source cluster encrypted binlogs, follow [Restore with encrypted binlogs](#restore-with-encrypted-binlogs)
 
@@ -27,7 +27,7 @@ The Operator reads binlog storage from `spec.backup.pitr.binlogServer` on the cl
 
 1. Confirm the cluster is running and list backups:
 
-   ```
+   ```bash
    kubectl get ps <cluster-name> -n <namespace>
    kubectl get ps-backup -n <namespace>
    ```
@@ -38,7 +38,7 @@ The Operator reads binlog storage from `spec.backup.pitr.binlogServer` on the cl
 
    Use `type: date` when you know the wall-clock time to restore to.
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQLRestore
    metadata:
@@ -55,7 +55,7 @@ The Operator reads binlog storage from `spec.backup.pitr.binlogServer` on the cl
 
    Use `type: gtid` when you know the GTID to stop before. The value has the format `source_id:transaction_id`.
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQLRestore
    metadata:
@@ -70,7 +70,7 @@ The Operator reads binlog storage from `spec.backup.pitr.binlogServer` on the cl
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/backup/restore.yaml -n <namespace>
    ```
 
@@ -83,8 +83,8 @@ The Operator starts a temporary Binlog Server from `spec.pitr.backupSource.binlo
 ### Checklist
 
 - Target cluster is running
-- User password Secret matches the source cluster. Copy it as described in [Preconditions](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html#preconditions)
-- If the base backup was [encrypted](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html), create the same encryption-key Secret on the target and set `spec.backupSource.storage.encryptionKeySecret`
+- User password Secret matches the source cluster. Copy it as described in [Preconditions](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md#preconditions)
+- If the base backup was [encrypted](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md), create the same encryption-key Secret on the target and set `spec.backupSource.storage.encryptionKeySecret`
 - If the source verified S3 with a custom CA, follow [Use a custom CA](#use-a-custom-ca)
 - If source binlogs were encrypted, copy the keyring Secret and set `spec.pitr.keyringSecret`. See [Restore with encrypted binlogs](#restore-with-encrypted-binlogs)
 
@@ -100,7 +100,7 @@ Keep these three prefixes distinct:
 
 The Operator must know where to take the backup from. Run this command on the **source cluster**:
 
-```
+```bash
 kubectl get ps-backup -n <source-namespace>
 ```
 
@@ -124,7 +124,7 @@ Edit [deploy/backup/restore.yaml](https://github.com/percona/percona-server-mysq
   - `gtid` - Specify the GTID set in the format `source_id:transaction_id`
   - `backupSource.binlogServer` - configure access to the binlog storage on the source cluster. Use the same settings as in the source cluster’s `spec.backup.pitr.binlogServer`, including the `prefix` for the binlog folder.
 
-```
+```yaml
 apiVersion: ps.percona.com/v1
 kind: PerconaServerMySQLRestore
 metadata:
@@ -166,26 +166,26 @@ spec:
 
 Start the restore:
 
-```
+```bash
 kubectl apply -f deploy/backup/restore.yaml -n <namespace>
 ```
 
 ### After the restore
 
-- [Enable binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#enable-binlog-collection) on the restored cluster with a **new** prefix if you share the source bucket.
+- [Enable binlog collection](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#enable-binlog-collection) on the restored cluster with a **new** prefix if you share the source bucket.
 - Take a fresh base backup to start a new timeline.
 
 ## Use a custom CA
 
-If the source used a [custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage) to verify TLS to S3, the restore Job must trust that CA. You do this on the cluster where the restore runs.
+If the source used a [custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage) to verify TLS to S3, the restore Job must trust that CA. You do this on the cluster where the restore runs.
 
-On the **same cluster**, if `caBundle` is already set on backup storage and on [Binlog Server](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#verify-tls-with-a-custom-ca), run the restore as in [Restore on the same cluster](#restore-on-the-same-cluster). The Operator reads the settings from the cluster’s Custom resource.
+On the **same cluster**, if `caBundle` is already set on backup storage and on [Binlog Server](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#verify-tls-with-a-custom-ca), run the restore as in [Restore on the same cluster](#restore-on-the-same-cluster). The Operator reads the settings from the cluster’s Custom resource.
 
 On a **new cluster**, or whenever you restore with `backupSource`, do the following:
 
-1. Create a CA Secret on the **target** cluster from the same CA file you used on the source. See [Create a CA Secret](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.html#configure-tls-verification-with-custom-certificates-for-s3-storage).
+1. Create a CA Secret on the **target** cluster from the same CA file you used on the source. See [Create a CA Secret](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-storage.md#configure-tls-verification-with-custom-certificates-for-s3-storage).
 
-   ```
+   ```bash
    kubectl create secret generic minio-ca-bundle \
      --from-file=ca.crt=/path/to/ca.crt -n <target-namespace>
    ```
@@ -194,7 +194,7 @@ On a **new cluster**, or whenever you restore with `backupSource`, do the follow
 
 1. Set `caBundle` on `spec.pitr.backupSource.binlogServer.storage.s3` so the temporary Binlog Server can download binlogs.
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQLRestore
    metadata:
@@ -234,15 +234,15 @@ On a **new cluster**, or whenever you restore with `backupSource`, do the follow
 
 1. Start the restore:
 
-   ```
+   ```bash
    kubectl apply -f deploy/backup/restore.yaml -n <target-namespace>
    ```
 
-1. [Watch the restore](#view-restore-details). If TLS verification fails, see [Restore from S3 storage that uses a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html#restore-from-s3-storage-that-uses-a-custom-ca).
+1. [Watch the restore](#view-restore-details). If TLS verification fails, see [Restore from S3 storage that uses a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md#restore-from-s3-storage-that-uses-a-custom-ca).
 
 ## Restore with encrypted binlogs
 
-Use this section when the source cluster [encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#binlog-encryption) in object storage. The restore Job decrypts each file with the key encryption key (KEK) recorded in that file’s metadata. Unencrypted binlogs in the same bucket are applied as-is.
+Use this section when the source cluster [encrypted binlogs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#binlog-encryption) in object storage. The restore Job decrypts each file with the key encryption key (KEK) recorded in that file’s metadata. Unencrypted binlogs in the same bucket are applied as-is.
 
 You **must have every KEK** that wrapped the binlogs you are replaying. If a key is missing from the keyring, those files cannot be decrypted.
 
@@ -252,7 +252,7 @@ If `spec.backup.pitr.binlogServer.keyringSecret` is still set on the cluster and
 
 Set `spec.pitr.keyringSecret` on the restore object when the keys you need live in a **different** Secret than the one on the cluster (for example after you rotated keys into a new Secret):
 
-```
+```yaml
 apiVersion: ps.percona.com/v1
 kind: PerconaServerMySQLRestore
 metadata:
@@ -276,19 +276,19 @@ The target cluster has no access to Secrets from the source environment. Copy th
 
 1. On the **source** cluster, export the keyring Secret. Use the name from `spec.backup.pitr.binlogServer.keyringSecret` on the source Custom Resource:
 
-   ```
+   ```bash
    kubectl get secret ps-cluster1-binlog-server-keyring -n <source-namespace> -o yaml > binlog-keyring.yaml
    ```
 
 1. Strip cluster-specific metadata:
 
-   ```
+   ```bash
    yq eval 'del(.metadata.ownerReferences, .metadata.annotations, .metadata.labels, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.selfLink, .metadata.uid, .metadata.namespace)' binlog-keyring.yaml > binlog-keyring-target.yaml
    ```
 
 1. Apply the Secret on the **target** cluster:
 
-   ```
+   ```bash
    kubectl apply -f binlog-keyring-target.yaml -n <target-namespace>
    ```
 
@@ -296,7 +296,7 @@ The target cluster has no access to Secrets from the source environment. Copy th
 
 1. Create the restore as in [Restore on a new cluster](#restore-on-a-new-cluster) and add `spec.pitr.keyringSecret`:
 
-   ```
+   ```yaml
    spec:
      clusterName: ps-cluster1
      backupSource:
@@ -324,13 +324,13 @@ The target cluster has no access to Secrets from the source environment. Copy th
                prefix: binlogs
    ```
 
-If the **base backup** was also encrypted, add `spec.backupSource.storage.encryptionKeySecret` as well. That key is separate from the binlog keyring. See [Encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html).
+If the **base backup** was also encrypted, add `spec.backupSource.storage.encryptionKeySecret` as well. That key is separate from the binlog keyring. See [Encrypted backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md).
 
 Keep your binlog encryption keys safe
 
 If a KEK is lost or removed from the keyring, binlogs wrapped with that key are irrecoverable. Store a backup of the keyring Secret separately from the binlog bucket.
 
-Apply the restore and [watch the restore](#view-restore-details). If decryption fails, see [Encrypted binlogs fail to decrypt](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html#encrypted-binlogs-fail-to-decrypt).
+Apply the restore and [watch the restore](#view-restore-details). If decryption fails, see [Encrypted binlogs fail to decrypt](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md#encrypted-binlogs-fail-to-decrypt).
 
 ## Ignore SQL errors during binlog replay
 
@@ -338,7 +338,7 @@ Updates made by `mysql-shell` can produce replication errors during replay, for 
 
 To ignore SQL errors, add `force: true` under `spec.pitr`. This passes `--force` to the MySQL client.
 
-```
+```yaml
 spec:
   pitr:
     force: true
@@ -354,13 +354,13 @@ The client silently ignores **all** SQL errors during binlog replay, not only me
 
 Point-in-time recovery creates a base restore Job (`xb-restore-<name>`) and a PITR Job (`pitr-restore-<name>`). Check both:
 
-```
+```bash
 kubectl get job -n <namespace>
 kubectl get ps-restore -n <namespace>
 ```
 
 ## Troubleshooting
 
-If the restore fails, see [Troubleshoot backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html#restores) and [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html#point-in-time-recovery).
+If the restore fails, see [Troubleshoot backups and restores](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md#restores) and [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md#point-in-time-recovery).
 
-To inspect the restored base backup before the binlogs are applied, you can pause the PITR Job with the `percona.com/pitr-sleep-forever` annotation. See [Pause a point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.html).
+To inspect the restored base backup before the binlogs are applied, you can pause the PITR Job with the `percona.com/pitr-sleep-forever` annotation. See [Pause a point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.md).

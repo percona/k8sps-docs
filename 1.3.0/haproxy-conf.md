@@ -2,7 +2,7 @@
 
 # Configuring Load Balancing with HAProxy
 
-Percona Operator for MySQL provides load balancing and proxy service with [HAProxy](https://haproxy.org) (enabled by default). HAProxy is the only solution proxy when asynchronous replication between MySQL instances is enabled, while group replication can be used either with HAProxy or [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.html). You can control whether to use HAProxy or not by enabling or disabling it via the `haproxy.enabled` option in the `deploy/cr.yaml` configuration file.
+Percona Operator for MySQL provides load balancing and proxy service with [HAProxy](https://haproxy.org) (enabled by default). HAProxy is the only solution proxy when asynchronous replication between MySQL instances is enabled, while group replication can be used either with HAProxy or [MySQL Router](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md). You can control whether to use HAProxy or not by enabling or disabling it via the `haproxy.enabled` option in the `deploy/cr.yaml` configuration file.
 
 Note
 
@@ -10,7 +10,7 @@ When enabling HAProxy, make sure MySQL Router is disabled (`proxy.router.enabled
 
 For example, you can use the following command to enable HAProxy for existing cluster:
 
-```
+```bash
 kubectl patch ps ps-cluster1 --type=merge --patch '{
   "spec": {
      "proxy": {
@@ -34,7 +34,7 @@ When the cluster with HAProxy is upgraded, the following steps take place. First
 
 You can pass custom configuration to HAProxy, adding options from the [haproxy.cfg](https://www.haproxy.com/blog/the-four-essential-sections-of-an-haproxy-configuration/) configuration file to the `haproxy.configuration` Custom Resource option in the `deploy/cr.yaml` file. Here is an example:
 
-```
+```yaml
 ...
 haproxy:
   enabled: true

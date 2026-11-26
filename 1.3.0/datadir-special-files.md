@@ -8,16 +8,16 @@ The data directory is on the Pod’s Persistent Volume. So these files stay in p
 
 Use another container if `mysql` keeps crashing
 
-The commands on this page use the `mysql` container (`-c mysql`). If this container crashes or restarts in a loop, `kubectl exec` into it can fail. The `xtrabackup` and `logs` containers of the same Pod mount the same data volume at `/var/lib/mysql`, so you can run the commands there instead. The `xtrabackup` container exists when backups are enabled (`backup.enabled`), and the `logs` container exists when [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html) is enabled (`logcollector.enabled`). For example:
+The commands on this page use the `mysql` container (`-c mysql`). If this container crashes or restarts in a loop, `kubectl exec` into it can fail. The `xtrabackup` and `logs` containers of the same Pod mount the same data volume at `/var/lib/mysql`, so you can run the commands there instead. The `xtrabackup` container exists when backups are enabled (`backup.enabled`), and the `logs` container exists when [persistent logging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md) is enabled (`logcollector.enabled`). For example:
 
-```
+```bash
 kubectl exec <cluster-name>-mysql-<N> -n <namespace> -c xtrabackup -- touch /var/lib/mysql/sleep-forever
 ```
 
 This page describes:
 
 - [files you can create or remove](#files-you-can-create-or-remove) to debug a Pod: `sleep-forever` and `no-bootstrap`, and the `full-cluster-crash` file that the Operator creates
-- the [`percona.com/pitr-sleep-forever` annotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.html) to pause a point-in-time recovery
+- the [`percona.com/pitr-sleep-forever` annotation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.md) to pause a point-in-time recovery
 - [files that the Operator manages](#files-managed-by-the-operator), which you must leave alone
 
 ## How the files affect the MySQL Pod
@@ -46,7 +46,7 @@ Use this file to stop a MySQL Pod from starting `mysqld`, while keeping the cont
 
 The entry point script checks for the file when the container starts, before it starts `mysqld`. If the file exists, the script prints the following messages to the container log and doesn’t start `mysqld`:
 
-```
+```text
 The /var/lib/mysql/sleep-forever file is detected, node is going to infinity loop
 If you want to exit from infinity loop you need to remove /var/lib/mysql/sleep-forever file
 ```
@@ -57,13 +57,13 @@ While the file exists, the startup, liveness, and readiness probes pass right aw
 
 **Who creates or removes it**
 
-You do. The Operator doesn’t create this file for MySQL Pods, with one exception: a [paused point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.html) creates it on the data volume of the `<cluster-name>-mysql-0` Pod. The [`clusterset-recovery` file](#files-managed-by-the-operator) removes `sleep-forever` from a Pod.
+You do. The Operator doesn’t create this file for MySQL Pods, with one exception: a [paused point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-pitr.md) creates it on the data volume of the `<cluster-name>-mysql-0` Pod. The [`clusterset-recovery` file](#files-managed-by-the-operator) removes `sleep-forever` from a Pod.
 
 **How to use it**
 
-Creating the file in a running container doesn’t stop `mysqld`. It only turns off the probes and the startup bootstrap for this Pod. The container stops before `mysqld` the next time it starts. See [Pause a Pod for debugging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.html#pause-a-pod-for-debugging) for the steps.
+Creating the file in a running container doesn’t stop `mysqld`. It only turns off the probes and the startup bootstrap for this Pod. The container stops before `mysqld` the next time it starts. See [Pause a Pod for debugging](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.md#pause-a-pod-for-debugging) for the steps.
 
-Because the readiness probe passes right away, you can also use the file to [unblock a rolling update](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.html#unblock-a-stuck-rolling-update) that waits for an unready Pod.
+Because the readiness probe passes right away, you can also use the file to [unblock a rolling update](https://docs.percona.com/percona-operator-for-mysql/1.3.0/pause-mysql-pod.md#unblock-a-stuck-rolling-update) that waits for an unready Pod.
 
 Warning
 
@@ -89,13 +89,13 @@ You do. The Operator neither creates nor removes this file for MySQL Pods.
 
 1. Create the file:
 
-   ```
+   ```bash
    kubectl exec <cluster-name>-mysql-<N> -n <namespace> -c mysql -- touch /var/lib/mysql/no-bootstrap
    ```
 
 1. Delete the Pod so that it starts again with the file in place:
 
-   ```
+   ```bash
    kubectl delete pod <cluster-name>-mysql-<N> -n <namespace>
    ```
 
@@ -103,13 +103,13 @@ You do. The Operator neither creates nor removes this file for MySQL Pods.
 
 1. Remove the file:
 
-   ```
+   ```bash
    kubectl exec <cluster-name>-mysql-<N> -n <namespace> -c mysql -- rm /var/lib/mysql/no-bootstrap
    ```
 
 1. Delete the Pod again. The startup probe runs only when the container starts, so the Pod rejoins the cluster only after a restart:
 
-   ```
+   ```bash
    kubectl delete pod <cluster-name>-mysql-<N> -n <namespace>
    ```
 
@@ -119,13 +119,13 @@ A Pod with the `no-bootstrap` file reports `Ready` even if `mysqld` doesn’t wo
 
 ### `full-cluster-crash`
 
-This file is used only in clusters with Group Replication. It marks a Pod that waits for recovery after a [full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html).
+This file is used only in clusters with Group Replication. It marks a Pod that waits for recovery after a [full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md).
 
 **Who creates or removes it**
 
 The startup probe creates the file when it decides that the group must be rebooted with the `dba.rebootClusterFromCompleteOutage()` command. For example, it does so when the Pod can’t reach any other member of the cluster, or when the cluster has no `ONLINE` primary. The file contains the `GTID_EXECUTED` value of the Pod. After that, the container restarts.
 
-The Operator removes the file from every Pod when it recovers the cluster automatically. If [automatic recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html#recover-the-cluster-automatically) is turned off, you remove the file yourself as part of the [manual recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html#recover-the-cluster-manually).
+The Operator removes the file from every Pod when it recovers the cluster automatically. If [automatic recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md#recover-the-cluster-automatically) is turned off, you remove the file yourself as part of the [manual recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md#recover-the-cluster-manually).
 
 **What it does**
 
@@ -136,7 +136,7 @@ While the file exists:
 - The liveness probe always passes. The readiness probe passes as soon as `mysqld` is ready, without checking the Group Replication membership. This lets all Pods become `Ready`, so that the Operator can start the recovery.
 - The Operator sets the cluster `status.state` to `error` with the `FullClusterCrashDetected` condition reason and records the `FullClusterCrashDetected` event.
 
-See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html) for how to recover the cluster.
+See [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md) for how to recover the cluster.
 
 Warning
 
@@ -165,10 +165,10 @@ The following files contain logs that help you troubleshoot a Pod. You can read 
 - `mysql-state-monitor.log` - the log of the tool that tracks the `mysqld` state
 - `pre-stop.log` - the log of the pre-stop hook
 - `failover.log` - the log of failover workers in clusters with asynchronous replication, starting with version 1.3.0
-- `log/` - the directory for [persistent logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html), starting with version 1.3.0
+- `log/` - the directory for [persistent logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md), starting with version 1.3.0
 
 For example:
 
-```
+```bash
 kubectl exec <cluster-name>-mysql-<N> -n <namespace> -c mysql -- cat /var/lib/mysql/bootstrap.log
 ```

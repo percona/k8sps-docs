@@ -2,7 +2,7 @@
 
 # Architecture
 
-Percona Operator for MySQL automates deploying and operating Percona Server for MySQL clusters on Kubernetes. This document explains what components the Operator uses and how they work together to provide a highly available MySQL database. Also, read more about [How the Operator works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/how-it-works.html).
+Percona Operator for MySQL automates deploying and operating Percona Server for MySQL clusters on Kubernetes. This document explains what components the Operator uses and how they work together to provide a highly available MySQL database. Also, read more about [How the Operator works](https://docs.percona.com/percona-operator-for-mysql/1.3.0/how-it-works.md).
 
 ## Components
 
@@ -10,18 +10,18 @@ The [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/stat
 
 - [Percona Server for MySQL](https://www.percona.com/doc/percona-server/LATEST/index.html) - a free, fully compatible, enhanced, and open source drop-in replacement for any MySQL database
 - [Percona XtraBackup](https://www.percona.com/doc/percona-xtrabackup/8.0/index.html) - a hot backup utility for MySQL based servers that doesn’t lock your database during the backup
-- [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) between MySQL instances [is turned on](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#mysqlclustertype),
+- [Orchestrator](https://github.com/openark/orchestrator) - a replication topology manager for MySQL used when [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) between MySQL instances [is turned on](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlclustertype),
 - [HAProxy](https://haproxy.org) - a proxy and load balancing service serving as the entry point to your database cluster. It is compatible with both [asynchronous replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication-primary-secondary-replication.html) and [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) between MySQL instances,
 - [MySQL Router](https://dev.mysql.com/doc/mysql-router/8.0/en/) - a proxy solution which can be used instead of HAProxy for MySQL clusters with [group replication](https://dev.mysql.com/doc/refman/8.0/en/group-replication.html) is turned on,
 - [Percona Toolkit](https://docs.percona.com/percona-toolkit/) - a set of tools for debugging MySQL Pods.
 
-It can also include sidecar containers such as PMM Client, the [log collector](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.html), or your custom ones. This depends on how you further fine-tune your cluster. Learn more about [sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.html).
+It can also include sidecar containers such as PMM Client, the [log collector](https://docs.percona.com/percona-operator-for-mysql/1.3.0/persistent-logging.md), or your custom ones. This depends on how you further fine-tune your cluster. Learn more about [sidecar containers](https://docs.percona.com/percona-operator-for-mysql/1.3.0/sidecar.md).
 
 ## Replication types
 
 Each MySQL node in your cluster contains a complete copy of your data, replicated across all nodes.
 
-The Operator supports two replication types, each with different characteristics for performance, consistency, and availability. You [choose the replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#mysqlclustertype) when configuring your cluster.
+The Operator supports two replication types, each with different characteristics for performance, consistency, and availability. You [choose the replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#mysqlclustertype) when configuring your cluster.
 
 ### Asynchronous replication (tech preview)
 
@@ -76,7 +76,7 @@ The proxy you use depends on your replication type and requirements:
 
 **Tip:** Choose Group Replication for stronger consistency and read scaling; choose asynchronous replication for lower write latency and simpler topology when it reaches GA status.
 
-You can change the replication type if needed. Refer to the [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.html) guide for step-by-step instructions. Starting with Operator 1.3.0, you can switch the type on a running cluster. The switch causes downtime.
+You can change the replication type if needed. Refer to the [Change replication type](https://docs.percona.com/percona-operator-for-mysql/1.3.0/change-replication-type.md) guide for step-by-step instructions. Starting with Operator 1.3.0, you can switch the type on a running cluster. The switch causes downtime.
 
 ## High availability
 
@@ -92,7 +92,11 @@ If a node fails, Kubernetes automatically reschedules the affected Pod on anothe
 
 - In **asynchronous replication** clusters, the Orchestrator detects the failure, promotes a healthy replica to primary, and updates the replication topology.
 
-- In **group replication** clusters, the native group membership protocol automatically handles member removal, primary election and topology recovery. If the majority of members go down at the same time, the group can’t recover on its own. The cluster enters the `error` state with the `FullClusterCrashDetected` reason. The Operator reboots it as described in [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.html).
+*Image: image*
+
+- In **group replication** clusters, the native group membership protocol automatically handles member removal, primary election and topology recovery. If the majority of members go down at the same time, the group can’t recover on its own. The cluster enters the `error` state with the `FullClusterCrashDetected` reason. The Operator reboots it as described in [Recover from a full cluster crash](https://docs.percona.com/percona-operator-for-mysql/1.3.0/crash-recovery.md).
+
+*Image: image*
 
 ### Client connectivity
 
@@ -100,15 +104,15 @@ Clients connect through HAProxy or MySQL Router, which automatically route traff
 
 For configuration details, see:
 
-- [HAProxy configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.html)
-- [MySQL Router configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.html)
+- [HAProxy configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/haproxy-conf.md)
+- [MySQL Router configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/router-conf.md)
 
 ## What to read next
 
 Now that you understand the architecture, explore these topics:
 
-- [Backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.html) - Understand backup and restore operations
-- [Scaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.html) - Scale your cluster horizontally or vertically
-- [High availability configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/constraints.html) - Configure anti-affinity and pod distribution
-- [Updating and upgrades](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update.html) - Keep your cluster up to date
-- [Operator Custom Resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html) - Description of available configuration options
+- [Backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups.md) - Understand backup and restore operations
+- [Scaling](https://docs.percona.com/percona-operator-for-mysql/1.3.0/scaling.md) - Scale your cluster horizontally or vertically
+- [High availability configuration](https://docs.percona.com/percona-operator-for-mysql/1.3.0/constraints.md) - Configure anti-affinity and pod distribution
+- [Updating and upgrades](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update.md) - Keep your cluster up to date
+- [Operator Custom Resource reference](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md) - Description of available configuration options

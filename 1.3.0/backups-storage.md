@@ -6,7 +6,7 @@ You configure backup storage in the `backup.storages` subsection of your Custom 
 
 Before configuring storage, you need to create a [Kubernetes Secret](https://kubernetes.io/docs/concepts/configuration/secret/) object that contains the credentials needed to access your storage.
 
-To [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.html) in object storage, create a separate Secret with your encryption key and reference it in `spec.backup.encryptionKeySecret` or under the storage entry.
+To [encrypt backups](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-encrypted.md) in object storage, create a separate Secret with your encryption key and reference it in `spec.backup.encryptionKeySecret` or under the storage entry.
 
 **Amazon S3 or S3-compatible storage**
 
@@ -20,13 +20,13 @@ To use Amazon S3 or S3-compatible storage for backups, create a Secret object wi
 
   **in Linux**
 
-  ```
+  ```bash
   echo -n 'plain-text-string' | base64 --wrap=0
   ```
 
   **in macOS**
 
-  ```
+  ```bash
   echo -n 'plain-text-string' | base64
   ```
 
@@ -34,7 +34,7 @@ Here’s the example configuration of the Secret file:
 
 deploy/backup/backup-secret-s3.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -47,7 +47,7 @@ data:
 
 1. Create the Secret object with this file:
 
-   ```
+   ```bash
    kubectl apply -f deploy/backup/backup-secret-s3.yaml -n <namespace>
    ```
 
@@ -59,7 +59,7 @@ data:
 
    Here’s the example:
 
-   ```
+   ```yaml
    backup:
      enabled: true
      ...
@@ -76,7 +76,7 @@ data:
 
    If you use S3-compatible storage instead of Amazon S3, add the `endpointUrl` option in the `s3` subsection. This points to your storage service and is specific to your cloud provider. For example, for MinIO:
 
-   ```
+   ```yaml
    endpointUrl: https://minio-service:9000
    ```
 
@@ -84,15 +84,15 @@ data:
 
    Organizing backups
 
-   You can use the [prefix](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#backupstoragesstorage-names3prefix) option to specify a path (sub-folder) inside the S3 bucket where backups will be stored. If you don’t set a prefix, backups are stored in the root directory.
+   You can use the [prefix](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#backupstoragesstorage-names3prefix) option to specify a path (sub-folder) inside the S3 bucket where backups will be stored. If you don’t set a prefix, backups are stored in the root directory.
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
-For more configuration options, see the [Operator Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-backup-section).
+For more configuration options, see the [Operator Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-backup-section).
 
 **Microsoft Azure Blob storage**
 
@@ -106,13 +106,13 @@ To use [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/b
 
   **in Linux**
 
-  ```
+  ```bash
   echo -n 'plain-text-string' | base64 --wrap=0
   ```
 
   **in macOS**
 
-  ```
+  ```bash
   echo -n 'plain-text-string' | base64
   ```
 
@@ -120,7 +120,7 @@ Here’s the example configuration of the Secret file:
 
 deploy/backup/backup-secret-azure.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -133,7 +133,7 @@ data:
 
 1. Create the Secret object with this file:
 
-   ```
+   ```bash
    kubectl apply -f deploy/backup/backup-secret-azure.yaml -n <namespace>
    ```
 
@@ -144,7 +144,7 @@ data:
 
    Here’s the example:
 
-   ```
+   ```yaml
    backup:
      enabled: true
      ...
@@ -158,11 +158,11 @@ data:
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
-For more configuration options, see the [Operator Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-backup-section).
+For more configuration options, see the [Operator Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-backup-section).
 
 **Google Cloud Storage**
 
@@ -176,13 +176,13 @@ To use Google Cloud Storage for storing backups, create a Secret object with you
 
   **in Linux**
 
-  ```
+  ```bash
   echo -n 'plain-text-string' | base64 --wrap=0
   ```
 
   **in macOS**
 
-  ```
+  ```bash
   echo -n 'plain-text-string' | base64
   ```
 
@@ -190,7 +190,7 @@ Here’s the example configuration of the Secret file:
 
 deploy/backup/backup-secret-gcp.yaml
 
-```
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -203,7 +203,7 @@ data:
 
 1. Create the Secret object with this file:
 
-   ```
+   ```bash
    kubectl apply -f deploy/backup/backup-secret-gcp.yaml -n <namespace>
    ```
 
@@ -214,7 +214,7 @@ data:
 
    Here’s the example:
 
-   ```
+   ```yaml
    backup:
      enabled: true
      ...
@@ -228,15 +228,15 @@ data:
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
-For more configuration options, see the [Operator Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.html#operator-backup-section).
+For more configuration options, see the [Operator Custom Resource options](https://docs.percona.com/percona-operator-for-mysql/1.3.0/operator.md#operator-backup-section).
 
 ## Configure TLS verification with custom certificates for S3 storage
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 You can use your organization’s CA to verify TLS to S3-compatible storage. This way you ensure secure communication and comply with the security policies in your organization.
 
@@ -248,7 +248,7 @@ To configure TLS verification with custom certificates, do the following:
 
    You can create it from a file:
 
-   ```
+   ```bash
    kubectl create secret generic minio-ca-bundle --from-file=ca.crt=/path/to/ca.crt -n <namespace>
    ```
 
@@ -256,7 +256,7 @@ To configure TLS verification with custom certificates, do the following:
 
    custom-ca-bundle.yaml
 
-   ```
+   ```yaml
    apiVersion: v1
    kind: Secret
    metadata:
@@ -268,7 +268,7 @@ To configure TLS verification with custom certificates, do the following:
 
    Apply the Secret:
 
-   ```
+   ```bash
    kubectl apply -f custom-ca-bundle.yaml -n <namespace>
    ```
 
@@ -280,7 +280,7 @@ To configure TLS verification with custom certificates, do the following:
 
    Here’s the example configuration:
 
-   ```
+   ```yaml
    backup:
      enabled: true
      storages:
@@ -299,7 +299,7 @@ To configure TLS verification with custom certificates, do the following:
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -313,23 +313,23 @@ The Operator does not detect changes inside an existing CA Secret. To add, repla
 
 1. Create a new Secret with the updated CA. Use a different name than the Secret you already reference:
 
-   ```
+   ```bash
    kubectl create secret generic minio-ca-bundle-v2 --from-file=ca.crt=/path/to/updated-ca.crt -n <namespace>
    ```
 
 1. Update `caBundle.name` in the Custom Resource to the new Secret:
 
-   ```
+   ```yaml
    caBundle:
      name: minio-ca-bundle-v2
      key: ca.crt
    ```
 
-   If Binlog Server also uses this CA, update `backup.pitr.binlogServer.storage.s3.caBundle.name` as well. See [Verify TLS with a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#verify-tls-with-a-custom-ca).
+   If Binlog Server also uses this CA, update `backup.pitr.binlogServer.storage.s3.caBundle.name` as well. See [Verify TLS with a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#verify-tls-with-a-custom-ca).
 
 1. Apply the configuration:
 
-   ```
+   ```bash
    kubectl apply -f deploy/cr.yaml -n <namespace>
    ```
 
@@ -337,8 +337,8 @@ After backups and restores succeed with the new CA, you can delete the old Secre
 
 If you configure several S3 storages, each can reference its own CA. The Operator mounts all of those CAs on MySQL Pods. A backup or restore Job uses the CA of the storage you selected.
 
-`caBundle` on `backup.storages` does not apply to Binlog Server. To verify TLS communication for [point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html), supply your custom certificate within the Binlog Server configuration as well by setting `caBundle` on [`backup.pitr.binlogServer.storage.s3`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#verify-tls-with-a-custom-ca). See [Verify TLS with a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.html#verify-tls-with-a-custom-ca).
+`caBundle` on `backup.storages` does not apply to Binlog Server. To verify TLS communication for [point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md), supply your custom certificate within the Binlog Server configuration as well by setting `caBundle` on [`backup.pitr.binlogServer.storage.s3`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#verify-tls-with-a-custom-ca). See [Verify TLS with a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-pitr.md#verify-tls-with-a-custom-ca).
 
-When you restore with `backupSource`, such as on a new cluster, create the CA Secret on the target and set `caBundle` on `backupSource.storage.s3`. See [Restore from S3 storage that uses a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.html#restore-from-s3-storage-that-uses-a-custom-ca).
+When you restore with `backupSource`, such as on a new cluster, create the CA Secret on the target and set `caBundle` on `backupSource.storage.s3`. See [Restore from S3 storage that uses a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-to-new-cluster.md#restore-from-s3-storage-that-uses-a-custom-ca).
 
-For point-in-time recovery, also set `caBundle` on the binlog storage as shown in [Use a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html#use-a-custom-ca).
+For point-in-time recovery, also set `caBundle` on the binlog storage as shown in [Use a custom CA](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md#use-a-custom-ca).

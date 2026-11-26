@@ -2,11 +2,11 @@
 
 # Operator security builds
 
-Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.html)
+Version added: [1.3.0](https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/index.md)
 
 The Operator has access to your cluster’s credentials and other sensitive configuration. A vulnerability in the Operator image is a path to that data, even when your MySQL cluster itself is fully patched. **Security builds** close that gap on a release you already run, without waiting for the next Operator version or retesting a full upgrade.
 
-This page covers patching your current Operator version. To move to a newer Operator version instead, see [Upgrade the Operator and CRD](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.html).
+This page covers patching your current Operator version. To move to a newer Operator version instead, see [Upgrade the Operator and CRD](https://docs.percona.com/percona-operator-for-mysql/1.3.0/update-operator.md).
 
 ## Understand a security build
 
@@ -30,7 +30,7 @@ Each release is published with three tags. The following table illustrates the t
 
 | Tag                                    | What it points to                                                                                                                                                                                        | When to use                                                                                                                                                                                                                                      |
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `1.3.0`                                | The original release image. This is the default tag, and the only one listed in the [Version Service](https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.html).                       | Use this tag for a standard deployment or upgrade.                                                                                                                                                                                               |
+| `1.3.0`                                | The original release image. This is the default tag, and the only one listed in the [Version Service](https://docs.percona.com/percona-operator-for-mysql/1.3.0/image-query.md).                         | Use this tag for a standard deployment or upgrade.                                                                                                                                                                                               |
 | `1.3.0-1`                              | The same release image, published with a numbered tag.                                                                                                                                                   | Use this tag when you want the release image and a fixed digest.                                                                                                                                                                                 |
 | `1.3.0-2`, `1.3.0-3` and later numbers | Security builds for the original release. They are **not** new Operator versions. Each numbered is a separate, immutable build that stays on its dedicated image. The first security build is `1.3.0-2`. | Use a numbered tag when you want a specific security build and you need that choice to stay fixed.                                                                                                                                               |
 | `1.3.0-latest`                         | The newest image for this release. This tag is mutable and it always points to the most recent image of this release. It can move from `1.3.0-2` to `1.3.0-3` and so on                                  | Use this tag when you want the newest image for this release and you are ready for the tag to move. **If you use digest**: A digest names one image. A digest you copy from this tag today still names today’s image after the tag has moved on. |
@@ -41,7 +41,7 @@ Numbered security-build tags (`1.3.0-2`, `1.3.0-3`, …) aren’t listed in the 
 
 Patch the Operator Deployment and set the image to the security tag you chose. This example uses `1.3.0-2`. Replace that tag with the one you picked.
 
-```
+```bash
 export NAMESPACE=<my-namespace>
 
 kubectl patch deployment percona-server-mysql-operator \

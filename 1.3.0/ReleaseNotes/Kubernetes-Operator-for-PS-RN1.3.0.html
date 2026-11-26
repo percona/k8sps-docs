@@ -129,7 +129,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
-        </style></head>
+        </style><link rel="alternate" type="text/markdown" href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md"></head>
   
   
     
@@ -139,7 +139,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>.</div>
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"><div class="agent-hint" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap">For AI agents: an index of this documentation is at <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/llms.txt" tabindex="-1">llms.txt</a>. This page as markdown: <a href="https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md" tabindex="-1">https://docs.percona.com/percona-operator-for-mysql/1.3.0/ReleaseNotes/Kubernetes-Operator-for-PS-RN1.3.0.md</a>.</div>
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -6530,7 +6530,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h3 id="enable-backups-on-asynchronous-clusters">Enable backups on asynchronous clusters<a data-markdown-ignore class="headerlink" href="#enable-backups-on-asynchronous-clusters" title="Permanent link">¶</a></h3>
 <p>Version 1.3.0 requires backups so a failover on an <a href="../architecture.html#asynchronous-replication-tech-preview">asynchronous replication</a> cluster can recover transactions from the old primary. An asynchronous cluster with <a href="../operator.html#backupenabled"><code>backup.enabled</code></a> set to <code>false</code> fails validation, and reconciliation stops.</p>
 <p>The status shows an error like this:</p>
-<div class="highlight"><pre><span></span><code>Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
+<div class="language-text highlight"><pre><span></span><code>Invalid configuration: When 'mysql.clusterType' is set to 'async', 'backup.enabled' must be true unless 'unsafeFlags.asyncFailoverWithPossibleDataLoss' is enabled. Without backups a failover cannot recover the transactions stranded on the old primary
 </code></pre></div>
 <p>A cluster that was valid on Operator 1.2.0 hits this check after the upgrade. Before you upgrade, do one of the following:</p>
 <ul>
@@ -6540,7 +6540,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p>Group Replication clusters are not part of this check.</p>
 <h3 id="take-a-new-base-backup-when-point-in-time-recovery-is-enabled">Take a new base backup when point-in-time recovery is enabled<a data-markdown-ignore class="headerlink" href="#take-a-new-base-backup-when-point-in-time-recovery-is-enabled" title="Permanent link">¶</a></h3>
 <p>If point-in-time recovery (PITR) is enabled, a recovery from a backup taken before the upgrade can fail with the following error:</p>
-<div class="highlight"><pre><span></span><code>54edf529-d2cc-11f1-aebd-668621c1d52d:1-94 --stop-datetime=2026-10-28T13:50:49]
+<div class="language-text highlight"><pre><span></span><code>54edf529-d2cc-11f1-aebd-668621c1d52d:1-94 --stop-datetime=2026-10-28T13:50:49]
 2026-10-28T13:52:40.183741217Z 0 [Info] [Recovery] streaming binlog binlogs1/binlog.000001
 2026-10-28T13:52:40.692443772Z 0 [Info] [Recovery] pitr failed: apply binlogs: mysql failed: exit status 1, stderr: ERROR 1396 (HY000) at line 1907: Operation ALTER USER failed for 'configurator'@'%'
 </code></pre></div>
@@ -6631,7 +6631,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <p><code>backup.startingDeadlineSeconds</code> sets how long a backup can wait to start. The backup waits when the cluster is not ready, or when another backup for this cluster is still running. If the Operator does not create the Job before this time expires, the backup state becomes <code>Error</code>.</p>
 <p><code>backup.suspendedDeadlineSeconds</code> sets how long a suspended backup can wait to resume. The Operator suspends a backup when the cluster is unhealthy, and resumes it when the cluster is ready again. A resumed backup starts from the beginning. If the backup does not resume before this time expires, the Operator marks it <code>Failed</code> and deletes the suspended Job.</p>
 <p>The default for both options is <code>0</code>, which means the Operator does not enforce a deadline. Set them in the cluster Custom Resource for every backup, or on a <code>PerconaServerMySQLBackup</code> object for one backup. The value on the backup object takes precedence.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">startingDeadlineSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">900</span>
 <span class="w">    </span><span class="nt">suspendedDeadlineSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">900</span>
@@ -6640,7 +6640,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h3 id="use-your-existing-cert-manager-clusterissuer-for-tls">Use your existing cert-manager ClusterIssuer for TLS<a data-markdown-ignore class="headerlink" href="#use-your-existing-cert-manager-clusterissuer-for-tls" title="Permanent link">¶</a></h3>
 <p>If you already run cert-manager with a cluster-wide issuer, you can point Percona Operator for MySQL at that <code>ClusterIssuer</code> resource. Percona Server for MySQL certificates are then signed under the same public key infrastructure (PKI) you use for the rest of the platform.</p>
 <p>To use a <code>ClusterIssuer</code>, configure the cluster as follows:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">tls</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">issuerConf</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-org-issuer</span>
@@ -6653,7 +6653,7 @@ box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 <h3 id="use-your-own-ca-to-verify-tls-with-s3-compatible-storage">Use your own CA to verify TLS with S3-compatible storage<a data-markdown-ignore class="headerlink" href="#use-your-own-ca-to-verify-tls-with-s3-compatible-storage" title="Permanent link">¶</a></h3>
 <p>You can now verify TLS to S3-compatible storage with the certificate authority (CA) your organization already trusts. That matters when you use certificates from your corporate PKI, and security policy does not let you skip certificate checks.</p>
 <p>Create a Secret with the CA and reference it in the storage configuration. Keep TLS verification enabled. The Operator uses that CA for backups and restores. You can also use the same CA for point-in-time recovery (tech preview) by referencing it in the Binlog Server storage configuration.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
+<div class="language-yaml highlight"><pre><span></span><code><span class="nt">spec</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">    </span><span class="nt">storages</span><span class="p">:</span>

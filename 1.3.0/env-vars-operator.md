@@ -22,13 +22,13 @@ Controls whether Operator logs are structured (JSON) or plain text.
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: LOG_STRUCTURED
     value: "true"
 ```
 
-Structured logs work well with tools such as [jq](https://stedolan.github.io/jq/) . See also [Check the logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-logs.html).
+Structured logs work well with tools such as [jq](https://stedolan.github.io/jq/) . See also [Check the logs](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-logs.md).
 
 ### `LOG_LEVEL`
 
@@ -48,7 +48,7 @@ Any other value falls back to `INFO` with a message in the log.
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: LOG_LEVEL
     value: DEBUG
@@ -60,7 +60,7 @@ Specifies which namespaces the Operator watches for `PerconaServerMySQL` and rel
 
 By default, the value is set to the Operator’s own namespace from the metadata.namespace option via a downward API `fieldRef`:
 
-```
+```yaml
 - name: WATCH_NAMESPACE
   valueFrom:
     fieldRef:
@@ -74,14 +74,14 @@ By default, the value is set to the Operator’s own namespace from the metadata
 
 Accepted values:
 
-- If set to a comma-separated list, the Operator watches those specific namespaces. The namespace list must include the namespace where the Operator itself is deployed. Use this approach for the [multi-namespace deployment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.html).
+- If set to a comma-separated list, the Operator watches those specific namespaces. The namespace list must include the namespace where the Operator itself is deployed. Use this approach for the [multi-namespace deployment](https://docs.percona.com/percona-operator-for-mysql/1.3.0/cluster-wide.md).
 - If set to an empty string (`""`), the Operator watches all namespaces.
 
 When you deploy the Operator in cluster-wide mode, it should be associated with the appropriate ClusterRole.
 
 **Example configuration:**
 
-```
+```yaml
 env:
  - name: WATCH_NAMESPACE
    value: "mysql,mysql-dev,mysql-prod"
@@ -89,7 +89,7 @@ env:
 
 ### `MAX_CONCURRENT_RECONCILES`
 
-Sets the number of concurrent workers that reconcile `PerconaServerMySQL` and related custom resources in parallel. Useful when you manage multiple clusters with a single Operator. See [Configure concurrency for a cluster reconciliation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/reconciliation-concurrency.html).
+Sets the number of concurrent workers that reconcile `PerconaServerMySQL` and related custom resources in parallel. Useful when you manage multiple clusters with a single Operator. See [Configure concurrency for a cluster reconciliation](https://docs.percona.com/percona-operator-for-mysql/1.3.0/reconciliation-concurrency.md).
 
 | Value type | Default | Example |
 | ---------- | ------- | ------- |
@@ -99,7 +99,7 @@ The value must be a positive integer. The Operator fails to start if the value i
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: MAX_CONCURRENT_RECONCILES
     value: "2"
@@ -107,7 +107,7 @@ env:
 
 ### `DISABLE_TELEMETRY`
 
-Disables anonymous telemetry data collection by the Operator. For what is collected when telemetry is enabled, see [Telemetry](https://docs.percona.com/percona-operator-for-mysql/1.3.0/telemetry.html).
+Disables anonymous telemetry data collection by the Operator. For what is collected when telemetry is enabled, see [Telemetry](https://docs.percona.com/percona-operator-for-mysql/1.3.0/telemetry.md).
 
 | Value type | Default   | Example  |
 | ---------- | --------- | -------- |
@@ -115,7 +115,7 @@ Disables anonymous telemetry data collection by the Operator. For what is collec
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: DISABLE_TELEMETRY
     value: "true"
@@ -137,7 +137,7 @@ When you disable leader election, the Operator restarts and deletes the existing
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: PSO_LEADER_ELECTION_ENABLED
     value: "false"
@@ -155,7 +155,7 @@ When you change the name, the Operator creates a new Lease. The previous Lease s
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: PSO_LEADER_ELECTION_LEASE_NAME
     value: "my-lease"
@@ -173,7 +173,7 @@ The lease duration must be greater than the [renew deadline](#pso_leader_electio
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: PSO_LEADER_ELECTION_LEASE_DURATION
     value: "90s"
@@ -191,7 +191,7 @@ The renew deadline must be greater than the [retry period](#pso_leader_election_
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: PSO_LEADER_ELECTION_RENEW_DEADLINE
     value: "60s"
@@ -207,7 +207,7 @@ Sets how long the Operator waits between leader election attempts. Use a duratio
 
 **Example configuration:**
 
-```
+```yaml
 env:
   - name: PSO_LEADER_ELECTION_RETRY_PERIOD
     value: "15s"
@@ -223,13 +223,13 @@ Here’s how to do it:
 
 1. Get the current environment variables:
 
-   ```
+   ```bash
    kubectl get deployment percona-server-mysql-operator -n <operator-namespace> -o jsonpath='{.spec.template.spec.containers[0].env}' | jq
    ```
 
 1. Update the deployment. This example command keeps downward API for `WATCH_NAMESPACE` and sets `LOG_LEVEL` to `DEBUG`:
 
-   ```
+   ```bash
    kubectl patch deployment percona-server-mysql-operator -n <operator-namespace> \
      --type='json' \
      -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env", "value": [
@@ -252,7 +252,7 @@ Adjust the list to match your current Deployment (for example cluster-wide `WATC
 
 You can also edit the Deployment directly:
 
-```
+```bash
 kubectl edit deployment percona-server-mysql-operator -n <operator-namespace>
 ```
 

@@ -2,13 +2,13 @@
 
 # Pause a point-in-time recovery
 
-To debug a [point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.html), pause it after the base backup is restored and before the binary logs are applied. Use this only for debugging, not for regular restores. If the recovery fails, see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.html#point-in-time-recovery) in Troubleshoot backups and restores.
+To debug a [point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/backups-restore-pitr.md), pause it after the base backup is restored and before the binary logs are applied. Use this only for debugging, not for regular restores. If the recovery fails, see [Point-in-time recovery](https://docs.percona.com/percona-operator-for-mysql/1.3.0/debug-backup-restore.md#point-in-time-recovery) in Troubleshoot backups and restores.
 
-The restore Job creates the [`sleep-forever`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.html#sleep-forever) file on the restored data directory and waits until you remove it.
+The restore Job creates the [`sleep-forever`](https://docs.percona.com/percona-operator-for-mysql/1.3.0/datadir-special-files.md#sleep-forever) file on the restored data directory and waits until you remove it.
 
 1. Add the `percona.com/pitr-sleep-forever` annotation to the `PerconaServerMySQLRestore` object. The Operator checks only if the annotation exists, not its value:
 
-   ```
+   ```yaml
    apiVersion: ps.percona.com/v1
    kind: PerconaServerMySQLRestore
    metadata:
@@ -27,14 +27,14 @@ The restore Job creates the [`sleep-forever`](https://docs.percona.com/percona-o
 
 1. Find the Pod of the restore Job. The Job is named `pitr-restore-<restore-name>`. Exec into the Pod to inspect the restored data:
 
-   ```
+   ```bash
    kubectl get pods -n <namespace> -l job-name=pitr-restore-<restore-name>
    kubectl exec -it <restore-pod-name> -n <namespace> -- bash
    ```
 
 1. Remove the file when you are done:
 
-   ```
+   ```bash
    kubectl exec <restore-pod-name> -n <namespace> -- rm /var/lib/mysql/sleep-forever
    ```
 
